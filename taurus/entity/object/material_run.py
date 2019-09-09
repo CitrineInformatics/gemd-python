@@ -11,7 +11,7 @@ class MaterialRun(BaseObject):
     skip = {"_measurements"}
 
     def __init__(self, name=None, spec=None, process=None, sample_type="unknown",
-                 uids=None, tags=None, notes=None, file_links=None, measurements=None):
+                 uids=None, tags=None, notes=None, file_links=None):
         BaseObject.__init__(self, uids=uids, tags=tags, notes=notes, file_links=file_links)
         self._process = None
         self._measurements = []
