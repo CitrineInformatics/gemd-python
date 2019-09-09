@@ -6,10 +6,14 @@ import subprocess
 
 
 class PostInstallCommand(install):
-    """Post-installation for installation mode"""
+    """Post-installation for installation mode."""
+
     def run(self):
-        """Python version is constrained to [3.5, 4.0), so if the minor version is < 6,
-        run the script to strip type hints"""
+        """Run strip-hints to support python 3.5.
+
+        Python version is constrained to [3.5, 4.0), so if the minor version is < 6,
+        run the script to strip type hints
+        """
         if sys.version_info.minor < 6:
             subprocess.call('chmod 755 scripts/strip_hints.sh', shell=True)
             subprocess.call('./scripts/strip_hints.sh', shell=True)
@@ -17,10 +21,14 @@ class PostInstallCommand(install):
 
 
 class PostDevelopCommand(develop):
-    """Post-installation for develop mode"""
+    """Post-installation for develop mode."""
+
     def run(self):
-        """Python version is constrained to [3.5, 4.0), so if the minor version is < 6,
-        run the script to strip type hints"""
+        """Run strip-hints to support python 3.5.
+
+        Python version is constrained to [3.5, 4.0), so if the minor version is < 6,
+        run the script to strip type hints
+        """
         if sys.version_info.minor < 6:
             subprocess.call('chmod 755 scripts/strip_hints.sh', shell=True)
             subprocess.call('./scripts/strip_hints.sh', shell=True)
@@ -46,5 +54,4 @@ setup(name='taurus',
       cmdclass={
           'install': PostInstallCommand,
           'develop': PostDevelopCommand
-      }
-)
+      })
