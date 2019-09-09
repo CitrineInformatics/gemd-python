@@ -1,0 +1,5 @@
+toolz==0.10.0
+enum34==1.1.6
+pint==0.9
+pymatgen==2018.11.6
+strip-hints==0.1.7

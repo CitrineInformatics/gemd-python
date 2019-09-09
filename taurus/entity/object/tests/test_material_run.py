@@ -1,0 +1,69 @@
+"""Test of the material run object."""
+import pytest
+import json
+from uuid import uuid4
+
+from taurus.client.json_encoder import loads, dumps
+from taurus.entity.attribute.property_and_conditions import PropertyAndConditions
+from taurus.entity.object import MaterialRun, ProcessRun
+from taurus.entity.object.material_spec import MaterialSpec
+from taurus.entity.attribute.property import Property
+from taurus.entity.value.nominal_real import NominalReal
+from taurus.entity.link_by_uid import LinkByUID
+
+
+def test_material_run():
+    """
+    Test the ability to create a MaterialRun that is linked to a MaterialSpec.
+
+    Make sure all enumerated values are respected, and check consistency after
+    serializing and deserializing.
+    """
+    # Define a property, and make sure that an inappropriate value for origin throws ValueError
+    with pytest.raises(ValueError):
+        prop = Property(name="A property", origin="bad origin", value=NominalReal(17, units=''))
+
+    # Create a MaterialSpec with a property
+    prop = Property(name="A property", origin="specified", value=NominalReal(17, units=''))
+    mat_spec = MaterialSpec(
+        name="a specification for a material",
+        properties=PropertyAndConditions(prop),
+        notes="Funny lookin'"
+    )
+
+    # Make sure that when property is serialized, origin (an enumeration) is serialized as a string
+    copy_prop = json.loads(dumps(mat_spec))
+    copy_origin = copy_prop[0][0]["properties"][0]['property']['origin']
+    assert isinstance(copy_origin, str)
+
+    # Create a MaterialRun, and make sure an inappropriate value for sample_type throws ValueError
+    with pytest.raises(ValueError):
+        mat = MaterialRun(spec=mat_spec, sample_type="imaginary")
+    mat = MaterialRun(spec=mat_spec, sample_type="virtual")
+
+    # ensure that serialization does not change the MaterialRun
+    copy = loads(dumps(mat))
+    assert dumps(copy) == dumps(mat), \
+        "Material run is modified by serialization or deserialization"
+
+
+def test_process_run():
+    """Test that a process run can house a material, and that it survives serde."""
+    process_run = ProcessRun("Bake a cake", uids={'My_ID': 17})
+    material_run = MaterialRun("A cake", process=process_run)
+
+    # Check that a bi-directional link is established
+    assert material_run.process == process_run
+    assert process_run.output_material == material_run
+
+    copy_material = loads(dumps(material_run))
+    assert dumps(copy_material) == dumps(material_run)
+
+
+def test_process_id_link():
+    """Test that a process run can house a LinkByUID object, and that it survives serde."""
+    uid = str(uuid4())
+    proc_link = LinkByUID(scope='id', id=uid)
+    mat_run = MaterialRun("Another cake", process=proc_link)
+    copy_material = loads(dumps(mat_run))
+    assert dumps(copy_material) == dumps(mat_run)
