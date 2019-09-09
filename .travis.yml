@@ -7,4 +7,4 @@ install:
   - pip install -U -r test_requirements.txt
   - python setup.py install
 script:
-  - pytest --flake8 --cov=taurus --cov-report term-missing --cov-report term:skip-covered --cov-fail-under=92 -s -r .
+  - pytest --flake8 --cov=taurus --cov-report term-missing --cov-report term:skip-covered --cov-fail-under=92 -s -r taurus
