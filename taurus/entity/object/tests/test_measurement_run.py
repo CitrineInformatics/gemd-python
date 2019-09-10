@@ -33,7 +33,7 @@ def test_measurement_spec():
 
 def test_material_soft_link():
     """Test that a measurement run can link to a material run, and that it survives serde."""
-    dye = MaterialRun("rhodamine", file_links=FileLink(filename='a.csv', link='/a/path'))
+    dye = MaterialRun("rhodamine", file_links=FileLink(filename='a.csv', url='/a/path'))
     assert dye.measurements == [], "default value of .measurements should be an empty list"
 
     # The .measurements member should not be settable
