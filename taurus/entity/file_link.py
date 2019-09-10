@@ -11,7 +11,7 @@ class FileLink(DictSerializable):
 
     typ = "file_link"
 
-    def __init__(self, filename, link):
+    def __init__(self, filename, url):
         DictSerializable.__init__(self)
         self.filename = filename
-        self.link = link
+        self.url = url
