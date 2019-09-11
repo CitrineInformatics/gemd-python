@@ -3,3 +3,5 @@ enum34==1.1.6
 pint==0.9
 pymatgen==2018.11.6
 strip-hints==0.1.7
+sphinx==2.2.0
+sphinxcontrib-apidoc==0.3.0
