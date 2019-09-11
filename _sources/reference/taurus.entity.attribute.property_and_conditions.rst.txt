@@ -1,0 +1,7 @@
+taurus.entity.attribute.property\_and\_conditions module
+========================================================
+
+.. automodule:: taurus.entity.attribute.property_and_conditions
+   :members:
+   :undoc-members:
+   :show-inheritance:

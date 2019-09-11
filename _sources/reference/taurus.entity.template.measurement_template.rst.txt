@@ -1,0 +1,7 @@
+taurus.entity.template.measurement\_template module
+===================================================
+
+.. automodule:: taurus.entity.template.measurement_template
+   :members:
+   :undoc-members:
+   :show-inheritance:

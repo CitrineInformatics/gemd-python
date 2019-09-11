@@ -1,0 +1,7 @@
+taurus.entity.object.measurement\_spec module
+=============================================
+
+.. automodule:: taurus.entity.object.measurement_spec
+   :members:
+   :undoc-members:
+   :show-inheritance:

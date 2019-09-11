@@ -1,0 +1,30 @@
+taurus.entity.value package
+===========================
+
+Submodules
+----------
+
+.. toctree::
+
+   taurus.entity.value.base_value
+   taurus.entity.value.categorical_value
+   taurus.entity.value.composition_value
+   taurus.entity.value.continuous_value
+   taurus.entity.value.discrete_categorical
+   taurus.entity.value.empirical_formula
+   taurus.entity.value.integer_value
+   taurus.entity.value.nominal_categorical
+   taurus.entity.value.nominal_composition
+   taurus.entity.value.nominal_integer
+   taurus.entity.value.nominal_real
+   taurus.entity.value.normal_real
+   taurus.entity.value.uniform_integer
+   taurus.entity.value.uniform_real
+
+Module contents
+---------------
+
+.. automodule:: taurus.entity.value
+   :members:
+   :undoc-members:
+   :show-inheritance:

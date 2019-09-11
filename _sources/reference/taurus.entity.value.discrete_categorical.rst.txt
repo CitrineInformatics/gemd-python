@@ -1,0 +1,7 @@
+taurus.entity.value.discrete\_categorical module
+================================================
+
+.. automodule:: taurus.entity.value.discrete_categorical
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+taurus.entity.value.nominal\_integer module
+===========================================
+
+.. automodule:: taurus.entity.value.nominal_integer
+   :members:
+   :undoc-members:
+   :show-inheritance:

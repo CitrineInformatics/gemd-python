@@ -1,0 +1,7 @@
+taurus.entity.value.nominal\_composition module
+===============================================
+
+.. automodule:: taurus.entity.value.nominal_composition
+   :members:
+   :undoc-members:
+   :show-inheritance:

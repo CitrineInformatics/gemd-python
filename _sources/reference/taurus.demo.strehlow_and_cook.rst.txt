@@ -1,0 +1,7 @@
+taurus.demo.strehlow\_and\_cook module
+======================================
+
+.. automodule:: taurus.demo.strehlow_and_cook
+   :members:
+   :undoc-members:
+   :show-inheritance:

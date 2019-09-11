@@ -1,0 +1,7 @@
+taurus.entity.setters module
+============================
+
+.. automodule:: taurus.entity.setters
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+taurus.entity.case\_insensitive\_dict module
+============================================
+
+.. automodule:: taurus.entity.case_insensitive_dict
+   :members:
+   :undoc-members:
+   :show-inheritance:

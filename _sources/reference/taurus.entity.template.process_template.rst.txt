@@ -1,0 +1,7 @@
+taurus.entity.template.process\_template module
+===============================================
+
+.. automodule:: taurus.entity.template.process_template
+   :members:
+   :undoc-members:
+   :show-inheritance:

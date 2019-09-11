@@ -1,0 +1,7 @@
+taurus.entity.object.base\_object module
+========================================
+
+.. automodule:: taurus.entity.object.base_object
+   :members:
+   :undoc-members:
+   :show-inheritance:

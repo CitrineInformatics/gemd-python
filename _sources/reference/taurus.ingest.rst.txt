@@ -1,0 +1,18 @@
+taurus.ingest package
+=====================
+
+Submodules
+----------
+
+.. toctree::
+
+   taurus.ingest.material_run_example
+   taurus.ingest.table_example
+
+Module contents
+---------------
+
+.. automodule:: taurus.ingest
+   :members:
+   :undoc-members:
+   :show-inheritance:

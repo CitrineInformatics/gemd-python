@@ -1,0 +1,7 @@
+taurus.demo.cake module
+=======================
+
+.. automodule:: taurus.demo.cake
+   :members:
+   :undoc-members:
+   :show-inheritance:

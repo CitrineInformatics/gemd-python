@@ -1,0 +1,7 @@
+taurus.entity.value.uniform\_integer module
+===========================================
+
+.. automodule:: taurus.entity.value.uniform_integer
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+taurus.entity.attribute.parameter module
+========================================
+
+.. automodule:: taurus.entity.attribute.parameter
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,23 @@
+taurus package
+==============
+
+Subpackages
+-----------
+
+.. toctree::
+
+   taurus.client
+   taurus.demo
+   taurus.entity
+   taurus.enumeration
+   taurus.ingest
+   taurus.units
+   taurus.util
+
+Module contents
+---------------
+
+.. automodule:: taurus
+   :members:
+   :undoc-members:
+   :show-inheritance:

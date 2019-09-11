@@ -1,0 +1,27 @@
+taurus.entity.template package
+==============================
+
+Submodules
+----------
+
+.. toctree::
+
+   taurus.entity.template.attribute_template
+   taurus.entity.template.base_template
+   taurus.entity.template.condition_template
+   taurus.entity.template.has_condition_templates
+   taurus.entity.template.has_parameter_templates
+   taurus.entity.template.has_property_templates
+   taurus.entity.template.material_template
+   taurus.entity.template.measurement_template
+   taurus.entity.template.parameter_template
+   taurus.entity.template.process_template
+   taurus.entity.template.property_template
+
+Module contents
+---------------
+
+.. automodule:: taurus.entity.template
+   :members:
+   :undoc-members:
+   :show-inheritance:

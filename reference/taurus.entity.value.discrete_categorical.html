@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>taurus.entity.value.discrete_categorical module &#8212; Taurus 0.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-taurus.entity.value.discrete_categorical">
+<span id="taurus-entity-value-discrete-categorical-module"></span><h1>taurus.entity.value.discrete_categorical module<a class="headerlink" href="#module-taurus.entity.value.discrete_categorical" title="Permalink to this headline">¶</a></h1>
+<p>Discrete distribution across several categories.</p>
+<dl class="class">
+<dt id="taurus.entity.value.discrete_categorical.DiscreteCategorical">
+<em class="property">class </em><code class="sig-prename descclassname">taurus.entity.value.discrete_categorical.</code><code class="sig-name descname">DiscreteCategorical</code><span class="sig-paren">(</span><em class="sig-param">probabilities=None</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.value.discrete_categorical.DiscreteCategorical" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="taurus.entity.value.categorical_value.html#taurus.entity.value.categorical_value.CategoricalValue" title="taurus.entity.value.categorical_value.CategoricalValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.value.categorical_value.CategoricalValue</span></code></a></p>
+<p>Distribution over a discrete set of categories.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>probabilities</strong> (<em>str</em><em> or </em><em>Map</em><em>[</em><em>str</em><em>, </em><em>float</em><em>]</em>) – <p>The categories and their probabilities.</p>
+<p>If a string is provided, that string corresponds to the only category and is given a
+probability of 1.0</p>
+<p>If a dictionary is provided, then each key is a category and its value is the probability
+of that category. The probabilities <em>must</em> sum to 1.0.</p>
+</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="taurus.entity.value.discrete_categorical.DiscreteCategorical.probabilities">
+<em class="property">property </em><code class="sig-name descname">probabilities</code><a class="headerlink" href="#taurus.entity.value.discrete_categorical.DiscreteCategorical.probabilities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the map from categories to probabilities.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="taurus.entity.value.discrete_categorical.DiscreteCategorical.typ">
+<code class="sig-name descname">typ</code><em class="property"> = 'discrete_categorical'</em><a class="headerlink" href="#taurus.entity.value.discrete_categorical.DiscreteCategorical.typ" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Taurus</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Citrine Informatics.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/reference/taurus.entity.value.discrete_categorical.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

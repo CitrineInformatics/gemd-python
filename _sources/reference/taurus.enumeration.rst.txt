@@ -1,0 +1,20 @@
+taurus.enumeration package
+==========================
+
+Submodules
+----------
+
+.. toctree::
+
+   taurus.enumeration.attribute_type
+   taurus.enumeration.base_enumeration
+   taurus.enumeration.origin
+   taurus.enumeration.sample_type
+
+Module contents
+---------------
+
+.. automodule:: taurus.enumeration
+   :members:
+   :undoc-members:
+   :show-inheritance:

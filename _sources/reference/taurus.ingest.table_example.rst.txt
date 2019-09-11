@@ -1,0 +1,7 @@
+taurus.ingest.table\_example module
+===================================
+
+.. automodule:: taurus.ingest.table_example
+   :members:
+   :undoc-members:
+   :show-inheritance:

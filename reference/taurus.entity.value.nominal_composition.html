@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>taurus.entity.value.nominal_composition module &#8212; Taurus 0.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-taurus.entity.value.nominal_composition">
+<span id="taurus-entity-value-nominal-composition-module"></span><h1>taurus.entity.value.nominal_composition module<a class="headerlink" href="#module-taurus.entity.value.nominal_composition" title="Permalink to this headline">¶</a></h1>
+<p>A nominal composition value.</p>
+<dl class="class">
+<dt id="taurus.entity.value.nominal_composition.NominalComposition">
+<em class="property">class </em><code class="sig-prename descclassname">taurus.entity.value.nominal_composition.</code><code class="sig-name descname">NominalComposition</code><span class="sig-paren">(</span><em class="sig-param">quantities=None</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.value.nominal_composition.NominalComposition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="taurus.entity.value.composition_value.html#taurus.entity.value.composition_value.CompositionValue" title="taurus.entity.value.composition_value.CompositionValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.value.composition_value.CompositionValue</span></code></a></p>
+<p>Nominal composition, represented as a map from the component names to the quantities.</p>
+<p>The quantities do not express an uncertainty but also do not imply that there is absolute
+certainty to their values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>quantities</strong> (<em>Map</em><em>[</em><em>String</em><em>, </em><em>Number</em><em>]</em>) – <p>A map from each component to its amount.  The quantities are not required to be expressed
+on a unit or fractional basis. The following are all acceptable:</p>
+<ul class="simple">
+<li><p>dict(acetone=0.25, methanol=0.75)</p></li>
+<li><p>dict(acetone=1, methanol=3)</p></li>
+<li><p>dict(acetone=3.5, methanol=10.5)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="taurus.entity.value.nominal_composition.NominalComposition.as_dict">
+<code class="sig-name descname">as_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.value.nominal_composition.NominalComposition.as_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the composition to a dictionary.</p>
+<p>Overrides the ordinary
+<a class="reference internal" href="taurus.entity.dict_serializable.html#taurus.entity.dict_serializable.DictSerializable.as_dict" title="taurus.entity.dict_serializable.DictSerializable.as_dict"><code class="xref py py-func docutils literal notranslate"><span class="pre">as_dict()</span></code></a> method in
+that the <cite>quantities</cite> field is turned into a list of lists,
+each of which has the form [component, quantity].</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="taurus.entity.value.nominal_composition.NominalComposition.components">
+<em class="property">property </em><code class="sig-name descname">components</code><a class="headerlink" href="#taurus.entity.value.nominal_composition.NominalComposition.components" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of the components.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="taurus.entity.value.nominal_composition.NominalComposition.quantities">
+<em class="property">property </em><code class="sig-name descname">quantities</code><a class="headerlink" href="#taurus.entity.value.nominal_composition.NominalComposition.quantities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a map from the components to their quantities.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="taurus.entity.value.nominal_composition.NominalComposition.typ">
+<code class="sig-name descname">typ</code><em class="property"> = 'nominal_composition'</em><a class="headerlink" href="#taurus.entity.value.nominal_composition.NominalComposition.typ" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Taurus</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Citrine Informatics.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/reference/taurus.entity.value.nominal_composition.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

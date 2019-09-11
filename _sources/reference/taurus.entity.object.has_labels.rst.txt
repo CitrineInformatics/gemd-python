@@ -1,0 +1,7 @@
+taurus.entity.object.has\_labels module
+=======================================
+
+.. automodule:: taurus.entity.object.has_labels
+   :members:
+   :undoc-members:
+   :show-inheritance:

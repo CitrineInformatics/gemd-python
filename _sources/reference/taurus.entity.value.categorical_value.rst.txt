@@ -1,0 +1,7 @@
+taurus.entity.value.categorical\_value module
+=============================================
+
+.. automodule:: taurus.entity.value.categorical_value
+   :members:
+   :undoc-members:
+   :show-inheritance:

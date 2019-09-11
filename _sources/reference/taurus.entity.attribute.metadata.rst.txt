@@ -1,0 +1,7 @@
+taurus.entity.attribute.metadata module
+=======================================
+
+.. automodule:: taurus.entity.attribute.metadata
+   :members:
+   :undoc-members:
+   :show-inheritance:

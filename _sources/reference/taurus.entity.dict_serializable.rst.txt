@@ -1,0 +1,7 @@
+taurus.entity.dict\_serializable module
+=======================================
+
+.. automodule:: taurus.entity.dict_serializable
+   :members:
+   :undoc-members:
+   :show-inheritance:

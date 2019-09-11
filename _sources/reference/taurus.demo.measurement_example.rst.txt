@@ -1,0 +1,7 @@
+taurus.demo.measurement\_example module
+=======================================
+
+.. automodule:: taurus.demo.measurement_example
+   :members:
+   :undoc-members:
+   :show-inheritance:
