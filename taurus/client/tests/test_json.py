@@ -19,13 +19,14 @@ def test_serialize():
     parameter = Parameter(name="A parameter", value=NormalReal(mean=17, std=1, units=''))
     input_material = MaterialRun(tags="input")
     process = ProcessRun(tags="A tag on a process run")
-    _ = IngredientRun(material=input_material, process=process)
+    IngredientRun(material=input_material, process=process)
     material = MaterialRun(tags=["A tag on a material"], process=process)
     measurement = MeasurementRun(tags="A tag on a measurement", conditions=condition,
                                  parameters=parameter, material=material)
 
     # serialize the root of the tree
     native_object = json.loads(dumps(measurement))
+    # ingredients don't get serialized on the process
     assert(len(native_object[0]) == 5)
     assert(native_object[1]["type"] == LinkByUID.typ)
 

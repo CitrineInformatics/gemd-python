@@ -168,5 +168,5 @@ def test_access_data():
     )[0] == 0.96)
 
     # check that the serialization results in the correct number of objects in the preface
-    # (note that measurements are not serialized)
-    assert(len(json.loads(dumps(island))[0]) == 23)
+    # (note that neither measurements nor ingredients are not serialized)
+    assert(len(json.loads(dumps(island))[0]) == 8)
