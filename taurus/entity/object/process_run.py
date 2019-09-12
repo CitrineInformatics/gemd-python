@@ -48,7 +48,7 @@ class ProcessRun(BaseObject, HasConditions, HasParameters):
         from taurus.entity.link_by_uid import LinkByUID
         self._ingredients = validate_list(ingredients, [IngredientRun, LinkByUID])
         ingredient_names = [x.name for x in self._ingredients
-                        if isinstance(x, IngredientRun) and x.name is not None]
+                            if isinstance(x, IngredientRun) and x.name is not None]
         if len(ingredient_names) > len(set(ingredient_names)):
             raise ValueError("Two ingredients were assigned the same name")
 
