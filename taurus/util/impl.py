@@ -82,7 +82,8 @@ def substitute_objects(obj, index):
                 if isinstance(thing, BaseEntity) and k in thing.skip:
                     continue
                 if isinstance(v, LinkByUID) and (v.scope.lower(), v.id) in index:
-                    thing.__dict__[k] = index[(v.scope.lower(), v.id)]
+                    # Use setattr() to call setter logic
+                    setattr(thing, k.lstrip('_'), index[(v.scope.lower(), v.id)])
                     substitute(thing.__dict__[k])
                 else:
                     substitute(v)
