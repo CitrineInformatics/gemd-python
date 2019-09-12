@@ -64,6 +64,7 @@ class BaseTemplate(BaseEntity):
                     attribute.template = attr_template
                 # if it does have a template and its not a LinkByUID, make sure its the right one
                 elif attribute.template != attr_template \
-                        and not isinstance(attribute.template, LinkByUID):
+                        and isinstance(attribute.template, BaseTemplate) \
+                        and isinstance(attr_template, BaseTemplate):
                     raise ValueError(
                         "Template and object templates don't match for all {}".format(attr_name))
