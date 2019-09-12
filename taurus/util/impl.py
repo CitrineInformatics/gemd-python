@@ -51,22 +51,29 @@ def substitute_objects(obj, index):
     :param index: containing the objects that the uids point to
     :return: None
     """
+    visited = set()
+
     def substitute(thing):
+        if id(thing) in visited:
+            return
+        visited.add(id(thing))
         if isinstance(thing, (list, tuple)):
             for i, x in enumerate(thing):
-                if isinstance(x, LinkByUID) and (x.scope, x.id) in index:
-                    thing[i] = index[(x.scope, x.id)]
+                if isinstance(x, LinkByUID) and (x.scope.lower(), x.id) in index:
+                    thing[i] = index[(x.scope.lower(), x.id)]
+                    substitute(thing[i])
                 else:
                     substitute(x)
         elif isinstance(thing, dict):
             for k, v in thing.items():
-                if isinstance(v, LinkByUID) and (v.scope, v.id) in index:
-                    thing[k] = index[(v.scope, v.id)]
+                if isinstance(v, LinkByUID) and (v.scope.lower(), v.id) in index:
+                    thing[k] = index[(v.scope.lower(), v.id)]
+                    substitute(thing[k])
                 else:
                     substitute(v)
             for k, v in thing.items():
-                if isinstance(k, LinkByUID) and (k.scope, k.id) in index:
-                    thing[index[(k.scope, k.id)]] = v
+                if isinstance(k, LinkByUID) and (k.scope.lower(), k.id) in index:
+                    thing[index[(k.scope.lower(), k.id)]] = v
                     del thing[k]
                 else:
                     substitute(k)
@@ -74,8 +81,9 @@ def substitute_objects(obj, index):
             for k, v in vars(thing).items():
                 if isinstance(thing, BaseEntity) and k in thing.skip:
                     continue
-                if isinstance(v, LinkByUID) and (v.scope, v.id) in index:
-                    thing.__dict__[k] = index[(v.scope, v.id)]
+                if isinstance(v, LinkByUID) and (v.scope.lower(), v.id) in index:
+                    thing.__dict__[k] = index[(v.scope.lower(), v.id)]
+                    substitute(thing.__dict__[k])
                 else:
                     substitute(v)
         return
