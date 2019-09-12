@@ -14,30 +14,30 @@ class ProcessTemplate(BaseTemplate, HasConditionTemplates, HasParameterTemplates
 
     def __init__(self, name=None, description=None,
                  conditions=None, parameters=None,
-                 allowed_unique_labels=None, allowed_labels=None,
+                 allowed_names=None, allowed_labels=None,
                  uids=None, tags=None):
         BaseTemplate.__init__(self, name, description, uids, tags)
         HasConditionTemplates.__init__(self, conditions)
         HasParameterTemplates.__init__(self, parameters)
 
-        self._allowed_unique_labels = None
-        self.allowed_unique_labels = allowed_unique_labels
+        self._allowed_names = None
+        self.allowed_names = allowed_names
 
         self._allowed_labels = None
         self.allowed_labels = allowed_labels
 
     @property
-    def allowed_unique_labels(self):
-        """Get the allowed unique labels."""
-        return self._allowed_unique_labels
+    def allowed_names(self):
+        """Get the allowed names."""
+        return self._allowed_names
 
-    @allowed_unique_labels.setter
-    def allowed_unique_labels(self, allowed_unique_labels):
+    @allowed_names.setter
+    def allowed_names(self, allowed_names):
         # if none, leave as none; don't set to the empty set
-        if allowed_unique_labels is None:
-            self._allowed_unique_labels = allowed_unique_labels
+        if allowed_names is None:
+            self._allowed_names = allowed_names
         else:
-            self._allowed_unique_labels = validate_list(allowed_unique_labels, str)
+            self._allowed_names = validate_list(allowed_names, str)
 
     @property
     def allowed_labels(self):
@@ -61,12 +61,12 @@ class ProcessTemplate(BaseTemplate, HasConditionTemplates, HasParameterTemplates
         self.validate_parameters(process)
 
         # Check the unique label namespace
-        if self.allowed_unique_labels is not None:
-            unique_labels = {x.unique_label
-                             for x in process.ingredients if x.unique_label is not None}
-            extra = unique_labels.difference(set(self.allowed_unique_labels))
+        if self.allowed_names is not None:
+            unique_labels = {x.name
+                             for x in process.ingredients if x.name is not None}
+            extra = unique_labels.difference(set(self.allowed_names))
             if len(extra) > 0:
-                raise ValueError("Found disallowed unique labels: {}".format(extra))
+                raise ValueError("Found disallowed names: {}".format(extra))
 
         # Check the label namespace
         if self.allowed_labels is not None:

@@ -20,10 +20,10 @@ class ProcessRun(BaseObject, HasConditions, HasParameters):
     def __init__(self, name=None, spec=None, ingredients=None,
                  conditions=None, parameters=None,
                  uids=None, tags=None, notes=None, file_links=None):
-        BaseObject.__init__(self, uids=uids, tags=tags, notes=notes, file_links=file_links)
+        BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
+                            file_links=file_links)
         HasConditions.__init__(self, conditions)
         HasParameters.__init__(self, parameters)
-        self.name = name
 
         self._ingredients = None
         self.ingredients = ingredients
@@ -47,10 +47,10 @@ class ProcessRun(BaseObject, HasConditions, HasParameters):
         from taurus.entity.object.ingredient_run import IngredientRun
         from taurus.entity.link_by_uid import LinkByUID
         self._ingredients = validate_list(ingredients, [IngredientRun, LinkByUID])
-        unique_labels = [x.unique_label for x in self._ingredients
-                         if isinstance(x, IngredientRun) and x.unique_label is not None]
-        if len(unique_labels) > len(set(unique_labels)):
-            raise ValueError("Two ingredients were assigned the same unique label")
+        ingredient_names = [x.name for x in self._ingredients
+                        if isinstance(x, IngredientRun) and x.name is not None]
+        if len(ingredient_names) > len(set(ingredient_names)):
+            raise ValueError("Two ingredients were assigned the same name")
 
     @property
     def spec(self):

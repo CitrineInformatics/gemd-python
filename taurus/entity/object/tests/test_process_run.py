@@ -28,7 +28,7 @@ def test_ingredient_run():
     proc_run = ProcessRun(
         name="a process spec",
         tags=["tag1", "tag2"],
-        ingredients=IngredientRun(unique_label='Input', material=MaterialRun(name='Raw'))
+        ingredients=IngredientRun(name='Input', material=MaterialRun(name='Raw'))
     )
 
     # Make copies of both specs
