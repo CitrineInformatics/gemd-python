@@ -36,7 +36,7 @@ from taurus.entity.value.normal_real import NormalReal
 from taurus.entity.value.uniform_integer import UniformInteger
 from taurus.entity.value.uniform_real import UniformReal
 from taurus.enumeration.base_enumeration import BaseEnumeration
-from taurus.util import flatten, substitute_links, deepcopy, set_uuids
+from taurus.util import flatten, substitute_links, deepcopy, set_uuids, substitute_objects
 
 
 def dumps(obj, **kwargs):
@@ -56,6 +56,7 @@ def loads(json_str, **kwargs):
     index = {}
     raw = json.loads(json_str, object_hook=lambda x: _loado(x, index), **kwargs)
     # the return value is in the 2nd position.
+    substitute_objects(raw, index)
     return raw[1]
 
 
@@ -114,8 +115,6 @@ def _loado(d, index):
         obj = clz.from_dict(d)
     elif typ == LinkByUID.typ:
         obj = LinkByUID.from_dict(d)
-        if (obj.scope.lower(), obj.id) in index:
-            return index[(obj.scope.lower(), obj.id)]
         return obj
     else:
         raise ValueError("Unexpected base object type: {}".format(typ))
