@@ -442,3 +442,4 @@ def test_deeply_nested_rehydration():
     '''
     material_history = loads(json_str)
     assert isinstance(material_history.process.ingredients[1].spec, IngredientSpec)
+    assert isinstance(material_history.measurements[0], MeasurementRun)
