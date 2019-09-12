@@ -6,6 +6,7 @@ from taurus.entity.attribute.parameter import Parameter
 from taurus.entity.link_by_uid import LinkByUID
 from taurus.entity.object import MeasurementRun, MaterialRun, ProcessRun
 from taurus.entity.object.ingredient_run import IngredientRun
+from taurus.entity.object.ingredient_spec import IngredientSpec
 from taurus.entity.value.nominal_real import NominalReal
 from taurus.entity.value.normal_real import NormalReal
 
@@ -99,3 +100,345 @@ def test_case_insensitive_rehydration():
     loaded_ingredient = loads(json_str)
     # The ingredient's material will either be a MaterialRun (pass) or a LinkByUID (fail)
     assert isinstance(loaded_ingredient.material, MaterialRun)
+
+
+def test_deeply_nested_rehydration():
+    """
+    Tests that loads fully replaces links with objects.
+
+    In particular, this test makes sure that loads is robust to objects being referenced by
+    LinkByUid before they are "declared" in the JSON array.
+    """
+    json_str = '''
+[
+  [
+    {
+      "type": "material_spec",
+      "properties": [],
+      "uids": {
+        "id": "230fc837-8a19-402c-86ad-e451b7a80f9d"
+      },
+      "tags": [],
+      "name": "Flour",
+      "file_links": []
+    },
+    {
+      "type": "material_run",
+      "spec": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "230fc837-8a19-402c-86ad-e451b7a80f9d"
+      },
+      "sample_type": "unknown",
+      "uids": {
+        "id": "76185e4f-c778-4654-a2ae-cc49851e291f"
+      },
+      "tags": [],
+      "name": "Flour",
+      "file_links": []
+    },
+    {
+      "type": "ingredient_run",
+      "material": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "76185e4f-c778-4654-a2ae-cc49851e291f"
+      },
+      "spec": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "f694d2cc-5b00-42ef-92b7-dee3cdc7239a"
+      },
+      "unique_label": "500 g flour",
+      "labels": [],
+      "uids": {
+        "id": "36aa5bff-c89d-43fa-95c8-fa6b710061d8"
+      },
+      "tags": [],
+      "file_links": []
+    },
+    {
+      "type": "material_spec",
+      "properties": [
+        {
+          "property": {
+            "type": "property",
+            "name": "mass",
+            "value": {
+              "type": "normal_real",
+              "mean": 0.84,
+              "std": 0.04,
+              "units": "gram"
+            },
+            "template": {
+              "type": "link_by_uid",
+              "scope": "id",
+              "id": "3b46b191-b3d0-4b31-bdba-377cca315cbd"
+            },
+            "origin": "unknown",
+            "file_links": []
+          },
+          "conditions": [
+            {
+              "type": "condition",
+              "name": "temperature",
+              "value": {
+                "type": "nominal_real",
+                "nominal": 20,
+                "units": "degC"
+              },
+              "template": {
+                "type": "link_by_uid",
+                "scope": "id",
+                "id": "09fb94ab-17fb-4428-a20e-d6b0d0ae5fb2"
+              },
+              "origin": "unknown",
+              "file_links": []
+            }
+          ],
+          "type": "property_and_conditions"
+        }
+      ],
+      "uids": {
+        "id": "39ec0605-0b9b-443c-ab6a-4d7bc1b73b24"
+      },
+      "tags": [],
+      "name": "Butter",
+      "file_links": []
+    },
+    {
+      "type": "material_run",
+      "spec": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "39ec0605-0b9b-443c-ab6a-4d7bc1b73b24"
+      },
+      "sample_type": "unknown",
+      "uids": {
+        "id": "605bf096-3b2d-4c3b-afaf-f77bcff9806f"
+      },
+      "tags": [],
+      "name": "Butter",
+      "file_links": []
+    },
+    {
+      "type": "ingredient_run",
+      "material": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "605bf096-3b2d-4c3b-afaf-f77bcff9806f"
+      },
+      "spec": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "118eacb7-6edc-4e57-b40b-2971481d37e5"
+      },
+      "unique_label": "1 stick butter",
+      "labels": [],
+      "absolute_quantity": {
+        "type": "nominal_real",
+        "nominal": 1,
+        "units": "dimensionless"
+      },
+      "uids": {
+        "id": "91ab45f2-ceec-4109-8f74-2f9964a4bc2c"
+      },
+      "tags": [],
+      "file_links": []
+    },
+    {
+      "type": "ingredient_spec",
+      "material": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "39ec0605-0b9b-443c-ab6a-4d7bc1b73b24"
+      },
+      "labels": [],
+      "uids": {
+        "id": "118eacb7-6edc-4e57-b40b-2971481d37e5"
+      },
+      "tags": [],
+      "file_links": []
+    },
+    {
+      "type": "ingredient_spec",
+      "material": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "230fc837-8a19-402c-86ad-e451b7a80f9d"
+      },
+      "labels": [],
+      "absolute_quantity": {
+        "type": "normal_real",
+        "mean": 500,
+        "std": 50,
+        "units": "gram"
+      },
+      "uids": {
+        "id": "f694d2cc-5b00-42ef-92b7-dee3cdc7239a"
+      },
+      "tags": [],
+      "file_links": []
+    },
+    {
+      "type": "process_spec",
+      "ingredients": [
+        {
+          "type": "link_by_uid",
+          "scope": "id",
+          "id": "f694d2cc-5b00-42ef-92b7-dee3cdc7239a"
+        },
+        {
+          "type": "link_by_uid",
+          "scope": "id",
+          "id": "118eacb7-6edc-4e57-b40b-2971481d37e5"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "parameter",
+          "name": "oven",
+          "value": {
+            "type": "nominal_categorical",
+            "category": "oven 1"
+          },
+          "template": {
+            "type": "link_by_uid",
+            "scope": "id",
+            "id": "536a3ebb-55a4-4560-a6df-fba44cdb917a"
+          },
+          "origin": "unknown",
+          "file_links": []
+        }
+      ],
+      "conditions": [],
+      "uids": {
+        "id": "f77dc327-ef44-4a39-a617-061ace5fa789"
+      },
+      "tags": [],
+      "name": "Ideal baking",
+      "file_links": []
+    },
+    {
+      "type": "process_run",
+      "spec": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "f77dc327-ef44-4a39-a617-061ace5fa789"
+      },
+      "ingredients": [
+        {
+          "type": "link_by_uid",
+          "scope": "id",
+          "id": "36aa5bff-c89d-43fa-95c8-fa6b710061d8"
+        },
+        {
+          "type": "link_by_uid",
+          "scope": "id",
+          "id": "91ab45f2-ceec-4109-8f74-2f9964a4bc2c"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "parameter",
+          "name": "oven",
+          "value": {
+            "type": "nominal_categorical",
+            "category": "oven 1"
+          },
+          "template": {
+            "type": "link_by_uid",
+            "scope": "id",
+            "id": "536a3ebb-55a4-4560-a6df-fba44cdb917a"
+          },
+          "origin": "unknown",
+          "file_links": []
+        }
+      ],
+      "conditions": [],
+      "uids": {
+        "id": "7cb9471b-0c90-4fd9-bfe1-0e9d7602ab0d",
+        "my_id": "jvkzrlnm"
+      },
+      "tags": [
+        "cake::yes"
+      ],
+      "name": "cake baking",
+      "file_links": []
+    },
+    {
+      "type": "material_spec",
+      "process": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "f77dc327-ef44-4a39-a617-061ace5fa789"
+      },
+      "properties": [],
+      "uids": {
+        "id": "b935aa7d-93a4-407f-937f-cca32d7a8413"
+      },
+      "tags": [],
+      "name": "An ideal cake",
+      "file_links": []
+    },
+    {
+      "type": "measurement_spec",
+      "parameters": [],
+      "conditions": [],
+      "uids": {
+        "id": "85c911eb-af5a-4c34-9b59-b88b84780239"
+      },
+      "tags": [],
+      "name": "Tasty spec",
+      "file_links": []
+    },
+    {
+      "type": "measurement_run",
+      "spec": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "85c911eb-af5a-4c34-9b59-b88b84780239"
+      },
+      "material": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "f0f41fb9-32dc-4903-aaf4-f369de71530f"
+      },
+      "properties": [],
+      "parameters": [],
+      "conditions": [],
+      "uids": {
+        "id": "9673f15d-76df-4dcd-a409-7152cb629a3f"
+      },
+      "tags": [
+        "example::tag"
+      ],
+      "name": "Tastiness",
+      "notes": "it is tasty",
+      "file_links": []
+    }
+  ],
+  {
+    "type": "material_run",
+    "process": {
+      "type": "link_by_uid",
+      "scope": "id",
+      "id": "7cb9471b-0c90-4fd9-bfe1-0e9d7602ab0d"
+    },
+    "spec": {
+      "type": "link_by_uid",
+      "scope": "id",
+      "id": "b935aa7d-93a4-407f-937f-cca32d7a8413"
+    },
+    "sample_type": "unknown",
+    "uids": {
+      "id": "f0f41fb9-32dc-4903-aaf4-f369de71530f"
+    },
+    "tags": [],
+    "name": "A cake",
+    "file_links": []
+  }
+]
+    '''
+    material_history = loads(json_str)
+    assert isinstance(material_history.process.ingredients[1].spec, IngredientSpec)
