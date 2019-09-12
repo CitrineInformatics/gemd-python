@@ -60,11 +60,11 @@ class ProcessTemplate(BaseTemplate, HasConditionTemplates, HasParameterTemplates
         self.validate_conditions(process)
         self.validate_parameters(process)
 
-        # Check the unique label namespace
+        # Check the name namespace
         if self.allowed_names is not None:
-            unique_labels = {x.name
-                             for x in process.ingredients if x.name is not None}
-            extra = unique_labels.difference(set(self.allowed_names))
+            unique_names = {x.name
+                            for x in process.ingredients if x.name is not None}
+            extra = unique_names.difference(set(self.allowed_names))
             if len(extra) > 0:
                 raise ValueError("Found disallowed names: {}".format(extra))
 
