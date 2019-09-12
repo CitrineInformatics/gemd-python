@@ -25,11 +25,8 @@ def test_process_spec():
 def test_ingredient_run():
     """Tests that a process can house an ingredient, and that pairing survives serialization."""
     # Create a ProcessSpec
-    proc_run = ProcessRun(
-        name="a process spec",
-        tags=["tag1", "tag2"],
-        ingredients=IngredientRun(unique_label='Input', material=MaterialRun(name='Raw'))
-    )
+    proc_run = ProcessRun(name="a process spec", tags=["tag1", "tag2"])
+    IngredientRun(unique_label='Input', material=MaterialRun(name='Raw'), process=proc_run)
 
     # Make copies of both specs
     proc_run_copy = loads(dumps(proc_run))

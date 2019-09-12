@@ -18,8 +18,8 @@ def test_serialize():
     condition = Condition(name="A condition", value=NominalReal(7, ''))
     parameter = Parameter(name="A parameter", value=NormalReal(mean=17, std=1, units=''))
     input_material = MaterialRun(tags="input")
-    input_ingredient = IngredientRun(material=input_material)
-    process = ProcessRun(tags="A tag on a process run", ingredients=[input_ingredient])
+    process = ProcessRun(tags="A tag on a process run")
+    _ = IngredientRun(material=input_material, process=process)
     material = MaterialRun(tags=["A tag on a material"], process=process)
     measurement = MeasurementRun(tags="A tag on a measurement", conditions=condition,
                                  parameters=parameter, material=material)
@@ -94,6 +94,11 @@ def test_case_insensitive_rehydration():
                 "scope": "ID",
                 "id": "9118c2d3-1c38-47fe-a650-c2b92fdb6777"
               }
+              "process": {
+                "type": "link_by_uid",
+                "scope": "ID",
+                "id": "9148c2d3-2c38-47fe-b650-c2b92fdb6777"
+              }
             }
           ]
        '''
@@ -143,6 +148,11 @@ def test_deeply_nested_rehydration():
         "type": "link_by_uid",
         "scope": "id",
         "id": "76185e4f-c778-4654-a2ae-cc49851e291f"
+      },
+      "process": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "7cb9471b-0c90-4fd9-bfe1-0e9d7602ab0d"
       },
       "spec": {
         "type": "link_by_uid",
@@ -228,6 +238,11 @@ def test_deeply_nested_rehydration():
         "scope": "id",
         "id": "605bf096-3b2d-4c3b-afaf-f77bcff9806f"
       },
+      "process": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "7cb9471b-0c90-4fd9-bfe1-0e9d7602ab0d"
+      },
       "spec": {
         "type": "link_by_uid",
         "scope": "id",
@@ -253,6 +268,11 @@ def test_deeply_nested_rehydration():
         "scope": "id",
         "id": "39ec0605-0b9b-443c-ab6a-4d7bc1b73b24"
       },
+      "process": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "f77dc327-ef44-4a39-a617-061ace5fa789"
+      },
       "labels": [],
       "uids": {
         "id": "118eacb7-6edc-4e57-b40b-2971481d37e5"
@@ -266,6 +286,11 @@ def test_deeply_nested_rehydration():
         "type": "link_by_uid",
         "scope": "id",
         "id": "230fc837-8a19-402c-86ad-e451b7a80f9d"
+      },
+      "process": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "f77dc327-ef44-4a39-a617-061ace5fa789"
       },
       "labels": [],
       "absolute_quantity": {
@@ -282,18 +307,6 @@ def test_deeply_nested_rehydration():
     },
     {
       "type": "process_spec",
-      "ingredients": [
-        {
-          "type": "link_by_uid",
-          "scope": "id",
-          "id": "f694d2cc-5b00-42ef-92b7-dee3cdc7239a"
-        },
-        {
-          "type": "link_by_uid",
-          "scope": "id",
-          "id": "118eacb7-6edc-4e57-b40b-2971481d37e5"
-        }
-      ],
       "parameters": [
         {
           "type": "parameter",
@@ -326,18 +339,6 @@ def test_deeply_nested_rehydration():
         "scope": "id",
         "id": "f77dc327-ef44-4a39-a617-061ace5fa789"
       },
-      "ingredients": [
-        {
-          "type": "link_by_uid",
-          "scope": "id",
-          "id": "36aa5bff-c89d-43fa-95c8-fa6b710061d8"
-        },
-        {
-          "type": "link_by_uid",
-          "scope": "id",
-          "id": "91ab45f2-ceec-4109-8f74-2f9964a4bc2c"
-        }
-      ],
       "parameters": [
         {
           "type": "parameter",

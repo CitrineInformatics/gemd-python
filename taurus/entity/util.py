@@ -41,7 +41,8 @@ def make_instance(base_spec):
                 name=spec.name,
                 spec=spec
             )
-            seen[id(spec)].ingredients = [crawler(x) for x in spec.ingredients]
+            for x in spec.ingredients:
+                crawler(x).process = seen[id(spec)]
         else:
             raise TypeError('Passed object is not a spec-like object({})'.format(type(spec)))
 
