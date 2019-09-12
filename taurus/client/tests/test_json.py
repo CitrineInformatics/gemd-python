@@ -93,7 +93,7 @@ def test_case_insensitive_rehydration():
                 "type": "link_by_uid",
                 "scope": "ID",
                 "id": "9118c2d3-1c38-47fe-a650-c2b92fdb6777"
-              }
+              },
               "process": {
                 "type": "link_by_uid",
                 "scope": "ID",
