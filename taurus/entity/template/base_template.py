@@ -62,9 +62,9 @@ class BaseTemplate(BaseEntity):
                 # if the attribute doesn't have a template, assign this template to it
                 if attribute.template is None:
                     attribute.template = attr_template
-                # if it does, make sure its the right one
-                # TODO: as_dict() doesn't work for attribute templates, so this throws an error
-                # Fix the setting in AttributeTemplate()
-                elif attribute.template != attr_template:
+                # if it does have a template and its not a LinkByUID, make sure its the right one
+                elif attribute.template != attr_template \
+                        and isinstance(attribute.template, AttributeTemplate) \
+                        and isinstance(attr_template, AttributeTemplate):
                     raise ValueError(
                         "Template and object templates don't match for all {}".format(attr_name))
