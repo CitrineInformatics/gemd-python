@@ -18,7 +18,7 @@ def test_make_instance():
 
     mat_spec = MaterialSpec(name='Mat name')
     mat_spec.process = ProcessSpec(name='Pro name')
-    IngredientSpec(unique_label='Ing label', process=mat_spec.process)
+    IngredientSpec(name='Ing label', process=mat_spec.process)
     mat_spec.process.ingredients[0].material = MaterialSpec(name='Baby mat name')
 
     mat_run = make_instance(mat_spec)
