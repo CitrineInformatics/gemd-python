@@ -21,9 +21,9 @@ class LinkByUID(DictSerializable):
     def from_entity(cls, entity, name="auto"):
         """Create LinkByUID from in-memory object using id with scope 'name'."""
         if name in entity.uids:
-            scope, id = name, entity.uids[name]
+            scope, uid = name, entity.uids[name]
         else:
             if not entity.uids:
                 entity.add_uid(name, str(uuid.uuid4()))
-            scope, id = next((s, i) for s, i in entity.uids.items())
-        return LinkByUID(scope, id)
+            scope, uid = next((s, i) for s, i in entity.uids.items())
+        return LinkByUID(scope, uid)
