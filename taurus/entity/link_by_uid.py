@@ -18,12 +18,12 @@ class LinkByUID(DictSerializable):
         return str({"scope": self.scope, "uid": self.id})
 
     @classmethod
-    def from_entity(cls, entity):
-        """Creates link using in-memory object. Assigns an ID linked object doesn't have one already."""
-        if 'id' in entity.uids:
-            scope, id = 'id', entity.uids['id']
+    def from_entity(cls, entity, name="auto"):
+        """Create LinkByUID from in-memory object using id with scope 'name'."""
+        if name in entity.uids:
+            scope, id = name, entity.uids[name]
         else:
             if not entity.uids:
-                entity.add_uid('auto', str(uuid.uuid4()))
+                entity.add_uid(name, str(uuid.uuid4()))
             scope, id = next((s, i) for s, i in entity.uids.items())
         return LinkByUID(scope, id)
