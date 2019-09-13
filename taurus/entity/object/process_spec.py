@@ -20,10 +20,10 @@ class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
     def __init__(self, name=None, template=None,
                  parameters=None, conditions=None,
                  uids=None, tags=None, notes=None, file_links=None):
-        BaseObject.__init__(self, uids=uids, tags=tags, notes=notes, file_links=file_links)
+        BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
+                            file_links=file_links)
         HasParameters.__init__(self, parameters=parameters)
         HasConditions.__init__(self, conditions=conditions)
-        self.name = name
 
         self._ingredients = []
 

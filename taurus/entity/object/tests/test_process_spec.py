@@ -51,7 +51,7 @@ def test_ingredient_spec():
     """Tests that a process can house an ingredient, and that pairing survives serialization."""
     # Create a ProcessSpec
     proc_spec = ProcessSpec(name="a process spec", tags=["tag1", "tag2"])
-    IngredientSpec(unique_label='Input', material=MaterialSpec(name='Raw'), process=proc_spec)
+    IngredientSpec(name='Input', material=MaterialSpec(name='Raw'), process=proc_spec)
 
     # Make copies of both specs
     proc_spec_copy = loads(dumps(proc_spec))

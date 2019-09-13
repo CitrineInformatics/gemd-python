@@ -157,7 +157,7 @@ def test_deeply_nested_rehydration():
         "scope": "id",
         "id": "f694d2cc-5b00-42ef-92b7-dee3cdc7239a"
       },
-      "unique_label": "500 g flour",
+      "name": "500 g flour",
       "labels": [],
       "uids": {
         "id": "36aa5bff-c89d-43fa-95c8-fa6b710061d8"
@@ -246,7 +246,7 @@ def test_deeply_nested_rehydration():
         "scope": "id",
         "id": "118eacb7-6edc-4e57-b40b-2971481d37e5"
       },
-      "unique_label": "1 stick butter",
+      "name": "1 stick butter",
       "labels": [],
       "absolute_quantity": {
         "type": "nominal_real",

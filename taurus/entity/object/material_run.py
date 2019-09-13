@@ -12,12 +12,12 @@ class MaterialRun(BaseObject):
 
     def __init__(self, name=None, spec=None, process=None, sample_type="unknown",
                  uids=None, tags=None, notes=None, file_links=None):
-        BaseObject.__init__(self, uids=uids, tags=tags, notes=notes, file_links=file_links)
+        BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
+                            file_links=file_links)
         self._process = None
         self._measurements = []
         self._sample_type = None
         self._spec = None
-        self.name = name
 
         self.spec = spec
         self.process = process

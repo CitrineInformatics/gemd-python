@@ -17,10 +17,10 @@ class MaterialSpec(BaseObject, HasTemplate):
     def __init__(self, name=None, template=None,
                  properties=None, process=None, uids=None, tags=None,
                  notes=None, file_links=None):
-        BaseObject.__init__(self, uids=uids, tags=tags, notes=notes, file_links=file_links)
+        BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
+                            file_links=file_links)
         self._properties = None
         self.properties = properties
-        self.name = name
         self._process = None
         self.process = process
         HasTemplate.__init__(self, template)
