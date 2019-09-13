@@ -23,7 +23,7 @@ class MeasurementTemplate(BaseTemplate,
         HasParameterTemplates.__init__(self, parameters)
 
     def validate(self, measurement):
-        """Check that a measurement satisfies all property, condition, and parametr templates."""
+        """Check that a measurement satisfies all property, condition, and parameter templates."""
         if not isinstance(measurement, (MeasurementRun, MeasurementSpec)):
             raise ValueError("MeasurementTemplate can only be applied to Measurements")
         self.validate_properties(measurement)

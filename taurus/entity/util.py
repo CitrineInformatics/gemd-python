@@ -34,7 +34,7 @@ def make_instance(base_spec):
             )
             seen[id(spec)].process = crawler(spec.process) if spec.process else None
         elif isinstance(spec, IngredientSpec):
-            seen[id(spec)] = IngredientRun(unique_label=spec.unique_label, spec=spec)
+            seen[id(spec)] = IngredientRun(name=spec.name, spec=spec)
             seen[id(spec)].material = crawler(spec.material) if spec.material else None
         elif isinstance(spec, ProcessSpec):
             seen[id(spec)] = ProcessRun(

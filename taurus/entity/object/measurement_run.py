@@ -19,16 +19,15 @@ class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters):
     def __init__(self, name=None, spec=None, material=None,
                  properties=None, conditions=None, parameters=None,
                  uids=None, tags=None, notes=None, file_links=None):
-        BaseObject.__init__(self, uids=uids, tags=tags, notes=notes, file_links=file_links)
+        BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
+                            file_links=file_links)
         HasProperties.__init__(self, properties)
         HasConditions.__init__(self, conditions)
         HasParameters.__init__(self, parameters)
 
-        self.name = name
         self._material = None
         self.material = material
         self._spec = None
-
         self.spec = spec
 
     @property

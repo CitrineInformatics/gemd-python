@@ -21,10 +21,10 @@ class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
     def __init__(self, name=None, ingredients=None, template=None,
                  parameters=None, conditions=None,
                  uids=None, tags=None, notes=None, file_links=None):
-        BaseObject.__init__(self, uids=uids, tags=tags, notes=notes, file_links=file_links)
+        BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
+                            file_links=file_links)
         HasParameters.__init__(self, parameters=parameters)
         HasConditions.__init__(self, conditions=conditions)
-        self.name = name
 
         self._ingredients = None
         self.ingredients = ingredients
@@ -46,8 +46,8 @@ class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
         from taurus.entity.object.ingredient_spec import IngredientSpec
         from taurus.entity.link_by_uid import LinkByUID
         self._ingredients = validate_list(ingredients, [IngredientSpec, LinkByUID])
-        ingredient_names = [x.unique_label for x in self._ingredients
-                            if isinstance(x, IngredientSpec) and x.unique_label is not None]
+        ingredient_names = [x.name for x in self._ingredients
+                            if isinstance(x, IngredientSpec) and x.name is not None]
         if len(ingredient_names) > len(set(ingredient_names)):
             raise ValueError("Two ingredients were assigned the same name")
 

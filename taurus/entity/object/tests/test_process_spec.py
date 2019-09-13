@@ -53,7 +53,7 @@ def test_ingredient_spec():
     proc_spec = ProcessSpec(
         name="a process spec",
         tags=["tag1", "tag2"],
-        ingredients=IngredientSpec(unique_label='Input', material=MaterialSpec(name='Raw'))
+        ingredients=IngredientSpec(name='Input', material=MaterialSpec(name='Raw'))
     )
 
     # Make copies of both specs
