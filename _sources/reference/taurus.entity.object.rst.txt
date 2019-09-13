@@ -8,7 +8,6 @@ Submodules
 
    taurus.entity.object.base_object
    taurus.entity.object.has_conditions
-   taurus.entity.object.has_labels
    taurus.entity.object.has_parameters
    taurus.entity.object.has_properties
    taurus.entity.object.has_quantities
