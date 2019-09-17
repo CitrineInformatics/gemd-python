@@ -35,7 +35,7 @@
 <p>An ingredient spec is the intent of a material being used in a process.</p>
 <dl class="class">
 <dt id="taurus.entity.object.ingredient_spec.IngredientSpec">
-<em class="property">class </em><code class="sig-prename descclassname">taurus.entity.object.ingredient_spec.</code><code class="sig-name descname">IngredientSpec</code><span class="sig-paren">(</span><em class="sig-param">material=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">labels=None</em>, <em class="sig-param">mass_fraction=None</em>, <em class="sig-param">volume_fraction=None</em>, <em class="sig-param">number_fraction=None</em>, <em class="sig-param">absolute_quantity=None</em>, <em class="sig-param">uids=None</em>, <em class="sig-param">tags=None</em>, <em class="sig-param">notes=None</em>, <em class="sig-param">file_links=None</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.object.ingredient_spec.IngredientSpec" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">taurus.entity.object.ingredient_spec.</code><code class="sig-name descname">IngredientSpec</code><span class="sig-paren">(</span><em class="sig-param">material=None</em>, <em class="sig-param">process=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">labels=None</em>, <em class="sig-param">mass_fraction=None</em>, <em class="sig-param">volume_fraction=None</em>, <em class="sig-param">number_fraction=None</em>, <em class="sig-param">absolute_quantity=None</em>, <em class="sig-param">uids=None</em>, <em class="sig-param">tags=None</em>, <em class="sig-param">notes=None</em>, <em class="sig-param">file_links=None</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.object.ingredient_spec.IngredientSpec" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="taurus.entity.object.base_object.html#taurus.entity.object.base_object.BaseObject" title="taurus.entity.object.base_object.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.object.base_object.BaseObject</span></code></a>, <a class="reference internal" href="taurus.entity.object.has_quantities.html#taurus.entity.object.has_quantities.HasQuantities" title="taurus.entity.object.has_quantities.HasQuantities"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.object.has_quantities.HasQuantities</span></code></a></p>
 <p>Ingredient spec, with quantities and links to originating material.</p>
 <dl class="method">
@@ -48,6 +48,12 @@
 <dt id="taurus.entity.object.ingredient_spec.IngredientSpec.material">
 <em class="property">property </em><code class="sig-name descname">material</code><a class="headerlink" href="#taurus.entity.object.ingredient_spec.IngredientSpec.material" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the material spec.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="taurus.entity.object.ingredient_spec.IngredientSpec.process">
+<em class="property">property </em><code class="sig-name descname">process</code><a class="headerlink" href="#taurus.entity.object.ingredient_spec.IngredientSpec.process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the material.</p>
 </dd></dl>
 
 <dl class="attribute">

@@ -35,7 +35,7 @@
 <p>A process run, which turns into ingredients into a material.</p>
 <dl class="class">
 <dt id="taurus.entity.object.process_run.ProcessRun">
-<em class="property">class </em><code class="sig-prename descclassname">taurus.entity.object.process_run.</code><code class="sig-name descname">ProcessRun</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">spec=None</em>, <em class="sig-param">ingredients=None</em>, <em class="sig-param">conditions=None</em>, <em class="sig-param">parameters=None</em>, <em class="sig-param">uids=None</em>, <em class="sig-param">tags=None</em>, <em class="sig-param">notes=None</em>, <em class="sig-param">file_links=None</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.object.process_run.ProcessRun" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">taurus.entity.object.process_run.</code><code class="sig-name descname">ProcessRun</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">spec=None</em>, <em class="sig-param">conditions=None</em>, <em class="sig-param">parameters=None</em>, <em class="sig-param">uids=None</em>, <em class="sig-param">tags=None</em>, <em class="sig-param">notes=None</em>, <em class="sig-param">file_links=None</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.object.process_run.ProcessRun" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="taurus.entity.object.base_object.html#taurus.entity.object.base_object.BaseObject" title="taurus.entity.object.base_object.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.object.base_object.BaseObject</span></code></a>, <a class="reference internal" href="taurus.entity.object.has_conditions.html#taurus.entity.object.has_conditions.HasConditions" title="taurus.entity.object.has_conditions.HasConditions"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.object.has_conditions.HasConditions</span></code></a>, <a class="reference internal" href="taurus.entity.object.has_parameters.html#taurus.entity.object.has_parameters.HasParameters" title="taurus.entity.object.has_parameters.HasParameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.object.has_parameters.HasParameters</span></code></a></p>
 <p>Realization of a process.</p>
 <p>This includes links to the input materials and measured conditions and parameters
@@ -54,7 +54,7 @@ ProcessRun includes a soft-link to the MaterialRun that it produces, if any</p>
 
 <dl class="attribute">
 <dt id="taurus.entity.object.process_run.ProcessRun.skip">
-<code class="sig-name descname">skip</code><em class="property"> = {'_output_material'}</em><a class="headerlink" href="#taurus.entity.object.process_run.ProcessRun.skip" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">skip</code><em class="property"> = {'_ingredients', '_output_material'}</em><a class="headerlink" href="#taurus.entity.object.process_run.ProcessRun.skip" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
