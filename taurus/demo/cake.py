@@ -29,7 +29,7 @@ from taurus.entity.value.normal_real import NormalReal
 from taurus.entity.dict_serializable import DictSerializable
 from taurus.entity.base_entity import BaseEntity
 from taurus.enumeration.origin import Origin
-from taurus.util.impl import set_uuids, recursive_flatmap, substitute_links
+from taurus.util.impl import set_uuids, substitute_links
 
 
 def make_cake():
