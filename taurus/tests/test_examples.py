@@ -51,11 +51,21 @@ def make_data_island(density, bulk_modulus, firing_temperature, binders, powders
     binder_runs = keymap(lambda x: MaterialRun(spec=x), binder_specs)
     powder_runs = keymap(lambda x: MaterialRun(spec=x), powder_specs)
 
+    all_input_materials = merge(binder_runs, powder_runs)
+    mixing_composition = Condition(
+        name="composition",
+        value=NominalComposition(all_input_materials)
+    )
+    mixing_process = ProcessRun(
+        tags=["mixing"],
+        conditions=[mixing_composition]
+    )
     binder_ingredients = []
     for run in binder_runs:
         binder_ingredients.append(
             IngredientRun(
                 material=run,
+                process=mixing_process,
                 mass_fraction=NominalReal(binders[run.spec.name], ''),
                 name=run.spec.name,
                 labels=["binder"]
@@ -67,24 +77,12 @@ def make_data_island(density, bulk_modulus, firing_temperature, binders, powders
         powder_ingredients.append(
             IngredientRun(
                 material=run,
+                process=mixing_process,
                 mass_fraction=NominalReal(powders[run.spec.name], ''),
                 name=run.spec.name,
                 labels=["powder"]
             )
         )
-
-    all_input_materials = merge(binder_runs, powder_runs)
-    all_ingredients = binder_ingredients + powder_ingredients
-
-    mixing_composition = Condition(
-        name="composition",
-        value=NominalComposition(all_input_materials)
-    )
-    mixing_process = ProcessRun(
-        tags=["mixing"],
-        ingredients=all_ingredients,
-        conditions=[mixing_composition]
-    )
 
     green_sample = MaterialRun(process=mixing_process)
 
@@ -102,13 +100,14 @@ def make_data_island(density, bulk_modulus, firing_temperature, binders, powders
     firing_process = ProcessRun(
         conditions=[measured_firing_temperature],
         parameters=[specified_firing_setting],
-        ingredients=[IngredientRun(
-            green_sample,
-            mass_fraction=NormalReal(1.0, 0.0, ''),
-            volume_fraction=NormalReal(1.0, 0.0, ''),
-            number_fraction=NormalReal(1.0, 0.0, '')
-        )],
         spec=firing_spec
+    )
+    IngredientRun(
+        green_sample,
+        process=firing_process,
+        mass_fraction=NormalReal(1.0, 0.0, ''),
+        volume_fraction=NormalReal(1.0, 0.0, ''),
+        number_fraction=NormalReal(1.0, 0.0, '')
     )
 
     measured_density = Property(
@@ -169,5 +168,5 @@ def test_access_data():
     )[0] == 0.96)
 
     # check that the serialization results in the correct number of objects in the preface
-    # (note that measurements are not serialized)
-    assert(len(json.loads(dumps(island))[0]) == 23)
+    # (note that neither measurements nor ingredients are serialized)
+    assert(len(json.loads(dumps(island))[0]) == 8)

@@ -54,43 +54,34 @@ def make_cake():
 
     cake.process = ProcessRun(name='Icing')
     for ingredient in (baked, frosting):
-        cake.process.ingredients.append(IngredientRun(material=ingredient))
+        IngredientRun(material=ingredient, process=cake.process)
 
     cake_taste = MeasurementRun(name='Final Taste', material=cake)
     cake_appearance = MeasurementRun(name='Final Appearance', material=cake)
 
     baked.process = ProcessRun(name='Baking')
-    baked.process.ingredients.append(IngredientRun(material=batter))
+    IngredientRun(material=batter, process=baked.process)
 
     batter.process = ProcessRun(name='Mixing Batter')
     for ingredient in (wetmix, drymix, milk):
-        batter.process.ingredients.append(IngredientRun(material=ingredient))
+        IngredientRun(material=ingredient, process=batter.process)
 
     wetmix.process = ProcessRun(name='Mixing Wet')
     for ingredient in (sugar, butter, eggs, vanilla):
-        wetmix.process.ingredients.append(IngredientRun(material=ingredient))
+        IngredientRun(material=ingredient, process=wetmix.process)
 
     drymix.process = ProcessRun(name='Mixing Dry')
     for ingredient in (flour, baking_powder, salt):
-        drymix.process.ingredients.append(IngredientRun(material=ingredient))
+        IngredientRun(material=ingredient, process=drymix.process)
 
     set_uuids(cake)
 
     frosting.process = ProcessRun(name='Mixing Frosting')
-    frosting.process.ingredients.append(IngredientRun(material=LinkByUID(
-        scope='auto',
-        id=butter.uids['auto']
-    )))
-    frosting.process.ingredients.append(IngredientRun(material=chocolate))
-    frosting.process.ingredients.append(IngredientRun(material=powder_sugar))
-    frosting.process.ingredients.append(IngredientRun(material=LinkByUID(
-        scope='auto',
-        id=vanilla.uids['auto']
-    )))
-    frosting.process.ingredients.append(IngredientRun(material=LinkByUID(
-        scope='auto',
-        id=milk.uids['auto']
-    )))
+    IngredientRun(material=LinkByUID.from_entity(butter), process=frosting.process)
+    IngredientRun(material=chocolate, process=frosting.process)
+    IngredientRun(material=powder_sugar, process=frosting.process)
+    IngredientRun(material=LinkByUID.from_entity(vanilla), process=frosting.process)
+    IngredientRun(material=LinkByUID.from_entity(milk), process=frosting.process)
 
     frosting_taste = MeasurementRun(name='Frosting Taste', material=frosting)
     frosting_sweetness = MeasurementRun(name='Frosting Sweetness', material=frosting)
@@ -134,41 +125,27 @@ def make_cake():
 
     # and abstract ingredients
     for run in cake.process.ingredients:
-        run.spec = IngredientSpec(material=run.material.spec)
-        cake.process.spec.ingredients.append(run.spec)
+        run.spec = IngredientSpec(material=run.material.spec, process=cake.process.spec)
 
     for run in baked.process.ingredients:
-        run.spec = IngredientSpec(material=run.material.spec)
-        baked.process.spec.ingredients.append(run.spec)
+        run.spec = IngredientSpec(material=run.material.spec, process=baked.process.spec)
 
     for run in batter.process.ingredients:
-        run.spec = IngredientSpec(material=run.material.spec)
-        batter.process.spec.ingredients.append(run.spec)
+        run.spec = IngredientSpec(material=run.material.spec, process=batter.process.spec)
 
     for run in wetmix.process.ingredients:
-        run.spec = IngredientSpec(material=run.material.spec)
-        wetmix.process.spec.ingredients.append(run.spec)
+        run.spec = IngredientSpec(material=run.material.spec, process=wetmix.process.spec)
 
     for run in drymix.process.ingredients:
-        run.spec = IngredientSpec(material=run.material.spec)
-        drymix.process.spec.ingredients.append(run.spec)
+        run.spec = IngredientSpec(material=run.material.spec, process=drymix.process.spec)
 
     set_uuids(cake)
 
-    frosting.spec.process.ingredients.append(IngredientSpec(material=LinkByUID(
-        scope='auto',
-        id=butter.spec.uids['auto']
-    )))
-    frosting.spec.process.ingredients.append(IngredientSpec(material=chocolate.spec))
-    frosting.spec.process.ingredients.append(IngredientSpec(material=powder_sugar.spec))
-    frosting.spec.process.ingredients.append(IngredientSpec(material=LinkByUID(
-        scope='auto',
-        id=vanilla.spec.uids['auto']
-    )))
-    frosting.spec.process.ingredients.append(IngredientSpec(material=LinkByUID(
-        scope='auto',
-        id=milk.spec.uids['auto']
-    )))
+    IngredientSpec(material=LinkByUID.from_entity(butter.spec), process=frosting.spec.process)
+    IngredientSpec(material=chocolate.spec, process=frosting.spec.process)
+    IngredientSpec(material=powder_sugar.spec, process=frosting.spec.process)
+    IngredientSpec(material=LinkByUID.from_entity(vanilla.spec), process=frosting.spec.process)
+    IngredientSpec(material=LinkByUID.from_entity(milk.spec), process=frosting.spec.process)
 
     # and spec out the measurements
     cake_taste.spec = MeasurementSpec(name='Taste')
