@@ -8,7 +8,15 @@ from taurus.entity.util import array_like
 
 
 class CategoricalBounds(BaseBounds):
-    """Categorical bounds, parameterized by a set of string-valued category labels."""
+    """
+    Categorical bounds, parameterized by a set of string-valued category labels.
+
+    Parameters
+    ----------
+    categories: list, tuple, or set
+        A collection of the allowed categories, each of which must be a string.
+
+    """
 
     typ = "categorical_bounds"
 
@@ -36,7 +44,21 @@ class CategoricalBounds(BaseBounds):
             raise ValueError("All the categories must be strings")
 
     def validate(self, value: BaseValue) -> bool:
-        """Check if value is in the set of allowed categories."""
+        """
+        Check if a value is in the set of allowed categories.
+
+        Parameters
+        ----------
+        value: BaseValue
+            Value to validate. In order to be valid, must be a
+            :py:class:`CategoricalValue <taurus.entity.value.categorical_value.CategoricalValue>`
+
+        Returns
+        -------
+        bool
+            True if the value is one of the allowed categories.
+
+        """
         if not super().validate(value):
             return False
         if not isinstance(value, CategoricalValue):
@@ -52,7 +74,18 @@ class CategoricalBounds(BaseBounds):
         assert False, msg  # pragma: no cover
 
     def contains(self, bounds: BaseBounds) -> bool:
-        """Check if another bounds object is a categorical with a subset of allowed values."""
+        """
+        Check if another bounds object is contained by this bounds.
+
+        The other bounds must also be a categorical and its allowed categories must be a subset
+        of this bounds's allowed categories.
+
+        Returns
+        -------
+        bool
+            True if the other bounds is contained by this bounds.
+
+        """
         if not super().contains(bounds):
             return False
         if not isinstance(bounds, CategoricalBounds):
@@ -61,5 +94,13 @@ class CategoricalBounds(BaseBounds):
         return bounds.categories.issubset(self.categories)
 
     def as_dict(self):
-        """Convert bounds to a dictionary."""
+        """
+        Convert bounds to a dictionary.
+
+        Returns
+        -------
+        dict
+            A dictionary with "type" and "categories".
+
+        """
         return {"type": self.typ, "categories": sorted(list(self.categories))}
