@@ -2,6 +2,7 @@
 from taurus.entity.object.base_object import BaseObject
 from taurus.entity.object.has_quantities import HasQuantities
 from taurus.entity.setters import validate_list
+from taurus.entity.valid_list import ValidList
 
 
 class IngredientRun(BaseObject, HasQuantities):
@@ -9,7 +10,7 @@ class IngredientRun(BaseObject, HasQuantities):
 
     typ = "ingredient_run"
 
-    def __init__(self, material=None, name=None, labels=None,
+    def __init__(self, material=None, process=None, name=None, labels=None,
                  mass_fraction=None, volume_fraction=None, number_fraction=None,
                  absolute_quantity=None,
                  spec=None, uids=None, tags=None, notes=None, file_links=None):
@@ -30,10 +31,12 @@ class IngredientRun(BaseObject, HasQuantities):
                                absolute_quantity)
 
         self._material = None
+        self._process = None
         self._spec = None
         self._labels = None
 
         self.material = material
+        self.process = process
         self.spec = spec
         self.labels = labels
 
@@ -61,6 +64,28 @@ class IngredientRun(BaseObject, HasQuantities):
             self._material = material
         else:
             raise ValueError("IngredientRun.material must be a MaterialRun")
+
+    @property
+    def process(self):
+        """Get the material."""
+        return self._process
+
+    @process.setter
+    def process(self, process):
+        from taurus.entity.object import ProcessRun
+        from taurus.entity.link_by_uid import LinkByUID
+        if process is None:
+            self._process = None
+        elif isinstance(process, ProcessRun):
+            self._process = process
+            if not isinstance(process.ingredients, ValidList):
+                process._ingredients = validate_list(self, IngredientRun)
+            else:
+                process._ingredients.append(self)
+        elif isinstance(process, LinkByUID):
+            self._process = process
+        else:
+            raise ValueError("IngredientRun.process must be a ProcessRun")
 
     @property
     def spec(self):
