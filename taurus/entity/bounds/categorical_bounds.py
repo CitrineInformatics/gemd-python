@@ -13,8 +13,8 @@ class CategoricalBounds(BaseBounds):
 
     Parameters
     ----------
-    categories: list, tuple, or set
-        A collection of the allowed categories, each of which must be a string.
+    categories: list, tuple, or set of strings
+        A collection of the allowed categories
 
     """
 
@@ -52,6 +52,7 @@ class CategoricalBounds(BaseBounds):
         value: BaseValue
             Value to validate. In order to be valid, must be a
             :py:class:`CategoricalValue <taurus.entity.value.categorical_value.CategoricalValue>`
+            and have be one of the allowed categories.
 
         Returns
         -------
@@ -77,8 +78,13 @@ class CategoricalBounds(BaseBounds):
         """
         Check if another bounds object is contained by this bounds.
 
-        The other bounds must also be a categorical and its allowed categories must be a subset
-        of this bounds's allowed categories.
+        The other bounds must also be a CategoricalBounds and its allowed categories must be a
+        subset of this bounds's allowed categories.
+
+        Parameters
+        ----------
+        bounds: BaseBounds
+            Other bounds object to check.
 
         Returns
         -------
@@ -100,7 +106,7 @@ class CategoricalBounds(BaseBounds):
         Returns
         -------
         dict
-            A dictionary with "type" and "categories".
+            A dictionary with "type" and "categories" (a sorted list of the categories).
 
         """
         return {"type": self.typ, "categories": sorted(list(self.categories))}
