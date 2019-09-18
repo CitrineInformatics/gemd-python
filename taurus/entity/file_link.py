@@ -7,6 +7,14 @@ class FileLink(DictSerializable):
     Class for storing a name and link to an external resource.
 
     Once the file protocol is defined, there should be substantial validation.
+
+    Parameters
+    ----------
+    filename: str
+        The name of the file.
+    url: str
+        URL that can be used to access the file.
+
     """
 
     typ = "file_link"
