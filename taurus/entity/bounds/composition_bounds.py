@@ -6,7 +6,15 @@ from taurus.entity.util import array_like
 
 
 class CompositionBounds(BaseBounds):
-    """Composition bounds, parameterized by a set of string-valued category labels."""
+    """
+    Composition bounds, parameterized by a set of string-valued category labels.
+
+    Parameters
+    ----------
+    components: list, tuple, or set or strings
+        A collection of the components that must be present in the composition.
+
+    """
 
     typ = "composition_bounds"
 
@@ -34,7 +42,22 @@ class CompositionBounds(BaseBounds):
             raise ValueError("All the components must be strings")
 
     def validate(self, value: BaseValue) -> bool:
-        """Check if a value has all of the required components."""
+        """
+        Check if a value has all of the required components.
+
+        Parameters
+        ----------
+        value: BaseValue
+            Value to validate. In order to be valid, must be a
+            :py:class:`CompositionValue <taurus.entity.value.composition_value.CompositionValue>`
+            and have all of the required components.
+
+        Returns
+        -------
+        bool
+            True if the value is a composition with all required components.
+
+        """
         if not super().validate(value):
             return False
         if not isinstance(value, CompositionValue):
@@ -43,7 +66,23 @@ class CompositionBounds(BaseBounds):
         return all(x in self.components for x in value.components)
 
     def contains(self, bounds: BaseBounds) -> bool:
-        """Check if another bounds is a subset of this set of required components."""
+        """
+        Check if another bounds is contained by this bounds.
+
+        The other bounds must also be a CompositionBounds and its components must be a subset of
+        this bounds's set of required components.
+
+        Parameters
+        ----------
+        bounds: BaseBounds
+            Other bounds object to check.
+
+        Returns
+        -------
+        bool
+            True if the other bounds is contained by this bounds.
+
+        """
         if not super().contains(bounds):
             return False
         if not isinstance(bounds, CompositionBounds):
@@ -52,5 +91,13 @@ class CompositionBounds(BaseBounds):
         return bounds.components.issubset(self.components)
 
     def as_dict(self):
-        """Convert to a dictionary."""
+        """
+        Convert bounds to a dictionary.
+
+        Returns
+        -------
+        dict
+            A dictionary with "type" and "components" (a sorted list of the components).
+
+        """
         return {"type": self.typ, "components": sorted(list(self.components))}

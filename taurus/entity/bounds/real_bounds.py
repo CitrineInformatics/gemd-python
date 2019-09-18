@@ -9,7 +9,20 @@ import taurus.units as units
 
 
 class RealBounds(BaseBounds):
-    """Bounded subset of the real numbers, parameterized by a lower and upper bound."""
+    """
+    Bounded subset of the real numbers, parameterized by a lower and upper bound.
+
+    Parameters
+    ----------
+    lower_bound: float
+        Lower endpoint.
+    upper_bound: float
+        Upper endpoint.
+    default_units: str
+        A string describing the units. Units must be present and they must be parseable by Pint.
+        An empty string can be used for the units of a dimensionless quantity.
+
+    """
 
     typ = "real_bounds"
 
@@ -39,7 +52,22 @@ class RealBounds(BaseBounds):
         self._default_units = units.parse_units(default_units)
 
     def validate(self, value: BaseValue) -> bool:
-        """Check if value is within bounds."""
+        """
+        Checks if a value is a real number within the bounds.
+
+        Parameters
+        ----------
+        value: BaseValue
+            Value to validate. In order to be valid, must be an
+            :py:class:`ContinuousValue <taurus.entity.value.continuous_value.ContinuousValue>`
+            and be between the lower and upper bound.
+
+        Returns
+        -------
+        bool
+            True if the value is between the lower and upper bound.
+
+        """
         if not super().validate(value):
             return False
         if not isinstance(value, ContinuousValue):
@@ -62,7 +90,23 @@ class RealBounds(BaseBounds):
             return upper >= value.upper_bound and lower <= value.lower_bound
 
     def contains(self, bounds: BaseBounds) -> bool:
-        """Check if another bounds is a subset."""
+        """
+        Check if another bounds is a subset of this range.
+
+        The other bounds must also be a RealBounds and its lower and upper bound must *both*
+        be within the range of this bounds object.
+
+        Parameters
+        ----------
+        bounds: BaseBounds
+            Other bounds object to check.
+
+        Returns
+        -------
+        bool
+            True if the other bounds is contained by this bounds.
+
+        """
         if not super().contains(bounds):
             return False
         if not isinstance(bounds, RealBounds):
@@ -75,7 +119,20 @@ class RealBounds(BaseBounds):
         return bounds.lower_bound >= lower and bounds.upper_bound <= upper
 
     def _convert_bounds(self, target_units):
-        """Convert the bounds to the target unit system, or None if not possible."""
+        """
+        Convert the bounds to the target unit system, or None if not possible.
+
+        Parameters
+        ----------
+        target_units: str
+            The units to convert into.
+
+        Returns
+        -------
+        tuple (float, float)
+            A tuple of the (lower_bound, upper_bound) in the target units.
+
+        """
         # if neither have units, then just return the bounds
         if not self.default_units and not target_units:
             return self.lower_bound, self.upper_bound
