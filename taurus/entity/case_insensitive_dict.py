@@ -1,8 +1,21 @@
-"""A case-insensitive dictionary."""
-
-
 class CaseInsensitiveDict(dict):
-    """Extends dict so that the keys are case-insensitive."""
+    """
+    A dictionary in which the keys are case-insensitive.
+
+    It is initialized the same way as a typical dict, but the values can be accessed without
+    regard to key case. The value associated with key "Key" can also be accessed with "key"
+    or "KEY" or "kEy".
+
+    Parameters
+    ----------
+    seq: iterable or mapping, optional
+        The key-value pairs of the dictionary. Can either be a mapping object with (key, value)
+        pairs, or an iterable of tuples of the form (key, value).
+    **kwargs: keyword args, optional
+        An alternative way of initializing the dictionary with key-value pairs.
+        Example: CaseInsensitiveDict(one=1, two="two").
+
+    """
 
     def __init__(self, seq=None, **kwargs):
         super().__init__(seq or {}, **kwargs)
@@ -14,7 +27,21 @@ class CaseInsensitiveDict(dict):
         return super().__getitem__(self.lowercase_dict[key.lower()])
 
     def get(self, key: str):
-        """Get the value for a given case-insensitive key."""
+        """
+        Get the value for a given case-insensitive key.
+
+        Parameters
+        ----------
+        key: str
+            The key to look up (possibly with a different casing).
+
+        Returns
+        -------
+        Any
+            The value associated with the case-insensitive version of `key`, or None
+            if `key` is not present.
+
+        """
         return self.__getitem__(key)
 
     def __setitem__(self, key: str, value):
@@ -25,8 +52,19 @@ class CaseInsensitiveDict(dict):
         return self.lowercase_dict.__contains__(key.lower())
 
     def _register_key(self, key: str):
+        """
+        Register a key to the dictionary.
+
+        Check to make sure it doesn't already exist in a different case.
+
+        Parameters
+        ----------
+        key: str
+            The key to register.
+
+        """
         prev = self.lowercase_dict.get(key.lower())
         if prev is not None and prev != key:
             raise ValueError(
-                "Key '{}' already exists in dict with different case: ''".format(key, prev))
+                "Key '{}' already exists in dict with different case: '{}'".format(key, prev))
         self.lowercase_dict[key.lower()] = key

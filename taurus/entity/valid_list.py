@@ -3,20 +3,23 @@ from collections.abc import Iterable
 
 
 class ValidList(list):
-    """A list-like class that verifies that its content conforms to specified types."""
+    """
+    A list-like class that verifies that its content conforms to specified types.
+
+    Parameters
+    ----------
+    _list: Iterable
+        The initial values for the elements of the list.
+    content_type: Type or Iterable[Type]
+        The allowed type(s) for the content of the list.
+    trigger: function
+        A function that gets invoked whenever a new element is added.
+
+    """
 
     _content_type = tuple([])
 
     def __init__(self, _list, content_type=None, trigger=None):
-        """
-        Create list with content and a collection of allowed types.
-
-        :param _list: The initial values for the elements of the list.  Must be an Iterable.
-        :param content_type: A type or Iterable of types to validate the data values against.
-                             If multiple elements are provided,
-                             the values must be an instance of at least one of the elements.
-        :param trigger: A function reference that should be invoked on any new element.
-        """
         if content_type is None:
             content_type = tuple()
 
@@ -41,7 +44,24 @@ class ValidList(list):
         list.__init__(self, _list)
 
     def _validate(self, value):
-        """Validate a value against the allowed types."""
+        """
+        Validate a value against the allowed types.
+
+        Parameters
+        ----------
+        value: Any
+            The value to validate.
+
+        Returns
+        -------
+        None
+
+        Raises
+        ------
+        ValueError
+            If `value` is not one of the allowed types.
+
+        """
         if not isinstance(value, self._content_type):
             raise TypeError(
                 'Value is not of an accepted type: {} =/= {}'.format(value, self._content_type))
@@ -50,11 +70,20 @@ class ValidList(list):
         """
         Called to implement assignment to self[index].
 
-        Necessary to override to insert value validation.
+        Validates that `value` is one of the allowed types.
 
-        :param index: The element of the list to change
-        :param value: The value to set the element to
-        :return: no return
+        Parameters
+        ----------
+        index: int
+            The index of the element of the list to change
+        value: Any
+            The value to set the element to
+
+        Returns
+        -------
+        None
+            `value` is inserted into the list at position `index`, if it is valid.
+
         """
         self._validate(value)
         if self._trigger is not None:
@@ -65,7 +94,18 @@ class ValidList(list):
         """
         Add an item to the end of the list; equivalent to a[len(a):] = [x].
 
-        Necessary to override to insert value validation.
+        Validates that `value` is one of the allowed types.
+
+        Parameters
+        ----------
+        value: Any
+            The value to append at the end of the list.
+
+        Returns
+        -------
+        None
+            `value` is appended at the end of the list, if it is valid.
+
         """
         self._validate(value)
         if self._trigger is not None:
@@ -76,7 +116,18 @@ class ValidList(list):
         """
         Extend the list by appending all the items in the given list; equivalent to a[len(a):] = L.
 
-        Necessary to override to insert value validation.
+        Validates that `value` is one of the allowed types.
+
+        Parameters
+        ----------
+        list_: list
+            The list of values to append at the end of the list.
+
+        Returns
+        -------
+        None
+            `list_` is appended at the end of the list, if all its entries are valid.
+
         """
         if isinstance(list_, Iterable):
             for value in list_:
@@ -90,13 +141,23 @@ class ValidList(list):
 
     def insert(self, i, value):
         """
-        Insert an item at a given position.
+        Insert a value at a given position, if it is one of the allowed types.
 
-        The first argument is the index of the element before which to insert,
-        so a.insert(0, x) inserts at the front of the list, and a.insert(len(a), x)
+        a.insert(0, x) inserts at the front of the list, and a.insert(len(a), x)
         is equivalent to a.append(x).
 
-        Necessary to override to insert value validation.
+        Parameters
+        ----------
+        i: int
+            The index of the element before which to insert.
+        value: Any
+            The value to insert into the list.
+
+        Returns
+        -------
+        None
+            `value` is inserted into the list at position `i`, if it is valid.
+
         """
         self._validate(value)
         if self._trigger is not None:

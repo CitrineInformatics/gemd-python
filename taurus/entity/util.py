@@ -5,7 +5,16 @@ def make_instance(base_spec):
     """
     Create a set of Run objects that mimic the connectivity of the passed Spec object.
 
-    :return: the instance that is created
+    Paramters
+    ---------
+    base_spec: BaseObject
+        A spec instance that may point to other specs.
+
+    Returns
+    -------
+    BaseObject
+        The run instance that is created, and may point to other runs.
+
     """
     seen = dict()
 
@@ -61,7 +70,11 @@ def array_like():
     """
     Figure out what kinds of list-like things we should be supporting for list type-checks.
 
-    :return: a tuple of classes
+    Returns
+    -------
+    tuple
+        A tuple of supported array-like classes.
+
     """
     global _array_like
     if _array_like is not None:
