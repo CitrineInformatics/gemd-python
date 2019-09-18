@@ -37,17 +37,20 @@
 <dt id="taurus.entity.bounds.base_bounds.BaseBounds">
 <em class="property">class </em><code class="sig-prename descclassname">taurus.entity.bounds.base_bounds.</code><code class="sig-name descname">BaseBounds</code><a class="headerlink" href="#taurus.entity.bounds.base_bounds.BaseBounds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="taurus.entity.dict_serializable.html#taurus.entity.dict_serializable.DictSerializable" title="taurus.entity.dict_serializable.DictSerializable"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.dict_serializable.DictSerializable</span></code></a></p>
-<p>Base class for bounds, include RealBounds and CategoricalBounds.</p>
+<p>Base class for bounds, including RealBounds and CategoricalBounds.</p>
 <dl class="method">
 <dt id="taurus.entity.bounds.base_bounds.BaseBounds.contains">
 <em class="property">abstract </em><code class="sig-name descname">contains</code><span class="sig-paren">(</span><em class="sig-param">bounds</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.bounds.base_bounds.BaseBounds.contains" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if another bounds is contained within this bounds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>bounds</strong> – to check</p>
+<dd class="field-odd"><p><strong>bounds</strong> (<a class="reference internal" href="#taurus.entity.bounds.base_bounds.BaseBounds" title="taurus.entity.bounds.base_bounds.BaseBounds"><em>BaseBounds</em></a>) – Other bounds object to check.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>true if any value that validates true for bounds also validates true for this</p>
+<dd class="field-even"><p>True if any value that validates true for bounds also validates true for this</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
@@ -58,10 +61,13 @@
 <dd><p>Check if a value is a member of this bounds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>value</strong> – to check</p>
+<dd class="field-odd"><p><strong>value</strong> (<a class="reference internal" href="taurus.entity.value.base_value.html#taurus.entity.value.base_value.BaseValue" title="taurus.entity.value.base_value.BaseValue"><em>BaseValue</em></a>) – Value to validate</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>True if the value is a member of the bounds, and False otherwise</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>

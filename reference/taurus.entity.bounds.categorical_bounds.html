@@ -38,10 +38,23 @@
 <em class="property">class </em><code class="sig-prename descclassname">taurus.entity.bounds.categorical_bounds.</code><code class="sig-name descname">CategoricalBounds</code><span class="sig-paren">(</span><em class="sig-param">categories=None</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.bounds.categorical_bounds.CategoricalBounds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="taurus.entity.bounds.base_bounds.html#taurus.entity.bounds.base_bounds.BaseBounds" title="taurus.entity.bounds.base_bounds.BaseBounds"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.bounds.base_bounds.BaseBounds</span></code></a></p>
 <p>Categorical bounds, parameterized by a set of string-valued category labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>categories</strong> (<em>list</em><em>, </em><em>tuple</em><em>, or </em><em>set of strings</em>) – A collection of the allowed categories</p>
+</dd>
+</dl>
 <dl class="method">
 <dt id="taurus.entity.bounds.categorical_bounds.CategoricalBounds.as_dict">
 <code class="sig-name descname">as_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.bounds.categorical_bounds.CategoricalBounds.as_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert bounds to a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A dictionary with “type” and “categories” (a sorted list of the categories).</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -53,7 +66,20 @@
 <dl class="method">
 <dt id="taurus.entity.bounds.categorical_bounds.CategoricalBounds.contains">
 <code class="sig-name descname">contains</code><span class="sig-paren">(</span><em class="sig-param">bounds: taurus.entity.bounds.base_bounds.BaseBounds</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#taurus.entity.bounds.categorical_bounds.CategoricalBounds.contains" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if another bounds object is a categorical with a subset of allowed values.</p>
+<dd><p>Check if another bounds object is contained by this bounds.</p>
+<p>The other bounds must also be a CategoricalBounds and its allowed categories must be a
+subset of this bounds’s allowed categories.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bounds</strong> (<a class="reference internal" href="taurus.entity.bounds.base_bounds.html#taurus.entity.bounds.base_bounds.BaseBounds" title="taurus.entity.bounds.base_bounds.BaseBounds"><em>BaseBounds</em></a>) – Other bounds object to check.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the other bounds is contained by this bounds.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
@@ -64,7 +90,20 @@
 <dl class="method">
 <dt id="taurus.entity.bounds.categorical_bounds.CategoricalBounds.validate">
 <code class="sig-name descname">validate</code><span class="sig-paren">(</span><em class="sig-param">value: taurus.entity.value.base_value.BaseValue</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#taurus.entity.bounds.categorical_bounds.CategoricalBounds.validate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if value is in the set of allowed categories.</p>
+<dd><p>Check if a value is in the set of allowed categories.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<a class="reference internal" href="taurus.entity.value.base_value.html#taurus.entity.value.base_value.BaseValue" title="taurus.entity.value.base_value.BaseValue"><em>BaseValue</em></a>) – Value to validate. In order to be valid, must be a
+<a class="reference internal" href="taurus.entity.value.categorical_value.html#taurus.entity.value.categorical_value.CategoricalValue" title="taurus.entity.value.categorical_value.CategoricalValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">CategoricalValue</span></code></a>
+and have be one of the allowed categories.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the value is one of the allowed categories.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
