@@ -42,7 +42,12 @@ def validate_str(obj):
     Returns
     -------
     str
-        Return obj if it is a string, otherwise throw ValueError
+        `obj` as a string.
+
+    Raises
+    -------
+    ValueError
+        If `obj` is not a string.
 
     """
     if not isinstance(obj, str):

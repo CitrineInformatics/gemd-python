@@ -55,7 +55,11 @@ class ValidList(list):
         Returns
         -------
         None
-            Throws a ValueError if `value` is not one of the allowed types.
+
+        Raises
+        ------
+        ValueError
+            If `value` is not one of the allowed types.
 
         """
         if not isinstance(value, self._content_type):
