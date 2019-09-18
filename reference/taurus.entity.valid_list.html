@@ -38,28 +38,71 @@
 <em class="property">class </em><code class="sig-prename descclassname">taurus.entity.valid_list.</code><code class="sig-name descname">ValidList</code><span class="sig-paren">(</span><em class="sig-param">_list</em>, <em class="sig-param">content_type=None</em>, <em class="sig-param">trigger=None</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.valid_list.ValidList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></p>
 <p>A list-like class that verifies that its content conforms to specified types.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>_list</strong> (<em>Iterable</em>) – The initial values for the elements of the list.</p></li>
+<li><p><strong>content_type</strong> (<em>Type</em><em> or </em><em>Iterable</em><em>[</em><em>Type</em><em>]</em>) – The allowed type(s) for the content of the list.</p></li>
+<li><p><strong>trigger</strong> (<em>function</em>) – A function that gets invoked whenever a new element is added.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="taurus.entity.valid_list.ValidList.append">
 <code class="sig-name descname">append</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.valid_list.ValidList.append" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add an item to the end of the list; equivalent to a[len(a):] = [x].</p>
-<p>Necessary to override to insert value validation.</p>
+<p>Validates that <cite>value</cite> is one of the allowed types.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>Any</em>) – The value to append at the end of the list.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>value</cite> is appended at the end of the list, if it is valid.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="taurus.entity.valid_list.ValidList.extend">
 <code class="sig-name descname">extend</code><span class="sig-paren">(</span><em class="sig-param">list_</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.valid_list.ValidList.extend" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extend the list by appending all the items in the given list; equivalent to a[len(a):] = L.</p>
-<p>Necessary to override to insert value validation.</p>
+<p>Validates that <cite>value</cite> is one of the allowed types.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>list_</strong> (<em>list</em>) – The list of values to append at the end of the list.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>list_</cite> is appended at the end of the list, if all its entries are valid.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="taurus.entity.valid_list.ValidList.insert">
 <code class="sig-name descname">insert</code><span class="sig-paren">(</span><em class="sig-param">i</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.valid_list.ValidList.insert" title="Permalink to this definition">¶</a></dt>
-<dd><p>Insert an item at a given position.</p>
-<p>The first argument is the index of the element before which to insert,
-so a.insert(0, x) inserts at the front of the list, and a.insert(len(a), x)
+<dd><p>Insert a value at a given position, if it is one of the allowed types.</p>
+<p>a.insert(0, x) inserts at the front of the list, and a.insert(len(a), x)
 is equivalent to a.append(x).</p>
-<p>Necessary to override to insert value validation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>i</strong> (<em>int</em>) – The index of the element before which to insert.</p></li>
+<li><p><strong>value</strong> (<em>Any</em>) – The value to insert into the list.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>value</cite> is inserted into the list at position <cite>i</cite>, if it is valid.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

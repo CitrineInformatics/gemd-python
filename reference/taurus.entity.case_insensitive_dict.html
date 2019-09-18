@@ -32,16 +32,40 @@
             
   <div class="section" id="module-taurus.entity.case_insensitive_dict">
 <span id="taurus-entity-case-insensitive-dict-module"></span><h1>taurus.entity.case_insensitive_dict module<a class="headerlink" href="#module-taurus.entity.case_insensitive_dict" title="Permalink to this headline">¶</a></h1>
-<p>A case-insensitive dictionary.</p>
 <dl class="class">
 <dt id="taurus.entity.case_insensitive_dict.CaseInsensitiveDict">
 <em class="property">class </em><code class="sig-prename descclassname">taurus.entity.case_insensitive_dict.</code><code class="sig-name descname">CaseInsensitiveDict</code><span class="sig-paren">(</span><em class="sig-param">seq=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.case_insensitive_dict.CaseInsensitiveDict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
-<p>Extends dict so that the keys are case-insensitive.</p>
+<p>A dictionary in which the keys are case-insensitive.</p>
+<p>It is initialized the same way as a typical dict, but the values can be accessed without
+regard to key case. The value associated with key “Key” can also be accessed with “key”
+or “KEY” or “kEy”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>seq</strong> (<em>iterable</em><em> or </em><em>mapping</em><em>, </em><em>optional</em>) – The key-value pairs of the dictionary. Can either be a mapping object with (key, value)
+pairs, or an iterable of tuples of the form (key, value).</p></li>
+<li><p><strong>**kwargs</strong> (<em>keyword args</em><em>, </em><em>optional</em>) – An alternative way of initializing the dictionary with key-value pairs.
+Example: CaseInsensitiveDict(one=1, two=”two”).</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="taurus.entity.case_insensitive_dict.CaseInsensitiveDict.get">
 <code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param">key: str</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.case_insensitive_dict.CaseInsensitiveDict.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the value for a given case-insensitive key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> (<em>str</em>) – The key to look up (possibly with a different casing).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The value associated with the case-insensitive version of <cite>key</cite>, or None
+if <cite>key</cite> is not present.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

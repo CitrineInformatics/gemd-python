@@ -37,12 +37,42 @@
 <dt id="taurus.entity.setters.validate_list">
 <code class="sig-prename descclassname">taurus.entity.setters.</code><code class="sig-name descname">validate_list</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">typ</em>, <em class="sig-param">trigger=None</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.setters.validate_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Attempts to return obj as a list, each element of which has type typ.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (<em>Any</em>) – Object or list of objects, all of which should be of type typ.</p></li>
+<li><p><strong>typ</strong> (<em>Type</em>) – The desired type of obj, or if obj is a list, every element of obj.</p></li>
+<li><p><strong>trigger</strong> (<em>function</em>) – A function to invoke when putting obj into a list.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list with all elements of obj.
+The list is constrained so that every element has type typ.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="taurus.entity.valid_list.html#taurus.entity.valid_list.ValidList" title="taurus.entity.valid_list.ValidList">ValidList</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="taurus.entity.setters.validate_str">
 <code class="sig-prename descclassname">taurus.entity.setters.</code><code class="sig-name descname">validate_str</code><span class="sig-paren">(</span><em class="sig-param">obj</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.setters.validate_str" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check that obj is a string and then convert it to unicode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>obj</strong> (<em>Any</em>) – Object that should be a string</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>obj</cite> as a string.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If <cite>obj</cite> is not a string.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

@@ -38,17 +38,29 @@
 <em class="property">class </em><code class="sig-prename descclassname">taurus.entity.base_entity.</code><code class="sig-name descname">BaseEntity</code><span class="sig-paren">(</span><em class="sig-param">uids</em>, <em class="sig-param">tags</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.base_entity.BaseEntity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="taurus.entity.dict_serializable.html#taurus.entity.dict_serializable.DictSerializable" title="taurus.entity.dict_serializable.DictSerializable"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.dict_serializable.DictSerializable</span></code></a></p>
 <p>Base class for any entity, which includes objects and templates.</p>
-<dl class="simple">
-<dt>Every entity contains:</dt><dd><ul class="simple">
-<li><p>uids, which are stored as a map from the uid’s name to its value</p></li>
-<li><p>tags, which are a list of strings</p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>uids</strong> (<em>Map</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em>) – A collection of
+<a class="reference external" href="https://citrineinformatics.github.io/taurus-documentation/specification/unique-identifiers/">unique IDs</a>.</p></li>
+<li><p><strong>tags</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – <a class="reference external" href="https://citrineinformatics.github.io/taurus-documentation/specification/tags/">Tags</a>
+are hierarchical strings that store information about an entity and can be used
+for discoverability.</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="method">
 <dt id="taurus.entity.base_entity.BaseEntity.add_uid">
-<code class="sig-name descname">add_uid</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">uid</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.base_entity.BaseEntity.add_uid" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_uid</code><span class="sig-paren">(</span><em class="sig-param">scope</em>, <em class="sig-param">uid</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.base_entity.BaseEntity.add_uid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a uid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scope</strong> (<em>str</em>) – scope of the uid</p></li>
+<li><p><strong>uid</strong> (<em>str</em>) – Unique identifier</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">

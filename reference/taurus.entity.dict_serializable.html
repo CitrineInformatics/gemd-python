@@ -32,7 +32,6 @@
             
   <div class="section" id="module-taurus.entity.dict_serializable">
 <span id="taurus-entity-dict-serializable-module"></span><h1>taurus.entity.dict_serializable module<a class="headerlink" href="#module-taurus.entity.dict_serializable" title="Permalink to this headline">¶</a></h1>
-<p>An object that can be serializaed as a dictionary.</p>
 <dl class="class">
 <dt id="taurus.entity.dict_serializable.DictSerializable">
 <em class="property">class </em><code class="sig-prename descclassname">taurus.entity.dict_serializable.</code><code class="sig-name descname">DictSerializable</code><a class="headerlink" href="#taurus.entity.dict_serializable.DictSerializable" title="Permalink to this definition">¶</a></dt>
@@ -42,12 +41,33 @@
 <dt id="taurus.entity.dict_serializable.DictSerializable.as_dict">
 <code class="sig-name descname">as_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.dict_serializable.DictSerializable.as_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert the object to a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A dictionary representation of the object, where the keys are its fields.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="taurus.entity.dict_serializable.DictSerializable.build">
 <em class="property">static </em><code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param">d</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.dict_serializable.DictSerializable.build" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build an object from a JSON dictionary.</p>
+<p>This differs from <cite>from_dict</cite> in that the values themselves may <em>also</em> be dictionaries
+corresponding to serialized DictSerializable objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>d</strong> (<em>dict</em>) – The object as a serialized dictionary.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The deserialized object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#taurus.entity.dict_serializable.DictSerializable" title="taurus.entity.dict_serializable.DictSerializable">DictSerializable</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -55,12 +75,31 @@
 <code class="sig-name descname">dump</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.dict_serializable.DictSerializable.dump" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert the object to a JSON dictionary, so that every entry is serialized.</p>
 <p>Uses the json encoder client, so objects with uids are converted to LinkByUID dictionaries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A string representation of the object as a dictionary.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="taurus.entity.dict_serializable.DictSerializable.from_dict">
 <em class="property">classmethod </em><code class="sig-name descname">from_dict</code><span class="sig-paren">(</span><em class="sig-param">d</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.dict_serializable.DictSerializable.from_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reconstitute the object from a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>d</strong> (<em>dict</em>) – The object as a dictionary of key-value pairs that correspond to the object’s fields.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The deserialized object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#taurus.entity.dict_serializable.DictSerializable" title="taurus.entity.dict_serializable.DictSerializable">DictSerializable</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">

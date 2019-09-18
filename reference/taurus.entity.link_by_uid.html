@@ -38,10 +38,32 @@
 <em class="property">class </em><code class="sig-prename descclassname">taurus.entity.link_by_uid.</code><code class="sig-name descname">LinkByUID</code><span class="sig-paren">(</span><em class="sig-param">scope</em>, <em class="sig-param">id</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.link_by_uid.LinkByUID" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="taurus.entity.dict_serializable.html#taurus.entity.dict_serializable.DictSerializable" title="taurus.entity.dict_serializable.DictSerializable"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.dict_serializable.DictSerializable</span></code></a></p>
 <p>Link object, which replaces pointers to other entities before serialization and writing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scope</strong> (<em>str</em>) – The scope of the unique identifier. Scopes are case-insensitive.</p></li>
+<li><p><strong>id</strong> (<em>str</em>) – The unique identifier.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="taurus.entity.link_by_uid.LinkByUID.from_entity">
 <em class="property">classmethod </em><code class="sig-name descname">from_entity</code><span class="sig-paren">(</span><em class="sig-param">entity</em>, <em class="sig-param">name='auto'</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.link_by_uid.LinkByUID.from_entity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create LinkByUID from in-memory object using id with scope ‘name’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entity</strong> (<a class="reference internal" href="taurus.entity.base_entity.html#taurus.entity.base_entity.BaseEntity" title="taurus.entity.base_entity.BaseEntity"><em>BaseEntity</em></a>) – The entity to substitute with a LinkByUID</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – The scope of the id.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A link object that references <cite>entity</cite> through its scope and id.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#taurus.entity.link_by_uid.LinkByUID" title="taurus.entity.link_by_uid.LinkByUID">LinkByUID</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
