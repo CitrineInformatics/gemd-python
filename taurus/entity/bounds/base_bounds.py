@@ -22,6 +22,7 @@ class BaseBounds(DictSerializable):
         -------
         bool
             True if the value is a member of the bounds, and False otherwise
+
         """
         if value is None:
             return False
@@ -43,6 +44,7 @@ class BaseBounds(DictSerializable):
         -------
         bool
             True if any value that validates true for bounds also validates true for this
+
         """
         if bounds is None:
             return False

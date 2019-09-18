@@ -56,6 +56,7 @@ class CompositionBounds(BaseBounds):
         -------
         bool
             True if the value is a composition with all required components.
+
         """
         if not super().validate(value):
             return False
@@ -97,5 +98,6 @@ class CompositionBounds(BaseBounds):
         -------
         dict
             A dictionary with "type" and "components" (a sorted list of the components).
+
         """
         return {"type": self.typ, "components": sorted(list(self.components))}
