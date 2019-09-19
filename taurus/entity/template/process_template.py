@@ -8,7 +8,43 @@ from taurus.entity.template.has_parameter_templates import HasParameterTemplates
 
 
 class ProcessTemplate(BaseTemplate, HasConditionTemplates, HasParameterTemplates):
-    """Template for processes, containing parameter, and condition templates and ranges."""
+    """
+    A process template.
+
+    Process templates are collections of condition and parameter templates that constrain the
+    values of a measurement's condition and parameter attributes, and provide a common structure
+    for describing similar measurements.
+
+    Parameters
+    ----------
+    name: str, optional
+        The name of the process template.
+    description: str, optional
+        Long-form description of the process template.
+    uids: Map[str, str], optional
+        A collection of
+        `unique IDs <https://citrineinformatics.github.io/taurus-documentation/
+        specification/unique-identifiers/>`_.
+    tags: List[str], optional
+        `Tags <https://citrineinformatics.github.io/taurus-documentation/specification/tags/>`_
+        are hierarchical strings that store information about an entity. They can be used
+        for filtering and discoverability.
+    conditions: List[:class:`ConditionTemplate \
+    <taurus.entity.template.condition_template.ConditionTemplate>`] or \
+    List[:class:`ConditionTemplate <taurus.entity.template.condition_template.ConditionTemplate>`,\
+     :py:class:`BaseBounds <taurus.entity.bounds.base_bounds.BaseBounds>`], optional
+        Templates for associated conditions. Each template can be provided by itself, or as a list
+        with the second entry being a separate, *more restrictive* Bounds object that defines
+        the limits of the value for this condition.
+    parameters: List[:class:`ParameterTemplate \
+    <taurus.entity.template.parameter_template.ParameterTemplate>`] or \
+    List[:class:`ParameterTemplate <taurus.entity.template.parameter_template.ParameterTemplate>`,\
+     :py:class:`BaseBounds <taurus.entity.bounds.base_bounds.BaseBounds>`], optional
+        Templates for associated parameters. Each template can be provided by itself, or as a list
+        with the second entry being a separate, *more restrictive* Bounds object that defines
+        the limits of the value for this parameter.
+
+    """
 
     typ = "process_template"
 
