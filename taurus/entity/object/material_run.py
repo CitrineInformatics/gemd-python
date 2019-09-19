@@ -1,11 +1,44 @@
-"""A material run."""
 from taurus.entity.object.base_object import BaseObject
 from taurus.enumeration import SampleType
 
 
 class MaterialRun(BaseObject):
-    """Realization of a Material, with links to its spec, originating process, and measurements."""
+    """
+    A material run.
 
+    This includes a link to the originating process and soft links to measurements.
+
+    Parameters
+    ----------
+    name: str, optional
+        Name of the material run.
+    uids: Map[str, str], optional
+        A collection of
+        `unique IDs <https://citrineinformatics.github.io/taurus-documentation/
+        specification/unique-identifiers/>`_.
+    tags: List[str], optional
+        `Tags <https://citrineinformatics.github.io/taurus-documentation/specification/tags/>`_
+        are hierarchical strings that store information about an entity. They can be used
+        for filtering and discoverability.
+    notes: str, optional
+        Long-form notes about the material run.
+    process: ProcessRun
+        Process that produces this material.
+    sample_type: str, optional
+        The form of this sample. Optionals are "experimental", "virtual", "production", or
+        "unknown." Default is "unknown."
+    spec: MaterialSpec
+        The material specification of which this is an instance.
+    file_links: List[FileLink], optional
+        Links to associated files, with resource paths into the files API.
+
+    Attributes
+    ----------
+    measurements: List[MeasurementRun], optional
+        Measurements performed on this material. The link is established by creating the
+        measurement run and settings its `material` field to this material run.
+
+    """
     typ = "material_run"
 
     skip = {"_measurements"}

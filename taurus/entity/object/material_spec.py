@@ -1,4 +1,3 @@
-"""A material spec."""
 from taurus.entity.attribute.property_and_conditions import PropertyAndConditions
 from taurus.entity.object.base_object import BaseObject
 from taurus.entity.object.has_template import HasTemplate
@@ -7,9 +6,34 @@ from taurus.entity.setters import validate_list
 
 class MaterialSpec(BaseObject, HasTemplate):
     """
-    Specification of the intent of a material.
+    A material specification.
 
-    This includes links to originating process and specified properties
+    This includes a link to the originating process and specified properties with conditions.
+
+    Parameters
+    ----------
+    name: str, optional
+        Name of the material spec.
+    uids: Map[str, str], optional
+        A collection of
+        `unique IDs <https://citrineinformatics.github.io/taurus-documentation/
+        specification/unique-identifiers/>`_.
+    tags: List[str], optional
+        `Tags <https://citrineinformatics.github.io/taurus-documentation/specification/tags/>`_
+        are hierarchical strings that store information about an entity. They can be used
+        for filtering and discoverability.
+    notes: str, optional
+        Long-form notes about the material spec.
+    process: ProcessSpec
+        Process that produces this material.
+    properties: List[PropertyAndConditions], optional
+        Properties of the material, along with an optional list of conditions under which
+        those properties are measured.
+    template: MaterialTemplate, optional
+        A template bounding the valid values for this material's properties.
+    file_links: List[FileLink], optional
+        Links to associated files, with resource paths into the files API.
+
     """
 
     typ = "material_spec"
