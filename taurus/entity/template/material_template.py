@@ -1,6 +1,4 @@
 """A material template."""
-from taurus.entity.object import MaterialRun
-from taurus.entity.object.material_spec import MaterialSpec
 from taurus.entity.template.base_template import BaseTemplate
 from taurus.entity.template.has_property_templates import HasPropertyTemplates
 

@@ -4,8 +4,6 @@ import pytest
 from taurus.client.json_encoder import dumps, loads
 from taurus.entity.bounds.composition_bounds import CompositionBounds
 from taurus.entity.bounds.real_bounds import RealBounds
-from taurus.entity.value.nominal_composition import NominalComposition
-from taurus.entity.value.nominal_real import NominalReal
 from taurus.entity.util import array_like
 
 

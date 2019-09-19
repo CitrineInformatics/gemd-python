@@ -1,7 +1,5 @@
 """Bounds a composition to have a specified set of components."""
 from taurus.entity.bounds.base_bounds import BaseBounds
-from taurus.entity.value.base_value import BaseValue
-from taurus.entity.value.composition_value import CompositionValue
 from taurus.entity.util import array_like
 
 

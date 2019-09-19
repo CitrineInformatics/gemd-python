@@ -1,10 +1,5 @@
 """Bound a real number to be between two values."""
 from taurus.entity.bounds.base_bounds import BaseBounds
-from taurus.entity.value.base_value import BaseValue
-from taurus.entity.value.continuous_value import ContinuousValue
-from taurus.entity.value.nominal_real import NominalReal
-from taurus.entity.value.normal_real import NormalReal
-from taurus.entity.value.uniform_real import UniformReal
 import taurus.units as units
 
 

@@ -3,9 +3,6 @@ import pytest
 
 from taurus.entity.bounds.integer_bounds import IntegerBounds
 from taurus.entity.bounds.real_bounds import RealBounds
-from taurus.entity.value.nominal_integer import NominalInteger
-from taurus.entity.value.nominal_real import NominalReal
-from taurus.entity.value.uniform_integer import UniformInteger
 
 
 def test_errors():

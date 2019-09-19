@@ -4,8 +4,6 @@ import pytest
 from taurus.client.json_encoder import dumps, loads
 from taurus.entity.bounds.categorical_bounds import CategoricalBounds
 from taurus.entity.bounds.real_bounds import RealBounds
-from taurus.entity.value.nominal_categorical import NominalCategorical
-from taurus.entity.value.nominal_real import NominalReal
 from taurus.entity.util import array_like
 
 

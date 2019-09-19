@@ -2,7 +2,6 @@
 from abc import abstractmethod
 
 from taurus.entity.dict_serializable import DictSerializable
-from taurus.entity.value.base_value import BaseValue
 
 
 class BaseBounds(DictSerializable):

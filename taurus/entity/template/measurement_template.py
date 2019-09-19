@@ -1,6 +1,4 @@
 """A measurement template."""
-from taurus.entity.object import MeasurementRun
-from taurus.entity.object.measurement_spec import MeasurementSpec
 from taurus.entity.template.base_template import BaseTemplate
 from taurus.entity.template.has_condition_templates import HasConditionTemplates
 from taurus.entity.template.has_parameter_templates import HasParameterTemplates

@@ -1,6 +1,4 @@
 """A process template."""
-from taurus.entity.object import ProcessRun
-from taurus.entity.object.process_spec import ProcessSpec
 from taurus.entity.setters import validate_list
 from taurus.entity.template.base_template import BaseTemplate
 from taurus.entity.template.has_condition_templates import HasConditionTemplates

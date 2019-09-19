@@ -8,4 +8,3 @@ class Property(BaseAttribute):
 
     typ = "property"
     attribute_type = AttributeType.PROPERTY
-

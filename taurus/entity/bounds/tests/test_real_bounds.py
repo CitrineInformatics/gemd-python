@@ -3,7 +3,6 @@ import pytest
 
 from taurus.entity.bounds.integer_bounds import IntegerBounds
 from taurus.entity.bounds.real_bounds import RealBounds
-from taurus.entity.value.nominal_categorical import NominalCategorical
 
 
 def test_contains():

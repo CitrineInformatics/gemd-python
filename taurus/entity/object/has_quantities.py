@@ -1,9 +1,6 @@
 """For entities that hve quantities."""
 from taurus.entity.bounds.real_bounds import RealBounds
 from taurus.entity.value.continuous_value import ContinuousValue
-from taurus.entity.value.nominal_real import NominalReal
-from taurus.entity.value.normal_real import NormalReal
-from taurus.entity.value.uniform_real import UniformReal
 
 fraction_bounds = RealBounds(lower_bound=0.0, upper_bound=1.0, default_units='')
 
@@ -36,7 +33,7 @@ class HasQuantities(object):
         if mass_fraction is None:
             self._mass_fraction = None
         elif not isinstance(mass_fraction, ContinuousValue):
-            raise TypeError("mass_fraction was not given as a continuous value: {}".format(mass_fraction))
+            raise TypeError("mass_fraction was not given as a continuous value")
         else:
             self._mass_fraction = mass_fraction
 
@@ -50,7 +47,7 @@ class HasQuantities(object):
         if volume_fraction is None:
             self._volume_fraction = None
         elif not isinstance(volume_fraction, ContinuousValue):
-            raise TypeError("volume_fraction was not given as a continuous value: {}".format(volume_fraction))
+            raise TypeError("volume_fraction was not given as a continuous value")
         else:
             self._volume_fraction = volume_fraction
 
@@ -64,7 +61,7 @@ class HasQuantities(object):
         if number_fraction is None:
             self._number_fraction = None
         elif not isinstance(number_fraction, ContinuousValue):
-            raise TypeError("number_fraction was not given as a continuous value: {}".format(number_fraction))
+            raise TypeError("number_fraction was not given as a continuous value")
         else:
             self._number_fraction = number_fraction
 

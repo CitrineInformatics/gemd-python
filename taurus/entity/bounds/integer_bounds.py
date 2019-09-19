@@ -1,9 +1,5 @@
 """Bounds an integer to be between two values."""
 from taurus.entity.bounds.base_bounds import BaseBounds
-from taurus.entity.value.base_value import BaseValue
-from taurus.entity.value.integer_value import IntegerValue
-from taurus.entity.value.nominal_integer import NominalInteger
-from taurus.entity.value.uniform_integer import UniformInteger
 
 
 class IntegerBounds(BaseBounds):

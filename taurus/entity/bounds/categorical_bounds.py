@@ -1,9 +1,5 @@
 """A restricted set of categories."""
 from taurus.entity.bounds.base_bounds import BaseBounds
-from taurus.entity.value.base_value import BaseValue
-from taurus.entity.value.categorical_value import CategoricalValue
-from taurus.entity.value.discrete_categorical import DiscreteCategorical
-from taurus.entity.value.nominal_categorical import NominalCategorical
 from taurus.entity.util import array_like
 
 

@@ -44,5 +44,3 @@ class AttributeTemplate(BaseEntity):
         if not isinstance(value, BaseBounds):
             raise ValueError("Bounds must be an instance of BaseBounds")
         self._bounds = value
-
-
