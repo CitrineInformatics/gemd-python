@@ -25,16 +25,6 @@ def test_invalid_constructor():
         CategoricalBounds(categories={1, 2})
 
 
-def test_validate():
-    """Test basic validation logic."""
-    bounds = CategoricalBounds(categories={"spam", "eggs"})
-    assert bounds.validate(NominalCategorical("spam"))
-    assert not bounds.validate(NominalCategorical("foo"))
-    assert not bounds.validate(NominalReal(2.0, ''))
-    with pytest.raises(TypeError):
-        bounds.validate("spam")
-
-
 def test_contains():
     """Test basic contains logic."""
     bounds = CategoricalBounds(categories={"spam", "eggs"})

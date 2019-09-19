@@ -25,16 +25,6 @@ def test_invalid_constructor():
         CompositionBounds(components={1, 2})
 
 
-def test_validate():
-    """Test basic validation logic."""
-    bounds = CompositionBounds(components={"spam", "eggs"})
-    assert bounds.validate(NominalComposition({"spam": 1.0, "eggs": 2.0}))
-    assert not bounds.validate(NominalComposition({"foo": 1.0, "bar": 2.0}))
-    assert not bounds.validate(NominalReal(2.0, ''))
-    with pytest.raises(TypeError):
-        bounds.validate({"spam": 1.0, "eggs": 2.0})
-
-
 def test_contains():
     """Test basic contains logic."""
     bounds = CompositionBounds(components={"spam", "eggs"})

@@ -21,11 +21,3 @@ class MeasurementTemplate(BaseTemplate,
         HasPropertyTemplates.__init__(self, properties)
         HasConditionTemplates.__init__(self, conditions)
         HasParameterTemplates.__init__(self, parameters)
-
-    def validate(self, measurement):
-        """Check that a measurement satisfies all property, condition, and parameter templates."""
-        if not isinstance(measurement, (MeasurementRun, MeasurementSpec)):
-            raise ValueError("MeasurementTemplate can only be applied to Measurements")
-        self.validate_properties(measurement)
-        self.validate_conditions(measurement)
-        self.validate_parameters(measurement)

@@ -24,7 +24,3 @@ class HasParameterTemplates(object):
         # TODO: list.map(_.validate_scope(AttributeType.PARAMETER)) all true
 
         self._parameters = list(map(BaseTemplate._homogenize_ranges, lst))
-
-    def validate_parameters(self, obj):
-        """Validate an object's parameters against its templates."""
-        BaseTemplate._validate_attributes(self, obj, "parameters")

@@ -24,7 +24,3 @@ class HasConditionTemplates(object):
         # TODO: list.map(_.validate_scope(AttributeType.CONDITION)) all true
 
         self._conditions = list(map(BaseTemplate._homogenize_ranges, lst))
-
-    def validate_conditions(self, obj):
-        """Validate an object's conditions against its template."""
-        BaseTemplate._validate_attributes(self, obj, "conditions")

@@ -13,9 +13,3 @@ class MaterialTemplate(BaseTemplate, HasPropertyTemplates):
     def __init__(self, name=None, description=None, properties=None, uids=None, tags=None):
         BaseTemplate.__init__(self, name, description, uids, tags)
         HasPropertyTemplates.__init__(self, properties)
-
-    def validate(self, material):
-        """Check that a material satisfies all property templates."""
-        if not isinstance(material, (MaterialRun, MaterialSpec)):
-            raise ValueError("MaterialTemplate can only be applied to Materials")
-        self.validate_properties(material)

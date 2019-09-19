@@ -43,37 +43,6 @@ class CategoricalBounds(BaseBounds):
         if not all(isinstance(x, str) for x in self.categories):
             raise ValueError("All the categories must be strings")
 
-    def validate(self, value: BaseValue) -> bool:
-        """
-        Check if a value is in the set of allowed categories.
-
-        Parameters
-        ----------
-        value: BaseValue
-            Value to validate. In order to be valid, must be a
-            :py:class:`CategoricalValue <taurus.entity.value.categorical_value.CategoricalValue>`
-            and have be one of the allowed categories.
-
-        Returns
-        -------
-        bool
-            True if the value is one of the allowed categories.
-
-        """
-        if not super().validate(value):
-            return False
-        if not isinstance(value, CategoricalValue):
-            return False
-
-        if isinstance(value, DiscreteCategorical):
-            return all(x in self.categories for x in value.probabilities)
-
-        if isinstance(value, NominalCategorical):
-            return value.category in self.categories
-
-        msg = "Categorical bounds do not check every CategoricalValue subclass"  # pragma: no cover
-        assert False, msg  # pragma: no cover
-
     def contains(self, bounds: BaseBounds) -> bool:
         """
         Check if another bounds object is contained by this bounds.

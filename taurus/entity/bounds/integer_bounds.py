@@ -31,34 +31,6 @@ class IntegerBounds(BaseBounds):
         if self.upper_bound is None or abs(self.upper_bound) >= float("inf"):
             raise ValueError("Upper bound must be given and finite")
 
-    def validate(self, value: BaseValue) -> bool:
-        """
-        Checks if a value is an integer within the bounds.
-
-        Parameters
-        ----------
-        value: BaseValue
-            Value to validate. In order to be valid, must be an
-            :py:class:`IntegerValue <taurus.entity.value.integer_value.IntegerValue>`
-            and be between the lower and upper bound.
-
-        Returns
-        -------
-        bool
-            True if the value is between the lower and upper bound.
-
-        """
-        if not super().validate(value):
-            return False
-        if not isinstance(value, IntegerValue):
-            return False
-
-        if isinstance(value, NominalInteger):
-            return self.upper_bound >= value.nominal >= self.lower_bound
-
-        if isinstance(value, UniformInteger):
-            return self.upper_bound >= value.upper_bound and self.lower_bound <= value.lower_bound
-
     def contains(self, bounds: BaseBounds) -> bool:
         """
         Check if another bounds is a subset of this range.

@@ -4,35 +4,6 @@ import pytest
 from taurus.entity.bounds.integer_bounds import IntegerBounds
 from taurus.entity.bounds.real_bounds import RealBounds
 from taurus.entity.value.nominal_categorical import NominalCategorical
-from taurus.entity.value.nominal_real import NominalReal
-
-
-def test_unit_validation():
-    """Make sure validation works when there is no unit conversion."""
-    dim = RealBounds(lower_bound=0, upper_bound=100, default_units="meter")
-    assert dim.validate(NominalReal(50, "m"))
-    assert not dim.validate(NominalReal(150, "m"))
-
-
-def test_unit_conversion():
-    """Make sure validation works when a unit conversion is involved."""
-    dim = RealBounds(lower_bound=0, upper_bound=100, default_units="meter")
-    assert dim.validate(NominalReal(5000, "cm"))
-    assert not dim.validate(NominalReal(50, "km"))
-    assert not dim.validate(NominalReal(50, "s"))
-
-
-def test_boundsless():
-    """Make sure validation works for boundless bounds."""
-    dim = RealBounds(lower_bound=0, upper_bound=100, default_units="")
-    assert dim.validate(NominalReal(50, ""))
-    assert not dim.validate(NominalReal(-50, ""))
-
-
-def test_non_prefix():
-    """Make sure validation works when the units differ by more than a prefix."""
-    dim2 = RealBounds(lower_bound=0, upper_bound=100, default_units="amp")
-    assert dim2.validate(NominalReal(50, "V / ohm"))
 
 
 def test_contains():
@@ -73,9 +44,4 @@ def test_constructor_error():
 def test_type_mismatch():
     """Test that incompatible types cannot be matched against RealBounds."""
     bounds = RealBounds(0, 1, default_units="meters")
-    assert not bounds.validate(NominalCategorical("foo"))
     assert not bounds.contains(IntegerBounds(0, 1))
-    with pytest.raises(TypeError):
-        bounds.validate(0)
-    with pytest.raises(TypeError):
-        bounds.contains([.33, .66])

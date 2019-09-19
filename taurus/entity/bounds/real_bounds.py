@@ -51,44 +51,6 @@ class RealBounds(BaseBounds):
                              "Use an empty string for a dimensionless quantity.")
         self._default_units = units.parse_units(default_units)
 
-    def validate(self, value: BaseValue) -> bool:
-        """
-        Checks if a value is a real number within the bounds.
-
-        Parameters
-        ----------
-        value: BaseValue
-            Value to validate. In order to be valid, must be an
-            :py:class:`ContinuousValue <taurus.entity.value.continuous_value.ContinuousValue>`
-            and be between the lower and upper bound.
-
-        Returns
-        -------
-        bool
-            True if the value is between the lower and upper bound.
-
-        """
-        if not super().validate(value):
-            return False
-        if not isinstance(value, ContinuousValue):
-            return False
-
-        lower, upper = self._convert_bounds(value.units)
-
-        if lower is None:
-            return False
-
-        if isinstance(value, NominalReal):
-            return upper >= value.nominal >= lower
-
-        # Normal distributions are interpreted as truncated normals,
-        # so long as their median value is within the bounds
-        if isinstance(value, NormalReal):
-            return upper >= value.mean >= lower
-
-        if isinstance(value, UniformReal):
-            return upper >= value.upper_bound and lower <= value.lower_bound
-
     def contains(self, bounds: BaseBounds) -> bool:
         """
         Check if another bounds is a subset of this range.

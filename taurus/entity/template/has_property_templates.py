@@ -27,8 +27,3 @@ class HasPropertyTemplates(object):
         # convert any templates into (template, bounds) pairs and
         # validate that any (template, bounds) pairs are consistent
         self._properties = list(map(BaseTemplate._homogenize_ranges, lst))
-
-    def validate_properties(self, obj):
-        """Validate an object's properties against its templates."""
-        # validate the template against the object's properties
-        BaseTemplate._validate_attributes(self, obj, "properties")
