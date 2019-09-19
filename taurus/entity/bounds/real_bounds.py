@@ -34,6 +34,9 @@ class RealBounds(BaseBounds):
         if self.upper_bound is None or abs(self.upper_bound) >= float("inf"):
             raise ValueError("Upper bound must be given and finite")
 
+        if self.upper_bound < self.lower_bound:
+            raise ValueError("Upper bound must be greater than or equal to lower bound")
+
     @property
     def default_units(self):
         """Get default units."""

@@ -13,6 +13,9 @@ def test_errors():
     with pytest.raises(ValueError):
         IntegerBounds(0, float("inf"))
 
+    with pytest.raises(ValueError):
+        IntegerBounds(10, 1)
+
 
 def test_incompatible_types():
     """Make sure that incompatible types aren't contained or validated."""

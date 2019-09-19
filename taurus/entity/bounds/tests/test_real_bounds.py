@@ -39,6 +39,9 @@ def test_constructor_error():
     with pytest.raises(ValueError):
         RealBounds(0, 100)
 
+    with pytest.raises(ValueError):
+        RealBounds(100, 0, "m")
+
 
 def test_type_mismatch():
     """Test that incompatible types cannot be matched against RealBounds."""
