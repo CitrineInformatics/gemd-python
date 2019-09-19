@@ -44,3 +44,5 @@ def test_type_mismatch():
     """Test that incompatible types cannot be matched against RealBounds."""
     bounds = RealBounds(0, 1, default_units="meters")
     assert not bounds.contains(IntegerBounds(0, 1))
+    with pytest.raises(TypeError):
+        bounds.contains([.33, .66])
