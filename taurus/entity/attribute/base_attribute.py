@@ -1,4 +1,3 @@
-"""Base class for all attributes."""
 from taurus.entity.dict_serializable import DictSerializable
 from taurus.entity.template.attribute_template import AttributeTemplate
 from taurus.entity.value.base_value import BaseValue

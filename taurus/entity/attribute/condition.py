@@ -1,4 +1,3 @@
-"""Condition class."""
 from taurus.entity.attribute.base_attribute import BaseAttribute
 from taurus.enumeration import AttributeType
 
