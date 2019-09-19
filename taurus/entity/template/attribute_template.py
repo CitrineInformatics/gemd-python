@@ -26,8 +26,6 @@ class AttributeTemplate(BaseEntity):
 
     """
 
-    skip = ["_data_type"]
-
     def __init__(self, name=None, description=None, bounds=None, uids=None, tags=None):
         BaseEntity.__init__(self, uids, tags)
         self.name = name
