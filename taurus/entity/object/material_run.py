@@ -39,6 +39,7 @@ class MaterialRun(BaseObject):
         measurement run and settings its `material` field to this material run.
 
     """
+
     typ = "material_run"
 
     skip = {"_measurements"}

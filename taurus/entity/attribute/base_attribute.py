@@ -30,6 +30,7 @@ class BaseAttribute(DictSerializable):
         Links to files associated with the attribute.
 
     """
+
     attribute_type = None
 
     def __init__(self, name=None, template=None, origin="unknown", value=None, notes=None,
