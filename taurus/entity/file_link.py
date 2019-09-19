@@ -4,7 +4,9 @@ from taurus.entity.dict_serializable import DictSerializable
 
 class FileLink(DictSerializable):
     """
-    Class for storing a name and link to an external resource.
+    `FileLink \
+    <https://citrineinformatics.github.io/taurus-documentation/specification/file-links/>`_
+    stores a name and link to an external resource.
 
     Once the file protocol is defined, there should be substantial validation.
 
