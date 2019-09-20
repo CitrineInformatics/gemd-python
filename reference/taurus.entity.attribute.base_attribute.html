@@ -32,12 +32,25 @@
             
   <div class="section" id="module-taurus.entity.attribute.base_attribute">
 <span id="taurus-entity-attribute-base-attribute-module"></span><h1>taurus.entity.attribute.base_attribute module<a class="headerlink" href="#module-taurus.entity.attribute.base_attribute" title="Permalink to this headline">¶</a></h1>
-<p>Base class for all attributes.</p>
 <dl class="class">
 <dt id="taurus.entity.attribute.base_attribute.BaseAttribute">
 <em class="property">class </em><code class="sig-prename descclassname">taurus.entity.attribute.base_attribute.</code><code class="sig-name descname">BaseAttribute</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">template=None</em>, <em class="sig-param">origin='unknown'</em>, <em class="sig-param">value=None</em>, <em class="sig-param">notes=None</em>, <em class="sig-param">file_links=None</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.attribute.base_attribute.BaseAttribute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="taurus.entity.dict_serializable.html#taurus.entity.dict_serializable.DictSerializable" title="taurus.entity.dict_serializable.DictSerializable"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.dict_serializable.DictSerializable</span></code></a></p>
-<p>Base class for attributes, which include Property, Parameter, Condition, and Metadata.</p>
+<p>Base class for all attributes, which include property, condition, parameter, and metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Required name of the attribute. Each attribute within an object must have a unique name.</p></li>
+<li><p><strong>notes</strong> (<em>str</em>) – Optional free-form notes about the attribute.</p></li>
+<li><p><strong>value</strong> (<a class="reference internal" href="taurus.entity.value.base_value.html#taurus.entity.value.base_value.BaseValue" title="taurus.entity.value.base_value.BaseValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseValue</span></code></a>) – The value of the attribute.</p></li>
+<li><p><strong>template</strong> (<a class="reference internal" href="taurus.entity.template.attribute_template.html#taurus.entity.template.attribute_template.AttributeTemplate" title="taurus.entity.template.attribute_template.AttributeTemplate"><code class="xref py py-class docutils literal notranslate"><span class="pre">AttributeTemplate</span></code></a>) – Attribute template that defines the allowed bounds of this attribute. If a template
+and value are both present then the value must be within the template bounds.</p></li>
+<li><p><strong>origin</strong> (<em>str</em>) – The origin of the attribute. Must be one of “measured”, “predicted”, “summary”,
+“specified”, “computed”, or “unknown.” Default is “unknown.”</p></li>
+<li><p><strong>file_links</strong> (<em>List</em><em>[</em><a class="reference internal" href="taurus.entity.file_link.html#taurus.entity.file_link.FileLink" title="taurus.entity.file_link.FileLink"><em>FileLink</em></a><em>]</em>) – Links to files associated with the attribute.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="attribute">
 <dt id="taurus.entity.attribute.base_attribute.BaseAttribute.attribute_type">
 <code class="sig-name descname">attribute_type</code><em class="property"> = None</em><a class="headerlink" href="#taurus.entity.attribute.base_attribute.BaseAttribute.attribute_type" title="Permalink to this definition">¶</a></dt>

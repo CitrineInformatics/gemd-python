@@ -32,13 +32,33 @@
             
   <div class="section" id="module-taurus.entity.object.measurement_run">
 <span id="taurus-entity-object-measurement-run-module"></span><h1>taurus.entity.object.measurement_run module<a class="headerlink" href="#module-taurus.entity.object.measurement_run" title="Permalink to this headline">¶</a></h1>
-<p>A measurement run performed on a material.</p>
 <dl class="class">
 <dt id="taurus.entity.object.measurement_run.MeasurementRun">
 <em class="property">class </em><code class="sig-prename descclassname">taurus.entity.object.measurement_run.</code><code class="sig-name descname">MeasurementRun</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">spec=None</em>, <em class="sig-param">material=None</em>, <em class="sig-param">properties=None</em>, <em class="sig-param">conditions=None</em>, <em class="sig-param">parameters=None</em>, <em class="sig-param">uids=None</em>, <em class="sig-param">tags=None</em>, <em class="sig-param">notes=None</em>, <em class="sig-param">file_links=None</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.object.measurement_run.MeasurementRun" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="taurus.entity.object.base_object.html#taurus.entity.object.base_object.BaseObject" title="taurus.entity.object.base_object.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.object.base_object.BaseObject</span></code></a>, <a class="reference internal" href="taurus.entity.object.has_conditions.html#taurus.entity.object.has_conditions.HasConditions" title="taurus.entity.object.has_conditions.HasConditions"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.object.has_conditions.HasConditions</span></code></a>, <a class="reference internal" href="taurus.entity.object.has_properties.html#taurus.entity.object.has_properties.HasProperties" title="taurus.entity.object.has_properties.HasProperties"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.object.has_properties.HasProperties</span></code></a>, <a class="reference internal" href="taurus.entity.object.has_parameters.html#taurus.entity.object.has_parameters.HasParameters" title="taurus.entity.object.has_parameters.HasParameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.object.has_parameters.HasParameters</span></code></a></p>
-<p>Realization of a measurement, which includes measured conditions, properties, and parameters.</p>
-<p>MeasurementRun includes a soft-link to the MaterialRun that contains it, if any.</p>
+<p>A measurement run.</p>
+<p>This contains a link to the material the measurement is performed on, as well as links to
+any properties, conditions, and parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the measurement run.</p></li>
+<li><p><strong>uids</strong> (<em>Map</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – A collection of
+<a class="reference external" href="https://citrineinformatics.github.io/taurus-documentation/specification/unique-identifiers/">unique IDs</a>.</p></li>
+<li><p><strong>tags</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – <a class="reference external" href="https://citrineinformatics.github.io/taurus-documentation/specification/tags/">Tags</a>
+are hierarchical strings that store information about an entity. They can be used
+for filtering and discoverability.</p></li>
+<li><p><strong>notes</strong> (<em>str</em><em>, </em><em>optional</em>) – Long-form notes about the measurement run.</p></li>
+<li><p><strong>conditions</strong> (<em>List</em><em>[</em><a class="reference internal" href="taurus.entity.attribute.condition.html#taurus.entity.attribute.condition.Condition" title="taurus.entity.attribute.condition.Condition"><em>Condition</em></a><em>]</em><em>, </em><em>optional</em>) – Conditions under which this measurement run occurs.</p></li>
+<li><p><strong>parameters</strong> (<em>List</em><em>[</em><a class="reference internal" href="taurus.entity.attribute.parameter.html#taurus.entity.attribute.parameter.Parameter" title="taurus.entity.attribute.parameter.Parameter"><em>Parameter</em></a><em>]</em><em>, </em><em>optional</em>) – Parameters of this measurement run.</p></li>
+<li><p><strong>properties</strong> (<em>List</em><em>[</em><a class="reference internal" href="taurus.entity.attribute.property.html#taurus.entity.attribute.property.Property" title="taurus.entity.attribute.property.Property"><em>Property</em></a><em>]</em><em>, </em><em>optional</em>) – Properties that are measured during this measurement run.</p></li>
+<li><p><strong>spec</strong> (<a class="reference internal" href="taurus.entity.object.material_spec.html#taurus.entity.object.material_spec.MaterialSpec" title="taurus.entity.object.material_spec.MaterialSpec"><em>MaterialSpec</em></a>) – The measurement specification of which this is an instance.</p></li>
+<li><p><strong>material</strong> (<a class="reference internal" href="taurus.entity.object.material_run.html#taurus.entity.object.material_run.MaterialRun" title="taurus.entity.object.material_run.MaterialRun"><em>MaterialRun</em></a>) – The material run being measured.</p></li>
+<li><p><strong>spec</strong> – The material specification of which this is an instance.</p></li>
+<li><p><strong>file_links</strong> (<em>List</em><em>[</em><a class="reference internal" href="taurus.entity.file_link.html#taurus.entity.file_link.FileLink" title="taurus.entity.file_link.FileLink"><em>FileLink</em></a><em>]</em><em>, </em><em>optional</em>) – Links to associated files, with resource paths into the files API.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="taurus.entity.object.measurement_run.MeasurementRun.material">
 <em class="property">property </em><code class="sig-name descname">material</code><a class="headerlink" href="#taurus.entity.object.measurement_run.MeasurementRun.material" title="Permalink to this definition">¶</a></dt>

@@ -32,23 +32,64 @@
             
   <div class="section" id="module-taurus.entity.object.process_spec">
 <span id="taurus-entity-object-process-spec-module"></span><h1>taurus.entity.object.process_spec module<a class="headerlink" href="#module-taurus.entity.object.process_spec" title="Permalink to this headline">¶</a></h1>
-<p>A process spec, the intent of a process that converts ingredients into an intended material.</p>
 <dl class="class">
 <dt id="taurus.entity.object.process_spec.ProcessSpec">
 <em class="property">class </em><code class="sig-prename descclassname">taurus.entity.object.process_spec.</code><code class="sig-name descname">ProcessSpec</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">template=None</em>, <em class="sig-param">parameters=None</em>, <em class="sig-param">conditions=None</em>, <em class="sig-param">uids=None</em>, <em class="sig-param">tags=None</em>, <em class="sig-param">notes=None</em>, <em class="sig-param">file_links=None</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.object.process_spec.ProcessSpec" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="taurus.entity.object.base_object.html#taurus.entity.object.base_object.BaseObject" title="taurus.entity.object.base_object.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.object.base_object.BaseObject</span></code></a>, <a class="reference internal" href="taurus.entity.object.has_parameters.html#taurus.entity.object.has_parameters.HasParameters" title="taurus.entity.object.has_parameters.HasParameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.object.has_parameters.HasParameters</span></code></a>, <a class="reference internal" href="taurus.entity.object.has_conditions.html#taurus.entity.object.has_conditions.HasConditions" title="taurus.entity.object.has_conditions.HasConditions"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.object.has_conditions.HasConditions</span></code></a>, <a class="reference internal" href="taurus.entity.object.has_template.html#taurus.entity.object.has_template.HasTemplate" title="taurus.entity.object.has_template.HasTemplate"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.object.has_template.HasTemplate</span></code></a></p>
-<p>Specification of a process.</p>
-<p>This includes a link to the input material specs and relevant conditions and parameters
-ProcessSpec includes a soft-link to the MaterialSpec that it produces, if any</p>
-<dl class="method">
+<p>A process specification.</p>
+<p>Processes transform zero or more input materials into exactly one output material.
+This includes links to the parameters and conditions under which the process is expected
+to be performed, as well as soft links to the output material and the input ingredients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the process spec.</p></li>
+<li><p><strong>uids</strong> (<em>Map</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – A collection of
+<a class="reference external" href="https://citrineinformatics.github.io/taurus-documentation/specification/unique-identifiers/">unique IDs</a>.</p></li>
+<li><p><strong>tags</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – <a class="reference external" href="https://citrineinformatics.github.io/taurus-documentation/specification/tags/">Tags</a>
+are hierarchical strings that store information about an entity. They can be used
+for filtering and discoverability.</p></li>
+<li><p><strong>notes</strong> (<em>str</em><em>, </em><em>optional</em>) – Long-form notes about the process spec.</p></li>
+<li><p><strong>conditions</strong> (<em>List</em><em>[</em><a class="reference internal" href="taurus.entity.attribute.condition.html#taurus.entity.attribute.condition.Condition" title="taurus.entity.attribute.condition.Condition"><em>Condition</em></a><em>]</em><em>, </em><em>optional</em>) – Conditions under which this process spec occurs.</p></li>
+<li><p><strong>parameters</strong> (<em>List</em><em>[</em><a class="reference internal" href="taurus.entity.attribute.parameter.html#taurus.entity.attribute.parameter.Parameter" title="taurus.entity.attribute.parameter.Parameter"><em>Parameter</em></a><em>]</em><em>, </em><em>optional</em>) – Parameters of this process spec.</p></li>
+<li><p><strong>template</strong> (<a class="reference internal" href="taurus.entity.template.process_template.html#taurus.entity.template.process_template.ProcessTemplate" title="taurus.entity.template.process_template.ProcessTemplate"><em>ProcessTemplate</em></a><em>, </em><em>optional</em>) – A template bounding the valid values for this process’s parameters and conditions.</p></li>
+<li><p><strong>file_links</strong> (<em>List</em><em>[</em><a class="reference internal" href="taurus.entity.file_link.html#taurus.entity.file_link.FileLink" title="taurus.entity.file_link.FileLink"><em>FileLink</em></a><em>]</em><em>, </em><em>optional</em>) – Links to associated files, with resource paths into the files API.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="taurus.entity.object.process_spec.ProcessSpec.output_material">
+<code class="sig-name descname">output_material</code><a class="headerlink" href="#taurus.entity.object.process_spec.ProcessSpec.output_material" title="Permalink to this definition">¶</a></dt>
+<dd><p>The material spec that this process spec produces. The link is established by creating
+the material spec and settings its <cite>process</cite> field to this process spec.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="taurus.entity.object.material_spec.html#taurus.entity.object.material_spec.MaterialSpec" title="taurus.entity.object.material_spec.MaterialSpec">MaterialSpec</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="taurus.entity.object.process_spec.ProcessSpec.ingredients">
-<em class="property">property </em><code class="sig-name descname">ingredients</code><a class="headerlink" href="#taurus.entity.object.process_spec.ProcessSpec.ingredients" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">ingredients</code><a class="headerlink" href="#taurus.entity.object.process_spec.ProcessSpec.ingredients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ingredient specs that act as inputs to this process spec. The link is established by
+creating each ingredient spec and setting its <cite>process</cite> field to this process spec.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="taurus.entity.object.ingredient_spec.html#taurus.entity.object.ingredient_spec.IngredientSpec" title="taurus.entity.object.ingredient_spec.IngredientSpec">IngredientSpec</a>], optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<em class="property">property </em><code class="sig-name descname">ingredients</code></dt>
 <dd><p>Get the list of input ingredient specs.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="taurus.entity.object.process_spec.ProcessSpec.output_material">
-<em class="property">property </em><code class="sig-name descname">output_material</code><a class="headerlink" href="#taurus.entity.object.process_spec.ProcessSpec.output_material" title="Permalink to this definition">¶</a></dt>
+<dt>
+<em class="property">property </em><code class="sig-name descname">output_material</code></dt>
 <dd><p>Get the output material spec.</p>
 </dd></dl>
 

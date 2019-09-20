@@ -32,12 +32,31 @@
             
   <div class="section" id="module-taurus.entity.object.measurement_spec">
 <span id="taurus-entity-object-measurement-spec-module"></span><h1>taurus.entity.object.measurement_spec module<a class="headerlink" href="#module-taurus.entity.object.measurement_spec" title="Permalink to this headline">¶</a></h1>
-<p>A measurement spec.</p>
 <dl class="class">
 <dt id="taurus.entity.object.measurement_spec.MeasurementSpec">
 <em class="property">class </em><code class="sig-prename descclassname">taurus.entity.object.measurement_spec.</code><code class="sig-name descname">MeasurementSpec</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">template=None</em>, <em class="sig-param">parameters=None</em>, <em class="sig-param">conditions=None</em>, <em class="sig-param">uids=None</em>, <em class="sig-param">tags=None</em>, <em class="sig-param">notes=None</em>, <em class="sig-param">file_links=None</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.object.measurement_spec.MeasurementSpec" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="taurus.entity.object.base_object.html#taurus.entity.object.base_object.BaseObject" title="taurus.entity.object.base_object.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.object.base_object.BaseObject</span></code></a>, <a class="reference internal" href="taurus.entity.object.has_parameters.html#taurus.entity.object.has_parameters.HasParameters" title="taurus.entity.object.has_parameters.HasParameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.object.has_parameters.HasParameters</span></code></a>, <a class="reference internal" href="taurus.entity.object.has_conditions.html#taurus.entity.object.has_conditions.HasConditions" title="taurus.entity.object.has_conditions.HasConditions"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.object.has_conditions.HasConditions</span></code></a>, <a class="reference internal" href="taurus.entity.object.has_template.html#taurus.entity.object.has_template.HasTemplate" title="taurus.entity.object.has_template.HasTemplate"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.object.has_template.HasTemplate</span></code></a></p>
-<p>Specification of a measurement, including the relevant conditions and parameters.</p>
+<p>A measurement specification.</p>
+<p>This includes links to the conditions and parameters under which the measurement is
+expected to be performed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the measurement spec.</p></li>
+<li><p><strong>uids</strong> (<em>Map</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – A collection of
+<a class="reference external" href="https://citrineinformatics.github.io/taurus-documentation/specification/unique-identifiers/">unique IDs</a>.</p></li>
+<li><p><strong>tags</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – <a class="reference external" href="https://citrineinformatics.github.io/taurus-documentation/specification/tags/">Tags</a>
+are hierarchical strings that store information about an entity. They can be used
+for filtering and discoverability.</p></li>
+<li><p><strong>notes</strong> (<em>str</em><em>, </em><em>optional</em>) – Long-form notes about the measurement spec.</p></li>
+<li><p><strong>conditions</strong> (<em>List</em><em>[</em><a class="reference internal" href="taurus.entity.attribute.condition.html#taurus.entity.attribute.condition.Condition" title="taurus.entity.attribute.condition.Condition"><em>Condition</em></a><em>]</em><em>, </em><em>optional</em>) – Conditions under which this measurement spec occurs.</p></li>
+<li><p><strong>parameters</strong> (<em>List</em><em>[</em><a class="reference internal" href="taurus.entity.attribute.parameter.html#taurus.entity.attribute.parameter.Parameter" title="taurus.entity.attribute.parameter.Parameter"><em>Parameter</em></a><em>]</em><em>, </em><em>optional</em>) – Parameters of this measurement spec.</p></li>
+<li><p><strong>template</strong> (<a class="reference internal" href="taurus.entity.template.measurement_template.html#taurus.entity.template.measurement_template.MeasurementTemplate" title="taurus.entity.template.measurement_template.MeasurementTemplate"><em>MeasurementTemplate</em></a>) – A template bounding the valid values for the measurement’s properties, parameters,
+and conditions.</p></li>
+<li><p><strong>file_links</strong> (<em>List</em><em>[</em><a class="reference internal" href="taurus.entity.file_link.html#taurus.entity.file_link.FileLink" title="taurus.entity.file_link.FileLink"><em>FileLink</em></a><em>]</em><em>, </em><em>optional</em>) – Links to associated files, with resource paths into the files API.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="attribute">
 <dt id="taurus.entity.object.measurement_spec.MeasurementSpec.typ">
 <code class="sig-name descname">typ</code><em class="property"> = 'measurement_spec'</em><a class="headerlink" href="#taurus.entity.object.measurement_spec.MeasurementSpec.typ" title="Permalink to this definition">¶</a></dt>

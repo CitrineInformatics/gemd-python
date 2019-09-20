@@ -32,13 +32,26 @@
             
   <div class="section" id="module-taurus.entity.object.base_object">
 <span id="taurus-entity-object-base-object-module"></span><h1>taurus.entity.object.base_object module<a class="headerlink" href="#module-taurus.entity.object.base_object" title="Permalink to this headline">¶</a></h1>
-<p>Base class for all Data Concepts objects.</p>
 <dl class="class">
 <dt id="taurus.entity.object.base_object.BaseObject">
 <em class="property">class </em><code class="sig-prename descclassname">taurus.entity.object.base_object.</code><code class="sig-name descname">BaseObject</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">uids=None</em>, <em class="sig-param">tags=None</em>, <em class="sig-param">notes=None</em>, <em class="sig-param">file_links=None</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.object.base_object.BaseObject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="taurus.entity.base_entity.html#taurus.entity.base_entity.BaseEntity" title="taurus.entity.base_entity.BaseEntity"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.base_entity.BaseEntity</span></code></a></p>
 <p>Base class for objects.</p>
 <p>This includes {Material, Process, Measurement, Ingredient} {Run, Spec}</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the material spec.</p></li>
+<li><p><strong>uids</strong> (<em>Map</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – A collection of
+<a class="reference external" href="https://citrineinformatics.github.io/taurus-documentation/specification/unique-identifiers/">unique IDs</a>.</p></li>
+<li><p><strong>tags</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – <a class="reference external" href="https://citrineinformatics.github.io/taurus-documentation/specification/tags/">Tags</a>
+are hierarchical strings that store information about an entity. They can be used
+for filtering and discoverability.</p></li>
+<li><p><strong>notes</strong> (<em>str</em><em>, </em><em>optional</em>) – Long-form notes about the material spec.</p></li>
+<li><p><strong>file_links</strong> (<em>List</em><em>[</em><a class="reference internal" href="taurus.entity.file_link.html#taurus.entity.file_link.FileLink" title="taurus.entity.file_link.FileLink"><em>FileLink</em></a><em>]</em><em>, </em><em>optional</em>) – Links to associated files, with resource paths into the files API.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="taurus.entity.object.base_object.BaseObject.file_links">
 <em class="property">property </em><code class="sig-name descname">file_links</code><a class="headerlink" href="#taurus.entity.object.base_object.BaseObject.file_links" title="Permalink to this definition">¶</a></dt>

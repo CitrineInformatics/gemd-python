@@ -32,12 +32,20 @@
             
   <div class="section" id="module-taurus.entity.attribute.property_and_conditions">
 <span id="taurus-entity-attribute-property-and-conditions-module"></span><h1>taurus.entity.attribute.property_and_conditions module<a class="headerlink" href="#module-taurus.entity.attribute.property_and_conditions" title="Permalink to this headline">¶</a></h1>
-<p>Class for combined property and conditions.</p>
 <dl class="class">
 <dt id="taurus.entity.attribute.property_and_conditions.PropertyAndConditions">
 <em class="property">class </em><code class="sig-prename descclassname">taurus.entity.attribute.property_and_conditions.</code><code class="sig-name descname">PropertyAndConditions</code><span class="sig-paren">(</span><em class="sig-param">property=None</em>, <em class="sig-param">conditions=None</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.attribute.property_and_conditions.PropertyAndConditions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="taurus.entity.dict_serializable.html#taurus.entity.dict_serializable.DictSerializable" title="taurus.entity.dict_serializable.DictSerializable"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.dict_serializable.DictSerializable</span></code></a></p>
-<p>Property and conditions, as in a measurement spec.</p>
+<p>A property and the conditions under which that property was determined.</p>
+<p>This attribute is only relevant for material specs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>property</strong> (<a class="reference internal" href="taurus.entity.attribute.property.html#taurus.entity.attribute.property.Property" title="taurus.entity.attribute.property.Property"><em>Property</em></a>) – A property attribute</p></li>
+<li><p><strong>conditions</strong> (<em>List</em><em>[</em><a class="reference internal" href="taurus.entity.attribute.condition.html#taurus.entity.attribute.condition.Condition" title="taurus.entity.attribute.condition.Condition"><em>Condition</em></a><em>]</em>) – An optional list of conditions associated with this property.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="taurus.entity.attribute.property_and_conditions.PropertyAndConditions.conditions">
 <em class="property">property </em><code class="sig-name descname">conditions</code><a class="headerlink" href="#taurus.entity.attribute.property_and_conditions.PropertyAndConditions.conditions" title="Permalink to this definition">¶</a></dt>

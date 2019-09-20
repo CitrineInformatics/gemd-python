@@ -37,18 +37,26 @@
 <dt id="taurus.entity.template.attribute_template.AttributeTemplate">
 <em class="property">class </em><code class="sig-prename descclassname">taurus.entity.template.attribute_template.</code><code class="sig-name descname">AttributeTemplate</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">description=None</em>, <em class="sig-param">bounds=None</em>, <em class="sig-param">uids=None</em>, <em class="sig-param">tags=None</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.template.attribute_template.AttributeTemplate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="taurus.entity.base_entity.html#taurus.entity.base_entity.BaseEntity" title="taurus.entity.base_entity.BaseEntity"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.base_entity.BaseEntity</span></code></a></p>
-<p>Class for all attribute templates, which must contain a bounds and scope.</p>
-<p>The bounds implies the type of the template, e.g. RealBounds imply data_type = DataType.REAL.</p>
+<p>An attribute template, which can be a property, parameter, or condition template.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – The name of the attribute template.</p></li>
+<li><p><strong>bounds</strong> (<a class="reference internal" href="taurus.entity.bounds.base_bounds.html#taurus.entity.bounds.base_bounds.BaseBounds" title="taurus.entity.bounds.base_bounds.BaseBounds"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseBounds</span></code></a>) – Bounds circumscribe the values that are valid according to this attribute template.</p></li>
+<li><p><strong>description</strong> (<em>str</em><em>, </em><em>optional</em>) – A long-form description of the attribute template.</p></li>
+<li><p><strong>uids</strong> (<em>Map</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – A collection of
+<a class="reference external" href="https://citrineinformatics.github.io/taurus-documentation/specification/unique-identifiers/">unique IDs</a>.</p></li>
+<li><p><strong>tags</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – <a class="reference external" href="https://citrineinformatics.github.io/taurus-documentation/specification/tags/">Tags</a>
+are hierarchical strings that store information about an entity. They can be used
+for filtering and discoverability.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="taurus.entity.template.attribute_template.AttributeTemplate.bounds">
 <em class="property">property </em><code class="sig-name descname">bounds</code><a class="headerlink" href="#taurus.entity.template.attribute_template.AttributeTemplate.bounds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the bounds.</p>
 </dd></dl>
-
-<dl class="attribute">
-<dt id="taurus.entity.template.attribute_template.AttributeTemplate.skip">
-<code class="sig-name descname">skip</code><em class="property"> = ['_data_type']</em><a class="headerlink" href="#taurus.entity.template.attribute_template.AttributeTemplate.skip" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 <dl class="method">
 <dt id="taurus.entity.template.attribute_template.AttributeTemplate.validate">

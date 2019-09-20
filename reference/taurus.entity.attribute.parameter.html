@@ -32,12 +32,14 @@
             
   <div class="section" id="module-taurus.entity.attribute.parameter">
 <span id="taurus-entity-attribute-parameter-module"></span><h1>taurus.entity.attribute.parameter module<a class="headerlink" href="#module-taurus.entity.attribute.parameter" title="Permalink to this headline">¶</a></h1>
-<p>Parameter class.</p>
 <dl class="class">
 <dt id="taurus.entity.attribute.parameter.Parameter">
 <em class="property">class </em><code class="sig-prename descclassname">taurus.entity.attribute.parameter.</code><code class="sig-name descname">Parameter</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">template=None</em>, <em class="sig-param">origin='unknown'</em>, <em class="sig-param">value=None</em>, <em class="sig-param">notes=None</em>, <em class="sig-param">file_links=None</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.attribute.parameter.Parameter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="taurus.entity.attribute.base_attribute.html#taurus.entity.attribute.base_attribute.BaseAttribute" title="taurus.entity.attribute.base_attribute.BaseAttribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">taurus.entity.attribute.base_attribute.BaseAttribute</span></code></a></p>
 <p>Parameter of a process or measurement.</p>
+<p>Parameters are the non-environmental variables (typically specified and controlled) that may
+affect a process or measurement: e.g. oven dial temperature for a kiln firing, magnification
+for a measurement taken with an electron microscope.</p>
 <dl class="attribute">
 <dt id="taurus.entity.attribute.parameter.Parameter.attribute_type">
 <code class="sig-name descname">attribute_type</code><em class="property"> = 'parameter'</em><a class="headerlink" href="#taurus.entity.attribute.parameter.Parameter.attribute_type" title="Permalink to this definition">¶</a></dt>
