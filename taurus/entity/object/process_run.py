@@ -1,4 +1,3 @@
-"""A process run, which turns into ingredients into a material."""
 from taurus.entity.object.base_object import BaseObject
 from taurus.entity.object.has_conditions import HasConditions
 from taurus.entity.object.has_parameters import HasParameters
@@ -6,10 +5,45 @@ from taurus.entity.object.has_parameters import HasParameters
 
 class ProcessRun(BaseObject, HasConditions, HasParameters):
     """
-    Realization of a process.
+    A process run.
 
-    This includes links to the input materials and measured conditions and parameters
-    ProcessRun includes a soft-link to the MaterialRun that it produces, if any
+    Processes transform zero or more input materials into exactly one output material.
+    This includes links to conditions and parameters under which the process was performed,
+    as well as soft links to the output material and each of the input ingredients.
+
+    Parameters
+    ----------
+    name: str, optional
+        Name of the process run.
+    uids: Map[str, str], optional
+        A collection of
+        `unique IDs <https://citrineinformatics.github.io/taurus-documentation/
+        specification/unique-identifiers/>`_.
+    tags: List[str], optional
+        `Tags <https://citrineinformatics.github.io/taurus-documentation/specification/tags/>`_
+        are hierarchical strings that store information about an entity. They can be used
+        for filtering and discoverability.
+    notes: str, optional
+        Long-form notes about the process run.
+    conditions: List[Condition], optional
+        Conditions under which this process run occurs.
+    parameters: List[Parameter], optional
+        Parameters of this process run.
+    spec: ProcessSpec
+        Spec for this process run.
+    file_links: List[FileLink], optional
+        Links to associated files, with resource paths into the files API.
+
+    Attributes
+    ----------
+    output_material: MaterialRun
+        The material run that this process run produces. The link is established by creating
+        the material run and settings its `process` field to this process run.
+
+    ingredients: List[IngredientRun]
+        Ingredient runs that act as inputs to this process run. The link is established by
+        creating each ingredient run and setting its `process` field to this process run.
+
     """
 
     typ = "process_run"

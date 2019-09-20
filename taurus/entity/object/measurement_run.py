@@ -1,4 +1,3 @@
-"""A measurement run performed on a material."""
 from taurus.entity.object.base_object import BaseObject
 from taurus.entity.object.has_conditions import HasConditions
 from taurus.entity.object.has_properties import HasProperties
@@ -9,9 +8,40 @@ from taurus.entity.valid_list import ValidList
 
 class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters):
     """
-    Realization of a measurement, which includes measured conditions, properties, and parameters.
+    A measurement run.
 
-    MeasurementRun includes a soft-link to the MaterialRun that contains it, if any.
+    This contains a link to the material the measurement is performed on, as well as links to
+    any properties, conditions, and parameters.
+
+    Parameters
+    ----------
+    name: str, optional
+        Name of the measurement run.
+    uids: Map[str, str], optional
+        A collection of
+        `unique IDs <https://citrineinformatics.github.io/taurus-documentation/
+        specification/unique-identifiers/>`_.
+    tags: List[str], optional
+        `Tags <https://citrineinformatics.github.io/taurus-documentation/specification/tags/>`_
+        are hierarchical strings that store information about an entity. They can be used
+        for filtering and discoverability.
+    notes: str, optional
+        Long-form notes about the measurement run.
+    conditions: List[Condition], optional
+        Conditions under which this measurement run occurs.
+    parameters: List[Parameter], optional
+        Parameters of this measurement run.
+    properties: List[Property], optional
+        Properties that are measured during this measurement run.
+    spec: MeasurementSpec
+        The measurement specification of which this is an instance.
+    material: MaterialRun
+        The material run being measured.
+    spec: MaterialSpec
+        The material specification of which this is an instance.
+    file_links: List[FileLink], optional
+        Links to associated files, with resource paths into the files API.
+
     """
 
     typ = "measurement_run"

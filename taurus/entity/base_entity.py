@@ -15,8 +15,8 @@ class BaseEntity(DictSerializable):
         specification/unique-identifiers/>`_.
     tags: List[str]
         `Tags <https://citrineinformatics.github.io/taurus-documentation/specification/tags/>`_
-        are hierarchical strings that store information about an entity and can be used
-        for discoverability.
+        are hierarchical strings that store information about an entity. They can be used
+        for filtering and discoverability.
 
     """
 

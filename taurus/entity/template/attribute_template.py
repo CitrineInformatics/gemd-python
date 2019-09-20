@@ -5,23 +5,28 @@ from taurus.entity.bounds.base_bounds import BaseBounds
 
 class AttributeTemplate(BaseEntity):
     """
-    Class for all attribute templates, which must contain a bounds and scope.
+    An attribute template, which can be a property, parameter, or condition template.
 
-    The bounds implies the type of the template, e.g. RealBounds imply data_type = DataType.REAL.
+    Parameters
+    ----------
+    name: str
+        The name of the attribute template.
+    bounds: :py:class:`BaseBounds <taurus.entity.bounds.base_bounds.BaseBounds>`
+        Bounds circumscribe the values that are valid according to this attribute template.
+    description: str, optional
+        A long-form description of the attribute template.
+    uids: Map[str, str], optional
+        A collection of
+        `unique IDs <https://citrineinformatics.github.io/taurus-documentation/
+        specification/unique-identifiers/>`_.
+    tags: List[str], optional
+        `Tags <https://citrineinformatics.github.io/taurus-documentation/specification/tags/>`_
+        are hierarchical strings that store information about an entity. They can be used
+        for filtering and discoverability.
+
     """
 
-    skip = ["_data_type"]
-
     def __init__(self, name=None, description=None, bounds=None, uids=None, tags=None):
-        """
-        Create an attribute template.
-
-        :param name: of the template and attributes that it describes
-        :param description: of the attribute that the template describes
-        :param bounds: bounds for data type
-        :param uids: from BaseEntity
-        :param tags: from BaseEntity
-        """
         BaseEntity.__init__(self, uids, tags)
         self.name = name
         self.description = description

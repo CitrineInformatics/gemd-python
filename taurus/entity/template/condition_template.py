@@ -1,4 +1,3 @@
-"""Condition template."""
 from taurus.entity.template.attribute_template import AttributeTemplate
 
 

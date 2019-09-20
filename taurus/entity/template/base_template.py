@@ -6,7 +6,25 @@ from taurus.entity.template.attribute_template import AttributeTemplate
 
 
 class BaseTemplate(BaseEntity):
-    """Base class for all templates."""
+    """
+    Base class for all object templates.
+
+    Parameters
+    ----------
+    name: str, optional
+        The name of the object template.
+    description: str, optional
+        Long-form description of the object template.
+    uids: Map[str, str], optional
+        A collection of
+        `unique IDs <https://citrineinformatics.github.io/taurus-documentation/
+        specification/unique-identifiers/>`_.
+    tags: List[str], optional
+        `Tags <https://citrineinformatics.github.io/taurus-documentation/specification/tags/>`_
+        are hierarchical strings that store information about an entity. They can be used
+        for filtering and discoverability.
+
+    """
 
     def __init__(self, name=None, description=None, uids=None, tags=None):
         BaseEntity.__init__(self, uids, tags)
@@ -20,7 +38,25 @@ class BaseTemplate(BaseEntity):
 
     @staticmethod
     def _homogenize_ranges(template_or_tuple):
-        """Take either a template or pair and turn it into a (template, bounds) pair."""
+        """
+        Take either a template or pair and turn it into a (template, bounds) pair.
+
+        If no bounds are provided, use the attribute template's default bounds.
+
+        Parameters
+        ----------
+        template_or_tuple: AttributeTemplate OR a list or
+        tuple [AttributeTemplate or LinkByUID, BaseBounds]
+           An attribute template, optionally with another Bounds object that is more
+           restrictive than the attribute template's default bounds.
+
+        Returns
+        -------
+        List[AttributeTemplate or LinkByUID, BaseBounds]
+            The attribute template and bounds that should be applied the the attribute
+            when used in the context of **this** object.
+
+        """
         # if given a template, pull out its bounds
         if isinstance(template_or_tuple, AttributeTemplate):
             return [template_or_tuple, template_or_tuple.bounds]
