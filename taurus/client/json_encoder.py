@@ -20,6 +20,7 @@ from taurus.entity.object.ingredient_spec import IngredientSpec
 from taurus.entity.object.material_spec import MaterialSpec
 from taurus.entity.object.measurement_spec import MeasurementSpec
 from taurus.entity.object.process_spec import ProcessSpec
+from taurus.entity.source.performed_source import PerformedSource
 from taurus.entity.template.condition_template import ConditionTemplate
 from taurus.entity.template.material_template import MaterialTemplate
 from taurus.entity.template.measurement_template import MeasurementTemplate
@@ -188,7 +189,7 @@ _clazzes = [
     NominalComposition, EmpiricalFormula,
     NominalReal, UniformReal, NormalReal, DiscreteCategorical, NominalCategorical,
     UniformInteger, NominalInteger,
-    FileLink
+    FileLink, PerformedSource
 ]
 _clazz_index = {}
 for clazz in _clazzes:

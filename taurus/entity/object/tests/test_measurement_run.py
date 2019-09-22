@@ -8,6 +8,7 @@ from taurus.entity.object.measurement_spec import MeasurementSpec
 from taurus.entity.attribute.condition import Condition
 from taurus.entity.attribute.parameter import Parameter
 from taurus.entity.attribute.property import Property
+from taurus.entity.source.performed_source import PerformedSource
 from taurus.entity.value.nominal_real import NominalReal
 from taurus.entity.file_link import FileLink
 from taurus.entity.link_by_uid import LinkByUID
@@ -77,3 +78,13 @@ def test_material_id_link():
     meas = MeasurementRun(material=mat)
     assert meas.material == mat
     assert loads(dumps(meas)) == meas
+
+
+def test_source():
+    """Test that source can be set, serialized, and deserialized."""
+    source = PerformedSource(performed_by="Marie Curie", performed_date="1898-07-01")
+    measurement = MeasurementRun(name="Polonium", source=source)
+    assert loads(dumps(measurement)).source.performed_by == "Marie Curie"
+
+    with pytest.raises(TypeError):
+        MeasurementRun(name="Polonium", source="Marie Curie on 1898-07-01")
