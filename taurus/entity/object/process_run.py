@@ -1,9 +1,10 @@
 from taurus.entity.object.base_object import BaseObject
 from taurus.entity.object.has_conditions import HasConditions
 from taurus.entity.object.has_parameters import HasParameters
+from taurus.entity.object.has_source import HasSource
 
 
-class ProcessRun(BaseObject, HasConditions, HasParameters):
+class ProcessRun(BaseObject, HasConditions, HasParameters, HasSource):
     """
     A process run.
 
@@ -33,6 +34,8 @@ class ProcessRun(BaseObject, HasConditions, HasParameters):
         Spec for this process run.
     file_links: List[FileLink], optional
         Links to associated files, with resource paths into the files API.
+    source: PerformedSource, optional
+        Information about the person who performed the run and when.
 
     Attributes
     ----------
@@ -52,11 +55,12 @@ class ProcessRun(BaseObject, HasConditions, HasParameters):
 
     def __init__(self, name=None, spec=None,
                  conditions=None, parameters=None,
-                 uids=None, tags=None, notes=None, file_links=None):
+                 uids=None, tags=None, notes=None, file_links=None, source=None):
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)
         HasConditions.__init__(self, conditions)
         HasParameters.__init__(self, parameters)
+        HasSource.__init__(self, source)
 
         self._ingredients = []
 
