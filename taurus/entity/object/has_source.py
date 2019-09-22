@@ -3,7 +3,7 @@ from taurus.entity.source.performed_source import PerformedSource
 
 
 class HasSource(object):
-    """Mixin-trait for entities that include parameters."""
+    """Mixin-trait for entities that include sources (data provenance)."""
 
     def __init__(self, source):
         self._source = None
