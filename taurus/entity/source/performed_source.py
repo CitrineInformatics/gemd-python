@@ -1,3 +1,6 @@
+import arrow
+from arrow.parser import ParserError
+
 from taurus.entity.dict_serializable import DictSerializable
 
 
@@ -47,6 +50,10 @@ class PerformedSource(DictSerializable):
         if value is None:
             self._performed_date = None
         elif isinstance(value, str):
-            self._performed_date = value
+            try:
+                parsed = arrow.get(value).datetime
+                self._performed_date = parsed.isoformat()
+            except ParserError:
+                raise ValueError("Unable to parse {} as date".format(value))
         else:
             raise TypeError("performed_date must be a string")

@@ -15,3 +15,6 @@ def test_construction():
 
     with pytest.raises(TypeError):
         PerformedSource(performed_by={"first_name": "Marie", "last_name": "Curie"})
+
+    with pytest.raises(ValueError):
+        PerformedSource(performed_date="The Ides of March")
