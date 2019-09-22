@@ -11,6 +11,7 @@ Submodules
    taurus.entity.object.has_parameters
    taurus.entity.object.has_properties
    taurus.entity.object.has_quantities
+   taurus.entity.object.has_source
    taurus.entity.object.has_template
    taurus.entity.object.ingredient_run
    taurus.entity.object.ingredient_spec

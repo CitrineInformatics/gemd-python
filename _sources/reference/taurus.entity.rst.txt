@@ -9,6 +9,7 @@ Subpackages
    taurus.entity.attribute
    taurus.entity.bounds
    taurus.entity.object
+   taurus.entity.source
    taurus.entity.template
    taurus.entity.value
 

@@ -1,0 +1,17 @@
+taurus.entity.source package
+============================
+
+Submodules
+----------
+
+.. toctree::
+
+   taurus.entity.source.performed_source
+
+Module contents
+---------------
+
+.. automodule:: taurus.entity.source
+   :members:
+   :undoc-members:
+   :show-inheritance:
