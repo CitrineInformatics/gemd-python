@@ -1,29 +1,63 @@
-"""A measurement run performed on a material."""
 from taurus.entity.object.base_object import BaseObject
 from taurus.entity.object.has_conditions import HasConditions
 from taurus.entity.object.has_properties import HasProperties
 from taurus.entity.object.has_parameters import HasParameters
+from taurus.entity.object.has_source import HasSource
 from taurus.entity.setters import validate_list
 from taurus.entity.valid_list import ValidList
 
 
-class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters):
+class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters, HasSource):
     """
-    Realization of a measurement, which includes measured conditions, properties, and parameters.
+    A measurement run.
 
-    MeasurementRun includes a soft-link to the MaterialRun that contains it, if any.
+    This contains a link to the material the measurement is performed on, as well as links to
+    any properties, conditions, and parameters.
+
+    Parameters
+    ----------
+    name: str, optional
+        Name of the measurement run.
+    uids: Map[str, str], optional
+        A collection of
+        `unique IDs <https://citrineinformatics.github.io/taurus-documentation/
+        specification/unique-identifiers/>`_.
+    tags: List[str], optional
+        `Tags <https://citrineinformatics.github.io/taurus-documentation/specification/tags/>`_
+        are hierarchical strings that store information about an entity. They can be used
+        for filtering and discoverability.
+    notes: str, optional
+        Long-form notes about the measurement run.
+    conditions: List[Condition], optional
+        Conditions under which this measurement run occurs.
+    parameters: List[Parameter], optional
+        Parameters of this measurement run.
+    properties: List[Property], optional
+        Properties that are measured during this measurement run.
+    spec: MeasurementSpec
+        The measurement specification of which this is an instance.
+    material: MaterialRun
+        The material run being measured.
+    spec: MaterialSpec
+        The material specification of which this is an instance.
+    file_links: List[FileLink], optional
+        Links to associated files, with resource paths into the files API.
+    source: PerformedSource, optional
+        Information about the person who performed the run and when.
+
     """
 
     typ = "measurement_run"
 
     def __init__(self, name=None, spec=None, material=None,
                  properties=None, conditions=None, parameters=None,
-                 uids=None, tags=None, notes=None, file_links=None):
+                 uids=None, tags=None, notes=None, file_links=None, source=None):
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)
         HasProperties.__init__(self, properties)
         HasConditions.__init__(self, conditions)
         HasParameters.__init__(self, parameters)
+        HasSource.__init__(self, source)
 
         self._material = None
         self.material = material

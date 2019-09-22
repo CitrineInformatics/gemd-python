@@ -1,4 +1,3 @@
-"""Property template."""
 from taurus.entity.template.attribute_template import AttributeTemplate
 
 

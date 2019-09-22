@@ -1,4 +1,3 @@
-"""A measurement spec."""
 from taurus.entity.object.base_object import BaseObject
 from taurus.entity.object.has_parameters import HasParameters
 from taurus.entity.object.has_conditions import HasConditions
@@ -6,7 +5,37 @@ from taurus.entity.object.has_template import HasTemplate
 
 
 class MeasurementSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
-    """Specification of a measurement, including the relevant conditions and parameters."""
+    """
+    A measurement specification.
+
+    This includes links to the conditions and parameters under which the measurement is
+    expected to be performed.
+
+    Parameters
+    ----------
+    name: str, optional
+        Name of the measurement spec.
+    uids: Map[str, str], optional
+        A collection of
+        `unique IDs <https://citrineinformatics.github.io/taurus-documentation/
+        specification/unique-identifiers/>`_.
+    tags: List[str], optional
+        `Tags <https://citrineinformatics.github.io/taurus-documentation/specification/tags/>`_
+        are hierarchical strings that store information about an entity. They can be used
+        for filtering and discoverability.
+    notes: str, optional
+        Long-form notes about the measurement spec.
+    conditions: List[Condition], optional
+        Conditions under which this measurement spec occurs.
+    parameters: List[Parameter], optional
+        Parameters of this measurement spec.
+    template: MeasurementTemplate
+        A template bounding the valid values for the measurement's properties, parameters,
+        and conditions.
+    file_links: List[FileLink], optional
+        Links to associated files, with resource paths into the files API.
+
+    """
 
     typ = "measurement_spec"
 

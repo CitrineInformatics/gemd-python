@@ -5,7 +5,15 @@ from taurus.entity.template.condition_template import ConditionTemplate
 
 
 class HasConditionTemplates(object):
-    """Mixin-trait for entities that include condition template."""
+    """
+    Mixin-trait for entities that include condition templates.
+
+    Parameters
+    ----------
+    conditions: List[ConditionTemplate]
+        A list of this entity's condition templates.
+
+    """
 
     def __init__(self, conditions):
         self._conditions = None
@@ -13,7 +21,15 @@ class HasConditionTemplates(object):
 
     @property
     def conditions(self):
-        """Get the list of condition templates."""
+        """
+        Get the list of condition templates.
+
+        Returns
+        -------
+        List[ConditionTemplate]
+            List of this entity's condition templates
+
+        """
         return self._conditions
 
     @conditions.setter
