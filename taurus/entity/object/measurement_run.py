@@ -78,7 +78,7 @@ class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters, Ha
         elif isinstance(value, MaterialRun):
             self._material = value
             if not isinstance(value.measurements, ValidList):
-                value._measurements = validate_list(self, MeasurementRun)
+                value._measurements = validate_list(self, [MeasurementRun, LinkByUID])
             else:
                 value._measurements.append(self)
         elif isinstance(value, LinkByUID):
