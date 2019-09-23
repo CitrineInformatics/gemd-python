@@ -12,13 +12,21 @@ script:
 - cd docs; make html; cd ..;
 - touch ./docs/_build/html/.nojekyll
 deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: "$GH_SECRET_TOKEN"
-  keep_history: true
-  local_dir: "./docs/_build/html/"
-  on:
-    branch: develop
+  - provider: pages
+    skip_cleanup: true
+    github_token: "$GH_SECRET_TOKEN"
+    keep_history: true
+    local_dir: "./docs/_build/html/"
+    on:
+      branch: develop
+  - provider: pypi
+    user: "CitrineInformatics"
+    password: "$PYPI_PASSWORD"
+    distributions: "sdist bdist_wheel"
+    on:
+      tags: true
 env:
   global:
-    secure: EShDEfEJhStL9RJNZG5eKDNYhH8s7TtiS2rnm/lFikjDjXyL1nuyjtvc7TCGW/tHCRk0/kvFCoQhgDUZeqrDkqQhK9johy9gNhqp/C6TbLxBvVYw8pxOYB9ljpw98WewChjqKOlNBNLhEFXiFWCpTkDX0sC8stSNpxTcxe4atWI+xVbMxnrzf8DfILuyCcnDzCZOcWkVNtZxoiia3JLqwFJH6f5FYL6j3+5GTDE+wPlH/k1G9CSY76tfQQh8D5LoXRhq3anck/sN3ftKe5ZR9Iq2o7HRxK8q2w8UFlvMKmTPu/gR/GHldZgTaeAV5hd6gA2utMjyNp6Or0xngLFbSFJmdg7EvMLOJNKryHnYelBBM29sU6UHxrZUTec0mG+1f79wbVbz9pPNj5Hu7Vwl4mDgrzPzRIc1h0G2+GqBN3+1swjw1xjNtia8E5Thftw7jCjQYsLuX/S83z/2T3RPFtA7oLYRwIDCdkPfH0SKod+fFU5F2q1E7678uc/7WrkQ2IK9KnfoORoDKCNRR3xuZy7WvKzM+lFJxWqo11E/RwpRAJeKOWP13JtTnywIWUkVjPoaZ3cE0xQuEZ1t939ia8kPaabnVzviTA3V+vo8xdCuhFldy69oGCqQZTp7Z1LqXE62V88rthBZiYWDyjskxh64Y1MfrFwNR+gjtcAb8cs=
+    - secure: EShDEfEJhStL9RJNZG5eKDNYhH8s7TtiS2rnm/lFikjDjXyL1nuyjtvc7TCGW/tHCRk0/kvFCoQhgDUZeqrDkqQhK9johy9gNhqp/C6TbLxBvVYw8pxOYB9ljpw98WewChjqKOlNBNLhEFXiFWCpTkDX0sC8stSNpxTcxe4atWI+xVbMxnrzf8DfILuyCcnDzCZOcWkVNtZxoiia3JLqwFJH6f5FYL6j3+5GTDE+wPlH/k1G9CSY76tfQQh8D5LoXRhq3anck/sN3ftKe5ZR9Iq2o7HRxK8q2w8UFlvMKmTPu/gR/GHldZgTaeAV5hd6gA2utMjyNp6Or0xngLFbSFJmdg7EvMLOJNKryHnYelBBM29sU6UHxrZUTec0mG+1f79wbVbz9pPNj5Hu7Vwl4mDgrzPzRIc1h0G2+GqBN3+1swjw1xjNtia8E5Thftw7jCjQYsLuX/S83z/2T3RPFtA7oLYRwIDCdkPfH0SKod+fFU5F2q1E7678uc/7WrkQ2IK9KnfoORoDKCNRR3xuZy7WvKzM+lFJxWqo11E/RwpRAJeKOWP13JtTnywIWUkVjPoaZ3cE0xQuEZ1t939ia8kPaabnVzviTA3V+vo8xdCuhFldy69oGCqQZTp7Z1LqXE62V88rthBZiYWDyjskxh64Y1MfrFwNR+gjtcAb8cs=
+    - secure: "gE5l+oyT1XX86YHUzuKriX1QARqO/BEDfjcRXPe8qr/of7e3BawFybHhHBCpMtAaap9gxhdomUwGfdhTpoP0t3LraPb1ViuuR1+btfsk2YO2tWoVL2rdHXezEOjxByH4lE6bwECjhnu8ncvjAB5cWNNkoVwxrrGoIJvHdr73sSOPmM4t7aTmg+IDHy4oA2R/7qCEUDdhgLV39fCxKtNOxW9qSIbQ8GQB13XQcmkQdHkAtwpFw4njHReWy2zsBibcdxX/sEHwPWlBrsjXVbwtOjlB0hs159AjAK+tJjOui3Psss8dGIVEPwpULx2QOHJuW5sEapR6dPjn8peU0Fpx5MWfBvQl+7o/joIs5Pz9XOwetEZrG+Z2xT1rsgr416wkxtPTtlsKCq+kGvOd/bbQ/76hoBSwL2r+KWIWEyu7OfW8ZyorJmXY0XYJdbpwhVT24mKE6a0WrWsfa4EatMOITeNzkfukQwBfY0HFx88+7iJUjTIN76I4nsjK7lYpHtp1NsjLQ4Mt+i2var4u8BuXaVdqw5meigWF3CY5VL/N3zTESrzpoItJNyjWzVx9uq1C9JOBtNLn/3ywDbzA0pd1EPTHZXNaLF2f2ojaM3cL+bcu8ixCb2/ZfK7K+HJan9S4ggTqJBhss+JDzjAqDLRs4LRwP0gGnsJTLlU1jMh3Lq8="
+
