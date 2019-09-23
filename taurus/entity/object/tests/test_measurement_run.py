@@ -72,6 +72,8 @@ def test_material_soft_link():
         "Measurement information should be removed when material is serialized"
 
     assert 'measurements' in dye.__repr__()
+    assert 'material' in fluorescence.__repr__()
+    assert 'material' in absorbance.__repr__()
 
 
 def test_material_id_link():
