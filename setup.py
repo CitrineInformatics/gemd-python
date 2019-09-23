@@ -35,7 +35,7 @@ class PostDevelopCommand(develop):
         develop.run(self)
 
 
-setup(name='taurus',
+setup(name='taurus-citrine',
       version='0.0.0',
       url='http://github.com/CitrineInformatics/taurus-py',
       description='Python library for the Citrine Platform',

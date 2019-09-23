@@ -23,6 +23,7 @@ deploy:
     user: "CitrineInformatics"
     password: "$PYPI_PASSWORD"
     distributions: "sdist bdist_wheel"
+    skip_existing: true
     on:
       tags: true
 env:
