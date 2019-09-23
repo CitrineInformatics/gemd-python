@@ -28,3 +28,7 @@ def test_parse_unexpected():
     for unit in unexpected:
         with pytest.raises(UndefinedUnitError):
             parse_units(unit)
+
+
+def test_delta_units():
+    parse_units('delta_degF / hr')
