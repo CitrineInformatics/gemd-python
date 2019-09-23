@@ -1,5 +1,0 @@
-# Coverage config for pytest-cov
-[run]
-omit =
-    # omit everything (test)
-    *
