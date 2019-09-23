@@ -1,9 +1,16 @@
 """An empirical chemical formaula."""
-from typing import Dict
-
 from taurus.entity.value.composition_value import CompositionValue
-from pymatgen.core.composition import Composition as ElementalComposition
-from pymatgen.core.composition import Element
+
+
+_all_elements = {
+    'Tb', 'Be', 'Sb', 'Re', 'Sr', 'Ac', 'Ho', 'Ir', 'Cr', 'Os', 'S', 'Pt', 'Si', 'C', 'V', 'Bi',
+    'U', 'Pr', 'B', 'O', 'Zn', 'Xe', 'N', 'Ni', 'No', 'Ti', 'Pa', 'Am', 'Cu', 'I', 'Al', 'Ba',
+    'Pu', 'Ca', 'Bk', 'Ge', 'In', 'H', 'Es', 'Se', 'Cs', 'Te', 'Rn', 'Hf', 'Cm', 'Kr', 'Y',
+    'Cf', 'Li', 'F', 'Hg', 'Sm', 'Nd', 'Br', 'Er', 'K', 'Zr', 'Pd', 'Au', 'Eu', 'Md', 'Ga', 'As',
+    'Mn', 'Ag', 'Nb', 'Gd', 'Ru', 'Po', 'W', 'Na', 'Cl', 'Mo', 'Rh', 'Pm', 'Rb', 'Np', 'Lr',
+    'Ce', 'Ra', 'Tm', 'Dy', 'Fr', 'Sc', 'Lu', 'Fe', 'Fm', 'Cd', 'Ar', 'Mg', 'P', 'Th', 'Co',
+    'Tc', 'Pb', 'Ta', 'Tl', 'At', 'He', 'Yb', 'La', 'Sn', 'Ne'
+}
 
 
 class EmpiricalFormula(CompositionValue):
@@ -19,11 +26,9 @@ class EmpiricalFormula(CompositionValue):
     """
 
     typ = "empirical_formula"
-    skip = {"_quantities"}
 
     def __init__(self, formula=None):
         self._formula = None
-        self._quantities = None
         self.formula = formula
 
     @property
@@ -33,25 +38,14 @@ class EmpiricalFormula(CompositionValue):
 
     @formula.setter
     def formula(self, value):
-        self._quantities = self._parse_formula(value)
-        self._formula = value
-
-    @staticmethod
-    def _parse_formula(formula_str) -> Dict[str, float]:
-        """Parse the formula (a string) to return a map from elements to amounts."""
-        return ElementalComposition(formula_str).to_reduced_dict
-
-    @property
-    def components(self):
-        """Get all components of the chemical formula."""
-        return self._quantities.keys()
-
-    @property
-    def quantities(self):
-        """Get a map from components to quantities."""
-        return self._quantities
+        if value is None:
+            self._formula = None
+        elif isinstance(value, str):
+            self._formula = value
+        else:
+            raise TypeError("Formula must be given as a string; got {}".format(type(value)))
 
     @staticmethod
     def all_elements():
         """The set of all elements in the periodic table."""
-        return {e.value for e in Element}
+        return _all_elements
