@@ -1,5 +1,6 @@
 from abc import ABC
 import json
+from copy import deepcopy
 
 
 class DictSerializable(ABC):
@@ -82,11 +83,17 @@ class DictSerializable(ABC):
         return loads(dumps(d))
 
     def __repr__(self):
+        from taurus.util.impl import substitute_links, set_uuids
         object_dict = self.as_dict()
+        # as_dict skips over keys in `skip`, but they should be in the representation.
         skipped_keys = {x.lstrip('_') for x in vars(self) if x in self.skip}
         for key in skipped_keys:
-            object_dict[key] = self.__getattribute__(key)
-        return str(object_dict)
+            skipped_attribute = deepcopy(self.__getattribute__(key))
+            # Replace links in skipped keys with LinkByUID to prevent infinite recursion loop.
+            set_uuids(skipped_attribute)
+            substitute_links(skipped_attribute)
+            object_dict[key] = skipped_attribute
+        return object_dict.__str__()
 
     def __eq__(self, other):
         if isinstance(other, DictSerializable):

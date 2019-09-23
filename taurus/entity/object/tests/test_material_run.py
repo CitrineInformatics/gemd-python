@@ -60,7 +60,7 @@ def test_process_run():
     assert dumps(copy_material) == dumps(material_run)
 
     assert 'output_material' in process_run.__repr__()
-    assert 'process' in material_run.foo()
+    assert 'process' in material_run.__repr__()
 
 
 def test_process_id_link():
