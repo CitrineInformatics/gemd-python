@@ -91,7 +91,11 @@ class DictSerializable(ABC):
             skipped_attribute = deepcopy(self.__getattribute__(key))
             # Replace links in skipped keys with LinkByUID to prevent infinite recursion loop.
             set_uuids(skipped_attribute)
-            substitute_links(skipped_attribute)
+            if isinstance(skipped_attribute, list):
+                for x in skipped_attribute:
+                    substitute_links(x)
+            else:
+                substitute_links(skipped_attribute)
             object_dict[key] = skipped_attribute
         return object_dict.__str__()
 
