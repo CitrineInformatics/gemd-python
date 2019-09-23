@@ -66,6 +66,8 @@ class MaterialRun(BaseObject):
     def process(self, process):
         from taurus.entity.object.process_run import ProcessRun
         from taurus.entity.link_by_uid import LinkByUID
+        if self.process is not None and isinstance(self.process, ProcessRun):
+            self.process._output_material = None
         if process is None:
             self._process = None
         elif isinstance(process, LinkByUID):
@@ -82,6 +84,7 @@ class MaterialRun(BaseObject):
         return self._measurements
 
     def _unset_measurement(self, meas):
+        """Remove `meas` from this material's list of measurements."""
         if meas in self._measurements:
             self._measurements.remove(meas)
 
