@@ -31,8 +31,8 @@ def test_boundsless():
 
 def test_non_prefix():
     """Make sure validation works when the units differ by more than a prefix."""
-    dim2 = RealBounds(lower_bound=0, upper_bound=100, default_units="amp")
-    assert dim2.validate(NominalReal(50, "V / ohm"))
+    dim2 = RealBounds(lower_bound=0, upper_bound=100, default_units="N")
+    assert dim2.validate(NominalReal(50, "kg m / sec^2"))
 
 
 def test_contains():

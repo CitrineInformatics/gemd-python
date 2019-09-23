@@ -1,5 +1,6 @@
 """Implementation of units."""
 import pint
+import pkg_resources
 from pint import UnitRegistry
 from pint.quantity import _Quantity
 from pint.unit import _Unit
@@ -10,7 +11,7 @@ except NameError:
     str = str
 
 # use the default unit registry for now
-_ureg = UnitRegistry()
+_ureg = UnitRegistry(filename=pkg_resources.resource_filename("taurus.units", "citrine_en.txt"))
 
 
 # alias the error that is thrown when units are incompatible
@@ -37,7 +38,7 @@ def parse_units(units):
     elif isinstance(units, _Unit):
         return _unit_to_str(units)
     else:
-        raise ValueError("Units must be given as a recognized unit string or Units object")
+        raise UndefinedUnitError("Units must be given as a recognized unit string or Units object")
 
 
 def convert_units(value, starting_unit, final_unit):
