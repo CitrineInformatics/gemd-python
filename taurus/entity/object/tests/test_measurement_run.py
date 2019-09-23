@@ -95,11 +95,16 @@ def test_measurement_reassignment():
     sample1 = MaterialRun("Sample 1")
     sample2 = MaterialRun("Sample 2")
     mass = MeasurementRun("Mass of sample", material=sample1)
+    volume = MeasurementRun("Volume of sample", material=sample1)
     assert mass.material == sample1
-    assert sample1.measurements == [mass]
+    assert set(sample1.measurements) == {mass, volume}
     assert sample2.measurements == []
 
     mass.material = sample2
     assert mass.material == sample2
-    assert sample1.measurements == []
+    assert sample1.measurements == [volume]
     assert sample2.measurements == [mass]
+
+    mass.material = None
+    assert mass.material is None
+    assert sample2.measurements == []

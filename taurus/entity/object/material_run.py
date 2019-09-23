@@ -81,6 +81,10 @@ class MaterialRun(BaseObject):
         """Get a list of measurement runs."""
         return self._measurements
 
+    def _unset_measurement(self, meas):
+        if meas in self._measurements:
+            self._measurements.remove(meas)
+
     @property
     def sample_type(self):
         """Get the sample type."""
