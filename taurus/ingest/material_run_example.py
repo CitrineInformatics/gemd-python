@@ -16,18 +16,18 @@ from taurus.entity.value.normal_real import NormalReal
 known_properties = {
     "density": PropertyTemplate(
         name="density",
-        bounds=RealBounds(lower_bound=0.0, upper_bound=1000.0, default_units='')
+        bounds=RealBounds(lower_bound=0.0, upper_bound=1000.0, default_units='g / cm^3')
     ),
     "kinematic viscosity": PropertyTemplate(
         name="kinematic viscosity",
-        bounds=RealBounds(lower_bound=0.0, upper_bound=10.0**40, default_units="")
+        bounds=RealBounds(lower_bound=0.0, upper_bound=10.0**40, default_units="m^2 / s")
     )
 }
 
 known_conditions = {
     "temperature": ConditionTemplate(
         name="temperature",
-        bounds=RealBounds(lower_bound=0.0, upper_bound=1000.0, default_units='')
+        bounds=RealBounds(lower_bound=0.0, upper_bound=1000.0, default_units='K')
     )
 }
 

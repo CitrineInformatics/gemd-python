@@ -10,32 +10,32 @@ example = {
     "experiments": [
         {
             "knob_2_setting": "low",
-            "temperature": 300,
-            "density": "1.0 +- 0.5",
+            "temperature": "300 degF",
+            "density": "1.0 +- 0.5 g/cm^3",
             "tags": "warm up"
         },
         {
             "knob_2_setting": "low",
-            "temperature": 302,
-            "density": "1.04 +- 0.1",
+            "temperature": "302 degF",
+            "density": "1.04 +- 0.1 g/cm^3",
             "tags": ["high quality", "hutch"]
         },
         {
             "knob_2_setting": "medium",
-            "density": "0.9 +- 0.4",
+            "density": "0.9 +- 0.4 g/cm^3",
             "tags": ["oops"]
         },
         {
             "knob_2_setting": "medium",
-            "temperature": 456,
-            "density": "0.87 +- 0.1",
+            "temperature": "456 degF",
+            "density": "0.87 +- 0.1 g/cm^3",
             "tags": ["high quality", "hutch"]
         },
         {
             "knob_2_setting": "high",
-            "temperature": 624,
-            "density": "0.80 +- 0.12",
-            "kinematic viscosity": "0.1",
+            "temperature": "624 degF",
+            "density": "0.80 +- 0.12 g/cm^3",
+            "kinematic viscosity": "0.1 m^2/s",
             "tags": ["hutch", "viscous"]
         }
     ]
