@@ -84,7 +84,7 @@ class BaseAttribute(DictSerializable):
             self._template = template
         elif isinstance(template, AttributeTemplate):
             if not template.validate(self):
-                raise ValueError("Template is incompatible with the attribute")
+                raise ValueError("Template is incompatible with attr {}".format(self.name))
             if self.value and not template.bounds.validate(self.value):
                 raise ValueError("the template is inconsistent with the value")
             self._template = template

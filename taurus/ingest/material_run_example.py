@@ -20,7 +20,7 @@ known_properties = {
     ),
     "kinematic viscosity": PropertyTemplate(
         name="kinematic viscosity",
-        bounds=RealBounds(lower_bound=0.0, upper_bound=10.0**40, default_units="m^2/s")
+        bounds=RealBounds(lower_bound=0.0, upper_bound=10.0**40, default_units="")
     )
 }
 
@@ -52,6 +52,7 @@ def _parse_value(val):
         try:
             unit = units.parse_units(toks[-1])
         except (ValueError, units.UndefinedUnitError):
+            print("Couldn't find {}".format(toks[-1]))
             unit = ''
 
         if std >= 0:

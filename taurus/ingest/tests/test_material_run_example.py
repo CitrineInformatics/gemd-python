@@ -35,7 +35,7 @@ example = {
             "knob_2_setting": "high",
             "temperature": 624,
             "density": "0.80 +- 0.12",
-            "kinematic viscosity": "1.0e3 St",
+            "kinematic viscosity": "0.1",
             "tags": ["hutch", "viscous"]
         }
     ]

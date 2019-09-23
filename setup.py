@@ -42,7 +42,12 @@ setup(name='taurus',
       author='Max Hutchinson',
       author_email='maxhutch@citrine.io',
       packages=find_packages(),
-      package_data={'taurus': ['demo/strehlow_and_cook.json']},
+      package_data={
+          'taurus': [
+              'demo/strehlow_and_cook.json',
+              'units/citrine_en.txt'
+          ]
+      },
       install_requires=[
           "toolz",
           "pytest>=4.3",
