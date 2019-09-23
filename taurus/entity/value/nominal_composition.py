@@ -53,8 +53,3 @@ class NominalComposition(CompositionValue):
         each of which has the form [component, quantity].
         """
         return {"type": self.typ, "quantities": list(list(x) for x in self.quantities.items())}
-
-    @property
-    def components(self):
-        """Get a list of the components."""
-        return self._quantities.keys()
