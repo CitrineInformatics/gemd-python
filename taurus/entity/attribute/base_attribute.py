@@ -50,10 +50,6 @@ class BaseAttribute(DictSerializable):
         self.origin = origin
         self.file_links = file_links
 
-        # TODO: Make template required (need to fix a bunch of unit tests)
-        #  if self.template is None:
-        #    raise ValueError("Template is required")
-
     @property
     def value(self):
         """Get value."""
@@ -61,9 +57,6 @@ class BaseAttribute(DictSerializable):
 
     @value.setter
     def value(self, value):
-        if self.template and value and not self.template.bounds.validate(value):
-            raise ValueError("the value is inconsistent with the template")
-
         if value is None:
             self._value = None
         elif isinstance(value, (BaseValue, str, bool)):
@@ -80,13 +73,7 @@ class BaseAttribute(DictSerializable):
     def template(self, template):
         if template is None:
             self._template = None
-        elif isinstance(template, LinkByUID):
-            self._template = template
-        elif isinstance(template, AttributeTemplate):
-            if not template.validate(self):
-                raise ValueError("Template is incompatible with attr {}".format(self.name))
-            if self.value and not template.bounds.validate(self.value):
-                raise ValueError("the template is inconsistent with the value")
+        elif isinstance(template, (LinkByUID, AttributeTemplate)):
             self._template = template
         else:
             raise ValueError("template must be a BaseAttributeTemplate or LinkByUID")

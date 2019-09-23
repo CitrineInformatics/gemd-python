@@ -146,20 +146,6 @@ def make_strehlow_objects(table=None):
             val = NominalCategorical(category=row[5])
             color_msr.properties.append(Property(name=color_msr_tmpl.name, value=val))
 
-    # Run through validators; these should be run automatically in theory/eventually
-    # It also appears this is not actually validating
-    for comp in compounds:
-        if comp.spec.properties:
-            if not chem_mat_tmpl.properties[0][1].validate(comp.spec.properties[0].property.value):
-                raise ValueError(
-                    'Material value mismatch: {}'.format(comp.spec.properties[0].value))
-            chem_mat_tmpl.validate(comp.spec)
-        for msr in comp.measurements:
-            if not msr.template.properties[0][1].validate(msr.properties[0].value):
-                raise ValueError(
-                    'Measurement value mismatch: {}'.format(comp.spec.properties[0].value))
-            msr.template.validate(msr)
-
     return compounds
 
 

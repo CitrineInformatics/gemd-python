@@ -1,6 +1,4 @@
 """A measurement template."""
-from taurus.entity.object import MeasurementRun
-from taurus.entity.object.measurement_spec import MeasurementSpec
 from taurus.entity.template.base_template import BaseTemplate
 from taurus.entity.template.has_condition_templates import HasConditionTemplates
 from taurus.entity.template.has_parameter_templates import HasParameterTemplates
@@ -64,11 +62,3 @@ class MeasurementTemplate(BaseTemplate,
         HasPropertyTemplates.__init__(self, properties)
         HasConditionTemplates.__init__(self, conditions)
         HasParameterTemplates.__init__(self, parameters)
-
-    def validate(self, measurement):
-        """Check that a measurement satisfies all property, condition, and parameter templates."""
-        if not isinstance(measurement, (MeasurementRun, MeasurementSpec)):
-            raise ValueError("MeasurementTemplate can only be applied to Measurements")
-        self.validate_properties(measurement)
-        self.validate_conditions(measurement)
-        self.validate_parameters(measurement)

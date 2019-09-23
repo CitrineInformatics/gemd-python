@@ -1,7 +1,5 @@
 """Bounds a composition to have a specified set of components."""
 from taurus.entity.bounds.base_bounds import BaseBounds
-from taurus.entity.value.base_value import BaseValue
-from taurus.entity.value.composition_value import CompositionValue
 from taurus.entity.util import array_like
 
 
@@ -40,30 +38,6 @@ class CompositionBounds(BaseBounds):
 
         if not all(isinstance(x, str) for x in self.components):
             raise ValueError("All the components must be strings")
-
-    def validate(self, value: BaseValue) -> bool:
-        """
-        Check if a value has all of the required components.
-
-        Parameters
-        ----------
-        value: BaseValue
-            Value to validate. In order to be valid, must be a
-            :py:class:`CompositionValue <taurus.entity.value.composition_value.CompositionValue>`
-            and have all of the required components.
-
-        Returns
-        -------
-        bool
-            True if the value is a composition with all required components.
-
-        """
-        if not super().validate(value):
-            return False
-        if not isinstance(value, CompositionValue):
-            return False
-
-        return all(x in self.components for x in value.components)
 
     def contains(self, bounds: BaseBounds) -> bool:
         """

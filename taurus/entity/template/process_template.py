@@ -1,6 +1,4 @@
 """A process template."""
-from taurus.entity.object import ProcessRun
-from taurus.entity.object.process_spec import ProcessSpec
 from taurus.entity.setters import validate_list
 from taurus.entity.template.base_template import BaseTemplate
 from taurus.entity.template.has_condition_templates import HasConditionTemplates
@@ -87,26 +85,3 @@ class ProcessTemplate(BaseTemplate, HasConditionTemplates, HasParameterTemplates
             self._allowed_labels = allowed_labels
         else:
             self._allowed_labels = validate_list(allowed_labels, str)
-
-    def validate(self, process):
-        """Check that a process satisfies all condition and parameter templates."""
-        if not isinstance(process, (ProcessRun, ProcessSpec)):
-            raise ValueError("ProcessTemplate can only be applied to Processes")
-
-        self.validate_conditions(process)
-        self.validate_parameters(process)
-
-        # Check the name namespace
-        if self.allowed_names is not None:
-            unique_names = {x.name
-                            for x in process.ingredients if x.name is not None}
-            extra = unique_names.difference(set(self.allowed_names))
-            if len(extra) > 0:
-                raise ValueError("Found disallowed names: {}".format(extra))
-
-        # Check the label namespace
-        if self.allowed_labels is not None:
-            labels = {label for x in process.ingredients for label in x.labels}
-            extra = labels.difference(set(self.allowed_labels))
-            if len(extra) > 0:
-                raise ValueError("Found disallowed labels: {}".format(extra))

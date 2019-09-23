@@ -1,10 +1,5 @@
 """Bound a real number to be between two values."""
 from taurus.entity.bounds.base_bounds import BaseBounds
-from taurus.entity.value.base_value import BaseValue
-from taurus.entity.value.continuous_value import ContinuousValue
-from taurus.entity.value.nominal_real import NominalReal
-from taurus.entity.value.normal_real import NormalReal
-from taurus.entity.value.uniform_real import UniformReal
 import taurus.units as units
 
 
@@ -39,6 +34,9 @@ class RealBounds(BaseBounds):
         if self.upper_bound is None or abs(self.upper_bound) >= float("inf"):
             raise ValueError("Upper bound must be given and finite")
 
+        if self.upper_bound < self.lower_bound:
+            raise ValueError("Upper bound must be greater than or equal to lower bound")
+
     @property
     def default_units(self):
         """Get default units."""
@@ -50,44 +48,6 @@ class RealBounds(BaseBounds):
             raise ValueError("Real bounds must have units. "
                              "Use an empty string for a dimensionless quantity.")
         self._default_units = units.parse_units(default_units)
-
-    def validate(self, value: BaseValue) -> bool:
-        """
-        Checks if a value is a real number within the bounds.
-
-        Parameters
-        ----------
-        value: BaseValue
-            Value to validate. In order to be valid, must be an
-            :py:class:`ContinuousValue <taurus.entity.value.continuous_value.ContinuousValue>`
-            and be between the lower and upper bound.
-
-        Returns
-        -------
-        bool
-            True if the value is between the lower and upper bound.
-
-        """
-        if not super().validate(value):
-            return False
-        if not isinstance(value, ContinuousValue):
-            return False
-
-        lower, upper = self._convert_bounds(value.units)
-
-        if lower is None:
-            return False
-
-        if isinstance(value, NominalReal):
-            return upper >= value.nominal >= lower
-
-        # Normal distributions are interpreted as truncated normals,
-        # so long as their median value is within the bounds
-        if isinstance(value, NormalReal):
-            return upper >= value.mean >= lower
-
-        if isinstance(value, UniformReal):
-            return upper >= value.upper_bound and lower <= value.lower_bound
 
     def contains(self, bounds: BaseBounds) -> bool:
         """
