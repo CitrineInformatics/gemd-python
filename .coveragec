@@ -2,4 +2,4 @@
 [run]
 omit =
     # omit demos
-    ./taurus/demo/*
+    taurus/demo/*
