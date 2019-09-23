@@ -82,7 +82,11 @@ class DictSerializable(ABC):
         return loads(dumps(d))
 
     def __repr__(self):
-        return str(self.as_dict())
+        object_dict = self.as_dict()
+        skipped_keys = {x.lstrip('_') for x in vars(self) if x in self.skip}
+        for key in skipped_keys:
+            object_dict[key] = self.__getattribute__(key)
+        return str(object_dict)
 
     def __eq__(self, other):
         if isinstance(other, DictSerializable):
