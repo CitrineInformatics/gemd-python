@@ -1,0 +1,5 @@
+# Coverage config for pytest-cov
+[run]
+omit =
+    # omit demos
+    ./taurus/demo/*
