@@ -71,6 +71,8 @@ def test_material_soft_link():
     assert loads(dumps(dye)).measurements == [], \
         "Measurement information should be removed when material is serialized"
 
+    assert 'measurements' in dye.__repr__()
+
 
 def test_material_id_link():
     """Check that a measurement can be linked to a material that is a LinkByUID."""
