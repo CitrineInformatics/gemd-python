@@ -12,6 +12,7 @@ from taurus.entity.source.performed_source import PerformedSource
 from taurus.entity.value.nominal_real import NominalReal
 from taurus.entity.file_link import FileLink
 from taurus.entity.link_by_uid import LinkByUID
+from taurus.util.impl import substitute_links
 
 
 def test_measurement_spec():
@@ -74,6 +75,9 @@ def test_material_soft_link():
     assert 'measurements' in dye.__repr__()
     assert 'material' in fluorescence.__repr__()
     assert 'material' in absorbance.__repr__()
+
+    substitute_links(dye.measurements)
+    assert 'measurements' in dye.__repr__()
 
 
 def test_material_id_link():

@@ -1,6 +1,5 @@
 from abc import ABC
 import json
-from copy import deepcopy
 
 
 class DictSerializable(ABC):
@@ -83,21 +82,40 @@ class DictSerializable(ABC):
         return loads(dumps(d))
 
     def __repr__(self):
-        from taurus.util.impl import substitute_links, set_uuids
         object_dict = self.as_dict()
-        # as_dict skips over keys in `skip`, but they should be in the representation.
+        # as_dict() skips over keys in `skip`, but they should be in the representation.
         skipped_keys = {x.lstrip('_') for x in vars(self) if x in self.skip}
         for key in skipped_keys:
-            skipped_attribute = deepcopy(self.__getattribute__(key))
-            # Replace links in skipped keys with LinkByUID to prevent infinite recursion loop.
-            set_uuids(skipped_attribute)
-            if isinstance(skipped_attribute, list):
-                for x in skipped_attribute:
-                    substitute_links(x)
-            else:
-                substitute_links(skipped_attribute)
-            object_dict[key] = skipped_attribute
+            skipped_field = self.__getattribute__(key)
+            object_dict[key] = self._name_repr(skipped_field)
         return object_dict.__str__()
+
+    def _name_repr(self, entity):
+        """
+        A representation of an object or a list of objects that uses the name and type.
+
+        This is used to represent soft-linked objects without inundating the user with
+        repetitive information.
+
+        Parameters
+        ----------
+        entity: DictSerializable or List[DictSerializable]
+            Object to represent using its name. Generally a (list of) BaseEntity or BaseAttribute,
+            both of which have a `name` field.
+
+        Returns
+        -------
+        str
+            A representation of `entity` using its name.
+
+        """
+        if isinstance(entity, (list, tuple)):
+            return [self._name_repr(item) for item in entity]
+        elif entity is None:
+            return None
+        else:
+            name = getattr(entity, 'name', '<unknown name>')
+            return "<{} '{}'>".format(type(entity).__name__, name)
 
     def __eq__(self, other):
         if isinstance(other, DictSerializable):
