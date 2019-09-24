@@ -31,7 +31,6 @@ def test_substitution_without_id():
 def test_native_id_substitution():
     """Test that the native id gets serialized, when specified."""
     native_id = 'id1'
-    other_id = 'id2'
     # Create measurement and material with two ids
     mat = MaterialRun("A material", uids={
         native_id: str(uuid4()), "an_id": str(uuid4()), "another_id": str(uuid4())})
