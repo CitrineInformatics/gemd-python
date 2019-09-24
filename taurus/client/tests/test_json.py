@@ -4,7 +4,7 @@ from taurus.entity.case_insensitive_dict import CaseInsensitiveDict
 from taurus.entity.attribute.condition import Condition
 from taurus.entity.attribute.parameter import Parameter
 from taurus.entity.link_by_uid import LinkByUID
-from taurus.entity.object import MeasurementRun, MaterialRun, ProcessRun
+from taurus.entity.object import MeasurementRun, MaterialRun, ProcessRun, ProcessSpec
 from taurus.entity.object.ingredient_run import IngredientRun
 from taurus.entity.object.ingredient_spec import IngredientSpec
 from taurus.entity.value.nominal_real import NominalReal
@@ -64,10 +64,8 @@ def test_dict_serialization():
     process = ProcessRun("A process")
     mat = MaterialRun("A material", process=process)
     meas = MeasurementRun("A measurement", material=mat)
-    meas_dict = meas.as_dict()
-    foo = dumps(meas_dict)
-    bar = loads(foo)
-    assert bar == meas
+    copy = loads(dumps(meas.as_dict()))
+    assert copy == meas
 
 
 def test_case_insensitive_rehydration():
