@@ -4,7 +4,7 @@ from taurus.entity.case_insensitive_dict import CaseInsensitiveDict
 from taurus.entity.attribute.condition import Condition
 from taurus.entity.attribute.parameter import Parameter
 from taurus.entity.link_by_uid import LinkByUID
-from taurus.entity.object import MeasurementRun, MaterialRun, ProcessRun, ProcessSpec
+from taurus.entity.object import MeasurementRun, MaterialRun, ProcessRun
 from taurus.entity.object.ingredient_run import IngredientRun
 from taurus.entity.object.ingredient_spec import IngredientSpec
 from taurus.entity.value.nominal_real import NominalReal
