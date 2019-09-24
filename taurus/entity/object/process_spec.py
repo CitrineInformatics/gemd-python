@@ -73,6 +73,11 @@ class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
         """Get the list of input ingredient specs."""
         return self._ingredients
 
+    def _unset_ingredient(self, ingred):
+        """Remove `ingred` from this process's list of ingredients."""
+        if ingred in self._ingredients:
+            self._ingredients.remove(ingred)
+
     @property
     def output_material(self):
         """Get the output material spec."""
