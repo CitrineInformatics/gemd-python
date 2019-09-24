@@ -103,6 +103,8 @@ class IngredientRun(BaseObject, HasQuantities):
     def process(self, process):
         from taurus.entity.object import ProcessRun
         from taurus.entity.link_by_uid import LinkByUID
+        if self._process is not None and isinstance(self._process, ProcessRun):
+            self._process._unset_ingredient(self)
         if process is None:
             self._process = None
         elif isinstance(process, ProcessRun):

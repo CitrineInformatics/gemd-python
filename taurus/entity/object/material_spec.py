@@ -74,6 +74,8 @@ class MaterialSpec(BaseObject, HasTemplate):
         """
         from taurus.entity.object.process_spec import ProcessSpec
         from taurus.entity.link_by_uid import LinkByUID
+        if self.process is not None and isinstance(self.process, ProcessSpec):
+            self.process._output_material = None
         if process is None:
             self._process = None
         elif isinstance(process, LinkByUID):
