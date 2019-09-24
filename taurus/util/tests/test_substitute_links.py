@@ -33,9 +33,10 @@ def test_native_id_substitution():
     native_id = 'id1'
     other_id = 'id2'
     # Create measurement and material with two ids
-    mat = MaterialRun("A material", uids={native_id: str(uuid4()), other_id: str(uuid4())})
-    meas = MeasurementRun("A measurement", material=mat,
-                          uids={native_id: str(uuid4()), other_id: str(uuid4())})
+    mat = MaterialRun("A material", uids={
+        native_id: str(uuid4()), "an_id": str(uuid4()), "another_id": str(uuid4())})
+    meas = MeasurementRun("A measurement", material=mat, uids={
+        "some_id": str(uuid4()), native_id: str(uuid4()), "an_id": str(uuid4())})
 
     # Turn the material pointer into a LinkByUID using native_id
     substitute_links(meas, native_uid=native_id)
@@ -43,7 +44,7 @@ def test_native_id_substitution():
 
     # Put the measurement into a list and convert that into a LinkByUID using native_id
     measurements_list = [meas]
-    substitute_links(measurements_list)
+    substitute_links(measurements_list, native_uid=native_id)
     assert measurements_list == [LinkByUID.from_entity(meas, name=native_id)]
 
 
