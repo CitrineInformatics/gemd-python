@@ -59,6 +59,17 @@ def test_uid_deser():
     assert ingredient_copy.material.uids['sample id'] == material.uids['Sample ID']
 
 
+def test_dict_serialization():
+    """Test that a dictionary can be serialized and then deserialized as a taurus object."""
+    process = ProcessRun("A process")
+    mat = MaterialRun("A material", process=process)
+    meas = MeasurementRun("A measurement", material=mat)
+    meas_dict = meas.as_dict()
+    foo = dumps(meas_dict)
+    bar = loads(foo)
+    assert bar == meas
+
+
 def test_case_insensitive_rehydration():
     """
 
