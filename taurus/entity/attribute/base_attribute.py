@@ -31,8 +31,6 @@ class BaseAttribute(DictSerializable):
 
     """
 
-    attribute_type = None
-
     def __init__(self, name=None, template=None, origin="unknown", value=None, notes=None,
                  file_links=None):
         if name is None:

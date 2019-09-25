@@ -1,5 +1,4 @@
 from taurus.entity.attribute.base_attribute import BaseAttribute
-from taurus.enumeration import AttributeType
 
 
 class Property(BaseAttribute):
@@ -12,4 +11,3 @@ class Property(BaseAttribute):
     """
 
     typ = "property"
-    attribute_type = AttributeType.PROPERTY
