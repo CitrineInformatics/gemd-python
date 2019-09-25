@@ -33,5 +33,5 @@ def test_ingredient_run():
 
     assert proc_run_copy == proc_run, "Full structure wasn't preserved across serialization"
 
-    assert 'process' in ingred_run.__repr__()
-    assert 'ingredients' in proc_run.__repr__()
+    assert 'process' in repr(ingred_run)
+    assert 'ingredients' in repr(proc_run)

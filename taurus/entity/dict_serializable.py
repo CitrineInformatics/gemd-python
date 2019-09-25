@@ -86,9 +86,9 @@ class DictSerializable(ABC):
         # as_dict() skips over keys in `skip`, but they should be in the representation.
         skipped_keys = {x.lstrip('_') for x in vars(self) if x in self.skip}
         for key in skipped_keys:
-            skipped_field = self.__getattribute__(key)
+            skipped_field = getattr(self, key, None)
             object_dict[key] = self._name_repr(skipped_field)
-        return object_dict.__str__()
+        return str(object_dict)
 
     def _name_repr(self, entity):
         """

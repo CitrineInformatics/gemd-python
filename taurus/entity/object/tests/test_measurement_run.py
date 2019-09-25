@@ -72,12 +72,12 @@ def test_material_soft_link():
     assert loads(dumps(dye)).measurements == [], \
         "Measurement information should be removed when material is serialized"
 
-    assert 'measurements' in dye.__repr__()
-    assert 'material' in fluorescence.__repr__()
-    assert 'material' in absorbance.__repr__()
+    assert 'measurements' in repr(dye)
+    assert 'material' in repr(fluorescence)
+    assert 'material' in repr(absorbance)
 
     substitute_links(dye.measurements)
-    assert 'measurements' in dye.__repr__()
+    assert 'measurements' in repr(dye)
 
 
 def test_material_id_link():
