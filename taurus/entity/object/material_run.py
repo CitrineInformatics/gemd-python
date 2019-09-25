@@ -76,7 +76,7 @@ class MaterialRun(BaseObject):
             process._output_material = self
             self._process = process
         else:
-            raise ValueError("process must be a ProcessRun: {}".format(process))
+            raise TypeError("process must be a ProcessRun or LinkByUID: {}".format(process))
 
     @property
     def measurements(self):
@@ -111,7 +111,7 @@ class MaterialRun(BaseObject):
         elif isinstance(spec, (MaterialSpec, LinkByUID)):
             self._spec = spec
         else:
-            raise ValueError("spec must be a MaterialSpec: {}".format(spec))
+            raise TypeError("spec must be a MaterialSpec or LinkByUID: {}".format(spec))
 
     @property
     def template(self):

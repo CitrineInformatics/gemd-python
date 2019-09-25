@@ -22,4 +22,4 @@ class HasTemplate(object):
         elif isinstance(template, (BaseTemplate, LinkByUID)):
             self._template = template
         else:
-            raise ValueError("Template must be a template")
+            raise TypeError("Template must be a template or LinkByUID: {}".format(template))

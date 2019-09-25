@@ -9,6 +9,7 @@ from taurus.entity.attribute.condition import Condition
 from taurus.entity.attribute.parameter import Parameter
 from taurus.entity.attribute.property import Property
 from taurus.entity.source.performed_source import PerformedSource
+from taurus.entity.template.measurement_template import MeasurementTemplate
 from taurus.entity.value.nominal_real import NominalReal
 from taurus.entity.file_link import FileLink
 from taurus.entity.link_by_uid import LinkByUID
@@ -116,3 +117,22 @@ def test_measurement_reassignment():
     mass.material = None
     assert mass.material is None
     assert sample2.measurements == []
+
+
+def test_invalid_assignment():
+    """Invalid assignments to `material` or `spec` throw a TypeError."""
+    with pytest.raises(TypeError):
+        MeasurementRun("name", spec=Condition("value of pi", value=NominalReal(3.14159, '')))
+    with pytest.raises(TypeError):
+        MeasurementRun("name", material=FileLink("filename", "url"))
+
+
+def test_template_access():
+    """A measurement run's template should be equal to its spec's template."""
+    template = MeasurementTemplate("measurement template", uids={'id': str(uuid4())})
+    spec = MeasurementSpec("A spec", uids={'id': str(uuid4())}, template=template)
+    meas = MeasurementRun("A run", uids={'id': str(uuid4())}, spec=spec)
+    assert meas.template == template
+
+    meas.spec = LinkByUID.from_entity(spec)
+    assert meas.template is None
