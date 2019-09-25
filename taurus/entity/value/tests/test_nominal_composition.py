@@ -1,4 +1,6 @@
 """Tests of the NominalComposition class."""
+import pytest
+
 from taurus.entity.value.nominal_composition import NominalComposition
 
 
@@ -10,6 +12,12 @@ def test_quantities_are_dict():
     assert isinstance(test_composition.quantities, dict)
     test_composition = NominalComposition([["gas", 0.7], ["plasma", 0.3]])
     assert isinstance(test_composition.quantities, dict)
+
+
+def test_invalid_assignment():
+    """Test that invalid assignment produces a TypeError."""
+    with pytest.raises(TypeError):
+        NominalComposition(("a quantity", 55))
 
 
 def test_quantities_as_dict():

@@ -21,3 +21,4 @@ def test_equality():
     assert value1 == value1
     assert value1 != value2  # Equality check does not do unit conversion.
     assert value1 != value3
+    assert value1 != 0.5
