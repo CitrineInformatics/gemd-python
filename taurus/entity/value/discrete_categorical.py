@@ -45,4 +45,4 @@ class DiscreteCategorical(CategoricalValue):
 
             self._probabilities = keymap(validate_str, probabilities)
         else:
-            raise ValueError("probabilities must be dict or single value")
+            raise TypeError("probabilities must be dict or single value")
