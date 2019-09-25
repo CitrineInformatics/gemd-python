@@ -13,12 +13,12 @@ def test_bounds_order():
 
 
 def test_equality():
-    """Test that equality checks both bounds and integers."""
+    """Test that equality checks both bounds and units."""
     value1 = UniformReal(0, 1, '')
-    value2 = UniformReal(0, 100, 'cm')
+    value2 = UniformReal(0, 1, 'cm')
     value3 = UniformReal(0, 2, '')
 
     assert value1 == value1
-    assert value1 != value2  # Equality check does not do unit conversion.
+    assert value1 != value2
     assert value1 != value3
     assert value1 != 0.5
