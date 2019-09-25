@@ -8,6 +8,7 @@ from taurus.entity.value.uniform_real import UniformReal
 from taurus.entity.value.normal_real import NormalReal
 from taurus.entity.value.nominal_integer import NominalInteger
 from taurus.entity.value.nominal_categorical import NominalCategorical
+from taurus.entity.value.empirical_formula import EmpiricalFormula
 
 
 def test_ingredient_reassignment():
@@ -40,6 +41,7 @@ VALID_QUANTITIES = [
 INVALID_QUANTITIES = [
     NominalCategorical("blue"),
     NominalInteger(5),
+    EmpiricalFormula("CH4"),
     0.33,
     "0.5"
 ]
