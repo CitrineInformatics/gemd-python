@@ -59,6 +59,9 @@ def test_process_run():
     copy_material = loads(dumps(material_run))
     assert dumps(copy_material) == dumps(material_run)
 
+    assert 'output_material' in repr(process_run)
+    assert 'process' in repr(material_run)
+
 
 def test_process_id_link():
     """Test that a process run can house a LinkByUID object, and that it survives serde."""

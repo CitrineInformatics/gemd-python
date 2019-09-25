@@ -110,7 +110,7 @@ class IngredientRun(BaseObject, HasQuantities):
         elif isinstance(process, ProcessRun):
             self._process = process
             if not isinstance(process.ingredients, ValidList):
-                process._ingredients = validate_list(self, IngredientRun)
+                process._ingredients = validate_list(self, [IngredientRun, LinkByUID])
             else:
                 process._ingredients.append(self)
         elif isinstance(process, LinkByUID):

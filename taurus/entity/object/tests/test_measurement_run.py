@@ -12,6 +12,7 @@ from taurus.entity.source.performed_source import PerformedSource
 from taurus.entity.value.nominal_real import NominalReal
 from taurus.entity.file_link import FileLink
 from taurus.entity.link_by_uid import LinkByUID
+from taurus.util.impl import substitute_links
 
 
 def test_measurement_spec():
@@ -70,6 +71,13 @@ def test_material_soft_link():
     # Serializing the material breaks the material-->measurement link.
     assert loads(dumps(dye)).measurements == [], \
         "Measurement information should be removed when material is serialized"
+
+    assert 'measurements' in repr(dye)
+    assert 'material' in repr(fluorescence)
+    assert 'material' in repr(absorbance)
+
+    substitute_links(dye.measurements)
+    assert 'measurements' in repr(dye)
 
 
 def test_material_id_link():

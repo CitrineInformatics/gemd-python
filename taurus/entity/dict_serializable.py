@@ -82,7 +82,40 @@ class DictSerializable(ABC):
         return loads(dumps(d))
 
     def __repr__(self):
-        return str(self.as_dict())
+        object_dict = self.as_dict()
+        # as_dict() skips over keys in `skip`, but they should be in the representation.
+        skipped_keys = {x.lstrip('_') for x in vars(self) if x in self.skip}
+        for key in skipped_keys:
+            skipped_field = getattr(self, key, None)
+            object_dict[key] = self._name_repr(skipped_field)
+        return str(object_dict)
+
+    def _name_repr(self, entity):
+        """
+        A representation of an object or a list of objects that uses the name and type.
+
+        This is used to represent soft-linked objects without inundating the user with
+        repetitive information.
+
+        Parameters
+        ----------
+        entity: DictSerializable or List[DictSerializable]
+            Object to represent using its name. Generally a (list of) BaseEntity or BaseAttribute,
+            both of which have a `name` field.
+
+        Returns
+        -------
+        str
+            A representation of `entity` using its name.
+
+        """
+        if isinstance(entity, (list, tuple)):
+            return [self._name_repr(item) for item in entity]
+        elif entity is None:
+            return None
+        else:
+            name = getattr(entity, 'name', '<unknown name>')
+            return "<{} '{}'>".format(type(entity).__name__, name)
 
     def __eq__(self, other):
         if isinstance(other, DictSerializable):
