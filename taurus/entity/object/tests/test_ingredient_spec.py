@@ -79,8 +79,8 @@ def test_invalid_quantities(invalid_quantity):
 
 
 def test_invalid_assignment():
-    """Invalid assignments to `process` or `material` throw a ValueError."""
-    with pytest.raises(ValueError):
+    """Invalid assignments to `process` or `material` throw a TypeError."""
+    with pytest.raises(TypeError):
         IngredientSpec(name="name", material=NominalReal(3, ''))
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         IngredientSpec(name="name", process="process")

@@ -86,7 +86,7 @@ class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters, Ha
         elif isinstance(value, LinkByUID):
             self._material = value
         else:
-            raise ValueError("material must be a MaterialRun or LinkByUID: {}".format(value))
+            raise TypeError("material must be a MaterialRun or LinkByUID: {}".format(value))
 
     @property
     def spec(self):
@@ -102,7 +102,7 @@ class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters, Ha
         elif isinstance(spec, (MeasurementSpec, LinkByUID)):
             self._spec = spec
         else:
-            raise ValueError("spec must be a MeasurementSpec: {}".format(spec))
+            raise TypeError("spec must be a MeasurementSpec or LinkByUID: {}".format(spec))
 
     @property
     def template(self):

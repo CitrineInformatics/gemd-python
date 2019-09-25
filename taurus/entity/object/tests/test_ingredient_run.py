@@ -28,10 +28,10 @@ def test_ingredient_reassignment():
 
 
 def test_invalid_assignment():
-    """Invalid assignments to `process` or `material` throw a ValueError."""
-    with pytest.raises(ValueError):
+    """Invalid assignments to `process` or `material` throw a TypeError."""
+    with pytest.raises(TypeError):
         IngredientRun(name="name", material=RealBounds(0, 5.0, ''))
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         IngredientRun(name="name", process="process")
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         IngredientRun(name="name", spec=5)

@@ -120,10 +120,10 @@ def test_measurement_reassignment():
 
 
 def test_invalid_assignment():
-    """Invalid assignments to `material` or `spec` throw a ValueError."""
-    with pytest.raises(ValueError):
+    """Invalid assignments to `material` or `spec` throw a TypeError."""
+    with pytest.raises(TypeError):
         MeasurementRun("name", spec=Condition("value of pi", value=NominalReal(3.14159, '')))
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         MeasurementRun("name", material=FileLink("filename", "url"))
 
 

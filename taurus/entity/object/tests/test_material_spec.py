@@ -21,8 +21,8 @@ def test_process_reassignment():
 
 
 def test_invalid_assignment():
-    """Invalid assignments to `process` or `template` throw a ValueError."""
-    with pytest.raises(ValueError):
+    """Invalid assignments to `process` or `template` throw a TypeError."""
+    with pytest.raises(TypeError):
         MaterialSpec("name", process=["Process 1", "Process 2"])
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         MaterialSpec("name", template=MaterialSpec("another spec"))

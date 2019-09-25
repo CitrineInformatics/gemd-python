@@ -43,8 +43,8 @@ def test_ingredient_run():
 
 
 def test_invalid_assignment():
-    """Invalid assignments to `spec` throw a ValueError."""
-    with pytest.raises(ValueError):
+    """Invalid assignments to `spec` throw a TypeError."""
+    with pytest.raises(TypeError):
         ProcessRun("name", spec=[ProcessSpec("spec")])
 
 
