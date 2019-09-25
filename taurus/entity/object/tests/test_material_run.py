@@ -5,8 +5,8 @@ from uuid import uuid4
 
 from taurus.client.json_encoder import loads, dumps
 from taurus.entity.attribute.property_and_conditions import PropertyAndConditions
-from taurus.entity.object import MaterialRun, ProcessRun
-from taurus.entity.object.material_spec import MaterialSpec
+from taurus.entity.object import MaterialRun, ProcessRun, MaterialSpec
+from taurus.entity.template.material_template import MaterialTemplate
 from taurus.entity.attribute.property import Property
 from taurus.entity.value.nominal_real import NominalReal
 from taurus.entity.link_by_uid import LinkByUID
@@ -85,3 +85,22 @@ def test_process_reassignment():
     assert powder.process == drying
     assert drying.output_material == powder
     assert welding.output_material is None
+
+
+def test_invalid_assignment():
+    """Invalid assignments to `process` or `spec` throw a ValueError."""
+    with pytest.raises(ValueError):
+        MaterialRun("name", spec=ProcessRun("a process"))
+    with pytest.raises(ValueError):
+        MaterialRun("name", process=MaterialSpec("a spec"))
+
+
+def test_template_access():
+    """A material run's template should be equal to its spec's template."""
+    template = MaterialTemplate("material template", uids={'id': str(uuid4())})
+    spec = MaterialSpec("A spec", uids={'id': str(uuid4())}, template=template)
+    mat = MaterialRun("A run", uids={'id': str(uuid4())}, spec=spec)
+    assert mat.template == template
+
+    mat.spec = LinkByUID.from_entity(spec)
+    assert mat.template is None
