@@ -16,4 +16,3 @@ def test_invalid_assignment():
         Property(name="property", template=ProcessTemplate("wrong kind of template"))
     with pytest.raises(ValueError):
         Property(name="property", origin=None)
-
