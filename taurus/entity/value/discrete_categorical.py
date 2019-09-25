@@ -42,7 +42,6 @@ class DiscreteCategorical(CategoricalValue):
         elif isinstance(probabilities, dict):
             if abs(sum(probabilities.values()) - 1.0) > 1.0e-9:
                 raise ValueError("probabilities must sum to 1.0")
-
             self._probabilities = keymap(validate_str, probabilities)
         else:
-            raise ValueError("probabilities must be dict or single value")
+            raise TypeError("probabilities must be dict or single value")
