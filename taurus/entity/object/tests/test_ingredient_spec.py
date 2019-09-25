@@ -74,3 +74,11 @@ def test_invalid_quantities(invalid_quantity):
         IngredientSpec(name="name", number_fraction=invalid_quantity)
     with pytest.raises(TypeError):
         IngredientSpec(name="name", absolute_quantity=invalid_quantity)
+
+
+def test_invalid_assignment():
+    """Invalid assignments to `process` or `material` throw a ValueError."""
+    with pytest.raises(ValueError):
+        IngredientSpec(name="name", material=NominalReal(3, ''))
+    with pytest.raises(ValueError):
+        IngredientSpec(name="name", process="process")
