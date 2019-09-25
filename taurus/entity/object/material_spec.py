@@ -85,4 +85,4 @@ class MaterialSpec(BaseObject, HasTemplate):
             self._process = process
         else:
             raise TypeError("process must be an instance of ProcessSpec or LinkByUID; "
-                             "instead received type {}: {}".format(type(process), process))
+                            "instead received type {}: {}".format(type(process), process))
