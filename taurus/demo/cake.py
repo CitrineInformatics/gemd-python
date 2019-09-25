@@ -1,6 +1,5 @@
 """Bake a cake."""
 import json
-from toolz import concatv
 
 from taurus.client.json_encoder import thin_dumps, dumps, loads
 from taurus.entity.attribute.condition import Condition
@@ -30,7 +29,7 @@ from taurus.entity.dict_serializable import DictSerializable
 from taurus.entity.base_entity import BaseEntity
 from taurus.enumeration.origin import Origin
 from taurus.util.impl import set_uuids, substitute_links
-
+from taurus.entity.util import complete_material_history
 
 def make_cake():
     """Define all objects that go into making a demo cake."""
@@ -229,75 +228,13 @@ def make_cake():
     return cake
 
 
-def complete_material_history(mat: MaterialRun):
-    """
-    Get a list of every single object in the material history, all as dictionaries.
-
-    This is useful for testing, if we want the context list that can be used to rehydrate
-    an entire material history.
-
-    :param mat: root material run
-    :return: a list containing every object connected to mat, each a dictionary with all
-        links substituted.
-    """
-    def _recursive_list(obj, seen=None):
-        """
-        Recursively accumulate a list of BaseEntity members.
-
-        :param obj: target of the operation
-        :param seen: set of seen objects (default=None).  DON'T PASS THIS
-        :return: a list of accumulated objects
-        """
-        res = []
-
-        if seen is None:
-            seen = set({})
-        if obj.__hash__ is not None:
-            if obj in seen:
-                return res
-            else:
-                seen.add(obj)
-
-        if isinstance(obj, (list, tuple)):
-            for i, x in enumerate(obj):
-                if isinstance(x, BaseEntity):
-                    res.extend(_recursive_list(x, seen))
-                    res.extend([x])
-                else:
-                    res.extend(_recursive_list(x, seen))
-        elif isinstance(obj, dict):
-            for x in concatv(obj.keys(), obj.values()):
-                if isinstance(x, BaseEntity):
-                    res.extend(_recursive_list(x, seen))
-                    res.extend([x])
-                else:
-                    res.extend(_recursive_list(x, seen))
-        elif isinstance(obj, DictSerializable):
-            for k, x in sorted(obj.__dict__.items()):
-                if isinstance(x, BaseEntity):
-                    res.extend(_recursive_list(x, seen))
-                    res.extend([x])
-                else:
-                    res.extend(_recursive_list(x, seen))
-        return res
-
-    mat_list = _recursive_list(mat)
-    # Convert to dictionaries so that objects can be compared and duplicates removed
-    mat_list_dict = [obj.as_dict() for obj in mat_list]
-    trimmed_list_dict = [item for index, item in enumerate(mat_list_dict)
-                         if item not in mat_list_dict[index + 1:]]
-
-    def _substitute_links_in_dict(obj: dict):
-        """Substitute the links in an object dictionary with link_by_uid dictionaries."""
-        copy = loads(dumps(obj))
-        substitute_links(copy)
-        return json.loads(dumps(copy))[0][0]
-
-    return [_substitute_links_in_dict(obj) for obj in trimmed_list_dict]
-
-
 if __name__ == "__main__":
     cake = make_cake()
+    set_uuids(cake)
+
+    with open("example_taurus_material_history.json", "w") as f:
+        context_list = complete_material_history(cake)
+        f.write(json.dumps(context_list, indent=2))
 
     with open("example_taurus_material_template.json", "w") as f:
         f.write(thin_dumps(cake.template, indent=2))
@@ -331,7 +268,3 @@ if __name__ == "__main__":
 
     with open("example_taurus_measurement_run.json", "w") as f:
         f.write(thin_dumps(cake.measurements[0], indent=2))
-
-    with open("example_taurus_material_history.json", "w") as f:
-        context_list = complete_material_history(cake)
-        f.write(json.dumps(context_list, indent=2))

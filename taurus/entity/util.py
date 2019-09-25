@@ -77,3 +77,44 @@ def array_like():
         _array_like = (list, tuple)
 
     return _array_like
+
+
+def complete_material_history(mat):
+    from taurus.entity.base_entity import BaseEntity
+    from taurus.entity.dict_serializable import DictSerializable
+    from taurus.client.json_encoder import dumps, loads
+    from taurus.util.impl import substitute_links
+
+    """
+    Get a list of every single object in the material history, all as dictionaries.
+
+    This is useful for testing, if we want the context list that can be used to rehydrate
+    an entire material history.
+
+    :param mat: root material run
+    :return: a list containing every object connected to mat, each a dictionary with all
+        links substituted.
+    """
+    queue = [mat]
+    seen = set()
+    result = []
+
+    while queue:
+        obj = queue.pop(0)
+
+        if isinstance(obj, BaseEntity):
+            if obj not in seen:
+                seen.add(obj)
+                queue.extend(obj.__dict__.values())
+
+                copy = loads(dumps(obj))
+                substitute_links(copy)
+                result.insert(0, json.loads(dumps(copy))[0][0])  # Leaf first
+        elif isinstance(obj, (list, tuple)):
+            queue.extend(obj)
+        elif isinstance(obj, dict):
+            queue.extend(obj.values())
+        elif isinstance(obj, DictSerializable):
+            queue.extend(obj.__dict__.values())
+
+    return result
