@@ -90,6 +90,8 @@ def test_process_reassignment():
 def test_invalid_assignment():
     """Invalid assignments to `process` or `spec` throw a TypeError."""
     with pytest.raises(TypeError):
+        MaterialRun(name=12)
+    with pytest.raises(TypeError):
         MaterialRun("name", spec=ProcessRun("a process"))
     with pytest.raises(TypeError):
         MaterialRun("name", process=MaterialSpec("a spec"))
