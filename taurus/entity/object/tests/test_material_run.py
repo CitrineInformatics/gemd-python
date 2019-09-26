@@ -128,7 +128,7 @@ def test_equality():
                             property=Property("a property", value=NominalReal(3, ''))),
                         tags=["a tag"])
     mat1 = MaterialRun("A material", spec=spec)
-    mat2 = MaterialRun("Another material", spec=spec)
+    mat2 = MaterialRun("A material", spec=spec, tags=["A tag"])
     assert mat1 == deepcopy(mat1)
     assert mat1 != mat2
     assert mat1 != "A material"
