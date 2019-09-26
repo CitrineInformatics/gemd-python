@@ -1,7 +1,7 @@
 """Bake a cake."""
 import json
 
-from taurus.client.json_encoder import thin_dumps, dumps, loads
+from taurus.client.json_encoder import thin_dumps
 from taurus.entity.attribute.condition import Condition
 from taurus.entity.attribute.parameter import Parameter
 from taurus.entity.attribute.property import Property
@@ -25,11 +25,10 @@ from taurus.entity.template.property_template import PropertyTemplate
 from taurus.entity.value.nominal_integer import NominalInteger
 from taurus.entity.value.nominal_real import NominalReal
 from taurus.entity.value.normal_real import NormalReal
-from taurus.entity.dict_serializable import DictSerializable
-from taurus.entity.base_entity import BaseEntity
 from taurus.enumeration.origin import Origin
-from taurus.util.impl import set_uuids, substitute_links
+from taurus.util.impl import set_uuids
 from taurus.entity.util import complete_material_history
+
 
 def make_cake():
     """Define all objects that go into making a demo cake."""
