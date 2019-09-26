@@ -68,4 +68,4 @@ class PropertyAndConditions(DictSerializable):
         if isinstance(value, Property):
             self._property = value
         else:
-            raise ValueError("property must be a Property")
+            raise TypeError("property must be a Property")
