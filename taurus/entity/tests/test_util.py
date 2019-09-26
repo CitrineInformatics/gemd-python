@@ -48,6 +48,6 @@ def test_circular_crawl():
     """Test that make_instance can handle a circular set of linked objects."""
     proc = ProcessSpec("process name")
     mat = MaterialSpec("material name", process=proc)
-    ingred = IngredientSpec(name="ingredient name", material=mat, process=proc)
+    IngredientSpec(name="ingredient name", material=mat, process=proc)
     mat_run = make_instance(mat)
     assert mat_run == mat_run.process.ingredients[0].material
