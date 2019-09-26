@@ -66,4 +66,4 @@ class BaseTemplate(BaseEntity):
                     return [first, second]
                 else:
                     raise ValueError("Range and template are inconsistent")
-        raise ValueError("Expected a template or (template, bounds) tuple")
+        raise TypeError("Expected a template or (template, bounds) tuple")
