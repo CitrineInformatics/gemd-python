@@ -25,7 +25,7 @@ def test_allowed_names():
     allowed_names = ["THF", "Carbon Disulfide", "Dimethyl Ether"]
     proc_template = ProcessTemplate(name="test template", allowed_names=allowed_names)
     for name in allowed_names:
-        assert name in proc_template.allowed_labels
+        assert name in proc_template.allowed_names
 
 
 def test_allowed_labels():
