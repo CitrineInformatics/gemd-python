@@ -31,5 +31,6 @@ def test_contains():
     assert int_bounds.contains(IntegerBounds(0, 1))
     assert int_bounds.contains(IntegerBounds(1, 2))
     assert not int_bounds.contains(IntegerBounds(1, 3))
+    assert not int_bounds.contains(None)
     with pytest.raises(TypeError):
         int_bounds.contains([0, 1])

@@ -29,6 +29,7 @@ def test_contains():
     assert bounds.contains(CompositionBounds(components={"spam"}))
     assert not bounds.contains(CompositionBounds(components={"foo"}))
     assert not bounds.contains(RealBounds(0.0, 2.0, ''))
+    assert not bounds.contains(None)
     with pytest.raises(TypeError):
         bounds.contains({"spam"})
 
