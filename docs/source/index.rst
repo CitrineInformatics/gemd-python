@@ -10,7 +10,10 @@ Welcome to the Taurus Documentation!
    :maxdepth: 2
    :caption: Contents:
 
+Taurus is the Python implementation of the Citrine data model, the full documentation of which
+can be found `here <https://citrineinformatics.github.io/taurus-documentation/>`_.
 
+To learn about the details of specific classes, please see the module index.
 
 Table of Contents
 -----------------

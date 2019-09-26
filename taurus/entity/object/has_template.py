@@ -19,12 +19,7 @@ class HasTemplate(object):
     def template(self, template):
         if template is None:
             self._template = None
-        elif isinstance(template, BaseTemplate):
-            # run the template validation when the template is assigned
-            template.validate(self)
-            self._template = template
-        elif isinstance(template, LinkByUID):
-            # LinkByUID cannot be validated, but is still assigned
+        elif isinstance(template, (BaseTemplate, LinkByUID)):
             self._template = template
         else:
-            raise ValueError("Template must be a template")
+            raise TypeError("Template must be a template or LinkByUID: {}".format(template))

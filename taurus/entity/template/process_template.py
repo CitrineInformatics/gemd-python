@@ -1,6 +1,4 @@
 """A process template."""
-from taurus.entity.object import ProcessRun
-from taurus.entity.object.process_spec import ProcessSpec
 from taurus.entity.setters import validate_list
 from taurus.entity.template.base_template import BaseTemplate
 from taurus.entity.template.has_condition_templates import HasConditionTemplates
@@ -8,7 +6,43 @@ from taurus.entity.template.has_parameter_templates import HasParameterTemplates
 
 
 class ProcessTemplate(BaseTemplate, HasConditionTemplates, HasParameterTemplates):
-    """Template for processes, containing parameter, and condition templates and ranges."""
+    """
+    A process template.
+
+    Process templates are collections of condition and parameter templates that constrain the
+    values of a measurement's condition and parameter attributes, and provide a common structure
+    for describing similar measurements.
+
+    Parameters
+    ----------
+    name: str, optional
+        The name of the process template.
+    description: str, optional
+        Long-form description of the process template.
+    uids: Map[str, str], optional
+        A collection of
+        `unique IDs <https://citrineinformatics.github.io/taurus-documentation/
+        specification/unique-identifiers/>`_.
+    tags: List[str], optional
+        `Tags <https://citrineinformatics.github.io/taurus-documentation/specification/tags/>`_
+        are hierarchical strings that store information about an entity. They can be used
+        for filtering and discoverability.
+    conditions: List[:class:`ConditionTemplate \
+    <taurus.entity.template.condition_template.ConditionTemplate>`] or \
+    List[:class:`ConditionTemplate <taurus.entity.template.condition_template.ConditionTemplate>`,\
+     :py:class:`BaseBounds <taurus.entity.bounds.base_bounds.BaseBounds>`], optional
+        Templates for associated conditions. Each template can be provided by itself, or as a list
+        with the second entry being a separate, *more restrictive* Bounds object that defines
+        the limits of the value for this condition.
+    parameters: List[:class:`ParameterTemplate \
+    <taurus.entity.template.parameter_template.ParameterTemplate>`] or \
+    List[:class:`ParameterTemplate <taurus.entity.template.parameter_template.ParameterTemplate>`,\
+     :py:class:`BaseBounds <taurus.entity.bounds.base_bounds.BaseBounds>`], optional
+        Templates for associated parameters. Each template can be provided by itself, or as a list
+        with the second entry being a separate, *more restrictive* Bounds object that defines
+        the limits of the value for this parameter.
+
+    """
 
     typ = "process_template"
 
@@ -51,26 +85,3 @@ class ProcessTemplate(BaseTemplate, HasConditionTemplates, HasParameterTemplates
             self._allowed_labels = allowed_labels
         else:
             self._allowed_labels = validate_list(allowed_labels, str)
-
-    def validate(self, process):
-        """Check that a process satisfies all condition and parameter templates."""
-        if not isinstance(process, (ProcessRun, ProcessSpec)):
-            raise ValueError("ProcessTemplate can only be applied to Processes")
-
-        self.validate_conditions(process)
-        self.validate_parameters(process)
-
-        # Check the name namespace
-        if self.allowed_names is not None:
-            unique_names = {x.name
-                            for x in process.ingredients if x.name is not None}
-            extra = unique_names.difference(set(self.allowed_names))
-            if len(extra) > 0:
-                raise ValueError("Found disallowed names: {}".format(extra))
-
-        # Check the label namespace
-        if self.allowed_labels is not None:
-            labels = {label for x in process.ingredients for label in x.labels}
-            extra = labels.difference(set(self.allowed_labels))
-            if len(extra) > 0:
-                raise ValueError("Found disallowed labels: {}".format(extra))

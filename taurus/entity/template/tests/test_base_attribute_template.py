@@ -5,7 +5,6 @@ from taurus.entity.bounds.categorical_bounds import CategoricalBounds
 from taurus.entity.bounds.real_bounds import RealBounds
 from taurus.entity.template.attribute_template import AttributeTemplate
 from taurus.entity.template.property_template import PropertyTemplate
-from taurus.enumeration import AttributeType
 from taurus.client.json_encoder import dumps, loads
 
 
@@ -13,7 +12,6 @@ class SampleAttributeTemplate(AttributeTemplate):
     """A class to flex the base attribute template."""
 
     typ = "sample_attribute_template"
-    allowed_scopes = {AttributeType.CONDITION, AttributeType.PROPERTY}
 
 
 cat_bounds = CategoricalBounds(categories={"a", "b", "c"})

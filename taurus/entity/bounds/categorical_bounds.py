@@ -1,14 +1,18 @@
 """A restricted set of categories."""
 from taurus.entity.bounds.base_bounds import BaseBounds
-from taurus.entity.value.base_value import BaseValue
-from taurus.entity.value.categorical_value import CategoricalValue
-from taurus.entity.value.discrete_categorical import DiscreteCategorical
-from taurus.entity.value.nominal_categorical import NominalCategorical
 from taurus.entity.util import array_like
 
 
 class CategoricalBounds(BaseBounds):
-    """Categorical bounds, parameterized by a set of string-valued category labels."""
+    """
+    Categorical bounds, parameterized by a set of string-valued category labels.
+
+    Parameters
+    ----------
+    categories: list, tuple, or set of strings
+        A collection of the allowed categories
+
+    """
 
     typ = "categorical_bounds"
 
@@ -35,24 +39,24 @@ class CategoricalBounds(BaseBounds):
         if not all(isinstance(x, str) for x in self.categories):
             raise ValueError("All the categories must be strings")
 
-    def validate(self, value: BaseValue) -> bool:
-        """Check if value is in the set of allowed categories."""
-        if not super().validate(value):
-            return False
-        if not isinstance(value, CategoricalValue):
-            return False
-
-        if isinstance(value, DiscreteCategorical):
-            return all(x in self.categories for x in value.probabilities)
-
-        if isinstance(value, NominalCategorical):
-            return value.category in self.categories
-
-        msg = "Categorical bounds do not check every CategoricalValue subclass"  # pragma: no cover
-        assert False, msg  # pragma: no cover
-
     def contains(self, bounds: BaseBounds) -> bool:
-        """Check if another bounds object is a categorical with a subset of allowed values."""
+        """
+        Check if another bounds object is contained by this bounds.
+
+        The other bounds must also be a CategoricalBounds and its allowed categories must be a
+        subset of this bounds's allowed categories.
+
+        Parameters
+        ----------
+        bounds: BaseBounds
+            Other bounds object to check.
+
+        Returns
+        -------
+        bool
+            True if the other bounds is contained by this bounds.
+
+        """
         if not super().contains(bounds):
             return False
         if not isinstance(bounds, CategoricalBounds):
@@ -61,5 +65,13 @@ class CategoricalBounds(BaseBounds):
         return bounds.categories.issubset(self.categories)
 
     def as_dict(self):
-        """Convert bounds to a dictionary."""
+        """
+        Convert bounds to a dictionary.
+
+        Returns
+        -------
+        dict
+            A dictionary with "type" and "categories" (a sorted list of the categories).
+
+        """
         return {"type": self.typ, "categories": sorted(list(self.categories))}

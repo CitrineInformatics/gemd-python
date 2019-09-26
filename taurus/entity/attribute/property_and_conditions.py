@@ -1,4 +1,3 @@
-"""Class for combined property and conditions."""
 from taurus.entity.attribute.condition import Condition
 from taurus.entity.attribute.property import Property
 from taurus.entity.dict_serializable import DictSerializable
@@ -6,7 +5,19 @@ from taurus.entity.setters import validate_list
 
 
 class PropertyAndConditions(DictSerializable):
-    """Property and conditions, as in a measurement spec."""
+    """
+    A property and the conditions under which that property was determined.
+
+    This attribute is only relevant for material specs.
+
+    Parameters
+    ----------
+    property: Property
+        A property attribute
+    conditions: List[Condition]
+        An optional list of conditions associated with this property.
+
+    """
 
     typ = "property_and_conditions"
 
@@ -57,4 +68,4 @@ class PropertyAndConditions(DictSerializable):
         if isinstance(value, Property):
             self._property = value
         else:
-            raise ValueError("property must be a Property")
+            raise TypeError("property must be a Property")

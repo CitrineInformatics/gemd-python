@@ -41,7 +41,7 @@ class NominalComposition(CompositionValue):
         elif isinstance(quantities, list):
             self._quantities = dict(quantities)
         else:
-            raise ValueError("quantities must be dict or None")
+            raise TypeError("quantities must be dict or List of two-item lists or None")
 
     def as_dict(self):
         """
@@ -53,8 +53,3 @@ class NominalComposition(CompositionValue):
         each of which has the form [component, quantity].
         """
         return {"type": self.typ, "quantities": list(list(x) for x in self.quantities.items())}
-
-    @property
-    def components(self):
-        """Get a list of the components."""
-        return self._quantities.keys()

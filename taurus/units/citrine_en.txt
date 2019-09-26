@@ -1,0 +1,139 @@
+# Citrine down-selected units support
+# Based on `default_en.txt` from Pint
+# https://raw.githubusercontent.com/hgrecco/pint/master/pint/default_en.txt
+
+@defaults
+    group = international
+    system = mks
+@end
+
+#### PREFIXES ####
+
+# decimal prefixes
+yocto- = 1e-24 = y-
+zepto- = 1e-21 = z-
+atto- =  1e-18 = a-
+femto- = 1e-15 = f-
+pico- =  1e-12 = p-
+nano- =  1e-9  = n-
+micro- = 1e-6  = µ- = u-
+milli- = 1e-3  = m-
+centi- = 1e-2  = c-
+deci- =  1e-1  = d-
+deca- =  1e+1  = da- = deka-
+hecto- = 1e2   = h-
+kilo- =  1e3   = k-
+mega- =  1e6   = M-
+giga- =  1e9   = G-
+tera- =  1e12  = T-
+peta- =  1e15  = P-
+exa- =   1e18  = E-
+zetta- = 1e21  = Z-
+yotta- = 1e24  = Y-
+
+# binary_prefixes
+kibi- = 2**10 = Ki-
+mebi- = 2**20 = Mi-
+gibi- = 2**30 = Gi-
+tebi- = 2**40 = Ti-
+pebi- = 2**50 = Pi-
+exbi- = 2**60 = Ei-
+zebi- = 2**70 = Zi-
+yobi- = 2**80 = Yi-
+
+#### BASE UNITS ####
+
+meter = [length] = m = metre
+second = [time] = s = sec
+gram = [mass] = g
+kelvin = [temperature]; offset: 0 = K = degK = °K = degree_Kelvin = degreeK  # older names supported for compatibility
+
+#### UNITS ####
+
+# Mass
+metric_ton = 1e3 * kilogram = t = tonne
+
+# Time
+minute = 60 * second = min
+hour = 60 * minute = hr
+day = 24 * hour = d
+
+# Temperature
+degree_Celsius = kelvin; offset: 273.15 = °C = celsius = degC = degreeC
+degree_Fahrenheit = 5 / 9 * kelvin; offset: 233.15 + 200 / 9 = °F = fahrenheit = degF = degreeF
+
+# Volume
+liter = decimeter ** 3 = l = L = litre
+cubic_centimeter = centimeter ** 3 = cc
+
+# Force
+newton = kilogram * meter / second ** 2 = N
+
+# Energy
+joule = newton * meter = J
+electron_volt = e * volt = eV
+
+# Power
+watt = joule / second = W
+
+# Pressure
+pascal = newton / meter ** 2 = Pa
+
+#### UNIT GROUPS ####
+
+@group USCSLengthInternational
+    inch = yard / 36 = in = international_inch = inches = international_inches
+    foot = yard / 3 = ft = international_foot = feet = international_feet
+    yard = 0.9144 * meter = yd = international_yard  # since Jul 1959
+@end
+
+@group USCSLiquidVolume
+    minim = pint / 7680
+    fluid_dram = pint / 128 = fldr = fluidram = US_fluid_dram = US_liquid_dram
+    fluid_ounce = pint / 16 = floz = US_fluid_ounce = US_liquid_ounce
+    gill = pint / 4 = gi = liquid_gill = US_liquid_gill
+    pint = quart / 2 = pt = liquid_pint = US_pint
+    fifth = gallon / 5 = _ = US_liquid_fifth
+    quart = gallon / 4 = qt = liquid_quart = US_liquid_quart
+    gallon = 231 * cubic_inch = gal = liquid_gallon = US_liquid_gallon
+@end
+
+@group USCSVolumeOther
+    teaspoon = fluid_ounce / 6 = tsp
+    tablespoon = fluid_ounce / 2 = tbsp
+    shot = 3 * tablespoon = jig = US_shot
+    cup = pint / 2 = cp = liquid_cup = US_liquid_cup
+    barrel = 31.5 * gallon = bbl
+    oil_barrel = 42 * gallon = oil_bbl
+    beer_barrel = 31 * gallon = beer_bbl
+    hogshead = 63 * gallon
+@end
+
+@group Avoirdupois
+    ton = 2e3 * pound = _ = short_ton
+@end
+
+@group AvoirdupoisUS using Avoirdupois
+    US_ton = ton
+@end
+
+#### SYSTEMS OF UNITS ####
+
+@system SI
+    second
+    meter
+    kilogram
+    kelvin
+@end
+
+@system mks using international
+    meter
+    kilogram
+    second
+@end
+
+@system cgs using international, Gaussian, ESU
+    centimeter
+    gram
+    second
+@end

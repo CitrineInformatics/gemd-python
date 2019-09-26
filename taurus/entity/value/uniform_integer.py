@@ -18,7 +18,9 @@ class UniformInteger(IntegerValue):
     typ = "uniform_integer"
 
     def __init__(self, lower_bound=None, upper_bound=None):
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
+        assert isinstance(lower_bound, int)
+        assert isinstance(upper_bound, int)
         assert lower_bound <= upper_bound, \
             "the lower bound must be <= the upper bound"
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound

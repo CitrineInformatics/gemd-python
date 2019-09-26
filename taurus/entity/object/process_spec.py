@@ -1,4 +1,3 @@
-"""A process spec, the intent of a process that converts ingredients into an intended material."""
 from taurus.entity.object.base_object import BaseObject
 from taurus.entity.object.has_parameters import HasParameters
 from taurus.entity.object.has_conditions import HasConditions
@@ -7,10 +6,45 @@ from taurus.entity.object.has_template import HasTemplate
 
 class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
     """
-    Specification of a process.
+    A process specification.
 
-    This includes a link to the input material specs and relevant conditions and parameters
-    ProcessSpec includes a soft-link to the MaterialSpec that it produces, if any
+    Processes transform zero or more input materials into exactly one output material.
+    This includes links to the parameters and conditions under which the process is expected
+    to be performed, as well as soft links to the output material and the input ingredients.
+
+    Parameters
+    ----------
+    name: str, optional
+        Name of the process spec.
+    uids: Map[str, str], optional
+        A collection of
+        `unique IDs <https://citrineinformatics.github.io/taurus-documentation/
+        specification/unique-identifiers/>`_.
+    tags: List[str], optional
+        `Tags <https://citrineinformatics.github.io/taurus-documentation/specification/tags/>`_
+        are hierarchical strings that store information about an entity. They can be used
+        for filtering and discoverability.
+    notes: str, optional
+        Long-form notes about the process spec.
+    conditions: List[Condition], optional
+        Conditions under which this process spec occurs.
+    parameters: List[Parameter], optional
+        Parameters of this process spec.
+    template: ProcessTemplate, optional
+        A template bounding the valid values for this process's parameters and conditions.
+    file_links: List[FileLink], optional
+        Links to associated files, with resource paths into the files API.
+
+    Attributes
+    ----------
+    output_material: MaterialSpec
+        The material spec that this process spec produces. The link is established by creating
+        the material spec and settings its `process` field to this process spec.
+
+    ingredients: List[IngredientSpec], optional
+        Ingredient specs that act as inputs to this process spec. The link is established by
+        creating each ingredient spec and setting its `process` field to this process spec.
+
     """
 
     typ = "process_spec"
@@ -38,6 +72,11 @@ class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
     def ingredients(self):
         """Get the list of input ingredient specs."""
         return self._ingredients
+
+    def _unset_ingredient(self, ingred):
+        """Remove `ingred` from this process's list of ingredients."""
+        if ingred in self._ingredients:
+            self._ingredients.remove(ingred)
 
     @property
     def output_material(self):

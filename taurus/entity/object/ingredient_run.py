@@ -1,4 +1,3 @@
-"""An ingredient run is a material run being used in a process run.."""
 from taurus.entity.object.base_object import BaseObject
 from taurus.entity.object.has_quantities import HasQuantities
 from taurus.entity.setters import validate_list
@@ -6,7 +5,49 @@ from taurus.entity.valid_list import ValidList
 
 
 class IngredientRun(BaseObject, HasQuantities):
-    """An ingredient run, with quantities and link to originating material."""
+    """
+    An ingredient run.
+
+    Ingredients annotate a material with information about its usage in a process.
+
+    Parameters
+    ----------
+    uids: Map[str, str], optional
+        A collection of
+        `unique IDs <https://citrineinformatics.github.io/taurus-documentation/
+        specification/unique-identifiers/>`_.
+    tags: List[str], optional
+        `Tags <https://citrineinformatics.github.io/taurus-documentation/specification/tags/>`_
+        are hierarchical strings that store information about an entity. They can be used
+        for filtering and discoverability.
+    notes: str, optional
+        Long-form notes about the ingredient run.
+    material: MaterialRun
+        Material that this ingredient is.
+    process: ProcessRun
+        Process that this ingredient is used in.
+    mass_fraction: :py:class:`ContinuousValue \
+    <taurus.entity.value.continuous_value.ContinuousValue>`, optional
+        The mass fraction of the ingredient in the process.
+    volume_fraction: :py:class:`ContinuousValue \
+    <taurus.entity.value.continuous_value.ContinuousValue>`, optional
+        The volume fraction of the ingredient in the process.
+    number_fraction: :py:class:`ContinuousValue \
+    <taurus.entity.value.continuous_value.ContinuousValue>`, optional
+        The number fraction of the ingredient in the process.
+    absolute_quantity: :py:class:`ContinuousValue \
+    <taurus.entity.value.continuous_value.ContinuousValue>`, optional
+        The absolute quantity of the ingredient in the process.
+    name: str, optional
+        Label on the ingredient that is unique within the process that contains it.
+    labels: List[str], optional
+        Additional labels on the ingredient that must be unique.
+    spec: IngredientSpec
+        The specification of which this ingredient is a realization.
+    file_links: List[FileLink], optional
+        Links to associated files, with resource paths into the files API.
+
+    """
 
     typ = "ingredient_run"
 
@@ -14,18 +55,6 @@ class IngredientRun(BaseObject, HasQuantities):
                  mass_fraction=None, volume_fraction=None, number_fraction=None,
                  absolute_quantity=None,
                  spec=None, uids=None, tags=None, notes=None, file_links=None):
-        """
-        Create an IngredientRun object.
-
-        Assigns quantities and labels to a material being used in a process
-        :param material: MaterialRun that is being used as the ingredient
-        :param name: of the ingredient as used in the process, e.g. "the peanut butter"
-        :param labels: that this ingredient belongs to, e.g. "spread" or "solvent"
-        :param mass_fraction: fraction of the ingredients that is this input ingredient, by mass
-        :param volume_fraction: fraction of the ingredients that is this ingredient, by volume
-        :param number_fraction: fraction of the ingredients that is this ingredient, by number
-        :param absolute_quantity: quantity of this ingredient in an absolute sense, e.g. 2 cups
-        """
         BaseObject.__init__(self, name, uids, tags, notes=notes, file_links=file_links)
         HasQuantities.__init__(self, mass_fraction, volume_fraction, number_fraction,
                                absolute_quantity)
@@ -63,7 +92,7 @@ class IngredientRun(BaseObject, HasQuantities):
         elif isinstance(material, (MaterialRun, LinkByUID)):
             self._material = material
         else:
-            raise ValueError("IngredientRun.material must be a MaterialRun")
+            raise TypeError("IngredientRun.material must be a MaterialRun or LinkByUID")
 
     @property
     def process(self):
@@ -74,18 +103,20 @@ class IngredientRun(BaseObject, HasQuantities):
     def process(self, process):
         from taurus.entity.object import ProcessRun
         from taurus.entity.link_by_uid import LinkByUID
+        if self._process is not None and isinstance(self._process, ProcessRun):
+            self._process._unset_ingredient(self)
         if process is None:
             self._process = None
         elif isinstance(process, ProcessRun):
             self._process = process
             if not isinstance(process.ingredients, ValidList):
-                process._ingredients = validate_list(self, IngredientRun)
+                process._ingredients = validate_list(self, [IngredientRun, LinkByUID])
             else:
                 process._ingredients.append(self)
         elif isinstance(process, LinkByUID):
             self._process = process
         else:
-            raise ValueError("IngredientRun.process must be a ProcessRun")
+            raise TypeError("IngredientRun.process must be a ProcessRun or LinkByUID")
 
     @property
     def spec(self):
@@ -101,4 +132,4 @@ class IngredientRun(BaseObject, HasQuantities):
         elif isinstance(spec, (IngredientSpec, LinkByUID)):
             self._spec = spec
         else:
-            raise ValueError("spec must be a IngredientSpec: {}".format(spec))
+            raise TypeError("spec must be a IngredientSpec or LinkByUID: {}".format(spec))

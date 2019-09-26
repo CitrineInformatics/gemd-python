@@ -4,8 +4,6 @@ import pytest
 from taurus.client.json_encoder import dumps, loads
 from taurus.entity.bounds.categorical_bounds import CategoricalBounds
 from taurus.entity.bounds.real_bounds import RealBounds
-from taurus.entity.value.nominal_categorical import NominalCategorical
-from taurus.entity.value.nominal_real import NominalReal
 from taurus.entity.util import array_like
 
 
@@ -23,16 +21,6 @@ def test_invalid_constructor():
 
     with pytest.raises(ValueError):
         CategoricalBounds(categories={1, 2})
-
-
-def test_validate():
-    """Test basic validation logic."""
-    bounds = CategoricalBounds(categories={"spam", "eggs"})
-    assert bounds.validate(NominalCategorical("spam"))
-    assert not bounds.validate(NominalCategorical("foo"))
-    assert not bounds.validate(NominalReal(2.0, ''))
-    with pytest.raises(TypeError):
-        bounds.validate("spam")
 
 
 def test_contains():

@@ -1,4 +1,3 @@
-"""A material spec."""
 from taurus.entity.attribute.property_and_conditions import PropertyAndConditions
 from taurus.entity.object.base_object import BaseObject
 from taurus.entity.object.has_template import HasTemplate
@@ -7,9 +6,34 @@ from taurus.entity.setters import validate_list
 
 class MaterialSpec(BaseObject, HasTemplate):
     """
-    Specification of the intent of a material.
+    A material specification.
 
-    This includes links to originating process and specified properties
+    This includes a link to the originating process and specified properties with conditions.
+
+    Parameters
+    ----------
+    name: str, optional
+        Name of the material spec.
+    uids: Map[str, str], optional
+        A collection of
+        `unique IDs <https://citrineinformatics.github.io/taurus-documentation/
+        specification/unique-identifiers/>`_.
+    tags: List[str], optional
+        `Tags <https://citrineinformatics.github.io/taurus-documentation/specification/tags/>`_
+        are hierarchical strings that store information about an entity. They can be used
+        for filtering and discoverability.
+    notes: str, optional
+        Long-form notes about the material spec.
+    process: ProcessSpec
+        Process that produces this material.
+    properties: List[PropertyAndConditions], optional
+        Properties of the material, along with an optional list of conditions under which
+        those properties are measured.
+    template: MaterialTemplate, optional
+        A template bounding the valid values for this material's properties.
+    file_links: List[FileLink], optional
+        Links to associated files, with resource paths into the files API.
+
     """
 
     typ = "material_spec"
@@ -50,6 +74,8 @@ class MaterialSpec(BaseObject, HasTemplate):
         """
         from taurus.entity.object.process_spec import ProcessSpec
         from taurus.entity.link_by_uid import LinkByUID
+        if self.process is not None and isinstance(self.process, ProcessSpec):
+            self.process._output_material = None
         if process is None:
             self._process = None
         elif isinstance(process, LinkByUID):
@@ -58,5 +84,5 @@ class MaterialSpec(BaseObject, HasTemplate):
             process._output_material = self
             self._process = process
         else:
-            raise ValueError("process must be an instance of ProcessSpec; "
-                             "instead received type {}: {}".format(type(process), process))
+            raise TypeError("process must be an instance of ProcessSpec or LinkByUID; "
+                            "instead received type {}: {}".format(type(process), process))

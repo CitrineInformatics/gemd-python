@@ -1,13 +1,19 @@
 """Bounds an integer to be between two values."""
 from taurus.entity.bounds.base_bounds import BaseBounds
-from taurus.entity.value.base_value import BaseValue
-from taurus.entity.value.integer_value import IntegerValue
-from taurus.entity.value.nominal_integer import NominalInteger
-from taurus.entity.value.uniform_integer import UniformInteger
 
 
 class IntegerBounds(BaseBounds):
-    """Bounded subset of the integers, parameterized by a lower and upper bound."""
+    """
+    Bounded subset of the integers, parameterized by a lower and upper bound.
+
+    Parameters
+    ----------
+    lower_bound: int
+        Lower endpoint.
+    upper_bound: int
+        Upper endpoint.
+
+    """
 
     typ = "integer_bounds"
 
@@ -21,21 +27,27 @@ class IntegerBounds(BaseBounds):
         if self.upper_bound is None or abs(self.upper_bound) >= float("inf"):
             raise ValueError("Upper bound must be given and finite")
 
-    def validate(self, value: BaseValue) -> bool:
-        """Checks if a value is an integer within the bounds."""
-        if not super().validate(value):
-            return False
-        if not isinstance(value, IntegerValue):
-            return False
-
-        if isinstance(value, NominalInteger):
-            return self.upper_bound >= value.nominal >= self.lower_bound
-
-        if isinstance(value, UniformInteger):
-            return self.upper_bound >= value.upper_bound and self.lower_bound <= value.lower_bound
+        if self.upper_bound < self.lower_bound:
+            raise ValueError("Upper bound must be greater than or equal to lower bound")
 
     def contains(self, bounds: BaseBounds) -> bool:
-        """Check if another bounds is a subset of this range."""
+        """
+        Check if another bounds is a subset of this range.
+
+        The other bounds must also be an IntegerBounds and its lower and upper bound must *both*
+        be within the range of this bounds object.
+
+        Parameters
+        ----------
+        bounds: BaseBounds
+            Other bounds object to check.
+
+        Returns
+        -------
+        bool
+            True if the other bounds is contained by this bounds.
+
+        """
         if not super().contains(bounds):
             return False
         if not isinstance(bounds, IntegerBounds):

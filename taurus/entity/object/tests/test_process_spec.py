@@ -25,7 +25,7 @@ def test_material_spec():
         "MaterialSpec should be initialized with no ProcessSpec, by default"
 
     # Assign a ProcessSpec to mat_spec, first ensuring that the type is enforced
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         mat_spec.process = 17
     mat_spec.process = proc_spec
 

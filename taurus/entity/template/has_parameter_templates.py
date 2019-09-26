@@ -5,7 +5,15 @@ from taurus.entity.template.parameter_template import ParameterTemplate
 
 
 class HasParameterTemplates(object):
-    """Mixin-trait for entities that include parameter templates."""
+    """
+    Mixin-trait for entities that include parameter templates.
+
+    Parameters
+    ----------
+    parameters: List[ParameterTemplate]
+        A list of this entity's parameter templates.
+
+    """
 
     def __init__(self, parameters):
         self._parameters = None
@@ -13,7 +21,15 @@ class HasParameterTemplates(object):
 
     @property
     def parameters(self):
-        """Get the list of parameter templates."""
+        """
+        Get the list of parameter templates.
+
+        Returns
+        -------
+        List[ParameterTemplate]
+            List of this entity's parameter templates
+
+        """
         return self._parameters
 
     @parameters.setter
@@ -24,7 +40,3 @@ class HasParameterTemplates(object):
         # TODO: list.map(_.validate_scope(AttributeType.PARAMETER)) all true
 
         self._parameters = list(map(BaseTemplate._homogenize_ranges, lst))
-
-    def validate_parameters(self, obj):
-        """Validate an object's parameters against its templates."""
-        BaseTemplate._validate_attributes(self, obj, "parameters")

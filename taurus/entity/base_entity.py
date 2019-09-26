@@ -7,9 +7,17 @@ class BaseEntity(DictSerializable):
     """
     Base class for any entity, which includes objects and templates.
 
-    Every entity contains:
-     - uids, which are stored as a map from the uid's name to its value
-     - tags, which are a list of strings
+    Parameters
+    ----------
+    uids: Map[str, str]
+        A collection of
+        `unique IDs <https://citrineinformatics.github.io/taurus-documentation/
+        specification/unique-identifiers/>`_.
+    tags: List[str]
+        `Tags <https://citrineinformatics.github.io/taurus-documentation/specification/tags/>`_
+        are hierarchical strings that store information about an entity. They can be used
+        for filtering and discoverability.
+
     """
 
     typ = "base"
@@ -53,6 +61,16 @@ class BaseEntity(DictSerializable):
         else:
             self._uids = CaseInsensitiveDict(**{uids[0]: uids[1]})
 
-    def add_uid(self, name, uid):
-        """Add a uid."""
-        self.uids[name] = uid
+    def add_uid(self, scope, uid):
+        """
+        Add a uid.
+
+        Parameters
+        ----------
+        scope: str
+            scope of the uid
+        uid: str
+            Unique identifier
+
+        """
+        self.uids[scope] = uid

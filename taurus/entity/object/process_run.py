@@ -1,15 +1,52 @@
-"""A process run, which turns into ingredients into a material."""
 from taurus.entity.object.base_object import BaseObject
 from taurus.entity.object.has_conditions import HasConditions
 from taurus.entity.object.has_parameters import HasParameters
+from taurus.entity.object.has_source import HasSource
 
 
-class ProcessRun(BaseObject, HasConditions, HasParameters):
+class ProcessRun(BaseObject, HasConditions, HasParameters, HasSource):
     """
-    Realization of a process.
+    A process run.
 
-    This includes links to the input materials and measured conditions and parameters
-    ProcessRun includes a soft-link to the MaterialRun that it produces, if any
+    Processes transform zero or more input materials into exactly one output material.
+    This includes links to conditions and parameters under which the process was performed,
+    as well as soft links to the output material and each of the input ingredients.
+
+    Parameters
+    ----------
+    name: str, optional
+        Name of the process run.
+    uids: Map[str, str], optional
+        A collection of
+        `unique IDs <https://citrineinformatics.github.io/taurus-documentation/
+        specification/unique-identifiers/>`_.
+    tags: List[str], optional
+        `Tags <https://citrineinformatics.github.io/taurus-documentation/specification/tags/>`_
+        are hierarchical strings that store information about an entity. They can be used
+        for filtering and discoverability.
+    notes: str, optional
+        Long-form notes about the process run.
+    conditions: List[Condition], optional
+        Conditions under which this process run occurs.
+    parameters: List[Parameter], optional
+        Parameters of this process run.
+    spec: ProcessSpec
+        Spec for this process run.
+    file_links: List[FileLink], optional
+        Links to associated files, with resource paths into the files API.
+    source: PerformedSource, optional
+        Information about the person who performed the run and when.
+
+    Attributes
+    ----------
+    output_material: MaterialRun
+        The material run that this process run produces. The link is established by creating
+        the material run and settings its `process` field to this process run.
+
+    ingredients: List[IngredientRun]
+        Ingredient runs that act as inputs to this process run. The link is established by
+        creating each ingredient run and setting its `process` field to this process run.
+
     """
 
     typ = "process_run"
@@ -18,11 +55,12 @@ class ProcessRun(BaseObject, HasConditions, HasParameters):
 
     def __init__(self, name=None, spec=None,
                  conditions=None, parameters=None,
-                 uids=None, tags=None, notes=None, file_links=None):
+                 uids=None, tags=None, notes=None, file_links=None, source=None):
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)
         HasConditions.__init__(self, conditions)
         HasParameters.__init__(self, parameters)
+        HasSource.__init__(self, source)
 
         self._ingredients = []
 
@@ -40,6 +78,11 @@ class ProcessRun(BaseObject, HasConditions, HasParameters):
         """Get the input ingredient runs."""
         return self._ingredients
 
+    def _unset_ingredient(self, ingred):
+        """Remove `ingred` from this process's list of ingredients."""
+        if ingred in self._ingredients:
+            self._ingredients.remove(ingred)
+
     @property
     def spec(self):
         """Get the process spec."""
@@ -54,7 +97,7 @@ class ProcessRun(BaseObject, HasConditions, HasParameters):
         elif isinstance(spec, (ProcessSpec, LinkByUID)):
             self._spec = spec
         else:
-            raise ValueError("spec must be a ProcessSpec: {}".format(spec))
+            raise TypeError("spec must be a ProcessSpec or LinkByUID: {}".format(spec))
 
     @property
     def template(self):

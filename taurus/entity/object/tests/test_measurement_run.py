@@ -8,9 +8,12 @@ from taurus.entity.object.measurement_spec import MeasurementSpec
 from taurus.entity.attribute.condition import Condition
 from taurus.entity.attribute.parameter import Parameter
 from taurus.entity.attribute.property import Property
+from taurus.entity.source.performed_source import PerformedSource
+from taurus.entity.template.measurement_template import MeasurementTemplate
 from taurus.entity.value.nominal_real import NominalReal
 from taurus.entity.file_link import FileLink
 from taurus.entity.link_by_uid import LinkByUID
+from taurus.util.impl import substitute_links
 
 
 def test_measurement_spec():
@@ -70,6 +73,13 @@ def test_material_soft_link():
     assert loads(dumps(dye)).measurements == [], \
         "Measurement information should be removed when material is serialized"
 
+    assert 'measurements' in repr(dye)
+    assert 'material' in repr(fluorescence)
+    assert 'material' in repr(absorbance)
+
+    substitute_links(dye.measurements)
+    assert 'measurements' in repr(dye)
+
 
 def test_material_id_link():
     """Check that a measurement can be linked to a material that is a LinkByUID."""
@@ -77,3 +87,52 @@ def test_material_id_link():
     meas = MeasurementRun(material=mat)
     assert meas.material == mat
     assert loads(dumps(meas)) == meas
+
+
+def test_source():
+    """Test that source can be set, serialized, and deserialized."""
+    source = PerformedSource(performed_by="Marie Curie", performed_date="1898-07-01")
+    measurement = MeasurementRun(name="Polonium", source=source)
+    assert loads(dumps(measurement)).source.performed_by == "Marie Curie"
+
+    with pytest.raises(TypeError):
+        MeasurementRun(name="Polonium", source="Marie Curie on 1898-07-01")
+
+
+def test_measurement_reassignment():
+    """Check that a measurement run can be re-assigned to a new material run."""
+    sample1 = MaterialRun("Sample 1")
+    sample2 = MaterialRun("Sample 2")
+    mass = MeasurementRun("Mass of sample", material=sample1)
+    volume = MeasurementRun("Volume of sample", material=sample1)
+    assert mass.material == sample1
+    assert set(sample1.measurements) == {mass, volume}
+    assert sample2.measurements == []
+
+    mass.material = sample2
+    assert mass.material == sample2
+    assert sample1.measurements == [volume]
+    assert sample2.measurements == [mass]
+
+    mass.material = None
+    assert mass.material is None
+    assert sample2.measurements == []
+
+
+def test_invalid_assignment():
+    """Invalid assignments to `material` or `spec` throw a TypeError."""
+    with pytest.raises(TypeError):
+        MeasurementRun("name", spec=Condition("value of pi", value=NominalReal(3.14159, '')))
+    with pytest.raises(TypeError):
+        MeasurementRun("name", material=FileLink("filename", "url"))
+
+
+def test_template_access():
+    """A measurement run's template should be equal to its spec's template."""
+    template = MeasurementTemplate("measurement template", uids={'id': str(uuid4())})
+    spec = MeasurementSpec("A spec", uids={'id': str(uuid4())}, template=template)
+    meas = MeasurementRun("A run", uids={'id': str(uuid4())}, spec=spec)
+    assert meas.template == template
+
+    meas.spec = LinkByUID.from_entity(spec)
+    assert meas.template is None

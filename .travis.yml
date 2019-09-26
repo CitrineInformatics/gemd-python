@@ -7,18 +7,27 @@ install:
 - pip install -U -r test_requirements.txt
 - pip install --no-deps -e .
 script:
-- pytest --flake8 --cov=taurus --cov-report term-missing --cov-report term:skip-covered
-  --cov-fail-under=90 -s -r ./taurus
+- pytest --flake8 --cov=taurus --cov-report term-missing --cov-report term:skip-covered --cov-config=tox.ini
+  --cov-fail-under=97 -s -r ./taurus
 - cd docs; make html; cd ..;
 - touch ./docs/_build/html/.nojekyll
 deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: "$GH_SECRET_TOKEN"
-  keep_history: true
-  local_dir: "./docs/_build/html/"
-  on:
-    branch: develop
+  - provider: pages
+    skip_cleanup: true
+    github_token: "$GH_SECRET_TOKEN"
+    keep_history: true
+    local_dir: "./docs/_build/html/"
+    on:
+      branch: master
+  - provider: pypi
+    user: "CitrineInformatics"
+    password: "$PYPI_PASSWORD"
+    distributions: "sdist bdist_wheel"
+    skip_existing: true
+    on:
+      tags: true
 env:
   global:
-    secure: EShDEfEJhStL9RJNZG5eKDNYhH8s7TtiS2rnm/lFikjDjXyL1nuyjtvc7TCGW/tHCRk0/kvFCoQhgDUZeqrDkqQhK9johy9gNhqp/C6TbLxBvVYw8pxOYB9ljpw98WewChjqKOlNBNLhEFXiFWCpTkDX0sC8stSNpxTcxe4atWI+xVbMxnrzf8DfILuyCcnDzCZOcWkVNtZxoiia3JLqwFJH6f5FYL6j3+5GTDE+wPlH/k1G9CSY76tfQQh8D5LoXRhq3anck/sN3ftKe5ZR9Iq2o7HRxK8q2w8UFlvMKmTPu/gR/GHldZgTaeAV5hd6gA2utMjyNp6Or0xngLFbSFJmdg7EvMLOJNKryHnYelBBM29sU6UHxrZUTec0mG+1f79wbVbz9pPNj5Hu7Vwl4mDgrzPzRIc1h0G2+GqBN3+1swjw1xjNtia8E5Thftw7jCjQYsLuX/S83z/2T3RPFtA7oLYRwIDCdkPfH0SKod+fFU5F2q1E7678uc/7WrkQ2IK9KnfoORoDKCNRR3xuZy7WvKzM+lFJxWqo11E/RwpRAJeKOWP13JtTnywIWUkVjPoaZ3cE0xQuEZ1t939ia8kPaabnVzviTA3V+vo8xdCuhFldy69oGCqQZTp7Z1LqXE62V88rthBZiYWDyjskxh64Y1MfrFwNR+gjtcAb8cs=
+    - secure: EShDEfEJhStL9RJNZG5eKDNYhH8s7TtiS2rnm/lFikjDjXyL1nuyjtvc7TCGW/tHCRk0/kvFCoQhgDUZeqrDkqQhK9johy9gNhqp/C6TbLxBvVYw8pxOYB9ljpw98WewChjqKOlNBNLhEFXiFWCpTkDX0sC8stSNpxTcxe4atWI+xVbMxnrzf8DfILuyCcnDzCZOcWkVNtZxoiia3JLqwFJH6f5FYL6j3+5GTDE+wPlH/k1G9CSY76tfQQh8D5LoXRhq3anck/sN3ftKe5ZR9Iq2o7HRxK8q2w8UFlvMKmTPu/gR/GHldZgTaeAV5hd6gA2utMjyNp6Or0xngLFbSFJmdg7EvMLOJNKryHnYelBBM29sU6UHxrZUTec0mG+1f79wbVbz9pPNj5Hu7Vwl4mDgrzPzRIc1h0G2+GqBN3+1swjw1xjNtia8E5Thftw7jCjQYsLuX/S83z/2T3RPFtA7oLYRwIDCdkPfH0SKod+fFU5F2q1E7678uc/7WrkQ2IK9KnfoORoDKCNRR3xuZy7WvKzM+lFJxWqo11E/RwpRAJeKOWP13JtTnywIWUkVjPoaZ3cE0xQuEZ1t939ia8kPaabnVzviTA3V+vo8xdCuhFldy69oGCqQZTp7Z1LqXE62V88rthBZiYWDyjskxh64Y1MfrFwNR+gjtcAb8cs=
+    - secure: "Dw0vOjxagSP/GzwbqmSnmaIcEJqCQVABbUnARYQ5hm2RGbgt2AaVkE561IKiBs5m8am37wLyTyq5jXr8x5Y6GHXtzCv5aYx2R/qOw9ROjGRe9sW2RjcCo4YQEqReYmHXnXhMxiUoy4DEaCmtWOmZBSFuw9leZ1T0Y3CMPtH2MiCqgeZJu4iywXwcoUAtHrYtpt80L6TK7zGpnPzTnydGXgy09I/6KqPeIBOR0dwp+D51/SjoKLrGqjrm5/TxdTLdfsDXGP6Y/NeKYIAfA0ACq4dlqRPt/vc+c14gToqXHjsu7inJTWowEqsdiK6v0MmdR1NBDUSRGwbA/u6Si1QX4wIu54/csXn+/rFXdAJrUGp1sIo5q0boR713s/jhEaSorX1BEeGbNsTqWcPoN7fT/cYstLZRzbHtMRja/dDHxQtOu/8ENTFl+Q8Xg1sUWMNDvZhfsa2fJvzqraYJSpXIirqlV7CMr9Q1TtKq/2MwjwVuR5rc3T3doDhTmdWTTe/y0UavyhudWwr8TVk1SoLXz+ZTFQSvQy8i+VfB1Yum4u+sxnhdh8WNwG1epCEqbj2R+DSIBvvyK9tAb5P91kOgAcBVdFauPkiYQKratGyp4HcadX+LjaQzbzlYJ746ZW8ltZSgJvD5DJBV+NUvLT2bkAXH5KA1E3ccq/ztTsSNuh4="
+

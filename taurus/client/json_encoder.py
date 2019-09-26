@@ -20,6 +20,7 @@ from taurus.entity.object.ingredient_spec import IngredientSpec
 from taurus.entity.object.material_spec import MaterialSpec
 from taurus.entity.object.measurement_spec import MeasurementSpec
 from taurus.entity.object.process_spec import ProcessSpec
+from taurus.entity.source.performed_source import PerformedSource
 from taurus.entity.template.condition_template import ConditionTemplate
 from taurus.entity.template.material_template import MaterialTemplate
 from taurus.entity.template.measurement_template import MeasurementTemplate
@@ -40,7 +41,22 @@ from taurus.util import flatten, substitute_links, deepcopy, set_uuids, substitu
 
 
 def dumps(obj, **kwargs):
-    """Dump an taurus object, or container of them, into a json-formatting string."""
+    """
+    Serialize a taurus object, or container of them, into a json-formatting string.
+
+    Parameters
+    ----------
+    obj: DictSerializable or List[DictSerializable]
+        The object(s) to serialize to a string.
+    **kwargs: keyword args, optional
+        Optional keyword arguments to pass to `json.dumps()`.
+
+    Returns
+    -------
+    str
+        A string version of the serialized objects.
+
+    """
     # create a top level list of [flattened_objects, link-i-fied return value]
     res = [obj]
     additional = flatten(res)
@@ -50,7 +66,23 @@ def dumps(obj, **kwargs):
 
 
 def loads(json_str, **kwargs):
-    """Deserialize a json-formatted string into taurus objects."""
+    """
+    Deserialize a json-formatted string into a taurus object.
+
+    Parameters
+    ----------
+    json_str: str
+        A string representing the serialized objects, such as what is produced by :func:`dumps`.
+    **kwargs: keyword args, optional
+        Optional keyword arguments to pass to `json.loads()`.
+
+    Returns
+    -------
+    DictSerializable or List[DictSerializable]
+        Deserialized versions of the objects represented by `json_str`, with links turned
+        back into pointers.
+
+    """
     # Create an index to hold the objects by their uid reference
     # so we can replace links with pointers
     index = {}
@@ -61,18 +93,64 @@ def loads(json_str, **kwargs):
 
 
 def load(fp, **kwargs):
-    """Read the file as string and call loads."""
+    """
+    Load serialized string representation of an object from a file.
+
+    Parameters
+    ----------
+    fp: file
+        File to read.
+    **kwargs: keyword args, optional
+        Optional keyword arguments to pass to `json.loads()`.
+
+    Returns
+    -------
+    DictSerializable or List[DictSerializable]
+        Deserialized object(s).
+
+    """
     return loads(fp.read(), **kwargs)
 
 
 def dump(obj, fp, **kwargs):
-    """Call dumps and then write the result to fp."""
+    """
+    Dump an object to a file, as a serialized string.
+
+    Parameters
+    ----------
+    obj: DictSerializable or List[DictSerializable]
+        Object(s) to dump
+    fp: file
+        File to write to.
+    **kwargs: keyword args, optional
+        Optional keyword arguments to pass to `json.dumps()`.
+
+    Returns
+    -------
+    None
+
+    """
     fp.write(dumps(obj, **kwargs))
     return
 
 
 def thin_dumps(obj, **kwargs):
-    """Thin the object by substituting in links, and then dumps only that object."""
+    """
+    Serialize a "thin" version of an object in which pointers are replaced by links.
+
+    Parameters
+    ----------
+    obj: BaseEntity
+        Object to dump (must be a BaseEntity because it must have uids)
+    **kwargs: keyword args, optional
+        Optional keyword arguments to pass to `json.dumps()`.
+
+    Returns
+    -------
+    str
+        A serialized string of `obj`, with link_by_uid in place of pointers to other objects.
+
+    """
     if not isinstance(obj, BaseEntity):
         raise ValueError("Can only dump BaseEntities, but got {}".format(type(obj)))
 
@@ -83,7 +161,20 @@ def thin_dumps(obj, **kwargs):
 
 
 def copy(obj):
-    """Copy an object by dumping and then loading it."""
+    """
+    Copy an object by dumping and then loading it.
+
+    Parameters
+    ----------
+    obj: DictSerializable
+        Object to copy
+
+    Returns
+    -------
+    DictSerializable
+        A copy of `obj`.
+
+    """
     return loads(dumps(obj))
 
 
@@ -98,7 +189,7 @@ _clazzes = [
     NominalComposition, EmpiricalFormula,
     NominalReal, UniformReal, NormalReal, DiscreteCategorical, NominalCategorical,
     UniformInteger, NominalInteger,
-    FileLink
+    FileLink, PerformedSource
 ]
 _clazz_index = {}
 for clazz in _clazzes:

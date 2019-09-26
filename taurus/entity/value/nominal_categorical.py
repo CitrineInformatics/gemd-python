@@ -17,7 +17,8 @@ class NominalCategorical(CategoricalValue):
     typ = "nominal_categorical"
 
     def __init__(self, category=None):
-        self._category = category
+        self._category = None
+        self.category = category
 
     @property
     def category(self):
@@ -28,4 +29,5 @@ class NominalCategorical(CategoricalValue):
     def category(self, category):
         if category is None:
             self._category = None
-        self._category = validate_str(category)
+        else:
+            self._category = validate_str(category)

@@ -5,7 +5,15 @@ from taurus.entity.template.property_template import PropertyTemplate
 
 
 class HasPropertyTemplates(object):
-    """Mixin-trait for entities that include property templates."""
+    """
+    Mixin-trait for entities that include property templates.
+
+    Parameters
+    ----------
+    properties: List[PropertyTemplate]
+        A list of this entity's property templates.
+
+    """
 
     def __init__(self, properties):
         self._properties = None
@@ -13,7 +21,15 @@ class HasPropertyTemplates(object):
 
     @property
     def properties(self):
-        """Get the list of property templates."""
+        """
+        Get the list of property templates.
+
+        Returns
+        -------
+        List[PropertyTemplate]
+            List of this entity's property templates
+
+        """
         return self._properties
 
     @properties.setter
@@ -27,8 +43,3 @@ class HasPropertyTemplates(object):
         # convert any templates into (template, bounds) pairs and
         # validate that any (template, bounds) pairs are consistent
         self._properties = list(map(BaseTemplate._homogenize_ranges, lst))
-
-    def validate_properties(self, obj):
-        """Validate an object's properties against its templates."""
-        # validate the template against the object's properties
-        BaseTemplate._validate_attributes(self, obj, "properties")

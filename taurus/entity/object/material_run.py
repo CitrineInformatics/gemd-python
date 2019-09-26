@@ -1,10 +1,44 @@
-"""A material run."""
 from taurus.entity.object.base_object import BaseObject
 from taurus.enumeration import SampleType
 
 
 class MaterialRun(BaseObject):
-    """Realization of a Material, with links to its spec, originating process, and measurements."""
+    """
+    A material run.
+
+    This includes a link to the originating process and soft links to measurements.
+
+    Parameters
+    ----------
+    name: str, optional
+        Name of the material run.
+    uids: Map[str, str], optional
+        A collection of
+        `unique IDs <https://citrineinformatics.github.io/taurus-documentation/
+        specification/unique-identifiers/>`_.
+    tags: List[str], optional
+        `Tags <https://citrineinformatics.github.io/taurus-documentation/specification/tags/>`_
+        are hierarchical strings that store information about an entity. They can be used
+        for filtering and discoverability.
+    notes: str, optional
+        Long-form notes about the material run.
+    process: ProcessRun
+        Process that produces this material.
+    sample_type: str, optional
+        The form of this sample. Optionals are "experimental", "virtual", "production", or
+        "unknown." Default is "unknown."
+    spec: MaterialSpec
+        The material specification of which this is an instance.
+    file_links: List[FileLink], optional
+        Links to associated files, with resource paths into the files API.
+
+    Attributes
+    ----------
+    measurements: List[MeasurementRun], optional
+        Measurements performed on this material. The link is established by creating the
+        measurement run and settings its `material` field to this material run.
+
+    """
 
     typ = "material_run"
 
@@ -32,6 +66,8 @@ class MaterialRun(BaseObject):
     def process(self, process):
         from taurus.entity.object.process_run import ProcessRun
         from taurus.entity.link_by_uid import LinkByUID
+        if self.process is not None and isinstance(self.process, ProcessRun):
+            self.process._output_material = None
         if process is None:
             self._process = None
         elif isinstance(process, LinkByUID):
@@ -40,12 +76,17 @@ class MaterialRun(BaseObject):
             process._output_material = self
             self._process = process
         else:
-            raise ValueError("process must be a ProcessRun: {}".format(process))
+            raise TypeError("process must be a ProcessRun or LinkByUID: {}".format(process))
 
     @property
     def measurements(self):
         """Get a list of measurement runs."""
         return self._measurements
+
+    def _unset_measurement(self, meas):
+        """Remove `meas` from this material's list of measurements."""
+        if meas in self._measurements:
+            self._measurements.remove(meas)
 
     @property
     def sample_type(self):
@@ -70,7 +111,7 @@ class MaterialRun(BaseObject):
         elif isinstance(spec, (MaterialSpec, LinkByUID)):
             self._spec = spec
         else:
-            raise ValueError("spec must be a MaterialSpec: {}".format(spec))
+            raise TypeError("spec must be a MaterialSpec or LinkByUID: {}".format(spec))
 
     @property
     def template(self):
