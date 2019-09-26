@@ -7,7 +7,7 @@ from taurus.entity.object.ingredient_run import IngredientRun
 def test_id_case_sensitivitiy():
     """Test that uids are case insensitive."""
     with pytest.raises(ValueError):
-        ingredient = IngredientRun(uids={'my_id': 'sample1', 'My_ID': 'sample2'})
+        IngredientRun(uids={'my_id': 'sample1', 'My_ID': 'sample2'})
 
     ingredient = IngredientRun(uids={'my_id': 'sample1'})
     assert ingredient.uids['my_id'] == 'sample1'
