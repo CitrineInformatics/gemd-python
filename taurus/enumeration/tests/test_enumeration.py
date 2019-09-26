@@ -15,10 +15,14 @@ def test_values():
 
     assert GoodClass.get_value("Red") == "Red"
     assert GoodClass.get_value(GoodClass.BLUE) == "Blue"
+    assert GoodClass.get_value(None) is None
     assert GoodClass.get_enum("Red") == GoodClass.RED
     assert GoodClass.get_enum(GoodClass.BLUE) == GoodClass.BLUE
+    assert GoodClass.get_enum(None) is None
     with pytest.raises(ValueError):
         GoodClass.get_value("Green")
+    with pytest.raises(ValueError):
+        GoodClass.get_enum("Green")
 
 
 def test_json_serde():
