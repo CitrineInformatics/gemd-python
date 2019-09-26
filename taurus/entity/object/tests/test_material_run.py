@@ -106,3 +106,15 @@ def test_template_access():
 
     mat.spec = LinkByUID.from_entity(spec)
     assert mat.template is None
+
+
+def test_build():
+    """Test that build recreates the material."""
+    spec = MaterialSpec("A spec",
+                        properties=PropertyAndConditions(
+                            property=Property("a property", value=NominalReal(3, ''))),
+                        tags=["a tag"])
+    mat = MaterialRun(name="a material", spec=spec)
+    mat_dict = mat.as_dict()
+    mat_dict['spec'] = mat.spec.as_dict()
+    assert MaterialRun.build(mat_dict) == mat
