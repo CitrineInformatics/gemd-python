@@ -2,6 +2,7 @@
 import pytest
 import json
 from uuid import uuid4
+from copy import deepcopy
 
 from taurus.client.json_encoder import loads, dumps
 from taurus.entity.attribute.property_and_conditions import PropertyAndConditions
@@ -118,3 +119,16 @@ def test_build():
     mat_dict = mat.as_dict()
     mat_dict['spec'] = mat.spec.as_dict()
     assert MaterialRun.build(mat_dict) == mat
+
+
+def test_equality():
+    """Test that equality check works as expected."""
+    spec = MaterialSpec("A spec",
+                        properties=PropertyAndConditions(
+                            property=Property("a property", value=NominalReal(3, ''))),
+                        tags=["a tag"])
+    mat1 = MaterialRun("A material", spec=spec)
+    mat2 = MaterialRun("Another material", spec=spec)
+    assert mat1 == deepcopy(mat1)
+    assert mat1 != mat2
+    assert mat1 != "A material"
