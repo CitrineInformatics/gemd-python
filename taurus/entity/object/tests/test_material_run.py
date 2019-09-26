@@ -101,7 +101,7 @@ def test_template_access():
     """A material run's template should be equal to its spec's template."""
     template = MaterialTemplate("material template", uids={'id': str(uuid4())})
     spec = MaterialSpec("A spec", uids={'id': str(uuid4())}, template=template)
-    mat = MaterialRun("A run", uids={'id': str(uuid4())}, spec=spec)
+    mat = MaterialRun("A run", uids=['id', str(uuid4())], spec=spec)
     assert mat.template == template
 
     mat.spec = LinkByUID.from_entity(spec)
