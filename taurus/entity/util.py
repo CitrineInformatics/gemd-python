@@ -93,11 +93,6 @@ def array_like():
 
 
 def complete_material_history(mat):
-    from taurus.entity.base_entity import BaseEntity
-    from taurus.entity.dict_serializable import DictSerializable
-    from taurus.client.json_encoder import dumps, loads
-    from taurus.util.impl import substitute_links
-
     """
     Get a list of every single object in the material history, all as dictionaries.
 
@@ -108,6 +103,12 @@ def complete_material_history(mat):
     :return: a list containing every object connected to mat, each a dictionary with all
         links substituted.
     """
+    from taurus.entity.base_entity import BaseEntity
+    from taurus.entity.dict_serializable import DictSerializable
+    import json
+    from taurus.client.json_encoder import dumps, loads
+    from taurus.util.impl import substitute_links
+
     queue = [mat]
     seen = set()
     result = []
