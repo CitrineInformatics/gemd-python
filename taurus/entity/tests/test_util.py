@@ -1,4 +1,6 @@
 """Tests of entity utils."""
+import pytest
+
 from taurus.entity.util import make_instance, complete_material_history
 from taurus.entity.attribute.condition import Condition
 from taurus.entity.attribute.property import Property
@@ -13,6 +15,7 @@ from taurus.entity.object.process_spec import ProcessSpec
 from taurus.entity.object.process_run import ProcessRun
 from taurus.entity.value.discrete_categorical import DiscreteCategorical
 from taurus.entity.value.nominal_real import NominalReal
+from taurus.entity.value.uniform_real import UniformReal
 
 
 def test_make_instance():
@@ -72,3 +75,20 @@ def test_serialized_history():
     buy_cookie_dough_dict = next(x for x in cookie_history if x.get('name') == 'Buy cookie dough')
     assert cookie_dough_spec_dict.get('process') == buy_spec.as_dict()
     assert buy_cookie_dough_dict.get('spec') == buy_spec.as_dict()
+
+
+def test_invalid_instance():
+    """Calling make_instance on a non-spec should throw a TypeError."""
+    not_specs = [MeasurementRun("meas"), Condition("cond"), UniformReal(0, 1, ''), 'foo', 10]
+    for not_spec in not_specs:
+        with pytest.raises(TypeError):
+            make_instance(not_spec)
+
+
+def test_circular_crawl():
+    """Test that make_instance can handle a circular set of linked objects."""
+    proc = ProcessSpec("process name")
+    mat = MaterialSpec("material name", process=proc)
+    IngredientSpec(name="ingredient name", material=mat, process=proc)
+    mat_run = make_instance(mat)
+    assert mat_run == mat_run.process.ingredients[0].material
