@@ -76,6 +76,9 @@ def test_serialized_history():
     assert cookie_dough_spec_dict.get('process') == buy_spec.as_dict()
     assert buy_cookie_dough_dict.get('spec') == buy_spec.as_dict()
 
+    from taurus.util.impl import substitute_objects
+    substitute_objects(cookie_history, {})
+
 
 def test_invalid_instance():
     """Calling make_instance on a non-spec should throw a TypeError."""
