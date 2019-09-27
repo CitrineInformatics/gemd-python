@@ -2,7 +2,6 @@
 import pytest
 
 from taurus.entity.util import make_instance, complete_material_history
-from taurus.entity.attribute.condition import Condition
 from taurus.entity.attribute.property import Property
 from taurus.entity.link_by_uid import LinkByUID
 from taurus.entity.object.ingredient_spec import IngredientSpec
@@ -15,6 +14,7 @@ from taurus.entity.object.process_spec import ProcessSpec
 from taurus.entity.object.process_run import ProcessRun
 from taurus.entity.value.discrete_categorical import DiscreteCategorical
 from taurus.entity.value.nominal_real import NominalReal
+from taurus.entity.attribute.condition import Condition
 from taurus.entity.value.uniform_real import UniformReal
 
 
@@ -75,9 +75,6 @@ def test_serialized_history():
     buy_cookie_dough_dict = next(x for x in cookie_history if x.get('name') == 'Buy cookie dough')
     assert cookie_dough_spec_dict.get('process') == buy_spec.as_dict()
     assert buy_cookie_dough_dict.get('spec') == buy_spec.as_dict()
-
-    from taurus.util.impl import substitute_objects
-    substitute_objects(cookie_history, {})
 
 
 def test_invalid_instance():
