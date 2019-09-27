@@ -29,10 +29,6 @@ class BaseEntity(DictSerializable):
         self._uids = None
         self.uids = uids
 
-    def content_hash(self):
-        """A hash of the object's content."""
-        return str(sorted(list(self.__dict__.items())))
-
     @property
     def tags(self):
         """Get the tags."""

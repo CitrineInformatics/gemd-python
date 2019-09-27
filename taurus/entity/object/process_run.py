@@ -78,6 +78,11 @@ class ProcessRun(BaseObject, HasConditions, HasParameters, HasSource):
         """Get the input ingredient runs."""
         return self._ingredients
 
+    def _unset_ingredient(self, ingred):
+        """Remove `ingred` from this process's list of ingredients."""
+        if ingred in self._ingredients:
+            self._ingredients.remove(ingred)
+
     @property
     def spec(self):
         """Get the process spec."""
@@ -92,7 +97,7 @@ class ProcessRun(BaseObject, HasConditions, HasParameters, HasSource):
         elif isinstance(spec, (ProcessSpec, LinkByUID)):
             self._spec = spec
         else:
-            raise ValueError("spec must be a ProcessSpec: {}".format(spec))
+            raise TypeError("spec must be a ProcessSpec or LinkByUID: {}".format(spec))
 
     @property
     def template(self):

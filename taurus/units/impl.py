@@ -5,10 +5,6 @@ from pint import UnitRegistry
 from pint.quantity import _Quantity
 from pint.unit import _Unit
 
-try:
-    str
-except NameError:
-    str = str
 
 # use the default unit registry for now
 _ureg = UnitRegistry(filename=pkg_resources.resource_filename("taurus.units", "citrine_en.txt"))
@@ -23,7 +19,7 @@ UndefinedUnitError = pint.errors.UndefinedUnitError
 def _unit_to_str(unit):
     """Helper that pulls a string representation of the unit from a quantity."""
     if not isinstance(unit, _Quantity):
-        raise ValueError("Expecting a unit or quantity")
+        raise TypeError("Expecting a quantity")  # pragma: no cover
     return str(unit.units)
 
 
@@ -36,7 +32,7 @@ def parse_units(units):
     elif isinstance(units, str):
         return _unit_to_str(_ureg(units))
     elif isinstance(units, _Unit):
-        return _unit_to_str(units)
+        return units
     else:
         raise UndefinedUnitError("Units must be given as a recognized unit string or Units object")
 

@@ -73,18 +73,20 @@ class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters, Ha
     def material(self, value):
         from taurus.entity.object import MaterialRun
         from taurus.entity.link_by_uid import LinkByUID
+        if self._material is not None and isinstance(self._material, MaterialRun):
+            self._material._unset_measurement(self)
         if value is None:
             self._material = value
         elif isinstance(value, MaterialRun):
             self._material = value
             if not isinstance(value.measurements, ValidList):
-                value._measurements = validate_list(self, MeasurementRun)
+                value._measurements = validate_list(self, [MeasurementRun, LinkByUID])
             else:
                 value._measurements.append(self)
         elif isinstance(value, LinkByUID):
             self._material = value
         else:
-            raise ValueError("material must be a MaterialRun or LinkByUID: {}".format(value))
+            raise TypeError("material must be a MaterialRun or LinkByUID: {}".format(value))
 
     @property
     def spec(self):
@@ -100,7 +102,7 @@ class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters, Ha
         elif isinstance(spec, (MeasurementSpec, LinkByUID)):
             self._spec = spec
         else:
-            raise ValueError("spec must be a MeasurementSpec: {}".format(spec))
+            raise TypeError("spec must be a MeasurementSpec or LinkByUID: {}".format(spec))
 
     @property
     def template(self):

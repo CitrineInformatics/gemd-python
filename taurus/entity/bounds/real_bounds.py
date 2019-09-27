@@ -93,19 +93,11 @@ class RealBounds(BaseBounds):
             A tuple of the (lower_bound, upper_bound) in the target units.
 
         """
-        # if neither have units, then just return the bounds
-        if not self.default_units and not target_units:
-            return self.lower_bound, self.upper_bound
-        # if either have units but both don't, then we can't return anything
-        elif not self.default_units or not target_units:
+        try:
+            lower_bound = units.convert_units(
+                self.lower_bound, self.default_units, target_units)
+            upper_bound = units.convert_units(
+                self.upper_bound, self.default_units, target_units)
+            return lower_bound, upper_bound
+        except units.IncompatibleUnitsError:
             return None, None
-        # if both have units, then we can try to convert
-        else:
-            try:
-                lower_bound = units.convert_units(
-                    self.lower_bound, self.default_units, target_units)
-                upper_bound = units.convert_units(
-                    self.upper_bound, self.default_units, target_units)
-                return lower_bound, upper_bound
-            except units.IncompatibleUnitsError:
-                return None, None

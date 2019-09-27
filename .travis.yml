@@ -7,8 +7,8 @@ install:
 - pip install -U -r test_requirements.txt
 - pip install --no-deps -e .
 script:
-- pytest --flake8 --cov=taurus --cov-report term-missing --cov-report term:skip-covered
-  --cov-fail-under=91 -s -r ./taurus
+- pytest --flake8 --cov=taurus --cov-report term-missing --cov-report term:skip-covered --cov-config=tox.ini
+  --cov-fail-under=100 -s -r ./taurus
 - cd docs; make html; cd ..;
 - touch ./docs/_build/html/.nojekyll
 deploy:

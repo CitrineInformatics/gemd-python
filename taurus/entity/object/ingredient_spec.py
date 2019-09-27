@@ -101,7 +101,7 @@ class IngredientSpec(BaseObject, HasQuantities):
         elif isinstance(material, (MaterialSpec, LinkByUID)):
             self._material = material
         else:
-            raise ValueError("IngredientSpec.material must be a MaterialSpec")
+            raise TypeError("IngredientSpec.material must be a MaterialSpec or LinkByUID")
 
     @property
     def process(self):
@@ -112,15 +112,17 @@ class IngredientSpec(BaseObject, HasQuantities):
     def process(self, process):
         from taurus.entity.object import ProcessSpec
         from taurus.entity.link_by_uid import LinkByUID
+        if self._process is not None and isinstance(self._process, ProcessSpec):
+            self._process._unset_ingredient(self)
         if process is None:
             self._process = None
         elif isinstance(process, ProcessSpec):
             self._process = process
             if not isinstance(process.ingredients, ValidList):
-                process._ingredients = validate_list(self, IngredientSpec)
+                process._ingredients = validate_list(self, [IngredientSpec, LinkByUID])
             else:
                 process._ingredients.append(self)
         elif isinstance(process, LinkByUID):
             self._process = process
         else:
-            raise ValueError("IngredientSpec.process must be a ProcessSpec")
+            raise TypeError("IngredientSpec.process must be a ProcessSpec or LinkByUID")

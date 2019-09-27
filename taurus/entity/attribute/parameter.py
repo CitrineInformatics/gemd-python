@@ -1,5 +1,4 @@
 from taurus.entity.attribute.base_attribute import BaseAttribute
-from taurus.enumeration import AttributeType
 
 
 class Parameter(BaseAttribute):
@@ -13,4 +12,3 @@ class Parameter(BaseAttribute):
     """
 
     typ = "parameter"
-    attribute_type = AttributeType.PARAMETER

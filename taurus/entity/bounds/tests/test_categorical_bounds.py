@@ -29,6 +29,7 @@ def test_contains():
     assert bounds.contains(CategoricalBounds(categories={"spam"}))
     assert not bounds.contains(CategoricalBounds(categories={"spam", "foo"}))
     assert not bounds.contains(RealBounds(0.0, 2.0, ''))
+    assert not bounds.contains(None)
     with pytest.raises(TypeError):
         bounds.contains({"spam", "eggs"})
 

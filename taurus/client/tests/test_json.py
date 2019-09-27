@@ -1,16 +1,19 @@
 """Test serialization and deserialization of taurus objects."""
-from taurus.client.json_encoder import dumps, loads
+import json
+import pytest
+
+from taurus.client.json_encoder import dumps, loads, copy, thin_dumps
+from taurus.entity.dict_serializable import DictSerializable
 from taurus.entity.case_insensitive_dict import CaseInsensitiveDict
 from taurus.entity.attribute.condition import Condition
 from taurus.entity.attribute.parameter import Parameter
 from taurus.entity.link_by_uid import LinkByUID
-from taurus.entity.object import MeasurementRun, MaterialRun, ProcessRun
+from taurus.entity.object import MeasurementRun, MaterialRun, ProcessRun, MeasurementSpec
 from taurus.entity.object.ingredient_run import IngredientRun
 from taurus.entity.object.ingredient_spec import IngredientSpec
 from taurus.entity.value.nominal_real import NominalReal
 from taurus.entity.value.normal_real import NormalReal
-
-import json
+from taurus.enumeration.origin import Origin
 
 
 def test_serialize():
@@ -43,10 +46,33 @@ def test_deserialize():
     parameter = Parameter(name="A parameter", value=NormalReal(mean=17, std=1, units=''))
     measurement = MeasurementRun(tags="A tag on a measurement", conditions=condition,
                                  parameters=parameter)
-    copy = loads(dumps(measurement))
-    assert(copy.conditions[0].value == measurement.conditions[0].value)
-    assert(copy.parameters[0].value == measurement.parameters[0].value)
-    assert(copy.uids["auto"] == measurement.uids["auto"])
+    copy_meas = copy(measurement)
+    assert(copy_meas.conditions[0].value == measurement.conditions[0].value)
+    assert(copy_meas.parameters[0].value == measurement.parameters[0].value)
+    assert(copy_meas.uids["auto"] == measurement.uids["auto"])
+
+
+def test_enumeration_serde():
+    """An enumeration should get serialized as a string."""
+    condition = Condition(name="A condition", notes=Origin.UNKNOWN)
+    copy_condition = copy(condition)
+    assert copy_condition.notes == Origin.get_value(condition.notes)
+
+
+def test_thin_dumps():
+    """Test that thin_dumps turns pointers into links and doesn't work on non-BaseEntity."""
+    mat = MaterialRun("The actual material")
+    meas_spec = MeasurementSpec("measurement", uids={'my_scope': '324324'})
+    meas = MeasurementRun("The measurement", spec=meas_spec, material=mat)
+
+    thin_copy = MeasurementRun.build(json.loads(thin_dumps(meas)))
+    assert isinstance(thin_copy, MeasurementRun)
+    assert isinstance(thin_copy.material, LinkByUID)
+    assert isinstance(thin_copy.spec, LinkByUID)
+    assert thin_copy.spec.id == meas_spec.uids['my_scope']
+
+    with pytest.raises(TypeError):
+        thin_dumps(LinkByUID('scope', 'id'))
 
 
 def test_uid_deser():
@@ -57,6 +83,40 @@ def test_uid_deser():
     assert isinstance(ingredient_copy.uids, CaseInsensitiveDict)
     assert ingredient_copy.material == material
     assert ingredient_copy.material.uids['sample id'] == material.uids['Sample ID']
+
+
+def test_dict_serialization():
+    """Test that a dictionary can be serialized and then deserialized as a taurus object."""
+    process = ProcessRun("A process")
+    mat = MaterialRun("A material", process=process)
+    meas = MeasurementRun("A measurement", material=mat)
+    copy = loads(dumps(meas.as_dict()))
+    assert copy == meas
+
+
+def test_unexpected_serialization():
+    """Trying to serialize an unexpected class should throw a TypeError."""
+    class DummyClass:
+        def __init__(self, foo):
+            self.foo = foo
+
+    with pytest.raises(TypeError):
+        dumps(ProcessRun("A process", notes=DummyClass("something")))
+
+
+def test_unexpected_deserialization():
+    """Trying to deserialize an unexpected class should throw a TypeError."""
+    class DummyClass(DictSerializable):
+        typ = 'dummy_class'
+
+        def __init__(self, foo):
+            self.foo = foo
+
+    # DummyClass can be serialized because it is a DictSerializable, but cannot be
+    # deserialized because it is not in the _clazzes list.
+    serialized = dumps(ProcessRun("A process", notes=DummyClass("something")))
+    with pytest.raises(TypeError):
+        loads(serialized)
 
 
 def test_case_insensitive_rehydration():

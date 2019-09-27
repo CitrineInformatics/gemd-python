@@ -152,7 +152,7 @@ def thin_dumps(obj, **kwargs):
 
     """
     if not isinstance(obj, BaseEntity):
-        raise ValueError("Can only dump BaseEntities, but got {}".format(type(obj)))
+        raise TypeError("Can only dump BaseEntities, but got {}".format(type(obj)))
 
     set_uuids(obj)
     res = deepcopy(obj)
@@ -208,7 +208,7 @@ def _loado(d, index):
         obj = LinkByUID.from_dict(d)
         return obj
     else:
-        raise ValueError("Unexpected base object type: {}".format(typ))
+        raise TypeError("Unexpected base object type: {}".format(typ))
 
     if isinstance(obj, BaseEntity):
         for (scope, id) in obj.uids.items():

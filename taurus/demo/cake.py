@@ -1,7 +1,7 @@
 """Bake a cake."""
 import json
 
-from taurus.client.json_encoder import thin_dumps, dumps
+from taurus.client.json_encoder import thin_dumps
 from taurus.entity.attribute.condition import Condition
 from taurus.entity.attribute.parameter import Parameter
 from taurus.entity.attribute.property import Property
@@ -27,6 +27,7 @@ from taurus.entity.value.nominal_real import NominalReal
 from taurus.entity.value.normal_real import NormalReal
 from taurus.enumeration.origin import Origin
 from taurus.util.impl import set_uuids
+from taurus.entity.util import complete_material_history
 
 
 def make_cake():
@@ -228,6 +229,11 @@ def make_cake():
 
 if __name__ == "__main__":
     cake = make_cake()
+    set_uuids(cake)
+
+    with open("example_taurus_material_history.json", "w") as f:
+        context_list = complete_material_history(cake)
+        f.write(json.dumps(context_list, indent=2))
 
     with open("example_taurus_material_template.json", "w") as f:
         f.write(thin_dumps(cake.template, indent=2))
@@ -261,7 +267,3 @@ if __name__ == "__main__":
 
     with open("example_taurus_measurement_run.json", "w") as f:
         f.write(thin_dumps(cake.measurements[0], indent=2))
-
-    with open("example_taurus_material_history.json", "w") as f:
-        context = json.loads(dumps(cake))[0]
-        f.write(json.dumps(context, indent=2))

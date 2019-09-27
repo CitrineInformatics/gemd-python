@@ -1,5 +1,4 @@
 from taurus.entity.attribute.base_attribute import BaseAttribute
-from taurus.enumeration import AttributeType
 
 
 class Condition(BaseAttribute):
@@ -12,4 +11,3 @@ class Condition(BaseAttribute):
     """
 
     typ = "condition"
-    attribute_type = AttributeType.CONDITION
