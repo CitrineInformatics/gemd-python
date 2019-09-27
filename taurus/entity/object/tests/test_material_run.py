@@ -2,6 +2,7 @@
 import pytest
 import json
 from uuid import uuid4
+from copy import deepcopy
 
 from taurus.client.json_encoder import loads, dumps
 from taurus.entity.attribute.property_and_conditions import PropertyAndConditions
@@ -90,6 +91,8 @@ def test_process_reassignment():
 def test_invalid_assignment():
     """Invalid assignments to `process` or `spec` throw a TypeError."""
     with pytest.raises(TypeError):
+        MaterialRun(name=12)
+    with pytest.raises(TypeError):
         MaterialRun("name", spec=ProcessRun("a process"))
     with pytest.raises(TypeError):
         MaterialRun("name", process=MaterialSpec("a spec"))
@@ -99,8 +102,33 @@ def test_template_access():
     """A material run's template should be equal to its spec's template."""
     template = MaterialTemplate("material template", uids={'id': str(uuid4())})
     spec = MaterialSpec("A spec", uids={'id': str(uuid4())}, template=template)
-    mat = MaterialRun("A run", uids={'id': str(uuid4())}, spec=spec)
+    mat = MaterialRun("A run", uids=['id', str(uuid4())], spec=spec)
     assert mat.template == template
 
     mat.spec = LinkByUID.from_entity(spec)
     assert mat.template is None
+
+
+def test_build():
+    """Test that build recreates the material."""
+    spec = MaterialSpec("A spec",
+                        properties=PropertyAndConditions(
+                            property=Property("a property", value=NominalReal(3, ''))),
+                        tags=["a tag"])
+    mat = MaterialRun(name="a material", spec=spec)
+    mat_dict = mat.as_dict()
+    mat_dict['spec'] = mat.spec.as_dict()
+    assert MaterialRun.build(mat_dict) == mat
+
+
+def test_equality():
+    """Test that equality check works as expected."""
+    spec = MaterialSpec("A spec",
+                        properties=PropertyAndConditions(
+                            property=Property("a property", value=NominalReal(3, ''))),
+                        tags=["a tag"])
+    mat1 = MaterialRun("A material", spec=spec)
+    mat2 = MaterialRun("A material", spec=spec, tags=["A tag"])
+    assert mat1 == deepcopy(mat1)
+    assert mat1 != mat2
+    assert mat1 != "A material"
