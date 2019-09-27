@@ -125,10 +125,7 @@ def make_data_island(density, bulk_modulus, firing_temperature, binders, powders
         spec=measurement_spec
     )
 
-    if tag:
-        tags = [tag]
-    else:
-        tags = []
+    tags = [tag] if tag else []
 
     material_spec = MaterialSpec(template=material_template)
     material_run = MaterialRun(process=firing_process, tags=tags, spec=material_spec)
