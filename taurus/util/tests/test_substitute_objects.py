@@ -24,11 +24,12 @@ def test_dictionary_substitution():
 
 
 def test_recursive_foreach():
-    """Test recursive_foreach() method."""
+    """Test that recursive_foreach() applies a method to every object."""
     new_tag = "Extra tag"
 
-    def func(base_obj):
-        base_obj.tags.extend([new_tag])
+    def func(base_ent):
+        """Adds a specific tag to the object."""
+        base_ent.tags.extend([new_tag])
         return
 
     param_template = ParameterTemplate("a param template", bounds=RealBounds(0, 100, ''))
@@ -38,6 +39,5 @@ def test_recursive_foreach():
     test_dict = {"foo": measurement}
     recursive_foreach(test_dict, func, apply_first=True)
 
-    assert new_tag in param_template.tags
-    assert new_tag in meas_template.tags
-    assert new_tag in measurement.tags
+    for ent in [param_template, meas_template, measurement]:
+        assert new_tag in ent.tags
