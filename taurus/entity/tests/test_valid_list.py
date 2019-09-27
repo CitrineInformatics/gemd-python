@@ -1,5 +1,6 @@
 """Tests of the ValidList class."""
 import pytest
+
 from taurus.entity.valid_list import ValidList
 
 
@@ -13,15 +14,13 @@ def test_access_data():
     assert lo_strings == ['a', 'b', 'c', 'd', 'e', 'f']
 
     with pytest.raises(TypeError):
-        ValidList(_list=tuple([1, 1]), content_type=1)
-    with pytest.raises(TypeError):
-        ValidList(_list=tuple([1, 1]), content_type=None)
-    with pytest.raises(TypeError):
         lo_strings[0] = 1
     with pytest.raises(TypeError):
         lo_strings.append(1)
     with pytest.raises(TypeError):
         lo_strings.extend(tuple([1]))
+    with pytest.raises(TypeError):
+        lo_strings.extend(1)
     with pytest.raises(TypeError):
         lo_strings.insert(2, 1)
 
@@ -47,4 +46,16 @@ def test_triggers():
     vlst.append(1)
     vlst.extend([1])
     vlst.insert(2, 1)
+    vlst[0] = 17
     assert len(vlst) == 5
+    assert len(stash) == 6
+
+
+def test_invalid_content():
+    """Test that an invalid content_type throws a TypeError."""
+    with pytest.raises(TypeError):
+        ValidList(['z'], content_type={'types': [str]})
+    with pytest.raises(TypeError):
+        ValidList(_list=tuple([1, 1]), content_type=1)
+    with pytest.raises(TypeError):
+        ValidList(_list=tuple([1, 1]), content_type=None)

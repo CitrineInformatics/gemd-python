@@ -6,7 +6,7 @@ from taurus.entity.bounds.real_bounds import RealBounds
 
 
 def test_contains():
-    """Make sure unit conversions are applied to boundss for contains."""
+    """Make sure unit conversions are applied to bounds for contains."""
     dim = RealBounds(lower_bound=0, upper_bound=100, default_units="degC")
     dim2 = RealBounds(lower_bound=33, upper_bound=200, default_units="degF")
     assert dim.contains(dim2)
@@ -37,6 +37,9 @@ def test_constructor_error():
         RealBounds(0, float("inf"), "meter")
 
     with pytest.raises(ValueError):
+        RealBounds(None, 10, '')
+
+    with pytest.raises(ValueError):
         RealBounds(0, 100)
 
     with pytest.raises(ValueError):
@@ -47,5 +50,6 @@ def test_type_mismatch():
     """Test that incompatible types cannot be matched against RealBounds."""
     bounds = RealBounds(0, 1, default_units="meters")
     assert not bounds.contains(IntegerBounds(0, 1))
+    assert not bounds.contains(None)
     with pytest.raises(TypeError):
         bounds.contains([.33, .66])

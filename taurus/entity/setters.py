@@ -51,7 +51,7 @@ def validate_str(obj):
 
     """
     if not isinstance(obj, str):
-        raise ValueError("Expected a string but got {} instead".format(type(obj)))
+        raise TypeError("Expected a string but got {} instead".format(type(obj)))
 
     # If python 2 and the string isn't already unicode, turn it into unicode"""
     try:
