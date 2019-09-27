@@ -3,6 +3,7 @@ import json
 import pytest
 
 from taurus.client.json_encoder import dumps, loads, copy, thin_dumps
+from taurus.entity.dict_serializable import DictSerializable
 from taurus.entity.case_insensitive_dict import CaseInsensitiveDict
 from taurus.entity.attribute.condition import Condition
 from taurus.entity.attribute.parameter import Parameter
@@ -101,6 +102,21 @@ def test_unexpected_serialization():
 
     with pytest.raises(TypeError):
         dumps(ProcessRun("A process", notes=DummyClass("something")))
+
+
+def test_unexpected_deserialization():
+    """Trying to deserialize an unexpected class should throw a TypeError."""
+    class DummyClass(DictSerializable):
+        typ = 'dummy_class'
+
+        def __init__(self, foo):
+            self.foo = foo
+
+    # DummyClass can be serialized because it is a DictSerializable, but cannot be
+    # deserialized because it is not in the _clazzes list.
+    serialized = dumps(ProcessRun("A process", notes=DummyClass("something")))
+    with pytest.raises(TypeError):
+        loads(serialized)
 
 
 def test_case_insensitive_rehydration():

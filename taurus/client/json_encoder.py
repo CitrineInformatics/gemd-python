@@ -208,7 +208,7 @@ def _loado(d, index):
         obj = LinkByUID.from_dict(d)
         return obj
     else:
-        raise ValueError("Unexpected base object type: {}".format(typ))  # pragma: no cover
+        raise TypeError("Unexpected base object type: {}".format(typ))
 
     if isinstance(obj, BaseEntity):
         for (scope, id) in obj.uids.items():
