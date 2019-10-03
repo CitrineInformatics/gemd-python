@@ -55,34 +55,44 @@ def make_cake():
 
     cake.process = ProcessRun(name='Icing')
     for ingredient in (baked, frosting):
-        IngredientRun(material=ingredient, process=cake.process)
+        IngredientRun(name='{} input'.format(ingredient.name),
+                      material=ingredient, process=cake.process)
 
     cake_taste = MeasurementRun(name='Final Taste', material=cake)
     cake_appearance = MeasurementRun(name='Final Appearance', material=cake)
 
     baked.process = ProcessRun(name='Baking')
-    IngredientRun(material=batter, process=baked.process)
+    IngredientRun(name='{} input'.format(ingredient.name),
+                  material=batter, process=baked.process)
 
     batter.process = ProcessRun(name='Mixing Batter')
     for ingredient in (wetmix, drymix, milk):
-        IngredientRun(material=ingredient, process=batter.process)
+        IngredientRun(name='{} input'.format(ingredient.name),
+                      material=ingredient, process=batter.process)
 
     wetmix.process = ProcessRun(name='Mixing Wet')
     for ingredient in (sugar, butter, eggs, vanilla):
-        IngredientRun(material=ingredient, process=wetmix.process)
+        IngredientRun(name='{} input'.format(ingredient.name),
+                      material=ingredient, process=wetmix.process)
 
     drymix.process = ProcessRun(name='Mixing Dry')
     for ingredient in (flour, baking_powder, salt):
-        IngredientRun(material=ingredient, process=drymix.process)
+        IngredientRun(name='{} input'.format(ingredient.name),
+                      material=ingredient, process=drymix.process)
 
     set_uuids(cake)
 
     frosting.process = ProcessRun(name='Mixing Frosting')
-    IngredientRun(material=LinkByUID.from_entity(butter), process=frosting.process)
-    IngredientRun(material=chocolate, process=frosting.process)
-    IngredientRun(material=powder_sugar, process=frosting.process)
-    IngredientRun(material=LinkByUID.from_entity(vanilla), process=frosting.process)
-    IngredientRun(material=LinkByUID.from_entity(milk), process=frosting.process)
+    IngredientRun(name='{} input'.format(butter.name),
+                  material=LinkByUID.from_entity(butter), process=frosting.process)
+    IngredientRun(name='{} input'.format(chocolate.name),
+                  material=chocolate, process=frosting.process)
+    IngredientRun(name='{} input'.format(powder_sugar.name),
+                  material=powder_sugar, process=frosting.process)
+    IngredientRun(name='{} input'.format(vanilla.name),
+                  material=LinkByUID.from_entity(vanilla), process=frosting.process)
+    IngredientRun(name='{} input'.format(milk.name),
+                  material=LinkByUID.from_entity(milk), process=frosting.process)
 
     frosting_taste = MeasurementRun(name='Frosting Taste', material=frosting)
     frosting_sweetness = MeasurementRun(name='Frosting Sweetness', material=frosting)
@@ -126,27 +136,38 @@ def make_cake():
 
     # and abstract ingredients
     for run in cake.process.ingredients:
-        run.spec = IngredientSpec(material=run.material.spec, process=cake.process.spec)
+        run.spec = IngredientSpec(name='{} input'.format(run.material.spec.name),
+                                  material=run.material.spec, process=cake.process.spec)
 
     for run in baked.process.ingredients:
-        run.spec = IngredientSpec(material=run.material.spec, process=baked.process.spec)
+        run.spec = IngredientSpec(name='{} input'.format(run.material.spec.name),
+                                  material=run.material.spec, process=baked.process.spec)
 
     for run in batter.process.ingredients:
-        run.spec = IngredientSpec(material=run.material.spec, process=batter.process.spec)
+        run.spec = IngredientSpec(name='{} input'.format(run.material.spec.name),
+                                  material=run.material.spec, process=batter.process.spec)
 
     for run in wetmix.process.ingredients:
-        run.spec = IngredientSpec(material=run.material.spec, process=wetmix.process.spec)
+        run.spec = IngredientSpec(name='{} input'.format(run.material.spec.name),
+                                  material=run.material.spec, process=wetmix.process.spec)
 
     for run in drymix.process.ingredients:
-        run.spec = IngredientSpec(material=run.material.spec, process=drymix.process.spec)
+        run.spec = IngredientSpec(name='{} input'.format(run.material.spec.name),
+                                  material=run.material.spec, process=drymix.process.spec)
 
     set_uuids(cake)
 
-    IngredientSpec(material=LinkByUID.from_entity(butter.spec), process=frosting.spec.process)
-    IngredientSpec(material=chocolate.spec, process=frosting.spec.process)
-    IngredientSpec(material=powder_sugar.spec, process=frosting.spec.process)
-    IngredientSpec(material=LinkByUID.from_entity(vanilla.spec), process=frosting.spec.process)
-    IngredientSpec(material=LinkByUID.from_entity(milk.spec), process=frosting.spec.process)
+    print(butter)
+
+    for run in frosting.process.ingredients:
+        if isinstance(run.material, LinkByUID):
+            mat = next(x for x in [butter, vanilla, milk] if x.uids['auto'] == run.material.id)
+            run.spec = IngredientSpec(name='{} input'.format(mat.spec.name),
+                                      material=LinkByUID.from_entity(mat.spec),
+                                      process=frosting.process.spec)
+        else:
+            run.spec = IngredientSpec(name='{} input'.format(run.material.spec.name),
+                                      material=run.material.spec, process=frosting.process.spec)
 
     # and spec out the measurements
     cake_taste.spec = MeasurementSpec(name='Taste')
