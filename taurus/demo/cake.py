@@ -32,7 +32,6 @@ from taurus.entity.util import complete_material_history
 
 def make_cake():
     """Define all objects that go into making a demo cake."""
-    
     cake = MaterialRun(name='Cake')
 
     baked = MaterialRun(name='Baked Cake')
