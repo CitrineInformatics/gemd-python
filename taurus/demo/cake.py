@@ -157,17 +157,16 @@ def make_cake():
 
     set_uuids(cake)
 
-    print(butter)
-
-    for run in frosting.process.ingredients:
-        if isinstance(run.material, LinkByUID):
-            mat = next(x for x in [butter, vanilla, milk] if x.uids['auto'] == run.material.id)
-            run.spec = IngredientSpec(name='{} input'.format(mat.spec.name),
-                                      material=LinkByUID.from_entity(mat.spec),
-                                      process=frosting.process.spec)
+    for ing_run in frosting.process.ingredients:
+        if isinstance(ing_run.material, LinkByUID):
+            mat = next(x for x in [butter, vanilla, milk] if x.uids['auto'] == ing_run.material.id)
+            ing_run.spec = IngredientSpec(name='{} input'.format(mat.spec.name),
+                                          material=LinkByUID.from_entity(mat.spec),
+                                          process=frosting.process.spec)
         else:
-            run.spec = IngredientSpec(name='{} input'.format(run.material.spec.name),
-                                      material=run.material.spec, process=frosting.process.spec)
+            ing_run.spec = IngredientSpec(name='{} input'.format(ing_run.material.spec.name),
+                                          material=ing_run.material.spec,
+                                          process=frosting.process.spec)
 
     # and spec out the measurements
     cake_taste.spec = MeasurementSpec(name='Taste')
