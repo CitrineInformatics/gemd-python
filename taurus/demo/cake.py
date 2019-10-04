@@ -30,8 +30,56 @@ from taurus.util.impl import set_uuids
 from taurus.entity.util import complete_material_history
 
 
+def make_cake_templates():
+    """Define all templates independently, since in the wild this will be an independent operation"""
+    tmpl = dict()
+
+    # Attributes
+    tmpl['Cooking time'] = ConditionTemplate(
+        name="Cooking time",
+        bounds=RealBounds(0, 7 * 24.0, "hr")
+    )
+    tmpl["Oven temperature setting"] = ParameterTemplate(
+        name="Oven temperature setting",
+        bounds=RealBounds(0, 2000.0, "K")
+    )
+    tmpl["Oven temperature"] = ConditionTemplate(
+        name="Oven temperature",
+        bounds=RealBounds(0, 2000.0, "K")
+    )
+
+    tmpl["Tastiness"] = PropertyTemplate(
+        name="Tastiness",
+        bounds=IntegerBounds(lower_bound=1, upper_bound=10)
+    )
+
+    # Objects
+    tmpl["Baking in an oven"] = ProcessTemplate(
+        name="Baking in an oven",
+        conditions=[(tmpl["Oven temperature"], RealBounds(0, 700, "degF"))],
+        parameters=[(tmpl["Oven temperature setting"], RealBounds(100, 550, "degF"))]
+    )
+
+    tmpl["Taste test"] = MeasurementTemplate(
+        properties=[tmpl["Tastiness"]]
+    )
+
+    tmpl["Dessert"] = MaterialTemplate(
+        name="Dessert",
+        properties=[tmpl["Tastiness"]]
+    )
+
+    return tmpl
+
+
 def make_cake():
     """Define all objects that go into making a demo cake."""
+    ######################################################################
+    # Templates
+    tmpl = make_cake_templates()
+
+    ######################################################################
+    # Objects
     cake = MaterialRun(name='Cake')
 
     baked = MaterialRun(name='Baked Cake')
@@ -176,73 +224,42 @@ def make_cake():
 
     ######################################################################
     # Let's add some attributes
-    cook_time_template = ConditionTemplate(
-        name="Cooking time",
-        bounds=RealBounds(0, 7 * 24.0, "hr")
-    )
-    oven_temperature_setting_template = ParameterTemplate(
-        name="Oven temperature setting",
-        bounds=RealBounds(0, 10000.0, "K")
-    )
-    oven_temperature_template = ConditionTemplate(
-        name="Oven temperature",
-        bounds=RealBounds(0, 10000.0, "K")
-    )
-    baking_template = ProcessTemplate(
-        name="Baking in an oven",
-        conditions=[(oven_temperature_template, RealBounds(0, 700, "degF"))],
-        parameters=[(oven_temperature_setting_template, RealBounds(100, 550, "degF"))]
-    )
-
-    tastiness_template = PropertyTemplate(
-        name="Tastiness",
-        bounds=IntegerBounds(lower_bound=1, upper_bound=10)
-    )
-    taste_test_template = MeasurementTemplate(
-        properties=[tastiness_template]
-    )
-
     baked.process.conditions.append(Condition(name='Cooking time',
-                                              template=cook_time_template,
+                                              template=tmpl['Cooking time'],
                                               origin=Origin.MEASURED,
                                               value=NominalReal(nominal=48, units='min')))
     baked.spec.process.conditions.append(Condition(name='Cooking time',
-                                                   template=cook_time_template,
+                                                   template=tmpl['Cooking time'],
                                                    origin=Origin.SPECIFIED,
                                                    value=NormalReal(mean=50, std=5, units='min')))
     baked.process.conditions.append(Condition(name='Oven temperature',
                                               origin="measured",
                                               value=NominalReal(nominal=362, units='degF')))
     baked.spec.process.parameters.append(Parameter(name='Oven temperature setting',
-                                                   template=oven_temperature_setting_template,
+                                                   template=tmpl['Oven temperature setting'],
                                                    origin="specified",
                                                    value=NominalReal(nominal=350, units='degF')))
     cake_taste.properties.append(Property(name='Tastiness',
                                           origin=Origin.MEASURED,
-                                          template=tastiness_template,
+                                          template=tmpl['Tastiness'],
                                           value=NominalInteger(nominal=5)))
     cake_appearance.properties.append(Property(name='Visual Appeal',
                                                origin=Origin.MEASURED,
                                                value=NominalInteger(nominal=5)))
     frosting_taste.properties.append(Property(name='Tastiness',
                                               origin=Origin.MEASURED,
-                                              template=tastiness_template,
+                                              template=tmpl['Tastiness'],
                                               value=NominalInteger(nominal=4)))
     frosting_sweetness.properties.append(Property(name='Sweetness (Sucrose-basis)',
                                                   origin=Origin.MEASURED,
                                                   value=NominalReal(nominal=1.7, units='')))
 
-    baked.process.spec.template = baking_template
-    cake_taste.spec.template = taste_test_template
-    frosting_taste.spec.template = taste_test_template
+    baked.process.spec.template = tmpl['Baking in an oven']
+    cake_taste.spec.template = tmpl['Taste test']
+    frosting_taste.spec.template = tmpl['Taste test']
 
-    dessert_template = MaterialTemplate(
-        name="Dessert",
-        properties=[tastiness_template]
-    )
-
-    cake.spec.template = dessert_template
-    frosting.spec.template = dessert_template
+    cake.spec.template = tmpl['Dessert']
+    frosting.spec.template = tmpl['Dessert']
 
     return cake
 
