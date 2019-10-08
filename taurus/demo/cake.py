@@ -35,9 +35,7 @@ from taurus.entity.source.performed_source import PerformedSource
 
 
 def make_cake_templates():
-    """
-    Define all templates independently, since in the wild this will be an independent operation.
-    """
+    """Define all templates independently, as in the wild this will be an independent operation."""
     tmpl = dict()
 
     # Attributes
