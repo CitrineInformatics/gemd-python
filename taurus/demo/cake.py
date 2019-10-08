@@ -1,6 +1,8 @@
 """Bake a cake."""
 import json
 
+import random
+
 from taurus.client.json_encoder import thin_dumps
 from taurus.entity.attribute.condition import Condition
 from taurus.entity.attribute.parameter import Parameter
@@ -24,10 +26,12 @@ from taurus.entity.template.property_template import PropertyTemplate
 from taurus.entity.value.nominal_integer import NominalInteger
 from taurus.entity.value.nominal_real import NominalReal
 from taurus.entity.value.normal_real import NormalReal
+from taurus.entity.value.uniform_real import UniformReal
 from taurus.enumeration.origin import Origin
 from taurus.util.impl import set_uuids
 from taurus.entity.util import complete_material_history, make_instance
 from taurus.entity.file_link import FileLink
+from taurus.entity.source.performed_source import PerformedSource
 
 
 def make_cake_templates():
@@ -497,8 +501,10 @@ def make_cake_spec():
     return cake
 
 
-def make_cake():
+def make_cake(seed=None):
     """Define all objects that go into making a demo cake."""
+    if seed is not None:
+        random.seed(seed)
     ######################################################################
     # Parent Objects
     tmpl = make_cake_templates()
@@ -507,6 +513,9 @@ def make_cake():
     ######################################################################
     # Objects
     cake = make_instance(cake_spec)
+    operators = ['gwash', 'jadams', 'thomasj', 'jmadison', 'jmonroe', 'jqadams']
+    cake.process.source = PerformedSource(performed_by=random.choice(operators),
+                                          performed_date='2019-03-14')
     # Replace Abstract/In General
     queue = [cake]
     while queue:
@@ -518,6 +527,28 @@ def make_cake():
             queue.extend(item.ingredients)
         elif isinstance(item, IngredientRun):
             queue.append(item.material)
+            fuzz = 0.95 + 0.1 * random.random()
+            if item.spec.absolute_quantity is not None:
+                item.absolute_quantity = \
+                    NormalReal(mean=fuzz * item.spec.absolute_quantity.nominal,
+                               std=0.05 * item.spec.absolute_quantity.nominal,
+                               units=item.spec.absolute_quantity.units)
+            if item.spec.volume_fraction is not None:
+                item.volume_fraction = \
+                    NormalReal(mean=fuzz * item.spec.volume_fraction.nominal,
+                               std=0.05 * item.spec.volume_fraction.nominal,
+                               units=item.spec.volume_fraction.units)
+            if item.spec.mass_fraction is not None:
+                item.mass_fraction = \
+                    UniformReal(lower_bound=(fuzz - 0.05) * item.spec.mass_fraction.nominal,
+                                upper_bound=(fuzz + 0.05) * item.spec.mass_fraction.nominal,
+                                units=item.spec.mass_fraction.units)
+            if item.spec.number_fraction is not None:
+                item.number_fraction = \
+                    NormalReal(mean=fuzz * item.spec.number_fraction.nominal,
+                               std=0.05 * item.spec.number_fraction.nominal,
+                               units=item.spec.number_fraction.units)
+
         else:
             raise TypeError("Unexpected object in the queue")
 
@@ -581,7 +612,7 @@ def make_cake():
 
 
 if __name__ == "__main__":
-    cake = make_cake()
+    cake = make_cake(seed=42)
     set_uuids(cake)
 
     with open("example_taurus_material_history.json", "w") as f:
