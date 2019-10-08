@@ -31,7 +31,9 @@ from taurus.entity.file_link import FileLink
 
 
 def make_cake_templates():
-    """Define all templates independently, since in the wild this will be an independent operation"""
+    """
+    Define all templates independently, since in the wild this will be an independent operation.
+    """
     tmpl = dict()
 
     # Attributes
@@ -129,7 +131,8 @@ def make_cake_spec():
         tags=list(frosting.tags),
         labels=['coating'],
         process=cake.process,
-        material=frosting
+        material=frosting,
+        absolute_quantity=NominalReal(nominal=1.0208, units='kg')
     )
 
     baked_cake = MaterialSpec(
@@ -223,7 +226,8 @@ def make_cake_spec():
         tags=list(drymix.tags),
         labels=['dry'],
         process=batter.process,
-        material=drymix
+        material=drymix,
+        absolute_quantity=NominalReal(nominal=3.052, units='cups')
     )
 
     ########################
@@ -247,7 +251,8 @@ def make_cake_spec():
         tags=list(flour.tags),
         labels=['dry'],
         process=drymix.process,
-        material=flour
+        material=flour,
+        volume_fraction=NominalReal(nominal=0.9829, units='')  # 3 cups
     )
 
     baking_powder = MaterialSpec(
@@ -270,7 +275,8 @@ def make_cake_spec():
         tags=list(baking_powder.tags),
         labels=['leavening', 'dry'],
         process=drymix.process,
-        material=baking_powder
+        material=baking_powder,
+        volume_fraction=NominalReal(nominal=0.0137, units='')  # 2 teaspoons
     )
 
     salt = MaterialSpec(
@@ -293,7 +299,8 @@ def make_cake_spec():
         tags=list(salt.tags),
         labels=['dry', 'seasoning'],
         process=drymix.process,
-        material=salt
+        material=salt,
+        volume_fraction=NominalReal(nominal=0.0034, units='')  # 1/2 teaspoon
     )
 
     sugar = MaterialSpec(
@@ -316,7 +323,8 @@ def make_cake_spec():
         tags=list(sugar.tags),
         labels=['wet', 'sweetener'],
         process=wetmix.process,
-        material=sugar
+        material=sugar,
+        absolute_quantity=NominalReal(nominal=2, units='cups')
     )
 
     butter = MaterialSpec(
@@ -339,14 +347,16 @@ def make_cake_spec():
         tags=list(butter.tags),
         labels=['wet', 'shortening'],
         process=wetmix.process,
-        material=butter
+        material=butter,
+        absolute_quantity=NominalReal(nominal=1, units='cups')
     )
     IngredientSpec(
         name="{} input".format(butter.name),
         tags=list(butter.tags),
         labels=['shortening'],
         process=frosting.process,
-        material=butter
+        material=butter,
+        mass_fraction=NominalReal(nominal=0.1056, units='')  # 1/2 c @ 0.911 g/cc
     )
 
     eggs = MaterialSpec(
@@ -369,7 +379,8 @@ def make_cake_spec():
         tags=list(eggs.tags),
         labels=['wet'],
         process=wetmix.process,
-        material=eggs
+        material=eggs,
+        absolute_quantity=NominalReal(nominal=4, units='')
     )
 
     vanilla = MaterialSpec(
@@ -392,14 +403,16 @@ def make_cake_spec():
         tags=list(vanilla.tags),
         labels=['wet', 'flavoring'],
         process=wetmix.process,
-        material=vanilla
+        material=vanilla,
+        absolute_quantity=NominalReal(nominal=2, units='teaspoons')
     )
     IngredientSpec(
         name="{} input".format(vanilla.name),
         tags=list(vanilla.tags),
         labels=['flavoring'],
         process=frosting.process,
-        material=vanilla
+        material=vanilla,
+        mass_fraction=NominalReal(nominal=0.0085, units='')  # 2 tsp @ 0.879 g/cc
     )
 
     milk = MaterialSpec(
@@ -421,15 +434,17 @@ def make_cake_spec():
         name="{} input".format(milk.name),
         tags=list(milk.tags),
         labels=['wet'],
-        process=wetmix.process,
-        material=milk
+        process=batter.process,
+        material=milk,
+        absolute_quantity=NominalReal(nominal=1, units='cup')
     )
     IngredientSpec(
         name="{} input".format(milk.name),
         tags=list(milk.tags),
         labels=[],
         process=frosting.process,
-        material=milk
+        material=milk,
+        mass_fraction=NominalReal(nominal=0.0600, units='')  # 1/4 c @ 1.037 g/cc
     )
 
     chocolate = MaterialSpec(
@@ -452,7 +467,8 @@ def make_cake_spec():
         tags=list(chocolate.tags),
         labels=['flavoring'],
         process=frosting.process,
-        material=chocolate
+        material=chocolate,
+        mass_fraction=NominalReal(nominal=0.0833, units='')  # 3 oz.
     )
 
     powder_sugar = MaterialSpec(
@@ -475,7 +491,8 @@ def make_cake_spec():
         tags=list(powder_sugar.tags),
         labels=['flavoring'],
         process=frosting.process,
-        material=powder_sugar
+        material=powder_sugar,
+        mass_fraction=NominalReal(nominal=0.7426, units='')  # 4 c @ 0.801 g/cc
     )
     return cake
 
@@ -494,7 +511,7 @@ def make_cake():
     queue = [cake]
     while queue:
         item = queue.pop(0)
-        item.name = item.name.replace('Abstract ','').replace(', in General','')
+        item.name = item.name.replace('Abstract ', '').replace(', in General', '')
         if isinstance(item, MaterialRun):
             queue.append(item.process)
         elif isinstance(item, ProcessRun):
