@@ -18,7 +18,3 @@ def test_link_by_uid():
     hist = complete_material_history(root)
     copy = loads(dumps(hist))[-1]
     assert copy.process.ingredients[0].material == copy.process.ingredients[1].material
-
-
-if __name__ == '__main__':
-    test_link_by_uid()
