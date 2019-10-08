@@ -519,6 +519,7 @@ def make_cake(seed=None):
     while queue:
         item = queue.pop(0)
         item.name = item.name.replace('Abstract ', '').replace(', in General', '')
+
         if isinstance(item, MaterialRun):
             queue.append(item.process)
         elif isinstance(item, ProcessRun):
@@ -606,12 +607,19 @@ def make_cake(seed=None):
     cake.spec.template = tmpl['Dessert']
     frosting.spec.template = tmpl['Dessert']
 
+    # Code to force all scopes to 'id'
+    set_uuids([cake, cake_taste, cake_appearance, frosting_taste, frosting_sweetness], name='id')
+    id_queue = [x for x in cake.process.ingredients]
+    while id_queue:
+        x = id_queue.pop(0)
+        set_uuids([x], name='id')
+        id_queue += x.material.process.ingredients
+
     return cake
 
 
 if __name__ == "__main__":
     cake = make_cake(seed=42)
-    set_uuids(cake)
 
     with open("example_taurus_material_history.json", "w") as f:
         context_list = complete_material_history(cake)
