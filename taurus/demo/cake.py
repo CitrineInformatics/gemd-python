@@ -7,7 +7,6 @@ from taurus.entity.attribute.parameter import Parameter
 from taurus.entity.attribute.property import Property
 from taurus.entity.bounds.integer_bounds import IntegerBounds
 from taurus.entity.bounds.real_bounds import RealBounds
-from taurus.entity.link_by_uid import LinkByUID
 from taurus.entity.object.ingredient_run import IngredientRun
 from taurus.entity.object.ingredient_spec import IngredientSpec
 from taurus.entity.object.material_run import MaterialRun
@@ -27,7 +26,8 @@ from taurus.entity.value.nominal_real import NominalReal
 from taurus.entity.value.normal_real import NormalReal
 from taurus.enumeration.origin import Origin
 from taurus.util.impl import set_uuids
-from taurus.entity.util import complete_material_history
+from taurus.entity.util import complete_material_history, make_instance
+from taurus.entity.file_link import FileLink
 
 
 def make_cake_templates():
@@ -69,152 +69,451 @@ def make_cake_templates():
         properties=[tmpl["Tastiness"]]
     )
 
+    tmpl["Generic Material"] = MaterialTemplate(name="Generic")
+    tmpl["Mixing"] = ProcessTemplate(name="Mixing")
+    tmpl["Procurement"] = ProcessTemplate(name="Procurement")
+
     return tmpl
+
+
+def make_cake_spec():
+    """Define a recipe for making a cake."""
+    ###############################################################################################
+    # Templates
+    tmpl = make_cake_templates()
+
+    ###############################################################################################
+    # Objects
+    cake = MaterialSpec(
+        name="Abstract Cake",
+        template=tmpl["Dessert"],
+        process=ProcessSpec(
+            name='Icing, in General',
+            tags=[
+                'spreading'
+            ],
+            notes='The act of covering a baked output with frosting'
+        ),
+        file_links=FileLink(
+            filename="Becky's Butter Cake",
+            url='https://www.landolakes.com/recipe/16730/becky-s-butter-cake/'
+        ),
+        tags=[
+            'cake::butter cake',
+            'dessert::baked::cake',
+            'iced::chocolate'
+        ],
+        notes='Butter cake recipe reminiscent of the 1-2-3-4 cake that Grandma may have baked.'
+    )
+
+    ########################
+    frosting = MaterialSpec(
+        name="Abstract Frosting",
+        template=tmpl["Dessert"],
+        process=ProcessSpec(
+            name='Mixing Frosting, in General',
+            template=tmpl["Mixing"],
+            tags=[
+                'mixing'
+            ],
+            notes='Combining ingredients to make a sweet frosting'
+        ),
+        tags=[
+            'frosting::chocolate',
+            'topping::chocolate'
+        ],
+        notes='Chocolate frosting'
+    )
+    IngredientSpec(
+        name="{} input".format(frosting.name),
+        tags=list(frosting.tags),
+        labels=['coating'],
+        process=cake.process,
+        material=frosting
+    )
+
+    baked_cake = MaterialSpec(
+        name="Abstract Baked Cake",
+        template=tmpl["Generic Material"],
+        process=ProcessSpec(
+            name='Baking, in General',
+            template=tmpl["Baking in an oven"],
+            tags=[
+                'oven::baking'
+            ],
+            notes='Using heat to convert batter into a solid matrix'
+        ),
+        tags=[
+        ],
+        notes='The cakey part of the cake'
+    )
+    IngredientSpec(
+        name="{} input".format(baked_cake.name),
+        tags=list(baked_cake.tags),
+        labels=['substrate'],
+        process=cake.process,
+        material=baked_cake
+    )
+
+    ########################
+    batter = MaterialSpec(
+        name="Abstract Batter",
+        template=tmpl["Generic Material"],
+        process=ProcessSpec(
+            name='Mixing Batter, in General',
+            template=tmpl["Mixing"],
+            tags=[
+                'mixing'
+            ],
+            notes='Combining ingredients to make a baking feedstock'
+        ),
+        tags=[
+        ],
+        notes='The fluid that converts to cake with heat'
+    )
+    IngredientSpec(
+        name="{} input".format(batter.name),
+        tags=list(batter.tags),
+        labels=['precursor'],
+        process=baked_cake.process,
+        material=batter
+    )
+
+    ########################
+    wetmix = MaterialSpec(
+        name="Abstract Wet Mix",
+        template=tmpl["Generic Material"],
+        process=ProcessSpec(
+            name='Mixing Wet, in General',
+            template=tmpl["Mixing"],
+            tags=[
+                'mixing'
+            ],
+            notes='Combining wet ingredients to make a baking feedstock'
+        ),
+        tags=[
+        ],
+        notes='The wet fraction of a batter'
+    )
+    IngredientSpec(
+        name="{} input".format(wetmix.name),
+        tags=list(wetmix.tags),
+        labels=['wet'],
+        process=batter.process,
+        material=wetmix
+    )
+
+    drymix = MaterialSpec(
+        name="Abstract Dry Mix",
+        template=tmpl["Generic Material"],
+        process=ProcessSpec(
+            name='Mixing Dry, in General',
+            template=tmpl["Mixing"],
+            tags=[
+                'mixing'
+            ],
+            notes='Combining dry ingredients to make a baking feedstock'
+        ),
+        tags=[
+        ],
+        notes='The dry fraction of a batter'
+    )
+    IngredientSpec(
+        name="{} input".format(drymix.name),
+        tags=list(drymix.tags),
+        labels=['dry'],
+        process=batter.process,
+        material=drymix
+    )
+
+    ########################
+    flour = MaterialSpec(
+        name="Abstract Flour",
+        template=tmpl["Generic Material"],
+        process=ProcessSpec(
+            name='Buying Flour, in General',
+            template=tmpl["Procurement"],
+            tags=[
+                'purchase::dry-goods'
+            ],
+            notes='Purchasing all purpose flour'
+        ),
+        tags=[
+        ],
+        notes='All-purpose flour'
+    )
+    IngredientSpec(
+        name="{} input".format(flour.name),
+        tags=list(flour.tags),
+        labels=['dry'],
+        process=drymix.process,
+        material=flour
+    )
+
+    baking_powder = MaterialSpec(
+        name="Abstract Baking Powder",
+        template=tmpl["Generic Material"],
+        process=ProcessSpec(
+            name='Buying Baking Powder, in General',
+            template=tmpl["Procurement"],
+            tags=[
+                'purchase::dry-goods'
+            ],
+            notes='Purchasing baking powder'
+        ),
+        tags=[
+        ],
+        notes='Leavening agent for cake'
+    )
+    IngredientSpec(
+        name="{} input".format(baking_powder.name),
+        tags=list(baking_powder.tags),
+        labels=['leavening', 'dry'],
+        process=drymix.process,
+        material=baking_powder
+    )
+
+    salt = MaterialSpec(
+        name="Abstract Salt",
+        template=tmpl["Generic Material"],
+        process=ProcessSpec(
+            name='Buying Salt, in General',
+            template=tmpl["Procurement"],
+            tags=[
+                'purchase::dry-goods'
+            ],
+            notes='Purchasing salt'
+        ),
+        tags=[
+        ],
+        notes='Plain old NaCl'
+    )
+    IngredientSpec(
+        name="{} input".format(salt.name),
+        tags=list(salt.tags),
+        labels=['dry', 'seasoning'],
+        process=drymix.process,
+        material=salt
+    )
+
+    sugar = MaterialSpec(
+        name="Abstract Sugar",
+        template=tmpl["Generic Material"],
+        process=ProcessSpec(
+            name='Buying Sugar, in General',
+            template=tmpl["Procurement"],
+            tags=[
+                'purchase::dry-goods'
+            ],
+            notes='Purchasing all purpose flour'
+        ),
+        tags=[
+        ],
+        notes='Sugar'
+    )
+    IngredientSpec(
+        name="{} input".format(sugar.name),
+        tags=list(sugar.tags),
+        labels=['wet', 'sweetener'],
+        process=wetmix.process,
+        material=sugar
+    )
+
+    butter = MaterialSpec(
+        name="Abstract Butter",
+        template=tmpl["Generic Material"],
+        process=ProcessSpec(
+            name='Buying Butter, in General',
+            template=tmpl["Procurement"],
+            tags=[
+                'purchase::produce'
+            ],
+            notes='Purchasing butter'
+        ),
+        tags=[
+        ],
+        notes='Shortening for making rich, buttery baked goods'
+    )
+    IngredientSpec(
+        name="{} input".format(butter.name),
+        tags=list(butter.tags),
+        labels=['wet', 'shortening'],
+        process=wetmix.process,
+        material=butter
+    )
+    IngredientSpec(
+        name="{} input".format(butter.name),
+        tags=list(butter.tags),
+        labels=['shortening'],
+        process=frosting.process,
+        material=butter
+    )
+
+    eggs = MaterialSpec(
+        name="Abstract Eggs",
+        template=tmpl["Generic Material"],
+        process=ProcessSpec(
+            name='Buying Eggs, in General',
+            template=tmpl["Procurement"],
+            tags=[
+                'purchase::produce'
+            ],
+            notes='Purchasing eggs'
+        ),
+        tags=[
+        ],
+        notes=''
+    )
+    IngredientSpec(
+        name="{} input".format(eggs.name),
+        tags=list(eggs.tags),
+        labels=['wet'],
+        process=wetmix.process,
+        material=eggs
+    )
+
+    vanilla = MaterialSpec(
+        name="Abstract Vanilla",
+        template=tmpl["Generic Material"],
+        process=ProcessSpec(
+            name='Buying Vanilla, in General',
+            template=tmpl["Procurement"],
+            tags=[
+                'purchase::dry-goods'
+            ],
+            notes='Purchasing vanilla'
+        ),
+        tags=[
+        ],
+        notes=''
+    )
+    IngredientSpec(
+        name="{} input".format(vanilla.name),
+        tags=list(vanilla.tags),
+        labels=['wet', 'flavoring'],
+        process=wetmix.process,
+        material=vanilla
+    )
+    IngredientSpec(
+        name="{} input".format(vanilla.name),
+        tags=list(vanilla.tags),
+        labels=['flavoring'],
+        process=frosting.process,
+        material=vanilla
+    )
+
+    milk = MaterialSpec(
+        name="Abstract Milk",
+        template=tmpl["Generic Material"],
+        process=ProcessSpec(
+            name='Buying Milk, in General',
+            template=tmpl["Procurement"],
+            tags=[
+                'purchase::produce'
+            ],
+            notes='Purchasing milk'
+        ),
+        tags=[
+        ],
+        notes=''
+    )
+    IngredientSpec(
+        name="{} input".format(milk.name),
+        tags=list(milk.tags),
+        labels=['wet'],
+        process=wetmix.process,
+        material=milk
+    )
+    IngredientSpec(
+        name="{} input".format(milk.name),
+        tags=list(milk.tags),
+        labels=[],
+        process=frosting.process,
+        material=milk
+    )
+
+    chocolate = MaterialSpec(
+        name="Abstract Chocolate",
+        template=tmpl["Generic Material"],
+        process=ProcessSpec(
+            name='Buying Chocolate, in General',
+            template=tmpl["Procurement"],
+            tags=[
+                'purchase::dry-goods'
+            ],
+            notes='Purchasing chocolate'
+        ),
+        tags=[
+        ],
+        notes=''
+    )
+    IngredientSpec(
+        name="{} input".format(chocolate.name),
+        tags=list(chocolate.tags),
+        labels=['flavoring'],
+        process=frosting.process,
+        material=chocolate
+    )
+
+    powder_sugar = MaterialSpec(
+        name="Abstract Powdered Sugar",
+        template=tmpl["Generic Material"],
+        process=ProcessSpec(
+            name='Buying Powdered Sugar, in General',
+            template=tmpl["Procurement"],
+            tags=[
+                'purchase::dry-goods'
+            ],
+            notes='Purchasing powdered sugar'
+        ),
+        tags=[
+        ],
+        notes='Granulated sugar mixed with corn starch'
+    )
+    IngredientSpec(
+        name="{} input".format(powder_sugar.name),
+        tags=list(powder_sugar.tags),
+        labels=['flavoring'],
+        process=frosting.process,
+        material=powder_sugar
+    )
+    return cake
 
 
 def make_cake():
     """Define all objects that go into making a demo cake."""
     ######################################################################
-    # Templates
+    # Parent Objects
     tmpl = make_cake_templates()
+    cake_spec = make_cake_spec()
 
     ######################################################################
     # Objects
-    cake = MaterialRun(name='Cake')
+    cake = make_instance(cake_spec)
+    # Replace Abstract/In General
+    queue = [cake]
+    while queue:
+        item = queue.pop(0)
+        item.name = item.name.replace('Abstract ','').replace(', in General','')
+        if isinstance(item, MaterialRun):
+            queue.append(item.process)
+        elif isinstance(item, ProcessRun):
+            queue.extend(item.ingredients)
+        elif isinstance(item, IngredientRun):
+            queue.append(item.material)
+        else:
+            raise TypeError("Unexpected object in the queue")
 
-    baked = MaterialRun(name='Baked Cake')
-    frosting = MaterialRun(name='Frosting')
+    frosting = \
+        next(x.material for x in cake.process.ingredients if 'rosting' in x.name)
+    baked = \
+        next(x.material for x in cake.process.ingredients if 'aked' in x.name)
 
-    batter = MaterialRun(name='Batter')
-
-    wetmix = MaterialRun(name='Wet Mix')
-    drymix = MaterialRun(name='Dry Mix')
-
-    flour = MaterialRun(name='Flour')
-    baking_powder = MaterialRun(name='Baking Powder')
-    salt = MaterialRun(name='Salt')
-    sugar = MaterialRun(name='Sugar')
-    butter = MaterialRun(name='Butter')
-    eggs = MaterialRun(name='Eggs')
-    vanilla = MaterialRun(name='Vanilla')
-    milk = MaterialRun(name='Milk')
-    chocolate = MaterialRun(name='Chocolate')
-    powder_sugar = MaterialRun(name='Powdered Sugar')
-
-    cake.process = ProcessRun(name='Icing')
-    for ingredient in (baked, frosting):
-        IngredientRun(name='{} input'.format(ingredient.name),
-                      material=ingredient, process=cake.process)
-
+    # Add measurements
     cake_taste = MeasurementRun(name='Final Taste', material=cake)
     cake_appearance = MeasurementRun(name='Final Appearance', material=cake)
-
-    baked.process = ProcessRun(name='Baking')
-    IngredientRun(name='{} input'.format(ingredient.name),
-                  material=batter, process=baked.process)
-
-    batter.process = ProcessRun(name='Mixing Batter')
-    for ingredient in (wetmix, drymix, milk):
-        IngredientRun(name='{} input'.format(ingredient.name),
-                      material=ingredient, process=batter.process)
-
-    wetmix.process = ProcessRun(name='Mixing Wet')
-    for ingredient in (sugar, butter, eggs, vanilla):
-        IngredientRun(name='{} input'.format(ingredient.name),
-                      material=ingredient, process=wetmix.process)
-
-    drymix.process = ProcessRun(name='Mixing Dry')
-    for ingredient in (flour, baking_powder, salt):
-        IngredientRun(name='{} input'.format(ingredient.name),
-                      material=ingredient, process=drymix.process)
-
-    set_uuids(cake)
-
-    frosting.process = ProcessRun(name='Mixing Frosting')
-    IngredientRun(name='{} input'.format(butter.name),
-                  material=LinkByUID.from_entity(butter), process=frosting.process)
-    IngredientRun(name='{} input'.format(chocolate.name),
-                  material=chocolate, process=frosting.process)
-    IngredientRun(name='{} input'.format(powder_sugar.name),
-                  material=powder_sugar, process=frosting.process)
-    IngredientRun(name='{} input'.format(vanilla.name),
-                  material=LinkByUID.from_entity(vanilla), process=frosting.process)
-    IngredientRun(name='{} input'.format(milk.name),
-                  material=LinkByUID.from_entity(milk), process=frosting.process)
-
     frosting_taste = MeasurementRun(name='Frosting Taste', material=frosting)
     frosting_sweetness = MeasurementRun(name='Frosting Sweetness', material=frosting)
-
-    ######################################################################
-    # And now let's create abstract cake
-    cake.spec = MaterialSpec(name='Abstract Cake')
-
-    baked.spec = MaterialSpec(name='Abstract Baked Cake')
-    frosting.spec = MaterialSpec(name='Abstract Frosting')
-
-    batter.spec = MaterialSpec(name='Abstract Batter')
-
-    wetmix.spec = MaterialSpec(name='Abstract Wet Mix')
-    drymix.spec = MaterialSpec(name='Abstract Dry Mix')
-
-    flour.spec = MaterialSpec(name='Abstract Flour')
-    baking_powder.spec = MaterialSpec(name='Abstract Baking Powder')
-    salt.spec = MaterialSpec(name='Abstract Salt')
-    sugar.spec = MaterialSpec(name='Abstract Sugar')
-    butter.spec = MaterialSpec(name='Abstract Butter')
-    eggs.spec = MaterialSpec(name='Abstract Eggs')
-    vanilla.spec = MaterialSpec(name='Abstract Vanilla')
-    milk.spec = MaterialSpec(name='Abstract Milk')
-    chocolate.spec = MaterialSpec(name='Abstract Chocolate')
-    powder_sugar.spec = MaterialSpec(name='Abstract Powdered Sugar')
-
-    # with abstract processes
-    cake.spec.process = ProcessSpec(name='Icing, in General')
-    cake.process.spec = cake.spec.process
-    baked.spec.process = ProcessSpec(name='Baking, in General')
-    baked.process.spec = baked.spec.process
-    batter.spec.process = ProcessSpec(name='Mixing Batter, in General')
-    batter.process.spec = batter.spec.process
-    wetmix.spec.process = ProcessSpec(name='Mixing Wet, in General')
-    wetmix.process.spec = wetmix.spec.process
-    drymix.spec.process = ProcessSpec(name='Mixing Dry, in General')
-    drymix.process.spec = drymix.spec.process
-    frosting.spec.process = ProcessSpec(name='Mixing Frosting, in General')
-    frosting.process.spec = frosting.spec.process
-
-    # and abstract ingredients
-    for run in cake.process.ingredients:
-        run.spec = IngredientSpec(name='{} input'.format(run.material.spec.name),
-                                  material=run.material.spec, process=cake.process.spec)
-
-    for run in baked.process.ingredients:
-        run.spec = IngredientSpec(name='{} input'.format(run.material.spec.name),
-                                  material=run.material.spec, process=baked.process.spec)
-
-    for run in batter.process.ingredients:
-        run.spec = IngredientSpec(name='{} input'.format(run.material.spec.name),
-                                  material=run.material.spec, process=batter.process.spec)
-
-    for run in wetmix.process.ingredients:
-        run.spec = IngredientSpec(name='{} input'.format(run.material.spec.name),
-                                  material=run.material.spec, process=wetmix.process.spec)
-
-    for run in drymix.process.ingredients:
-        run.spec = IngredientSpec(name='{} input'.format(run.material.spec.name),
-                                  material=run.material.spec, process=drymix.process.spec)
-
-    set_uuids(cake)
-
-    for ing_run in frosting.process.ingredients:
-        if isinstance(ing_run.material, LinkByUID):
-            mat = next(x for x in [butter, vanilla, milk] if x.uids['auto'] == ing_run.material.id)
-            ing_run.spec = IngredientSpec(name='{} input'.format(mat.spec.name),
-                                          material=LinkByUID.from_entity(mat.spec),
-                                          process=frosting.process.spec)
-        else:
-            ing_run.spec = IngredientSpec(name='{} input'.format(ing_run.material.spec.name),
-                                          material=ing_run.material.spec,
-                                          process=frosting.process.spec)
 
     # and spec out the measurements
     cake_taste.spec = MeasurementSpec(name='Taste')
