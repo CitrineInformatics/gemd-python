@@ -134,7 +134,7 @@ def make_cake_spec():
         labels=['coating'],
         process=cake.process,
         material=frosting,
-        absolute_quantity=NominalReal(nominal=1.0208, units='kg')
+        absolute_quantity=NominalReal(nominal=0.751, units='kg')
     )
 
     baked_cake = MaterialSpec(
@@ -358,7 +358,7 @@ def make_cake_spec():
         labels=['shortening'],
         process=frosting.process,
         material=butter,
-        mass_fraction=NominalReal(nominal=0.1056, units='')  # 1/2 c @ 0.911 g/cc
+        mass_fraction=NominalReal(nominal=0.1434, units='')  # 1/2 c @ 0.911 g/cc
     )
 
     eggs = MaterialSpec(
@@ -414,7 +414,7 @@ def make_cake_spec():
         labels=['flavoring'],
         process=frosting.process,
         material=vanilla,
-        mass_fraction=NominalReal(nominal=0.0085, units='')  # 2 tsp @ 0.879 g/cc
+        mass_fraction=NominalReal(nominal=0.0231, units='')  # 2 tsp @ 0.879 g/cc
     )
 
     milk = MaterialSpec(
@@ -446,7 +446,7 @@ def make_cake_spec():
         labels=[],
         process=frosting.process,
         material=milk,
-        mass_fraction=NominalReal(nominal=0.0600, units='')  # 1/4 c @ 1.037 g/cc
+        mass_fraction=NominalReal(nominal=0.0816, units='')  # 1/4 c @ 1.037 g/cc
     )
 
     chocolate = MaterialSpec(
@@ -470,7 +470,7 @@ def make_cake_spec():
         labels=['flavoring'],
         process=frosting.process,
         material=chocolate,
-        mass_fraction=NominalReal(nominal=0.0833, units='')  # 3 oz.
+        mass_fraction=NominalReal(nominal=0.1132, units='')  # 3 oz.
     )
 
     powder_sugar = MaterialSpec(
@@ -494,7 +494,7 @@ def make_cake_spec():
         labels=['flavoring'],
         process=frosting.process,
         material=powder_sugar,
-        mass_fraction=NominalReal(nominal=0.7426, units='')  # 4 c @ 0.801 g/cc
+        mass_fraction=NominalReal(nominal=0.6387, units='')  # 4 c @ 30 g/ 0.25 cups
     )
     return cake
 
