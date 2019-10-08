@@ -9,7 +9,6 @@ from taurus.entity.link_by_uid import LinkByUID
 
 def test_link_by_uid():
     """Test that linking works."""
-
     root = MaterialRun(name='root', process=ProcessRun(name='root proc'))
     leaf = MaterialRun(name='leaf', process=ProcessRun(name='leaf proc'))
     IngredientRun(process=root.process, material=leaf)
