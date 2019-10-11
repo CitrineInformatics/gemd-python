@@ -41,19 +41,23 @@ def make_cake_templates():
     # Attributes
     tmpl['Cooking time'] = ConditionTemplate(
         name="Cooking time",
+        description="The time elapsed during a cooking process",
         bounds=RealBounds(0, 7 * 24.0, "hr")
     )
     tmpl["Oven temperature setting"] = ParameterTemplate(
         name="Oven temperature setting",
+        description="Where the knob points",
         bounds=RealBounds(0, 2000.0, "K")
     )
     tmpl["Oven temperature"] = ConditionTemplate(
         name="Oven temperature",
+        description="Actual temperature measured by the thermocouple",
         bounds=RealBounds(0, 2000.0, "K")
     )
 
     tmpl["Tastiness"] = PropertyTemplate(
         name="Tastiness",
+        description="Yumminess on a fairly arbitrary scale",
         bounds=IntegerBounds(lower_bound=1, upper_bound=10)
     )
 
