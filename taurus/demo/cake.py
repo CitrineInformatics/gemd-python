@@ -519,6 +519,10 @@ def make_cake(seed=None):
     while queue:
         item = queue.pop(0)
         item.name = item.name.replace('Abstract ', '').replace(', in General', '')
+        if item.spec.tags is not None:
+            item.tags = list(item.spec.tags)
+        if item.spec.notes:  # None or empty string
+            item.notes = 'The spec says "{}"'.format(item.spec.notes)
 
         if isinstance(item, MaterialRun):
             queue.append(item.process)
