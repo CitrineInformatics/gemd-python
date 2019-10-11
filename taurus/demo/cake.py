@@ -41,25 +41,31 @@ def make_cake_templates():
     # Attributes
     tmpl['Cooking time'] = ConditionTemplate(
         name="Cooking time",
+        description="The time elapsed during a cooking process",
         bounds=RealBounds(0, 7 * 24.0, "hr")
     )
     tmpl["Oven temperature setting"] = ParameterTemplate(
         name="Oven temperature setting",
+        description="Where the knob points",
         bounds=RealBounds(0, 2000.0, "K")
     )
     tmpl["Oven temperature"] = ConditionTemplate(
         name="Oven temperature",
+        description="Actual temperature measured by the thermocouple",
         bounds=RealBounds(0, 2000.0, "K")
     )
 
     tmpl["Tastiness"] = PropertyTemplate(
         name="Tastiness",
+        description="Yumminess on a fairly arbitrary scale",
         bounds=IntegerBounds(lower_bound=1, upper_bound=10)
     )
 
     # Objects
     tmpl["Baking in an oven"] = ProcessTemplate(
         name="Baking in an oven",
+        description='Using heat to promote chemical reactions in a material',
+        allowed_labels=['precursor'],
         conditions=[(tmpl["Oven temperature"], RealBounds(0, 700, "degF"))],
         parameters=[(tmpl["Oven temperature setting"], RealBounds(100, 550, "degF"))]
     )
@@ -74,8 +80,15 @@ def make_cake_templates():
     )
 
     tmpl["Generic Material"] = MaterialTemplate(name="Generic")
-    tmpl["Mixing"] = ProcessTemplate(name="Mixing")
-    tmpl["Procurement"] = ProcessTemplate(name="Procurement")
+    tmpl["Icing"] = ProcessTemplate(name="Icing",
+                                    description='Applying a coating to a substrate',
+                                    allowed_labels=['coating', 'substrate'])
+    tmpl["Mixing"] = ProcessTemplate(name="Mixing",
+                                     description='Physically combining ingredients',
+                                     allowed_labels=['wet', 'dry', 'leavening', 'seasoning',
+                                                     'sweetener', 'shortening', 'flavoring'])
+    tmpl["Procurement"] = ProcessTemplate(name="Procurement",
+                                          description="Buyin' stuff")
 
     return tmpl
 
@@ -93,6 +106,7 @@ def make_cake_spec():
         template=tmpl["Dessert"],
         process=ProcessSpec(
             name='Icing, in General',
+            template=tmpl["Icing"],
             tags=[
                 'spreading'
             ],
@@ -131,6 +145,7 @@ def make_cake_spec():
     IngredientSpec(
         name="{} input".format(frosting.name),
         tags=list(frosting.tags),
+        notes='Seems like a lot of frosting',
         labels=['coating'],
         process=cake.process,
         material=frosting,
@@ -511,19 +526,28 @@ def make_cake(seed=None):
     ######################################################################
     # Objects
     cake = make_instance(cake_spec)
-    operators = ['gwash', 'jadams', 'thomasj', 'jmadison', 'jmonroe', 'jqadams']
+    operators = ['gwash', 'jadams', 'thomasj', 'jmadison', 'jmonroe']
     cake.process.source = PerformedSource(performed_by=random.choice(operators),
-                                          performed_date='2019-03-14')
+                                          performed_date='2015-03-14')
     # Replace Abstract/In General
     queue = [cake]
     while queue:
         item = queue.pop(0)
         item.name = item.name.replace('Abstract ', '').replace(', in General', '')
+        if item.spec.tags is not None:
+            item.tags = list(item.spec.tags)
+        if item.spec.notes:  # None or empty string
+            item.notes = 'The spec says "{}"'.format(item.spec.notes)
 
         if isinstance(item, MaterialRun):
             queue.append(item.process)
         elif isinstance(item, ProcessRun):
             queue.extend(item.ingredients)
+            if item.template.name == "Procurement":
+                item.source = PerformedSource(performed_by='hamilton',
+                                              performed_date='2015-02-17')
+            else:
+                item.source = cake.process.source
         elif isinstance(item, IngredientRun):
             queue.append(item.material)
             fuzz = 0.95 + 0.1 * random.random()
