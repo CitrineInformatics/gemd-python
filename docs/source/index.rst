@@ -6,10 +6,6 @@
 Welcome to the Taurus Documentation!
 ===================================================
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
 Taurus is the Python implementation of the Citrine data model, the full documentation of which
 can be found `here <https://citrineinformatics.github.io/taurus-documentation/>`_.
 
@@ -22,8 +18,10 @@ Table of Contents
    :maxdepth: 2
    :numbered: 4
 
+   depth/index
+
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
