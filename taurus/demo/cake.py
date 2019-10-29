@@ -71,6 +71,7 @@ def make_cake_templates():
     )
 
     tmpl["Taste test"] = MeasurementTemplate(
+        name="Taste test",
         properties=[tmpl["Tastiness"]]
     )
 
