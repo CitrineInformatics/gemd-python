@@ -67,7 +67,7 @@ def test_cake():
         elif isinstance(obj, IngredientRun):
             if obj.spec:
                 queue.append(obj.spec)
-                if obj.material:
+                if obj.material and isinstance(obj.material, MaterialRun):
                     assert obj.spec.material == obj.material.spec
             if obj.material:
                 queue.append(obj.material)
