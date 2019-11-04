@@ -8,7 +8,6 @@ Submodules
 
    taurus.entity.attribute.base_attribute
    taurus.entity.attribute.condition
-   taurus.entity.attribute.metadata
    taurus.entity.attribute.parameter
    taurus.entity.attribute.property
    taurus.entity.attribute.property_and_conditions

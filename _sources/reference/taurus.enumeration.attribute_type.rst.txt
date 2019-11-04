@@ -1,7 +1,0 @@
-taurus.enumeration.attribute\_type module
-=========================================
-
-.. automodule:: taurus.enumeration.attribute_type
-   :members:
-   :undoc-members:
-   :show-inheritance:

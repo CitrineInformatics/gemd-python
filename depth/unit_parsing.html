@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>taurus.demo.measurement_example module &#8212; Taurus 0.0.0 documentation</title>
+    <title>1.1. Unit Parsing &#8212; Taurus 0.0.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -14,6 +14,7 @@
     <script type="text/javascript" src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="1. In depth documentation" href="index.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -30,22 +31,13 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-taurus.demo.measurement_example">
-<span id="taurus-demo-measurement-example-module"></span><h1>taurus.demo.measurement_example module<a class="headerlink" href="#module-taurus.demo.measurement_example" title="Permalink to this headline">¶</a></h1>
-<p>Demonstrate attaching measurements to a material.</p>
-<dl class="function">
-<dt id="taurus.demo.measurement_example.make_demo_measurements">
-<code class="sig-prename descclassname">taurus.demo.measurement_example.</code><code class="sig-name descname">make_demo_measurements</code><span class="sig-paren">(</span><em class="sig-param">num_measurements</em>, <em class="sig-param">extra_tags=frozenset({})</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.demo.measurement_example.make_demo_measurements" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make a measurement object.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="taurus.demo.measurement_example.make_flexural_test_measurement">
-<code class="sig-prename descclassname">taurus.demo.measurement_example.</code><code class="sig-name descname">make_flexural_test_measurement</code><span class="sig-paren">(</span><em class="sig-param">my_id</em>, <em class="sig-param">deflection</em>, <em class="sig-param">extra_tags=frozenset({})</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.demo.measurement_example.make_flexural_test_measurement" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the stree, strain, and modulus.</p>
-<p>According to <a class="reference external" href="https://en.wikipedia.org/wiki/Three-point_flexural_test">https://en.wikipedia.org/wiki/Three-point_flexural_test</a></p>
-</dd></dl>
-
+  <div class="section" id="unit-parsing">
+<h1>1.1. Unit Parsing<a class="headerlink" href="#unit-parsing" title="Permalink to this headline">¶</a></h1>
+<p>Unit parsing is performed using the <a class="reference external" href="https://pint.readthedocs.io/en/0.9/">Pint</a> package.
+By default, Pint supports a larger set of units than the Citrine Platform.
+Therefore, we include a custom unit definition file in Taurus: <a class="reference external" href="https://github.com/CitrineInformatics/taurus/blob/master/taurus/units/citrine_en.txt">citrine_en.txt</a>.
+This file contains the most commonly used units and will grow over time.</p>
+<p>Requests for support of additional units can be made by opening an issue in the <a class="reference external" href="https://github.com/CitrineInformatics/taurus">taurus repository</a> on github.</p>
 </div>
 
 
@@ -65,14 +57,20 @@
 
 
 <h3>Navigation</h3>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../depth/index.html">1. In depth documentation</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">1. In depth documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">1.1. Unit Parsing</a></li>
+</ul>
+</li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">1. In depth documentation</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">1. In depth documentation</a></li>
+  </ul></li>
   </ul></li>
 </ul>
 </div>
@@ -106,7 +104,7 @@
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="../_sources/reference/taurus.demo.measurement_example.rst.txt"
+      <a href="../_sources/depth/unit_parsing.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
