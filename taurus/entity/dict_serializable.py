@@ -37,8 +37,8 @@ class DictSerializable(ABC):
             if name in expected_arg_names:
                 kwargs[name] = arg
             else:
-                logger.warning('Ignoring unexpected keyword argument in {}: {}'
-                               .format(cls.__name__, name))
+                logger.warning('Ignoring unexpected keyword argument in {}: {}'.format(
+                    cls.__name__, name))
         # noinspection PyArgumentList
         # DictSerializable's constructor is not intended for use,
         # but all of its children will use from_dict like this.
