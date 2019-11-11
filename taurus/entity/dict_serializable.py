@@ -34,7 +34,7 @@ class DictSerializable(ABC):
         expected_arg_names = inspect.getfullargspec(cls.__init__).args
         kwargs = {}
         for name, arg in d.items():
-            if name in arg_names:
+            if name in expected_arg_names:
                 kwargs[name] = arg
             else:
                 logger.warning('Ignoring unexpected keyword argument in {}: {}'.format(__name__, name))
