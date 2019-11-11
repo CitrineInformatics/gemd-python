@@ -31,7 +31,7 @@ class DictSerializable(ABC):
             The deserialized object.
 
         """
-        arg_names = inspect.getfullargspec(cls.__init__).args
+        expected_arg_names = inspect.getfullargspec(cls.__init__).args
         kwargs = {}
         for name, arg in d.items():
             if name in arg_names:
