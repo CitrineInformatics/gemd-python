@@ -45,7 +45,8 @@ setup(name='taurus-citrine',
       package_data={
           'taurus': [
               'demo/strehlow_and_cook.json',
-              'units/citrine_en.txt'
+              'units/citrine_en.txt',
+              'units/constants_en.txt'
           ]
       },
       install_requires=[
