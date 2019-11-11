@@ -1,5 +1,12 @@
 from abc import ABC
+from logging import getLogger
+
 import json
+import inspect
+
+# There are some weird (probably resolvable) errors during object cloning if this is an
+# instance variable of DictSerializable.
+logger = getLogger(__name__)
 
 
 class DictSerializable(ABC):
@@ -24,10 +31,18 @@ class DictSerializable(ABC):
             The deserialized object.
 
         """
+        expected_arg_names = inspect.getfullargspec(cls.__init__).args
+        kwargs = {}
+        for name, arg in d.items():
+            if name in expected_arg_names:
+                kwargs[name] = arg
+            else:
+                logger.warning('Ignoring unexpected keyword argument in {}: {}'.format(
+                    cls.__name__, name))
         # noinspection PyArgumentList
         # DictSerializable's constructor is not intended for use,
         # but all of its children will use from_dict like this.
-        return cls(**d)
+        return cls(**kwargs)
 
     def as_dict(self):
         """
