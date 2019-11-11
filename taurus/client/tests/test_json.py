@@ -11,6 +11,7 @@ from taurus.entity.link_by_uid import LinkByUID
 from taurus.entity.object import MeasurementRun, MaterialRun, ProcessRun, MeasurementSpec
 from taurus.entity.object.ingredient_run import IngredientRun
 from taurus.entity.object.ingredient_spec import IngredientSpec
+from taurus.entity.value.nominal_integer import NominalInteger
 from taurus.entity.value.nominal_real import NominalReal
 from taurus.entity.value.normal_real import NormalReal
 from taurus.enumeration.origin import Origin
@@ -54,8 +55,8 @@ def test_deserialize():
 
 def test_deserialize_extra_fields():
     """Extra JSON fields should be ignored in deserialization."""
-    json_data = '[[], {"nominal": 5, "type": "nominal_real", "extra garbage": "foo"}]'
-    assert(loads(json_data) == NominalReal(nominal=5))
+    json_data = '[[], {"nominal": 5, "type": "nominal_integer", "extra garbage": "foo"}]'
+    assert(loads(json_data) == NominalInteger(nominal=5))
 
 
 def test_enumeration_serde():
