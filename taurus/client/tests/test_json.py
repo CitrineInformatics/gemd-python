@@ -52,6 +52,12 @@ def test_deserialize():
     assert(copy_meas.uids["auto"] == measurement.uids["auto"])
 
 
+def test_deserialize_extra_fields():
+    """Extra JSON fields should be ignored in deserialization."""
+    json_data = '[[], {"nominal": 5, "type": "nominal_real", "extra garbage": "foo"}]'
+    assert(loads(json_data) == NominalReal(nominal=5))
+
+
 def test_enumeration_serde():
     """An enumeration should get serialized as a string."""
     condition = Condition(name="A condition", notes=Origin.UNKNOWN)
