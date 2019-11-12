@@ -36,7 +36,7 @@ class PostDevelopCommand(develop):
 
 
 setup(name='taurus-citrine',
-      version='0.2.1',
+      version='0.3.0',
       url='http://github.com/CitrineInformatics/taurus',
       description='Python library for the Citrine Platform',
       author='Max Hutchinson',
@@ -45,7 +45,8 @@ setup(name='taurus-citrine',
       package_data={
           'taurus': [
               'demo/strehlow_and_cook.json',
-              'units/citrine_en.txt'
+              'units/citrine_en.txt',
+              'units/constants_en.txt'
           ]
       },
       install_requires=[

@@ -25,11 +25,7 @@ def test_parse_expected():
 def test_parse_unexpected():
     """Test that we cannot parse the units that we do not expect to."""
     unexpected = [
-        "rankine",
-        "slug",
-        "hand",
-        "year",
-        "St",
+        "gibberish",
         5
     ]
     for unit in unexpected:
