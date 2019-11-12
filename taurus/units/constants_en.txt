@@ -1,3 +1,47 @@
+# Citrine customized constants input file for Pint, based explicitly on the Pint defaults as
+# included release 0.9 (https://github.com/hgrecco/pint/releases/tag/0.9).  The Pint Authors hold
+# copyright and are documented in https://github.com/hgrecco/pint/blob/0.9/AUTHORS.
+#
+# The original copyright statement for the constants file reads:
+#
+#     Copyright (c) 2012 by Hernan E. Grecco and contributors.  See AUTHORS
+#     for more details.
+#
+#     Some rights reserved.
+#
+#     Redistribution and use in source and binary forms of the software as well
+#     as documentation, with or without modification, are permitted provided
+#     that the following conditions are met:
+#
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#
+#     * Redistributions in binary form must reproduce the above
+#       copyright notice, this list of conditions and the following
+#       disclaimer in the documentation and/or other materials provided
+#       with the distribution.
+#
+#     * The names of the contributors may not be used to endorse or
+#       promote products derived from this software without specific
+#       prior written permission.
+#
+#     THIS SOFTWARE AND DOCUMENTATION IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+#     CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT
+#     NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+#     A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+#     OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+#     EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+#     PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+#     PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+#     LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+#     NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+#     SOFTWARE AND DOCUMENTATION, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+#     DAMAGE.
+#
+#
+# Original content, with commenting, follows:
+#
+###################################################################################################
 # Default Pint constants definition file
 # Based on the International System of Units
 # Language: english
@@ -9,6 +53,7 @@
 # As computed by Maxima with fpprec:50
 
 pi    = 3.1415926535897932384626433832795028841971693993751 = π  # pi
+# ^^^^^    Uncommented pi definition
 tansec = 4.8481368111333441675396429478852851658848753880815e-6   # tangent of 1 arc-second ~ arc_second/radian
 ln10   = 2.3025850929940456840179914546843642076011014886288      # natural logarithm of 10
 wien_x = 4.9651142317442763036987591313228939440555849867973      # solution to (x-5)*exp(x)+5 = 0 => x = W(5/exp(5))+5
