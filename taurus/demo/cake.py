@@ -401,7 +401,7 @@ def make_cake_spec(tmpl=None):
             tags=[
                 'purchase::dry-goods'
             ],
-            notes='Purchasing salt',
+            notes='Purchasing salt'
         ),
         tags=[
         ],
