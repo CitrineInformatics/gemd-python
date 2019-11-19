@@ -7,8 +7,11 @@ from taurus.client.json_encoder import thin_dumps
 from taurus.entity.attribute.condition import Condition
 from taurus.entity.attribute.parameter import Parameter
 from taurus.entity.attribute.property import Property
+from taurus.entity.attribute.property_and_conditions import PropertyAndConditions
 from taurus.entity.bounds.integer_bounds import IntegerBounds
 from taurus.entity.bounds.real_bounds import RealBounds
+from taurus.entity.bounds.categorical_bounds import CategoricalBounds
+from taurus.entity.bounds.composition_bounds import CompositionBounds
 from taurus.entity.object.ingredient_run import IngredientRun
 from taurus.entity.object.ingredient_spec import IngredientSpec
 from taurus.entity.object.material_run import MaterialRun
@@ -24,9 +27,14 @@ from taurus.entity.template.parameter_template import ParameterTemplate
 from taurus.entity.template.process_template import ProcessTemplate
 from taurus.entity.template.property_template import PropertyTemplate
 from taurus.entity.value.nominal_integer import NominalInteger
+from taurus.entity.value.uniform_integer import UniformInteger
 from taurus.entity.value.nominal_real import NominalReal
 from taurus.entity.value.normal_real import NormalReal
 from taurus.entity.value.uniform_real import UniformReal
+from taurus.entity.value.nominal_categorical import NominalCategorical
+from taurus.entity.value.discrete_categorical import DiscreteCategorical
+from taurus.entity.value.nominal_composition import NominalComposition
+from taurus.entity.value.empirical_formula import EmpiricalFormula
 from taurus.enumeration.origin import Origin
 from taurus.util.impl import set_uuids
 from taurus.entity.util import complete_material_history, make_instance
@@ -55,10 +63,52 @@ def make_cake_templates():
         bounds=RealBounds(0, 2000.0, "K")
     )
 
+    tmpl["Toothpick test"] = PropertyTemplate(
+        name="Toothpick test",
+        description="Results of inserting a toothpick to check doneness",
+        bounds=CategoricalBounds(["wet", "crumbs", "completely clean"])
+    )
+    tmpl["Color"] = PropertyTemplate(
+        name="Baked color",
+        description="Visual observation of the color of a baked good",
+        bounds=CategoricalBounds(["Pale", "Golden brown", "Deep brown", "Black"])
+    )
+
     tmpl["Tastiness"] = PropertyTemplate(
         name="Tastiness",
         description="Yumminess on a fairly arbitrary scale",
         bounds=IntegerBounds(lower_bound=1, upper_bound=10)
+    )
+
+    tmpl["Nutritional Information"] = PropertyTemplate(
+        name="Nutritional Information",
+        description="FDA Nutrition Facts, mass basis.  Please be attentive to g vs. mg.  "
+                    + "`other-carbohydrate` and `other-fat` are the total values minus the "
+                    + "broken-out quantities. Other is the difference between the total and the"
+                    + "serving size.",
+        bounds=CompositionBounds(
+            components=[
+                'other',
+                'saturated-fat',
+                'trans-fat',
+                'other-fat',
+                'cholesterol',
+                'sodium',
+                'dietary-fiber',
+                'sugars',
+                'other-carbohydrate',
+                'protein',
+                'vitamin-d',
+                'calcium',
+                'iron',
+                'potassium'
+            ]
+        )
+    )
+    tmpl["Serving Size"] = ConditionTemplate(
+        name="Serving Size",
+        description="Serving size in mass units, to go along with FDA Nutrition Facts",
+        bounds=RealBounds(1.e-3, 10.e3, "g")
     )
 
     # Objects
@@ -68,6 +118,12 @@ def make_cake_templates():
         allowed_labels=['precursor'],
         conditions=[(tmpl["Oven temperature"], RealBounds(0, 700, "degF"))],
         parameters=[(tmpl["Oven temperature setting"], RealBounds(100, 550, "degF"))]
+    )
+
+    tmpl["Doneness"] = MeasurementTemplate(
+        name="Doneness test",
+        description="An ensemble of tests to determine the doneness of a baked good",
+        properties=[tmpl["Toothpick test"], tmpl["Color"]]
     )
 
     tmpl["Taste test"] = MeasurementTemplate(
@@ -81,6 +137,13 @@ def make_cake_templates():
     )
 
     tmpl["Generic Material"] = MaterialTemplate(name="Generic")
+    tmpl["Nutritional Material"] = MaterialTemplate(
+        name="Nutritional Material",
+        description="A material with FDA Nutrition Facts attached",
+        properties=[
+            tmpl["Nutritional Information"]
+        ]
+    )
     tmpl["Icing"] = ProcessTemplate(name="Icing",
                                     description='Applying a coating to a substrate',
                                     allowed_labels=['coating', 'substrate'])
@@ -94,11 +157,12 @@ def make_cake_templates():
     return tmpl
 
 
-def make_cake_spec():
+def make_cake_spec(tmpl=None):
     """Define a recipe for making a cake."""
     ###############################################################################################
     # Templates
-    tmpl = make_cake_templates()
+    if tmpl is None:
+        tmpl = make_cake_templates()
 
     ###############################################################################################
     # Objects
@@ -251,7 +315,31 @@ def make_cake_spec():
     ########################
     flour = MaterialSpec(
         name="Abstract Flour",
-        template=tmpl["Generic Material"],
+        template=tmpl["Nutritional Material"],
+        properties=[
+            PropertyAndConditions(
+                property=Property(
+                    name="Nutritional Information",
+                    value=NominalComposition(
+                        {
+                            "dietary-fiber": 1,
+                            "sugar": 1,
+                            "other-carbohydrate": 20,
+                            "protein": 4,
+                            "other": 4
+                        }
+                    ),
+                    template=tmpl["Nutritional Information"],
+                    origin="specified"
+                ),
+                conditions=Condition(
+                    name="Serving Size",
+                    value=NominalReal(30, 'g'),
+                    template=tmpl["Serving Size"],
+                    origin="specified"
+                )
+            )
+        ],
         process=ProcessSpec(
             name='Buying Flour, in General',
             template=tmpl["Procurement"],
@@ -306,11 +394,14 @@ def make_cake_spec():
             tags=[
                 'purchase::dry-goods'
             ],
-            notes='Purchasing salt'
+            notes='Purchasing salt',
         ),
         tags=[
         ],
-        notes='Plain old NaCl'
+        notes='Plain old NaCl',
+        properties=[
+            PropertyAndConditions(Property(EmpiricalFormula("NaCl")))
+        ]
     )
     IngredientSpec(
         name="{} input".format(salt.name),
@@ -334,7 +425,10 @@ def make_cake_spec():
         ),
         tags=[
         ],
-        notes='Sugar'
+        notes='Sugar',
+        properties=[
+            PropertyAndConditions(Property(EmpiricalFormula("C12H22O11")))
+        ]
     )
     IngredientSpec(
         name="{} input".format(sugar.name),
@@ -515,14 +609,16 @@ def make_cake_spec():
     return cake
 
 
-def make_cake(seed=None):
+def make_cake(seed=None, tmpl=None, cake_spec=None):
     """Define all objects that go into making a demo cake."""
     if seed is not None:
         random.seed(seed)
     ######################################################################
     # Parent Objects
-    tmpl = make_cake_templates()
-    cake_spec = make_cake_spec()
+    if tmpl is None:
+        tmpl = make_cake_templates()
+    if cake_spec is None:
+        cake_spec = make_cake_spec(tmpl)
 
     ######################################################################
     # Objects
