@@ -83,9 +83,9 @@ def make_cake_templates():
     tmpl["Nutritional Information"] = PropertyTemplate(
         name="Nutritional Information",
         description="FDA Nutrition Facts, mass basis.  Please be attentive to g vs. mg.  "
-                    + "`other-carbohydrate` and `other-fat` are the total values minus the "
-                    + "broken-out quantities. Other is the difference between the total and the"
-                    + "serving size.",
+                    "`other-carbohydrate` and `other-fat` are the total values minus the "
+                    "broken-out quantities. Other is the difference between the total and the "
+                    "serving size.",
         bounds=CompositionBounds(
             components=[
                 'other',
