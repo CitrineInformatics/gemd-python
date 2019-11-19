@@ -177,6 +177,13 @@ def make_cake_spec(tmpl=None):
             ],
             notes='The act of covering a baked output with frosting'
         ),
+        properties=[
+            PropertyAndConditions(Property(name="Tastiness",
+                                           value=NominalInteger(5),
+                                           template=tmpl["Tastiness"],
+                                           origin="specified"
+                                           ))
+        ],
         file_links=FileLink(
             filename="Becky's Butter Cake",
             url='https://www.landolakes.com/recipe/16730/becky-s-butter-cake/'
@@ -682,12 +689,14 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     cake_appearance = MeasurementRun(name='Final Appearance', material=cake)
     frosting_taste = MeasurementRun(name='Frosting Taste', material=frosting)
     frosting_sweetness = MeasurementRun(name='Frosting Sweetness', material=frosting)
+    baked_doneness = MeasurementRun(name='Baking doneness', material=baked)
 
     # and spec out the measurements
-    cake_taste.spec = MeasurementSpec(name='Taste')
+    cake_taste.spec = MeasurementSpec(name='Taste', template=tmpl['Taste test'])
     cake_appearance.spec = MeasurementSpec(name='Appearance')
     frosting_taste.spec = cake_taste.spec  # Taste
     frosting_sweetness.spec = MeasurementSpec(name='Sweetness')
+    baked_doneness.spec = MeasurementSpec(name='Sweetness', template=tmpl["Doneness"])
 
     ######################################################################
     # Let's add some attributes
@@ -709,7 +718,7 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     cake_taste.properties.append(Property(name='Tastiness',
                                           origin=Origin.MEASURED,
                                           template=tmpl['Tastiness'],
-                                          value=NominalInteger(nominal=5)))
+                                          value=UniformInteger(4, 5)))
     cake_appearance.properties.append(Property(name='Visual Appeal',
                                                origin=Origin.MEASURED,
                                                value=NominalInteger(nominal=5)))
@@ -720,6 +729,23 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     frosting_sweetness.properties.append(Property(name='Sweetness (Sucrose-basis)',
                                                   origin=Origin.MEASURED,
                                                   value=NominalReal(nominal=1.7, units='')))
+
+    baked_doneness.properties.append(Property(
+        name='Toothpick test',
+        origin="measured",
+        template=tmpl["Toothpick test"],
+        value=NominalCategorical("crumbs")
+    ))
+    baked_doneness.properties.append(Property(
+        name='Color',
+        origin="measured",
+        template=tmpl["Color"],
+        value=DiscreteCategorical({
+            "Pale": 0.05,
+            "Golden brown": 0.65,
+            "Deep brown": 0.3
+        })
+    ))
 
     baked.process.spec.template = tmpl['Baking in an oven']
     cake_taste.spec.template = tmpl['Taste test']
