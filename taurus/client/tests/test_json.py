@@ -3,6 +3,8 @@ import json
 import pytest
 
 from taurus.client.json_encoder import dumps, loads, copy, thin_dumps
+from taurus.entity.attribute.property import Property
+from taurus.entity.bounds.real_bounds import RealBounds
 from taurus.entity.dict_serializable import DictSerializable
 from taurus.entity.case_insensitive_dict import CaseInsensitiveDict
 from taurus.entity.attribute.condition import Condition
@@ -11,6 +13,7 @@ from taurus.entity.link_by_uid import LinkByUID
 from taurus.entity.object import MeasurementRun, MaterialRun, ProcessRun, MeasurementSpec
 from taurus.entity.object.ingredient_run import IngredientRun
 from taurus.entity.object.ingredient_spec import IngredientSpec
+from taurus.entity.template.property_template import PropertyTemplate
 from taurus.entity.value.nominal_integer import NominalInteger
 from taurus.entity.value.nominal_real import NominalReal
 from taurus.entity.value.normal_real import NormalReal
@@ -64,6 +67,18 @@ def test_enumeration_serde():
     condition = Condition(name="A condition", notes=Origin.UNKNOWN)
     copy_condition = copy(condition)
     assert copy_condition.notes == Origin.get_value(condition.notes)
+
+
+def test_attribute_serde():
+    """An attribute with a link to an attribute template should be copy-able."""
+    prop_tmpl = PropertyTemplate(name='prop_tmpl',
+                                 bounds=RealBounds(0, 2, 'm')
+                                 )
+    prop = Property(name='prop',
+                    template=prop_tmpl,
+                    value=NominalReal(1, 'm')
+                    )
+    assert loads(dumps(prop)) == prop
 
 
 def test_thin_dumps():
