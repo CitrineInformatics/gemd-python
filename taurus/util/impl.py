@@ -65,20 +65,22 @@ def substitute_objects(obj, index):
                 else:
                     substitute(x)
         elif isinstance(thing, dict):
-            for k, v in thing.items():
+            # we are restricted from modifying the keys of a dict while iterating over it's
+            # items so we iterate over a copy of the dict instead.
+            for k, v in thing.copy().items():
                 if isinstance(v, LinkByUID) and (v.scope.lower(), v.id) in index:
                     thing[k] = index[(v.scope.lower(), v.id)]
                     substitute(thing[k])
                 else:
                     substitute(v)
-            for k, v in thing.items():
+            for k, v in thing.copy().items():
                 if isinstance(k, LinkByUID) and (k.scope.lower(), k.id) in index:
                     thing[index[(k.scope.lower(), k.id)]] = v
                     del thing[k]
                 else:
                     substitute(k)
         elif isinstance(thing, DictSerializable):
-            for k, v in vars(thing).items():
+            for k, v in vars(thing).copy().items():
                 if isinstance(thing, BaseEntity) and k in thing.skip:
                     continue
                 if isinstance(v, LinkByUID) and (v.scope.lower(), v.id) in index:
@@ -258,7 +260,7 @@ def _recursive_substitute(obj, native_uid=None, seen=None):
                 obj[i] = deepcopy(x)
                 _recursive_substitute(obj[i], native_uid, seen)
     elif isinstance(obj, dict):
-        for k, x in obj.items():
+        for k, x in obj.copy().items():
             if isinstance(x, BaseEntity):
                 if len(x.uids) == 0:
                     raise ValueError("No UID for {}".format(x))
@@ -269,7 +271,7 @@ def _recursive_substitute(obj, native_uid=None, seen=None):
                     obj[k] = LinkByUID(uid_to_use[0], uid_to_use[1])
             else:
                 _recursive_substitute(x, native_uid, seen)
-        for k, x in obj.items():
+        for k, x in obj.copy().items():
             if isinstance(k, BaseEntity):
                 if len(k.uids) == 0:
                     raise ValueError("No UID for {}".format(k))
