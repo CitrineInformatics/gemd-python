@@ -78,7 +78,11 @@ def test_attribute_serde():
                     template=prop_tmpl,
                     value=NominalReal(1, 'm')
                     )
+    meas_spec = MeasurementSpec("a spec")
+    meas = MeasurementRun("a measurement", spec=meas_spec, properties=[prop])
     assert loads(dumps(prop)) == prop
+    assert loads(dumps(meas)) == meas
+    assert isinstance(prop.template, PropertyTemplate)
 
 
 def test_thin_dumps():
