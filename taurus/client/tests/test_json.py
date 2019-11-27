@@ -86,7 +86,7 @@ def test_attribute_serde():
 
 
 def test_thin_dumps():
-    """Test that thin_dumps turns pointers into links"""
+    """Test that thin_dumps turns pointers into links."""
     mat = MaterialRun("The actual material")
     meas_spec = MeasurementSpec("measurement", uids={'my_scope': '324324'})
     meas = MeasurementRun("The measurement", spec=meas_spec, material=mat)

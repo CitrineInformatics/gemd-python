@@ -151,7 +151,6 @@ def thin_dumps(obj, **kwargs):
         A serialized string of `obj`, with link_by_uid in place of pointers to other objects.
 
     """
-
     set_uuids(obj)
     res = deepcopy(obj)
     substitute_links(res)
