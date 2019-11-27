@@ -140,8 +140,8 @@ def thin_dumps(obj, **kwargs):
 
     Parameters
     ----------
-    obj: BaseEntity
-        Object to dump (must be a BaseEntity because it must have uids)
+    obj:
+        Object to dump
     **kwargs: keyword args, optional
         Optional keyword arguments to pass to `json.dumps()`.
 
@@ -151,8 +151,6 @@ def thin_dumps(obj, **kwargs):
         A serialized string of `obj`, with link_by_uid in place of pointers to other objects.
 
     """
-    if not isinstance(obj, BaseEntity):
-        raise TypeError("Can only dump BaseEntities, but got {}".format(type(obj)))
 
     set_uuids(obj)
     res = deepcopy(obj)
