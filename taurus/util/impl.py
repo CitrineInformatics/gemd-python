@@ -254,7 +254,9 @@ def _recursive_substitute(obj, native_uid=None, seen=None):
                     uid_to_use = next(iter(x.uids.items()))
                     obj[i] = LinkByUID(uid_to_use[0], uid_to_use[1])
             else:
-                _recursive_substitute(x, native_uid, seen)
+                # The list/tuple obj is modified, but the object inside it is not
+                obj[i] = deepcopy(x)
+                _recursive_substitute(obj[i], native_uid, seen)
     elif isinstance(obj, dict):
         for k, x in obj.items():
             if isinstance(x, BaseEntity):
