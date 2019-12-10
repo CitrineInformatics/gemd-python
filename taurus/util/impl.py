@@ -65,7 +65,7 @@ def substitute_objects(obj, index):
                 else:
                     substitute(x)
         elif isinstance(thing, dict):
-            # we are restricted from modifying the keys of a dict while iterating over it's
+            # we are restricted from modifying the keys of a dict while iterating over its
             # items so we iterate over a copy of the dict instead.
             for k, v in thing.copy().items():
                 if isinstance(v, LinkByUID) and (v.scope.lower(), v.id) in index:
