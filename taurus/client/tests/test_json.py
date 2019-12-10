@@ -101,6 +101,10 @@ def test_thin_dumps():
     expected_json = '{"id": "my_id", "scope": "scope", "type": "link_by_uid"}'
     assert thin_dumps(LinkByUID('scope', 'my_id')) == expected_json
 
+    # Check that objects lacking .uid attributes will raise an exception when dumped
+    with pytest.raises(TypeError):
+        thin_dumps({{'key': 'value'}})
+
 
 def test_uid_deser():
     """Test that uids continue to be a CaseInsensitiveDict after deserialization."""
