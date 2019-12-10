@@ -86,7 +86,7 @@ def test_attribute_serde():
 
 
 def test_thin_dumps():
-    """Test that thin_dumps turns pointers into links and doesn't work on non-BaseEntity."""
+    """Test that thin_dumps turns pointers into links."""
     mat = MaterialRun("The actual material")
     meas_spec = MeasurementSpec("measurement", uids={'my_scope': '324324'})
     meas = MeasurementRun("The measurement", spec=meas_spec, material=mat)
@@ -97,8 +97,13 @@ def test_thin_dumps():
     assert isinstance(thin_copy.spec, LinkByUID)
     assert thin_copy.spec.id == meas_spec.uids['my_scope']
 
+    # Check that LinkByUID objects are correctly converted their JSON equivalent
+    expected_json = '{"id": "my_id", "scope": "scope", "type": "link_by_uid"}'
+    assert thin_dumps(LinkByUID('scope', 'my_id')) == expected_json
+
+    # Check that objects lacking .uid attributes will raise an exception when dumped
     with pytest.raises(TypeError):
-        thin_dumps(LinkByUID('scope', 'id'))
+        thin_dumps({{'key': 'value'}})
 
 
 def test_uid_deser():

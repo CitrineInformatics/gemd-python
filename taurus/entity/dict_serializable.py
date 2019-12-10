@@ -71,8 +71,8 @@ class DictSerializable(ABC):
             A string representation of the object as a dictionary.
 
         """
-        from taurus.client.json_encoder import dumps
-        return json.loads(dumps(self))[1]
+        from taurus.client.json_encoder import thin_dumps
+        return json.loads(thin_dumps(self))
 
     @staticmethod
     def build(d):
