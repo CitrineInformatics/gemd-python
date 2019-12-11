@@ -153,41 +153,40 @@ def recursive_foreach(obj, func, apply_first=False, seen=None):
         else:
             seen.add(obj)
 
+    if apply_first and isinstance(obj, BaseEntity):
+        func(obj)
+
     if isinstance(obj, (list, tuple)):
         for i, x in enumerate(obj):
             if isinstance(x, BaseEntity):
                 if apply_first:
-                    func(x)
                     recursive_foreach(x, func, apply_first, seen)
                 else:
                     recursive_foreach(x, func, apply_first, seen)
-                    func(x)
             else:
                 recursive_foreach(x, func, apply_first, seen)
     elif isinstance(obj, dict):
         for x in concatv(obj.keys(), obj.values()):
             if isinstance(x, BaseEntity):
                 if apply_first:
-                    func(x)
                     recursive_foreach(x, func, apply_first, seen)
                 else:
                     recursive_foreach(x, func, apply_first, seen)
-                    func(x)
             else:
                 recursive_foreach(x, func, apply_first, seen)
     elif isinstance(obj, DictSerializable):
         for k, x in obj.__dict__.items():
-            if isinstance(obj, BaseEntity) and k in obj.skip:
-                continue
             if isinstance(x, BaseEntity):
                 if apply_first:
-                    func(x)
                     recursive_foreach(x, func, apply_first, seen)
                 else:
                     recursive_foreach(x, func, apply_first, seen)
-                    func(x)
             else:
                 recursive_foreach(x, func, apply_first, seen)
+
+    if isinstance(obj, BaseEntity) and not apply_first:
+        func(obj)
+
     return
 
 
