@@ -196,6 +196,21 @@ def test_case_insensitive_rehydration():
     assert isinstance(loaded_ingredient.material, MaterialRun)
 
 
+def test_many_ingredients():
+    """Test that ingredients remain connected to processes when round-robined through json"""
+    proc = ProcessRun("foo")
+    expected = []
+    for i in range(10):
+        mat = MaterialRun(name=str(i))
+        IngredientRun(name="i{}".format(i), process=proc, material=mat)
+        expected.append("i{}".format(i))
+
+    reloaded = loads(dumps(proc))
+    assert len(list(reloaded.ingredients)) == 10
+    names = [x.name for x in reloaded.ingredients]
+    assert sorted(names) == sorted(expected)
+
+
 def test_deeply_nested_rehydration():
     """
     Tests that loads fully replaces links with objects.
