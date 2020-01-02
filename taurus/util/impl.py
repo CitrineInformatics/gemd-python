@@ -48,32 +48,27 @@ def substitute_objects(obj, index):
     It is the inverse of substitute_links.
     :param obj: target of the operation
     :param index: containing the objects that the uids point to
-    :return: None
     """
     visited = {}
-
-    def index_or_obj(x):
-        if isinstance(x, LinkByUID):
-            return index.get((x.scope.lower(), x.id), x)
-        else:
-            return x
 
     def substitute(thing):
         if id(thing) in visited:
             return visited[id(thing)]
-        if isinstance(thing, list):
-            new = [substitute(index_or_obj(x)) for x in thing]
+        if isinstance(thing, LinkByUID):
+            o = index.get((thing.scope.lower(), thing.id), thing)
+            visited[id(thing)] = o
+            new = substitute(o)
+        elif isinstance(thing, list):
+            new = [substitute(x) for x in thing]
         elif isinstance(thing, tuple):
-            new = tuple(substitute(index_or_obj(x)) for x in thing)
+            new = tuple(substitute(x) for x in thing)
         elif isinstance(thing, dict):
-            new = {substitute(index_or_obj(k)): substitute(index_or_obj(v))
-                   for k, v in thing.items()}
+            new = {substitute(k): substitute(v) for k, v in thing.items()}
         elif isinstance(thing, DictSerializable):
-            new_attrs = {substitute(index_or_obj(k)): substitute(index_or_obj(v))
-                         for k, v in thing.as_dict().items()}
+            new_attrs = {substitute(k): substitute(v) for k, v in thing.as_dict().items()}
             new = thing.from_dict(new_attrs)
         else:
-            new = index_or_obj(thing)
+            new = thing
 
         visited[(id(new))] = new
         visited[(id(thing))] = new
