@@ -25,6 +25,15 @@ def test_dictionary_substitution():
     assert v == mat
 
 
+def test_tuple_sub():
+    proc = ProcessRun('foo', uids={'id': '123'})
+    proc_link = LinkByUID.from_entity(proc)
+    index = {(proc_link.scope, proc_link.id): proc}
+    tup = (proc_link,)
+    subbed = substitute_objects(tup, index)
+    assert subbed[0] == proc
+
+
 def test_recursive_foreach():
     """Test that recursive_foreach() applies a method to every object."""
     new_tag = "Extra tag"
