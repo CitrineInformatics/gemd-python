@@ -26,6 +26,7 @@ def test_dictionary_substitution():
 
 
 def test_tuple_sub():
+    """substitute_objects() should correctly substitute tuple values."""
     proc = ProcessRun('foo', uids={'id': '123'})
     proc_link = LinkByUID.from_entity(proc)
     index = {(proc_link.scope, proc_link.id): proc}
