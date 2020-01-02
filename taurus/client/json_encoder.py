@@ -88,8 +88,8 @@ def loads(json_str, **kwargs):
     index = {}
     raw = json.loads(json_str, object_hook=lambda x: _loado(x, index), **kwargs)
     # the return value is in the 2nd position.
-    substitute_objects(raw, index)
-    return raw[1]
+    subbed = substitute_objects(raw, index)
+    return subbed[1]
 
 
 def load(fp, **kwargs):

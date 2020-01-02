@@ -46,53 +46,39 @@ def substitute_objects(obj, index):
 
     This prepares the object to be used after being deserialized.
     It is the inverse of substitute_links.
-    It is an in-place operation.
     :param obj: target of the operation
     :param index: containing the objects that the uids point to
     :return: None
     """
-    visited = set()
+    visited = {}
+
+    def index_or_obj(x):
+        if isinstance(x, LinkByUID):
+            return index.get((x.scope.lower(), x.id), x)
+        else:
+            return x
 
     def substitute(thing):
         if id(thing) in visited:
-            return
-        visited.add(id(thing))
-        if isinstance(thing, (list, tuple)):
-            for i, x in enumerate(thing):
-                if isinstance(x, LinkByUID) and (x.scope.lower(), x.id) in index:
-                    thing[i] = index[(x.scope.lower(), x.id)]
-                    substitute(thing[i])
-                else:
-                    substitute(x)
+            return visited[id(thing)]
+        if isinstance(thing, list):
+            new = [substitute(index_or_obj(x)) for x in thing]
+        elif isinstance(thing, tuple):
+            new = tuple(substitute(index_or_obj(x)) for x in thing)
         elif isinstance(thing, dict):
-            # we are restricted from modifying the keys of a dict while iterating over its
-            # items so we iterate over a copy of the dict instead.
-            for k, v in thing.copy().items():
-                if isinstance(v, LinkByUID) and (v.scope.lower(), v.id) in index:
-                    thing[k] = index[(v.scope.lower(), v.id)]
-                    substitute(thing[k])
-                else:
-                    substitute(v)
-            for k, v in thing.copy().items():
-                if isinstance(k, LinkByUID) and (k.scope.lower(), k.id) in index:
-                    thing[index[(k.scope.lower(), k.id)]] = v
-                    del thing[k]
-                else:
-                    substitute(k)
+            new = {substitute(index_or_obj(k)): substitute(index_or_obj(v))
+                   for k, v in thing.items()}
         elif isinstance(thing, DictSerializable):
-            for k, v in vars(thing).copy().items():
-                if isinstance(thing, BaseEntity) and k in thing.skip:
-                    continue
-                if isinstance(v, LinkByUID) and (v.scope.lower(), v.id) in index:
-                    # Use setattr() to call setter logic
-                    setattr(thing, k.lstrip('_'), index[(v.scope.lower(), v.id)])
-                    substitute(thing.__dict__[k])
-                else:
-                    substitute(v)
-        return
+            new_attrs = {substitute(index_or_obj(k)): substitute(index_or_obj(v))
+                         for k, v in thing.as_dict().items()}
+            new = thing.from_dict(new_attrs)
+        else:
+            new = index_or_obj(thing)
 
-    substitute(obj)
-    return
+        visited[(id(new))] = new
+        visited[(id(thing))] = new
+        return new
+    return substitute(obj)
 
 
 def flatten(obj):

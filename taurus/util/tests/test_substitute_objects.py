@@ -19,8 +19,10 @@ def test_dictionary_substitution():
              (proc_link.scope.lower(), proc_link.id): proc}
 
     test_dict = {LinkByUID.from_entity(proc): LinkByUID.from_entity(mat)}
-    substitute_objects(test_dict, index)
-    assert test_dict[proc] == mat
+    subbed = substitute_objects(test_dict, index)
+    k, v = next((k, v) for k, v in subbed.items())
+    assert k == proc
+    assert v == mat
 
 
 def test_recursive_foreach():
