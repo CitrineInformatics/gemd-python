@@ -1,7 +1,14 @@
+from logging import getLogger
+
+import warnings
+
 from taurus.entity.object.base_object import BaseObject
 from taurus.entity.object.has_quantities import HasQuantities
 from taurus.entity.setters import validate_list
 from taurus.entity.valid_list import ValidList
+
+
+logger = getLogger(__name__)
 
 
 class IngredientRun(BaseObject, HasQuantities):
@@ -55,10 +62,18 @@ class IngredientRun(BaseObject, HasQuantities):
                  mass_fraction=None, volume_fraction=None, number_fraction=None,
                  absolute_quantity=None,
                  spec=None, uids=None, tags=None, notes=None, file_links=None):
-        BaseObject.__init__(self, name, uids, tags, notes=notes, file_links=file_links)
+        BaseObject.__init__(self, name=name, uids=uids, tags=tags,
+                            notes=notes, file_links=file_links)
         HasQuantities.__init__(self, mass_fraction, volume_fraction, number_fraction,
                                absolute_quantity)
-
+        if name is not None:
+            warnings.warn("The 'name' argument for ingredient runs is deprecated. "
+                          "It may be overwritten by the name of this object's spec.",
+                          DeprecationWarning)
+        if labels is not None:
+            warnings.warn("The 'labels' argument for ingredient runs is deprecated. "
+                          "It may be overwritten by the labels of this object's spec.",
+                          DeprecationWarning)
         self._material = None
         self._process = None
         self._spec = None
@@ -66,8 +81,9 @@ class IngredientRun(BaseObject, HasQuantities):
 
         self.material = material
         self.process = process
-        self.spec = spec
         self.labels = labels
+        # this may overwrite name/labels
+        self.spec = spec
 
     @property
     def labels(self):
@@ -131,5 +147,15 @@ class IngredientRun(BaseObject, HasQuantities):
             self._spec = None
         elif isinstance(spec, (IngredientSpec, LinkByUID)):
             self._spec = spec
+            if isinstance(spec, IngredientSpec):
+                self.name = spec.name
+                self.labels = spec.labels
         else:
             raise TypeError("spec must be a IngredientSpec or LinkByUID: {}".format(spec))
+
+    @classmethod
+    def from_dict(cls, d):
+        """Suppresses name/label warnings during deserializaton."""
+        with warnings.catch_warnings():
+            warnings.filterwarnings('ignore', category=DeprecationWarning)
+            return super().from_dict(d)
