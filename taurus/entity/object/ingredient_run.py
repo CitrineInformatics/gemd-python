@@ -1,14 +1,9 @@
-from logging import getLogger
-
 import warnings
 
 from taurus.entity.object.base_object import BaseObject
 from taurus.entity.object.has_quantities import HasQuantities
 from taurus.entity.setters import validate_list
 from taurus.entity.valid_list import ValidList
-
-
-logger = getLogger(__name__)
 
 
 class IngredientRun(BaseObject, HasQuantities):
