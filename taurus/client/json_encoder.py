@@ -60,7 +60,7 @@ def dumps(obj, **kwargs):
     # create a top level list of [flattened_objects, link-i-fied return value]
     res = [obj]
     additional = flatten(res)
-    substitute_links(res)
+    res = substitute_links(res)
     res.insert(0, additional)
     return json.dumps(res, cls=TaurusEncoder, sort_keys=True, **kwargs)
 
@@ -153,7 +153,7 @@ def thin_dumps(obj, **kwargs):
     """
     set_uuids(obj)
     res = deepcopy(obj)
-    substitute_links(res)
+    res = substitute_links(res)
     return json.dumps(res, cls=TaurusEncoder, sort_keys=True, **kwargs)
 
 

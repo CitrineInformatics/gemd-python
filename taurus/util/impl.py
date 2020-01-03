@@ -1,6 +1,7 @@
 """Utility functions."""
 import uuid
 from copy import deepcopy
+from typing import Dict
 
 from taurus.entity.base_entity import BaseEntity
 from taurus.entity.dict_serializable import DictSerializable
@@ -25,19 +26,57 @@ def set_uuids(obj, name="auto"):
     return
 
 
+def _substitute(thing, sub, applies, visited: Dict[int, object] = None):
+    if visited is None:
+        visited = {}
+    if thing.__hash__ is not None and thing in visited:
+        return visited[thing]
+    if applies(thing):
+        replacement = sub(thing)
+        if thing.__hash__ is not None:
+            visited[thing] = replacement
+        new = _substitute(replacement, sub, applies, visited)
+    elif isinstance(thing, list):
+        new = [_substitute(x, sub, applies, visited) for x in thing]
+    elif isinstance(thing, tuple):
+        new = tuple(_substitute(x, sub, applies, visited) for x in thing)
+    elif isinstance(thing, dict):
+        new = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
+               for k, v in thing.items()}
+    elif isinstance(thing, DictSerializable):
+        new_attrs = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
+                     for k, v in thing.as_dict().items()}
+        new = thing.from_dict(new_attrs)
+    else:
+        new = thing
+
+    if thing.__hash__ is not None:
+        visited[thing] = new
+    if new.__hash__ is not None:
+        visited[new] = new
+
+    return new
+
+
 def substitute_links(obj, native_uid=None):
     """
     Recursively replace pointers to BaseEntity with LinkByUID objects.
 
     This prepares the object to be serialized or written to the API.
     It is the inverse of substitute_objects.
-    It is an in-place operation.
     :param obj: target of the operation
     :param native_uid: preferred uid to use for creating LinkByUID objects (Default: None)
-    :return: None
     """
-    _recursive_substitute(obj, native_uid)
-    return
+    def make_link(entity: BaseEntity):
+        if len(entity.uids) == 0:
+            raise ValueError("No UID for {}".format(entity))
+        elif native_uid and native_uid in entity.uids:
+            return LinkByUID(native_uid, entity.uids[native_uid])
+        else:
+            return LinkByUID.from_entity(entity)
+
+    return _substitute(obj, sub=make_link,
+                       applies=lambda o: o is not obj and isinstance(o, BaseEntity))
 
 
 def substitute_objects(obj, index):
@@ -49,31 +88,9 @@ def substitute_objects(obj, index):
     :param obj: target of the operation
     :param index: containing the objects that the uids point to
     """
-    visited = {}
-
-    def substitute(thing):
-        if id(thing) in visited:
-            return visited[id(thing)]
-        if isinstance(thing, LinkByUID):
-            o = index.get((thing.scope.lower(), thing.id), thing)
-            visited[id(thing)] = o
-            new = substitute(o)
-        elif isinstance(thing, list):
-            new = [substitute(x) for x in thing]
-        elif isinstance(thing, tuple):
-            new = tuple(substitute(x) for x in thing)
-        elif isinstance(thing, dict):
-            new = {substitute(k): substitute(v) for k, v in thing.items()}
-        elif isinstance(thing, DictSerializable):
-            new_attrs = {substitute(k): substitute(v) for k, v in thing.as_dict().items()}
-            new = thing.from_dict(new_attrs)
-        else:
-            new = thing
-
-        visited[(id(new))] = new
-        visited[(id(thing))] = new
-        return new
-    return substitute(obj)
+    return _substitute(obj,
+                       sub=lambda l: index.get((l.scope.lower(), l.id), l),
+                       applies=lambda o: isinstance(o, LinkByUID))
 
 
 def flatten(obj):
@@ -90,6 +107,7 @@ def flatten(obj):
     # The ids should be set in the actual object so they are consistent
     set_uuids(obj)
 
+    # TODO: remove this
     # make a copy before we substitute the pointers for links
     copy = deepcopy(obj)
 
@@ -112,8 +130,7 @@ def flatten(obj):
         return to_return
 
     res = recursive_flatmap(copy, _flatten)
-    [substitute_links(x) for x in res]
-    return res
+    return [substitute_links(x) for x in res]
 
 
 def recursive_foreach(obj, func, apply_first=False, seen=None):
