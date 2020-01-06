@@ -1,6 +1,5 @@
 """Utility functions."""
 import uuid
-from copy import deepcopy
 from typing import Dict
 
 from taurus.entity.base_entity import BaseEntity
@@ -107,10 +106,6 @@ def flatten(obj):
     # The ids should be set in the actual object so they are consistent
     set_uuids(obj)
 
-    # TODO: remove this
-    # make a copy before we substitute the pointers for links
-    copy = deepcopy(obj)
-
     # list of uids that we've seen, to avoid returning duplicates
     known_uids = set()
 
@@ -129,7 +124,7 @@ def flatten(obj):
 
         return to_return
 
-    res = recursive_flatmap(copy, _flatten)
+    res = recursive_flatmap(obj, _flatten)
     return [substitute_links(x) for x in res]
 
 

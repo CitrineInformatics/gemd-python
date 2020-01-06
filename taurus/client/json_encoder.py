@@ -37,7 +37,7 @@ from taurus.entity.value.normal_real import NormalReal
 from taurus.entity.value.uniform_integer import UniformInteger
 from taurus.entity.value.uniform_real import UniformReal
 from taurus.enumeration.base_enumeration import BaseEnumeration
-from taurus.util import flatten, substitute_links, deepcopy, set_uuids, substitute_objects
+from taurus.util import flatten, substitute_links, set_uuids, substitute_objects
 
 
 def dumps(obj, **kwargs):
@@ -152,8 +152,7 @@ def thin_dumps(obj, **kwargs):
 
     """
     set_uuids(obj)
-    res = deepcopy(obj)
-    res = substitute_links(res)
+    res = substitute_links(obj)
     return json.dumps(res, cls=TaurusEncoder, sort_keys=True, **kwargs)
 
 
