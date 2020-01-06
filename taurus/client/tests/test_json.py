@@ -154,7 +154,7 @@ def test_unexpected_deserialization():
 
 
 def test_pure_subsitutions():
-    """Make sure substitute methods don't mutate inputs"""
+    """Make sure substitute methods don't mutate inputs."""
     json_str = '''
           [
             [
