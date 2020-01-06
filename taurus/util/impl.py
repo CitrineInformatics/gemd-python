@@ -1,6 +1,6 @@
 """Utility functions."""
 import uuid
-from typing import Dict
+from typing import Dict, Callable
 
 from taurus.entity.base_entity import BaseEntity
 from taurus.entity.dict_serializable import DictSerializable
@@ -25,7 +25,19 @@ def set_uuids(obj, name="auto"):
     return
 
 
-def _substitute(thing, sub, applies, visited: Dict[int, object] = None):
+def _substitute(thing,
+                sub: Callable[[object], object],
+                applies: Callable[[object], bool],
+                visited: Dict[int, object] = None) -> object:
+    """
+    Generic recursive substitute function.
+
+    Generates a new instance of thing by traversing its contents recursively, substituting
+    values for which the sub function applies.
+    :param thing: The object to traverse with substitution.
+    :param sub: Function which provides substitute for value, should not have side-effects.
+    :param applies: Function which defines the domain for the sub function to be invoked.
+    """
     if visited is None:
         visited = {}
     if thing.__hash__ is not None and thing in visited:
