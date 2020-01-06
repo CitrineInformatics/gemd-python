@@ -407,7 +407,7 @@ def make_cake_spec(tmpl=None):
         ],
         notes='Plain old NaCl',
         properties=[
-            PropertyAndConditions(Property(EmpiricalFormula("NaCl")))
+            PropertyAndConditions(Property(name='Formula', value=EmpiricalFormula("NaCl")))
         ]
     )
     IngredientSpec(
@@ -434,7 +434,7 @@ def make_cake_spec(tmpl=None):
         ],
         notes='Sugar',
         properties=[
-            PropertyAndConditions(Property(EmpiricalFormula("C12H22O11")))
+            PropertyAndConditions(Property(name="Formula", value=EmpiricalFormula("C12H22O11")))
         ]
     )
     IngredientSpec(
