@@ -49,7 +49,7 @@ def test_serialized_history():
     cookie_dough = MaterialRun("cookie dough", process=buy_cookie_dough, spec=cookie_dough_spec)
     bake = ProcessRun("bake cookie dough", conditions=[
         Condition("oven temp", origin='measured', value=NominalReal(357, 'degF'))])
-    IngredientRun(name="all of the cookie dough", material=cookie_dough,
+    IngredientRun(material=cookie_dough,
                   process=bake, number_fraction=NominalReal(1, ''))
     cookie = MaterialRun("cookie", process=bake, tags=["chocolate chip", "drop"])
     MeasurementRun("taste", material=cookie, properties=[

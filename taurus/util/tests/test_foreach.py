@@ -10,7 +10,7 @@ def test_recursive_foreach():
     """Test that recursive foreach will actually walk through a material history."""
     mat_run = MaterialRun("foo")
     process_run = ProcessRun("bar")
-    IngredientRun(process=process_run, material=mat_run, name="foobar")
+    IngredientRun(process=process_run, material=mat_run)
     output = MaterialRun(process=process_run)
 
     # property templates are trickier than templates because they are referenced in attributes
