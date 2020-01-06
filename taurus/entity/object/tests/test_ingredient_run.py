@@ -10,8 +10,8 @@ def test_ingredient_reassignment():
     """Check that an ingredient run can be re-assigned to a new process run."""
     boiling = ProcessRun("Boil potatoes")
     frying = ProcessRun("Fry potatoes")
-    oil = IngredientRun(name="Oil", process=boiling)
-    potatoes = IngredientRun(name="Potatoes", process=boiling)
+    oil = IngredientRun(process=boiling)
+    potatoes = IngredientRun(process=boiling)
     assert oil.process == boiling
     assert set(boiling.ingredients) == {oil, potatoes}
     assert frying.ingredients == []
@@ -30,8 +30,8 @@ def test_ingredient_reassignment():
 def test_invalid_assignment():
     """Invalid assignments to `process` or `material` throw a TypeError."""
     with pytest.raises(TypeError):
-        IngredientRun(name="name", material=RealBounds(0, 5.0, ''))
+        IngredientRun(material=RealBounds(0, 5.0, ''))
     with pytest.raises(TypeError):
-        IngredientRun(name="name", process="process")
+        IngredientRun(process="process")
     with pytest.raises(TypeError):
-        IngredientRun(name="name", spec=5)
+        IngredientRun(spec=5)
