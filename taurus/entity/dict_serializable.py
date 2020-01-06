@@ -36,7 +36,7 @@ class DictSerializable(ABC):
         for name, arg in d.items():
             if name in expected_arg_names:
                 kwargs[name] = arg
-            else:
+            elif name != 'type':
                 logger.warning('Ignoring unexpected keyword argument in {}: {}'.format(
                     cls.__name__, name))
         # noinspection PyArgumentList
