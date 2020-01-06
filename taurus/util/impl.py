@@ -28,7 +28,7 @@ def set_uuids(obj, name="auto"):
 def _substitute(thing,
                 sub: Callable[[object], object],
                 applies: Callable[[object], bool],
-                visited: Dict[int, object] = None) -> object:
+                visited: Dict[object, object] = None) -> object:
     """
     Generic recursive substitute function.
 
