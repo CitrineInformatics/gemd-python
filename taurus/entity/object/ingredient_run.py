@@ -103,7 +103,8 @@ class IngredientRun(BaseObject, HasQuantities):
         elif isinstance(material, (MaterialRun, LinkByUID)):
             self._material = material
         else:
-            raise TypeError("IngredientRun.material must be a MaterialRun or LinkByUID")
+            raise TypeError("IngredientRun.material must be a MaterialRun or "
+                            "LinkByUID: {}".format(material))
 
     @property
     def process(self):
@@ -127,7 +128,8 @@ class IngredientRun(BaseObject, HasQuantities):
         elif isinstance(process, LinkByUID):
             self._process = process
         else:
-            raise TypeError("IngredientRun.process must be a ProcessRun or LinkByUID")
+            raise TypeError("IngredientRun.process must be a ProcessRun or "
+                            "LinkByUID: {}".format(process))
 
     @property
     def spec(self):

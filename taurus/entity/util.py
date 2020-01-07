@@ -112,8 +112,7 @@ def complete_material_history(mat):
     result = []
 
     def body(obj: BaseEntity):
-        copy = loads(dumps(obj))
-        substitute_links(copy)
+        copy = substitute_links(loads(dumps(obj)))
         result.append(json.loads(dumps(copy))[0][0])
 
     recursive_foreach(mat, body, apply_first=False)
