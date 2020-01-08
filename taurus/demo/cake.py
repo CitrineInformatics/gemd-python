@@ -790,6 +790,11 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
         id_queue += x.material.process.ingredients
 
     cake.notes = cake.notes + "; Très délicieux! 😀"
+    cake.file_links = [FileLink(
+        filename="Photo",
+        url='https://www.landolakes.com/RecipeManagementSystem/media/'
+            'Recipe-Media-Files/Recipes/Retail/x17/16730-beckys-butter-cake-600x600.jpg?ext=.jpg'
+    )]
 
     return cake
 
