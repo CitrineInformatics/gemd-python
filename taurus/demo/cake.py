@@ -42,6 +42,10 @@ from taurus.entity.file_link import FileLink
 from taurus.entity.source.performed_source import PerformedSource
 
 
+# For now, module constant, though likely this should get promoted to a package level
+DEMO_SCOPE = 'citrine-demo'
+
+
 def make_cake_templates():
     """Define all templates independently, as in the wild this will be an independent operation."""
     tmpl = dict()
@@ -153,6 +157,9 @@ def make_cake_templates():
                                                      'sweetener', 'shortening', 'flavoring'])
     tmpl["Procurement"] = ProcessTemplate(name="Procurement",
                                           description="Buyin' stuff")
+
+    for key in tmpl:
+        tmpl[key].add_uid(DEMO_SCOPE, key)
 
     return tmpl
 
@@ -613,6 +620,25 @@ def make_cake_spec(tmpl=None):
         material=powder_sugar,
         mass_fraction=NominalReal(nominal=0.6387, units='')  # 4 c @ 30 g/ 0.25 cups
     )
+
+    # Crawl tree and annotate with uids
+    queue = [cake]
+    seen = set()
+    while queue:
+        item = queue.pop(0)
+        if item in seen:
+            continue
+        seen.add(item)
+
+        item.add_uid(DEMO_SCOPE, item.name)
+
+        if isinstance(item, MaterialSpec):
+            queue.append(item.process)
+        elif isinstance(item, ProcessSpec):
+            queue.extend(item.ingredients)
+        elif isinstance(item, IngredientSpec):
+            queue.append(item.material)
+
     return cake
 
 
@@ -754,12 +780,13 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     cake.spec.template = tmpl['Dessert']
     frosting.spec.template = tmpl['Dessert']
 
-    # Code to force all scopes to 'id'
-    set_uuids([cake, cake_taste, cake_appearance, frosting_taste, frosting_sweetness], name='id')
+    # Code to force all scope to DEMO, though it's not repeatable in the right way yet
+    set_uuids([cake, cake_taste, cake_appearance,
+               frosting_taste, frosting_sweetness], name=DEMO_SCOPE)
     id_queue = [x for x in cake.process.ingredients]
     while id_queue:
         x = id_queue.pop(0)
-        set_uuids([x], name='id')
+        set_uuids([x], name=DEMO_SCOPE)
         id_queue += x.material.process.ingredients
 
     return cake
