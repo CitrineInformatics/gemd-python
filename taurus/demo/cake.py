@@ -789,6 +789,8 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
         set_uuids([x], name=DEMO_SCOPE)
         id_queue += x.material.process.ingredients
 
+    cake.notes = cake.notes + "; Très délicieux! 😀"
+
     return cake
 
 
