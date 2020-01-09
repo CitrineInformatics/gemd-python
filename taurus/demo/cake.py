@@ -215,7 +215,7 @@ def make_cake_spec(tmpl=None):
         notes='Chocolate frosting'
     )
     IngredientSpec(
-        name="{} input".format(frosting.name),
+        name="{} input".format(frosting.name.replace('Abstract ', '')),
         tags=list(frosting.tags),
         notes='Seems like a lot of frosting',
         labels=['coating'],
@@ -240,7 +240,7 @@ def make_cake_spec(tmpl=None):
         notes='The cakey part of the cake'
     )
     IngredientSpec(
-        name="{} input".format(baked_cake.name),
+        name="{} input".format(baked_cake.name.replace('Abstract ', '')),
         tags=list(baked_cake.tags),
         labels=['substrate'],
         process=cake.process,
@@ -264,7 +264,7 @@ def make_cake_spec(tmpl=None):
         notes='The fluid that converts to cake with heat'
     )
     IngredientSpec(
-        name="{} input".format(batter.name),
+        name="{} input".format(batter.name.replace('Abstract ', '')),
         tags=list(batter.tags),
         labels=['precursor'],
         process=baked_cake.process,
@@ -288,7 +288,7 @@ def make_cake_spec(tmpl=None):
         notes='The wet fraction of a batter'
     )
     IngredientSpec(
-        name="{} input".format(wetmix.name),
+        name="{} input".format(wetmix.name.replace('Abstract ', '')),
         tags=list(wetmix.tags),
         labels=['wet'],
         process=batter.process,
@@ -311,7 +311,7 @@ def make_cake_spec(tmpl=None):
         notes='The dry fraction of a batter'
     )
     IngredientSpec(
-        name="{} input".format(drymix.name),
+        name="{} input".format(drymix.name.replace('Abstract ', '')),
         tags=list(drymix.tags),
         labels=['dry'],
         process=batter.process,
@@ -360,7 +360,7 @@ def make_cake_spec(tmpl=None):
         notes='All-purpose flour'
     )
     IngredientSpec(
-        name="{} input".format(flour.name),
+        name="{} input".format(flour.name.replace('Abstract ', '')),
         tags=list(flour.tags),
         labels=['dry'],
         process=drymix.process,
@@ -384,7 +384,7 @@ def make_cake_spec(tmpl=None):
         notes='Leavening agent for cake'
     )
     IngredientSpec(
-        name="{} input".format(baking_powder.name),
+        name="{} input".format(baking_powder.name.replace('Abstract ', '')),
         tags=list(baking_powder.tags),
         labels=['leavening', 'dry'],
         process=drymix.process,
@@ -411,7 +411,7 @@ def make_cake_spec(tmpl=None):
         ]
     )
     IngredientSpec(
-        name="{} input".format(salt.name),
+        name="{} input".format(salt.name.replace('Abstract ', '')),
         tags=list(salt.tags),
         labels=['dry', 'seasoning'],
         process=drymix.process,
@@ -438,7 +438,7 @@ def make_cake_spec(tmpl=None):
         ]
     )
     IngredientSpec(
-        name="{} input".format(sugar.name),
+        name="{} input".format(sugar.name.replace('Abstract ', '')),
         tags=list(sugar.tags),
         labels=['wet', 'sweetener'],
         process=wetmix.process,
@@ -462,7 +462,7 @@ def make_cake_spec(tmpl=None):
         notes='Shortening for making rich, buttery baked goods'
     )
     IngredientSpec(
-        name="{} input".format(butter.name),
+        name="{} input".format(butter.name.replace('Abstract ', '')),
         tags=list(butter.tags),
         labels=['wet', 'shortening'],
         process=wetmix.process,
@@ -470,7 +470,7 @@ def make_cake_spec(tmpl=None):
         absolute_quantity=NominalReal(nominal=1, units='cups')
     )
     IngredientSpec(
-        name="{} input".format(butter.name),
+        name="{} input".format(butter.name.replace('Abstract ', '')),
         tags=list(butter.tags),
         labels=['shortening'],
         process=frosting.process,
@@ -494,7 +494,7 @@ def make_cake_spec(tmpl=None):
         notes=''
     )
     IngredientSpec(
-        name="{} input".format(eggs.name),
+        name="{} input".format(eggs.name.replace('Abstract ', '')),
         tags=list(eggs.tags),
         labels=['wet'],
         process=wetmix.process,
@@ -518,7 +518,7 @@ def make_cake_spec(tmpl=None):
         notes=''
     )
     IngredientSpec(
-        name="{} input".format(vanilla.name),
+        name="{} input".format(vanilla.name.replace('Abstract ', '')),
         tags=list(vanilla.tags),
         labels=['wet', 'flavoring'],
         process=wetmix.process,
@@ -526,7 +526,7 @@ def make_cake_spec(tmpl=None):
         absolute_quantity=NominalReal(nominal=2, units='teaspoons')
     )
     IngredientSpec(
-        name="{} input".format(vanilla.name),
+        name="{} input".format(vanilla.name.replace('Abstract ', '')),
         tags=list(vanilla.tags),
         labels=['flavoring'],
         process=frosting.process,
@@ -550,7 +550,7 @@ def make_cake_spec(tmpl=None):
         notes=''
     )
     IngredientSpec(
-        name="{} input".format(milk.name),
+        name="{} input".format(milk.name.replace('Abstract ', '')),
         tags=list(milk.tags),
         labels=['wet'],
         process=batter.process,
@@ -558,7 +558,7 @@ def make_cake_spec(tmpl=None):
         absolute_quantity=NominalReal(nominal=1, units='cup')
     )
     IngredientSpec(
-        name="{} input".format(milk.name),
+        name="{} input".format(milk.name.replace('Abstract ', '')),
         tags=list(milk.tags),
         labels=[],
         process=frosting.process,
@@ -582,7 +582,7 @@ def make_cake_spec(tmpl=None):
         notes=''
     )
     IngredientSpec(
-        name="{} input".format(chocolate.name),
+        name="{} input".format(chocolate.name.replace('Abstract ', '')),
         tags=list(chocolate.tags),
         labels=['flavoring'],
         process=frosting.process,
@@ -606,7 +606,7 @@ def make_cake_spec(tmpl=None):
         notes='Granulated sugar mixed with corn starch'
     )
     IngredientSpec(
-        name="{} input".format(powder_sugar.name),
+        name="{} input".format(powder_sugar.name.replace('Abstract ', '')),
         tags=list(powder_sugar.tags),
         labels=['flavoring'],
         process=frosting.process,
@@ -637,8 +637,7 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     queue = [cake]
     while queue:
         item = queue.pop(0)
-        if not isinstance(item, IngredientRun):
-            item.name = item.name.replace('Abstract ', '').replace(', in General', '')
+        item.name = item.name.replace('Abstract ', '').replace(', in General', '')
         if item.spec.tags is not None:
             item.tags = list(item.spec.tags)
         if item.spec.notes:  # None or empty string
