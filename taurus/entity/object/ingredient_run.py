@@ -12,25 +12,6 @@ class IngredientRun(BaseObject, HasQuantities):
 
     Ingredients annotate a material with information about its usage in a process.
 
-    *  If a user invokes the IngredientRun constructor in citrine-python with either the name
-       or labels argument, a deprecation warning will be issued
-
-    * If a user invokes the spec setter on an IngredientRun and the value is an IngredientSpec
-      (as opposed to a LinkByUID), the `name` and `labels` fields will be set to `spec.name`
-      and `spec.labels`, respectively
-
-        * This is also true with the spec argument to the IngredientRun constructor - the spec
-          setter is called by the constructor
-
-    * If a user attempts to register an IngredientRun whose name or labels do not match those of
-      its spec, a validation error (HTTP 400) will be returned
-
-        * This includes if the values are None, so users should explicitly set their spec to be
-          the appropriate IngredientSpec and not just a LinkByUID
-
-    * Any attempt to update the name or labels of an IngredientSpec that is referenced by 1 or
-      more IngredientRuns will return a validation error (HTTP 400)
-
     Parameters
     ----------
     uids: Map[str, str], optional
