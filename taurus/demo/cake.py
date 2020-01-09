@@ -637,15 +637,16 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     queue = [cake]
     while queue:
         item = queue.pop(0)
-        item.name = item.name.replace('Abstract ', '').replace(', in General', '')
         if item.spec.tags is not None:
             item.tags = list(item.spec.tags)
         if item.spec.notes:  # None or empty string
             item.notes = 'The spec says "{}"'.format(item.spec.notes)
 
         if isinstance(item, MaterialRun):
+            item.name = item.name.replace('Abstract ', '')
             queue.append(item.process)
         elif isinstance(item, ProcessRun):
+            item.name = item.name.replace(', in General', '')
             queue.extend(item.ingredients)
             if item.template.name == "Procurement":
                 item.source = PerformedSource(performed_by='hamilton',
