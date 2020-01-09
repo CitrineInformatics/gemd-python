@@ -637,7 +637,8 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     queue = [cake]
     while queue:
         item = queue.pop(0)
-        item.name = item.name.replace('Abstract ', '').replace(', in General', '')
+        if not isinstance(item, IngredientRun):
+            item.name = item.name.replace('Abstract ', '').replace(', in General', '')
         if item.spec.tags is not None:
             item.tags = list(item.spec.tags)
         if item.spec.notes:  # None or empty string
