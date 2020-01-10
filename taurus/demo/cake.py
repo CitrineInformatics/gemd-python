@@ -172,6 +172,18 @@ def make_cake_spec(tmpl=None):
     if tmpl is None:
         tmpl = make_cake_templates()
 
+    count = dict()
+
+    def ingredient_kwargs(material):
+        # Pulls the elements of a material that all ingredients consume out
+        count[material.name] = count.get(material.name, 0) + 1
+        return {
+            "name": "{} input{}".format(material.name.replace('Abstract ', ''),
+                                        " (Again)" * (count[material.name] - 1)),
+            "tags": list(material.tags),
+            "material": material
+        }
+
     ###############################################################################################
     # Objects
     cake = MaterialSpec(
@@ -223,12 +235,10 @@ def make_cake_spec(tmpl=None):
         notes='Chocolate frosting'
     )
     IngredientSpec(
-        name="{} input".format(frosting.name),
-        tags=list(frosting.tags),
+        **ingredient_kwargs(frosting),
         notes='Seems like a lot of frosting',
         labels=['coating'],
         process=cake.process,
-        material=frosting,
         absolute_quantity=NominalReal(nominal=0.751, units='kg')
     )
 
@@ -248,11 +258,9 @@ def make_cake_spec(tmpl=None):
         notes='The cakey part of the cake'
     )
     IngredientSpec(
-        name="{} input".format(baked_cake.name),
-        tags=list(baked_cake.tags),
+        **ingredient_kwargs(baked_cake),
         labels=['substrate'],
-        process=cake.process,
-        material=baked_cake
+        process=cake.process
     )
 
     ########################
@@ -272,11 +280,9 @@ def make_cake_spec(tmpl=None):
         notes='The fluid that converts to cake with heat'
     )
     IngredientSpec(
-        name="{} input".format(batter.name),
-        tags=list(batter.tags),
+        **ingredient_kwargs(batter),
         labels=['precursor'],
-        process=baked_cake.process,
-        material=batter
+        process=baked_cake.process
     )
 
     ########################
@@ -296,11 +302,9 @@ def make_cake_spec(tmpl=None):
         notes='The wet fraction of a batter'
     )
     IngredientSpec(
-        name="{} input".format(wetmix.name),
-        tags=list(wetmix.tags),
+        **ingredient_kwargs(wetmix),
         labels=['wet'],
-        process=batter.process,
-        material=wetmix
+        process=batter.process
     )
 
     drymix = MaterialSpec(
@@ -319,11 +323,9 @@ def make_cake_spec(tmpl=None):
         notes='The dry fraction of a batter'
     )
     IngredientSpec(
-        name="{} input".format(drymix.name),
-        tags=list(drymix.tags),
+        **ingredient_kwargs(drymix),
         labels=['dry'],
         process=batter.process,
-        material=drymix,
         absolute_quantity=NominalReal(nominal=3.052, units='cups')
     )
 
@@ -368,11 +370,9 @@ def make_cake_spec(tmpl=None):
         notes='All-purpose flour'
     )
     IngredientSpec(
-        name="{} input".format(flour.name),
-        tags=list(flour.tags),
+        **ingredient_kwargs(flour),
         labels=['dry'],
         process=drymix.process,
-        material=flour,
         volume_fraction=NominalReal(nominal=0.9829, units='')  # 3 cups
     )
 
@@ -392,11 +392,9 @@ def make_cake_spec(tmpl=None):
         notes='Leavening agent for cake'
     )
     IngredientSpec(
-        name="{} input".format(baking_powder.name),
-        tags=list(baking_powder.tags),
+        **ingredient_kwargs(baking_powder),
         labels=['leavening', 'dry'],
         process=drymix.process,
-        material=baking_powder,
         volume_fraction=NominalReal(nominal=0.0137, units='')  # 2 teaspoons
     )
 
@@ -419,11 +417,9 @@ def make_cake_spec(tmpl=None):
         ]
     )
     IngredientSpec(
-        name="{} input".format(salt.name),
-        tags=list(salt.tags),
+        **ingredient_kwargs(salt),
         labels=['dry', 'seasoning'],
         process=drymix.process,
-        material=salt,
         volume_fraction=NominalReal(nominal=0.0034, units='')  # 1/2 teaspoon
     )
 
@@ -446,11 +442,9 @@ def make_cake_spec(tmpl=None):
         ]
     )
     IngredientSpec(
-        name="{} input".format(sugar.name),
-        tags=list(sugar.tags),
+        **ingredient_kwargs(sugar),
         labels=['wet', 'sweetener'],
         process=wetmix.process,
-        material=sugar,
         absolute_quantity=NominalReal(nominal=2, units='cups')
     )
 
@@ -470,19 +464,15 @@ def make_cake_spec(tmpl=None):
         notes='Shortening for making rich, buttery baked goods'
     )
     IngredientSpec(
-        name="{} input".format(butter.name),
-        tags=list(butter.tags),
+        **ingredient_kwargs(butter),
         labels=['wet', 'shortening'],
         process=wetmix.process,
-        material=butter,
         absolute_quantity=NominalReal(nominal=1, units='cups')
     )
     IngredientSpec(
-        name="{} input".format(butter.name),
-        tags=list(butter.tags),
+        **ingredient_kwargs(butter),
         labels=['shortening'],
         process=frosting.process,
-        material=butter,
         mass_fraction=NominalReal(nominal=0.1434, units='')  # 1/2 c @ 0.911 g/cc
     )
 
@@ -502,11 +492,8 @@ def make_cake_spec(tmpl=None):
         notes=''
     )
     IngredientSpec(
-        name="{} input".format(eggs.name),
-        tags=list(eggs.tags),
+        **ingredient_kwargs(eggs),
         labels=['wet'],
-        process=wetmix.process,
-        material=eggs,
         absolute_quantity=NominalReal(nominal=4, units='')
     )
 
@@ -526,19 +513,15 @@ def make_cake_spec(tmpl=None):
         notes=''
     )
     IngredientSpec(
-        name="{} input".format(vanilla.name),
-        tags=list(vanilla.tags),
+        **ingredient_kwargs(vanilla),
         labels=['wet', 'flavoring'],
         process=wetmix.process,
-        material=vanilla,
         absolute_quantity=NominalReal(nominal=2, units='teaspoons')
     )
     IngredientSpec(
-        name="{} input".format(vanilla.name),
-        tags=list(vanilla.tags),
+        **ingredient_kwargs(vanilla),
         labels=['flavoring'],
         process=frosting.process,
-        material=vanilla,
         mass_fraction=NominalReal(nominal=0.0231, units='')  # 2 tsp @ 0.879 g/cc
     )
 
@@ -558,19 +541,15 @@ def make_cake_spec(tmpl=None):
         notes=''
     )
     IngredientSpec(
-        name="{} input".format(milk.name),
-        tags=list(milk.tags),
+        **ingredient_kwargs(milk),
         labels=['wet'],
         process=batter.process,
-        material=milk,
         absolute_quantity=NominalReal(nominal=1, units='cup')
     )
     IngredientSpec(
-        name="{} input".format(milk.name),
-        tags=list(milk.tags),
+        **ingredient_kwargs(milk),
         labels=[],
         process=frosting.process,
-        material=milk,
         mass_fraction=NominalReal(nominal=0.0816, units='')  # 1/4 c @ 1.037 g/cc
     )
 
@@ -590,11 +569,9 @@ def make_cake_spec(tmpl=None):
         notes=''
     )
     IngredientSpec(
-        name="{} input".format(chocolate.name),
-        tags=list(chocolate.tags),
+        **ingredient_kwargs(chocolate),
         labels=['flavoring'],
         process=frosting.process,
-        material=chocolate,
         mass_fraction=NominalReal(nominal=0.1132, units='')  # 3 oz.
     )
 
@@ -614,11 +591,9 @@ def make_cake_spec(tmpl=None):
         notes='Granulated sugar mixed with corn starch'
     )
     IngredientSpec(
-        name="{} input".format(powder_sugar.name),
-        tags=list(powder_sugar.tags),
+        **ingredient_kwargs(powder_sugar),
         labels=['flavoring'],
         process=frosting.process,
-        material=powder_sugar,
         mass_fraction=NominalReal(nominal=0.6387, units='')  # 4 c @ 30 g/ 0.25 cups
     )
 
@@ -652,15 +627,16 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     queue = [cake]
     while queue:
         item = queue.pop(0)
-        item.name = item.name.replace('Abstract ', '').replace(', in General', '')
         if item.spec.tags is not None:
             item.tags = list(item.spec.tags)
         if item.spec.notes:  # None or empty string
             item.notes = 'The spec says "{}"'.format(item.spec.notes)
 
         if isinstance(item, MaterialRun):
+            item.name = item.name.replace('Abstract ', '')
             queue.append(item.process)
         elif isinstance(item, ProcessRun):
+            item.name = item.name.replace(', in General', '')
             queue.extend(item.ingredients)
             if item.template.name == "Procurement":
                 item.source = PerformedSource(performed_by='hamilton',
