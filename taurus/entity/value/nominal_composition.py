@@ -42,4 +42,3 @@ class NominalComposition(CompositionValue):
             self._quantities = dict(quantities)
         else:
             raise TypeError("quantities must be dict or List of two-item lists or None")
-
