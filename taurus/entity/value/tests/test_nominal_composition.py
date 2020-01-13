@@ -19,9 +19,3 @@ def test_invalid_assignment():
     with pytest.raises(TypeError):
         NominalComposition(("a quantity", 55))
 
-
-def test_quantities_as_dict():
-    """Test that the as_dict() method represents `quantities` as a list."""
-    test_composition = NominalComposition(dict(acetone=0.25, methanol=0.75))
-    quantities = test_composition.as_dict().get('quantities')
-    assert isinstance(quantities, list) and len(quantities) == 2
