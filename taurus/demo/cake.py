@@ -160,8 +160,9 @@ def make_cake_templates():
                                           description="Buyin' stuff")
 
     for key in tmpl:
-        tmpl[key].add_uid(DEMO_SCOPE, key)
-
+        tmpl[key].add_uid(DEMO_SCOPE, key + "-template")  # Hack to fix collisions
+        # TDOO: This should really be done in a new scope and with reasonable names, but
+        # time constraint
     return tmpl
 
 
@@ -687,7 +688,7 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     cake_appearance.spec = MeasurementSpec(name='Appearance')
     frosting_taste.spec = cake_taste.spec  # Taste
     frosting_sweetness.spec = MeasurementSpec(name='Sweetness')
-    baked_doneness.spec = MeasurementSpec(name='Sweetness', template=tmpl["Doneness"])
+    baked_doneness.spec = MeasurementSpec(name='Doneness', template=tmpl["Doneness"])
 
     ######################################################################
     # Let's add some attributes
