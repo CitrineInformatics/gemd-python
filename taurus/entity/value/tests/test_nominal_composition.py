@@ -18,4 +18,3 @@ def test_invalid_assignment():
     """Test that invalid assignment produces a TypeError."""
     with pytest.raises(TypeError):
         NominalComposition(("a quantity", 55))
-        
