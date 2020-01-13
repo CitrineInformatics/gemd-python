@@ -3,7 +3,6 @@ import json
 
 import random
 
-from taurus.client.json_encoder import thin_dumps
 from taurus.entity.attribute.condition import Condition
 from taurus.entity.attribute.parameter import Parameter
 from taurus.entity.attribute.property import Property
@@ -36,10 +35,16 @@ from taurus.entity.value.discrete_categorical import DiscreteCategorical
 from taurus.entity.value.nominal_composition import NominalComposition
 from taurus.entity.value.empirical_formula import EmpiricalFormula
 from taurus.enumeration.origin import Origin
-from taurus.util.impl import set_uuids
 from taurus.entity.util import complete_material_history, make_instance
 from taurus.entity.file_link import FileLink
 from taurus.entity.source.performed_source import PerformedSource
+
+from taurus.client.json_encoder import thin_dumps
+from taurus.util.impl import recursive_foreach
+
+
+# For now, module constant, though likely this should get promoted to a package level
+DEMO_SCOPE = 'citrine-demo'
 
 
 def make_cake_templates():
@@ -154,6 +159,10 @@ def make_cake_templates():
     tmpl["Procurement"] = ProcessTemplate(name="Procurement",
                                           description="Buyin' stuff")
 
+    for key in tmpl:
+        tmpl[key].add_uid(DEMO_SCOPE, key + "-template")  # Hack to fix collisions
+        # TDOO: This should really be done in a new scope and with reasonable names, but
+        # time constraint
     return tmpl
 
 
@@ -182,7 +191,7 @@ def make_cake_spec(tmpl=None):
         name="Abstract Cake",
         template=tmpl["Dessert"],
         process=ProcessSpec(
-            name='Icing, in General',
+            name='Icing Cake, in General',
             template=tmpl["Icing"],
             tags=[
                 'spreading'
@@ -588,11 +597,18 @@ def make_cake_spec(tmpl=None):
         process=frosting.process,
         mass_fraction=NominalReal(nominal=0.6387, units='')  # 4 c @ 30 g/ 0.25 cups
     )
+
+    # Crawl tree and annotate with uids
+    recursive_foreach(cake, lambda obj: obj.add_uid(DEMO_SCOPE, obj.name))
+
     return cake
 
 
 def make_cake(seed=None, tmpl=None, cake_spec=None):
     """Define all objects that go into making a demo cake."""
+    import struct
+    import hashlib
+
     if seed is not None:
         random.seed(seed)
     ######################################################################
@@ -672,7 +688,7 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     cake_appearance.spec = MeasurementSpec(name='Appearance')
     frosting_taste.spec = cake_taste.spec  # Taste
     frosting_sweetness.spec = MeasurementSpec(name='Sweetness')
-    baked_doneness.spec = MeasurementSpec(name='Sweetness', template=tmpl["Doneness"])
+    baked_doneness.spec = MeasurementSpec(name='Doneness', template=tmpl["Doneness"])
 
     ######################################################################
     # Let's add some attributes
@@ -730,19 +746,67 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     cake.spec.template = tmpl['Dessert']
     frosting.spec.template = tmpl['Dessert']
 
-    # Code to force all scopes to 'id'
-    set_uuids([cake, cake_taste, cake_appearance, frosting_taste, frosting_sweetness], name='id')
-    id_queue = [x for x in cake.process.ingredients]
+    # Code to generate quasi-repeatable run annotations
+    # Note there are potential machine dependencies
+    md5 = hashlib.md5()
+    for x in random.getstate()[1]:
+        md5.update(struct.pack(">I", x))
+    run_key = md5.hexdigest()
+
+    id_queue = [cake, cake_taste, cake_appearance, frosting_taste, frosting_sweetness,
+                baked_doneness, cake_taste.spec, cake_appearance.spec, frosting_taste.spec,
+                frosting_sweetness.spec, baked_doneness.spec]
     while id_queue:
-        x = id_queue.pop(0)
-        set_uuids([x], name='id')
-        id_queue += x.material.process.ingredients
+        item = id_queue.pop(0)
+        item.add_uid(DEMO_SCOPE, '{}-{}'.format(item.name, run_key))
+        if isinstance(item, MaterialRun):
+            id_queue.append(item.process)
+        elif isinstance(item, ProcessRun):
+            id_queue.extend(item.ingredients)
+        elif isinstance(item, IngredientRun):
+            id_queue.append(item.material)
+
+    cake.notes = cake.notes + "; Très délicieux! 😀"
+    cake.file_links = [FileLink(
+        filename="Photo",
+        url='https://www.landolakes.com/RecipeManagementSystem/media/'
+            'Recipe-Media-Files/Recipes/Retail/x17/16730-beckys-butter-cake-600x600.jpg?ext=.jpg'
+    )]
 
     return cake
 
 
 if __name__ == "__main__":
     cake = make_cake(seed=42)
+
+    queue = [cake]
+    seen = set()
+    id_seen = set()
+    while queue:
+        item = queue.pop(0)
+        if item is None or id(item) in id_seen:
+            continue
+        id_seen.add(id(item))
+
+        # for scope in item.uids:
+        #     if item.uids[scope] in seen:
+        #         print(scope, item.uids[scope], item.name)
+        #     seen.add(item.uids[scope])
+        if item.name in seen:
+            print(item.name)
+        seen.add(item.name)
+
+        if isinstance(item, (MaterialRun, MeasurementRun, ProcessRun, IngredientRun)):
+            queue.append(item.spec)
+        if isinstance(item, (MaterialSpec, MeasurementSpec, ProcessSpec)):
+            queue.append(item.template)
+        if isinstance(item, MaterialRun):
+            queue.append(item.process)
+            queue.extend(item.measurements)
+        if isinstance(item, ProcessRun):
+            queue.extend(item.ingredients)
+        if isinstance(item, IngredientRun):
+            queue.append(item.material)
 
     with open("example_taurus_material_history.json", "w") as f:
         context_list = complete_material_history(cake)
