@@ -115,6 +115,11 @@ def make_cake_templates():
         description="Serving size in mass units, to go along with FDA Nutrition Facts",
         bounds=RealBounds(1.e-3, 10.e3, "g")
     )
+    tmpl["Chemical Formula"] = PropertyTemplate(
+        name="Chemical Formula",
+        description="The chemical formula of a material",
+        bounds=CompositionBounds(components=EmpiricalFormula.all_elements())
+    )
 
     # Objects
     tmpl["Baking in an oven"] = ProcessTemplate(
@@ -142,11 +147,19 @@ def make_cake_templates():
     )
 
     tmpl["Generic Material"] = MaterialTemplate(name="Generic")
+
     tmpl["Nutritional Material"] = MaterialTemplate(
         name="Nutritional Material",
         description="A material with FDA Nutrition Facts attached",
         properties=[
             tmpl["Nutritional Information"]
+        ]
+    )
+    tmpl["Formulaic Material"] = MaterialTemplate(
+        name="Formulaic Material",
+        description="A material with chemical characterization",
+        properties=[
+            tmpl["Chemical Formula"]
         ]
     )
     tmpl["Icing"] = ProcessTemplate(name="Icing",
@@ -401,7 +414,7 @@ def make_cake_spec(tmpl=None):
 
     salt = MaterialSpec(
         name="Abstract Salt",
-        template=tmpl["Generic Material"],
+        template=tmpl["Formulaic Material"],
         process=ProcessSpec(
             name='Buying Salt, in General',
             template=tmpl["Procurement"],
@@ -426,7 +439,7 @@ def make_cake_spec(tmpl=None):
 
     sugar = MaterialSpec(
         name="Abstract Sugar",
-        template=tmpl["Generic Material"],
+        template=tmpl["Formulaic Material"],
         process=ProcessSpec(
             name='Buying Sugar, in General',
             template=tmpl["Procurement"],
@@ -778,35 +791,6 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
 
 if __name__ == "__main__":
     cake = make_cake(seed=42)
-
-    queue = [cake]
-    seen = set()
-    id_seen = set()
-    while queue:
-        item = queue.pop(0)
-        if item is None or id(item) in id_seen:
-            continue
-        id_seen.add(id(item))
-
-        # for scope in item.uids:
-        #     if item.uids[scope] in seen:
-        #         print(scope, item.uids[scope], item.name)
-        #     seen.add(item.uids[scope])
-        if item.name in seen:
-            print(item.name)
-        seen.add(item.name)
-
-        if isinstance(item, (MaterialRun, MeasurementRun, ProcessRun, IngredientRun)):
-            queue.append(item.spec)
-        if isinstance(item, (MaterialSpec, MeasurementSpec, ProcessSpec)):
-            queue.append(item.template)
-        if isinstance(item, MaterialRun):
-            queue.append(item.process)
-            queue.extend(item.measurements)
-        if isinstance(item, ProcessRun):
-            queue.extend(item.ingredients)
-        if isinstance(item, IngredientRun):
-            queue.append(item.material)
 
     with open("example_taurus_material_history.json", "w") as f:
         context_list = complete_material_history(cake)
