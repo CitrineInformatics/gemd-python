@@ -10,12 +10,41 @@ from taurus.entity.object.ingredient_run import IngredientRun
 
 from taurus.client.json_encoder import dumps, loads
 from taurus.demo.cake import make_cake
+from taurus.util import recursive_foreach
+from taurus.entity.util import complete_material_history
 
 
 def test_cake():
     """Create cake, serialize, deserialize."""
     cake = make_cake()
     assert dumps(loads(dumps(cake)), indent=2) == dumps(cake, indent=2)
+
+    # Check that all the objects show up
+    tot_count = 0
+
+    def increment(dummy):
+        nonlocal tot_count
+        tot_count += 1
+
+    recursive_foreach(cake, increment)
+    assert tot_count == 122
+
+    # And make sure nothing was lost
+    tot_count = 0
+    recursive_foreach(loads(dumps(complete_material_history(cake))), increment)
+    assert tot_count == 122
+
+    # Check that no UIDs collide
+    uid_seen = dict()
+
+    def check_ids(obj):
+        nonlocal uid_seen
+        for scope in obj.uids:
+            lbl = '{}::{}'.format(scope, obj.uids[scope])
+            if lbl in uid_seen:
+                assert uid_seen[lbl] == id(obj)
+            uid_seen[lbl] = id(obj)
+    recursive_foreach(cake, check_ids)
 
     queue = [cake]
     seen = set()
