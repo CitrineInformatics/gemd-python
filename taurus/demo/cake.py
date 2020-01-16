@@ -173,9 +173,7 @@ def make_cake_templates():
                                           description="Buyin' stuff")
 
     for key in tmpl:
-        tmpl[key].add_uid(DEMO_SCOPE, key + "-template")  # Hack to fix collisions
-        # TDOO: This should really be done in a new scope and with reasonable names, but
-        # time constraint
+        tmpl[key].add_uid(DEMO_SCOPE + "-template", key)
     return tmpl
 
 
