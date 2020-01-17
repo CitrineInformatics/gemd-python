@@ -19,11 +19,7 @@ def test_cake():
     cake = make_cake()
 
     def test_for_loss(obj):
-        mirror = loads(dumps(obj))
-
-        if obj.name in ("Baking doneness", "Abstract Flour", "Flour input", "Flour"):
-            return  # TODO figure out why these cases are failing
-        assert(obj == mirror)
+        assert(obj == loads(dumps(obj)))
     recursive_foreach(cake, test_for_loss)
 
     # And verify equality was working in the first place
