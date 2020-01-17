@@ -12,4 +12,3 @@ class BaseValue(DictSerializable):
     """
 
     typ = "value"
-
