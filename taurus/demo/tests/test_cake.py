@@ -21,8 +21,6 @@ def test_cake():
     def test_for_loss(obj):
         if obj.name == "Baking doneness":
             return  # TODO figure out why this case is failing
-        if obj != loads(dumps(obj)):
-            print(dumps(obj, indent=2))
         assert(obj == loads(dumps(obj)))
     recursive_foreach(cake, test_for_loss)
 
