@@ -609,8 +609,8 @@ def make_cake_spec(tmpl=None):
         mass_fraction=NominalReal(nominal=0.6387, units='')  # 4 c @ 30 g/ 0.25 cups
     )
 
-    # Crawl tree and annotate with uids
-    recursive_foreach(cake, lambda obj: obj.add_uid(DEMO_SCOPE, obj.name))
+    # Crawl tree and annotate with uids; only add ids if there's nothing there
+    recursive_foreach(cake, lambda obj: obj.uids or obj.add_uid(DEMO_SCOPE, obj.name))
 
     return cake
 
@@ -700,6 +700,8 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     frosting_taste.spec = cake_taste.spec  # Taste
     frosting_sweetness.spec = MeasurementSpec(name='Sweetness')
     baked_doneness.spec = MeasurementSpec(name='Doneness', template=tmpl["Doneness"])
+    for msr in (cake_taste, cake_appearance, frosting_taste, frosting_sweetness, baked_doneness):
+        msr.spec.add_uid(DEMO_SCOPE, msr.spec.name)
 
     ######################################################################
     # Let's add some attributes
@@ -764,18 +766,8 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
         md5.update(struct.pack(">I", x))
     run_key = md5.hexdigest()
 
-    id_queue = [cake, cake_taste, cake_appearance, frosting_taste, frosting_sweetness,
-                baked_doneness, cake_taste.spec, cake_appearance.spec, frosting_taste.spec,
-                frosting_sweetness.spec, baked_doneness.spec]
-    while id_queue:
-        item = id_queue.pop(0)
-        item.add_uid(DEMO_SCOPE, '{}-{}'.format(item.name, run_key))
-        if isinstance(item, MaterialRun):
-            id_queue.append(item.process)
-        elif isinstance(item, ProcessRun):
-            id_queue.extend(item.ingredients)
-        elif isinstance(item, IngredientRun):
-            id_queue.append(item.material)
+    # Crawl tree and annotate with uids; only add ids if there's nothing there
+    recursive_foreach(cake, lambda obj: obj.uids or obj.add_uid(DEMO_SCOPE, obj.name + run_key))
 
     cake.notes = cake.notes + "; Très délicieux! 😀"
     cake.file_links = [FileLink(
