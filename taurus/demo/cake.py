@@ -110,9 +110,9 @@ def make_cake_templates():
             ]
         )
     )
-    tmpl["Serving Size"] = ConditionTemplate(
-        name="Serving Size",
-        description="Serving size in mass units, to go along with FDA Nutrition Facts",
+    tmpl["Sample Size"] = ConditionTemplate(
+        name="Sample Size",
+        description="Sample size in mass units, to go along with FDA Nutrition Facts",
         bounds=RealBounds(1.e-3, 10.e3, "g")
     )
     tmpl["Chemical Formula"] = PropertyTemplate(
@@ -141,10 +141,15 @@ def make_cake_templates():
         properties=[tmpl["Tastiness"]]
     )
 
-    tmpl["Chemical Analysis"] = MeasurementTemplate(
-        name="Chemical Analysis",
+    tmpl["Nutritional Analysis"] = MeasurementTemplate(
+        name="Nutritional Analysis",
         properties=[tmpl["Nutritional Information"]],
-        conditions=[tmpl["Serving Size"]]
+        conditions=[tmpl["Sample Size"]]
+    )
+    tmpl["Nutritional Analysis"] = MeasurementTemplate(
+        name="Nutritional Analysis",
+        properties=[tmpl["Nutritional Information"]],
+        conditions=[tmpl["Sample Size"]]
     )
 
     tmpl["Dessert"] = MaterialTemplate(
@@ -370,7 +375,7 @@ def make_cake_spec(tmpl=None):
                 conditions=Condition(
                     name="Serving Size",
                     value=NominalReal(30, 'g'),
-                    template=tmpl["Serving Size"],
+                    template=tmpl["Sample Size"],
                     origin="specified"
                 )
             )
@@ -711,7 +716,7 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     frosting_taste = MeasurementRun(name='Frosting Taste', material=frosting)
     frosting_sweetness = MeasurementRun(name='Frosting Sweetness', material=frosting)
     baked_doneness = MeasurementRun(name='Baking doneness', material=baked)
-    flour_content = MeasurementRun(name='Flour chemical analysis', material=flour)
+    flour_content = MeasurementRun(name='Flour nutritional analysis', material=flour)
 
     # and spec out the measurements
     cake_taste.spec = MeasurementSpec(name='Taste', template=tmpl['Taste test'])
@@ -719,8 +724,8 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     frosting_taste.spec = cake_taste.spec  # Taste
     frosting_sweetness.spec = MeasurementSpec(name='Sweetness')
     baked_doneness.spec = MeasurementSpec(name='Doneness', template=tmpl["Doneness"])
-    flour_content.spec = MeasurementSpec(name='Chemical analysis',
-                                         template=tmpl["Chemical Analysis"])
+    flour_content.spec = MeasurementSpec(name='Nutritional analysis',
+                                         template=tmpl["Nutritional Analysis"])
     for msr in (cake_taste, cake_appearance, frosting_taste, frosting_sweetness,
                 baked_doneness, flour_content):
         msr.spec.add_uid(DEMO_SCOPE, msr.spec.name)
@@ -795,7 +800,7 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
             std=0.15,
             units='mg'
         ),
-        template=tmpl["Serving Size"],
+        template=tmpl["Sample Size"],
         origin="measured"
     ))
     flour_content.spec.conditions.append(Condition(
@@ -804,7 +809,7 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
             nominal=10,
             units='mg'
         ),
-        template=tmpl["Serving Size"],
+        template=tmpl["Sample Size"],
         origin="specified"
     ))
 
