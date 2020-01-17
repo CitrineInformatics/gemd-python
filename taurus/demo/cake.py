@@ -736,7 +736,7 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     sugar_content.spec = salt_content.spec
 
     for msr in (cake_taste, cake_appearance, frosting_taste, frosting_sweetness,
-                baked_doneness, flour_content):
+                baked_doneness, flour_content, salt_content, sugar_content):
         msr.spec.add_uid(DEMO_SCOPE, msr.spec.name)
 
     ######################################################################
