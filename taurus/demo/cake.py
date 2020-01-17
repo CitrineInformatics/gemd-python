@@ -110,9 +110,9 @@ def make_cake_templates():
             ]
         )
     )
-    tmpl["Serving Size"] = ConditionTemplate(
-        name="Serving Size",
-        description="Serving size in mass units, to go along with FDA Nutrition Facts",
+    tmpl["Sample Size"] = ConditionTemplate(
+        name="Sample Size",
+        description="Sample size in mass units, to go along with FDA Nutrition Facts",
         bounds=RealBounds(1.e-3, 10.e3, "g")
     )
     tmpl["Chemical Formula"] = PropertyTemplate(
@@ -139,6 +139,17 @@ def make_cake_templates():
     tmpl["Taste test"] = MeasurementTemplate(
         name="Taste test",
         properties=[tmpl["Tastiness"]]
+    )
+
+    tmpl["Nutritional Analysis"] = MeasurementTemplate(
+        name="Nutritional Analysis",
+        properties=[tmpl["Nutritional Information"]],
+        conditions=[tmpl["Sample Size"]]
+    )
+    tmpl["Elemental Analysis"] = MeasurementTemplate(
+        name="Elemental Analysis",
+        properties=[tmpl["Chemical Formula"]],
+        conditions=[tmpl["Sample Size"]]
     )
 
     tmpl["Dessert"] = MaterialTemplate(
@@ -364,7 +375,7 @@ def make_cake_spec(tmpl=None):
                 conditions=Condition(
                     name="Serving Size",
                     value=NominalReal(30, 'g'),
-                    template=tmpl["Serving Size"],
+                    template=tmpl["Sample Size"],
                     origin="specified"
                 )
             )
@@ -687,12 +698,29 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     baked = \
         next(x.material for x in cake.process.ingredients if 'aked' in x.name)
 
+    def find_name(name, material):
+        # Recursively search for the right material
+        if name == material.name:
+            return material
+        for ingredient in material.process.ingredients:
+            result = find_name(name, ingredient.material)
+            if result:
+                return result
+        return
+
+    flour = find_name('Flour', cake)
+    salt = find_name('Salt', cake)
+    sugar = find_name('Sugar', cake)
+
     # Add measurements
     cake_taste = MeasurementRun(name='Final Taste', material=cake)
     cake_appearance = MeasurementRun(name='Final Appearance', material=cake)
     frosting_taste = MeasurementRun(name='Frosting Taste', material=frosting)
     frosting_sweetness = MeasurementRun(name='Frosting Sweetness', material=frosting)
     baked_doneness = MeasurementRun(name='Baking doneness', material=baked)
+    flour_content = MeasurementRun(name='Flour nutritional analysis', material=flour)
+    salt_content = MeasurementRun(name='Salt elemental analysis', material=salt)
+    sugar_content = MeasurementRun(name='Sugar elemental analysis', material=sugar)
 
     # and spec out the measurements
     cake_taste.spec = MeasurementSpec(name='Taste', template=tmpl['Taste test'])
@@ -700,7 +728,15 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     frosting_taste.spec = cake_taste.spec  # Taste
     frosting_sweetness.spec = MeasurementSpec(name='Sweetness')
     baked_doneness.spec = MeasurementSpec(name='Doneness', template=tmpl["Doneness"])
-    for msr in (cake_taste, cake_appearance, frosting_taste, frosting_sweetness, baked_doneness):
+    flour_content.spec = MeasurementSpec(name='Nutritional analysis',
+                                         template=tmpl["Nutritional Analysis"])
+    salt_content.spec = MeasurementSpec(name='Elemental analysis',
+                                        template=tmpl["Elemental Analysis"]
+                                        )
+    sugar_content.spec = salt_content.spec
+
+    for msr in (cake_taste, cake_appearance, frosting_taste, frosting_sweetness,
+                baked_doneness, flour_content, salt_content, sugar_content):
         msr.spec.add_uid(DEMO_SCOPE, msr.spec.name)
 
     ######################################################################
@@ -752,12 +788,82 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
         })
     ))
 
-    baked.process.spec.template = tmpl['Baking in an oven']
-    cake_taste.spec.template = tmpl['Taste test']
-    frosting_taste.spec.template = tmpl['Taste test']
+    flour_content.properties.append(Property(
+        name='Nutritional Information',
+        value=NominalComposition(
+            {
+                "dietary-fiber": 1 * (0.99 + 0.02 * random.random()),
+                "sugar": 1 * (0.99 + 0.02 * random.random()),
+                "other-carbohydrate": 20 * (0.99 + 0.02 * random.random()),
+                "protein": 4 * (0.99 + 0.02 * random.random()),
+                "other": 4 * (0.99 + 0.02 * random.random())
+            }
+        ),
+        template=tmpl["Nutritional Information"],
+        origin="measured"
+    ))
+    flour_content.conditions.append(Condition(
+        name='Sample Size',
+        value=NormalReal(
+            mean=99 + 2 * random.random(),
+            std=1.5,
+            units='mg'
+        ),
+        template=tmpl["Sample Size"],
+        origin="measured"
+    ))
+    flour_content.spec.conditions.append(Condition(
+        name='Sample Size',
+        value=NominalReal(
+            nominal=100,
+            units='mg'
+        ),
+        template=tmpl["Sample Size"],
+        origin="specified"
+    ))
 
-    cake.spec.template = tmpl['Dessert']
-    frosting.spec.template = tmpl['Dessert']
+    salt_content.properties.append(Property(
+        name="Composition",
+        value=EmpiricalFormula(formula="NaClCa0.006Si0.006O0.018K0.000015I0.000015"),
+        template=tmpl["Chemical Formula"],
+        origin="measured"
+    ))
+    salt_content.conditions.append(Condition(
+        name='Sample Size',
+        value=NormalReal(
+            mean=99 + 2 * random.random(),
+            std=1.5,
+            units='mg'
+        ),
+        template=tmpl["Sample Size"],
+        origin="measured"
+    ))
+    salt_content.spec.conditions.append(Condition(
+        name='Sample Size',
+        value=NominalReal(
+            nominal=100,
+            units='mg'
+        ),
+        template=tmpl["Sample Size"],
+        origin="specified"
+    ))
+
+    sugar_content.properties.append(Property(
+        name="Composition",
+        value=EmpiricalFormula(formula='C11.996H21.995O10.997S0.00015'),
+        template=tmpl["Chemical Formula"],
+        origin="measured"
+    ))
+    sugar_content.conditions.append(Condition(
+        name='Sample Size',
+        value=NormalReal(
+            mean=99 + 2 * random.random(),
+            std=1.5,
+            units='mg'
+        ),
+        template=tmpl["Sample Size"],
+        origin="measured"
+    ))
 
     # Code to generate quasi-repeatable run annotations
     # Note there are potential machine dependencies
