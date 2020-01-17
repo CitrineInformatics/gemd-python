@@ -141,6 +141,12 @@ def make_cake_templates():
         properties=[tmpl["Tastiness"]]
     )
 
+    tmpl["Chemical Analysis"] = MeasurementTemplate(
+        name="Chemical Analysis",
+        properties=[tmpl["Nutritional Information"]],
+        conditions=[tmpl["Serving Size"]]
+    )
+
     tmpl["Dessert"] = MaterialTemplate(
         name="Dessert",
         properties=[tmpl["Tastiness"]]
@@ -687,12 +693,25 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     baked = \
         next(x.material for x in cake.process.ingredients if 'aked' in x.name)
 
+    def find_name(name, material):
+        # Recursively search for the right material
+        if name == material.name:
+            return material
+        for ingredient in material.process.ingredients:
+            result = find_name(name, ingredient.material)
+            if result:
+                return result
+        return
+
+    flour = find_name('Flour', cake)
+
     # Add measurements
     cake_taste = MeasurementRun(name='Final Taste', material=cake)
     cake_appearance = MeasurementRun(name='Final Appearance', material=cake)
     frosting_taste = MeasurementRun(name='Frosting Taste', material=frosting)
     frosting_sweetness = MeasurementRun(name='Frosting Sweetness', material=frosting)
     baked_doneness = MeasurementRun(name='Baking doneness', material=baked)
+    flour_content = MeasurementRun(name='Flour chemical analysis', material=flour)
 
     # and spec out the measurements
     cake_taste.spec = MeasurementSpec(name='Taste', template=tmpl['Taste test'])
@@ -700,7 +719,10 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     frosting_taste.spec = cake_taste.spec  # Taste
     frosting_sweetness.spec = MeasurementSpec(name='Sweetness')
     baked_doneness.spec = MeasurementSpec(name='Doneness', template=tmpl["Doneness"])
-    for msr in (cake_taste, cake_appearance, frosting_taste, frosting_sweetness, baked_doneness):
+    flour_content.spec = MeasurementSpec(name='Chemical analysis',
+                                         template=tmpl["Chemical Analysis"])
+    for msr in (cake_taste, cake_appearance, frosting_taste, frosting_sweetness,
+                baked_doneness, flour_content):
         msr.spec.add_uid(DEMO_SCOPE, msr.spec.name)
 
     ######################################################################
@@ -750,6 +772,31 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
             "Golden brown": 0.65,
             "Deep brown": 0.3
         })
+    ))
+
+    flour_content.properties.append(Property(
+        name='Nutritional Information',
+        value=NominalComposition(
+            {
+                "dietary-fiber": 1 * (0.99 + 0.02*random.random()),
+                "sugar": 1 * (0.99 + 0.02*random.random()),
+                "other-carbohydrate": 20 * (0.99 + 0.02*random.random()),
+                "protein": 4 * (0.99 + 0.02*random.random()),
+                "other": 4 * (0.99 + 0.02*random.random())
+            }
+        ),
+        template=tmpl["Nutritional Information"],
+        origin="measured"
+    ))
+    flour_content.conditions.append(Condition(
+        name='Sample Size',
+        value=NormalReal(
+            mean=9.9 + .2*random.random(),
+            std=0.15,
+            units='mg'
+        ),
+        template=tmpl["Serving Size"],
+        origin="measured"
     ))
 
     baked.process.spec.template = tmpl['Baking in an oven']
