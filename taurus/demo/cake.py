@@ -798,6 +798,15 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
         template=tmpl["Serving Size"],
         origin="measured"
     ))
+    flour_content.spec.conditions.append(Condition(
+        name='Sample Size',
+        value=NominalReal(
+            nominal=10,
+            units='mg'
+        ),
+        template=tmpl["Serving Size"],
+        origin="specified"
+    ))
 
     # Code to generate quasi-repeatable run annotations
     # Note there are potential machine dependencies
