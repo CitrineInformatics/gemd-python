@@ -778,11 +778,11 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
         name='Nutritional Information',
         value=NominalComposition(
             {
-                "dietary-fiber": 1 * (0.99 + 0.02*random.random()),
-                "sugar": 1 * (0.99 + 0.02*random.random()),
-                "other-carbohydrate": 20 * (0.99 + 0.02*random.random()),
-                "protein": 4 * (0.99 + 0.02*random.random()),
-                "other": 4 * (0.99 + 0.02*random.random())
+                "dietary-fiber": 1 * (0.99 + 0.02 * random.random()),
+                "sugar": 1 * (0.99 + 0.02 * random.random()),
+                "other-carbohydrate": 20 * (0.99 + 0.02 * random.random()),
+                "protein": 4 * (0.99 + 0.02 * random.random()),
+                "other": 4 * (0.99 + 0.02 * random.random())
             }
         ),
         template=tmpl["Nutritional Information"],
@@ -791,7 +791,7 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     flour_content.conditions.append(Condition(
         name='Sample Size',
         value=NormalReal(
-            mean=9.9 + .2*random.random(),
+            mean=9.9 + .2 * random.random(),
             std=0.15,
             units='mg'
         ),
