@@ -146,9 +146,9 @@ def make_cake_templates():
         properties=[tmpl["Nutritional Information"]],
         conditions=[tmpl["Sample Size"]]
     )
-    tmpl["Nutritional Analysis"] = MeasurementTemplate(
-        name="Nutritional Analysis",
-        properties=[tmpl["Nutritional Information"]],
+    tmpl["Elemental Analysis"] = MeasurementTemplate(
+        name="Elemental Analysis",
+        properties=[tmpl["Chemical Formula"]],
         conditions=[tmpl["Sample Size"]]
     )
 
@@ -709,6 +709,8 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
         return
 
     flour = find_name('Flour', cake)
+    salt = find_name('Salt', cake)
+    sugar = find_name('Sugar', cake)
 
     # Add measurements
     cake_taste = MeasurementRun(name='Final Taste', material=cake)
@@ -717,6 +719,8 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     frosting_sweetness = MeasurementRun(name='Frosting Sweetness', material=frosting)
     baked_doneness = MeasurementRun(name='Baking doneness', material=baked)
     flour_content = MeasurementRun(name='Flour nutritional analysis', material=flour)
+    salt_content = MeasurementRun(name='Salt elemental analysis', material=salt)
+    sugar_content = MeasurementRun(name='Sugar elemental analysis', material=sugar)
 
     # and spec out the measurements
     cake_taste.spec = MeasurementSpec(name='Taste', template=tmpl['Taste test'])
@@ -726,6 +730,11 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     baked_doneness.spec = MeasurementSpec(name='Doneness', template=tmpl["Doneness"])
     flour_content.spec = MeasurementSpec(name='Nutritional analysis',
                                          template=tmpl["Nutritional Analysis"])
+    salt_content.spec = MeasurementSpec(name='Elemental analysis',
+                                        template=tmpl["Elemental Analysis"]
+                                        )
+    sugar_content.spec = salt_content.spec
+
     for msr in (cake_taste, cake_appearance, frosting_taste, frosting_sweetness,
                 baked_doneness, flour_content):
         msr.spec.add_uid(DEMO_SCOPE, msr.spec.name)
@@ -796,8 +805,8 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     flour_content.conditions.append(Condition(
         name='Sample Size',
         value=NormalReal(
-            mean=9.9 + .2 * random.random(),
-            std=0.15,
+            mean=99 + 2 * random.random(),
+            std=1.5,
             units='mg'
         ),
         template=tmpl["Sample Size"],
@@ -806,11 +815,54 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     flour_content.spec.conditions.append(Condition(
         name='Sample Size',
         value=NominalReal(
-            nominal=10,
+            nominal=100,
             units='mg'
         ),
         template=tmpl["Sample Size"],
         origin="specified"
+    ))
+
+    salt_content.properties.append(Property(
+        name="Composition",
+        value=EmpiricalFormula(formula="NaClCa0.006Si0.006O0.018K0.000015I0.000015"),
+        template=tmpl["Chemical Formula"],
+        origin="measured"
+    ))
+    salt_content.conditions.append(Condition(
+        name='Sample Size',
+        value=NormalReal(
+            mean=99 + 2 * random.random(),
+            std=1.5,
+            units='mg'
+        ),
+        template=tmpl["Sample Size"],
+        origin="measured"
+    ))
+    salt_content.spec.conditions.append(Condition(
+        name='Sample Size',
+        value=NominalReal(
+            nominal=100,
+            units='mg'
+        ),
+        template=tmpl["Sample Size"],
+        origin="specified"
+    ))
+
+    sugar_content.properties.append(Property(
+        name="Composition",
+        value=EmpiricalFormula(formula='C11.996H21.995O10.997S0.00015'),
+        template=tmpl["Chemical Formula"],
+        origin="measured"
+    ))
+    sugar_content.conditions.append(Condition(
+        name='Sample Size',
+        value=NormalReal(
+            mean=99 + 2 * random.random(),
+            std=1.5,
+            units='mg'
+        ),
+        template=tmpl["Sample Size"],
+        origin="measured"
     ))
 
     # Code to generate quasi-repeatable run annotations
