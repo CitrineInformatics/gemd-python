@@ -799,13 +799,6 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
         origin="measured"
     ))
 
-    baked.process.spec.template = tmpl['Baking in an oven']
-    cake_taste.spec.template = tmpl['Taste test']
-    frosting_taste.spec.template = tmpl['Taste test']
-
-    cake.spec.template = tmpl['Dessert']
-    frosting.spec.template = tmpl['Dessert']
-
     # Code to generate quasi-repeatable run annotations
     # Note there are potential machine dependencies
     md5 = hashlib.md5()
