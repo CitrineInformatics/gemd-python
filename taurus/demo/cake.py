@@ -363,7 +363,7 @@ def make_cake_spec(tmpl=None):
                     value=NominalComposition(
                         {
                             "dietary-fiber": 1,
-                            "sugar": 1,
+                            "sugars": 1,
                             "other-carbohydrate": 20,
                             "protein": 4,
                             "other": 4
@@ -793,7 +793,7 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
         value=NominalComposition(
             {
                 "dietary-fiber": 1 * (0.99 + 0.02 * random.random()),
-                "sugar": 1 * (0.99 + 0.02 * random.random()),
+                "sugars": 1 * (0.99 + 0.02 * random.random()),
                 "other-carbohydrate": 20 * (0.99 + 0.02 * random.random()),
                 "protein": 4 * (0.99 + 0.02 * random.random()),
                 "other": 4 * (0.99 + 0.02 * random.random())
