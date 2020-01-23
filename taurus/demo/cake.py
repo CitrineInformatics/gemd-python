@@ -48,7 +48,7 @@ DEMO_SCOPE = 'citrine-demo'
 
 
 def import_toothpick_picture():
-    """Return the stream of the toothpick picture"""
+    """Return the stream of the toothpick picture.""
     import pkg_resources
     resource = pkg_resources.resource_stream("taurus.demo", "toothpick.jpg")
 
