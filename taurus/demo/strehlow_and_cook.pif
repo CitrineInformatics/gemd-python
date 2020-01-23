@@ -17122,7 +17122,7 @@
         "name": "Temperature derivative of band gap",
         "scalars": [
           {
-            "value": "-6. lOe-04"
+            "value": "-6.10e-04"
           }
         ],
         "units": "eV/K",
@@ -30758,7 +30758,7 @@
         "name": "Temperature derivative of band gap",
         "scalars": [
           {
-            "value": "-4.00c-04"
+            "value": "-4.80e-04"
           }
         ],
         "units": "eV/K",
@@ -32711,7 +32711,7 @@
         "name": "Band gap",
         "scalars": [
           {
-            "value": "0.005"
+            "value": "0.805"
           }
         ],
         "units": "eV",
@@ -32743,7 +32743,7 @@
         "name": "Temperature derivative of band gap",
         "scalars": [
           {
-            "value": "-3.90c-04"
+            "value": "-3.90e-04"
           }
         ],
         "units": "eV/K",
@@ -35454,7 +35454,7 @@
         "name": "Temperature derivative of band gap",
         "scalars": [
           {
-            "value": "-5. lOe-04"
+            "value": "-5.10e-04"
           }
         ],
         "units": "eV/K",
@@ -54031,7 +54031,7 @@
         "name": "Temperature derivative of band gap",
         "scalars": [
           {
-            "value": "6.00c 04"
+            "value": "6.00e04"
           }
         ],
         "units": "eV/K",
@@ -58134,7 +58134,7 @@
         "name": "Temperature derivative of band gap",
         "scalars": [
           {
-            "value": "~6.30e-05"
+            "value": "-6.30e-05"
           }
         ],
         "units": "eV/K",
@@ -73322,7 +73322,7 @@
         "name": "Temperature derivative of band gap",
         "scalars": [
           {
-            "value": "#NAME?"
+            "value": "-1.00e-04"
           }
         ],
         "units": "eV/K",
@@ -75600,7 +75600,7 @@
         "name": "Temperature derivative of band gap",
         "scalars": [
           {
-            "value": "4. lOe-04"
+            "value": "4.10e-04"
           }
         ],
         "units": "eV/K",
