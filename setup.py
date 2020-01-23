@@ -36,7 +36,7 @@ class PostDevelopCommand(develop):
 
 
 setup(name='taurus-citrine',
-      version='0.3.0',
+      version='0.4.0',
       url='http://github.com/CitrineInformatics/taurus',
       description='Python library for the Citrine Platform',
       author='Max Hutchinson',
