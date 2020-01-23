@@ -77,6 +77,9 @@
 <dt id="taurus.util.impl.recursive_foreach">
 <code class="sig-prename descclassname">taurus.util.impl.</code><code class="sig-name descname">recursive_foreach</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">func</em>, <em class="sig-param">apply_first=False</em>, <em class="sig-param">seen=None</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.util.impl.recursive_foreach" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply a function recursively to each BaseEntity object.</p>
+<p>Only objects of type BaseEntity will have the function applied, but the recursion will walk
+through all objects.  For example, BaseEntity -&gt; list -&gt; BaseEntity will have func applied
+to both base entities.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -108,10 +111,8 @@
 <dd><p>Recursively replace pointers to BaseEntity with LinkByUID objects.</p>
 <p>This prepares the object to be serialized or written to the API.
 It is the inverse of substitute_objects.
-It is an in-place operation.
 :param obj: target of the operation
-:param native_uid: preferred uid to use for creating LinkByUID objects (Default: None)
-:return: None</p>
+:param native_uid: preferred uid to use for creating LinkByUID objects (Default: None)</p>
 </dd></dl>
 
 <dl class="function">
@@ -120,10 +121,8 @@ It is an in-place operation.
 <dd><p>Recursively replace LinkByUID objects with pointers to the objects with that UID in the index.</p>
 <p>This prepares the object to be used after being deserialized.
 It is the inverse of substitute_links.
-It is an in-place operation.
 :param obj: target of the operation
-:param index: containing the objects that the uids point to
-:return: None</p>
+:param index: containing the objects that the uids point to</p>
 </dd></dl>
 
 </div>
