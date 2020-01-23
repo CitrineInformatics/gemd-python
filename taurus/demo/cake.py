@@ -47,6 +47,14 @@ from taurus.util.impl import recursive_foreach
 DEMO_SCOPE = 'citrine-demo'
 
 
+def import_toothpick_picture():
+    """Return the stream of the toothpick picture"""
+    import pkg_resources
+    resource = pkg_resources.resource_stream("taurus.demo", "toothpick.jpg")
+
+    return resource
+
+
 def make_cake_templates():
     """Define all templates independently, as in the wild this will be an independent operation."""
     tmpl = dict()

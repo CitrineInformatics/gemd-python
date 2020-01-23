@@ -9,7 +9,7 @@ from taurus.entity.object.ingredient_spec import IngredientSpec
 from taurus.entity.object.ingredient_run import IngredientRun
 
 from taurus.client.json_encoder import dumps, loads
-from taurus.demo.cake import make_cake
+from taurus.demo.cake import make_cake, import_toothpick_picture
 from taurus.util import recursive_foreach
 from taurus.entity.util import complete_material_history
 
@@ -112,3 +112,7 @@ def test_cake():
                     assert obj.spec.material == obj.material.spec
             if obj.material:
                 queue.append(obj.material)
+
+def test_import():
+    """Make sure picture import runs"""
+    import_toothpick_picture()
