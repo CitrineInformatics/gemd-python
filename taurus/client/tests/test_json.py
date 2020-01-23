@@ -1,8 +1,12 @@
 """Test serialization and deserialization of taurus objects."""
 import json
+from copy import deepcopy
+
 import pytest
 
-from taurus.client.json_encoder import dumps, loads, copy, thin_dumps
+from taurus.client.json_encoder import dumps, loads, copy, thin_dumps, _loado
+from taurus.entity.attribute.property import Property
+from taurus.entity.bounds.real_bounds import RealBounds
 from taurus.entity.dict_serializable import DictSerializable
 from taurus.entity.case_insensitive_dict import CaseInsensitiveDict
 from taurus.entity.attribute.condition import Condition
@@ -11,10 +15,12 @@ from taurus.entity.link_by_uid import LinkByUID
 from taurus.entity.object import MeasurementRun, MaterialRun, ProcessRun, MeasurementSpec
 from taurus.entity.object.ingredient_run import IngredientRun
 from taurus.entity.object.ingredient_spec import IngredientSpec
+from taurus.entity.template.property_template import PropertyTemplate
 from taurus.entity.value.nominal_integer import NominalInteger
 from taurus.entity.value.nominal_real import NominalReal
 from taurus.entity.value.normal_real import NormalReal
 from taurus.enumeration.origin import Origin
+from taurus.util import substitute_objects, substitute_links
 
 
 def test_serialize():
@@ -66,8 +72,24 @@ def test_enumeration_serde():
     assert copy_condition.notes == Origin.get_value(condition.notes)
 
 
+def test_attribute_serde():
+    """An attribute with a link to an attribute template should be copy-able."""
+    prop_tmpl = PropertyTemplate(name='prop_tmpl',
+                                 bounds=RealBounds(0, 2, 'm')
+                                 )
+    prop = Property(name='prop',
+                    template=prop_tmpl,
+                    value=NominalReal(1, 'm')
+                    )
+    meas_spec = MeasurementSpec("a spec")
+    meas = MeasurementRun("a measurement", spec=meas_spec, properties=[prop])
+    assert loads(dumps(prop)) == prop
+    assert loads(dumps(meas)) == meas
+    assert isinstance(prop.template, PropertyTemplate)
+
+
 def test_thin_dumps():
-    """Test that thin_dumps turns pointers into links and doesn't work on non-BaseEntity."""
+    """Test that thin_dumps turns pointers into links."""
     mat = MaterialRun("The actual material")
     meas_spec = MeasurementSpec("measurement", uids={'my_scope': '324324'})
     meas = MeasurementRun("The measurement", spec=meas_spec, material=mat)
@@ -78,8 +100,13 @@ def test_thin_dumps():
     assert isinstance(thin_copy.spec, LinkByUID)
     assert thin_copy.spec.id == meas_spec.uids['my_scope']
 
+    # Check that LinkByUID objects are correctly converted their JSON equivalent
+    expected_json = '{"id": "my_id", "scope": "scope", "type": "link_by_uid"}'
+    assert thin_dumps(LinkByUID('scope', 'my_id')) == expected_json
+
+    # Check that objects lacking .uid attributes will raise an exception when dumped
     with pytest.raises(TypeError):
-        thin_dumps(LinkByUID('scope', 'id'))
+        thin_dumps({{'key': 'value'}})
 
 
 def test_uid_deser():
@@ -124,6 +151,50 @@ def test_unexpected_deserialization():
     serialized = dumps(ProcessRun("A process", notes=DummyClass("something")))
     with pytest.raises(TypeError):
         loads(serialized)
+
+
+def test_pure_subsitutions():
+    """Make sure substitute methods don't mutate inputs."""
+    json_str = '''
+          [
+            [
+              {
+                "uids": {
+                  "id": "9118c2d3-1c38-47fe-a650-c2b92fdb6777"
+                },
+                "type": "material_run",
+                "name": "flour"
+              }
+            ],
+            {
+              "type": "ingredient_run",
+              "uids": {
+                "id": "8858805f-ec02-49e4-ba3b-d784e2aea3f8"
+              },
+              "material": {
+                "type": "link_by_uid",
+                "scope": "ID",
+                "id": "9118c2d3-1c38-47fe-a650-c2b92fdb6777"
+              },
+              "process": {
+                "type": "link_by_uid",
+                "scope": "ID",
+                "id": "9148c2d3-2c38-47fe-b650-c2b92fdb6777"
+              }
+            }
+          ]
+       '''
+    index = {}
+    original = json.loads(json_str, object_hook=lambda x: _loado(x, index))
+    frozen = deepcopy(original)
+    loaded = substitute_objects(original, index)
+    assert original == frozen
+    frozen_loaded = deepcopy(loaded)
+    substitute_links(loaded)
+    assert loaded == frozen_loaded
+    for o in loaded:
+        substitute_links(o)
+    assert loaded == frozen_loaded
 
 
 def test_case_insensitive_rehydration():

@@ -42,14 +42,3 @@ class NominalComposition(CompositionValue):
             self._quantities = dict(quantities)
         else:
             raise TypeError("quantities must be dict or List of two-item lists or None")
-
-    def as_dict(self):
-        """
-        Convert the composition to a dictionary.
-
-        Overrides the ordinary
-        :func:`as_dict() <taurus.entity.dict_serializable.DictSerializable.as_dict>` method in
-        that the `quantities` field is turned into a list of lists,
-        each of which has the form [component, quantity].
-        """
-        return {"type": self.typ, "quantities": list(list(x) for x in self.quantities.items())}

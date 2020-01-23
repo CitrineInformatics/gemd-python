@@ -1,4 +1,5 @@
 """Utility methods."""
+from taurus.util import recursive_foreach
 
 
 def make_instance(base_spec):
@@ -43,7 +44,7 @@ def make_instance(base_spec):
             )
             seen[id(spec)].process = crawler(spec.process) if spec.process else None
         elif isinstance(spec, IngredientSpec):
-            seen[id(spec)] = IngredientRun(name=spec.name, spec=spec)
+            seen[id(spec)] = IngredientRun(spec=spec)
             seen[id(spec)].material = crawler(spec.material) if spec.material else None
         elif isinstance(spec, ProcessSpec):
             seen[id(spec)] = ProcessRun(
@@ -104,31 +105,16 @@ def complete_material_history(mat):
         links substituted.
     """
     from taurus.entity.base_entity import BaseEntity
-    from taurus.entity.dict_serializable import DictSerializable
     import json
     from taurus.client.json_encoder import dumps, loads
     from taurus.util.impl import substitute_links
 
-    queue = [mat]
-    seen = set()
     result = []
 
-    while queue:
-        obj = queue.pop(0)
+    def body(obj: BaseEntity):
+        copy = substitute_links(loads(dumps(obj)))
+        result.append(json.loads(dumps(copy))[0][0])
 
-        if isinstance(obj, BaseEntity):
-            if obj not in seen:
-                seen.add(obj)
-                queue.extend(obj.__dict__.values())
-
-                copy = loads(dumps(obj))
-                substitute_links(copy)
-                result.insert(0, json.loads(dumps(copy))[0][0])  # Leaf first
-        elif isinstance(obj, (list, tuple)):
-            queue.extend(obj)
-        elif isinstance(obj, dict):
-            queue.extend(obj.values())
-        elif isinstance(obj, DictSerializable):
-            queue.extend(obj.__dict__.values())
+    recursive_foreach(mat, body, apply_first=False)
 
     return result

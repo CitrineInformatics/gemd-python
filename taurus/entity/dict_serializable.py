@@ -36,7 +36,7 @@ class DictSerializable(ABC):
         for name, arg in d.items():
             if name in expected_arg_names:
                 kwargs[name] = arg
-            else:
+            elif name != 'type':
                 logger.warning('Ignoring unexpected keyword argument in {}: {}'.format(
                     cls.__name__, name))
         # noinspection PyArgumentList
@@ -71,8 +71,8 @@ class DictSerializable(ABC):
             A string representation of the object as a dictionary.
 
         """
-        from taurus.client.json_encoder import dumps
-        return json.loads(dumps(self))[1]
+        from taurus.client.json_encoder import thin_dumps
+        return json.loads(thin_dumps(self))
 
     @staticmethod
     def build(d):
