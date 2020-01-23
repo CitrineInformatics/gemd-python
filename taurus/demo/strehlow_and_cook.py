@@ -24,6 +24,16 @@ from taurus.entity.value.nominal_real import NominalReal
 from taurus.entity.bounds.real_bounds import RealBounds
 
 
+def import_table():
+    """Return the deserialized JSON table"""
+    import pkg_resources
+    import json
+    resource = pkg_resources.resource_stream("taurus.demo", "strehlow_and_cook.json")
+    table = json.load(resource)
+
+    return table
+
+
 def make_strehlow_objects(table=None):
     """Make a table with Strehlow & Cook data."""
     if table is None:
@@ -256,21 +266,19 @@ def make_strehlow_table(compounds):
 
 
 if __name__ == "__main__":
-    import pkg_resources
-    import json
     import taurus.client.json_encoder as je
+    import json
 
     # Whether to use the full data set.
     # If `False` a minimal, predefined subset of compounds will be used.
     use_full_table = False
 
     if use_full_table:
-        resource = pkg_resources.resource_stream("taurus.demo", "strehlow_and_cook.json")
-        table = json.load(resource)
+        imported_table = import_table()
     else:
-        table = None
+        imported_table = None
 
-    compounds = make_strehlow_objects(table)
+    compounds = make_strehlow_objects(imported_table)
     sac_tbl = make_strehlow_table(compounds)
 
     # Look at each different combination of Value types in a S&C record
