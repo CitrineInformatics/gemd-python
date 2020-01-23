@@ -113,6 +113,8 @@ def test_cake():
             if obj.material:
                 queue.append(obj.material)
 
+
 def test_import():
     """Make sure picture import runs"""
     import_toothpick_picture()
+    
