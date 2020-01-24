@@ -24,6 +24,10 @@ from taurus.entity.value.nominal_real import NominalReal
 from taurus.entity.bounds.real_bounds import RealBounds
 
 
+# For now, module constant, though likely this should get promoted to a package level
+DEMO_SCOPE = 'citrine-demo-sac'
+
+
 def import_table():
     """Return the deserialized JSON table."""
     import pkg_resources
@@ -49,48 +53,29 @@ def minimal_subset(table):
 
 def make_strehlow_objects(table=None):
     """Make a table with Strehlow & Cook data."""
-    if table is None:
-        table = [["Bi$_{2}$Te$_{3}$", "Bi2Te3", 0.153, None, "Single crystalline", None],
-                 ["DyN", "DyN", 2.1, None, None, None],
-                 ["InAs", "InAs", 0.404, None, "Single crystalline", "Dark Gray"],
-                 ["CaS", "CaS", 6.0, 0.2, "Polycrystalline", None],
-                 ["Rb$_{3}$Sb", "Rb3Sb", 1.7, 0.1, None, None],
-                 ["CeN", "CeN", 0.7, None, None, "Bronze"],
-                 ["BaI", "BaI", None, None, None, None],
-                 ["CoF$_{2}$", "CoF2", None, None, "Polycrystalline", None],
-                 ["B$_{2}$Se$_{3}$", "B2Se3", None, None, None, "Orange"],
-                 ["Mg$_{3}$As$_{2}$", "Mg3As2", 2.55, 0.35, "Polycrystalline", "Brown"],
-                 ["Bi$_{0.85}$Sb$_{0.15}$", None, 0.01, None, "Single crystalline", None],
-                 ["CoTe$_{1.88}$", None, 0.2, None, None, None]]
-
-    cryst_bnds = CategoricalBounds(['Amorphous', 'Polycrystalline', 'Single crystalline'])
-    color_bnds = CategoricalBounds(
-        ['Amber', 'Black', 'Blue', 'Bluish', 'Bronze', 'Brown', 'Brown-Black', 'Copper-Red',
-         'Dark Brown', 'Dark Gray', 'Dark Green', 'Dark Red', 'Gray', 'Light Gray', 'Ocher',
-         'Orange', 'Orange-Red', 'Pale Yellow', 'Red', 'Red-Yellow', 'Violet', 'White',
-         'Yellow', 'Yellow-Orange', 'Yellow-White'
-         ])
-    band_bnds = RealBounds(lower_bound=0, upper_bound=100, default_units='eV')
-
+    # Construct templates
     chem_tmpl = PropertyTemplate(
-        name="Identity",
+        name="Formula",
         bounds=CompositionBounds(components=EmpiricalFormula.all_elements()),
     )
     cryst_tmpl = PropertyTemplate(
         name="Crystallinity",
-        bounds=cryst_bnds,
+        bounds=CategoricalBounds(['Amorphous', 'Polycrystalline', 'Single crystalline']),
     )
     color_tmpl = PropertyTemplate(
         name="Color",
-        bounds=color_bnds,
+        bounds=CategoricalBounds(
+            ['Amber', 'Black', 'Blue', 'Bluish', 'Bronze', 'Brown', 'Brown-Black', 'Copper-Red',
+             'Dark Brown', 'Dark Gray', 'Dark Green', 'Dark Red', 'Gray', 'Light Gray', 'Ocher',
+             'Orange', 'Orange-Red', 'Pale Yellow', 'Red', 'Red-Yellow', 'Violet', 'White',
+             'Yellow', 'Yellow-Orange', 'Yellow-White'
+             ]),
     )
     band_tmpl = PropertyTemplate(
         name="Band gap",
-        bounds=band_bnds,
+        bounds=RealBounds(lower_bound=0, upper_bound=100, default_units='eV'),
     )
-
-    # Templates
-    proc_tmpl = ProcessTemplate(name='Literature source template')
+    proc_tmpl = ProcessTemplate(name='Sample preparation')
 
     chem_mat_tmpl = MaterialTemplate(name='Chemical',
                                      properties=[chem_tmpl]
@@ -104,6 +89,21 @@ def make_strehlow_objects(table=None):
     band_msr_tmpl = MeasurementTemplate(name='Band gap measurement',
                                         properties=[band_tmpl]
                                         )
+
+
+    if table is None:
+        table = [["Bi$_{2}$Te$_{3}$", "Bi2Te3", 0.153, None, "Single crystalline", None],
+                 ["DyN", "DyN", 2.1, None, None, None],
+                 ["InAs", "InAs", 0.404, None, "Single crystalline", "Dark Gray"],
+                 ["CaS", "CaS", 6.0, 0.2, "Polycrystalline", None],
+                 ["Rb$_{3}$Sb", "Rb3Sb", 1.7, 0.1, None, None],
+                 ["CeN", "CeN", 0.7, None, None, "Bronze"],
+                 ["BaI", "BaI", None, None, None, None],
+                 ["CoF$_{2}$", "CoF2", None, None, "Polycrystalline", None],
+                 ["B$_{2}$Se$_{3}$", "B2Se3", None, None, None, "Orange"],
+                 ["Mg$_{3}$As$_{2}$", "Mg3As2", 2.55, 0.35, "Polycrystalline", "Brown"],
+                 ["Bi$_{0.85}$Sb$_{0.15}$", None, 0.01, None, "Single crystalline", None],
+                 ["CoTe$_{1.88}$", None, 0.2, None, None, None]]
 
     # Specs
     cryst_msr_spec = MeasurementSpec(name='Crystallinity',
@@ -144,7 +144,7 @@ def make_strehlow_objects(table=None):
                 band_meas.properties.append(
                     Property(name=band_msr_tmpl.name,
                              value=NormalReal(mean=row[2],
-                                              units=band_bnds.default_units,
+                                              units=band_msr_tmpl.properties[0][0].bounds.default_units,
                                               std=row[3]
                                               )
                              )
@@ -153,7 +153,7 @@ def make_strehlow_objects(table=None):
                 band_meas.properties.append(
                     Property(name=band_msr_tmpl.name,
                              value=NominalReal(nominal=row[2],
-                                               units=band_bnds.default_units
+                                               units=band_msr_tmpl.properties[0][0].bounds.default_units
                                                )
                              )
                 )

@@ -1,12 +1,12 @@
 """Test Strehlow & Cook demo."""
 from taurus.demo.strehlow_and_cook import make_strehlow_table, make_strehlow_objects, \
-    minimal_subset
+    minimal_subset, import_table
 import taurus.client.json_encoder as je
 
 
 def test_sac():
     """Make S&C table and assert that it can be serialized."""
-    sac = make_strehlow_objects()
+    sac = make_strehlow_objects(import_table())
     sac_tbl = make_strehlow_table(sac)
 
     # Check that all shapes of records serialize and deserialize
