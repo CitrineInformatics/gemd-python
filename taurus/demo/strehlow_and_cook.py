@@ -32,7 +32,7 @@ def import_table():
     """Return the deserialized JSON table."""
     import pkg_resources
     import json
-    resource = pkg_resources.resource_stream("taurus.demo", "strehlow_and_cook.json")
+    resource = pkg_resources.resource_stream("taurus.demo", "strehlow_and_cook.pif")
     table = json.load(resource)
 
     return table
@@ -90,7 +90,6 @@ def make_strehlow_objects(table=None):
                                         properties=[band_tmpl]
                                         )
 
-
     if table is None:
         table = [["Bi$_{2}$Te$_{3}$", "Bi2Te3", 0.153, None, "Single crystalline", None],
                  ["DyN", "DyN", 2.1, None, None, None],
@@ -119,9 +118,8 @@ def make_strehlow_objects(table=None):
                                     )
 
     compounds = []
-    max_len = 0
     for row in table:
-        spec = MaterialSpec(name=row[0],
+        spec = MaterialSpec(name=row['chemicalFormula'],
                             template=chem_mat_tmpl,
                             process=ProcessSpec(name='Literature source',
                                                 template=proc_tmpl
@@ -129,44 +127,39 @@ def make_strehlow_objects(table=None):
                             )
         run = make_instance(spec)
         compounds.append(run)
-        max_len = max(max_len, len(row[0]))
 
-        if row[1] is not None:
+        if '.' not in row['chemicalFormula']:
             spec.properties.append(
-                PropertyAndConditions(property=Property(name=chem_tmpl.name,
-                                                        value=EmpiricalFormula(formula=row[1]),
-                                                        template=chem_tmpl)
-                                      ))
-        if row[2] is not None:
+                PropertyAndConditions(
+                    property=Property(name=chem_tmpl.name,
+                                      value=EmpiricalFormula(formula=row['chemicalFormula']),
+                                      template=chem_tmpl)
+                ))
+
+        for prop in filter(lambda x:'Band gap' == x['name'], row['properties']):
             band_meas = make_instance(band_msr_spec)
             band_meas.material = run
-            if row[3] is not None:
-                band_meas.properties.append(
-                    Property(name=band_msr_tmpl.name,
-                             value=NormalReal(mean=row[2],
-                                              units=band_msr_tmpl.properties[0][0].bounds.default_units,
-                                              std=row[3]
-                                              )
-                             )
-                )
+            if 'uncertainty' in prop['scalars'][0]:
+                val = NormalReal(mean=float(prop['scalars'][0]['value']),
+                                 units=prop['units'],
+                                 std=float(prop['scalars'][0]['uncertainty'])
+                                 )
             else:
-                band_meas.properties.append(
-                    Property(name=band_msr_tmpl.name,
-                             value=NominalReal(nominal=row[2],
-                                               units=band_msr_tmpl.properties[0][0].bounds.default_units
-                                               )
-                             )
-                )
-        if row[4] is not None:
+                val = NominalReal(nominal=float(prop['scalars'][0]['value']),
+                                  units=prop['units']
+                                  )
+            band_meas.properties.append(Property(name=cryst_msr_tmpl.name, value=val))
+
+        for prop in filter(lambda x: 'Crystallinity' == x['name'], row['properties']):
             cryst_msr = make_instance(cryst_msr_spec)
             cryst_msr.material = run
-            val = NominalCategorical(category=row[4])
+            val = NominalCategorical(category=prop['scalars'][0]['value'])
             cryst_msr.properties.append(Property(name=cryst_msr_tmpl.name, value=val))
 
-        if row[5] is not None:
+        for prop in filter(lambda x: 'Color' == x['name'], row['properties']):
             color_msr = make_instance(color_msr_spec)
             color_msr.material = run
-            val = NominalCategorical(category=row[5])
+            val = NominalCategorical(category=prop['scalars'][0]['value'])
             color_msr.properties.append(Property(name=color_msr_tmpl.name, value=val))
 
     return compounds

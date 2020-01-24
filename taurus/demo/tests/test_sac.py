@@ -19,4 +19,5 @@ def test_sac():
     assert len(smaller) == 12
 
     # Make sure there's no migration with repeated serialization
-    assert je.dumps(je.loads(je.dumps(sac_tbl))) == je.dumps(sac_tbl)
+    for row in sac_tbl:
+        assert je.dumps(je.loads(je.dumps(row))) == je.dumps(row)
