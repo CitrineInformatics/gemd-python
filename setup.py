@@ -45,6 +45,7 @@ setup(name='taurus-citrine',
       package_data={
           'taurus': [
               'demo/strehlow_and_cook.json',
+              'demo/toothpick.jpg',
               'units/citrine_en.txt',
               'units/constants_en.txt'
           ]
