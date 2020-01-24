@@ -51,18 +51,19 @@ def minimal_subset(table):
     return smaller
 
 
-def make_strehlow_objects(table=None):
-    """Make a table with Strehlow & Cook data."""
-    # Construct templates
-    chem_tmpl = PropertyTemplate(
+def make_templates():
+    """Build all templates needed for the table."""
+    tmpl = dict()
+
+    tmpl["Formula"] = PropertyTemplate(
         name="Formula",
         bounds=CompositionBounds(components=EmpiricalFormula.all_elements()),
     )
-    cryst_tmpl = PropertyTemplate(
+    tmpl["Crystallinity"] = PropertyTemplate(
         name="Crystallinity",
         bounds=CategoricalBounds(['Amorphous', 'Polycrystalline', 'Single crystalline']),
     )
-    color_tmpl = PropertyTemplate(
+    tmpl["Color"] = PropertyTemplate(
         name="Color",
         bounds=CategoricalBounds(
             ['Amber', 'Black', 'Blue', 'Bluish', 'Bronze', 'Brown', 'Brown-Black', 'Copper-Red',
@@ -71,24 +72,31 @@ def make_strehlow_objects(table=None):
              'Yellow', 'Yellow-Orange', 'Yellow-White'
              ]),
     )
-    band_tmpl = PropertyTemplate(
+    tmpl["Band gap"] = PropertyTemplate(
         name="Band gap",
         bounds=RealBounds(lower_bound=0, upper_bound=100, default_units='eV'),
     )
-    proc_tmpl = ProcessTemplate(name='Sample preparation')
+    tmpl["Sample preparation"] = ProcessTemplate(name='Sample preparation')
 
-    chem_mat_tmpl = MaterialTemplate(name='Chemical',
-                                     properties=[chem_tmpl]
-                                     )
-    cryst_msr_tmpl = MeasurementTemplate(name='Crystal description',
-                                         properties=[cryst_tmpl]
-                                         )
-    color_msr_tmpl = MeasurementTemplate(name='Color description',
-                                         properties=[color_tmpl]
-                                         )
-    band_msr_tmpl = MeasurementTemplate(name='Band gap measurement',
-                                        properties=[band_tmpl]
+    tmpl["Chemical"] = MaterialTemplate(name='Chemical',
+                                        properties=[tmpl["Formula"]]
                                         )
+    tmpl["Crystal description"] = MeasurementTemplate(name='Crystal description',
+                                                      properties=[tmpl["Crystallinity"]]
+                                                      )
+    tmpl["Color description"] = MeasurementTemplate(name='Color description',
+                                                    properties=[tmpl["Color"]]
+                                                    )
+    tmpl["Band gap measurement"] = MeasurementTemplate(name='Band gap measurement',
+                                                       properties=[tmpl["Band gap"]]
+                                                       )
+
+    return tmpl
+
+
+def make_strehlow_objects(table=None):
+    """Make a table with Strehlow & Cook data."""
+    tmpl = make_templates()
 
     if table is None:
         table = [["Bi$_{2}$Te$_{3}$", "Bi2Te3", 0.153, None, "Single crystalline", None],
@@ -106,23 +114,23 @@ def make_strehlow_objects(table=None):
 
     # Specs
     cryst_msr_spec = MeasurementSpec(name='Crystallinity',
-                                     template=cryst_msr_tmpl
+                                     template=tmpl["Crystal description"]
                                      )
 
     color_msr_spec = MeasurementSpec(name='Color',
-                                     template=color_msr_tmpl
+                                     template=tmpl["Color description"]
                                      )
 
     band_msr_spec = MeasurementSpec(name='Band gap',
-                                    template=band_msr_tmpl
+                                    template=tmpl["Band gap measurement"]
                                     )
 
     compounds = []
     for row in table:
         spec = MaterialSpec(name=row['chemicalFormula'],
-                            template=chem_mat_tmpl,
-                            process=ProcessSpec(name='Literature source',
-                                                template=proc_tmpl
+                            template=tmpl["Chemical"],
+                            process=ProcessSpec(name="Sample preparation",
+                                                template=tmpl["Sample preparation"]
                                                 )
                             )
         run = make_instance(spec)
@@ -131,14 +139,14 @@ def make_strehlow_objects(table=None):
         if '.' not in row['chemicalFormula']:
             spec.properties.append(
                 PropertyAndConditions(
-                    property=Property(name=chem_tmpl.name,
+                    property=Property(name=spec.template.properties[0][0].name,
                                       value=EmpiricalFormula(formula=row['chemicalFormula']),
-                                      template=chem_tmpl)
+                                      template=spec.template.properties[0][0])
                 ))
 
-        for prop in filter(lambda x:'Band gap' == x['name'], row['properties']):
-            band_meas = make_instance(band_msr_spec)
-            band_meas.material = run
+        for prop in filter(lambda x: 'Band gap' == x['name'], row['properties']):
+            band_msr = make_instance(band_msr_spec)
+            band_msr.material = run
             if 'uncertainty' in prop['scalars'][0]:
                 val = NormalReal(mean=float(prop['scalars'][0]['value']),
                                  units=prop['units'],
@@ -148,19 +156,22 @@ def make_strehlow_objects(table=None):
                 val = NominalReal(nominal=float(prop['scalars'][0]['value']),
                                   units=prop['units']
                                   )
-            band_meas.properties.append(Property(name=cryst_msr_tmpl.name, value=val))
+            band_msr.properties.append(
+                Property(name=band_msr_spec.template.properties[0][0].name, value=val))
 
         for prop in filter(lambda x: 'Crystallinity' == x['name'], row['properties']):
             cryst_msr = make_instance(cryst_msr_spec)
             cryst_msr.material = run
             val = NominalCategorical(category=prop['scalars'][0]['value'])
-            cryst_msr.properties.append(Property(name=cryst_msr_tmpl.name, value=val))
+            cryst_msr.properties.append(
+                Property(name=cryst_msr_spec.template.properties[0][0].name, value=val))
 
         for prop in filter(lambda x: 'Color' == x['name'], row['properties']):
             color_msr = make_instance(color_msr_spec)
             color_msr.material = run
             val = NominalCategorical(category=prop['scalars'][0]['value'])
-            color_msr.properties.append(Property(name=color_msr_tmpl.name, value=val))
+            color_msr.properties.append(
+                Property(name=color_msr_spec.template.properties[0][0].name, value=val))
 
     return compounds
 
