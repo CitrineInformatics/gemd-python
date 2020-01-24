@@ -25,13 +25,26 @@ from taurus.entity.bounds.real_bounds import RealBounds
 
 
 def import_table():
-    """Return the deserialized JSON table"""
+    """Return the deserialized JSON table."""
     import pkg_resources
     import json
     resource = pkg_resources.resource_stream("taurus.demo", "strehlow_and_cook.json")
     table = json.load(resource)
 
     return table
+
+
+def minimal_subset(table):
+    """Transform an incoming table into the minimal example that reflects full diversity."""
+    seen = set()
+    smaller = []
+    for row in table:
+        mask = ''.join(map(lambda x: str(type(x)), row))
+        if mask not in seen:  # this is a novel shape
+            smaller.append(row)
+            seen.add(mask)
+
+    return smaller
 
 
 def make_strehlow_objects(table=None):
@@ -271,7 +284,7 @@ if __name__ == "__main__":
 
     # Whether to use the full data set.
     # If `False` a minimal, predefined subset of compounds will be used.
-    use_full_table = False
+    use_full_table = True
 
     if use_full_table:
         imported_table = import_table()
@@ -282,13 +295,10 @@ if __name__ == "__main__":
     sac_tbl = make_strehlow_table(compounds)
 
     # Look at each different combination of Value types in a S&C record
-    seen = set()
-    for comp, row in zip(compounds, sac_tbl['content']):
-        mask = ''.join(map(lambda x: str(type(x)), row))
-        if mask not in seen:  # this is a novel shape
-            seen.add(mask)
-            print(comp.name)
-    print('Total number of prototypes: {}'.format(len(seen)))
+    smaller = minimal_subset(sac_tbl['content'])
+    for row in smaller:
+        print(row[0])
+    print('Total number of prototypes: {}'.format(len(smaller)))
 
     print("\n\nJSON -- Training table")
     print(json.dumps(json.loads(je.dumps(sac_tbl))[1], indent=2))
