@@ -51,6 +51,18 @@ def minimal_subset(table):
     return smaller
 
 
+def formula_latex(old):
+    """Transform a formula into one with LaTeX markup."""
+    import re
+    return re.sub(r"(?<=[A-Za-z])([\d\.]+)(?=[A-Za-z]|$)", r"$_{\1}$", formula_clean(old))
+
+
+def formula_clean(old):
+    """Transform a formula into a cleaner version."""
+    import re
+    return re.sub(r"(?<=[A-Za-z])1(?=[A-Za-z]|$)", '', old)
+
+
 def make_templates():
     """Build all templates needed for the table."""
     tmpl = dict()
@@ -127,7 +139,7 @@ def make_strehlow_objects(table=None):
 
     compounds = []
     for row in table:
-        spec = MaterialSpec(name=row['chemicalFormula'],
+        spec = MaterialSpec(name=formula_latex(row['chemicalFormula']),
                             template=tmpl["Chemical"],
                             process=ProcessSpec(name="Sample preparation",
                                                 template=tmpl["Sample preparation"]
@@ -140,7 +152,9 @@ def make_strehlow_objects(table=None):
             spec.properties.append(
                 PropertyAndConditions(
                     property=Property(name=spec.template.properties[0][0].name,
-                                      value=EmpiricalFormula(formula=row['chemicalFormula']),
+                                      value=EmpiricalFormula(
+                                          formula=formula_clean(row['chemicalFormula'])
+                                      ),
                                       template=spec.template.properties[0][0])
                 ))
 
