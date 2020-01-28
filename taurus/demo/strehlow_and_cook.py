@@ -12,6 +12,7 @@ from taurus.entity.template.measurement_template import MeasurementTemplate
 from taurus.entity.attribute.property import Property
 from taurus.entity.template.property_template import PropertyTemplate
 from taurus.entity.attribute.property_and_conditions import PropertyAndConditions
+from taurus.entity.template.condition_template import ConditionTemplate
 
 from taurus.entity.bounds.categorical_bounds import CategoricalBounds
 from taurus.entity.value.nominal_categorical import NominalCategorical
@@ -83,7 +84,43 @@ def make_templates():
                        'Red-Yellow', 'Violet', 'White', 'Yellow', 'Yellow-Orange', 'Yellow-White']
                   )],
         "Band gap": [PropertyTemplate,
-                     RealBounds(lower_bound=0.001, upper_bound=100, default_units='eV')]
+                     RealBounds(lower_bound=0.001, upper_bound=100, default_units='eV')],
+        "Temperature": [ConditionTemplate,
+                        RealBounds(lower_bound=1, upper_bound=1000, default_units='K')],
+        "Temperature derivative of band gap": [PropertyTemplate,
+                                               RealBounds(lower_bound=-0.01, upper_bound=0.01,
+                                                          default_units='eV/K')],
+        "Lasing": [PropertyTemplate,
+                   CategoricalBounds(['Lasing', 'No Lasing'])],
+        "Cathodoluminescence": [PropertyTemplate,
+                                CategoricalBounds(['Cathodoluminescence',
+                                                   'No Cathodoluminescence'])],
+        "Mechanical luminescence": [PropertyTemplate,
+                                    CategoricalBounds(['Mechanical Luminescence',
+                                                       'No Mechanical Luminescence'])],
+        "Photoluminescence": [PropertyTemplate,
+                              CategoricalBounds(['Photoluminescence', 'No Photoluminescence'])],
+        "Electroluminescence": [PropertyTemplate,
+                                CategoricalBounds(['Electroluminescence',
+                                                   'No Electroluminescence'])],
+        "Thermoluminescence": [PropertyTemplate,
+                               CategoricalBounds(['Thermoluminescence', 'No Thermoluminescence'])],
+        "Morphology": [ConditionTemplate,
+                       CategoricalBounds(['Thin Film', 'Bulk'])],
+        "Electric field polarization": [ConditionTemplate,
+                                        CategoricalBounds(['Parallel to A axis',
+                                                           'Parallel to B axis',
+                                                           'Parallel to C axis',
+                                                           'Perpendicular to B axis',
+                                                           'Perpendicular to C axis'])],
+        "Phase": [ConditionTemplate,
+                  CategoricalBounds(['A', 'B', 'B1', 'B2', 'Cubic', 'Fused quartz', 'Hexagonal',
+                                     'Natural diamond', 'Orthorhombic', 'Rutile', 'Sapphire',
+                                     'Synthetic quartz', 'Tetragonal', 'Trigonal'])],
+        "Transition": [ConditionTemplate,
+                       CategoricalBounds(['Direct', 'Excitonic', 'G1 to X1', 'G15 to G1',
+                                          'G15 to X1', 'G25 to G1', 'G25 to G12', 'G25 to G15',
+                                          'G6 to G8', 'G8 to G6+', 'Indirect', 'L6+ to L6-'])]
     }
     for (name, (typ, bounds)) in attribute_feed.items():
         assert name not in tmpl
