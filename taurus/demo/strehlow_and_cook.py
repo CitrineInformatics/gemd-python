@@ -27,16 +27,23 @@ from taurus.entity.bounds.real_bounds import RealBounds
 
 # For now, module constant, though likely this should get promoted to a package level
 DEMO_SCOPE = 'citrine-demo-sac'
+FULL_TABLE = "strehlow_and_cook.pif"
+SMALL_TABLE = "strehlow_and_cook_small.pif"
 
 
-def import_table():
+def import_table(filename=FULL_TABLE):
     """Return the deserialized JSON table."""
     import pkg_resources
     import json
-    resource = pkg_resources.resource_stream("taurus.demo", "strehlow_and_cook.pif")
+    resource = pkg_resources.resource_stream("taurus.demo", filename)
     table = json.load(resource)
 
     return table
+
+
+def _fingerprint(row):
+    """Generate a string-based fingerprint to characterize row diversity."""
+    return ''.join(map(lambda x: str(type(x)), row))
 
 
 def minimal_subset(table):
@@ -44,7 +51,7 @@ def minimal_subset(table):
     seen = set()
     smaller = []
     for row in table:
-        mask = ''.join(map(lambda x: str(type(x)), row))
+        mask = _fingerprint(row)
         if mask not in seen:  # this is a novel shape
             smaller.append(row)
             seen.add(mask)
@@ -354,65 +361,91 @@ def make_strehlow_table(compounds):
 
 
 if __name__ == "__main__":
-    import taurus.client.json_encoder as je
+    """
+    When run as a script, this will clobber the SMALL_TABLE file with a newly-generated
+    minimal subset input table.
+    """
+    import os.path
     import json
 
-    # Whether to use the full data set.
-    # If `False` a minimal, predefined subset of compounds will be used.
-    use_full_table = True
+    imported_table = import_table(FULL_TABLE)
+    full_compounds = make_strehlow_objects(imported_table)
+    full_table = make_strehlow_table(full_compounds)
+    small_table = minimal_subset(full_table['content'])
+    todo = set(_fingerprint(x) for x in small_table)
+    print('Total number of prototypes: {}'.format(len(small_table)))
 
-    if use_full_table:
-        imported_table = import_table()
-    else:
-        imported_table = None
+    reduced_list = []
+    for (raw, clean) in zip(imported_table, full_table['content']):
+        fp = _fingerprint(clean)
+        if fp in todo:
+            reduced_list.append(raw)
+            todo.remove(fp)
+            if not todo:
+                break
 
-    compounds = make_strehlow_objects(imported_table)
-    sac_tbl = make_strehlow_table(compounds)
+    with open(os.path.join(os.path.dirname(__file__), SMALL_TABLE), 'w') as f:
+        import json
+        json.dump(reduced_list, f)
 
-    # Look at each different combination of Value types in a S&C record
-    smaller = minimal_subset(sac_tbl['content'])
-    for row in smaller:
-        print(row[0])
-    print('Total number of prototypes: {}'.format(len(smaller)))
 
-    print("\n\nJSON -- Training table")
-    print(json.dumps(json.loads(je.dumps(sac_tbl))[1], indent=2))
-
-    print("\n\nCSV -- Display table")
-    header = list(map(lambda x: '~'.join(x['name']), sac_tbl['headers']))
-    header.insert(2, header[2])
-    header[0] += '~Label'
-    header[1] += '~Formula'
-    header[2] += '~Mean ({})'.format('eV')  # .format(sac_tbl['headers'][2]['bounds'].default_units
-    header[3] += '~Std deviation ({})'.format('eV')
-    header[4] += '~Category'
-    header[5] += '~Category'
-
-    print(','.join(header))
-
-    for comp in sac_tbl['content']:
-        row = [comp[0]]
-
-        if comp[1] is None:
-            row.append('')
-        else:
-            row.append(comp[1].formula)
-
-        if comp[2] is None:
-            row.extend(['', ''])
-        elif isinstance(comp[2], NominalReal):
-            row.extend([str(comp[2].nominal), ''])
-        else:
-            row.extend([str(comp[2].mean), str(comp[2].std)])
-
-        if comp[3] is None:
-            row.append('')
-        else:
-            row.append(comp[3].category)
-
-        if comp[4] is None:
-            row.append('')
-        else:
-            row.append(comp[4].category)
-
-        print(','.join(row))
+#    import taurus.client.json_encoder as je
+# # Whether to use the full data set.
+#     # If `False` a minimal, predefined subset of compounds will be used.
+#     use_full_table = True
+#
+#     if use_full_table:
+#         imported_table = import_table()
+#     else:
+#         imported_table = None
+#
+#     compounds = make_strehlow_objects(imported_table)
+#     sac_tbl = make_strehlow_table(compounds)
+#
+#     # Look at each different combination of Value types in a S&C record
+#     smaller = minimal_subset(sac_tbl['content'])
+#     for row in smaller:
+#         print(row)
+#     print('Total number of prototypes: {}'.format(len(smaller)))
+#
+#     print("\n\nJSON -- Training table")
+#     print(json.dumps(json.loads(je.dumps(sac_tbl))[1], indent=2))
+#
+#     print("\n\nCSV -- Display table")
+#     header = list(map(lambda x: '~'.join(x['name']), sac_tbl['headers']))
+#     header.insert(2, header[2])
+#     header[0] += '~Label'
+#     header[1] += '~Formula'
+#     header[2] += '~Mean ({})'.format('eV')  # .format(sac_tbl['headers'][2]['bounds'].default_units
+#     header[3] += '~Std deviation ({})'.format('eV')
+#     header[4] += '~Category'
+#     header[5] += '~Category'
+#
+#     print(','.join(header))
+#
+#     for comp in sac_tbl['content']:
+#         row = [comp[0]]
+#
+#         if comp[1] is None:
+#             row.append('')
+#         else:
+#             row.append(comp[1].formula)
+#
+#         if comp[2] is None:
+#             row.extend(['', ''])
+#         elif isinstance(comp[2], NominalReal):
+#             row.extend([str(comp[2].nominal), ''])
+#         else:
+#             row.extend([str(comp[2].mean), str(comp[2].std)])
+#
+#         if comp[3] is None:
+#             row.append('')
+#         else:
+#             row.append(comp[3].category)
+#
+#         if comp[4] is None:
+#             row.append('')
+#         else:
+#             row.append(comp[4].category)
+#
+#         print(','.join(row))
