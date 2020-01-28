@@ -86,8 +86,12 @@ def make_templates():
                      RealBounds(lower_bound=0.001, upper_bound=100, default_units='eV')]
     }
     for (name, (typ, bounds)) in attribute_feed.items():
+        assert name not in tmpl
         tmpl[name] = typ(name=name,
-                         bounds=bounds)
+                         bounds=bounds,
+                         uids={DEMO_SCOPE+'-template': name},
+                         tags=['citrine::demo::template::attribute']
+                         )
 
     # Object Templates
     object_feed = {
@@ -113,7 +117,10 @@ def make_templates():
         ],
     }
     for (name, (typ, kw_args)) in object_feed.items():
+        assert name not in tmpl
         tmpl[name] = typ(name=name,
+                         uids={DEMO_SCOPE+'-template': name},
+                         tags=['citrine::demo::template::object'],
                          **kw_args)
 
     return tmpl
