@@ -67,41 +67,54 @@ def make_templates():
     """Build all templates needed for the table."""
     tmpl = dict()
 
-    tmpl["Formula"] = PropertyTemplate(
-        name="Formula",
-        bounds=CompositionBounds(components=EmpiricalFormula.all_elements()),
-    )
-    tmpl["Crystallinity"] = PropertyTemplate(
-        name="Crystallinity",
-        bounds=CategoricalBounds(['Amorphous', 'Polycrystalline', 'Single crystalline']),
-    )
-    tmpl["Color"] = PropertyTemplate(
-        name="Color",
-        bounds=CategoricalBounds(
-            ['Amber', 'Black', 'Blue', 'Bluish', 'Bronze', 'Brown', 'Brown-Black', 'Copper-Red',
-             'Dark Brown', 'Dark Gray', 'Dark Green', 'Dark Red', 'Gray', 'Light Gray', 'Ocher',
-             'Orange', 'Orange-Red', 'Pale Yellow', 'Red', 'Red-Yellow', 'Violet', 'White',
-             'Yellow', 'Yellow-Orange', 'Yellow-White'
-             ]),
-    )
-    tmpl["Band gap"] = PropertyTemplate(
-        name="Band gap",
-        bounds=RealBounds(lower_bound=0, upper_bound=100, default_units='eV'),
-    )
-    tmpl["Sample preparation"] = ProcessTemplate(name='Sample preparation')
+    # Attribute Templates
+    attribute_feed = {
+        "Formula": [PropertyTemplate,
+                    CompositionBounds(components=EmpiricalFormula.all_elements())],
+        "Crystallinity": [PropertyTemplate,
+                          CategoricalBounds(
+                              ['Amorphous', 'Polycrystalline', 'Single crystalline']
+                          )],
+        "Color": [PropertyTemplate,
+                  CategoricalBounds(
+                      ['Amber', 'Black', 'Blue', 'Bluish', 'Bronze', 'Brown', 'Brown-Black',
+                       'Copper-Red', 'Dark Brown', 'Dark Gray', 'Dark Green', 'Dark Red', 'Gray',
+                       'Light Gray', 'Ocher', 'Orange', 'Orange-Red', 'Pale Yellow', 'Red',
+                       'Red-Yellow', 'Violet', 'White', 'Yellow', 'Yellow-Orange', 'Yellow-White']
+                  )],
+        "Band gap": [PropertyTemplate,
+                     RealBounds(lower_bound=0.001, upper_bound=100, default_units='eV')]
+    }
+    for (name, (typ, bounds)) in attribute_feed.items():
+        tmpl[name] = typ(name=name,
+                         bounds=bounds)
 
-    tmpl["Chemical"] = MaterialTemplate(name='Chemical',
-                                        properties=[tmpl["Formula"]]
-                                        )
-    tmpl["Crystal description"] = MeasurementTemplate(name='Crystal description',
-                                                      properties=[tmpl["Crystallinity"]]
-                                                      )
-    tmpl["Color description"] = MeasurementTemplate(name='Color description',
-                                                    properties=[tmpl["Color"]]
-                                                    )
-    tmpl["Band gap measurement"] = MeasurementTemplate(name='Band gap measurement',
-                                                       properties=[tmpl["Band gap"]]
-                                                       )
+    # Object Templates
+    object_feed = {
+        "Sample preparation": [
+            ProcessTemplate,
+            dict()
+        ],
+        "Chemical": [
+            MaterialTemplate,
+            {"properties": [tmpl["Formula"]]}
+        ],
+        "Crystal description": [
+            MaterialTemplate,
+            {"properties": [tmpl["Crystallinity"]]}
+        ],
+        "Color description": [
+            MaterialTemplate,
+            {"properties": [tmpl["Color"]]}
+        ],
+        "Band gap measurement": [
+            MeasurementTemplate,
+            {"properties": [tmpl["Band gap"]]}
+        ],
+    }
+    for (name, (typ, kw_args)) in object_feed.items():
+        tmpl[name] = typ(name=name,
+                         **kw_args)
 
     return tmpl
 
