@@ -38,7 +38,10 @@ def import_table(filename=SMALL_TABLE):
     import pkg_resources
     import json
     resource = pkg_resources.resource_stream("taurus.demo", filename)
-    table = json.load(resource)
+    content = bytearray()
+    for line in resource:
+        content += line
+    table = json.loads(content.decode())
 
     return table
 
@@ -419,7 +422,7 @@ if __name__ == "__main__":
                 break
 
     with open(os.path.join(os.path.dirname(__file__), SMALL_TABLE), 'w') as f:
-        json.dump(reduced_list, f)
+        json.dump(reduced_list, f, indent=2)
 
     print("\n\nJSON -- Training table")
     import taurus.client.json_encoder as je
