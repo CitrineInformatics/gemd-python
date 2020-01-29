@@ -12,6 +12,7 @@ from taurus.entity.template.measurement_template import MeasurementTemplate
 from taurus.entity.attribute.property import Property
 from taurus.entity.template.property_template import PropertyTemplate
 from taurus.entity.attribute.property_and_conditions import PropertyAndConditions
+from taurus.entity.attribute.condition import Condition
 from taurus.entity.template.condition_template import ConditionTemplate
 
 from taurus.entity.bounds.categorical_bounds import CategoricalBounds
@@ -80,7 +81,7 @@ def make_templates():
     attribute_feed = {
         "Formula": [PropertyTemplate,
                     CompositionBounds(components=EmpiricalFormula.all_elements())],
-        "Crystallinity": [PropertyTemplate,
+        "Crystallinity": [ConditionTemplate,
                           CategoricalBounds(
                               ['Amorphous', 'Polycrystalline', 'Single crystalline']
                           )],
@@ -148,17 +149,26 @@ def make_templates():
             MaterialTemplate,
             {"properties": [tmpl["Formula"]]}
         ],
-        "Crystal description": [
-            MaterialTemplate,
-            {"properties": [tmpl["Crystallinity"]]}
-        ],
-        "Color description": [
-            MaterialTemplate,
-            {"properties": [tmpl["Color"]]}
-        ],
         "Band gap measurement": [
             MeasurementTemplate,
-            {"properties": [tmpl["Band gap"]]}
+            {"properties": [tmpl["Band gap"],
+                            tmpl["Temperature derivative of band gap"],
+                            tmpl["Color"],
+                            tmpl["Lasing"],
+                            tmpl["Cathodoluminescence"],
+                            tmpl["Mechanical luminescence"],
+                            tmpl["Photoluminescence"],
+                            tmpl["Electroluminescence"],
+                            tmpl["Thermoluminescence"]
+                            ],
+             "conditions": [tmpl["Temperature"],
+                            tmpl["Crystallinity"],
+                            tmpl["Morphology"],
+                            tmpl["Electric field polarization"],
+                            tmpl["Phase"],
+                            tmpl["Transition"]
+                            ]
+             }
         ],
     }
     for (name, (typ, kw_args)) in object_feed.items():
@@ -179,17 +189,28 @@ def make_strehlow_objects(table=None):
         table = import_table()
 
     # Specs
-    cryst_msr_spec = MeasurementSpec(name='Crystallinity',
-                                     template=tmpl["Crystal description"]
-                                     )
+    msr_spec = MeasurementSpec(name='Band gap',
+                               template=tmpl["Band gap measurement"]
+                               )
 
-    color_msr_spec = MeasurementSpec(name='Color',
-                                     template=tmpl["Color description"]
-                                     )
+    def real_mapper(prop):
+        """Mapping methods for RealBounds."""
+        if 'uncertainty' in prop['scalars'][0]:
+            val = NormalReal(mean=float(prop['scalars'][0]['value']),
+                             units=prop['units'],
+                             std=float(prop['scalars'][0]['uncertainty'])
+                             )
+        else:
+            val = NominalReal(nominal=float(prop['scalars'][0]['value']),
+                              units=prop['units']
+                              )
+        return val
 
-    band_msr_spec = MeasurementSpec(name='Band gap',
-                                    template=tmpl["Band gap measurement"]
-                                    )
+    content_map = {
+        RealBounds: real_mapper,
+        CategoricalBounds: lambda prop: NominalCategorical(category=prop['scalars'][0]['value']),
+        type(None): lambda bnd: 'Label'
+    }
 
     compounds = []
     for row in table:
@@ -212,35 +233,38 @@ def make_strehlow_objects(table=None):
                                       template=spec.template.properties[0][0])
                 ))
 
-        for prop in filter(lambda x: 'Band gap' == x['name'], row['properties']):
-            band_msr = make_instance(band_msr_spec)
-            band_msr.material = run
-            if 'uncertainty' in prop['scalars'][0]:
-                val = NormalReal(mean=float(prop['scalars'][0]['value']),
-                                 units=prop['units'],
-                                 std=float(prop['scalars'][0]['uncertainty'])
-                                 )
-            else:
-                val = NominalReal(nominal=float(prop['scalars'][0]['value']),
-                                  units=prop['units']
-                                  )
-            band_msr.properties.append(
-                Property(name=band_msr_spec.template.properties[0][0].name, value=val))
+        msr = make_instance(msr_spec)
+        msr.material = run
 
-        for prop in filter(lambda x: 'Crystallinity' == x['name'], row['properties']):
-            cryst_msr = make_instance(cryst_msr_spec)
-            cryst_msr.material = run
-            val = NominalCategorical(category=prop['scalars'][0]['value'])
-            cryst_msr.properties.append(
-                Property(name=cryst_msr_spec.template.properties[0][0].name, value=val))
+        for prop in row['properties']:
+            template = tmpl[prop['name']]
+            if type(template) == PropertyTemplate:
+                msr.properties.append(
+                    Property(name=template.name,
+                             template=template,
+                             value=content_map[type(template.bounds)](prop)
+                             ))
+            elif type(template) == ConditionTemplate:
+                msr.conditions.append(
+                    Condition(name=template.name,
+                              template=template,
+                              value=content_map[type(template.bounds)](prop)
+                              ))
 
-        for prop in filter(lambda x: 'Color' == x['name'], row['properties']):
-            color_msr = make_instance(color_msr_spec)
-            color_msr.material = run
-            val = NominalCategorical(category=prop['scalars'][0]['value'])
-            color_msr.properties.append(
-                Property(name=color_msr_spec.template.properties[0][0].name, value=val))
-
+                for cond in row.get('conditions', []):
+                    template = tmpl[cond['name']]
+                    if type(template) == PropertyTemplate:
+                        msr.properties.append(
+                            Property(name=template.name,
+                                     template=template,
+                                     value=content_map[type(template.bounds)](cond)
+                                     ))
+                    elif type(template) == ConditionTemplate:
+                        msr.conditions.append(
+                            Condition(name=template.name,
+                                      template=template,
+                                      value=content_map[type(template.bounds)](cond)
+                                      ))
     return compounds
 
 
@@ -262,13 +286,12 @@ def make_strehlow_table(compounds):
             break
 
     chem_mat_tmpl = compounds[0].spec.template
+    msr = compounds[0].measurements[0]
 
-    for comp in compounds:
-        if len(comp.measurements) == 3:  # Full list
-            band_msr = comp.measurements[0].spec
-            cryst_msr = comp.measurements[1].spec
-            color_msr = comp.measurements[2].spec
-            break
+    tmpl = dict()
+    for attr in (compounds[0].measurements[0].spec.template.properties
+                 + compounds[0].measurements[0].spec.template.conditions):
+        tmpl[attr[0].name] = attr[0]
 
     # Consider how to specify relevant data pathing here
     output = {'headers': [], 'content': []}
@@ -293,29 +316,26 @@ def make_strehlow_table(compounds):
     )
     output['headers'].append(
         {'name': [chem_mat_tmpl.name,
-                  band_msr.name,
-                  band_msr.template.properties[0][0].name
+                  "Band gap"
                   ],
          'primitive': False,
-         'bounds': band_msr.template.properties[0][0].bounds
+         'bounds': tmpl["Band gap"].bounds
          }
     )
     output['headers'].append(
         {'name': [chem_mat_tmpl.name,
-                  cryst_msr.name,
-                  cryst_msr.template.properties[0][0].name
+                  "Crystallinity"
                   ],
          'primitive': False,
-         'bounds': cryst_msr.template.properties[0][0].bounds
+         'bounds': tmpl["Crystallinity"].bounds
          }
     )
     output['headers'].append(
         {'name': [chem_mat_tmpl.name,
-                  color_msr.name,
-                  color_msr.template.properties[0][0].name
+                  "Color"
                   ],
          'primitive': False,
-         'bounds': color_msr.template.properties[0][0].bounds
+         'bounds': tmpl["Color"].bounds
          }
     )
 
@@ -327,27 +347,28 @@ def make_strehlow_table(compounds):
         else:
             row.append(None)
 
-        x = list(filter(lambda y: y.name == band_msr.name, comp.measurements))
+        x = list(filter(lambda y: y.name == "Band gap", comp.measurements[0].properties))
         if x:
-            row.append(x[0].properties[0].value)
+            row.append(x[0].value)
         else:
             row.append(None)
 
-        x = list(filter(lambda y: y.name == cryst_msr.name, comp.measurements))
+        x = list(filter(lambda y: y.name == "Crystallinity", comp.measurements[0].conditions))
         if x:
-            row.append(x[0].properties[0].value)
+            row.append(x[0].value)
         else:
             row.append(None)
 
-        x = list(filter(lambda y: y.name == color_msr.name, comp.measurements))
+        x = list(filter(lambda y: y.name == "Color", comp.measurements[0].properties))
         if x:
-            row.append(x[0].properties[0].value)
+            row.append(x[0].value)
         else:
             row.append(None)
 
         output['content'].append(row)
 
     return output
+
 
 def make_display_table(structured):
     """Generate a Display Table from a passed Structured Table"""
