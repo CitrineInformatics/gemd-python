@@ -33,7 +33,7 @@ FULL_TABLE = "strehlow_and_cook.pif"
 SMALL_TABLE = "strehlow_and_cook_small.pif"
 
 
-def import_table(filename=FULL_TABLE):
+def import_table(filename=SMALL_TABLE):
     """Return the deserialized JSON table."""
     import pkg_resources
     import json
@@ -100,20 +100,17 @@ def make_templates():
                                                RealBounds(lower_bound=-0.01, upper_bound=0.01,
                                                           default_units='eV/K')],
         "Lasing": [PropertyTemplate,
-                   CategoricalBounds(['Lasing', 'No Lasing'])],
+                   CategoricalBounds(['True', 'False'])],
         "Cathodoluminescence": [PropertyTemplate,
-                                CategoricalBounds(['Cathodoluminescence',
-                                                   'No Cathodoluminescence'])],
+                                CategoricalBounds(['True', 'False'])],
         "Mechanical luminescence": [PropertyTemplate,
-                                    CategoricalBounds(['Mechanical Luminescence',
-                                                       'No Mechanical Luminescence'])],
+                                    CategoricalBounds(['True', 'False'])],
         "Photoluminescence": [PropertyTemplate,
-                              CategoricalBounds(['Photoluminescence', 'No Photoluminescence'])],
+                              CategoricalBounds(['True', 'False'])],
         "Electroluminescence": [PropertyTemplate,
-                                CategoricalBounds(['Electroluminescence',
-                                                   'No Electroluminescence'])],
+                                CategoricalBounds(['True', 'False'])],
         "Thermoluminescence": [PropertyTemplate,
-                               CategoricalBounds(['Thermoluminescence', 'No Thermoluminescence'])],
+                               CategoricalBounds(['True', 'False'])],
         "Morphology": [ConditionTemplate,
                        CategoricalBounds(['Thin Film', 'Bulk'])],
         "Electric field polarization": [ConditionTemplate,
@@ -135,7 +132,7 @@ def make_templates():
         assert name not in tmpl
         tmpl[name] = typ(name=name,
                          bounds=bounds,
-                         uids={DEMO_SCOPE+'-template': name},
+                         uids={DEMO_SCOPE + '-template': name},
                          tags=['citrine::demo::template::attribute']
                          )
 
@@ -174,7 +171,7 @@ def make_templates():
     for (name, (typ, kw_args)) in object_feed.items():
         assert name not in tmpl
         tmpl[name] = typ(name=name,
-                         uids={DEMO_SCOPE+'-template': name},
+                         uids={DEMO_SCOPE + '-template': name},
                          tags=['citrine::demo::template::object'],
                          **kw_args)
 
@@ -228,8 +225,7 @@ def make_strehlow_objects(table=None):
                 PropertyAndConditions(
                     property=Property(name=spec.template.properties[0][0].name,
                                       value=EmpiricalFormula(
-                                          formula=formula_clean(row['chemicalFormula'])
-                                      ),
+                                          formula=formula_clean(row['chemicalFormula'])),
                                       template=spec.template.properties[0][0])
                 ))
 
@@ -251,20 +247,20 @@ def make_strehlow_objects(table=None):
                               value=content_map[type(template.bounds)](prop)
                               ))
 
-                for cond in row.get('conditions', []):
-                    template = tmpl[cond['name']]
-                    if type(template) == PropertyTemplate:
-                        msr.properties.append(
-                            Property(name=template.name,
-                                     template=template,
-                                     value=content_map[type(template.bounds)](cond)
-                                     ))
-                    elif type(template) == ConditionTemplate:
-                        msr.conditions.append(
-                            Condition(name=template.name,
-                                      template=template,
-                                      value=content_map[type(template.bounds)](cond)
-                                      ))
+            for cond in prop.get('conditions', []):
+                template = tmpl[cond['name']]
+                if type(template) == PropertyTemplate:
+                    msr.properties.append(
+                        Property(name=template.name,
+                                 template=template,
+                                 value=content_map[type(template.bounds)](cond)
+                                 ))
+                elif type(template) == ConditionTemplate:
+                    msr.conditions.append(
+                        Condition(name=template.name,
+                                  template=template,
+                                  value=content_map[type(template.bounds)](cond)
+                                  ))
     return compounds
 
 
@@ -286,11 +282,11 @@ def make_strehlow_table(compounds):
             break
 
     chem_mat_tmpl = compounds[0].spec.template
-    msr = compounds[0].measurements[0]
 
     tmpl = dict()
-    for attr in (compounds[0].measurements[0].spec.template.properties
-                 + compounds[0].measurements[0].spec.template.conditions):
+    # Horrible formatting to satisfy flake8
+    for attr in (compounds[0].measurements[0].spec.template.
+                 properties + compounds[0].measurements[0].spec.template.conditions):
         tmpl[attr[0].name] = attr[0]
 
     # Consider how to specify relevant data pathing here
@@ -314,30 +310,20 @@ def make_strehlow_table(compounds):
          'bounds': CompositionBounds()
          }
     )
-    output['headers'].append(
-        {'name': [chem_mat_tmpl.name,
-                  "Band gap"
-                  ],
-         'primitive': False,
-         'bounds': tmpl["Band gap"].bounds
-         }
-    )
-    output['headers'].append(
-        {'name': [chem_mat_tmpl.name,
-                  "Crystallinity"
-                  ],
-         'primitive': False,
-         'bounds': tmpl["Crystallinity"].bounds
-         }
-    )
-    output['headers'].append(
-        {'name': [chem_mat_tmpl.name,
-                  "Color"
-                  ],
-         'primitive': False,
-         'bounds': tmpl["Color"].bounds
-         }
-    )
+    terms = ["Band gap", "Temperature derivative of band gap", "Temperature", "Color",
+             "Lasing", "Cathodoluminescence", "Mechanical luminescence", "Photoluminescence",
+             "Electroluminescence", "Thermoluminescence", "Transition",
+             "Electric field polarization", "Crystallinity", "Morphology", "Phase"]
+
+    for term in terms:
+        output['headers'].append(
+            {'name': [chem_mat_tmpl.name,
+                      term
+                      ],
+             'primitive': False,
+             'bounds': tmpl[term].bounds
+             }
+        )
 
     for comp in compounds:
         row = [comp.spec.name]
@@ -347,23 +333,13 @@ def make_strehlow_table(compounds):
         else:
             row.append(None)
 
-        x = list(filter(lambda y: y.name == "Band gap", comp.measurements[0].properties))
-        if x:
-            row.append(x[0].value)
-        else:
-            row.append(None)
-
-        x = list(filter(lambda y: y.name == "Crystallinity", comp.measurements[0].conditions))
-        if x:
-            row.append(x[0].value)
-        else:
-            row.append(None)
-
-        x = list(filter(lambda y: y.name == "Color", comp.measurements[0].properties))
-        if x:
-            row.append(x[0].value)
-        else:
-            row.append(None)
+        for term in terms:
+            x = list(filter(lambda y: y.name == term,
+                            comp.measurements[0].properties + comp.measurements[0].conditions))
+            if x:
+                row.append(x[0].value)
+            else:
+                row.append(None)
 
         output['content'].append(row)
 
@@ -371,8 +347,7 @@ def make_strehlow_table(compounds):
 
 
 def make_display_table(structured):
-    """Generate a Display Table from a passed Structured Table"""
-
+    """Generate a Display Table from a passed Structured Table."""
     table = [[]]
     header_map = {
         RealBounds: lambda bnd: 'Mean({})'.format(bnd.default_units),
@@ -444,7 +419,6 @@ if __name__ == "__main__":
                 break
 
     with open(os.path.join(os.path.dirname(__file__), SMALL_TABLE), 'w') as f:
-        import json
         json.dump(reduced_list, f)
 
     print("\n\nJSON -- Training table")
