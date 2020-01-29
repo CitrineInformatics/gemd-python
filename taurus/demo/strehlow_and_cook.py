@@ -22,6 +22,7 @@ from taurus.entity.value.empirical_formula import EmpiricalFormula
 
 from taurus.entity.value.normal_real import NormalReal
 from taurus.entity.value.nominal_real import NominalReal
+from taurus.entity.value.uniform_real import UniformReal
 from taurus.entity.bounds.real_bounds import RealBounds
 
 
@@ -175,18 +176,7 @@ def make_strehlow_objects(table=None):
     tmpl = make_templates()
 
     if table is None:
-        table = [["Bi$_{2}$Te$_{3}$", "Bi2Te3", 0.153, None, "Single crystalline", None],
-                 ["DyN", "DyN", 2.1, None, None, None],
-                 ["InAs", "InAs", 0.404, None, "Single crystalline", "Dark Gray"],
-                 ["CaS", "CaS", 6.0, 0.2, "Polycrystalline", None],
-                 ["Rb$_{3}$Sb", "Rb3Sb", 1.7, 0.1, None, None],
-                 ["CeN", "CeN", 0.7, None, None, "Bronze"],
-                 ["BaI", "BaI", None, None, None, None],
-                 ["CoF$_{2}$", "CoF2", None, None, "Polycrystalline", None],
-                 ["B$_{2}$Se$_{3}$", "B2Se3", None, None, None, "Orange"],
-                 ["Mg$_{3}$As$_{2}$", "Mg3As2", 2.55, 0.35, "Polycrystalline", "Brown"],
-                 ["Bi$_{0.85}$Sb$_{0.15}$", None, 0.01, None, "Single crystalline", None],
-                 ["CoTe$_{1.88}$", None, 0.2, None, None, None]]
+        table = import_table()
 
     # Specs
     cryst_msr_spec = MeasurementSpec(name='Crystallinity',
@@ -359,6 +349,54 @@ def make_strehlow_table(compounds):
 
     return output
 
+def make_display_table(structured):
+    """Generate a Display Table from a passed Structured Table"""
+
+    table = [[]]
+    header_map = {
+        RealBounds: lambda bnd: 'Mean({})'.format(bnd.default_units),
+        CategoricalBounds: lambda bnd: 'Category',
+        CompositionBounds: lambda bnd: 'Formula',
+        type(None): lambda bnd: 'Label'
+    }
+    for column in structured['headers']:
+        bounds = column.get('bounds', None)
+        table[0].append('~'.join(column['name'] + [header_map[type(bounds)](bounds)]))
+
+    i_bandgap = list(filter(lambda i: 'Band gap' in table[0][i], range(len(table[0]))))
+    assert i_bandgap, "Band gap was not found"
+    i_bandgap = i_bandgap[0]
+    column = structured['headers'][i_bandgap]
+    table[0].insert(
+        i_bandgap + 1,
+        '~'.join(column['name'] + ['Std Deviation({})'.format(column['bounds'].default_units)])
+    )
+
+    content_map = {
+        NominalReal: lambda x: x.nominal,
+        NormalReal: lambda x: x.mean,
+        UniformReal: lambda x: 0.5 * (x.lower_bound + x.upper_bound),
+        NominalCategorical: lambda x: x.category,
+        EmpiricalFormula: lambda x: x.formula,
+        str: lambda x: x,
+        type(None): lambda x: ''
+    }
+    uncert_map = {
+        NominalReal: lambda x: '',
+        NormalReal: lambda x: x.std,
+        UniformReal: lambda x: 0.29 * (x.upper_bound - x.lower_bound),
+        type(None): lambda x: ''
+    }
+    for row in structured['content']:
+        table.append([])
+        for element in row:
+            table[-1].append(content_map[type(element)](element))
+
+        # And insert band gap
+        table[-1].insert(i_bandgap + 1, uncert_map[type(row[i_bandgap])](row[i_bandgap]))
+
+    return table
+
 
 if __name__ == "__main__":
     """
@@ -388,64 +426,11 @@ if __name__ == "__main__":
         import json
         json.dump(reduced_list, f)
 
+    print("\n\nJSON -- Training table")
+    import taurus.client.json_encoder as je
+    print(json.dumps(json.loads(je.dumps(full_table))[1], indent=2))
 
-#    import taurus.client.json_encoder as je
-# # Whether to use the full data set.
-#     # If `False` a minimal, predefined subset of compounds will be used.
-#     use_full_table = True
-#
-#     if use_full_table:
-#         imported_table = import_table()
-#     else:
-#         imported_table = None
-#
-#     compounds = make_strehlow_objects(imported_table)
-#     sac_tbl = make_strehlow_table(compounds)
-#
-#     # Look at each different combination of Value types in a S&C record
-#     smaller = minimal_subset(sac_tbl['content'])
-#     for row in smaller:
-#         print(row)
-#     print('Total number of prototypes: {}'.format(len(smaller)))
-#
-#     print("\n\nJSON -- Training table")
-#     print(json.dumps(json.loads(je.dumps(sac_tbl))[1], indent=2))
-#
-#     print("\n\nCSV -- Display table")
-#     header = list(map(lambda x: '~'.join(x['name']), sac_tbl['headers']))
-#     header.insert(2, header[2])
-#     header[0] += '~Label'
-#     header[1] += '~Formula'
-#     header[2] += '~Mean ({})'.format('eV')  # .format(sac_tbl['headers'][2]['bounds'].default_units
-#     header[3] += '~Std deviation ({})'.format('eV')
-#     header[4] += '~Category'
-#     header[5] += '~Category'
-#
-#     print(','.join(header))
-#
-#     for comp in sac_tbl['content']:
-#         row = [comp[0]]
-#
-#         if comp[1] is None:
-#             row.append('')
-#         else:
-#             row.append(comp[1].formula)
-#
-#         if comp[2] is None:
-#             row.extend(['', ''])
-#         elif isinstance(comp[2], NominalReal):
-#             row.extend([str(comp[2].nominal), ''])
-#         else:
-#             row.extend([str(comp[2].mean), str(comp[2].std)])
-#
-#         if comp[3] is None:
-#             row.append('')
-#         else:
-#             row.append(comp[3].category)
-#
-#         if comp[4] is None:
-#             row.append('')
-#         else:
-#             row.append(comp[4].category)
-#
-#         print(','.join(row))
+    print("\n\nCSV -- Display table")
+    display = make_display_table(full_table)
+    for row in display:
+        print(','.join(map(lambda x: str(x), row)))
