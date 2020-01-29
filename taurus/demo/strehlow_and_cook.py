@@ -287,9 +287,11 @@ def make_strehlow_table(compounds):
     chem_mat_tmpl = compounds[0].spec.template
 
     tmpl = dict()
-    # Horrible formatting to satisfy flake8
-    for attr in (compounds[0].measurements[0].spec.template.
-                 properties + compounds[0].measurements[0].spec.template.conditions):
+
+    properties = compounds[0].measurements[0].spec.template.properties
+    conditions = compounds[0].measurements[0].spec.template.conditions
+    parameters = compounds[0].measurements[0].spec.template.parameters
+    for attr in (properties + conditions + parameters):
         tmpl[attr[0].name] = attr[0]
 
     # Consider how to specify relevant data pathing here
