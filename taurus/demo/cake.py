@@ -123,6 +123,11 @@ def make_cake_templates():
         description="Sample size in mass units, to go along with FDA Nutrition Facts",
         bounds=RealBounds(1.e-3, 10.e3, "g")
     )
+    tmpl["Expected Sample Size"] = ParameterTemplate(
+        name="Expected Sample Size",
+        description="Specified sample size in mass units, to go along with FDA Nutrition Facts",
+        bounds=RealBounds(1.e-3, 10.e3, "g")
+    )
     tmpl["Chemical Formula"] = PropertyTemplate(
         name="Chemical Formula",
         description="The chemical formula of a material",
@@ -152,12 +157,14 @@ def make_cake_templates():
     tmpl["Nutritional Analysis"] = MeasurementTemplate(
         name="Nutritional Analysis",
         properties=[tmpl["Nutritional Information"]],
-        conditions=[tmpl["Sample Size"]]
+        conditions=[tmpl["Sample Size"]],
+        parameters=[tmpl["Expected Sample Size"]]
     )
     tmpl["Elemental Analysis"] = MeasurementTemplate(
         name="Elemental Analysis",
         properties=[tmpl["Chemical Formula"]],
-        conditions=[tmpl["Sample Size"]]
+        conditions=[tmpl["Sample Size"]],
+        parameters=[tmpl["Expected Sample Size"]]
     )
 
     tmpl["Dessert"] = MaterialTemplate(
@@ -820,6 +827,12 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
         template=tmpl["Sample Size"],
         origin="measured"
     ))
+    flour_content.parameters.append(Parameter(
+        name='Sample Size',
+        value=NominalReal(nominal=0.1, units='g'),
+        template=tmpl["Sample Size"],
+        origin="measured"
+    ))
     flour_content.spec.conditions.append(Condition(
         name='Sample Size',
         value=NominalReal(
@@ -828,6 +841,12 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
         ),
         template=tmpl["Sample Size"],
         origin="specified"
+    ))
+    flour_content.spec.parameters.append(Parameter(
+        name='Sample Size',
+        value=NominalReal(nominal=0.1, units='g'),
+        template=tmpl["Sample Size"],
+        origin="measured"
     ))
 
     salt_content.properties.append(Property(
@@ -843,6 +862,12 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
             std=1.5,
             units='mg'
         ),
+        template=tmpl["Sample Size"],
+        origin="measured"
+    ))
+    salt_content.parameters.append(Parameter(
+        name='Sample Size',
+        value=NominalReal(nominal=0.1, units='g'),
         template=tmpl["Sample Size"],
         origin="measured"
     ))
@@ -869,6 +894,12 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
             std=1.5,
             units='mg'
         ),
+        template=tmpl["Sample Size"],
+        origin="measured"
+    ))
+    sugar_content.spec.parameters.append(Parameter(
+        name='Sample Size',
+        value=NominalReal(nominal=0.1, units='g'),
         template=tmpl["Sample Size"],
         origin="measured"
     ))
