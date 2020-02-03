@@ -828,10 +828,10 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
         origin="measured"
     ))
     flour_content.parameters.append(Parameter(
-        name='Sample Size',
+        name='Expected Sample Size',
         value=NominalReal(nominal=0.1, units='g'),
-        template=tmpl["Sample Size"],
-        origin="measured"
+        template=tmpl["Expected Sample Size"],
+        origin="specified"
     ))
     flour_content.spec.conditions.append(Condition(
         name='Sample Size',
@@ -843,10 +843,10 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
         origin="specified"
     ))
     flour_content.spec.parameters.append(Parameter(
-        name='Sample Size',
+        name='Expected Sample Size',
         value=NominalReal(nominal=0.1, units='g'),
-        template=tmpl["Sample Size"],
-        origin="measured"
+        template=tmpl["Expected Sample Size"],
+        origin="specified"
     ))
 
     salt_content.properties.append(Property(
@@ -866,10 +866,10 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
         origin="measured"
     ))
     salt_content.parameters.append(Parameter(
-        name='Sample Size',
+        name='Expected Sample Size',
         value=NominalReal(nominal=0.1, units='g'),
-        template=tmpl["Sample Size"],
-        origin="measured"
+        template=tmpl["Expected Sample Size"],
+        origin="specified"
     ))
     salt_content.spec.conditions.append(Condition(
         name='Sample Size',
@@ -898,10 +898,10 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
         origin="measured"
     ))
     sugar_content.spec.parameters.append(Parameter(
-        name='Sample Size',
+        name='Expected Sample Size',
         value=NominalReal(nominal=0.1, units='g'),
-        template=tmpl["Sample Size"],
-        origin="measured"
+        template=tmpl["Expected Sample Size"],
+        origin="specified"
     ))
 
     # Code to generate quasi-repeatable run annotations
