@@ -12,6 +12,8 @@ from taurus.entity.template.measurement_template import MeasurementTemplate
 from taurus.entity.attribute.property import Property
 from taurus.entity.template.property_template import PropertyTemplate
 from taurus.entity.attribute.property_and_conditions import PropertyAndConditions
+from taurus.entity.attribute.condition import Condition
+from taurus.entity.template.condition_template import ConditionTemplate
 
 from taurus.entity.bounds.categorical_bounds import CategoricalBounds
 from taurus.entity.value.nominal_categorical import NominalCategorical
@@ -21,132 +23,250 @@ from taurus.entity.value.empirical_formula import EmpiricalFormula
 
 from taurus.entity.value.normal_real import NormalReal
 from taurus.entity.value.nominal_real import NominalReal
+from taurus.entity.value.uniform_real import UniformReal
 from taurus.entity.bounds.real_bounds import RealBounds
+
+
+# For now, module constant, though likely this should get promoted to a package level
+DEMO_SCOPE = 'citrine-demo-sac'
+FULL_TABLE = "strehlow_and_cook.pif"
+SMALL_TABLE = "strehlow_and_cook_small.pif"
+
+
+def import_table(filename=SMALL_TABLE):
+    """Return the deserialized JSON table."""
+    import pkg_resources
+    import json
+    resource = pkg_resources.resource_stream("taurus.demo", filename)
+    content = bytearray()
+    for line in resource:
+        content += line
+    table = json.loads(content.decode())
+
+    return table
+
+
+def _fingerprint(row):
+    """Generate a string-based fingerprint to characterize row diversity."""
+    return ''.join(map(lambda x: str(type(x)), row))
+
+
+def minimal_subset(table):
+    """Transform an incoming table into the minimal example that reflects full diversity."""
+    seen = set()
+    smaller = []
+    for row in table:
+        mask = _fingerprint(row)
+        if mask not in seen:  # this is a novel shape
+            smaller.append(row)
+            seen.add(mask)
+
+    return smaller
+
+
+def formula_latex(old):
+    """Transform a formula into one with LaTeX markup."""
+    import re
+    return re.sub(r"(?<=[A-Za-z])([\d\.]+)(?=[A-Za-z]|$)", r"$_{\1}$", formula_clean(old))
+
+
+def formula_clean(old):
+    """Transform a formula into a cleaner version."""
+    import re
+    return re.sub(r"(?<=[A-Za-z])1(?=[A-Za-z]|$)", '', old)
+
+
+def make_templates():
+    """Build all templates needed for the table."""
+    tmpl = dict()
+
+    # Attribute Templates
+    attribute_feed = {
+        "Formula": [PropertyTemplate,
+                    CompositionBounds(components=EmpiricalFormula.all_elements())],
+        "Crystallinity": [ConditionTemplate,
+                          CategoricalBounds(
+                              ['Amorphous', 'Polycrystalline', 'Single crystalline']
+                          )],
+        "Color": [PropertyTemplate,
+                  CategoricalBounds(
+                      ['Amber', 'Black', 'Blue', 'Bluish', 'Bronze', 'Brown', 'Brown-Black',
+                       'Copper-Red', 'Dark Brown', 'Dark Gray', 'Dark Green', 'Dark Red', 'Gray',
+                       'Light Gray', 'Ocher', 'Orange', 'Orange-Red', 'Pale Yellow', 'Red',
+                       'Red-Yellow', 'Violet', 'White', 'Yellow', 'Yellow-Orange', 'Yellow-White']
+                  )],
+        "Band gap": [PropertyTemplate,
+                     RealBounds(lower_bound=0.001, upper_bound=100, default_units='eV')],
+        "Temperature": [ConditionTemplate,
+                        RealBounds(lower_bound=1, upper_bound=1000, default_units='K')],
+        "Temperature derivative of band gap": [PropertyTemplate,
+                                               RealBounds(lower_bound=-0.01, upper_bound=0.01,
+                                                          default_units='eV/K')],
+        "Lasing": [PropertyTemplate,
+                   CategoricalBounds(['True', 'False'])],
+        "Cathodoluminescence": [PropertyTemplate,
+                                CategoricalBounds(['True', 'False'])],
+        "Mechanical luminescence": [PropertyTemplate,
+                                    CategoricalBounds(['True', 'False'])],
+        "Photoluminescence": [PropertyTemplate,
+                              CategoricalBounds(['True', 'False'])],
+        "Electroluminescence": [PropertyTemplate,
+                                CategoricalBounds(['True', 'False'])],
+        "Thermoluminescence": [PropertyTemplate,
+                               CategoricalBounds(['True', 'False'])],
+        "Morphology": [ConditionTemplate,
+                       CategoricalBounds(['Thin Film', 'Bulk'])],
+        "Electric field polarization": [ConditionTemplate,
+                                        CategoricalBounds(['Parallel to A axis',
+                                                           'Parallel to B axis',
+                                                           'Parallel to C axis',
+                                                           'Perpendicular to B axis',
+                                                           'Perpendicular to C axis'])],
+        "Phase": [ConditionTemplate,
+                  CategoricalBounds(['A', 'B', 'B1', 'B2', 'Cubic', 'Fused quartz', 'Hexagonal',
+                                     'Natural diamond', 'Orthorhombic', 'Rutile', 'Sapphire',
+                                     'Synthetic quartz', 'Tetragonal', 'Trigonal'])],
+        "Transition": [ConditionTemplate,
+                       CategoricalBounds(['Direct', 'Excitonic', 'G1 to X1', 'G15 to G1',
+                                          'G15 to X1', 'G25 to G1', 'G25 to G12', 'G25 to G15',
+                                          'G6 to G8', 'G8 to G6+', 'Indirect', 'L6+ to L6-'])]
+    }
+    for (name, (typ, bounds)) in attribute_feed.items():
+        assert name not in tmpl
+        tmpl[name] = typ(name=name,
+                         bounds=bounds,
+                         uids={DEMO_SCOPE + '-template': name},
+                         tags=['citrine::demo::template::attribute']
+                         )
+
+    # Object Templates
+    object_feed = {
+        "Sample preparation": [
+            ProcessTemplate,
+            dict()
+        ],
+        "Chemical": [
+            MaterialTemplate,
+            {"properties": [tmpl["Formula"]]}
+        ],
+        "Band gap measurement": [
+            MeasurementTemplate,
+            {"properties": [tmpl["Band gap"],
+                            tmpl["Temperature derivative of band gap"],
+                            tmpl["Color"],
+                            tmpl["Lasing"],
+                            tmpl["Cathodoluminescence"],
+                            tmpl["Mechanical luminescence"],
+                            tmpl["Photoluminescence"],
+                            tmpl["Electroluminescence"],
+                            tmpl["Thermoluminescence"]
+                            ],
+             "conditions": [tmpl["Temperature"],
+                            tmpl["Crystallinity"],
+                            tmpl["Morphology"],
+                            tmpl["Electric field polarization"],
+                            tmpl["Phase"],
+                            tmpl["Transition"]
+                            ]
+             }
+        ],
+    }
+    for (name, (typ, kw_args)) in object_feed.items():
+        assert name not in tmpl
+        tmpl[name] = typ(name=name,
+                         uids={DEMO_SCOPE + '-template': name},
+                         tags=['citrine::demo::template::object'],
+                         **kw_args)
+
+    return tmpl
 
 
 def make_strehlow_objects(table=None):
     """Make a table with Strehlow & Cook data."""
+    tmpl = make_templates()
+
     if table is None:
-        table = [["Bi$_{2}$Te$_{3}$", "Bi2Te3", 0.153, None, "Single crystalline", None],
-                 ["DyN", "DyN", 2.1, None, None, None],
-                 ["InAs", "InAs", 0.404, None, "Single crystalline", "Dark Gray"],
-                 ["CaS", "CaS", 6.0, 0.2, "Polycrystalline", None],
-                 ["Rb$_{3}$Sb", "Rb3Sb", 1.7, 0.1, None, None],
-                 ["CeN", "CeN", 0.7, None, None, "Bronze"],
-                 ["BaI", "BaI", None, None, None, None],
-                 ["CoF$_{2}$", "CoF2", None, None, "Polycrystalline", None],
-                 ["B$_{2}$Se$_{3}$", "B2Se3", None, None, None, "Orange"],
-                 ["Mg$_{3}$As$_{2}$", "Mg3As2", 2.55, 0.35, "Polycrystalline", "Brown"],
-                 ["Bi$_{0.85}$Sb$_{0.15}$", None, 0.01, None, "Single crystalline", None],
-                 ["CoTe$_{1.88}$", None, 0.2, None, None, None]]
-
-    cryst_bnds = CategoricalBounds(['Amorphous', 'Polycrystalline', 'Single crystalline'])
-    color_bnds = CategoricalBounds(
-        ['Amber', 'Black', 'Blue', 'Bluish', 'Bronze', 'Brown', 'Brown-Black', 'Copper-Red',
-         'Dark Brown', 'Dark Gray', 'Dark Green', 'Dark Red', 'Gray', 'Light Gray', 'Ocher',
-         'Orange', 'Orange-Red', 'Pale Yellow', 'Red', 'Red-Yellow', 'Violet', 'White',
-         'Yellow', 'Yellow-Orange', 'Yellow-White'
-         ])
-    band_bnds = RealBounds(lower_bound=0, upper_bound=100, default_units='eV')
-
-    chem_tmpl = PropertyTemplate(
-        name="Identity",
-        bounds=CompositionBounds(components=EmpiricalFormula.all_elements()),
-    )
-    cryst_tmpl = PropertyTemplate(
-        name="Crystallinity",
-        bounds=cryst_bnds,
-    )
-    color_tmpl = PropertyTemplate(
-        name="Color",
-        bounds=color_bnds,
-    )
-    band_tmpl = PropertyTemplate(
-        name="Band gap",
-        bounds=band_bnds,
-    )
-
-    # Templates
-    proc_tmpl = ProcessTemplate(name='Literature source template')
-
-    chem_mat_tmpl = MaterialTemplate(name='Chemical',
-                                     properties=[chem_tmpl]
-                                     )
-    cryst_msr_tmpl = MeasurementTemplate(name='Crystal description',
-                                         properties=[cryst_tmpl]
-                                         )
-    color_msr_tmpl = MeasurementTemplate(name='Color description',
-                                         properties=[color_tmpl]
-                                         )
-    band_msr_tmpl = MeasurementTemplate(name='Band gap measurement',
-                                        properties=[band_tmpl]
-                                        )
+        table = import_table()
 
     # Specs
-    cryst_msr_spec = MeasurementSpec(name='Crystallinity',
-                                     template=cryst_msr_tmpl
-                                     )
+    msr_spec = MeasurementSpec(name='Band gap',
+                               template=tmpl["Band gap measurement"]
+                               )
 
-    color_msr_spec = MeasurementSpec(name='Color',
-                                     template=color_msr_tmpl
-                                     )
+    def real_mapper(prop):
+        """Mapping methods for RealBounds."""
+        if 'uncertainty' in prop['scalars'][0]:
+            val = NormalReal(mean=float(prop['scalars'][0]['value']),
+                             units=prop['units'],
+                             std=float(prop['scalars'][0]['uncertainty'])
+                             )
+        else:
+            val = NominalReal(nominal=float(prop['scalars'][0]['value']),
+                              units=prop['units']
+                              )
+        return val
 
-    band_msr_spec = MeasurementSpec(name='Band gap',
-                                    template=band_msr_tmpl
-                                    )
+    content_map = {
+        RealBounds: real_mapper,
+        CategoricalBounds: lambda prop: NominalCategorical(category=prop['scalars'][0]['value']),
+        type(None): lambda bnd: 'Label'
+    }
 
-    compounds = []
-    max_len = 0
+    datapoints = []
+    compounds = dict()
     for row in table:
-        spec = MaterialSpec(name=row[0],
-                            template=chem_mat_tmpl,
-                            process=ProcessSpec(name='Literature source',
-                                                template=proc_tmpl
-                                                )
-                            )
+        formula = formula_clean(row['chemicalFormula'])
+        spec = compounds.get(formula,
+                             MaterialSpec(name=formula_latex(formula),
+                                          template=tmpl["Chemical"],
+                                          process=ProcessSpec(name="Sample preparation",
+                                                              template=tmpl["Sample preparation"]
+                                                              )
+                                          ))
         run = make_instance(spec)
-        compounds.append(run)
-        max_len = max(max_len, len(row[0]))
+        datapoints.append(run)
 
-        if row[1] is not None:
+        if not spec.properties:
             spec.properties.append(
-                PropertyAndConditions(property=Property(name=chem_tmpl.name,
-                                                        value=EmpiricalFormula(formula=row[1]),
-                                                        template=chem_tmpl)
-                                      ))
-        if row[2] is not None:
-            band_meas = make_instance(band_msr_spec)
-            band_meas.material = run
-            if row[3] is not None:
-                band_meas.properties.append(
-                    Property(name=band_msr_tmpl.name,
-                             value=NormalReal(mean=row[2],
-                                              units=band_bnds.default_units,
-                                              std=row[3]
-                                              )
-                             )
-                )
-            else:
-                band_meas.properties.append(
-                    Property(name=band_msr_tmpl.name,
-                             value=NominalReal(nominal=row[2],
-                                               units=band_bnds.default_units
-                                               )
-                             )
-                )
-        if row[4] is not None:
-            cryst_msr = make_instance(cryst_msr_spec)
-            cryst_msr.material = run
-            val = NominalCategorical(category=row[4])
-            cryst_msr.properties.append(Property(name=cryst_msr_tmpl.name, value=val))
+                PropertyAndConditions(
+                    property=Property(name=spec.template.properties[0][0].name,
+                                      value=EmpiricalFormula(formula=formula),
+                                      template=spec.template.properties[0][0])
+                ))
 
-        if row[5] is not None:
-            color_msr = make_instance(color_msr_spec)
-            color_msr.material = run
-            val = NominalCategorical(category=row[5])
-            color_msr.properties.append(Property(name=color_msr_tmpl.name, value=val))
+        msr = make_instance(msr_spec)
+        msr.material = run
 
-    return compounds
+        for prop in row['properties']:
+            template = tmpl[prop['name']]
+            if type(template) == PropertyTemplate:
+                msr.properties.append(
+                    Property(name=template.name,
+                             template=template,
+                             value=content_map[type(template.bounds)](prop)
+                             ))
+            elif type(template) == ConditionTemplate:
+                msr.conditions.append(
+                    Condition(name=template.name,
+                              template=template,
+                              value=content_map[type(template.bounds)](prop)
+                              ))
+
+            for cond in prop.get('conditions', []):
+                template = tmpl[cond['name']]
+                if type(template) == PropertyTemplate:
+                    msr.properties.append(
+                        Property(name=template.name,
+                                 template=template,
+                                 value=content_map[type(template.bounds)](cond)
+                                 ))
+                elif type(template) == ConditionTemplate:
+                    msr.conditions.append(
+                        Condition(name=template.name,
+                                  template=template,
+                                  value=content_map[type(template.bounds)](cond)
+                                  ))
+    return datapoints
 
 
 def make_strehlow_table(compounds):
@@ -168,12 +288,13 @@ def make_strehlow_table(compounds):
 
     chem_mat_tmpl = compounds[0].spec.template
 
-    for comp in compounds:
-        if len(comp.measurements) == 3:  # Full list
-            band_msr = comp.measurements[0].spec
-            cryst_msr = comp.measurements[1].spec
-            color_msr = comp.measurements[2].spec
-            break
+    tmpl = dict()
+
+    properties = compounds[0].measurements[0].spec.template.properties
+    conditions = compounds[0].measurements[0].spec.template.conditions
+    parameters = compounds[0].measurements[0].spec.template.parameters
+    for attr in (properties + conditions + parameters):
+        tmpl[attr[0].name] = attr[0]
 
     # Consider how to specify relevant data pathing here
     output = {'headers': [], 'content': []}
@@ -196,33 +317,20 @@ def make_strehlow_table(compounds):
          'bounds': CompositionBounds()
          }
     )
-    output['headers'].append(
-        {'name': [chem_mat_tmpl.name,
-                  band_msr.name,
-                  band_msr.template.properties[0][0].name
-                  ],
-         'primitive': False,
-         'bounds': band_msr.template.properties[0][0].bounds
-         }
-    )
-    output['headers'].append(
-        {'name': [chem_mat_tmpl.name,
-                  cryst_msr.name,
-                  cryst_msr.template.properties[0][0].name
-                  ],
-         'primitive': False,
-         'bounds': cryst_msr.template.properties[0][0].bounds
-         }
-    )
-    output['headers'].append(
-        {'name': [chem_mat_tmpl.name,
-                  color_msr.name,
-                  color_msr.template.properties[0][0].name
-                  ],
-         'primitive': False,
-         'bounds': color_msr.template.properties[0][0].bounds
-         }
-    )
+    terms = ["Band gap", "Temperature derivative of band gap", "Temperature", "Color",
+             "Lasing", "Cathodoluminescence", "Mechanical luminescence", "Photoluminescence",
+             "Electroluminescence", "Thermoluminescence", "Transition",
+             "Electric field polarization", "Crystallinity", "Morphology", "Phase"]
+
+    for term in terms:
+        output['headers'].append(
+            {'name': [chem_mat_tmpl.name,
+                      term
+                      ],
+             'primitive': False,
+             'bounds': tmpl[term].bounds
+             }
+        )
 
     for comp in compounds:
         row = [comp.spec.name]
@@ -232,94 +340,107 @@ def make_strehlow_table(compounds):
         else:
             row.append(None)
 
-        x = list(filter(lambda y: y.name == band_msr.name, comp.measurements))
-        if x:
-            row.append(x[0].properties[0].value)
-        else:
-            row.append(None)
-
-        x = list(filter(lambda y: y.name == cryst_msr.name, comp.measurements))
-        if x:
-            row.append(x[0].properties[0].value)
-        else:
-            row.append(None)
-
-        x = list(filter(lambda y: y.name == color_msr.name, comp.measurements))
-        if x:
-            row.append(x[0].properties[0].value)
-        else:
-            row.append(None)
+        for term in terms:
+            x = list(filter(lambda y: y.name == term,
+                            comp.measurements[0].properties + comp.measurements[0].conditions))
+            if x:
+                row.append(x[0].value)
+            else:
+                row.append(None)
 
         output['content'].append(row)
 
     return output
 
 
+def make_display_table(structured):
+    """
+    Generate a Display Table from a passed Structured Table.
+
+    This routine takes in a prototyped Structured Table and returns a prototyped Display Table
+    (CSV of scalar values) based upon some standard assumptions about how it should be displayed.
+
+    :param structured: A structured table, such as generated by make_strehlow_table
+    :return
+    """
+    table = [[]]
+    header_map = {
+        RealBounds: lambda bnd: 'Mean({})'.format(bnd.default_units),
+        CategoricalBounds: lambda bnd: 'Category',
+        CompositionBounds: lambda bnd: 'Formula',
+        type(None): lambda bnd: 'Label'
+    }
+    for column in structured['headers']:
+        bounds = column.get('bounds', None)
+        table[0].append('~'.join(column['name'] + [header_map[type(bounds)](bounds)]))
+
+    i_bandgap = list(filter(lambda i: 'Band gap' in table[0][i], range(len(table[0]))))
+    assert i_bandgap, "Band gap was not found"
+    i_bandgap = i_bandgap[0]
+    column = structured['headers'][i_bandgap]
+    table[0].insert(
+        i_bandgap + 1,
+        '~'.join(column['name'] + ['Std Deviation({})'.format(column['bounds'].default_units)])
+    )
+
+    content_map = {
+        NominalReal: lambda x: x.nominal,
+        NormalReal: lambda x: x.mean,
+        UniformReal: lambda x: 0.5 * (x.lower_bound + x.upper_bound),
+        NominalCategorical: lambda x: x.category,
+        EmpiricalFormula: lambda x: x.formula,
+        str: lambda x: x,
+        type(None): lambda x: ''
+    }
+    uncert_map = {
+        NominalReal: lambda x: '',
+        NormalReal: lambda x: x.std,
+        UniformReal: lambda x: 0.29 * (x.upper_bound - x.lower_bound),
+        type(None): lambda x: ''
+    }
+    for row in structured['content']:
+        table.append([])
+        for element in row:
+            table[-1].append(content_map[type(element)](element))
+
+        # And insert band gap
+        table[-1].insert(i_bandgap + 1, uncert_map[type(row[i_bandgap])](row[i_bandgap]))
+
+    return table
+
+
 if __name__ == "__main__":
-    import pkg_resources
+    """
+    When run as a script, this will clobber the SMALL_TABLE file with a newly-generated
+    minimal subset input table.
+    """
+    import os.path
     import json
-    import taurus.client.json_encoder as je
 
-    # Whether to use the full data set.
-    # If `False` a minimal, predefined subset of compounds will be used.
-    use_full_table = False
+    imported_table = import_table(FULL_TABLE)
+    full_compounds = make_strehlow_objects(imported_table)
+    full_table = make_strehlow_table(full_compounds)
+    small_table = minimal_subset(full_table['content'])
+    todo = set(_fingerprint(x) for x in small_table)
+    print('Total number of prototypes: {}'.format(len(small_table)))
 
-    if use_full_table:
-        resource = pkg_resources.resource_stream("taurus.demo", "strehlow_and_cook.json")
-        table = json.load(resource)
-    else:
-        table = None
+    reduced_list = []
+    for (raw, clean) in zip(imported_table, full_table['content']):
+        fp = _fingerprint(clean)
+        if fp in todo:
+            reduced_list.append(raw)
+            todo.remove(fp)
+            if not todo:
+                break
 
-    compounds = make_strehlow_objects(table)
-    sac_tbl = make_strehlow_table(compounds)
-
-    # Look at each different combination of Value types in a S&C record
-    seen = set()
-    for comp, row in zip(compounds, sac_tbl['content']):
-        mask = ''.join(map(lambda x: str(type(x)), row))
-        if mask not in seen:  # this is a novel shape
-            seen.add(mask)
-            print(comp.name)
-    print('Total number of prototypes: {}'.format(len(seen)))
+    with open(os.path.join(os.path.dirname(__file__), SMALL_TABLE), 'w') as f:
+        json.dump(reduced_list, f, indent=2)
 
     print("\n\nJSON -- Training table")
-    print(json.dumps(json.loads(je.dumps(sac_tbl))[1], indent=2))
+    import taurus.client.json_encoder as je
+    print(json.dumps(json.loads(je.dumps(full_table))[1], indent=2))
 
     print("\n\nCSV -- Display table")
-    header = list(map(lambda x: '~'.join(x['name']), sac_tbl['headers']))
-    header.insert(2, header[2])
-    header[0] += '~Label'
-    header[1] += '~Formula'
-    header[2] += '~Mean ({})'.format('eV')  # .format(sac_tbl['headers'][2]['bounds'].default_units
-    header[3] += '~Std deviation ({})'.format('eV')
-    header[4] += '~Category'
-    header[5] += '~Category'
-
-    print(','.join(header))
-
-    for comp in sac_tbl['content']:
-        row = [comp[0]]
-
-        if comp[1] is None:
-            row.append('')
-        else:
-            row.append(comp[1].formula)
-
-        if comp[2] is None:
-            row.extend(['', ''])
-        elif isinstance(comp[2], NominalReal):
-            row.extend([str(comp[2].nominal), ''])
-        else:
-            row.extend([str(comp[2].mean), str(comp[2].std)])
-
-        if comp[3] is None:
-            row.append('')
-        else:
-            row.append(comp[3].category)
-
-        if comp[4] is None:
-            row.append('')
-        else:
-            row.append(comp[4].category)
-
-        print(','.join(row))
+    display = make_display_table(full_table)
+    for row in display:
+        print(','.join(map(lambda x: str(x), row)))
