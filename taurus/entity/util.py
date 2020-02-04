@@ -44,7 +44,7 @@ def make_instance(base_spec):
             )
             seen[id(spec)].process = crawler(spec.process) if spec.process else None
         elif isinstance(spec, IngredientSpec):
-            seen[id(spec)] = IngredientRun(name=spec.name, spec=spec)
+            seen[id(spec)] = IngredientRun(spec=spec)
             seen[id(spec)].material = crawler(spec.material) if spec.material else None
         elif isinstance(spec, ProcessSpec):
             seen[id(spec)] = ProcessRun(
@@ -112,8 +112,7 @@ def complete_material_history(mat):
     result = []
 
     def body(obj: BaseEntity):
-        copy = loads(dumps(obj))
-        substitute_links(copy)
+        copy = substitute_links(loads(dumps(obj)))
         result.append(json.loads(dumps(copy))[0][0])
 
     recursive_foreach(mat, body, apply_first=False)

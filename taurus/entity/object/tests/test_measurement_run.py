@@ -77,8 +77,8 @@ def test_material_soft_link():
     assert 'material' in repr(fluorescence)
     assert 'material' in repr(absorbance)
 
-    substitute_links(dye.measurements)
-    assert 'measurements' in repr(dye)
+    subbed = substitute_links(dye)
+    assert 'measurements' in repr(subbed)
 
 
 def test_material_id_link():

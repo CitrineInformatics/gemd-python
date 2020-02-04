@@ -1,8 +1,10 @@
 """Test serialization and deserialization of taurus objects."""
 import json
+from copy import deepcopy
+
 import pytest
 
-from taurus.client.json_encoder import dumps, loads, copy, thin_dumps
+from taurus.client.json_encoder import dumps, loads, copy, thin_dumps, _loado
 from taurus.entity.attribute.property import Property
 from taurus.entity.bounds.real_bounds import RealBounds
 from taurus.entity.dict_serializable import DictSerializable
@@ -18,6 +20,7 @@ from taurus.entity.value.nominal_integer import NominalInteger
 from taurus.entity.value.nominal_real import NominalReal
 from taurus.entity.value.normal_real import NormalReal
 from taurus.enumeration.origin import Origin
+from taurus.util import substitute_objects, substitute_links
 
 
 def test_serialize():
@@ -148,6 +151,50 @@ def test_unexpected_deserialization():
     serialized = dumps(ProcessRun("A process", notes=DummyClass("something")))
     with pytest.raises(TypeError):
         loads(serialized)
+
+
+def test_pure_subsitutions():
+    """Make sure substitute methods don't mutate inputs."""
+    json_str = '''
+          [
+            [
+              {
+                "uids": {
+                  "id": "9118c2d3-1c38-47fe-a650-c2b92fdb6777"
+                },
+                "type": "material_run",
+                "name": "flour"
+              }
+            ],
+            {
+              "type": "ingredient_run",
+              "uids": {
+                "id": "8858805f-ec02-49e4-ba3b-d784e2aea3f8"
+              },
+              "material": {
+                "type": "link_by_uid",
+                "scope": "ID",
+                "id": "9118c2d3-1c38-47fe-a650-c2b92fdb6777"
+              },
+              "process": {
+                "type": "link_by_uid",
+                "scope": "ID",
+                "id": "9148c2d3-2c38-47fe-b650-c2b92fdb6777"
+              }
+            }
+          ]
+       '''
+    index = {}
+    original = json.loads(json_str, object_hook=lambda x: _loado(x, index))
+    frozen = deepcopy(original)
+    loaded = substitute_objects(original, index)
+    assert original == frozen
+    frozen_loaded = deepcopy(loaded)
+    substitute_links(loaded)
+    assert loaded == frozen_loaded
+    for o in loaded:
+        substitute_links(o)
+    assert loaded == frozen_loaded
 
 
 def test_case_insensitive_rehydration():

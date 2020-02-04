@@ -3,7 +3,6 @@ import json
 
 import random
 
-from taurus.client.json_encoder import thin_dumps
 from taurus.entity.attribute.condition import Condition
 from taurus.entity.attribute.parameter import Parameter
 from taurus.entity.attribute.property import Property
@@ -36,10 +35,24 @@ from taurus.entity.value.discrete_categorical import DiscreteCategorical
 from taurus.entity.value.nominal_composition import NominalComposition
 from taurus.entity.value.empirical_formula import EmpiricalFormula
 from taurus.enumeration.origin import Origin
-from taurus.util.impl import set_uuids
 from taurus.entity.util import complete_material_history, make_instance
 from taurus.entity.file_link import FileLink
 from taurus.entity.source.performed_source import PerformedSource
+
+from taurus.client.json_encoder import thin_dumps
+from taurus.util.impl import recursive_foreach
+
+
+# For now, module constant, though likely this should get promoted to a package level
+DEMO_SCOPE = 'citrine-demo'
+
+
+def import_toothpick_picture():
+    """Return the stream of the toothpick picture."""
+    import pkg_resources
+    resource = pkg_resources.resource_stream("taurus.demo", "toothpick.jpg")
+
+    return resource
 
 
 def make_cake_templates():
@@ -105,10 +118,15 @@ def make_cake_templates():
             ]
         )
     )
-    tmpl["Serving Size"] = ConditionTemplate(
-        name="Serving Size",
-        description="Serving size in mass units, to go along with FDA Nutrition Facts",
+    tmpl["Sample Size"] = ConditionTemplate(
+        name="Sample Size",
+        description="Sample size in mass units, to go along with FDA Nutrition Facts",
         bounds=RealBounds(1.e-3, 10.e3, "g")
+    )
+    tmpl["Chemical Formula"] = PropertyTemplate(
+        name="Chemical Formula",
+        description="The chemical formula of a material",
+        bounds=CompositionBounds(components=EmpiricalFormula.all_elements())
     )
 
     # Objects
@@ -131,17 +149,36 @@ def make_cake_templates():
         properties=[tmpl["Tastiness"]]
     )
 
+    tmpl["Nutritional Analysis"] = MeasurementTemplate(
+        name="Nutritional Analysis",
+        properties=[tmpl["Nutritional Information"]],
+        conditions=[tmpl["Sample Size"]]
+    )
+    tmpl["Elemental Analysis"] = MeasurementTemplate(
+        name="Elemental Analysis",
+        properties=[tmpl["Chemical Formula"]],
+        conditions=[tmpl["Sample Size"]]
+    )
+
     tmpl["Dessert"] = MaterialTemplate(
         name="Dessert",
         properties=[tmpl["Tastiness"]]
     )
 
     tmpl["Generic Material"] = MaterialTemplate(name="Generic")
+
     tmpl["Nutritional Material"] = MaterialTemplate(
         name="Nutritional Material",
         description="A material with FDA Nutrition Facts attached",
         properties=[
             tmpl["Nutritional Information"]
+        ]
+    )
+    tmpl["Formulaic Material"] = MaterialTemplate(
+        name="Formulaic Material",
+        description="A material with chemical characterization",
+        properties=[
+            tmpl["Chemical Formula"]
         ]
     )
     tmpl["Icing"] = ProcessTemplate(name="Icing",
@@ -154,6 +191,8 @@ def make_cake_templates():
     tmpl["Procurement"] = ProcessTemplate(name="Procurement",
                                           description="Buyin' stuff")
 
+    for key in tmpl:
+        tmpl[key].add_uid(DEMO_SCOPE + "-template", key)
     return tmpl
 
 
@@ -164,13 +203,25 @@ def make_cake_spec(tmpl=None):
     if tmpl is None:
         tmpl = make_cake_templates()
 
+    count = dict()
+
+    def ingredient_kwargs(material):
+        # Pulls the elements of a material that all ingredients consume out
+        count[material.name] = count.get(material.name, 0) + 1
+        return {
+            "name": "{} input{}".format(material.name.replace('Abstract ', ''),
+                                        " (Again)" * (count[material.name] - 1)),
+            "tags": list(material.tags),
+            "material": material
+        }
+
     ###############################################################################################
     # Objects
     cake = MaterialSpec(
         name="Abstract Cake",
         template=tmpl["Dessert"],
         process=ProcessSpec(
-            name='Icing, in General',
+            name='Icing Cake, in General',
             template=tmpl["Icing"],
             tags=[
                 'spreading'
@@ -215,12 +266,10 @@ def make_cake_spec(tmpl=None):
         notes='Chocolate frosting'
     )
     IngredientSpec(
-        name="{} input".format(frosting.name),
-        tags=list(frosting.tags),
+        **ingredient_kwargs(frosting),
         notes='Seems like a lot of frosting',
         labels=['coating'],
         process=cake.process,
-        material=frosting,
         absolute_quantity=NominalReal(nominal=0.751, units='kg')
     )
 
@@ -240,11 +289,9 @@ def make_cake_spec(tmpl=None):
         notes='The cakey part of the cake'
     )
     IngredientSpec(
-        name="{} input".format(baked_cake.name),
-        tags=list(baked_cake.tags),
+        **ingredient_kwargs(baked_cake),
         labels=['substrate'],
-        process=cake.process,
-        material=baked_cake
+        process=cake.process
     )
 
     ########################
@@ -264,11 +311,9 @@ def make_cake_spec(tmpl=None):
         notes='The fluid that converts to cake with heat'
     )
     IngredientSpec(
-        name="{} input".format(batter.name),
-        tags=list(batter.tags),
+        **ingredient_kwargs(batter),
         labels=['precursor'],
-        process=baked_cake.process,
-        material=batter
+        process=baked_cake.process
     )
 
     ########################
@@ -288,11 +333,9 @@ def make_cake_spec(tmpl=None):
         notes='The wet fraction of a batter'
     )
     IngredientSpec(
-        name="{} input".format(wetmix.name),
-        tags=list(wetmix.tags),
+        **ingredient_kwargs(wetmix),
         labels=['wet'],
-        process=batter.process,
-        material=wetmix
+        process=batter.process
     )
 
     drymix = MaterialSpec(
@@ -311,11 +354,9 @@ def make_cake_spec(tmpl=None):
         notes='The dry fraction of a batter'
     )
     IngredientSpec(
-        name="{} input".format(drymix.name),
-        tags=list(drymix.tags),
+        **ingredient_kwargs(drymix),
         labels=['dry'],
         process=batter.process,
-        material=drymix,
         absolute_quantity=NominalReal(nominal=3.052, units='cups')
     )
 
@@ -330,7 +371,7 @@ def make_cake_spec(tmpl=None):
                     value=NominalComposition(
                         {
                             "dietary-fiber": 1,
-                            "sugar": 1,
+                            "sugars": 1,
                             "other-carbohydrate": 20,
                             "protein": 4,
                             "other": 4
@@ -342,7 +383,7 @@ def make_cake_spec(tmpl=None):
                 conditions=Condition(
                     name="Serving Size",
                     value=NominalReal(30, 'g'),
-                    template=tmpl["Serving Size"],
+                    template=tmpl["Sample Size"],
                     origin="specified"
                 )
             )
@@ -360,11 +401,9 @@ def make_cake_spec(tmpl=None):
         notes='All-purpose flour'
     )
     IngredientSpec(
-        name="{} input".format(flour.name),
-        tags=list(flour.tags),
+        **ingredient_kwargs(flour),
         labels=['dry'],
         process=drymix.process,
-        material=flour,
         volume_fraction=NominalReal(nominal=0.9829, units='')  # 3 cups
     )
 
@@ -384,17 +423,15 @@ def make_cake_spec(tmpl=None):
         notes='Leavening agent for cake'
     )
     IngredientSpec(
-        name="{} input".format(baking_powder.name),
-        tags=list(baking_powder.tags),
+        **ingredient_kwargs(baking_powder),
         labels=['leavening', 'dry'],
         process=drymix.process,
-        material=baking_powder,
         volume_fraction=NominalReal(nominal=0.0137, units='')  # 2 teaspoons
     )
 
     salt = MaterialSpec(
         name="Abstract Salt",
-        template=tmpl["Generic Material"],
+        template=tmpl["Formulaic Material"],
         process=ProcessSpec(
             name='Buying Salt, in General',
             template=tmpl["Procurement"],
@@ -407,21 +444,19 @@ def make_cake_spec(tmpl=None):
         ],
         notes='Plain old NaCl',
         properties=[
-            PropertyAndConditions(Property(EmpiricalFormula("NaCl")))
+            PropertyAndConditions(Property(name='Formula', value=EmpiricalFormula("NaCl")))
         ]
     )
     IngredientSpec(
-        name="{} input".format(salt.name),
-        tags=list(salt.tags),
+        **ingredient_kwargs(salt),
         labels=['dry', 'seasoning'],
         process=drymix.process,
-        material=salt,
         volume_fraction=NominalReal(nominal=0.0034, units='')  # 1/2 teaspoon
     )
 
     sugar = MaterialSpec(
         name="Abstract Sugar",
-        template=tmpl["Generic Material"],
+        template=tmpl["Formulaic Material"],
         process=ProcessSpec(
             name='Buying Sugar, in General',
             template=tmpl["Procurement"],
@@ -434,15 +469,13 @@ def make_cake_spec(tmpl=None):
         ],
         notes='Sugar',
         properties=[
-            PropertyAndConditions(Property(EmpiricalFormula("C12H22O11")))
+            PropertyAndConditions(Property(name="Formula", value=EmpiricalFormula("C12H22O11")))
         ]
     )
     IngredientSpec(
-        name="{} input".format(sugar.name),
-        tags=list(sugar.tags),
+        **ingredient_kwargs(sugar),
         labels=['wet', 'sweetener'],
         process=wetmix.process,
-        material=sugar,
         absolute_quantity=NominalReal(nominal=2, units='cups')
     )
 
@@ -462,19 +495,15 @@ def make_cake_spec(tmpl=None):
         notes='Shortening for making rich, buttery baked goods'
     )
     IngredientSpec(
-        name="{} input".format(butter.name),
-        tags=list(butter.tags),
+        **ingredient_kwargs(butter),
         labels=['wet', 'shortening'],
         process=wetmix.process,
-        material=butter,
         absolute_quantity=NominalReal(nominal=1, units='cups')
     )
     IngredientSpec(
-        name="{} input".format(butter.name),
-        tags=list(butter.tags),
+        **ingredient_kwargs(butter),
         labels=['shortening'],
         process=frosting.process,
-        material=butter,
         mass_fraction=NominalReal(nominal=0.1434, units='')  # 1/2 c @ 0.911 g/cc
     )
 
@@ -494,11 +523,8 @@ def make_cake_spec(tmpl=None):
         notes=''
     )
     IngredientSpec(
-        name="{} input".format(eggs.name),
-        tags=list(eggs.tags),
+        **ingredient_kwargs(eggs),
         labels=['wet'],
-        process=wetmix.process,
-        material=eggs,
         absolute_quantity=NominalReal(nominal=4, units='')
     )
 
@@ -518,19 +544,15 @@ def make_cake_spec(tmpl=None):
         notes=''
     )
     IngredientSpec(
-        name="{} input".format(vanilla.name),
-        tags=list(vanilla.tags),
+        **ingredient_kwargs(vanilla),
         labels=['wet', 'flavoring'],
         process=wetmix.process,
-        material=vanilla,
         absolute_quantity=NominalReal(nominal=2, units='teaspoons')
     )
     IngredientSpec(
-        name="{} input".format(vanilla.name),
-        tags=list(vanilla.tags),
+        **ingredient_kwargs(vanilla),
         labels=['flavoring'],
         process=frosting.process,
-        material=vanilla,
         mass_fraction=NominalReal(nominal=0.0231, units='')  # 2 tsp @ 0.879 g/cc
     )
 
@@ -550,19 +572,15 @@ def make_cake_spec(tmpl=None):
         notes=''
     )
     IngredientSpec(
-        name="{} input".format(milk.name),
-        tags=list(milk.tags),
+        **ingredient_kwargs(milk),
         labels=['wet'],
         process=batter.process,
-        material=milk,
         absolute_quantity=NominalReal(nominal=1, units='cup')
     )
     IngredientSpec(
-        name="{} input".format(milk.name),
-        tags=list(milk.tags),
+        **ingredient_kwargs(milk),
         labels=[],
         process=frosting.process,
-        material=milk,
         mass_fraction=NominalReal(nominal=0.0816, units='')  # 1/4 c @ 1.037 g/cc
     )
 
@@ -582,11 +600,9 @@ def make_cake_spec(tmpl=None):
         notes=''
     )
     IngredientSpec(
-        name="{} input".format(chocolate.name),
-        tags=list(chocolate.tags),
+        **ingredient_kwargs(chocolate),
         labels=['flavoring'],
         process=frosting.process,
-        material=chocolate,
         mass_fraction=NominalReal(nominal=0.1132, units='')  # 3 oz.
     )
 
@@ -606,18 +622,23 @@ def make_cake_spec(tmpl=None):
         notes='Granulated sugar mixed with corn starch'
     )
     IngredientSpec(
-        name="{} input".format(powder_sugar.name),
-        tags=list(powder_sugar.tags),
+        **ingredient_kwargs(powder_sugar),
         labels=['flavoring'],
         process=frosting.process,
-        material=powder_sugar,
         mass_fraction=NominalReal(nominal=0.6387, units='')  # 4 c @ 30 g/ 0.25 cups
     )
+
+    # Crawl tree and annotate with uids; only add ids if there's nothing there
+    recursive_foreach(cake, lambda obj: obj.uids or obj.add_uid(DEMO_SCOPE, obj.name))
+
     return cake
 
 
 def make_cake(seed=None, tmpl=None, cake_spec=None):
     """Define all objects that go into making a demo cake."""
+    import struct
+    import hashlib
+
     if seed is not None:
         random.seed(seed)
     ######################################################################
@@ -637,15 +658,16 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     queue = [cake]
     while queue:
         item = queue.pop(0)
-        item.name = item.name.replace('Abstract ', '').replace(', in General', '')
         if item.spec.tags is not None:
             item.tags = list(item.spec.tags)
         if item.spec.notes:  # None or empty string
             item.notes = 'The spec says "{}"'.format(item.spec.notes)
 
         if isinstance(item, MaterialRun):
+            item.name = item.name.replace('Abstract ', '')
             queue.append(item.process)
         elif isinstance(item, ProcessRun):
+            item.name = item.name.replace(', in General', '')
             queue.extend(item.ingredients)
             if item.template.name == "Procurement":
                 item.source = PerformedSource(performed_by='hamilton',
@@ -684,19 +706,46 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     baked = \
         next(x.material for x in cake.process.ingredients if 'aked' in x.name)
 
+    def find_name(name, material):
+        # Recursively search for the right material
+        if name == material.name:
+            return material
+        for ingredient in material.process.ingredients:
+            result = find_name(name, ingredient.material)
+            if result:
+                return result
+        return
+
+    flour = find_name('Flour', cake)
+    salt = find_name('Salt', cake)
+    sugar = find_name('Sugar', cake)
+
     # Add measurements
     cake_taste = MeasurementRun(name='Final Taste', material=cake)
     cake_appearance = MeasurementRun(name='Final Appearance', material=cake)
     frosting_taste = MeasurementRun(name='Frosting Taste', material=frosting)
     frosting_sweetness = MeasurementRun(name='Frosting Sweetness', material=frosting)
     baked_doneness = MeasurementRun(name='Baking doneness', material=baked)
+    flour_content = MeasurementRun(name='Flour nutritional analysis', material=flour)
+    salt_content = MeasurementRun(name='Salt elemental analysis', material=salt)
+    sugar_content = MeasurementRun(name='Sugar elemental analysis', material=sugar)
 
     # and spec out the measurements
     cake_taste.spec = MeasurementSpec(name='Taste', template=tmpl['Taste test'])
     cake_appearance.spec = MeasurementSpec(name='Appearance')
     frosting_taste.spec = cake_taste.spec  # Taste
     frosting_sweetness.spec = MeasurementSpec(name='Sweetness')
-    baked_doneness.spec = MeasurementSpec(name='Sweetness', template=tmpl["Doneness"])
+    baked_doneness.spec = MeasurementSpec(name='Doneness', template=tmpl["Doneness"])
+    flour_content.spec = MeasurementSpec(name='Nutritional analysis',
+                                         template=tmpl["Nutritional Analysis"])
+    salt_content.spec = MeasurementSpec(name='Elemental analysis',
+                                        template=tmpl["Elemental Analysis"]
+                                        )
+    sugar_content.spec = salt_content.spec
+
+    for msr in (cake_taste, cake_appearance, frosting_taste, frosting_sweetness,
+                baked_doneness, flour_content, salt_content, sugar_content):
+        msr.spec.add_uid(DEMO_SCOPE, msr.spec.name)
 
     ######################################################################
     # Let's add some attributes
@@ -747,20 +796,99 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
         })
     ))
 
-    baked.process.spec.template = tmpl['Baking in an oven']
-    cake_taste.spec.template = tmpl['Taste test']
-    frosting_taste.spec.template = tmpl['Taste test']
+    flour_content.properties.append(Property(
+        name='Nutritional Information',
+        value=NominalComposition(
+            {
+                "dietary-fiber": 1 * (0.99 + 0.02 * random.random()),
+                "sugars": 1 * (0.99 + 0.02 * random.random()),
+                "other-carbohydrate": 20 * (0.99 + 0.02 * random.random()),
+                "protein": 4 * (0.99 + 0.02 * random.random()),
+                "other": 4 * (0.99 + 0.02 * random.random())
+            }
+        ),
+        template=tmpl["Nutritional Information"],
+        origin="measured"
+    ))
+    flour_content.conditions.append(Condition(
+        name='Sample Size',
+        value=NormalReal(
+            mean=99 + 2 * random.random(),
+            std=1.5,
+            units='mg'
+        ),
+        template=tmpl["Sample Size"],
+        origin="measured"
+    ))
+    flour_content.spec.conditions.append(Condition(
+        name='Sample Size',
+        value=NominalReal(
+            nominal=100,
+            units='mg'
+        ),
+        template=tmpl["Sample Size"],
+        origin="specified"
+    ))
 
-    cake.spec.template = tmpl['Dessert']
-    frosting.spec.template = tmpl['Dessert']
+    salt_content.properties.append(Property(
+        name="Composition",
+        value=EmpiricalFormula(formula="NaClCa0.006Si0.006O0.018K0.000015I0.000015"),
+        template=tmpl["Chemical Formula"],
+        origin="measured"
+    ))
+    salt_content.conditions.append(Condition(
+        name='Sample Size',
+        value=NormalReal(
+            mean=99 + 2 * random.random(),
+            std=1.5,
+            units='mg'
+        ),
+        template=tmpl["Sample Size"],
+        origin="measured"
+    ))
+    salt_content.spec.conditions.append(Condition(
+        name='Sample Size',
+        value=NominalReal(
+            nominal=100,
+            units='mg'
+        ),
+        template=tmpl["Sample Size"],
+        origin="specified"
+    ))
 
-    # Code to force all scopes to 'id'
-    set_uuids([cake, cake_taste, cake_appearance, frosting_taste, frosting_sweetness], name='id')
-    id_queue = [x for x in cake.process.ingredients]
-    while id_queue:
-        x = id_queue.pop(0)
-        set_uuids([x], name='id')
-        id_queue += x.material.process.ingredients
+    sugar_content.properties.append(Property(
+        name="Composition",
+        value=EmpiricalFormula(formula='C11.996H21.995O10.997S0.00015'),
+        template=tmpl["Chemical Formula"],
+        origin="measured"
+    ))
+    sugar_content.conditions.append(Condition(
+        name='Sample Size',
+        value=NormalReal(
+            mean=99 + 2 * random.random(),
+            std=1.5,
+            units='mg'
+        ),
+        template=tmpl["Sample Size"],
+        origin="measured"
+    ))
+
+    # Code to generate quasi-repeatable run annotations
+    # Note there are potential machine dependencies
+    md5 = hashlib.md5()
+    for x in random.getstate()[1]:
+        md5.update(struct.pack(">I", x))
+    run_key = md5.hexdigest()
+
+    # Crawl tree and annotate with uids; only add ids if there's nothing there
+    recursive_foreach(cake, lambda obj: obj.uids or obj.add_uid(DEMO_SCOPE, obj.name + run_key))
+
+    cake.notes = cake.notes + "; Très délicieux! 😀"
+    cake.file_links = [FileLink(
+        filename="Photo",
+        url='https://www.landolakes.com/RecipeManagementSystem/media/'
+            'Recipe-Media-Files/Recipes/Retail/x17/16730-beckys-butter-cake-600x600.jpg?ext=.jpg'
+    )]
 
     return cake
 

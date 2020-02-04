@@ -19,8 +19,20 @@ def test_dictionary_substitution():
              (proc_link.scope.lower(), proc_link.id): proc}
 
     test_dict = {LinkByUID.from_entity(proc): LinkByUID.from_entity(mat)}
-    substitute_objects(test_dict, index)
-    assert test_dict[proc] == mat
+    subbed = substitute_objects(test_dict, index)
+    k, v = next((k, v) for k, v in subbed.items())
+    assert k == proc
+    assert v == mat
+
+
+def test_tuple_sub():
+    """substitute_objects() should correctly substitute tuple values."""
+    proc = ProcessRun('foo', uids={'id': '123'})
+    proc_link = LinkByUID.from_entity(proc)
+    index = {(proc_link.scope, proc_link.id): proc}
+    tup = (proc_link,)
+    subbed = substitute_objects(tup, index)
+    assert subbed[0] == proc
 
 
 def test_recursive_foreach():

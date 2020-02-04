@@ -67,8 +67,6 @@ def make_data_island(density, bulk_modulus, firing_temperature, binders, powders
                 material=run,
                 process=mixing_process,
                 mass_fraction=NominalReal(binders[run.spec.name], ''),
-                name=run.spec.name,
-                labels=["binder"]
             )
         )
 
@@ -79,8 +77,6 @@ def make_data_island(density, bulk_modulus, firing_temperature, binders, powders
                 material=run,
                 process=mixing_process,
                 mass_fraction=NominalReal(powders[run.spec.name], ''),
-                name=run.spec.name,
-                labels=["powder"]
             )
         )
 

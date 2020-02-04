@@ -37,7 +37,7 @@ from taurus.entity.value.normal_real import NormalReal
 from taurus.entity.value.uniform_integer import UniformInteger
 from taurus.entity.value.uniform_real import UniformReal
 from taurus.enumeration.base_enumeration import BaseEnumeration
-from taurus.util import flatten, substitute_links, deepcopy, set_uuids, substitute_objects
+from taurus.util import flatten, substitute_links, set_uuids, substitute_objects
 
 
 def dumps(obj, **kwargs):
@@ -60,7 +60,7 @@ def dumps(obj, **kwargs):
     # create a top level list of [flattened_objects, link-i-fied return value]
     res = [obj]
     additional = flatten(res)
-    substitute_links(res)
+    res = substitute_links(res)
     res.insert(0, additional)
     return json.dumps(res, cls=TaurusEncoder, sort_keys=True, **kwargs)
 
@@ -88,8 +88,8 @@ def loads(json_str, **kwargs):
     index = {}
     raw = json.loads(json_str, object_hook=lambda x: _loado(x, index), **kwargs)
     # the return value is in the 2nd position.
-    substitute_objects(raw, index)
-    return raw[1]
+    subbed = substitute_objects(raw, index)
+    return subbed[1]
 
 
 def load(fp, **kwargs):
@@ -152,8 +152,7 @@ def thin_dumps(obj, **kwargs):
 
     """
     set_uuids(obj)
-    res = deepcopy(obj)
-    substitute_links(res)
+    res = substitute_links(obj)
     return json.dumps(res, cls=TaurusEncoder, sort_keys=True, **kwargs)
 
 

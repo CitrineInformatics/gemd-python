@@ -1,6 +1,6 @@
 """Utility functions."""
 import uuid
-from copy import deepcopy
+from typing import Dict, Callable
 
 from taurus.entity.base_entity import BaseEntity
 from taurus.entity.dict_serializable import DictSerializable
@@ -25,19 +25,69 @@ def set_uuids(obj, name="auto"):
     return
 
 
+def _substitute(thing,
+                sub: Callable[[object], object],
+                applies: Callable[[object], bool],
+                visited: Dict[object, object] = None) -> object:
+    """
+    Generic recursive substitute function.
+
+    Generates a new instance of thing by traversing its contents recursively, substituting
+    values for which the sub function applies.
+    :param thing: The object to traverse with substitution.
+    :param sub: Function which provides substitute for value, should not have side-effects.
+    :param applies: Function which defines the domain for the sub function to be invoked.
+    """
+    if visited is None:
+        visited = {}
+    if thing.__hash__ is not None and thing in visited:
+        return visited[thing]
+    if applies(thing):
+        replacement = sub(thing)
+        if thing.__hash__ is not None:
+            visited[thing] = replacement
+        new = _substitute(replacement, sub, applies, visited)
+    elif isinstance(thing, list):
+        new = [_substitute(x, sub, applies, visited) for x in thing]
+    elif isinstance(thing, tuple):
+        new = tuple(_substitute(x, sub, applies, visited) for x in thing)
+    elif isinstance(thing, dict):
+        new = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
+               for k, v in thing.items()}
+    elif isinstance(thing, DictSerializable):
+        new_attrs = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
+                     for k, v in thing.as_dict().items()}
+        new = thing.from_dict(new_attrs)
+    else:
+        new = thing
+
+    if thing.__hash__ is not None:
+        visited[thing] = new
+    if new.__hash__ is not None:
+        visited[new] = new
+
+    return new
+
+
 def substitute_links(obj, native_uid=None):
     """
     Recursively replace pointers to BaseEntity with LinkByUID objects.
 
     This prepares the object to be serialized or written to the API.
     It is the inverse of substitute_objects.
-    It is an in-place operation.
     :param obj: target of the operation
     :param native_uid: preferred uid to use for creating LinkByUID objects (Default: None)
-    :return: None
     """
-    _recursive_substitute(obj, native_uid)
-    return
+    def make_link(entity: BaseEntity):
+        if len(entity.uids) == 0:
+            raise ValueError("No UID for {}".format(entity))
+        elif native_uid and native_uid in entity.uids:
+            return LinkByUID(native_uid, entity.uids[native_uid])
+        else:
+            return LinkByUID.from_entity(entity)
+
+    return _substitute(obj, sub=make_link,
+                       applies=lambda o: o is not obj and isinstance(o, BaseEntity))
 
 
 def substitute_objects(obj, index):
@@ -46,53 +96,12 @@ def substitute_objects(obj, index):
 
     This prepares the object to be used after being deserialized.
     It is the inverse of substitute_links.
-    It is an in-place operation.
     :param obj: target of the operation
     :param index: containing the objects that the uids point to
-    :return: None
     """
-    visited = set()
-
-    def substitute(thing):
-        if id(thing) in visited:
-            return
-        visited.add(id(thing))
-        if isinstance(thing, (list, tuple)):
-            for i, x in enumerate(thing):
-                if isinstance(x, LinkByUID) and (x.scope.lower(), x.id) in index:
-                    thing[i] = index[(x.scope.lower(), x.id)]
-                    substitute(thing[i])
-                else:
-                    substitute(x)
-        elif isinstance(thing, dict):
-            # we are restricted from modifying the keys of a dict while iterating over its
-            # items so we iterate over a copy of the dict instead.
-            for k, v in thing.copy().items():
-                if isinstance(v, LinkByUID) and (v.scope.lower(), v.id) in index:
-                    thing[k] = index[(v.scope.lower(), v.id)]
-                    substitute(thing[k])
-                else:
-                    substitute(v)
-            for k, v in thing.copy().items():
-                if isinstance(k, LinkByUID) and (k.scope.lower(), k.id) in index:
-                    thing[index[(k.scope.lower(), k.id)]] = v
-                    del thing[k]
-                else:
-                    substitute(k)
-        elif isinstance(thing, DictSerializable):
-            for k, v in vars(thing).copy().items():
-                if isinstance(thing, BaseEntity) and k in thing.skip:
-                    continue
-                if isinstance(v, LinkByUID) and (v.scope.lower(), v.id) in index:
-                    # Use setattr() to call setter logic
-                    setattr(thing, k.lstrip('_'), index[(v.scope.lower(), v.id)])
-                    substitute(thing.__dict__[k])
-                else:
-                    substitute(v)
-        return
-
-    substitute(obj)
-    return
+    return _substitute(obj,
+                       sub=lambda l: index.get((l.scope.lower(), l.id), l),
+                       applies=lambda o: isinstance(o, LinkByUID))
 
 
 def flatten(obj):
@@ -108,9 +117,6 @@ def flatten(obj):
     """
     # The ids should be set in the actual object so they are consistent
     set_uuids(obj)
-
-    # make a copy before we substitute the pointers for links
-    copy = deepcopy(obj)
 
     # list of uids that we've seen, to avoid returning duplicates
     known_uids = set()
@@ -130,9 +136,8 @@ def flatten(obj):
 
         return to_return
 
-    res = recursive_flatmap(copy, _flatten)
-    [substitute_links(x) for x in res]
-    return res
+    res = recursive_flatmap(obj, _flatten)
+    return [substitute_links(x) for x in res]
 
 
 def recursive_foreach(obj, func, apply_first=False, seen=None):
@@ -219,68 +224,3 @@ def recursive_flatmap(obj, func, seen=None):
             else:
                 res.extend(recursive_flatmap(x, func, seen))
     return res
-
-
-def _recursive_substitute(obj, native_uid=None, seen=None):
-    if seen is None:
-        seen = set({})
-    if obj.__hash__ is not None:
-        if obj in seen:
-            return
-        else:
-            seen.add(obj)
-
-    if isinstance(obj, (list, tuple)):
-        for i, x in enumerate(obj):
-            if isinstance(x, BaseEntity):
-                if len(x.uids) == 0:
-                    raise ValueError("No UID for {}".format(x))
-                elif native_uid and native_uid in x.uids:
-                    obj[i] = LinkByUID(native_uid, x.uids[native_uid])
-                else:
-                    uid_to_use = next(iter(x.uids.items()))
-                    obj[i] = LinkByUID(uid_to_use[0], uid_to_use[1])
-            else:
-                # The list/tuple obj is modified, but the object inside it is not
-                obj[i] = deepcopy(x)
-                _recursive_substitute(obj[i], native_uid, seen)
-    elif isinstance(obj, dict):
-        for k, x in obj.copy().items():
-            if isinstance(x, BaseEntity):
-                if len(x.uids) == 0:
-                    raise ValueError("No UID for {}".format(x))
-                elif native_uid and native_uid in x.uids:
-                    obj[k] = LinkByUID(native_uid, x.uids[native_uid])
-                else:
-                    uid_to_use = next(iter(x.uids.items()))
-                    obj[k] = LinkByUID(uid_to_use[0], uid_to_use[1])
-            else:
-                _recursive_substitute(x, native_uid, seen)
-        for k, x in obj.copy().items():
-            if isinstance(k, BaseEntity):
-                if len(k.uids) == 0:
-                    raise ValueError("No UID for {}".format(k))
-                elif native_uid and native_uid in k.uids:
-                    obj[LinkByUID(native_uid, k.uids[native_uid])] = x
-                    del obj[k]
-                else:
-                    uid_to_use = next(iter(k.uids.items()))
-                    obj[LinkByUID(uid_to_use[0], uid_to_use[1])] = x
-                    del obj[k]
-            else:
-                _recursive_substitute(k, native_uid, seen)
-    elif isinstance(obj, DictSerializable):
-        for k, x in obj.__dict__.items():
-            if isinstance(obj, BaseEntity) and k in obj.skip:
-                continue
-            if isinstance(x, BaseEntity):
-                if len(x.uids) == 0:
-                    raise ValueError("No UID for {}".format(x))
-                elif native_uid and native_uid in x.uids:
-                    obj.__dict__[k] = LinkByUID(native_uid, x.uids[native_uid])
-                else:
-                    uid_to_use = next(iter(x.uids.items()))
-                    obj.__dict__[k] = LinkByUID(uid_to_use[0], uid_to_use[1])
-            else:
-                _recursive_substitute(x, native_uid, seen)
-    return
