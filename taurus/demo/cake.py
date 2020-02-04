@@ -118,15 +118,15 @@ def make_cake_templates():
             ]
         )
     )
-    tmpl["Sample Size"] = ConditionTemplate(
-        name="Sample Size",
+    tmpl["Sample Mass"] = ConditionTemplate(
+        name="Sample Mass",
         description="Sample size in mass units, to go along with FDA Nutrition Facts",
-        bounds=RealBounds(1.e-3, 10.e3, "g")
+        bounds=RealBounds(1.e-3, 1.e4, "g")
     )
-    tmpl["Expected Sample Size"] = ParameterTemplate(
-        name="Expected Sample Size",
+    tmpl["Expected Sample Mass"] = ParameterTemplate(
+        name="Expected Sample Mass",
         description="Specified sample size in mass units, to go along with FDA Nutrition Facts",
-        bounds=RealBounds(1.e-3, 10.e3, "g")
+        bounds=RealBounds(1.e-3, 1.e4, "g")
     )
     tmpl["Chemical Formula"] = PropertyTemplate(
         name="Chemical Formula",
@@ -157,14 +157,14 @@ def make_cake_templates():
     tmpl["Nutritional Analysis"] = MeasurementTemplate(
         name="Nutritional Analysis",
         properties=[tmpl["Nutritional Information"]],
-        conditions=[tmpl["Sample Size"]],
-        parameters=[tmpl["Expected Sample Size"]]
+        conditions=[tmpl["Sample Mass"]],
+        parameters=[tmpl["Expected Sample Mass"]]
     )
     tmpl["Elemental Analysis"] = MeasurementTemplate(
         name="Elemental Analysis",
         properties=[tmpl["Chemical Formula"]],
-        conditions=[tmpl["Sample Size"]],
-        parameters=[tmpl["Expected Sample Size"]]
+        conditions=[tmpl["Sample Mass"]],
+        parameters=[tmpl["Expected Sample Mass"]]
     )
 
     tmpl["Dessert"] = MaterialTemplate(
@@ -390,7 +390,7 @@ def make_cake_spec(tmpl=None):
                 conditions=Condition(
                     name="Serving Size",
                     value=NominalReal(30, 'g'),
-                    template=tmpl["Sample Size"],
+                    template=tmpl["Sample Mass"],
                     origin="specified"
                 )
             )
@@ -818,34 +818,34 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
         origin="measured"
     ))
     flour_content.conditions.append(Condition(
-        name='Sample Size',
+        name='Sample Mass',
         value=NormalReal(
             mean=99 + 2 * random.random(),
             std=1.5,
             units='mg'
         ),
-        template=tmpl["Sample Size"],
+        template=tmpl["Sample Mass"],
         origin="measured"
     ))
     flour_content.parameters.append(Parameter(
-        name='Expected Sample Size',
+        name='Expected Sample Mass',
         value=NominalReal(nominal=0.1, units='g'),
-        template=tmpl["Expected Sample Size"],
+        template=tmpl["Expected Sample Mass"],
         origin="specified"
     ))
     flour_content.spec.conditions.append(Condition(
-        name='Sample Size',
+        name='Sample Mass',
         value=NominalReal(
             nominal=100,
             units='mg'
         ),
-        template=tmpl["Sample Size"],
+        template=tmpl["Sample Mass"],
         origin="specified"
     ))
     flour_content.spec.parameters.append(Parameter(
-        name='Expected Sample Size',
+        name='Expected Sample Mass',
         value=NominalReal(nominal=0.1, units='g'),
-        template=tmpl["Expected Sample Size"],
+        template=tmpl["Expected Sample Mass"],
         origin="specified"
     ))
 
@@ -856,28 +856,28 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
         origin="measured"
     ))
     salt_content.conditions.append(Condition(
-        name='Sample Size',
+        name='Sample Mass',
         value=NormalReal(
             mean=99 + 2 * random.random(),
             std=1.5,
             units='mg'
         ),
-        template=tmpl["Sample Size"],
+        template=tmpl["Sample Mass"],
         origin="measured"
     ))
     salt_content.parameters.append(Parameter(
-        name='Expected Sample Size',
+        name='Expected Sample Mass',
         value=NominalReal(nominal=0.1, units='g'),
-        template=tmpl["Expected Sample Size"],
+        template=tmpl["Expected Sample Mass"],
         origin="specified"
     ))
     salt_content.spec.conditions.append(Condition(
-        name='Sample Size',
+        name='Sample Mass',
         value=NominalReal(
             nominal=100,
             units='mg'
         ),
-        template=tmpl["Sample Size"],
+        template=tmpl["Sample Mass"],
         origin="specified"
     ))
 
@@ -888,19 +888,19 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
         origin="measured"
     ))
     sugar_content.conditions.append(Condition(
-        name='Sample Size',
+        name='Sample Mass',
         value=NormalReal(
             mean=99 + 2 * random.random(),
             std=1.5,
             units='mg'
         ),
-        template=tmpl["Sample Size"],
+        template=tmpl["Sample Mass"],
         origin="measured"
     ))
     sugar_content.spec.parameters.append(Parameter(
-        name='Expected Sample Size',
+        name='Expected Sample Mass',
         value=NominalReal(nominal=0.1, units='g'),
-        template=tmpl["Expected Sample Size"],
+        template=tmpl["Expected Sample Mass"],
         origin="specified"
     ))
 
