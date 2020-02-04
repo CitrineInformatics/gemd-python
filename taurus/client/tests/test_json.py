@@ -12,7 +12,8 @@ from taurus.entity.case_insensitive_dict import CaseInsensitiveDict
 from taurus.entity.attribute.condition import Condition
 from taurus.entity.attribute.parameter import Parameter
 from taurus.entity.link_by_uid import LinkByUID
-from taurus.entity.object import MeasurementRun, MaterialRun, ProcessRun, MeasurementSpec
+from taurus.entity.object import MeasurementRun, MaterialRun, ProcessRun
+from taurus.entity.object import MeasurementSpec, MaterialSpec, ProcessSpec
 from taurus.entity.object.ingredient_run import IngredientRun
 from taurus.entity.object.ingredient_spec import IngredientSpec
 from taurus.entity.template.property_template import PropertyTemplate
@@ -245,11 +246,12 @@ def test_case_insensitive_rehydration():
 
 def test_many_ingredients():
     """Test that ingredients remain connected to processes when round-robined through json"""
-    proc = ProcessRun("foo")
+    proc = ProcessRun("foo", spec=ProcessSpec("sfoo"))
     expected = []
     for i in range(10):
-        mat = MaterialRun(name=str(i))
-        IngredientRun(name="i{}".format(i), process=proc, material=mat)
+        mat = MaterialRun(name=str(i), spec=MaterialSpec("s{}".format(i)))
+        i_spec = IngredientSpec(name="i{}".format(i), material=mat.spec, process=proc.spec)
+        IngredientRun(process=proc, material=mat, spec=i_spec)
         expected.append("i{}".format(i))
 
     reloaded = loads(dumps(proc))
