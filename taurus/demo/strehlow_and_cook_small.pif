@@ -169,7 +169,7 @@
         "units": "eV",
         "conditions": [
           {
-            "name": "Transition",
+            "name": "Bands",
             "scalars": [
               {
                 "value": "G15 to G1"
@@ -281,6 +281,65 @@
         ],
         "method": {
           "name": "Estimated"
+        },
+        "dataType": "EXPERIMENTAL"
+      }
+    ],
+    "chemicalFormula": "Li1I1"
+  },
+  {
+    "category": "system.chemical",
+    "references": [
+      {
+        "doi": "10.1063/1.3253115"
+      }
+    ],
+    "properties": [
+      {
+        "name": "Crystallinity",
+        "scalars": [
+          {
+            "value": "Polycrystalline"
+          }
+        ]
+      },
+      {
+        "name": "Morphology",
+        "scalars": [
+          {
+            "value": "Thin film"
+          }
+        ]
+      },
+      {
+        "name": "Band gap",
+        "scalars": [
+          {
+            "value": "5.62"
+          }
+        ],
+        "units": "eV",
+        "conditions": [
+          {
+            "name": "Transition",
+            "scalars": [
+              {
+                "value": "Excitonic"
+              }
+            ]
+          },
+          {
+            "name": "Temperature",
+            "scalars": [
+              {
+                "value": "4.7"
+              }
+            ],
+            "units": "K"
+          }
+        ],
+        "method": {
+          "name": "Absorption"
         },
         "dataType": "EXPERIMENTAL"
       }
@@ -1132,6 +1191,45 @@
     ],
     "properties": [
       {
+        "name": "Band gap",
+        "scalars": [
+          {
+            "value": "6"
+          }
+        ],
+        "units": "eV",
+        "conditions": [
+          {
+            "name": "Bands",
+            "scalars": [
+              {
+                "value": "G25 to G15"
+              }
+            ]
+          },
+          {
+            "name": "Transition",
+            "scalars": [
+              {
+                "value": "Direct"
+              }
+            ]
+          }
+        ],
+        "dataType": "EXPERIMENTAL"
+      }
+    ],
+    "chemicalFormula": "C"
+  },
+  {
+    "category": "system.chemical",
+    "references": [
+      {
+        "doi": "10.1063/1.3253115"
+      }
+    ],
+    "properties": [
+      {
         "name": "Thermoluminescence",
         "scalars": [
           {
@@ -1142,6 +1240,65 @@
       }
     ],
     "chemicalFormula": "NaN"
+  },
+  {
+    "category": "system.chemical",
+    "references": [
+      {
+        "doi": "10.1063/1.3253115"
+      }
+    ],
+    "properties": [
+      {
+        "name": "Crystallinity",
+        "scalars": [
+          {
+            "value": "Single crystalline"
+          }
+        ]
+      },
+      {
+        "name": "Band gap",
+        "scalars": [
+          {
+            "value": "8.97"
+          }
+        ],
+        "units": "eV",
+        "conditions": [
+          {
+            "name": "Bands",
+            "scalars": [
+              {
+                "value": "G15 to G1"
+              }
+            ]
+          },
+          {
+            "name": "Transition",
+            "scalars": [
+              {
+                "value": "Direct"
+              }
+            ]
+          },
+          {
+            "name": "Temperature",
+            "scalars": [
+              {
+                "value": "300"
+              }
+            ],
+            "units": "K"
+          }
+        ],
+        "method": {
+          "name": "Absorption"
+        },
+        "dataType": "EXPERIMENTAL"
+      }
+    ],
+    "chemicalFormula": "Na1Cl1"
   },
   {
     "category": "system.chemical",
@@ -1608,6 +1765,85 @@
       }
     ],
     "chemicalFormula": "Mg1Cl1"
+  },
+  {
+    "category": "system.chemical",
+    "references": [
+      {
+        "doi": "10.1063/1.3253115"
+      }
+    ],
+    "properties": [
+      {
+        "name": "Crystallinity",
+        "scalars": [
+          {
+            "value": "Single crystalline"
+          }
+        ]
+      },
+      {
+        "name": "Band gap",
+        "scalars": [
+          {
+            "value": "1.64"
+          }
+        ],
+        "units": "eV",
+        "conditions": [
+          {
+            "name": "Bands",
+            "scalars": [
+              {
+                "value": "G15 to G1"
+              }
+            ]
+          },
+          {
+            "name": "Transition",
+            "scalars": [
+              {
+                "value": "Direct"
+              }
+            ]
+          },
+          {
+            "name": "Temperature",
+            "scalars": [
+              {
+                "value": "300"
+              }
+            ],
+            "units": "K"
+          }
+        ],
+        "method": {
+          "name": "Electroreflection"
+        },
+        "dataType": "EXPERIMENTAL"
+      },
+      {
+        "name": "Photoluminescence",
+        "scalars": [
+          {
+            "value": "True"
+          }
+        ],
+        "conditions": [
+          {
+            "name": "Temperature",
+            "scalars": [
+              {
+                "value": "300"
+              }
+            ],
+            "units": "K"
+          }
+        ],
+        "dataType": "EXPERIMENTAL"
+      }
+    ],
+    "chemicalFormula": "Mg2Ge1"
   },
   {
     "category": "system.chemical",
@@ -5158,7 +5394,7 @@
         "units": "eV",
         "conditions": [
           {
-            "name": "Transition",
+            "name": "Bands",
             "scalars": [
               {
                 "value": "G25 to G1"
@@ -6528,13 +6764,92 @@
         "name": "Band gap",
         "scalars": [
           {
+            "value": "2.25"
+          }
+        ],
+        "units": "eV",
+        "conditions": [
+          {
+            "name": "Bands",
+            "scalars": [
+              {
+                "value": "G15 to G1"
+              }
+            ]
+          },
+          {
+            "name": "Transition",
+            "scalars": [
+              {
+                "value": "Direct"
+              }
+            ]
+          },
+          {
+            "name": "Temperature",
+            "scalars": [
+              {
+                "value": "300"
+              }
+            ],
+            "units": "K"
+          }
+        ],
+        "method": {
+          "name": "Absorption"
+        },
+        "dataType": "EXPERIMENTAL"
+      },
+      {
+        "name": "Color",
+        "scalars": [
+          {
+            "value": "Red"
+          }
+        ],
+        "conditions": [
+          {
+            "name": "Temperature",
+            "scalars": [
+              {
+                "value": "300"
+              }
+            ],
+            "units": "K"
+          }
+        ],
+        "dataType": "EXPERIMENTAL"
+      }
+    ],
+    "chemicalFormula": "Zn1Te1"
+  },
+  {
+    "category": "system.chemical",
+    "references": [
+      {
+        "doi": "10.1063/1.3253115"
+      }
+    ],
+    "properties": [
+      {
+        "name": "Crystallinity",
+        "scalars": [
+          {
+            "value": "Single crystalline"
+          }
+        ]
+      },
+      {
+        "name": "Band gap",
+        "scalars": [
+          {
             "value": "2.37"
           }
         ],
         "units": "eV",
         "conditions": [
           {
-            "name": "Transition",
+            "name": "Bands",
             "scalars": [
               {
                 "value": "G15 to G1"
@@ -6593,7 +6908,7 @@
         "units": "eV",
         "conditions": [
           {
-            "name": "Transition",
+            "name": "Bands",
             "scalars": [
               {
                 "value": "G15 to G1"
@@ -6812,6 +7127,216 @@
       }
     ],
     "chemicalFormula": "Ga2O3"
+  },
+  {
+    "category": "system.chemical",
+    "references": [
+      {
+        "doi": "10.1063/1.3253115"
+      }
+    ],
+    "properties": [
+      {
+        "name": "Crystallinity",
+        "scalars": [
+          {
+            "value": "Single crystalline"
+          }
+        ]
+      },
+      {
+        "name": "Band gap",
+        "scalars": [
+          {
+            "value": "2.22"
+          }
+        ],
+        "units": "eV",
+        "conditions": [
+          {
+            "name": "Bands",
+            "scalars": [
+              {
+                "value": "G15 to X1"
+              }
+            ]
+          },
+          {
+            "name": "Transition",
+            "scalars": [
+              {
+                "value": "Indirect"
+              }
+            ]
+          },
+          {
+            "name": "Temperature",
+            "scalars": [
+              {
+                "value": "300"
+              }
+            ],
+            "units": "K"
+          }
+        ],
+        "method": {
+          "name": "Absorption"
+        },
+        "dataType": "EXPERIMENTAL"
+      },
+      {
+        "name": "Temperature derivative of band gap",
+        "scalars": [
+          {
+            "value": "-0.00052"
+          }
+        ],
+        "units": "eV/K",
+        "conditions": [
+          {
+            "name": "Bands",
+            "scalars": [
+              {
+                "value": "G15 to X1"
+              }
+            ]
+          },
+          {
+            "name": "Transition",
+            "scalars": [
+              {
+                "value": "Indirect"
+              }
+            ]
+          },
+          {
+            "name": "Temperature",
+            "scalars": [
+              {
+                "value": "300"
+              }
+            ],
+            "units": "K"
+          }
+        ],
+        "method": {
+          "name": "Absorption"
+        },
+        "dataType": "EXPERIMENTAL"
+      }
+    ],
+    "chemicalFormula": "Ga1P1"
+  },
+  {
+    "category": "system.chemical",
+    "references": [
+      {
+        "doi": "10.1063/1.3253115"
+      }
+    ],
+    "properties": [
+      {
+        "name": "Crystallinity",
+        "scalars": [
+          {
+            "value": "Single crystalline"
+          }
+        ]
+      },
+      {
+        "name": "Band gap",
+        "scalars": [
+          {
+            "value": "2.5"
+          }
+        ],
+        "units": "eV",
+        "conditions": [
+          {
+            "name": "Transition",
+            "scalars": [
+              {
+                "value": "Indirect"
+              }
+            ]
+          },
+          {
+            "name": "Temperature",
+            "scalars": [
+              {
+                "value": "295"
+              }
+            ],
+            "units": "K"
+          }
+        ],
+        "method": {
+          "name": "Absorption"
+        },
+        "dataType": "EXPERIMENTAL"
+      },
+      {
+        "name": "Electroluminescence",
+        "scalars": [
+          {
+            "value": "True"
+          }
+        ],
+        "conditions": [
+          {
+            "name": "Temperature",
+            "scalars": [
+              {
+                "value": "295"
+              }
+            ],
+            "units": "K"
+          }
+        ],
+        "dataType": "EXPERIMENTAL"
+      },
+      {
+        "name": "Photoluminescence",
+        "scalars": [
+          {
+            "value": "True"
+          }
+        ],
+        "conditions": [
+          {
+            "name": "Temperature",
+            "scalars": [
+              {
+                "value": "295"
+              }
+            ],
+            "units": "K"
+          }
+        ],
+        "dataType": "EXPERIMENTAL"
+      },
+      {
+        "name": "Thermoluminescence",
+        "scalars": [
+          {
+            "value": "True"
+          }
+        ],
+        "conditions": [
+          {
+            "name": "Temperature",
+            "scalars": [
+              {
+                "value": "295"
+              }
+            ],
+            "units": "K"
+          }
+        ],
+        "dataType": "EXPERIMENTAL"
+      }
+    ],
+    "chemicalFormula": "Ga1S1"
   },
   {
     "category": "system.chemical",
@@ -7300,6 +7825,57 @@
       }
     ],
     "chemicalFormula": "Ge1As1"
+  },
+  {
+    "category": "system.chemical",
+    "references": [
+      {
+        "doi": "10.1063/1.3253115"
+      }
+    ],
+    "properties": [
+      {
+        "name": "Crystallinity",
+        "scalars": [
+          {
+            "value": "Single crystalline"
+          }
+        ]
+      },
+      {
+        "name": "Band gap",
+        "scalars": [
+          {
+            "value": "2.69"
+          }
+        ],
+        "units": "eV",
+        "conditions": [
+          {
+            "name": "Transition",
+            "scalars": [
+              {
+                "value": "Direct"
+              }
+            ]
+          }
+        ],
+        "method": {
+          "name": "Absorption"
+        },
+        "dataType": "EXPERIMENTAL"
+      },
+      {
+        "name": "Color",
+        "scalars": [
+          {
+            "value": "Yellow-Orange"
+          }
+        ],
+        "dataType": "EXPERIMENTAL"
+      }
+    ],
+    "chemicalFormula": "Ge1Se2"
   },
   {
     "category": "system.chemical",
@@ -9724,6 +10300,53 @@
         "name": "Band gap",
         "scalars": [
           {
+            "value": "0.33"
+          }
+        ],
+        "units": "eV",
+        "conditions": [
+          {
+            "name": "Transition",
+            "scalars": [
+              {
+                "value": "Direct"
+              }
+            ]
+          }
+        ],
+        "dataType": "EXPERIMENTAL"
+      }
+    ],
+    "chemicalFormula": "Sn1Te1"
+  },
+  {
+    "category": "system.chemical",
+    "references": [
+      {
+        "doi": "10.1063/1.3253115"
+      }
+    ],
+    "properties": [
+      {
+        "name": "Crystallinity",
+        "scalars": [
+          {
+            "value": "Polycrystalline"
+          }
+        ]
+      },
+      {
+        "name": "Morphology",
+        "scalars": [
+          {
+            "value": "Thin film"
+          }
+        ]
+      },
+      {
+        "name": "Band gap",
+        "scalars": [
+          {
             "value": "0.36"
           }
         ],
@@ -10814,6 +11437,57 @@
       }
     ],
     "chemicalFormula": "Hg1S1"
+  },
+  {
+    "category": "system.chemical",
+    "references": [
+      {
+        "doi": "10.1063/1.3253115"
+      }
+    ],
+    "properties": [
+      {
+        "name": "Crystallinity",
+        "scalars": [
+          {
+            "value": "Single crystalline"
+          }
+        ]
+      },
+      {
+        "name": "Band gap",
+        "scalars": [
+          {
+            "value": "0.283"
+          }
+        ],
+        "units": "eV",
+        "conditions": [
+          {
+            "name": "Bands",
+            "scalars": [
+              {
+                "value": "G6 to G8"
+              }
+            ]
+          },
+          {
+            "name": "Temperature",
+            "scalars": [
+              {
+                "value": "30"
+              }
+            ],
+            "units": "K"
+          }
+        ],
+        "method": {
+          "name": "Magnetoreflection"
+        },
+        "dataType": "EXPERIMENTAL"
+      }
+    ],
+    "chemicalFormula": "Hg1Te1"
   },
   {
     "category": "system.chemical",

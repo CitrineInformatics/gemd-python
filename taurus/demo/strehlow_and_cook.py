@@ -129,9 +129,11 @@ def make_templates():
                            CategoricalBounds(['Cubic', 'Hexagonal', 'Orthorhombic', 'Tetragonal',
                                               'Trigonal'])],
         "Transition": [ConditionTemplate,
-                       CategoricalBounds(['Direct', 'Excitonic', 'G1 to X1', 'G15 to G1',
-                                          'G15 to X1', 'G25 to G1', 'G25 to G12', 'G25 to G15',
-                                          'G6 to G8', 'G8 to G6+', 'Indirect', 'L6+ to L6-'])]
+                       CategoricalBounds(['Direct', 'Excitonic', 'Indirect'])],
+        "Bands": [ConditionTemplate,
+                  CategoricalBounds(['G1 to X1', 'G15 to G1', 'G15 to X1', 'G25 to G1',
+                                     'G25 to G12', 'G25 to G15', 'G6 to G8', 'G8 to G6+',
+                                     'L6+ to L6-'])]
     }
     for (name, (typ, bounds)) in attribute_feed.items():
         assert name not in tmpl
@@ -169,7 +171,8 @@ def make_templates():
                             tmpl["Electric field polarization"],
                             tmpl["Phase"],
                             tmpl["Crystal system"],
-                            tmpl["Transition"]
+                            tmpl["Transition"],
+                            tmpl["Bands"]
                             ]
              }
         ],
@@ -240,14 +243,18 @@ def make_strehlow_objects(table=None):
         msr = make_instance(msr_spec)
         msr.material = run
 
-        # A category in the PIF need to be split to avoid repeat Attribute Templates in a Run
+        # 2 categories in the PIF need to be split to avoid repeat Attribute Templates in a Run
+        name_map = {
+            'Phase': 'Crystal system',
+            'Transition': 'Bands'
+        }
         for prop in row['properties']:
             for attr in [prop] + prop.get('conditions', []):
-                if attr['name'] == 'Phase':
+                if attr['name'] in name_map:
                     template = tmpl[attr['name']]
                     value = attr['scalars'][0]['value']
                     if value not in template.bounds.categories:
-                        attr['name'] = 'Crystal system'
+                        attr['name'] = name_map[attr['name']]
 
         for prop in row['properties']:
             template = tmpl[prop['name']]
@@ -331,7 +338,7 @@ def make_strehlow_table(compounds):
     )
     terms = ["Band gap", "Temperature derivative of band gap", "Temperature", "Color",
              "Lasing", "Cathodoluminescence", "Mechanical luminescence", "Photoluminescence",
-             "Electroluminescence", "Thermoluminescence", "Transition",
+             "Electroluminescence", "Thermoluminescence", "Transition", "Bands",
              "Electric field polarization", "Crystallinity", "Morphology", "Phase",
              'Crystal system']
 
@@ -457,4 +464,3 @@ if __name__ == "__main__":
     display = make_display_table(full_table)
     for row in display:
         print(','.join(map(lambda x: str(x), row)))
-
