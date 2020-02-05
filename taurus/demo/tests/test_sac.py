@@ -16,7 +16,7 @@ def test_sac():
     # Look at each different combination of Value types in a S&C record
     smaller = minimal_subset(sac_tbl['content'])
     # Make sure that the diversity of value types isn't lost, e.g. something is being None'd
-    assert len(smaller) == 148
+    assert len(smaller) == 157
 
     # Make sure there's no migration with repeated serialization
     for row in sac_tbl:

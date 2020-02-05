@@ -123,9 +123,11 @@ def make_templates():
                                                            'Perpendicular to B axis',
                                                            'Perpendicular to C axis'])],
         "Phase": [ConditionTemplate,
-                  CategoricalBounds(['A', 'B', 'B1', 'B2', 'Cubic', 'Fused quartz', 'Hexagonal',
-                                     'Natural diamond', 'Orthorhombic', 'Rutile', 'Sapphire',
-                                     'Synthetic quartz', 'Tetragonal', 'Trigonal'])],
+                  CategoricalBounds(['A', 'B', 'B1', 'B2', 'Fused quartz', 'Natural diamond',
+                                     'Rutile', 'Sapphire', 'Synthetic quartz'])],
+        "Crystal system": [ConditionTemplate,
+                           CategoricalBounds(['Cubic', 'Hexagonal', 'Orthorhombic', 'Tetragonal',
+                                              'Trigonal'])],
         "Transition": [ConditionTemplate,
                        CategoricalBounds(['Direct', 'Excitonic', 'G1 to X1', 'G15 to G1',
                                           'G15 to X1', 'G25 to G1', 'G25 to G12', 'G25 to G15',
@@ -166,6 +168,7 @@ def make_templates():
                             tmpl["Morphology"],
                             tmpl["Electric field polarization"],
                             tmpl["Phase"],
+                            tmpl["Crystal system"],
                             tmpl["Transition"]
                             ]
              }
@@ -236,6 +239,15 @@ def make_strehlow_objects(table=None):
 
         msr = make_instance(msr_spec)
         msr.material = run
+
+        # A category in the PIF need to be split to avoid repeat Attribute Templates in a Run
+        for prop in row['properties']:
+            for attr in [prop] + prop.get('conditions', []):
+                if attr['name'] == 'Phase':
+                    template = tmpl[attr['name']]
+                    value = attr['scalars'][0]['value']
+                    if value not in template.bounds.categories:
+                        attr['name'] = 'Crystal system'
 
         for prop in row['properties']:
             template = tmpl[prop['name']]
@@ -320,7 +332,8 @@ def make_strehlow_table(compounds):
     terms = ["Band gap", "Temperature derivative of band gap", "Temperature", "Color",
              "Lasing", "Cathodoluminescence", "Mechanical luminescence", "Photoluminescence",
              "Electroluminescence", "Thermoluminescence", "Transition",
-             "Electric field polarization", "Crystallinity", "Morphology", "Phase"]
+             "Electric field polarization", "Crystallinity", "Morphology", "Phase",
+             'Crystal system']
 
     for term in terms:
         output['headers'].append(
@@ -444,3 +457,4 @@ if __name__ == "__main__":
     display = make_display_table(full_table)
     for row in display:
         print(','.join(map(lambda x: str(x), row)))
+
