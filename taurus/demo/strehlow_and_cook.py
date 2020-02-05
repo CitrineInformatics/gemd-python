@@ -115,7 +115,7 @@ def make_templates():
         "Thermoluminescence": [PropertyTemplate,
                                CategoricalBounds(['True', 'False'])],
         "Morphology": [ConditionTemplate,
-                       CategoricalBounds(['Thin Film', 'Bulk'])],
+                       CategoricalBounds(['Thin film', 'Bulk'])],
         "Electric field polarization": [ConditionTemplate,
                                         CategoricalBounds(['Parallel to A axis',
                                                            'Parallel to B axis',
