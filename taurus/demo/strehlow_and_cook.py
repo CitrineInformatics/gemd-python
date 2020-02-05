@@ -254,6 +254,7 @@ def make_strehlow_objects(table=None):
             'EXPERIMENTAL': Origin.MEASURED,
             'COMPUTATIONAL': Origin.COMPUTED
         }
+        seen = set()  # Some conditions come in from multiple properties on the same object
         for prop in row['properties']:
             origin = origin_map.get(prop.get('dataType', None), Origin.UNKNOWN)
             if 'method' in prop:
@@ -261,6 +262,11 @@ def make_strehlow_objects(table=None):
             else:
                 method = 'Method: unreported'
             for attr in [prop] + prop.get('conditions', []):
+                if attr['name'] in seen:
+                    # Early return if it's a repeat
+                    continue
+                seen.add(attr['name'])
+
                 template = tmpl[attr['name']]
                 # Figure out if we need to split this column
                 if attr['name'] in name_map:
