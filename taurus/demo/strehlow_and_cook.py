@@ -26,6 +26,8 @@ from taurus.entity.value.nominal_real import NominalReal
 from taurus.entity.value.uniform_real import UniformReal
 from taurus.entity.bounds.real_bounds import RealBounds
 
+from taurus.enumeration.origin import Origin
+
 
 # For now, module constant, though likely this should get promoted to a package level
 DEMO_SCOPE = 'citrine-demo-sac'
@@ -248,7 +250,16 @@ def make_strehlow_objects(table=None):
             'Phase': 'Crystal system',
             'Transition': 'Bands'
         }
+        origin_map = {
+            'EXPERIMENTAL': Origin.MEASURED,
+            'COMPUTATIONAL': Origin.COMPUTED
+        }
         for prop in row['properties']:
+            origin = origin_map.get(prop.get('dataType', None), Origin.UNKNOWN)
+            if 'method' in prop:
+                method = 'Method: ' + prop['method']['name']
+            else:
+                method = 'Method: unreported'
             for attr in [prop] + prop.get('conditions', []):
                 template = tmpl[attr['name']]
                 # Figure out if we need to split this column
@@ -262,13 +273,17 @@ def make_strehlow_objects(table=None):
                     msr.properties.append(
                         Property(name=template.name,
                                  template=template,
-                                 value=content_map[type(template.bounds)](attr)
+                                 value=content_map[type(template.bounds)](attr),
+                                 origin=origin,
+                                 notes=method
                                  ))
                 elif type(template) == ConditionTemplate:
                     msr.conditions.append(
                         Condition(name=template.name,
                                   template=template,
-                                  value=content_map[type(template.bounds)](attr)
+                                  value=content_map[type(template.bounds)](attr),
+                                  origin=origin,
+                                  notes=method
                                   ))
 
     return datapoints
