@@ -250,41 +250,27 @@ def make_strehlow_objects(table=None):
         }
         for prop in row['properties']:
             for attr in [prop] + prop.get('conditions', []):
+                template = tmpl[attr['name']]
+                # Figure out if we need to split this column
                 if attr['name'] in name_map:
-                    template = tmpl[attr['name']]
                     value = attr['scalars'][0]['value']
                     if value not in template.bounds.categories:
-                        attr['name'] = name_map[attr['name']]
+                        template = tmpl[name_map[attr['name']]]
 
-        for prop in row['properties']:
-            template = tmpl[prop['name']]
-            if type(template) == PropertyTemplate:
-                msr.properties.append(
-                    Property(name=template.name,
-                             template=template,
-                             value=content_map[type(template.bounds)](prop)
-                             ))
-            elif type(template) == ConditionTemplate:
-                msr.conditions.append(
-                    Condition(name=template.name,
-                              template=template,
-                              value=content_map[type(template.bounds)](prop)
-                              ))
-
-            for cond in prop.get('conditions', []):
-                template = tmpl[cond['name']]
+                # Move into GEMD structure
                 if type(template) == PropertyTemplate:
                     msr.properties.append(
                         Property(name=template.name,
                                  template=template,
-                                 value=content_map[type(template.bounds)](cond)
+                                 value=content_map[type(template.bounds)](attr)
                                  ))
                 elif type(template) == ConditionTemplate:
                     msr.conditions.append(
                         Condition(name=template.name,
                                   template=template,
-                                  value=content_map[type(template.bounds)](cond)
+                                  value=content_map[type(template.bounds)](attr)
                                   ))
+
     return datapoints
 
 

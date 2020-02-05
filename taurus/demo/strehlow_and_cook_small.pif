@@ -169,7 +169,7 @@
         "units": "eV",
         "conditions": [
           {
-            "name": "Bands",
+            "name": "Transition",
             "scalars": [
               {
                 "value": "G15 to G1"
@@ -590,7 +590,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Cubic"
@@ -835,7 +835,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Cubic"
@@ -1200,7 +1200,7 @@
         "units": "eV",
         "conditions": [
           {
-            "name": "Bands",
+            "name": "Transition",
             "scalars": [
               {
                 "value": "G25 to G15"
@@ -1267,7 +1267,7 @@
         "units": "eV",
         "conditions": [
           {
-            "name": "Bands",
+            "name": "Transition",
             "scalars": [
               {
                 "value": "G15 to G1"
@@ -1372,7 +1372,7 @@
     ],
     "properties": [
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Hexagonal"
@@ -1792,7 +1792,7 @@
         "units": "eV",
         "conditions": [
           {
-            "name": "Bands",
+            "name": "Transition",
             "scalars": [
               {
                 "value": "G15 to G1"
@@ -3153,7 +3153,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Hexagonal"
@@ -3244,7 +3244,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Cubic"
@@ -3303,7 +3303,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Hexagonal"
@@ -3545,7 +3545,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Orthorhombic"
@@ -3853,7 +3853,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Orthorhombic"
@@ -3912,7 +3912,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Orthorhombic"
@@ -3999,7 +3999,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Hexagonal"
@@ -4067,7 +4067,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Hexagonal"
@@ -5394,7 +5394,7 @@
         "units": "eV",
         "conditions": [
           {
-            "name": "Bands",
+            "name": "Transition",
             "scalars": [
               {
                 "value": "G25 to G1"
@@ -6005,7 +6005,7 @@
     ],
     "properties": [
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Tetragonal"
@@ -6098,7 +6098,7 @@
     ],
     "properties": [
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Tetragonal"
@@ -6167,7 +6167,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Tetragonal"
@@ -6302,7 +6302,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Hexagonal"
@@ -6464,7 +6464,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Hexagonal"
@@ -6702,7 +6702,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Hexagonal"
@@ -6770,7 +6770,7 @@
         "units": "eV",
         "conditions": [
           {
-            "name": "Bands",
+            "name": "Transition",
             "scalars": [
               {
                 "value": "G15 to G1"
@@ -6849,7 +6849,7 @@
         "units": "eV",
         "conditions": [
           {
-            "name": "Bands",
+            "name": "Transition",
             "scalars": [
               {
                 "value": "G15 to G1"
@@ -6908,7 +6908,7 @@
         "units": "eV",
         "conditions": [
           {
-            "name": "Bands",
+            "name": "Transition",
             "scalars": [
               {
                 "value": "G15 to G1"
@@ -7154,7 +7154,7 @@
         "units": "eV",
         "conditions": [
           {
-            "name": "Bands",
+            "name": "Transition",
             "scalars": [
               {
                 "value": "G15 to X1"
@@ -7194,7 +7194,7 @@
         "units": "eV/K",
         "conditions": [
           {
-            "name": "Bands",
+            "name": "Transition",
             "scalars": [
               {
                 "value": "G15 to X1"
@@ -7954,7 +7954,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Trigonal"
@@ -8021,7 +8021,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Trigonal"
@@ -8079,7 +8079,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Hexagonal"
@@ -8132,7 +8132,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Hexagonal"
@@ -8957,7 +8957,7 @@
     ],
     "properties": [
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Tetragonal"
@@ -11107,7 +11107,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Cubic"
@@ -11190,7 +11190,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Hexagonal"
@@ -11289,7 +11289,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Hexagonal"
@@ -11356,7 +11356,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Hexagonal"
@@ -11464,7 +11464,7 @@
         "units": "eV",
         "conditions": [
           {
-            "name": "Bands",
+            "name": "Transition",
             "scalars": [
               {
                 "value": "G6 to G8"
@@ -11506,7 +11506,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Tetragonal"
@@ -11700,7 +11700,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Orthorhombic"
@@ -11799,7 +11799,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Tetragonal"
@@ -11910,7 +11910,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Orthorhombic"
@@ -12057,7 +12057,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Tetragonal"
@@ -12121,7 +12121,7 @@
         ]
       },
       {
-        "name": "Crystal system",
+        "name": "Phase",
         "scalars": [
           {
             "value": "Tetragonal"
