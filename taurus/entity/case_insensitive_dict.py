@@ -26,7 +26,7 @@ class CaseInsensitiveDict(dict):
     def __getitem__(self, key: str):
         return super().__getitem__(self.lowercase_dict[key.lower()])
 
-    def get(self, key: str):
+    def get(self, key: str, default=None):
         """
         Get the value for a given case-insensitive key.
 
@@ -35,6 +35,9 @@ class CaseInsensitiveDict(dict):
         key: str
             The key to look up (possibly with a different casing).
 
+        default: Any
+            The result to return if the key is not present.
+
         Returns
         -------
         Any
@@ -42,7 +45,10 @@ class CaseInsensitiveDict(dict):
             if `key` is not present.
 
         """
-        return self.__getitem__(key)
+        if self.__contains__(key):
+            return self.__getitem__(key)
+        else:
+            return default
 
     def __setitem__(self, key: str, value):
         self._register_key(key)
