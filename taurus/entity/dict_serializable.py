@@ -1,6 +1,6 @@
 from abc import ABC
-from typing import Iterable
 from logging import getLogger
+from typing import Iterable
 
 import json
 import inspect
