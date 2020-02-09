@@ -57,13 +57,7 @@ def test_process_run():
     assert material_run.process == process_run
     assert process_run.output_material == material_run
 
-    print("Before")
     copy_material = loads(dumps(material_run))
-    print("After")
-    print(copy_material)
-    # print(dumps(material_run, indent=2))
-    # print(copy_material.process)
-    # print(dumps(copy_material, indent=2))
     assert dumps(copy_material) == dumps(material_run)
 
     assert 'output_material' in repr(process_run)
