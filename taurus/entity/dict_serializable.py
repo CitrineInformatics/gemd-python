@@ -1,6 +1,6 @@
 from abc import ABC
 from logging import getLogger
-from typing import Iterable
+from typing import Iterable  # noqa: F401
 
 import json
 import inspect
