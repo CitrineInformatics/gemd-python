@@ -112,6 +112,11 @@ def flatten(obj):
       - Making sure at least one uid is set in each BaseEntity in scope
       - Getting a list of unique objects contained in the scope
       - Substituting the pointers in those objects with LinkByUID objects
+
+    Flattening obeys chronlogical ordering: if you flatten a process, you _will_ get the
+    ingredients of the process in the result, even though process.ingredients is skipped.
+    This supports the flattening of entire material histories.
+
     :param obj: defining the scope of the flatten
     :return: a list of BaseEntity with LinkByUIDs to any BaseEntity members
     """
@@ -120,6 +125,9 @@ def flatten(obj):
 
     # list of uids that we've seen, to avoid returning duplicates
     known_uids = set()
+    if isinstance(obj, BaseEntity):
+        for uid in obj.uids.items():
+            known_uids.add(uid)
 
     def _flatten(base_obj):
         to_return = []
@@ -136,7 +144,7 @@ def flatten(obj):
 
         return to_return
 
-    res = recursive_flatmap(obj, _flatten)
+    res = recursive_flatmap(obj, _flatten, chronological=True)
     return [substitute_links(x) for x in res]
 
 
@@ -181,7 +189,7 @@ def recursive_foreach(obj, func, apply_first=False, seen=None):
     return
 
 
-def recursive_flatmap(obj, func, seen=None):
+def recursive_flatmap(obj, func, seen=None, chronological=False):
     """
     Recursively apply and accumulate a list-valued function to BaseEntity members.
 
@@ -216,7 +224,9 @@ def recursive_flatmap(obj, func, seen=None):
                 res.extend(recursive_flatmap(x, func, seen))
     elif isinstance(obj, DictSerializable):
         for k, x in sorted(obj.__dict__.items()):
-            if isinstance(obj, BaseEntity) and k in obj.skip:
+            if chronological and isinstance(obj, BaseEntity) and k in obj._forward:
+                continue
+            if not chronological and isinstance(obj, BaseEntity) and k in obj.skip:
                 continue
             if isinstance(x, BaseEntity):
                 res.extend(recursive_flatmap(x, func, seen))

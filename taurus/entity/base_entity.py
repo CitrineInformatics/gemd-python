@@ -1,4 +1,6 @@
 """Base class for all entities."""
+from typing import Iterable
+
 from taurus.entity.dict_serializable import DictSerializable
 from taurus.entity.case_insensitive_dict import CaseInsensitiveDict
 
@@ -70,3 +72,14 @@ class BaseEntity(DictSerializable):
 
         """
         self.uids[scope] = uid
+
+    @property
+    def _forward(self) -> Iterable[str]:
+        """List of forward links that should be skipped when doing a chronological traversal.
+
+        Usually, this is the same as the skip list.  However, the link direction between
+        ingredients and processes is flipped: the ingredient -> process links is the writeable one
+        while the process -> ingredient link is read-only.  This is the opposite of chronological
+        order, so _forward gives a way to express the chronological ordering as well.
+        """
+        return self.skip
