@@ -3,7 +3,7 @@ from taurus.entity.object import ProcessSpec, MaterialSpec, IngredientSpec, Proc
     MaterialRun, IngredientRun
 from taurus.entity.template.condition_template import ConditionTemplate
 from taurus.entity.template.process_template import ProcessTemplate
-from taurus.util import flatten
+from taurus.util import flatten, recursive_flatmap
 
 
 def test_flatten_bounds():
@@ -41,3 +41,14 @@ def test_flatten_empty_history():
     assert len(flatten(input_run)) == 3
     assert len(flatten(ingredient_run)) == 7
     assert len(flatten(transform_run)) == 7
+
+
+def test_flatmap_skip_ordering():
+    """Test that the chronological setting is obeyed."""
+    # The writeable link is ingredient -> process, but the chronological link is
+    # process -> ingredient
+    proc = ProcessRun(name="foo")
+    IngredientRun(name="bar", process=proc)
+
+    assert len(recursive_flatmap(proc, lambda x: [x], chronological=True)) == 2
+    assert len(recursive_flatmap(proc, lambda x: [x], chronological=False)) == 0

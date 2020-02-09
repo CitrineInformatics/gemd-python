@@ -42,7 +42,7 @@ def test_case_sensitivity():
 
 def test_serde():
     """Test that an object with a case-insensitive dict can be serialized properly."""
-    process = ProcessRun("A process", uids={'Foo': 17})
+    process = ProcessRun("A process", uids={'Foo': str(17)})
     process_copy = loads(dumps(process))
     assert process == process_copy
     assert process_copy.uids['foo'] == process_copy.uids['Foo']

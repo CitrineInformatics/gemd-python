@@ -50,14 +50,20 @@ def test_material_run():
 
 def test_process_run():
     """Test that a process run can house a material, and that it survives serde."""
-    process_run = ProcessRun("Bake a cake", uids={'My_ID': 17})
+    process_run = ProcessRun("Bake a cake", uids={'My_ID': str(17)})
     material_run = MaterialRun("A cake", process=process_run)
 
     # Check that a bi-directional link is established
     assert material_run.process == process_run
     assert process_run.output_material == material_run
 
+    print("Before")
     copy_material = loads(dumps(material_run))
+    print("After")
+    print(copy_material)
+    # print(dumps(material_run, indent=2))
+    # print(copy_material.process)
+    # print(dumps(copy_material, indent=2))
     assert dumps(copy_material) == dumps(material_run)
 
     assert 'output_material' in repr(process_run)

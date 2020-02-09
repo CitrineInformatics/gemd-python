@@ -7,6 +7,7 @@ import inspect
 
 # There are some weird (probably resolvable) errors during object cloning if this is an
 # instance variable of DictSerializable.
+
 logger = getLogger(__name__)
 
 
@@ -72,8 +73,8 @@ class DictSerializable(ABC):
             A string representation of the object as a dictionary.
 
         """
-        from taurus.client.json_encoder import thin_dumps
-        return json.loads(thin_dumps(self))
+        from taurus.client.json_encoder import raw_dumps
+        return json.loads(raw_dumps(self))
 
     @staticmethod
     def build(d):
@@ -94,8 +95,9 @@ class DictSerializable(ABC):
             The deserialized object.
 
         """
-        from taurus.client.json_encoder import loads, dumps
-        return loads(dumps(d))
+        from taurus.client.json_encoder import raw_dumps, raw_loads
+
+        return raw_loads(raw_dumps(d))
 
     def __repr__(self):
         object_dict = self.as_dict()
