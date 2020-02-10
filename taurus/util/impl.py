@@ -118,8 +118,9 @@ def flatten(obj):
       - Making sure at least one uid is set in each BaseEntity in scope
       - Getting a list of unique objects contained in the scope
       - Substituting the pointers in those objects with LinkByUID objects
+      - Sorting the output so an object is listed after all of its dependencies
 
-    Flattening obeys chronlogical ordering: if you flatten a process, you _will_ get the
+    Flattening obeys reverse chronological ordering: if you flatten a process, you _will_ get the
     ingredients of the process in the result, even though process.ingredients is skipped.
     This supports the flattening of entire material histories.
 
@@ -202,7 +203,7 @@ def recursive_flatmap(obj, func, seen=None, chronological=False):
     :param obj: target of the operation
     :param func: function to apply; must be list-valued
     :param seen: set of seen objects (default=None).  DON'T PASS THIS
-    :param chronological causes func to be called in reverse chronological order,
+    :param chronological: causes func to be called in reverse chronological order,
      rather than the default writable-link-based ordering
     :return: a list of accumulated return values
     """
