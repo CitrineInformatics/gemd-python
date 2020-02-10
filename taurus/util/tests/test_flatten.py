@@ -29,8 +29,7 @@ def test_flatten_empty_history():
     procured_run = ProcessRun(name="procured", spec=procured)
     input_run = MaterialRun(name="foo", process=procured_run, spec=input)
     transform_run = ProcessRun(name="transformed", spec=transform)
-    ingredient_run = IngredientRun(
-        name="input", material=input_run, process=transform_run, spec=ingredient)
+    ingredient_run = IngredientRun(material=input_run, process=transform_run, spec=ingredient)
 
     assert len(flatten(procured)) == 0
     assert len(flatten(input)) == 1
@@ -48,7 +47,7 @@ def test_flatmap_skip_ordering():
     # The writeable link is ingredient -> process, but the chronological link is
     # process -> ingredient
     proc = ProcessRun(name="foo")
-    IngredientRun(name="bar", process=proc)
+    IngredientRun(notes="bar", process=proc)
 
     assert len(recursive_flatmap(proc, lambda x: [x], chronological=True)) == 2
     assert len(recursive_flatmap(proc, lambda x: [x], chronological=False)) == 0
