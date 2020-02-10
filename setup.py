@@ -58,7 +58,8 @@ setup(name='taurus-citrine',
           "pint>=0.9",
           "strip-hints>=0.1.5"
       ],
-      cmdclass={
-          'install': PostInstallCommand,
-          'develop': PostDevelopCommand
-      })
+      # cmdclass={
+      #     'install': PostInstallCommand,
+      #     'develop': PostDevelopCommand
+      #}
+      )
