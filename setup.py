@@ -58,6 +58,7 @@ setup(name='taurus-citrine',
           "pint>=0.9",
           "strip-hints>=0.1.5"
       ],
+      # TODO: add this back when we apply them on deployments
       # cmdclass={
       #     'install': PostInstallCommand,
       #     'develop': PostDevelopCommand
