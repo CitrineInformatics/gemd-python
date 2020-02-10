@@ -244,7 +244,7 @@ def test_case_insensitive_rehydration():
 
 
 def test_many_ingredients():
-    """Test that ingredients remain connected to processes when round-robined through json"""
+    """Test that ingredients remain connected to processes when round-robined through json."""
     proc = ProcessRun("foo", spec=ProcessSpec("sfoo"))
     expected = []
     for i in range(10):
