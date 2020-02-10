@@ -10,7 +10,7 @@ from taurus.enumeration import Origin
 
 # recommended values taken from
 # https://www.shimadzu.com/an/industry/petrochemicalchemical/n9j25k00000pyv3w.html
-thickness: float = 4.0  # mm
+thickness = 4.0  # mm
 length = 80.0  # mm
 width = 10.0  # mm
 span = 64.0  # mm

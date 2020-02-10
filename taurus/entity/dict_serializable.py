@@ -1,6 +1,5 @@
 from abc import ABC
 from logging import getLogger
-from typing import Iterable  # noqa: F401
 
 import json
 import inspect
@@ -15,7 +14,7 @@ class DictSerializable(ABC):
     """A base class for objects that can be represented as a dictionary and serialized."""
 
     typ = NotImplemented
-    skip: Iterable[str] = set()
+    skip = set()
 
     @classmethod
     def from_dict(cls, d):
