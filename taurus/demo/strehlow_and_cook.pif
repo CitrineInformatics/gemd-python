@@ -54031,7 +54031,7 @@
         "name": "Temperature derivative of band gap",
         "scalars": [
           {
-            "value": "6.00e04"
+            "value": "6.00e-04"
           }
         ],
         "units": "eV/K",

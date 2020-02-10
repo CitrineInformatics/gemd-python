@@ -38,7 +38,7 @@ def test_serialize():
     # serialize the root of the tree
     native_object = json.loads(dumps(measurement))
     # ingredients don't get serialized on the process
-    assert(len(native_object[0]) == 3)
+    assert(len(native_object[0]) == 5)
     assert(native_object[1]["type"] == LinkByUID.typ)
 
     # serialize all of the nodes
@@ -147,11 +147,10 @@ def test_unexpected_deserialization():
         def __init__(self, foo):
             self.foo = foo
 
-    # DummyClass can be serialized because it is a DictSerializable, but cannot be
-    # deserialized because it is not in the _clazzes list.
-    serialized = dumps(ProcessRun("A process", notes=DummyClass("something")))
+    # DummyClass cannot be serialized since dumps will round-robin serialize
+    # in the substitute_links method
     with pytest.raises(TypeError):
-        loads(serialized)
+        dumps(ProcessRun("A process", notes=DummyClass("something")))
 
 
 def test_pure_subsitutions():
@@ -271,194 +270,6 @@ def test_deeply_nested_rehydration():
 [
   [
     {
-      "type": "material_spec",
-      "properties": [],
-      "uids": {
-        "id": "230fc837-8a19-402c-86ad-e451b7a80f9d"
-      },
-      "tags": [],
-      "name": "Flour",
-      "file_links": []
-    },
-    {
-      "type": "material_run",
-      "spec": {
-        "type": "link_by_uid",
-        "scope": "id",
-        "id": "230fc837-8a19-402c-86ad-e451b7a80f9d"
-      },
-      "sample_type": "unknown",
-      "uids": {
-        "id": "76185e4f-c778-4654-a2ae-cc49851e291f"
-      },
-      "tags": [],
-      "name": "Flour",
-      "file_links": []
-    },
-    {
-      "type": "ingredient_run",
-      "material": {
-        "type": "link_by_uid",
-        "scope": "id",
-        "id": "76185e4f-c778-4654-a2ae-cc49851e291f"
-      },
-      "process": {
-        "type": "link_by_uid",
-        "scope": "id",
-        "id": "7cb9471b-0c90-4fd9-bfe1-0e9d7602ab0d"
-      },
-      "spec": {
-        "type": "link_by_uid",
-        "scope": "id",
-        "id": "f694d2cc-5b00-42ef-92b7-dee3cdc7239a"
-      },
-      "name": "500 g flour",
-      "labels": [],
-      "uids": {
-        "id": "36aa5bff-c89d-43fa-95c8-fa6b710061d8"
-      },
-      "tags": [],
-      "file_links": []
-    },
-    {
-      "type": "material_spec",
-      "properties": [
-        {
-          "property": {
-            "type": "property",
-            "name": "mass",
-            "value": {
-              "type": "normal_real",
-              "mean": 0.84,
-              "std": 0.04,
-              "units": "gram"
-            },
-            "template": {
-              "type": "link_by_uid",
-              "scope": "id",
-              "id": "3b46b191-b3d0-4b31-bdba-377cca315cbd"
-            },
-            "origin": "unknown",
-            "file_links": []
-          },
-          "conditions": [
-            {
-              "type": "condition",
-              "name": "temperature",
-              "value": {
-                "type": "nominal_real",
-                "nominal": 20,
-                "units": "degC"
-              },
-              "template": {
-                "type": "link_by_uid",
-                "scope": "id",
-                "id": "09fb94ab-17fb-4428-a20e-d6b0d0ae5fb2"
-              },
-              "origin": "unknown",
-              "file_links": []
-            }
-          ],
-          "type": "property_and_conditions"
-        }
-      ],
-      "uids": {
-        "id": "39ec0605-0b9b-443c-ab6a-4d7bc1b73b24"
-      },
-      "tags": [],
-      "name": "Butter",
-      "file_links": []
-    },
-    {
-      "type": "material_run",
-      "spec": {
-        "type": "link_by_uid",
-        "scope": "id",
-        "id": "39ec0605-0b9b-443c-ab6a-4d7bc1b73b24"
-      },
-      "sample_type": "unknown",
-      "uids": {
-        "id": "605bf096-3b2d-4c3b-afaf-f77bcff9806f"
-      },
-      "tags": [],
-      "name": "Butter",
-      "file_links": []
-    },
-    {
-      "type": "ingredient_run",
-      "material": {
-        "type": "link_by_uid",
-        "scope": "id",
-        "id": "605bf096-3b2d-4c3b-afaf-f77bcff9806f"
-      },
-      "process": {
-        "type": "link_by_uid",
-        "scope": "id",
-        "id": "7cb9471b-0c90-4fd9-bfe1-0e9d7602ab0d"
-      },
-      "spec": {
-        "type": "link_by_uid",
-        "scope": "id",
-        "id": "118eacb7-6edc-4e57-b40b-2971481d37e5"
-      },
-      "name": "1 stick butter",
-      "labels": [],
-      "absolute_quantity": {
-        "type": "nominal_real",
-        "nominal": 1,
-        "units": "dimensionless"
-      },
-      "uids": {
-        "id": "91ab45f2-ceec-4109-8f74-2f9964a4bc2c"
-      },
-      "tags": [],
-      "file_links": []
-    },
-    {
-      "type": "ingredient_spec",
-      "material": {
-        "type": "link_by_uid",
-        "scope": "id",
-        "id": "39ec0605-0b9b-443c-ab6a-4d7bc1b73b24"
-      },
-      "process": {
-        "type": "link_by_uid",
-        "scope": "id",
-        "id": "f77dc327-ef44-4a39-a617-061ace5fa789"
-      },
-      "labels": [],
-      "uids": {
-        "id": "118eacb7-6edc-4e57-b40b-2971481d37e5"
-      },
-      "tags": [],
-      "file_links": []
-    },
-    {
-      "type": "ingredient_spec",
-      "material": {
-        "type": "link_by_uid",
-        "scope": "id",
-        "id": "230fc837-8a19-402c-86ad-e451b7a80f9d"
-      },
-      "process": {
-        "type": "link_by_uid",
-        "scope": "id",
-        "id": "f77dc327-ef44-4a39-a617-061ace5fa789"
-      },
-      "labels": [],
-      "absolute_quantity": {
-        "type": "normal_real",
-        "mean": 500,
-        "std": 50,
-        "units": "gram"
-      },
-      "uids": {
-        "id": "f694d2cc-5b00-42ef-92b7-dee3cdc7239a"
-      },
-      "tags": [],
-      "file_links": []
-    },
-    {
       "type": "process_spec",
       "parameters": [
         {
@@ -522,6 +333,16 @@ def test_deeply_nested_rehydration():
     },
     {
       "type": "material_spec",
+      "properties": [],
+      "uids": {
+        "id": "230fc837-8a19-402c-86ad-e451b7a80f9d"
+      },
+      "tags": [],
+      "name": "Flour",
+      "file_links": []
+    },
+    {
+      "type": "material_spec",
       "process": {
         "type": "link_by_uid",
         "scope": "id",
@@ -533,6 +354,203 @@ def test_deeply_nested_rehydration():
       },
       "tags": [],
       "name": "An ideal cake",
+      "file_links": []
+    },
+    {
+      "type": "material_spec",
+      "properties": [
+        {
+          "property": {
+            "type": "property",
+            "name": "mass",
+            "value": {
+              "type": "normal_real",
+              "mean": 0.84,
+              "std": 0.04,
+              "units": "gram"
+            },
+            "template": {
+              "type": "link_by_uid",
+              "scope": "id",
+              "id": "3b46b191-b3d0-4b31-bdba-377cca315cbd"
+            },
+            "origin": "unknown",
+            "file_links": []
+          },
+          "conditions": [
+            {
+              "type": "condition",
+              "name": "temperature",
+              "value": {
+                "type": "nominal_real",
+                "nominal": 20,
+                "units": "degC"
+              },
+              "template": {
+                "type": "link_by_uid",
+                "scope": "id",
+                "id": "09fb94ab-17fb-4428-a20e-d6b0d0ae5fb2"
+              },
+              "origin": "unknown",
+              "file_links": []
+            }
+          ],
+          "type": "property_and_conditions"
+        }
+      ],
+      "uids": {
+        "id": "39ec0605-0b9b-443c-ab6a-4d7bc1b73b24"
+      },
+      "tags": [],
+      "name": "Butter",
+      "file_links": []
+    },
+    {
+      "type": "ingredient_spec",
+      "material": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "39ec0605-0b9b-443c-ab6a-4d7bc1b73b24"
+      },
+      "process": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "f77dc327-ef44-4a39-a617-061ace5fa789"
+      },
+      "labels": [],
+      "uids": {
+        "id": "118eacb7-6edc-4e57-b40b-2971481d37e5"
+      },
+      "tags": [],
+      "file_links": []
+    },
+    {
+      "type": "ingredient_spec",
+      "material": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "230fc837-8a19-402c-86ad-e451b7a80f9d"
+      },
+      "process": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "f77dc327-ef44-4a39-a617-061ace5fa789"
+      },
+      "labels": [],
+      "absolute_quantity": {
+        "type": "normal_real",
+        "mean": 500,
+        "std": 50,
+        "units": "gram"
+      },
+      "uids": {
+        "id": "f694d2cc-5b00-42ef-92b7-dee3cdc7239a"
+      },
+      "tags": [],
+      "file_links": []
+    },
+    {
+      "type": "material_run",
+      "spec": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "230fc837-8a19-402c-86ad-e451b7a80f9d"
+      },
+      "sample_type": "unknown",
+      "uids": {
+        "id": "76185e4f-c778-4654-a2ae-cc49851e291f"
+      },
+      "tags": [],
+      "name": "Flour",
+      "file_links": []
+    },
+        {
+      "type": "material_run",
+      "spec": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "39ec0605-0b9b-443c-ab6a-4d7bc1b73b24"
+      },
+      "sample_type": "unknown",
+      "uids": {
+        "id": "605bf096-3b2d-4c3b-afaf-f77bcff9806f"
+      },
+      "tags": [],
+      "name": "Butter",
+      "file_links": []
+    },{
+      "type": "material_run",
+      "process": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "7cb9471b-0c90-4fd9-bfe1-0e9d7602ab0d"
+      },
+      "spec": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "b935aa7d-93a4-407f-937f-cca32d7a8413"
+      },
+      "sample_type": "unknown",
+      "uids": {
+        "id": "f0f41fb9-32dc-4903-aaf4-f369de71530f"
+      },
+      "tags": [],
+      "name": "A cake",
+      "file_links": []
+    },
+    {
+      "type": "ingredient_run",
+      "material": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "76185e4f-c778-4654-a2ae-cc49851e291f"
+      },
+      "process": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "7cb9471b-0c90-4fd9-bfe1-0e9d7602ab0d"
+      },
+      "spec": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "f694d2cc-5b00-42ef-92b7-dee3cdc7239a"
+      },
+      "name": "500 g flour",
+      "labels": [],
+      "uids": {
+        "id": "36aa5bff-c89d-43fa-95c8-fa6b710061d8"
+      },
+      "tags": [],
+      "file_links": []
+    },
+    {
+      "type": "ingredient_run",
+      "material": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "605bf096-3b2d-4c3b-afaf-f77bcff9806f"
+      },
+      "process": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "7cb9471b-0c90-4fd9-bfe1-0e9d7602ab0d"
+      },
+      "spec": {
+        "type": "link_by_uid",
+        "scope": "id",
+        "id": "118eacb7-6edc-4e57-b40b-2971481d37e5"
+      },
+      "name": "1 stick butter",
+      "labels": [],
+      "absolute_quantity": {
+        "type": "nominal_real",
+        "nominal": 1,
+        "units": "dimensionless"
+      },
+      "uids": {
+        "id": "91ab45f2-ceec-4109-8f74-2f9964a4bc2c"
+      },
+      "tags": [],
       "file_links": []
     },
     {
@@ -573,24 +591,9 @@ def test_deeply_nested_rehydration():
     }
   ],
   {
-    "type": "material_run",
-    "process": {
-      "type": "link_by_uid",
-      "scope": "id",
-      "id": "7cb9471b-0c90-4fd9-bfe1-0e9d7602ab0d"
-    },
-    "spec": {
-      "type": "link_by_uid",
-      "scope": "id",
-      "id": "b935aa7d-93a4-407f-937f-cca32d7a8413"
-    },
-    "sample_type": "unknown",
-    "uids": {
-      "id": "f0f41fb9-32dc-4903-aaf4-f369de71530f"
-    },
-    "tags": [],
-    "name": "A cake",
-    "file_links": []
+    "type": "link_by_uid",
+    "scope": "id",
+    "id": "f0f41fb9-32dc-4903-aaf4-f369de71530f"
   }
 ]
     '''
