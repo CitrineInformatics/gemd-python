@@ -50,7 +50,7 @@ def test_material_run():
 
 def test_process_run():
     """Test that a process run can house a material, and that it survives serde."""
-    process_run = ProcessRun("Bake a cake", uids={'My_ID': 17})
+    process_run = ProcessRun("Bake a cake", uids={'My_ID': str(17)})
     material_run = MaterialRun("A cake", process=process_run)
 
     # Check that a bi-directional link is established

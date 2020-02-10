@@ -7,6 +7,11 @@ from taurus.entity.dict_serializable import DictSerializable
 from taurus.entity.link_by_uid import LinkByUID
 from toolz import concatv
 
+from taurus.entity.object import MeasurementSpec, ProcessSpec, MaterialSpec, IngredientSpec, \
+    MeasurementRun, IngredientRun, MaterialRun, ProcessRun
+from taurus.entity.template.attribute_template import AttributeTemplate
+from taurus.entity.template.base_template import BaseTemplate
+
 
 def set_uuids(obj, name="auto"):
     """
@@ -57,7 +62,7 @@ def _substitute(thing,
     elif isinstance(thing, DictSerializable):
         new_attrs = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
                      for k, v in thing.as_dict().items()}
-        new = thing.from_dict(new_attrs)
+        new = thing.build(new_attrs)
     else:
         new = thing
 
@@ -66,6 +71,7 @@ def _substitute(thing,
     if new.__hash__ is not None:
         visited[new] = new
 
+    # assert type(thing) == type(new), "{} is not {}".format(type(thing), type(new))
     return new
 
 
@@ -112,6 +118,12 @@ def flatten(obj):
       - Making sure at least one uid is set in each BaseEntity in scope
       - Getting a list of unique objects contained in the scope
       - Substituting the pointers in those objects with LinkByUID objects
+      - Sorting the output so an object is listed after all of its dependencies
+
+    Flattening obeys reverse chronological ordering: if you flatten a process, you _will_ get the
+    ingredients of the process in the result, even though process.ingredients is skipped.
+    This supports the flattening of entire material histories.
+
     :param obj: defining the scope of the flatten
     :return: a list of BaseEntity with LinkByUIDs to any BaseEntity members
     """
@@ -120,6 +132,9 @@ def flatten(obj):
 
     # list of uids that we've seen, to avoid returning duplicates
     known_uids = set()
+    if isinstance(obj, BaseEntity):
+        for uid in obj.uids.items():
+            known_uids.add(uid)
 
     def _flatten(base_obj):
         to_return = []
@@ -136,8 +151,8 @@ def flatten(obj):
 
         return to_return
 
-    res = recursive_flatmap(obj, _flatten)
-    return [substitute_links(x) for x in res]
+    res = recursive_flatmap(obj, _flatten, chronological=True)
+    return sorted([substitute_links(x) for x in res], key=lambda x: _flattened_sort_order(x))
 
 
 def recursive_foreach(obj, func, apply_first=False, seen=None):
@@ -181,13 +196,15 @@ def recursive_foreach(obj, func, apply_first=False, seen=None):
     return
 
 
-def recursive_flatmap(obj, func, seen=None):
+def recursive_flatmap(obj, func, seen=None, chronological=False):
     """
     Recursively apply and accumulate a list-valued function to BaseEntity members.
 
     :param obj: target of the operation
     :param func: function to apply; must be list-valued
     :param seen: set of seen objects (default=None).  DON'T PASS THIS
+    :param chronological: causes func to be called in reverse chronological order,
+     rather than the default writable-link-based ordering
     :return: a list of accumulated return values
     """
     res = []
@@ -203,24 +220,46 @@ def recursive_flatmap(obj, func, seen=None):
     if isinstance(obj, (list, tuple)):
         for i, x in enumerate(obj):
             if isinstance(x, BaseEntity):
-                res.extend(recursive_flatmap(x, func, seen))
+                res.extend(recursive_flatmap(x, func, seen, chronological))
                 res.extend(func(x))
             else:
-                res.extend(recursive_flatmap(x, func, seen))
+                res.extend(recursive_flatmap(x, func, seen, chronological))
     elif isinstance(obj, dict):
         for x in concatv(obj.keys(), obj.values()):
             if isinstance(x, BaseEntity):
-                res.extend(recursive_flatmap(x, func, seen))
+                res.extend(recursive_flatmap(x, func, seen, chronological))
                 res.extend(func(x))
             else:
-                res.extend(recursive_flatmap(x, func, seen))
+                res.extend(recursive_flatmap(x, func, seen, chronological))
     elif isinstance(obj, DictSerializable):
         for k, x in sorted(obj.__dict__.items()):
-            if isinstance(obj, BaseEntity) and k in obj.skip:
+            if chronological and isinstance(obj, BaseEntity) and k in obj._forward:
+                continue
+            if not chronological and isinstance(obj, BaseEntity) and k in obj.skip:
                 continue
             if isinstance(x, BaseEntity):
-                res.extend(recursive_flatmap(x, func, seen))
+                res.extend(recursive_flatmap(x, func, seen, chronological))
                 res.extend(func(x))
             else:
-                res.extend(recursive_flatmap(x, func, seen))
+                res.extend(recursive_flatmap(x, func, seen, chronological))
     return res
+
+
+def _flattened_sort_order(obj: BaseEntity) -> int:
+    """Sort order for flattening such that the objects can be read back and re-nested."""
+    if isinstance(obj, AttributeTemplate):
+        return 0
+    if isinstance(obj, BaseTemplate):
+        return 1
+    if isinstance(obj, (ProcessSpec, MeasurementSpec)):
+        return 2
+    if isinstance(obj, MaterialSpec):
+        return 3
+    if isinstance(obj, IngredientSpec):
+        return 4
+    if isinstance(obj, ProcessRun):
+        return 5
+    if isinstance(obj, MaterialRun):
+        return 6
+    if isinstance(obj, (IngredientRun, MeasurementRun)):
+        return 7
