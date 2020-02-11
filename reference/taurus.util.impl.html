@@ -42,9 +42,13 @@
 <li><p>Making sure at least one uid is set in each BaseEntity in scope</p></li>
 <li><p>Getting a list of unique objects contained in the scope</p></li>
 <li><p>Substituting the pointers in those objects with LinkByUID objects</p></li>
+<li><p>Sorting the output so an object is listed after all of its dependencies</p></li>
 </ul>
 </dd>
 </dl>
+<p>Flattening obeys reverse chronological ordering: if you flatten a process, you _will_ get the
+ingredients of the process in the result, even though process.ingredients is skipped.
+This supports the flattening of entire material histories.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>obj</strong> – defining the scope of the flatten</p>
@@ -57,7 +61,7 @@
 
 <dl class="function">
 <dt id="taurus.util.impl.recursive_flatmap">
-<code class="sig-prename descclassname">taurus.util.impl.</code><code class="sig-name descname">recursive_flatmap</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">func</em>, <em class="sig-param">seen=None</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.util.impl.recursive_flatmap" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">taurus.util.impl.</code><code class="sig-name descname">recursive_flatmap</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">func</em>, <em class="sig-param">seen=None</em>, <em class="sig-param">chronological=False</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.util.impl.recursive_flatmap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recursively apply and accumulate a list-valued function to BaseEntity members.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -65,6 +69,8 @@
 <li><p><strong>obj</strong> – target of the operation</p></li>
 <li><p><strong>func</strong> – function to apply; must be list-valued</p></li>
 <li><p><strong>seen</strong> – set of seen objects (default=None).  DON’T PASS THIS</p></li>
+<li><p><strong>chronological</strong> – causes func to be called in reverse chronological order,
+rather than the default writable-link-based ordering</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

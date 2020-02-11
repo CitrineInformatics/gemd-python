@@ -52,11 +52,14 @@ Example: CaseInsensitiveDict(one=1, two=”two”).</p></li>
 </dl>
 <dl class="method">
 <dt id="taurus.entity.case_insensitive_dict.CaseInsensitiveDict.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param">key: str</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.case_insensitive_dict.CaseInsensitiveDict.get" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param">key: str</em>, <em class="sig-param">default=None</em><span class="sig-paren">)</span><a class="headerlink" href="#taurus.entity.case_insensitive_dict.CaseInsensitiveDict.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the value for a given case-insensitive key.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>key</strong> (<em>str</em>) – The key to look up (possibly with a different casing).</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>str</em>) – The key to look up (possibly with a different casing).</p></li>
+<li><p><strong>default</strong> (<em>Any</em>) – The result to return if the key is not present.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The value associated with the case-insensitive version of <cite>key</cite>, or None
