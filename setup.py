@@ -36,7 +36,7 @@ class PostDevelopCommand(develop):
 
 
 setup(name='taurus-citrine',
-      version='0.4.0',
+      version='0.5.0',
       url='http://github.com/CitrineInformatics/taurus',
       description='Python library for the Citrine Platform',
       author='Max Hutchinson',
@@ -44,7 +44,9 @@ setup(name='taurus-citrine',
       packages=find_packages(),
       package_data={
           'taurus': [
-              'demo/strehlow_and_cook.json',
+              'demo/strehlow_and_cook.pif',
+              'demo/strehlow_and_cook_small.pif',
+              'demo/toothpick.jpg',
               'units/citrine_en.txt',
               'units/constants_en.txt'
           ]
@@ -56,7 +58,9 @@ setup(name='taurus-citrine',
           "pint>=0.9",
           "strip-hints>=0.1.5"
       ],
-      cmdclass={
-          'install': PostInstallCommand,
-          'develop': PostDevelopCommand
-      })
+      # TODO: add this back when we apply them on deployments
+      # cmdclass={
+      #     'install': PostInstallCommand,
+      #     'develop': PostDevelopCommand
+      # }
+      )

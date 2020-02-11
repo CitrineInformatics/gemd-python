@@ -37,7 +37,7 @@ from taurus.entity.value.normal_real import NormalReal
 from taurus.entity.value.uniform_integer import UniformInteger
 from taurus.entity.value.uniform_real import UniformReal
 from taurus.enumeration.base_enumeration import BaseEnumeration
-from taurus.util import flatten, substitute_links, set_uuids, substitute_objects
+from taurus.util import flatten, substitute_links, set_uuids
 
 
 def dumps(obj, **kwargs):
@@ -86,10 +86,9 @@ def loads(json_str, **kwargs):
     # Create an index to hold the objects by their uid reference
     # so we can replace links with pointers
     index = {}
-    raw = json.loads(json_str, object_hook=lambda x: _loado(x, index), **kwargs)
+    raw = json.loads(json_str, object_hook=lambda x: _loado(x, index, True), **kwargs)
     # the return value is in the 2nd position.
-    subbed = substitute_objects(raw, index)
-    return subbed[1]
+    return raw[1]
 
 
 def load(fp, **kwargs):
@@ -134,6 +133,26 @@ def dump(obj, fp, **kwargs):
     return
 
 
+def raw_dumps(obj, **kwargs):
+    """
+    Serialize the object as-is, which could be as a nested object.
+
+    Parameters
+    ----------
+    obj:
+        Object to dump
+    **kwargs: keyword args, optional
+        Optional keyword arguments to pass to `json.dumps()`.
+
+    Returns
+    -------
+    str
+        A serialized string of `obj`, which could be nested
+
+    """
+    return json.dumps(obj, cls=TaurusEncoder, sort_keys=True, **kwargs)
+
+
 def thin_dumps(obj, **kwargs):
     """
     Serialize a "thin" version of an object in which pointers are replaced by links.
@@ -154,6 +173,29 @@ def thin_dumps(obj, **kwargs):
     set_uuids(obj)
     res = substitute_links(obj)
     return json.dumps(res, cls=TaurusEncoder, sort_keys=True, **kwargs)
+
+
+def raw_loads(json_str, **kwargs):
+    """
+    Deserialize a json-formatted string with no preamble into a taurus object as-is.
+
+    Parameters
+    ----------
+    json_str: str
+        A string representing the serialized objects, such as what is produced by :func:`dumps`.
+    **kwargs: keyword args, optional
+        Optional keyword arguments to pass to `json.loads()`.
+
+    Returns
+    -------
+    DictSerializable or List[DictSerializable]
+        Deserialized versions of the objects represented by `json_str`
+
+    """
+    # Create an index to hold the objects by their uid reference
+    # so we can replace links with pointers
+    index = {}
+    return json.loads(json_str, object_hook=lambda x: _loado(x, index), **kwargs)
 
 
 def copy(obj):
@@ -192,7 +234,7 @@ for clazz in _clazzes:
     _clazz_index[clazz.typ] = clazz
 
 
-def _loado(d, index):
+def _loado(d, index, substitute=False):
     if "type" not in d:
         return d
     typ = d.pop("type")
@@ -202,6 +244,8 @@ def _loado(d, index):
         obj = clz.from_dict(d)
     elif typ == LinkByUID.typ:
         obj = LinkByUID.from_dict(d)
+        if substitute and (obj.scope.lower(), obj.id) in index:
+            return index[(obj.scope.lower(), obj.id)]
         return obj
     else:
         raise TypeError("Unexpected base object type: {}".format(typ))

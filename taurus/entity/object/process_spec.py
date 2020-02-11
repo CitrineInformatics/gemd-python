@@ -1,3 +1,5 @@
+from typing import Iterable
+
 from taurus.entity.object.base_object import BaseObject
 from taurus.entity.object.has_parameters import HasParameters
 from taurus.entity.object.has_conditions import HasConditions
@@ -82,3 +84,17 @@ class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
     def output_material(self):
         """Get the output material spec."""
         return self._output_material
+
+    @property
+    def _forward(self) -> Iterable[str]:
+        """List of forward links that should be skipped when doing a chronological traversal.
+
+        Usually, this is the same as the skip list.  However, the link direction between
+        ingredients and processes is flipped: the ingredient -> process links is the writeable one
+        while the process -> ingredient link is read-only.  This is the opposite of chronological
+        order, so _forward gives a way to express the chronological ordering as well.
+
+        Ingredients are _not_ forward links, even though they are skipped, so they are not included
+        below.
+        """
+        return {"_output_material"}

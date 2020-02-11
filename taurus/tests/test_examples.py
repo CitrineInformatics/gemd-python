@@ -51,7 +51,7 @@ def make_data_island(density, bulk_modulus, firing_temperature, binders, powders
     binder_runs = keymap(lambda x: MaterialRun(spec=x), binder_specs)
     powder_runs = keymap(lambda x: MaterialRun(spec=x), powder_specs)
 
-    all_input_materials = merge(binder_runs, powder_runs)
+    all_input_materials = keymap(lambda x: x.spec.name, merge(binder_runs, powder_runs))
     mixing_composition = Condition(
         name="composition",
         value=NominalComposition(all_input_materials)
@@ -157,9 +157,9 @@ def test_access_data():
     # read the quantity of alumina
     quantities = island.process.ingredients[0].material.process.conditions[0].value.quantities
     assert(list(
-        keyfilter(lambda x: x.spec.name == "Al2O3", quantities).values()
+        keyfilter(lambda x: x == "Al2O3", quantities).values()
     )[0] == 0.96)
 
     # check that the serialization results in the correct number of objects in the preface
     # (note that neither measurements nor ingredients are serialized)
-    assert(len(json.loads(dumps(island))[0]) == 8)
+    assert(len(json.loads(dumps(island))[0]) == 23)

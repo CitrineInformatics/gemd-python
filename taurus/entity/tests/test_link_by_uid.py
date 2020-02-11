@@ -1,6 +1,5 @@
 """General tests of LinkByUID dynamics."""
 from taurus.client.json_encoder import dumps, loads
-from taurus.entity.util import complete_material_history
 from taurus.entity.object.material_run import MaterialRun
 from taurus.entity.object.process_run import ProcessRun
 from taurus.entity.object.ingredient_run import IngredientRun
@@ -14,6 +13,5 @@ def test_link_by_uid():
     IngredientRun(process=root.process, material=leaf)
     IngredientRun(process=root.process, material=LinkByUID.from_entity(leaf))
 
-    hist = complete_material_history(root)
-    copy = loads(dumps(hist))[-1]
+    copy = loads(dumps(root))
     assert copy.process.ingredients[0].material == copy.process.ingredients[1].material
