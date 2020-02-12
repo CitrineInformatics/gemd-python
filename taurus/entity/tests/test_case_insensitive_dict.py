@@ -23,6 +23,11 @@ def test_case_sensitivity():
     assert data_dict['KEY2'] == 22
     assert data_dict.get('KEY2') == 22
 
+    # A failed get with a default value is not fatal
+    with pytest.raises(KeyError):
+        data_dict['KEY4'] == 4
+    data_dict.get('Key4', 4) == 4
+
     # Check that the keys maintain their original case
     assert set(data_dict.keys()) == {'key1', 'key2', 'kEY3'}
 
