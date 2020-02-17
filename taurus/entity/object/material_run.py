@@ -126,4 +126,11 @@ class MaterialRun(BaseObject):
 
     @property
     def _forward(self) -> Iterable[str]:
+        """List of forward links that should be skipped when doing a chronological traversal.
+
+        There are no forward links present in the material run.  The only item in skip,
+        measurements, should be included when doing a "chronological" traversal.  It just
+        shouldn't be included *as a member* when serializing the material run objects.
+        :return: an empty set
+        """
         return {}
