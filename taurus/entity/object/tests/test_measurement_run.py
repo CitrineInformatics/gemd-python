@@ -69,10 +69,6 @@ def test_material_soft_link():
     assert loads(dumps(fluorescence)) == fluorescence, \
         "Measurement should remain unchanged when serialized"
 
-    # Serializing the material breaks the material-->measurement link.
-    assert loads(dumps(dye)).measurements == [], \
-        "Measurement information should be removed when material is serialized"
-
     assert 'measurements' in repr(dye)
     assert 'material' in repr(fluorescence)
     assert 'material' in repr(absorbance)
