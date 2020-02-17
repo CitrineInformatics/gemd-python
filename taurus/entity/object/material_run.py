@@ -1,3 +1,5 @@
+from typing import Iterable
+
 from taurus.entity.object.base_object import BaseObject
 from taurus.enumeration import SampleType
 
@@ -121,3 +123,7 @@ class MaterialRun(BaseObject):
             return self.spec.template
         else:
             return None
+
+    @property
+    def _forward(self) -> Iterable[str]:
+        return {}
