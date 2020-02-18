@@ -37,7 +37,7 @@ def loads(json_str, **kwargs):
     -------
     DictSerializable or List[DictSerializable]
         Deserialized versions of the objects represented by `json_str`, with links turned
-        back into object references (python's pointers).
+        back into python object references.
 
     """
     return __default.loads(json_str, **kwargs)
