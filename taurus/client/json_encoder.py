@@ -1,6 +1,6 @@
 """Encoding and decoding taurus objects to/from json."""
+import inspect
 import json
-from json import JSONEncoder
 
 from taurus.entity.attribute.condition import Condition
 from taurus.entity.attribute.parameter import Parameter
@@ -37,6 +37,7 @@ from taurus.entity.value.normal_real import NormalReal
 from taurus.entity.value.uniform_integer import UniformInteger
 from taurus.entity.value.uniform_real import UniformReal
 from taurus.enumeration.base_enumeration import BaseEnumeration
+from taurus.json import TaurusEncoder
 from taurus.util import flatten, substitute_links, set_uuids
 
 
@@ -216,6 +217,21 @@ def copy(obj):
     return loads(dumps(obj))
 
 
+def register_classes(classes):
+    if not isinstance(classes, dict):
+        raise ValueError("Must be given a dict from str -> class")
+    non_string_keys = [x for x in classes.keys() if not isinstance(x, str)]
+    if len(non_string_keys) > 0:
+        raise ValueError("The keys must be strings, but got {} as keys".format(non_string_keys))
+    non_class_values = [x for x in classes.values() if not inspect.isclass(x)]
+    if len(non_class_values) > 0:
+        raise ValueError(
+            "The values must be classes, but got {} as values".format(non_class_values))
+
+    _clazz_index.update(classes)
+    return
+
+
 # build index from the class's typ member to the class itself
 _clazzes = [
     MaterialTemplate, MeasurementTemplate, ProcessTemplate,
@@ -256,14 +272,4 @@ def _loado(d, index, substitute=False):
     return obj
 
 
-class TaurusEncoder(JSONEncoder):
-    """Rules for encoding taurus objects as json strings."""
 
-    def default(self, o):
-        """Default encoder implementation."""
-        if isinstance(o, DictSerializable):
-            return o.as_dict()
-        elif isinstance(o, BaseEnumeration):
-            return o.value
-        else:
-            return JSONEncoder.default(self, o)
