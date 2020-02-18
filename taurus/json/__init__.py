@@ -1,4 +1,4 @@
-from .taurus_encoder import TaurusEncoder
+from .taurus_encoder import TaurusEncoder  # noqa: F401
 from .taurus_json import TaurusJson
 
 __default = TaurusJson()

@@ -106,14 +106,14 @@ def complete_material_history(mat):
     """
     from taurus.entity.base_entity import BaseEntity
     import json
-    from taurus.client.json_encoder import dumps, loads
+    from taurus.json import dumps, loads
     from taurus.util.impl import substitute_links
 
     result = []
 
     def body(obj: BaseEntity):
         copy = substitute_links(loads(dumps(obj)))
-        result.append(json.loads(dumps(copy))[0][0])
+        result.append(json.loads(dumps(copy))["context"][0])
 
     recursive_foreach(mat, body, apply_first=False)
 

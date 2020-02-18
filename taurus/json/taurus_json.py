@@ -9,7 +9,6 @@ from taurus.entity.bounds.categorical_bounds import CategoricalBounds
 from taurus.entity.bounds.composition_bounds import CompositionBounds
 from taurus.entity.bounds.integer_bounds import IntegerBounds
 from taurus.entity.bounds.real_bounds import RealBounds
-from taurus.entity.dict_serializable import DictSerializable
 from taurus.entity.file_link import FileLink
 from taurus.entity.link_by_uid import LinkByUID
 from taurus.entity.object import ProcessRun, MaterialRun, MeasurementRun
@@ -35,11 +34,48 @@ from taurus.entity.value.normal_real import NormalReal
 from taurus.entity.value.uniform_integer import UniformInteger
 from taurus.entity.value.uniform_real import UniformReal
 from taurus.json import TaurusEncoder
-from taurus.util import flatten, substitute_links
-import json
+from taurus.util import flatten, substitute_links, set_uuids
+import json as json_builtin
 
 
 class TaurusJson(object):
+    """
+    Class that provides json load/dump functionality that is compatible with taurus objects.
+
+    Taurus objects are connected to one another forming a graph.  This presents two challenges:
+      a) Cycles need to be broken, forming an directed acyclic graph
+      b) Duplicate paths to the same object need to be written to a single object and then
+         deserialized into the same object
+
+    The (a) problem is addressed by the structure of bidirectional taurus links: only one
+    direction of the link is writable.  For example, a link can be created between a
+    material run and a measurement run by setting the `material` field in the measurement run,
+    but not the other way around; the measurements field in material run is read-only.  This
+    is reflected in the json strategy through the `skip` member of DictSerializable, which
+    makes sure that the read-only side of bidirectional links are not written.
+
+    The second part of the solution to (a) is a seen set in the `recursive_flatmap` method
+    in util that is used by `flatten`.
+
+    The (b) problem is resolved by those same `recursive_flatmap` and `flatten` methods.  The
+    `flatten` method does a depth-first traversal of the graph, recording the first time
+    each object is traversed.  This produces a list of all of the objects that are contained
+    in the "historical" subgraph:
+      * material -> {process, measurements}
+      * process -> {ingredients}
+      * ingredient -> {process, input material}
+      * measurement -> {material}
+    This prevents traversing from materials forward to the ingredients that use them, since
+    that link doesn't exist.
+
+    The serialization format is a (context, object) tuple.  The context is the list of
+    flattened objects, while object that was being serialized but with all of the pointers
+    to other taurus entities replaced by LinkByUID objects.  The deserialization is performed
+    with a custom object hook that builds a local index of all of the objects in the context.
+    By the time it gets around to deserializing the object, it knows how to replace all of the
+    LinkByUIDs with taurus entities that had been flattened out.
+    """
+
     _clazzes = [
         MaterialTemplate, MeasurementTemplate, ProcessTemplate,
         MaterialSpec, MeasurementSpec, ProcessSpec, IngredientSpec,
@@ -58,7 +94,6 @@ class TaurusJson(object):
         # build index from the class's typ member to the class itself
         for clazz in self._clazzes:
             self._clazz_index[clazz.typ] = clazz
-        pass
 
     def dumps(self, obj, **kwargs):
         """
@@ -78,11 +113,11 @@ class TaurusJson(object):
 
         """
         # create a top level list of [flattened_objects, link-i-fied return value]
-        res = [obj]
+        res = {"object": obj}
         additional = flatten(res)
         res = substitute_links(res)
-        res.insert(0, additional)
-        return json.dumps(res, cls=TaurusEncoder, sort_keys=True, **kwargs)
+        res["context"] = additional
+        return json_builtin.dumps(res, cls=TaurusEncoder, sort_keys=True, **kwargs)
 
     def loads(self, json_str, **kwargs):
         """
@@ -91,7 +126,7 @@ class TaurusJson(object):
         Parameters
         ----------
         json_str: str
-            A string representing the serialized objects, such as what is produced by :func:`dumps`.
+            A string representing the serialized objects, like what is produced by :func:`dumps`.
         **kwargs: keyword args, optional
             Optional keyword arguments to pass to `json.loads()`.
 
@@ -105,10 +140,10 @@ class TaurusJson(object):
         # Create an index to hold the objects by their uid reference
         # so we can replace links with pointers
         index = {}
-        raw = json.loads(
+        raw = json_builtin.loads(
             json_str, object_hook=lambda x: self._load_and_index(x, index, True), **kwargs)
         # the return value is in the 2nd position.
-        return raw[1]
+        return raw["object"]
 
     def load(self, fp, **kwargs):
         """
@@ -150,12 +185,104 @@ class TaurusJson(object):
         fp.write(self.dumps(obj, **kwargs))
         return
 
+    def copy(self, obj):
+        """
+        Copy an object by dumping and then loading it.
+
+        Parameters
+        ----------
+        obj: DictSerializable
+            Object to copy
+
+        Returns
+        -------
+        DictSerializable
+            A copy of `obj`.
+
+        """
+        return self.loads(self.dumps(obj))
+
+    def raw_dumps(self, obj, **kwargs):
+        """
+        Serialize the object as-is, which could be as a nested object.
+
+        Parameters
+        ----------
+        obj:
+            Object to dump
+        **kwargs: keyword args, optional
+            Optional keyword arguments to pass to `json.dumps()`.
+
+        Returns
+        -------
+        str
+            A serialized string of `obj`, which could be nested
+
+        """
+        return json_builtin.dumps(obj, cls=TaurusEncoder, sort_keys=True, **kwargs)
+
+    def thin_dumps(self, obj, **kwargs):
+        """
+        Serialize a "thin" version of an object in which pointers are replaced by links.
+
+        Parameters
+        ----------
+        obj:
+            Object to dump
+        **kwargs: keyword args, optional
+            Optional keyword arguments to pass to `json.dumps()`.
+
+        Returns
+        -------
+        str
+            A serialized string of `obj`, with link_by_uid in place of pointers to other objects.
+
+        """
+        set_uuids(obj)
+        res = substitute_links(obj)
+        return json_builtin.dumps(res, cls=TaurusEncoder, sort_keys=True, **kwargs)
+
+    def raw_loads(self, json_str, **kwargs):
+        """
+        Deserialize a json-formatted string with no context into a taurus object as-is.
+
+        Parameters
+        ----------
+        json_str: str
+            A string representing the serialized objects, like what is produced by :func:`dumps`.
+        **kwargs: keyword args, optional
+            Optional keyword arguments to pass to `json.loads()`.
+
+        Returns
+        -------
+        DictSerializable or List[DictSerializable]
+            Deserialized versions of the objects represented by `json_str`
+
+        """
+        # Create an index to hold the objects by their uid reference
+        # so we can replace links with pointers
+        index = {}
+        return json_builtin.loads(
+            json_str, object_hook=lambda x: self._load_and_index(x, index), **kwargs)
+
     def register_classes(self, classes):
+        """
+        Register additional classes to the custom deserialization object hook.
+
+        This allows for additional DictSerializable subclasses to be registered to the class index
+        that is used to decode the type strings.  Existing keys are overwritten, allowing classes
+        in the taurus package to be subclassed and overridden in the class index by their
+        subclass.
+
+        :param classes: a dict mapping the type string to the class
+        :return: None
+        """
         if not isinstance(classes, dict):
             raise ValueError("Must be given a dict from str -> class")
         non_string_keys = [x for x in classes.keys() if not isinstance(x, str)]
         if len(non_string_keys) > 0:
-            raise ValueError("The keys must be strings, but got {} as keys".format(non_string_keys))
+            raise ValueError(
+                "The keys must be strings, but got {} as keys".format(non_string_keys))
         non_class_values = [x for x in classes.values() if not inspect.isclass(x)]
         if len(non_class_values) > 0:
             raise ValueError(
@@ -163,7 +290,17 @@ class TaurusJson(object):
 
         self._clazz_index.update(classes)
 
-    def _load_and_index(self, d, index, substitute=False):
+    def _load_and_index(self, d, object_index, substitute=False):
+        """
+        Load the class based on the type string and index it, if a BaseEntity.
+
+        This function is used as the object hook when deserializing taurus objects
+
+        :param d: dictionary to try to load into a registered class instance
+        :param object_index: to add the object to if it is a BaseEntity
+        :param substitute: whether to substitute LinkByUIDs when they are found in the index
+        :return: the deserialized object, or the input dict if it wasn't recognized
+        """
         if "type" not in d:
             return d
         typ = d.pop("type")
@@ -173,13 +310,13 @@ class TaurusJson(object):
             obj = clz.from_dict(d)
         elif typ == LinkByUID.typ:
             obj = LinkByUID.from_dict(d)
-            if substitute and (obj.scope.lower(), obj.id) in index:
-                return index[(obj.scope.lower(), obj.id)]
+            if substitute and (obj.scope.lower(), obj.id) in object_index:
+                return object_index[(obj.scope.lower(), obj.id)]
             return obj
         else:
             raise TypeError("Unexpected base object type: {}".format(typ))
 
         if isinstance(obj, BaseEntity):
             for (scope, uid) in obj.uids.items():
-                index[(scope.lower(), uid)] = obj
+                object_index[(scope.lower(), uid)] = obj
         return obj

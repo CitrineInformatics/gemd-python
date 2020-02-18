@@ -162,4 +162,4 @@ def test_access_data():
 
     # check that the serialization results in the correct number of objects in the preface
     # (note that neither measurements nor ingredients are serialized)
-    assert(len(json.loads(dumps(island))[0]) == 26)
+    assert(len(json.loads(dumps(island))["context"]) == 26)

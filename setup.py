@@ -56,7 +56,8 @@ setup(name='taurus-citrine',
           "pytest>=4.3",
           "enum34",
           "pint>=0.9",
-          "strip-hints>=0.1.5"
+          "strip-hints>=0.1.5",
+          "deprecation>=2.0.7,<3"
       ],
       # TODO: add this back when we apply them on deployments
       # cmdclass={
