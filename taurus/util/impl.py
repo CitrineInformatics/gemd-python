@@ -1,6 +1,6 @@
 """Utility functions."""
 import uuid
-from typing import Dict, Callable
+from typing import Dict, Callable, Union
 
 from taurus.entity.base_entity import BaseEntity
 from taurus.entity.dict_serializable import DictSerializable
@@ -9,8 +9,12 @@ from toolz import concatv
 
 from taurus.entity.object import MeasurementSpec, ProcessSpec, MaterialSpec, IngredientSpec, \
     MeasurementRun, IngredientRun, MaterialRun, ProcessRun
-from taurus.entity.template.attribute_template import AttributeTemplate
-from taurus.entity.template.base_template import BaseTemplate
+from taurus.entity.template.condition_template import ConditionTemplate
+from taurus.entity.template.material_template import MaterialTemplate
+from taurus.entity.template.measurement_template import MeasurementTemplate
+from taurus.entity.template.parameter_template import ParameterTemplate
+from taurus.entity.template.process_template import ProcessTemplate
+from taurus.entity.template.property_template import PropertyTemplate
 
 
 def set_uuids(obj, name="auto"):
@@ -152,7 +156,7 @@ def flatten(obj):
         return to_return
 
     res = recursive_flatmap(obj, _flatten, chronological=True)
-    return sorted([substitute_links(x) for x in res], key=lambda x: _flattened_sort_order(x))
+    return sorted([substitute_links(x) for x in res], key=lambda x: writable_sort_order(x))
 
 
 def recursive_foreach(obj, func, apply_first=False, seen=None):
@@ -245,21 +249,26 @@ def recursive_flatmap(obj, func, seen=None, chronological=False):
     return res
 
 
-def _flattened_sort_order(obj: BaseEntity) -> int:
+def writable_sort_order(key: Union[BaseEntity, str]) -> int:
     """Sort order for flattening such that the objects can be read back and re-nested."""
-    if isinstance(obj, AttributeTemplate):
+    if isinstance(key, BaseEntity):
+        typ = key.typ
+    elif isinstance(key, str):
+        typ = key
+    else:
+        raise ValueError("Can ony sort BaseEntities and type strings, not {}".format(key))
+
+    if typ in [ConditionTemplate.typ, ParameterTemplate.typ, PropertyTemplate.typ]:
         return 0
-    if isinstance(obj, BaseTemplate):
+    if typ in [MaterialTemplate.typ, ProcessTemplate.typ, MeasurementTemplate.typ]:
         return 1
-    if isinstance(obj, (ProcessSpec, MeasurementSpec)):
+    if typ in [ProcessSpec.typ, MeasurementSpec.typ]:
         return 2
-    if isinstance(obj, MaterialSpec):
+    if typ in [ProcessRun.typ, MaterialSpec.typ]:
         return 3
-    if isinstance(obj, IngredientSpec):
+    if typ in [IngredientSpec.typ, MaterialRun.typ]:
         return 4
-    if isinstance(obj, ProcessRun):
+    if typ in [IngredientRun.typ, MeasurementRun.typ]:
         return 5
-    if isinstance(obj, MaterialRun):
-        return 6
-    if isinstance(obj, (IngredientRun, MeasurementRun)):
-        return 7
+
+    raise ValueError("Unrecognized type string: {}".format(typ))
