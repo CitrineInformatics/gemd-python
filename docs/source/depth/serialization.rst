@@ -1,3 +1,5 @@
+.. _Serialization In Depth:
+
 ==============================
 Serialization (with Graphs!)
 ==============================
@@ -26,7 +28,7 @@ c. Objects that are referenced by multiple objects must be deserialized to the s
 These challenges are addressed by a custom json serialization procedure and the special :class:`~taurus.entity.link_by_uid.LinkByUID` class.
 
 1. Each entity that doesn't already have at least one unique identifier is assigned a unique identifier so it can be referenced.
-2. The graph is flattened by traversing it while maintaining a seen list and replacing pointers to other entities with :class:`~taurus.entity.link_by_uid.LinkByUID` objects, producing the set of entities that are reachable.
+2. The graph is flattened by traversing it while maintaining a seen list and replacing object references to other entities with :class:`~taurus.entity.link_by_uid.LinkByUID` objects, producing the set of entities that are reachable.
 3. The objects are sorted into a special "writable" order that ensures that link targets are created when deserializing.
 4. This sorted list of entities is assigned to the "context" field in the serialization output.
 5. The original object (which may contain multiple entities) is assigned to the "object" field in the serialization output.
@@ -83,3 +85,6 @@ it knows how to build taurus entities and other :class:`~taurus.entity.dict_seri
 it creates an index with the unique identifiers of the taurus entities that it has seen so far,
 and it replaces any :class:`~taurus.entity.link_by_uid.LinkByUID` that it encounters with objects from that index.
 The only thing left to do is return the ``"object"`` item from the resulting dictionary.
+
+This strategy is implemented in the :class:`~taurus.json.taurus_json.TaurusJson` class
+and conveniently exposed in the :py:mod:`taurus.json` module, which provides the familiar `json` interface.

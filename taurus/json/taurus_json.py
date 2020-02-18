@@ -42,38 +42,8 @@ class TaurusJson(object):
     """
     Class that provides json load/dump functionality that is compatible with taurus objects.
 
-    Taurus objects are connected to one another forming a graph.  This presents two challenges:
-      a) Cycles need to be broken, forming an directed acyclic graph
-      b) Duplicate paths to the same object need to be written to a single object and then
-         deserialized into the same object
-
-    The (a) problem is addressed by the structure of bidirectional taurus links: only one
-    direction of the link is writable.  For example, a link can be created between a
-    material run and a measurement run by setting the `material` field in the measurement run,
-    but not the other way around; the measurements field in material run is read-only.  This
-    is reflected in the json strategy through the `skip` member of DictSerializable, which
-    makes sure that the read-only side of bidirectional links are not written.
-
-    The second part of the solution to (a) is a seen set in the `recursive_flatmap` method
-    in util that is used by `flatten`.
-
-    The (b) problem is resolved by those same `recursive_flatmap` and `flatten` methods.  The
-    `flatten` method does a depth-first traversal of the graph, recording the first time
-    each object is traversed.  This produces a list of all of the objects that are contained
-    in the "historical" subgraph:
-      * material -> {process, measurements}
-      * process -> {ingredients}
-      * ingredient -> {process, input material}
-      * measurement -> {material}
-    This prevents traversing from materials forward to the ingredients that use them, since
-    that link doesn't exist.
-
-    The serialization format is a (context, object) tuple.  The context is the list of
-    flattened objects, while object that was being serialized but with all of the pointers
-    to other taurus entities replaced by LinkByUID objects.  The deserialization is performed
-    with a custom object hook that builds a local index of all of the objects in the context.
-    By the time it gets around to deserializing the object, it knows how to replace all of the
-    LinkByUIDs with taurus entities that had been flattened out.
+    The serialization and deserialization strategy implemented by this class is described in
+    :ref:`Serialization In Depth`
     """
 
     _clazzes = [

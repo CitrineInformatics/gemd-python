@@ -1,3 +1,21 @@
+"""Taurus JSON support, which provides a drop-in replacement for json.
+
+This module provides the four main python json methods:
+
+* :func:`dump` for serializing python and taurus objects to a JSON file
+* :func:`load` for deserializing python and taurus objects from a JSON file
+* :func:`dumps` for serializing python and taurus objects into a String
+* :func:`loads` for deserializing python and taurus objects from a String
+
+These methods should provide drop-in support for serialization and deserialization of
+taurus-containing data structures by replacing imports of ``json`` with those of ``taurus.json``.
+
+It also provides convenience imports of :class:`~taurus_encoder.TaurusEncoder`
+and :class:`~taurus_json.TaurusJson`.
+These classes can be used by developers to integrate taurus with other tools by extending the
+JSON support provided here to those tools.
+"""
+
 from .taurus_encoder import TaurusEncoder  # noqa: F401
 from .taurus_json import TaurusJson
 
@@ -19,7 +37,7 @@ def loads(json_str, **kwargs):
     -------
     DictSerializable or List[DictSerializable]
         Deserialized versions of the objects represented by `json_str`, with links turned
-        back into pointers.
+        back into object references (python's pointers).
 
     """
     return __default.loads(json_str, **kwargs)
