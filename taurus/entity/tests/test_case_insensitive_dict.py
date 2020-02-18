@@ -3,7 +3,7 @@ import pytest
 
 from taurus.entity.case_insensitive_dict import CaseInsensitiveDict
 from taurus.entity.object.process_run import ProcessRun
-from taurus.client.json_encoder import loads, dumps
+from taurus.json import loads, dumps
 
 
 def test_case_sensitivity():

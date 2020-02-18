@@ -4,7 +4,7 @@ import pytest
 from taurus.entity.attribute.property import Property
 from taurus.enumeration import Origin
 from taurus.enumeration.base_enumeration import BaseEnumeration
-from taurus.client.json_encoder import loads, dumps
+from taurus.json import loads, dumps
 
 
 def test_values():

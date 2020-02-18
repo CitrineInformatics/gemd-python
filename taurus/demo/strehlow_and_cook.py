@@ -464,7 +464,7 @@ if __name__ == "__main__":
         json.dump(reduced_list, f, indent=2)
 
     print("\n\nJSON -- Training table")
-    import taurus.client.json_encoder as je
+    import taurus.json as je
     print(json.dumps(json.loads(je.dumps(full_table))[1], indent=2))
 
     print("\n\nCSV -- Display table")

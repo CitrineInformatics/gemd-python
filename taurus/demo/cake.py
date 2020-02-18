@@ -39,7 +39,7 @@ from taurus.entity.util import complete_material_history, make_instance
 from taurus.entity.file_link import FileLink
 from taurus.entity.source.performed_source import PerformedSource
 
-from taurus.client.json_encoder import thin_dumps
+from taurus.json import TaurusJson
 from taurus.util.impl import recursive_foreach
 
 
@@ -925,6 +925,7 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
 
 
 if __name__ == "__main__":
+    encoder = TaurusJson()
     cake = make_cake(seed=42)
 
     with open("example_taurus_material_history.json", "w") as f:
@@ -932,34 +933,35 @@ if __name__ == "__main__":
         f.write(json.dumps(context_list, indent=2))
 
     with open("example_taurus_material_template.json", "w") as f:
-        f.write(thin_dumps(cake.template, indent=2))
+        f.write(encoder.thin_dumps(cake.template, indent=2))
 
     with open("example_taurus_process_template.json", "w") as f:
-        f.write(thin_dumps(cake.process.ingredients[0].material.process.template, indent=2))
+        f.write(
+            encoder.thin_dumps(cake.process.ingredients[0].material.process.template, indent=2))
 
     with open("example_taurus_measurement_template.json", "w") as f:
-        f.write(thin_dumps(cake.measurements[0].template, indent=2))
+        f.write(encoder.thin_dumps(cake.measurements[0].template, indent=2))
 
     with open("example_taurus_material_spec.json", "w") as f:
-        f.write(thin_dumps(cake.spec, indent=2))
+        f.write(encoder.thin_dumps(cake.spec, indent=2))
 
     with open("example_taurus_process_spec.json", "w") as f:
-        f.write(thin_dumps(cake.process.spec, indent=2))
+        f.write(encoder.thin_dumps(cake.process.spec, indent=2))
 
     with open("example_taurus_ingredient_spec.json", "w") as f:
-        f.write(thin_dumps(cake.process.spec.ingredients[0], indent=2))
+        f.write(encoder.thin_dumps(cake.process.spec.ingredients[0], indent=2))
 
     with open("example_taurus_measurement_spec.json", "w") as f:
-        f.write(thin_dumps(cake.measurements[0].spec, indent=2))
+        f.write(encoder.thin_dumps(cake.measurements[0].spec, indent=2))
 
     with open("example_taurus_material_run.json", "w") as f:
-        f.write(thin_dumps(cake, indent=2))
+        f.write(encoder.thin_dumps(cake, indent=2))
 
     with open("example_taurus_process_run.json", "w") as f:
-        f.write(thin_dumps(cake.process, indent=2))
+        f.write(encoder.thin_dumps(cake.process, indent=2))
 
     with open("example_taurus_ingredient_run.json", "w") as f:
-        f.write(thin_dumps(cake.process.ingredients[0], indent=2))
+        f.write(encoder.thin_dumps(cake.process.ingredients[0], indent=2))
 
     with open("example_taurus_measurement_run.json", "w") as f:
-        f.write(thin_dumps(cake.measurements[0], indent=2))
+        f.write(encoder.thin_dumps(cake.measurements[0], indent=2))

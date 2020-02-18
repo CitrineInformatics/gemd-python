@@ -4,7 +4,7 @@ import json
 from taurus.entity.object.ingredient_run import IngredientRun
 from toolz import keymap, merge, keyfilter
 
-from taurus.client.json_encoder import dumps
+from taurus.json import dumps
 from taurus.entity.attribute.condition import Condition
 from taurus.entity.attribute.parameter import Parameter
 from taurus.entity.attribute.property import Property

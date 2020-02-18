@@ -4,7 +4,7 @@ import json
 from uuid import uuid4
 from copy import deepcopy
 
-from taurus.client.json_encoder import loads, dumps
+from taurus.json import loads, dumps
 from taurus.entity.attribute.property_and_conditions import PropertyAndConditions
 from taurus.entity.object import MaterialRun, ProcessRun, MaterialSpec
 from taurus.entity.template.material_template import MaterialTemplate

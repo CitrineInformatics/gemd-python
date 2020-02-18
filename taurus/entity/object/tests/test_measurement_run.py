@@ -2,7 +2,7 @@
 import pytest
 from uuid import uuid4
 
-from taurus.client.json_encoder import dumps, loads
+from taurus.json import dumps, loads
 from taurus.entity.object import MeasurementRun, MaterialRun
 from taurus.entity.object.measurement_spec import MeasurementSpec
 from taurus.entity.attribute.condition import Condition
