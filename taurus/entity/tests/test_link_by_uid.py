@@ -1,5 +1,5 @@
 """General tests of LinkByUID dynamics."""
-from taurus.client.json_encoder import dumps, loads
+from taurus.json import dumps, loads
 from taurus.entity.object.material_run import MaterialRun
 from taurus.entity.object.process_run import ProcessRun
 from taurus.entity.object.ingredient_run import IngredientRun

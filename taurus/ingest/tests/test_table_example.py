@@ -1,7 +1,7 @@
 """Test an example table."""
 import pandas as pd
 
-from taurus.client.json_encoder import load, dump
+from taurus.json import load, dump
 from taurus.entity.object import MaterialRun
 from taurus.ingest.table_example import ingest_table
 

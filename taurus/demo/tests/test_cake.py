@@ -8,7 +8,7 @@ from taurus.entity.object.measurement_run import MeasurementRun
 from taurus.entity.object.ingredient_spec import IngredientSpec
 from taurus.entity.object.ingredient_run import IngredientRun
 
-from taurus.client.json_encoder import dumps, loads
+from taurus.json import dumps, loads
 from taurus.demo.cake import make_cake, import_toothpick_picture
 from taurus.util import recursive_foreach
 from taurus.entity.util import complete_material_history

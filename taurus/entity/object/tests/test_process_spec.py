@@ -1,7 +1,7 @@
 """Tests of the process spec object."""
 import pytest
 
-from taurus.client.json_encoder import dumps, loads
+from taurus.json import dumps, loads
 from taurus.entity.attribute.property_and_conditions import PropertyAndConditions
 from taurus.entity.object.process_spec import ProcessSpec
 from taurus.entity.object.material_spec import MaterialSpec

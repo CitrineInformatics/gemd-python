@@ -1,5 +1,5 @@
 """Test the ingestion of a material run."""
-from taurus.client.json_encoder import dump, load
+from taurus.json import dump, load
 from taurus.ingest.material_run_example import ingest_material_run
 import tempfile
 

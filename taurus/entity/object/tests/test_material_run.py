@@ -4,7 +4,7 @@ import json
 from uuid import uuid4
 from copy import deepcopy
 
-from taurus.client.json_encoder import loads, dumps
+from taurus.json import loads, dumps
 from taurus.entity.attribute.property_and_conditions import PropertyAndConditions
 from taurus.entity.object import MaterialRun, ProcessRun, MaterialSpec
 from taurus.entity.template.material_template import MaterialTemplate
@@ -34,7 +34,7 @@ def test_material_run():
 
     # Make sure that when property is serialized, origin (an enumeration) is serialized as a string
     copy_prop = json.loads(dumps(mat_spec))
-    copy_origin = copy_prop[0][0]["properties"][0]['property']['origin']
+    copy_origin = copy_prop["context"][0]["properties"][0]['property']['origin']
     assert isinstance(copy_origin, str)
 
     # Create a MaterialRun, and make sure an inappropriate value for sample_type throws ValueError

@@ -6,7 +6,7 @@ from taurus.entity.bounds.real_bounds import RealBounds
 from taurus.entity.value.uniform_real import UniformReal
 from taurus.entity.template.attribute_template import AttributeTemplate
 from taurus.entity.template.property_template import PropertyTemplate
-from taurus.client.json_encoder import dumps, loads
+from taurus.json import dumps, loads
 
 
 class SampleAttributeTemplate(AttributeTemplate):

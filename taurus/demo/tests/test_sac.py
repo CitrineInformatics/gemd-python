@@ -1,7 +1,7 @@
 """Test Strehlow & Cook demo."""
 from taurus.demo.strehlow_and_cook import make_strehlow_table, make_strehlow_objects, \
     minimal_subset, import_table
-import taurus.client.json_encoder as je
+import taurus.json as je
 
 
 def test_sac():
