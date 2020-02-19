@@ -40,10 +40,10 @@ def test_material_spec():
     mat_spec_copy = loads(dumps(mat_spec))
     proc_spec_copy = loads(dumps(proc_spec))
 
-    assert proc_spec_copy.output_material is None, \
+    assert proc_spec_copy.output_material == mat_spec, \
         "Serialization should break link from ProcessSpec to MaterialSpec"
 
-    assert dumps(mat_spec_copy.process) == dumps(proc_spec), \
+    assert mat_spec_copy.process == proc_spec, \
         "Serialization should preserve link from MaterialSpec to ProcessSpec"
 
 

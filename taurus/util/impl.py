@@ -155,7 +155,7 @@ def flatten(obj):
 
         return to_return
 
-    res = recursive_flatmap(obj, _flatten, chronological=True)
+    res = recursive_flatmap(obj, _flatten, unidirectional=False)
     return sorted([substitute_links(x) for x in res], key=lambda x: writable_sort_order(x))
 
 
@@ -200,15 +200,14 @@ def recursive_foreach(obj, func, apply_first=False, seen=None):
     return
 
 
-def recursive_flatmap(obj, func, seen=None, chronological=False):
+def recursive_flatmap(obj, func, seen=None, unidirectional=True):
     """
     Recursively apply and accumulate a list-valued function to BaseEntity members.
 
     :param obj: target of the operation
     :param func: function to apply; must be list-valued
     :param seen: set of seen objects (default=None).  DON'T PASS THIS
-    :param chronological: causes func to be called in reverse chronological order,
-     rather than the default writable-link-based ordering
+    :param unidirectional: only recurse through the writeable direction of bidirectional links
     :return: a list of accumulated return values
     """
     res = []
@@ -224,28 +223,26 @@ def recursive_flatmap(obj, func, seen=None, chronological=False):
     if isinstance(obj, (list, tuple)):
         for i, x in enumerate(obj):
             if isinstance(x, BaseEntity):
-                res.extend(recursive_flatmap(x, func, seen, chronological))
+                res.extend(recursive_flatmap(x, func, seen, unidirectional))
                 res.extend(func(x))
             else:
-                res.extend(recursive_flatmap(x, func, seen, chronological))
+                res.extend(recursive_flatmap(x, func, seen, unidirectional))
     elif isinstance(obj, dict):
         for x in concatv(obj.keys(), obj.values()):
             if isinstance(x, BaseEntity):
-                res.extend(recursive_flatmap(x, func, seen, chronological))
+                res.extend(recursive_flatmap(x, func, seen, unidirectional))
                 res.extend(func(x))
             else:
-                res.extend(recursive_flatmap(x, func, seen, chronological))
+                res.extend(recursive_flatmap(x, func, seen, unidirectional))
     elif isinstance(obj, DictSerializable):
         for k, x in sorted(obj.__dict__.items()):
-            if chronological and isinstance(obj, BaseEntity) and k in obj._forward:
-                continue
-            if not chronological and isinstance(obj, BaseEntity) and k in obj.skip:
+            if unidirectional and isinstance(obj, BaseEntity) and k in obj.skip:
                 continue
             if isinstance(x, BaseEntity):
-                res.extend(recursive_flatmap(x, func, seen, chronological))
+                res.extend(recursive_flatmap(x, func, seen, unidirectional))
                 res.extend(func(x))
             else:
-                res.extend(recursive_flatmap(x, func, seen, chronological))
+                res.extend(recursive_flatmap(x, func, seen, unidirectional))
     return res
 
 
