@@ -31,23 +31,22 @@ def test_flatten_empty_history():
     transform_run = ProcessRun(name="transformed", spec=transform)
     ingredient_run = IngredientRun(material=input_run, process=transform_run, spec=ingredient)
 
-    assert len(flatten(procured)) == 0
+    assert len(flatten(procured)) == 1
     assert len(flatten(input)) == 1
     assert len(flatten(ingredient)) == 3
     assert len(flatten(transform)) == 3
 
-    assert len(flatten(procured_run)) == 1
+    assert len(flatten(procured_run)) == 3
     assert len(flatten(input_run)) == 3
     assert len(flatten(ingredient_run)) == 7
     assert len(flatten(transform_run)) == 7
 
 
-def test_flatmap_skip_ordering():
-    """Test that the chronological setting is obeyed."""
-    # The writeable link is ingredient -> process, but the chronological link is
-    # process -> ingredient
+def test_flatmap_unidirectional_ordering():
+    """Test that the unidirecitonal setting is obeyed."""
+    # The writeable link is ingredient -> process, not process -> ingredients
     proc = ProcessRun(name="foo")
     IngredientRun(notes="bar", process=proc)
 
-    assert len(recursive_flatmap(proc, lambda x: [x], chronological=True)) == 2
-    assert len(recursive_flatmap(proc, lambda x: [x], chronological=False)) == 0
+    assert len(recursive_flatmap(proc, lambda x: [x], unidirectional=False)) == 2
+    assert len(recursive_flatmap(proc, lambda x: [x], unidirectional=True)) == 0

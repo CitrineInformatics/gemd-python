@@ -2,7 +2,7 @@
 import pytest
 from uuid import uuid4
 
-from taurus.client.json_encoder import dumps, loads
+from taurus.json import dumps, loads
 from taurus.entity.object import MeasurementRun, MaterialRun
 from taurus.entity.object.measurement_spec import MeasurementSpec
 from taurus.entity.attribute.condition import Condition
@@ -68,10 +68,6 @@ def test_material_soft_link():
         "Measurement should remain unchanged when serialized"
     assert loads(dumps(fluorescence)) == fluorescence, \
         "Measurement should remain unchanged when serialized"
-
-    # Serializing the material breaks the material-->measurement link.
-    assert loads(dumps(dye)).measurements == [], \
-        "Measurement information should be removed when material is serialized"
 
     assert 'measurements' in repr(dye)
     assert 'material' in repr(fluorescence)

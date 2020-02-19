@@ -1,7 +1,7 @@
 """Tests of the process spec object."""
 import pytest
 
-from taurus.client.json_encoder import dumps, loads
+from taurus.json import dumps, loads
 from taurus.entity.attribute.property_and_conditions import PropertyAndConditions
 from taurus.entity.object.process_spec import ProcessSpec
 from taurus.entity.object.material_spec import MaterialSpec
@@ -40,10 +40,10 @@ def test_material_spec():
     mat_spec_copy = loads(dumps(mat_spec))
     proc_spec_copy = loads(dumps(proc_spec))
 
-    assert proc_spec_copy.output_material is None, \
-        "Serialization should break link from ProcessSpec to MaterialSpec"
+    assert proc_spec_copy.output_material == mat_spec, \
+        "Serialization should preserve link from ProcessSpec to MaterialSpec"
 
-    assert dumps(mat_spec_copy.process) == dumps(proc_spec), \
+    assert mat_spec_copy.process == proc_spec, \
         "Serialization should preserve link from MaterialSpec to ProcessSpec"
 
 

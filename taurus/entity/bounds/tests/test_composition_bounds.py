@@ -1,7 +1,7 @@
 """Test CompositionBounds."""
 import pytest
 
-from taurus.client.json_encoder import dumps, loads
+from taurus.json import dumps, loads
 from taurus.entity.bounds.composition_bounds import CompositionBounds
 from taurus.entity.bounds.real_bounds import RealBounds
 from taurus.entity.util import array_like

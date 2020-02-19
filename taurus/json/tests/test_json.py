@@ -4,7 +4,7 @@ from copy import deepcopy
 
 import pytest
 
-from taurus.client.json_encoder import dumps, loads, copy, thin_dumps, _loado
+from taurus.json import dumps, loads, TaurusJson
 from taurus.entity.attribute.property import Property
 from taurus.entity.bounds.real_bounds import RealBounds
 from taurus.entity.dict_serializable import DictSerializable
@@ -38,14 +38,14 @@ def test_serialize():
     # serialize the root of the tree
     native_object = json.loads(dumps(measurement))
     # ingredients don't get serialized on the process
-    assert(len(native_object[0]) == 5)
-    assert(native_object[1]["type"] == LinkByUID.typ)
+    assert(len(native_object["context"]) == 5)
+    assert(native_object["object"]["type"] == LinkByUID.typ)
 
     # serialize all of the nodes
     native_batch = json.loads(dumps([material, process, measurement, ingredient]))
-    assert(len(native_batch[0]) == 5)
-    assert(len(native_batch[1]) == 4)
-    assert(all(x["type"] == LinkByUID.typ for x in native_batch[1]))
+    assert(len(native_batch["context"]) == 5)
+    assert(len(native_batch["object"]) == 4)
+    assert(all(x["type"] == LinkByUID.typ for x in native_batch["object"]))
 
 
 def test_deserialize():
@@ -54,7 +54,7 @@ def test_deserialize():
     parameter = Parameter(name="A parameter", value=NormalReal(mean=17, std=1, units=''))
     measurement = MeasurementRun(tags="A tag on a measurement", conditions=condition,
                                  parameters=parameter)
-    copy_meas = copy(measurement)
+    copy_meas = TaurusJson().copy(measurement)
     assert(copy_meas.conditions[0].value == measurement.conditions[0].value)
     assert(copy_meas.parameters[0].value == measurement.parameters[0].value)
     assert(copy_meas.uids["auto"] == measurement.uids["auto"])
@@ -62,14 +62,15 @@ def test_deserialize():
 
 def test_deserialize_extra_fields():
     """Extra JSON fields should be ignored in deserialization."""
-    json_data = '[[], {"nominal": 5, "type": "nominal_integer", "extra garbage": "foo"}]'
+    json_data = '{"context": [],' \
+                ' "object": {"nominal": 5, "type": "nominal_integer", "extra garbage": "foo"}}'
     assert(loads(json_data) == NominalInteger(nominal=5))
 
 
 def test_enumeration_serde():
     """An enumeration should get serialized as a string."""
     condition = Condition(name="A condition", notes=Origin.UNKNOWN)
-    copy_condition = copy(condition)
+    copy_condition = TaurusJson().copy(condition)
     assert copy_condition.notes == Origin.get_value(condition.notes)
 
 
@@ -95,7 +96,7 @@ def test_thin_dumps():
     meas_spec = MeasurementSpec("measurement", uids={'my_scope': '324324'})
     meas = MeasurementRun("The measurement", spec=meas_spec, material=mat)
 
-    thin_copy = MeasurementRun.build(json.loads(thin_dumps(meas)))
+    thin_copy = MeasurementRun.build(json.loads(TaurusJson().thin_dumps(meas)))
     assert isinstance(thin_copy, MeasurementRun)
     assert isinstance(thin_copy.material, LinkByUID)
     assert isinstance(thin_copy.spec, LinkByUID)
@@ -103,11 +104,11 @@ def test_thin_dumps():
 
     # Check that LinkByUID objects are correctly converted their JSON equivalent
     expected_json = '{"id": "my_id", "scope": "scope", "type": "link_by_uid"}'
-    assert thin_dumps(LinkByUID('scope', 'my_id')) == expected_json
+    assert TaurusJson().thin_dumps(LinkByUID('scope', 'my_id')) == expected_json
 
     # Check that objects lacking .uid attributes will raise an exception when dumped
     with pytest.raises(TypeError):
-        thin_dumps({{'key': 'value'}})
+        TaurusJson().thin_dumps({{'key': 'value'}})
 
 
 def test_uid_deser():
@@ -153,6 +154,37 @@ def test_unexpected_deserialization():
         dumps(ProcessRun("A process", notes=DummyClass("something")))
 
 
+def test_register_classes_override():
+    """Test that register_classes overrides existing entries in the class index."""
+    class MyProcessSpec(ProcessSpec):
+        pass
+
+    normal = TaurusJson()
+    custom = TaurusJson()
+    custom.register_classes({MyProcessSpec.typ: MyProcessSpec})
+
+    obj = ProcessSpec(name="foo")
+    assert not isinstance(normal.copy(obj), MyProcessSpec),\
+        "Class registration bled across TaurusJson() objects"
+
+    assert isinstance(custom.copy(obj), ProcessSpec),\
+        "Custom TaurusJson didn't deserialize as MyProcessSpec"
+
+
+def test_register_argument_validation():
+    """Test that register_classes argument is type checked."""
+    orig = TaurusJson()
+
+    with pytest.raises(ValueError):
+        orig.register_classes("foo")
+
+    with pytest.raises(ValueError):
+        orig.register_classes({"foo": orig})
+
+    with pytest.raises(ValueError):
+        orig.register_classes({ProcessSpec: ProcessSpec})
+
+
 def test_pure_subsitutions():
     """Make sure substitute methods don't mutate inputs."""
     json_str = '''
@@ -185,7 +217,7 @@ def test_pure_subsitutions():
           ]
        '''
     index = {}
-    original = json.loads(json_str, object_hook=lambda x: _loado(x, index))
+    original = json.loads(json_str, object_hook=lambda x: TaurusJson()._load_and_index(x, index))
     frozen = deepcopy(original)
     loaded = substitute_objects(original, index)
     assert original == frozen
@@ -210,8 +242,8 @@ def test_case_insensitive_rehydration():
     # The material link has "scope": "ID", whereas the material in the context list, which is
     # to be loaded, has uid with scope "id".
     json_str = '''
-          [
-            [
+          {
+            "context": [
               {
                 "uids": {
                   "id": "9118c2d3-1c38-47fe-a650-c2b92fdb6777"
@@ -220,7 +252,7 @@ def test_case_insensitive_rehydration():
                 "name": "flour"
               }
             ],
-            {
+            "object": {
               "type": "ingredient_run",
               "uids": {
                 "id": "8858805f-ec02-49e4-ba3b-d784e2aea3f8"
@@ -236,7 +268,7 @@ def test_case_insensitive_rehydration():
                 "id": "9148c2d3-2c38-47fe-b650-c2b92fdb6777"
               }
             }
-          ]
+          }
        '''
     loaded_ingredient = loads(json_str)
     # The ingredient's material will either be a MaterialRun (pass) or a LinkByUID (fail)
@@ -267,8 +299,8 @@ def test_deeply_nested_rehydration():
     LinkByUid before they are "declared" in the JSON array.
     """
     json_str = '''
-[
-  [
+{
+  "context": [
     {
       "type": "process_spec",
       "parameters": [
@@ -590,13 +622,17 @@ def test_deeply_nested_rehydration():
       "file_links": []
     }
   ],
-  {
+  "object": {
     "type": "link_by_uid",
     "scope": "id",
     "id": "f0f41fb9-32dc-4903-aaf4-f369de71530f"
   }
-]
+}
     '''
     material_history = loads(json_str)
     assert isinstance(material_history.process.ingredients[1].spec, IngredientSpec)
     assert isinstance(material_history.measurements[0], MeasurementRun)
+
+    copied = loads(dumps(material_history))
+    assert isinstance(copied.process.ingredients[1].spec, IngredientSpec)
+    assert isinstance(copied.measurements[0], MeasurementRun)

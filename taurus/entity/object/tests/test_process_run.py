@@ -2,7 +2,7 @@
 import pytest
 from uuid import uuid4
 
-from taurus.client.json_encoder import dumps, loads
+from taurus.json import dumps, loads
 from taurus.entity.object.process_run import ProcessRun
 from taurus.entity.object.process_spec import ProcessSpec
 from taurus.entity.attribute.condition import Condition

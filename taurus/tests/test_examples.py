@@ -4,7 +4,7 @@ import json
 from taurus.entity.object.ingredient_run import IngredientRun
 from toolz import keymap, merge, keyfilter
 
-from taurus.client.json_encoder import dumps
+from taurus.json import dumps
 from taurus.entity.attribute.condition import Condition
 from taurus.entity.attribute.parameter import Parameter
 from taurus.entity.attribute.property import Property
@@ -162,4 +162,4 @@ def test_access_data():
 
     # check that the serialization results in the correct number of objects in the preface
     # (note that neither measurements nor ingredients are serialized)
-    assert(len(json.loads(dumps(island))[0]) == 23)
+    assert(len(json.loads(dumps(island))["context"]) == 26)

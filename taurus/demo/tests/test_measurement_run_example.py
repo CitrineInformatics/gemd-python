@@ -1,5 +1,5 @@
 """Test measurement demo."""
-from taurus.client.json_encoder import dumps, load
+from taurus.json import dumps, load
 from taurus.demo.measurement_example import make_demo_measurements
 
 

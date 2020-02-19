@@ -1,7 +1,7 @@
 """Test parsing and serde of empirical chemical formulae."""
 import pytest
 
-from taurus.client.json_encoder import dumps, loads
+from taurus.json import dumps, loads
 from taurus.entity.value.empirical_formula import EmpiricalFormula
 
 
