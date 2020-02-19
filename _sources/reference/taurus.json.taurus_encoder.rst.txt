@@ -1,0 +1,7 @@
+taurus.json.taurus\_encoder module
+==================================
+
+.. automodule:: taurus.json.taurus_encoder
+   :members:
+   :undoc-members:
+   :show-inheritance:

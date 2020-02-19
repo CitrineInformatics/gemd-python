@@ -11,6 +11,7 @@ Subpackages
    taurus.entity
    taurus.enumeration
    taurus.ingest
+   taurus.json
    taurus.units
    taurus.util
 
