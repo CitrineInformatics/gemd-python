@@ -3,6 +3,7 @@ from taurus.entity.setters import validate_list
 from taurus.entity.template.base_template import BaseTemplate
 from taurus.entity.template.has_condition_templates import HasConditionTemplates
 from taurus.entity.template.has_parameter_templates import HasParameterTemplates
+from taurus.entity.object.process_spec import ProcessSpec
 
 
 class ProcessTemplate(BaseTemplate, HasConditionTemplates, HasParameterTemplates):
@@ -46,10 +47,17 @@ class ProcessTemplate(BaseTemplate, HasConditionTemplates, HasParameterTemplates
 
     typ = "process_template"
 
-    def __init__(self, name=None, description=None,
-                 conditions=None, parameters=None,
-                 allowed_names=None, allowed_labels=None,
-                 uids=None, tags=None):
+    def __init__(
+        self,
+        name=None,
+        description=None,
+        conditions=None,
+        parameters=None,
+        allowed_names=None,
+        allowed_labels=None,
+        uids=None,
+        tags=None,
+    ):
         BaseTemplate.__init__(self, name, description, uids, tags)
         HasConditionTemplates.__init__(self, conditions)
         HasParameterTemplates.__init__(self, parameters)
@@ -59,6 +67,39 @@ class ProcessTemplate(BaseTemplate, HasConditionTemplates, HasParameterTemplates
 
         self._allowed_labels = None
         self.allowed_labels = allowed_labels
+
+    def __call__(
+        self,
+        name=None,
+        template=None,
+        parameters=None,
+        conditions=None,
+        uids=None,
+        tags=None,
+        notes=None,
+        file_links=None,
+    ):
+        """Produces a process spec that is linked to this process template."""
+
+        if not name:  # inherit name from the template by default
+            name = self.name
+        if not template:  # link the process spec to this template by default
+            template = self
+        if not parameters:  # inherit the parameters from the template (empty values)
+            parameters = [parameter_template() for parameter_template, bounds in self.parameters]
+        if not conditions:  # inherit the conditions from the template (empty values)
+            conditions = [condition_template() for condition_template, bounds in self.conditions]
+
+        return ProcessSpec(
+            name=name,
+            template=template,
+            parameters=parameters,
+            conditions=conditions,
+            uids=uids,
+            tags=tags,
+            notes=notes,
+            file_links=file_links,
+        )
 
     @property
     def allowed_names(self):

@@ -2,8 +2,21 @@
 import pytest
 
 from taurus.entity.template.process_template import ProcessTemplate
+from taurus.entity.template.parameter_template import ParameterTemplate
 from taurus.entity.template.condition_template import ConditionTemplate
 from taurus.entity.bounds.real_bounds import RealBounds
+from taurus.entity.bounds.categorical_bounds import CategoricalBounds
+
+
+condition_template = ConditionTemplate(
+    name="test_condition", bounds=CategoricalBounds(["True", "False"])
+)
+parameter_template = ParameterTemplate(
+    name="test_parameter", bounds=CategoricalBounds(["True", "False"])
+)
+process_template = ProcessTemplate(
+    name="test_process", conditions=[condition_template], parameters=[parameter_template]
+)
 
 
 def test_bounds_mismatch():
@@ -39,3 +52,24 @@ def test_allowed_labels():
     proc_template = ProcessTemplate(name="test template", allowed_labels=allowed_labels)
     for label in allowed_labels:
         assert label in proc_template.allowed_labels
+
+
+def test_creating_process_spec():
+    """Test creating a process spec from a process template."""
+
+    process = process_template()  # inherit default properties from template
+    assert process.name == process_template.name
+    assert process.template is process_template
+
+    for cond, (cond_template, bounds) in zip(
+        process.conditions, process_template.conditions
+    ):
+        assert cond.name == cond_template.name
+
+    for param, (param_template, bounds) in zip(
+        process.parameters, process_template.parameters
+    ):
+        assert param.name == param_template.name
+
+    process = process_template(name="other name")  # change default values
+    assert process.name == "other name"
