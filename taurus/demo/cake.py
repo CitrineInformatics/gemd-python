@@ -3,38 +3,18 @@ import json
 
 import random
 
-from taurus.entity.attribute.condition import Condition
-from taurus.entity.attribute.parameter import Parameter
-from taurus.entity.attribute.property import Property
-from taurus.entity.attribute.property_and_conditions import PropertyAndConditions
-from taurus.entity.bounds.integer_bounds import IntegerBounds
-from taurus.entity.bounds.real_bounds import RealBounds
-from taurus.entity.bounds.categorical_bounds import CategoricalBounds
-from taurus.entity.bounds.composition_bounds import CompositionBounds
-from taurus.entity.object.ingredient_run import IngredientRun
-from taurus.entity.object.ingredient_spec import IngredientSpec
-from taurus.entity.object.material_run import MaterialRun
-from taurus.entity.object.material_spec import MaterialSpec
-from taurus.entity.object.measurement_run import MeasurementRun
-from taurus.entity.object.measurement_spec import MeasurementSpec
-from taurus.entity.object.process_run import ProcessRun
-from taurus.entity.object.process_spec import ProcessSpec
-from taurus.entity.template.condition_template import ConditionTemplate
-from taurus.entity.template.material_template import MaterialTemplate
-from taurus.entity.template.measurement_template import MeasurementTemplate
-from taurus.entity.template.parameter_template import ParameterTemplate
-from taurus.entity.template.process_template import ProcessTemplate
-from taurus.entity.template.property_template import PropertyTemplate
-from taurus.entity.value.nominal_integer import NominalInteger
-from taurus.entity.value.uniform_integer import UniformInteger
-from taurus.entity.value.nominal_real import NominalReal
-from taurus.entity.value.normal_real import NormalReal
-from taurus.entity.value.uniform_real import UniformReal
-from taurus.entity.value.nominal_categorical import NominalCategorical
-from taurus.entity.value.discrete_categorical import DiscreteCategorical
-from taurus.entity.value.nominal_composition import NominalComposition
-from taurus.entity.value.empirical_formula import EmpiricalFormula
+from taurus.entity.attribute import Condition, Parameter, Property, PropertyAndConditions
+from taurus.entity.bounds import IntegerBounds, RealBounds, CategoricalBounds, CompositionBounds
+from taurus.entity.object import ProcessSpec, ProcessRun, MaterialSpec, MaterialRun, \
+    MeasurementSpec, MeasurementRun, IngredientSpec, IngredientRun
+from taurus.entity.template import ProcessTemplate, MaterialTemplate, MeasurementTemplate, \
+    PropertyTemplate, ParameterTemplate, ConditionTemplate
+from taurus.entity.value import NominalInteger, UniformInteger, \
+    NominalReal, NormalReal, UniformReal, \
+    NominalCategorical, DiscreteCategorical, \
+    NominalComposition, EmpiricalFormula
 from taurus.enumeration.origin import Origin
+
 from taurus.entity.util import complete_material_history, make_instance
 from taurus.entity.file_link import FileLink
 from taurus.entity.source.performed_source import PerformedSource
