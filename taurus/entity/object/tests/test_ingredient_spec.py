@@ -11,6 +11,11 @@ from taurus.entity.value.nominal_categorical import NominalCategorical
 from taurus.entity.value.empirical_formula import EmpiricalFormula
 
 
+ingredient_spec = IngredientSpec(
+    name="test_ingredient", absolute_quantity=NominalReal(1.0, units="kg")
+)
+
+
 def test_ingredient_reassignment():
     """Check that an ingredient spec can be re-assigned to a new process spec."""
     boiling = ProcessSpec("Boil potatoes")
@@ -32,18 +37,14 @@ def test_ingredient_reassignment():
     assert set(frying.ingredients) == {oil, potatoes}
 
 
-VALID_QUANTITIES = [
-    NominalReal(14.0, ''),
-    UniformReal(0.5, 0.6, 'm'),
-    NormalReal(-0.3, 0.6, "kg")
-]
+VALID_QUANTITIES = [NominalReal(14.0, ""), UniformReal(0.5, 0.6, "m"), NormalReal(-0.3, 0.6, "kg")]
 
 INVALID_QUANTITIES = [
     NominalCategorical("blue"),
     NominalInteger(5),
     EmpiricalFormula("CH4"),
     0.33,
-    "0.5"
+    "0.5",
 ]
 
 
@@ -81,6 +82,20 @@ def test_invalid_quantities(invalid_quantity):
 def test_invalid_assignment():
     """Invalid assignments to `process` or `material` throw a TypeError."""
     with pytest.raises(TypeError):
-        IngredientSpec(name="name", material=NominalReal(3, ''))
+        IngredientSpec(name="name", material=NominalReal(3, ""))
     with pytest.raises(TypeError):
         IngredientSpec(name="name", process="process")
+
+
+def test_creating_ingredient_run():
+    """Test creating an ingredient run from an ingredient spec."""
+
+    ingredient = ingredient_spec()  # inherit default properties from spec
+    assert ingredient.name == ingredient_spec.name
+    assert ingredient.spec is ingredient_spec
+    assert ingredient.absolute_quantity == ingredient_spec.absolute_quantity
+
+    ingredient = ingredient_spec(
+        absolute_quantity=NominalReal(1.1, units="kg")
+    )  # change default values
+    assert ingredient.absolute_quantity != ingredient_spec.absolute_quantity

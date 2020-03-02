@@ -1,5 +1,6 @@
 from taurus.entity.attribute.property_and_conditions import PropertyAndConditions
 from taurus.entity.object.base_object import BaseObject
+from taurus.entity.object.material_run import MaterialRun
 from taurus.entity.object.has_template import HasTemplate
 from taurus.entity.setters import validate_list
 
@@ -38,16 +39,56 @@ class MaterialSpec(BaseObject, HasTemplate):
 
     typ = "material_spec"
 
-    def __init__(self, name=None, template=None,
-                 properties=None, process=None, uids=None, tags=None,
-                 notes=None, file_links=None):
-        BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
-                            file_links=file_links)
+    def __init__(
+        self,
+        name=None,
+        template=None,
+        properties=None,
+        process=None,
+        uids=None,
+        tags=None,
+        notes=None,
+        file_links=None,
+    ):
+        BaseObject.__init__(
+            self, name=name, uids=uids, tags=tags, notes=notes, file_links=file_links
+        )
         self._properties = None
         self.properties = properties
         self._process = None
         self.process = process
         HasTemplate.__init__(self, template)
+
+    def __call__(
+        self,
+        name=None,
+        spec=None,
+        process=None,
+        sample_type='unknown',
+        uids=None,
+        tags=None,
+        notes=None,
+        file_links=None,
+    ):
+        """Produces an material run that is linked to this material spec."""
+
+        if not name:  # set defaults if no constructor values were supplied
+            name = self.name
+        if not spec:
+            spec = self
+        if not tags:
+            tags = self.tags
+
+        return MaterialRun(
+            name=name,
+            spec=spec,
+            process=process,
+            sample_type=sample_type,
+            uids=uids,
+            tags=tags,
+            notes=notes,
+            file_links=file_links,
+        )
 
     @property
     def properties(self):
@@ -74,6 +115,7 @@ class MaterialSpec(BaseObject, HasTemplate):
         """
         from taurus.entity.object.process_spec import ProcessSpec
         from taurus.entity.link_by_uid import LinkByUID
+
         if self.process is not None and isinstance(self.process, ProcessSpec):
             self.process._output_material = None
         if process is None:
@@ -84,5 +126,7 @@ class MaterialSpec(BaseObject, HasTemplate):
             process._output_material = self
             self._process = process
         else:
-            raise TypeError("process must be an instance of ProcessSpec or LinkByUID; "
-                            "instead received type {}: {}".format(type(process), process))
+            raise TypeError(
+                "process must be an instance of ProcessSpec or LinkByUID; "
+                "instead received type {}: {}".format(type(process), process)
+            )

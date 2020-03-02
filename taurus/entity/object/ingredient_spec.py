@@ -1,4 +1,7 @@
+import copy
+
 from taurus.entity.object.base_object import BaseObject
+from taurus.entity.object.ingredient_run import IngredientRun
 from taurus.entity.object.has_quantities import HasQuantities
 from taurus.entity.setters import validate_list
 from taurus.entity.valid_list import ValidList
@@ -49,10 +52,21 @@ class IngredientSpec(BaseObject, HasQuantities):
 
     typ = "ingredient_spec"
 
-    def __init__(self, material=None, process=None, name=None, labels=None,
-                 mass_fraction=None, volume_fraction=None, number_fraction=None,
-                 absolute_quantity=None,
-                 uids=None, tags=None, notes=None, file_links=None):
+    def __init__(
+        self,
+        material=None,
+        process=None,
+        name=None,
+        labels=None,
+        mass_fraction=None,
+        volume_fraction=None,
+        number_fraction=None,
+        absolute_quantity=None,
+        uids=None,
+        tags=None,
+        notes=None,
+        file_links=None,
+    ):
         """
         Create an IngredientSpec object.
 
@@ -67,8 +81,9 @@ class IngredientSpec(BaseObject, HasQuantities):
         :param absolute_quantity: quantity of this ingredient in an absolute sense, e.g. 2 cups
         """
         BaseObject.__init__(self, name, uids, tags, notes=notes, file_links=file_links)
-        HasQuantities.__init__(self, mass_fraction, volume_fraction, number_fraction,
-                               absolute_quantity)
+        HasQuantities.__init__(
+            self, mass_fraction, volume_fraction, number_fraction, absolute_quantity
+        )
 
         self._material = None
         self._process = None
@@ -77,6 +92,54 @@ class IngredientSpec(BaseObject, HasQuantities):
         self.material = material
         self.process = process
         self.labels = labels
+
+    def __call__(
+        self,
+        material=None,
+        process=None,
+        mass_fraction=None,
+        volume_fraction=None,
+        number_fraction=None,
+        absolute_quantity=None,
+        spec=None,
+        uids=None,
+        tags=None,
+        notes=None,
+        file_links=None,
+    ):
+        """Produces an ingredient run that is linked to this ingredient spec.
+
+        Notes
+        -----
+        name and labels are tied to the spec values.
+        """
+
+        if not mass_fraction:
+            mass_fraction = copy.deepcopy(self.mass_fraction)
+        if not volume_fraction:
+            volume_fraction = copy.deepcopy(self.volume_fraction)
+        if not number_fraction:
+            number_fraction = copy.deepcopy(self.number_fraction)
+        if not absolute_quantity:
+            absolute_quantity = copy.deepcopy(self.absolute_quantity)
+        if not spec:
+            spec = self
+        if not tags:
+            tags = self.tags
+
+        return IngredientRun(
+            material=material,
+            process=process,
+            mass_fraction=mass_fraction,
+            volume_fraction=volume_fraction,
+            number_fraction=number_fraction,
+            absolute_quantity=absolute_quantity,
+            spec=spec,
+            uids=uids,
+            tags=tags,
+            notes=notes,
+            file_links=file_links,
+        )
 
     @property
     def labels(self):
@@ -96,6 +159,7 @@ class IngredientSpec(BaseObject, HasQuantities):
     def material(self, material):
         from taurus.entity.object.material_spec import MaterialSpec
         from taurus.entity.link_by_uid import LinkByUID
+
         if material is None:
             self._material = None
         elif isinstance(material, (MaterialSpec, LinkByUID)):
@@ -112,6 +176,7 @@ class IngredientSpec(BaseObject, HasQuantities):
     def process(self, process):
         from taurus.entity.object import ProcessSpec
         from taurus.entity.link_by_uid import LinkByUID
+
         if self._process is not None and isinstance(self._process, ProcessSpec):
             self._process._unset_ingredient(self)
         if process is None:

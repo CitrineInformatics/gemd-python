@@ -1,4 +1,7 @@
+import copy
+
 from taurus.entity.object.base_object import BaseObject
+from taurus.entity.object.process_run import ProcessRun
 from taurus.entity.object.has_parameters import HasParameters
 from taurus.entity.object.has_conditions import HasConditions
 from taurus.entity.object.has_template import HasTemplate
@@ -51,11 +54,20 @@ class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
 
     skip = {"_output_material", "_ingredients"}
 
-    def __init__(self, name=None, template=None,
-                 parameters=None, conditions=None,
-                 uids=None, tags=None, notes=None, file_links=None):
-        BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
-                            file_links=file_links)
+    def __init__(
+        self,
+        name=None,
+        template=None,
+        parameters=None,
+        conditions=None,
+        uids=None,
+        tags=None,
+        notes=None,
+        file_links=None,
+    ):
+        BaseObject.__init__(
+            self, name=name, uids=uids, tags=tags, notes=notes, file_links=file_links
+        )
         HasParameters.__init__(self, parameters=parameters)
         HasConditions.__init__(self, conditions=conditions)
 
@@ -67,6 +79,43 @@ class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
         self._output_material = None
 
         HasTemplate.__init__(self, template=template)
+
+    def __call__(
+        self,
+        name=None,
+        spec=None,
+        conditions=None,
+        parameters=None,
+        uids=None,
+        tags=None,
+        notes=None,
+        file_links=None,
+        source=None,
+    ):
+        """Produces a process run that is linked to this process spec."""
+
+        if not name:  # set defaults if no constructor values were supplied
+            name = self.name
+        if not spec:
+            spec = self
+        if not parameters:  # inherit the parameters from the spec
+            parameters = [copy.copy(param) for param in self.parameters]
+        if not conditions:  # inherit the conditions from the spec
+            conditions = [copy.copy(cond) for cond in self.conditions]
+        if not tags:
+            tags = self.tags
+
+        return ProcessRun(
+            name=name,
+            spec=spec,
+            conditions=conditions,
+            parameters=parameters,
+            uids=uids,
+            tags=tags,
+            notes=notes,
+            file_links=file_links,
+            source=source,
+        )
 
     @property
     def ingredients(self):
