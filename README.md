@@ -10,8 +10,8 @@ To install `taurus`, you can simply:
 $ pip install taurus-citrine
 ```
 
-Documentation of this package can be found at https://citrineinformatics.github.io/taurus/
-Detailed documentation of the `taurus` data model can be found in the [language-agnostic documentation](https://citrineinformatics.github.io/taurus-documentation/).
+Detailed documentation of the `GEMD` data model can be found in the [language-agnostic documentation](https://citrineinformatics.github.io/gemd-docs/).
+Documentation of this package can be found [here](https://citrineinformatics.github.io/taurus/).
 
 ## Developer instructions
 To download the repo and install requirements, run 

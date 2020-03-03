@@ -7,15 +7,6 @@ from taurus.entity.dict_serializable import DictSerializable
 from taurus.entity.link_by_uid import LinkByUID
 from toolz import concatv
 
-from taurus.entity.object import MeasurementSpec, ProcessSpec, MaterialSpec, IngredientSpec, \
-    MeasurementRun, IngredientRun, MaterialRun, ProcessRun
-from taurus.entity.template.condition_template import ConditionTemplate
-from taurus.entity.template.material_template import MaterialTemplate
-from taurus.entity.template.measurement_template import MeasurementTemplate
-from taurus.entity.template.parameter_template import ParameterTemplate
-from taurus.entity.template.process_template import ProcessTemplate
-from taurus.entity.template.property_template import PropertyTemplate
-
 
 def set_uuids(obj, name="auto"):
     """
@@ -248,6 +239,11 @@ def recursive_flatmap(obj, func, seen=None, unidirectional=True):
 
 def writable_sort_order(key: Union[BaseEntity, str]) -> int:
     """Sort order for flattening such that the objects can be read back and re-nested."""
+    from taurus.entity.object import MeasurementSpec, ProcessSpec, MaterialSpec, IngredientSpec, \
+        MeasurementRun, IngredientRun, MaterialRun, ProcessRun
+    from taurus.entity.template import ConditionTemplate, MaterialTemplate, MeasurementTemplate, \
+        ParameterTemplate, ProcessTemplate, PropertyTemplate
+
     if isinstance(key, BaseEntity):
         typ = key.typ
     elif isinstance(key, str):
