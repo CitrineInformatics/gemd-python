@@ -6,9 +6,17 @@ from taurus.entity.object.base_object import BaseObject
 
 class BaseExperiment(BaseEntity):
     """An experiment is a collection of Taurus objects, with defined connections between them.
+
+    Parameters
+    ----------
+    objects: Map[str, Union[BaseTemplate, BaseObject]]
+        Collection of Taurus objects indexed by strings.
+    connections: List[Touple[str, str]]
+        Connections between the objects specified by their string indicies.
+
     """
 
-    def __init__(self, objects, connections, uids, tags):
+    def __init__(self, objects, connections, uids=None, tags=None):
         BaseEntity.__init__(self, uids=uids, tags=tags)
         self._objects = None
         self._connections = None
@@ -32,11 +40,14 @@ class BaseExperiment(BaseEntity):
 
     @connections.setter
     def connections(self, connections):
-        self._connections = connections  # TODO: check all str in objects mapping
+        for source, destination in connections:  # TODO: move more complicated setters to module
+            assert source in self.objects.keys()
+            assert destination in self.objects.keys()
+        self._connections = connections
 
     def visualize(self):
         """Graphs the objects in this data model."""
         from dagre_py.core import plot
-        nodes = [{"label": p} for p in self.templates.keys()]
+        nodes = [{"label": p} for p in self.objects.keys()]
         edges = [{"source": s, "target": t} for s, t in self.connections]
         plot({"nodes": nodes, "edges": edges})
