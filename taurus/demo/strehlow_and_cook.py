@@ -465,7 +465,7 @@ if __name__ == "__main__":
 
     print("\n\nJSON -- Training table")
     import taurus.json as je
-    print(json.dumps(json.loads(je.dumps(full_table))[1], indent=2))
+    print(json.dumps(json.loads(je.dumps(full_table))["object"], indent=2))
 
     print("\n\nCSV -- Display table")
     display = make_display_table(full_table)

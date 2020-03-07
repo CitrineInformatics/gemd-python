@@ -2,6 +2,7 @@
 from taurus.demo.strehlow_and_cook import make_strehlow_table, make_strehlow_objects, \
     minimal_subset, import_table
 import taurus.json as je
+import json
 
 
 def test_sac():
@@ -21,3 +22,6 @@ def test_sac():
     # Make sure there's no migration with repeated serialization
     for row in sac_tbl:
         assert je.dumps(je.loads(je.dumps(row))) == je.dumps(row)
+
+    # Verify that the serialization trick for mocking a structured table works
+    json.dumps(json.loads(je.dumps(sac_tbl))["object"], indent=2)
