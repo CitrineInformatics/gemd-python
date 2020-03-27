@@ -35,8 +35,8 @@ class PostDevelopCommand(develop):
         develop.run(self)
 
 
-setup(name='taurus-citrine',
-      version='0.6.0',
+setup(name='gemd',
+      version='0.6.1',
       url='http://github.com/CitrineInformatics/taurus',
       description='Python library for the Citrine Platform',
       author='Max Hutchinson',
