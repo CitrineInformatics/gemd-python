@@ -43,7 +43,7 @@ setup(name='gemd',
       author_email='maxhutch@citrine.io',
       packages=find_packages(),
       package_data={
-          'taurus': [
+          'gemd': [
               'demo/strehlow_and_cook.pif',
               'demo/strehlow_and_cook_small.pif',
               'demo/toothpick.jpg',

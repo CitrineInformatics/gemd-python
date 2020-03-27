@@ -12,13 +12,13 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../taurus'))
+sys.path.insert(0, os.path.abspath('../../gemd'))
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'Taurus'
-copyright = '2019, Citrine Informatics'
+project = 'GEMD'
+copyright = '2020, Citrine Informatics'
 author = 'Citrine Informatics'
 
 # The full version, including alpha/beta/rc tags
@@ -40,7 +40,7 @@ extensions = [
 # build.
 #
 # See: https://github.com/sphinx-contrib/apidoc
-apidoc_module_dir = '../../taurus'
+apidoc_module_dir = '../../gemd'
 apidoc_output_dir = 'reference'
 apidoc_excluded_paths = ['tests']
 apidoc_separate_modules = True
