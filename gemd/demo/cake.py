@@ -18,6 +18,7 @@ from gemd.enumeration.origin import Origin
 from gemd.entity.util import complete_material_history, make_instance
 from gemd.entity.file_link import FileLink
 from gemd.entity.source.performed_source import PerformedSource
+from gemd.json import GEMDJson
 
 from gemd.util.impl import recursive_foreach
 
