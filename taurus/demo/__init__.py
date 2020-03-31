@@ -1,1 +1,1 @@
-"""Demonstration of the data concepts library."""
+from gemd.demo import *

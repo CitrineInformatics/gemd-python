@@ -59,6 +59,8 @@ class GEMDJson(object):
         FileLink, PerformedSource
     ]
 
+    _link_type = LinkByUID
+
     def __init__(self):
         self._clazz_index = {}
         # build index from the class's typ member to the class itself
@@ -278,8 +280,8 @@ class GEMDJson(object):
         if typ in self._clazz_index:
             clz = self._clazz_index[typ]
             obj = clz.from_dict(d)
-        elif typ == LinkByUID.typ:
-            obj = LinkByUID.from_dict(d)
+        elif typ == self._link_type.typ:
+            obj = self._link_type.from_dict(d)
             if substitute and (obj.scope.lower(), obj.id) in object_index:
                 return object_index[(obj.scope.lower(), obj.id)]
             return obj

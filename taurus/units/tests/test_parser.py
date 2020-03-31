@@ -4,7 +4,7 @@ from pint import UnitRegistry
 from taurus.units import parse_units, UndefinedUnitError
 
 # use the default unit registry for now
-_ureg = UnitRegistry(filename=pkg_resources.resource_filename("taurus.units", "citrine_en.txt"))
+_ureg = UnitRegistry(filename=pkg_resources.resource_filename("gemd.units", "citrine_en.txt"))
 
 
 def test_parse_expected():

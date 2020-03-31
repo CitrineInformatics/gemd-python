@@ -50,6 +50,7 @@ def test_recursive_foreach():
     measurement = MeasurementSpec(name="name", parameters=parameter, template=meas_template)
     test_dict = {"foo": measurement}
     recursive_foreach(test_dict, func, apply_first=True)
+    print(test_dict)
 
     for ent in [param_template, meas_template, measurement]:
         assert new_tag in ent.tags
