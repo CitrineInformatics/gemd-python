@@ -37,7 +37,7 @@ class PostDevelopCommand(develop):
 
 setup(name='gemd',
       version='0.6.1',
-      url='http://github.com/CitrineInformatics/taurus',
+      url='http://github.com/CitrineInformatics/gemd',
       description='Python library for the Citrine Platform',
       author='Max Hutchinson',
       author_email='maxhutch@citrine.io',
