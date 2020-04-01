@@ -5,6 +5,11 @@ find ./taurus -regex '.*\.py'|while read fileName; do
   strip-hints $fileName --to-empty --only-assigns-and-defs >tmp.py
   mv tmp.py $fileName
 done
+find ./gemd -regex '.*\.py'|while read fileName; do
+  echo $fileName
+  strip-hints $fileName --to-empty --only-assigns-and-defs >tmp.py
+  mv tmp.py $fileName
+done
 find ./tests -regex '.*\.py'|while read fileName; do
   echo $fileName
   strip-hints $fileName --to-empty --only-assigns-and-defs >tmp.py

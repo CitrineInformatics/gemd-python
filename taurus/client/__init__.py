@@ -1,1 +1,1 @@
-"""Taurus client."""
+from gemd.client import *

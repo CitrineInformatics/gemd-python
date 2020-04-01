@@ -8,8 +8,10 @@ install:
 - pip install --no-deps -e .
 script:
 - pytest --cov=taurus --cov-report term-missing --cov-report term:skip-covered --cov-config=tox.ini
-  --cov-fail-under=100 -s -r ./taurus
-- flake8 taurus
+  --cov-fail-under=98 -s ./taurus
+- pytest --cov=gemd --cov-report term-missing --cov-report term:skip-covered --cov-config=tox.ini
+  --cov-fail-under=100 -s ./gemd
+- flake8 gemd
 - cd docs; make html; cd ..;
 - touch ./docs/_build/html/.nojekyll
 deploy:

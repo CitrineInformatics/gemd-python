@@ -35,15 +35,15 @@ class PostDevelopCommand(develop):
         develop.run(self)
 
 
-setup(name='taurus-citrine',
-      version='0.6.0',
-      url='http://github.com/CitrineInformatics/taurus',
+setup(name='gemd',
+      version='0.6.1',
+      url='http://github.com/CitrineInformatics/gemd',
       description='Python library for the Citrine Platform',
       author='Max Hutchinson',
       author_email='maxhutch@citrine.io',
       packages=find_packages(),
       package_data={
-          'taurus': [
+          'gemd': [
               'demo/strehlow_and_cook.pif',
               'demo/strehlow_and_cook_small.pif',
               'demo/toothpick.jpg',

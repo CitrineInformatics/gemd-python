@@ -1,1 +1,1 @@
-# flake8: noqa
+from gemd.ingest import *
