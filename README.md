@@ -6,17 +6,19 @@ This package provides a framework for storing information about the processes th
 ## Usage
 
 To install `gemd`, you can simply:
-```
+```bash
 $ pip install gemd
 ```
 
 Detailed documentation of the `GEMD` data model can be found in the [language-agnostic documentation](https://citrineinformatics.github.io/gemd-docs/).
-Documentation of this package can be found [here](https://citrineinformatics.github.io/gemd/).
+Documentation of this package can be found [here](https://citrineinformatics.github.io/gemd-python/).
 
 ## Developer instructions
 To download the repo and install requirements, run 
 
-```pip install git+https://github.com/CitrineInformatics/gemd-python.git```
+```bash
+pip install git+https://github.com/CitrineInformatics/gemd-python.git
+```
 
 Tests are run with `pytest`, and the `pytest-cov` package is used to assess test coverage. 
 In order to assess coverage locally, run `pytest` with the following arguments:
@@ -27,6 +29,8 @@ In order to assess coverage locally, run `pytest` with the following arguments:
 * `--cov-fail-under=100` Throws an error if coverage is less than 100% (optional)
 
 The following command will run all tests, print line numbers for lines that are not executed, skip modules with full coverage, and fail if coverage is less than 100%:
-`python -m pytest --cov=gemd/ --cov-report term:skip-covered --cov-report term-missing --cov-fail-under=100`
+```bash
+pytest --cov=gemd --cov-report term-missing --cov-report term:skip-covered --cov-config=tox.ini --cov-fail-under=100 -s ./gemd
+```
 
 
