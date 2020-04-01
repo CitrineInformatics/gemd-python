@@ -1,0 +1,18 @@
+gemd.json package
+=================
+
+Submodules
+----------
+
+.. toctree::
+
+   gemd.json.gemd_encoder
+   gemd.json.gemd_json
+
+Module contents
+---------------
+
+.. automodule:: gemd.json
+   :members:
+   :undoc-members:
+   :show-inheritance:

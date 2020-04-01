@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>gemd.util.impl module &#8212; GEMD 0.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-gemd.util.impl">
+<span id="gemd-util-impl-module"></span><h1>gemd.util.impl module<a class="headerlink" href="#module-gemd.util.impl" title="Permalink to this headline">¶</a></h1>
+<p>Utility functions.</p>
+<dl class="function">
+<dt id="gemd.util.impl.flatten">
+<code class="sig-prename descclassname">gemd.util.impl.</code><code class="sig-name descname">flatten</code><span class="sig-paren">(</span><em class="sig-param">obj</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.util.impl.flatten" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flatten a BaseEntity into a list of objects connected by LinkByUID objects.</p>
+<dl class="simple">
+<dt>This is a composite operation the amounts to:</dt><dd><ul class="simple">
+<li><p>Making sure at least one uid is set in each BaseEntity in scope</p></li>
+<li><p>Getting a list of unique objects contained in the scope</p></li>
+<li><p>Substituting the pointers in those objects with LinkByUID objects</p></li>
+<li><p>Sorting the output so an object is listed after all of its dependencies</p></li>
+</ul>
+</dd>
+</dl>
+<p>Flattening obeys reverse chronological ordering: if you flatten a process, you _will_ get the
+ingredients of the process in the result, even though process.ingredients is skipped.
+This supports the flattening of entire material histories.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>obj</strong> – defining the scope of the flatten</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of BaseEntity with LinkByUIDs to any BaseEntity members</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="gemd.util.impl.recursive_flatmap">
+<code class="sig-prename descclassname">gemd.util.impl.</code><code class="sig-name descname">recursive_flatmap</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">func</em>, <em class="sig-param">seen=None</em>, <em class="sig-param">unidirectional=True</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.util.impl.recursive_flatmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recursively apply and accumulate a list-valued function to BaseEntity members.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> – target of the operation</p></li>
+<li><p><strong>func</strong> – function to apply; must be list-valued</p></li>
+<li><p><strong>seen</strong> – set of seen objects (default=None).  DON’T PASS THIS</p></li>
+<li><p><strong>unidirectional</strong> – only recurse through the writeable direction of bidirectional links</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of accumulated return values</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="gemd.util.impl.recursive_foreach">
+<code class="sig-prename descclassname">gemd.util.impl.</code><code class="sig-name descname">recursive_foreach</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">func</em>, <em class="sig-param">apply_first=False</em>, <em class="sig-param">seen=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.util.impl.recursive_foreach" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply a function recursively to each BaseEntity object.</p>
+<p>Only objects of type BaseEntity will have the function applied, but the recursion will walk
+through all objects.  For example, BaseEntity -&gt; list -&gt; BaseEntity will have func applied
+to both base entities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> – target of the operation</p></li>
+<li><p><strong>func</strong> – to apply to each contained BaseEntity</p></li>
+<li><p><strong>apply_first</strong> – whether to apply the func before applying it to members (default: false)</p></li>
+<li><p><strong>seen</strong> – set of seen objects (default=None).  DON’T PASS THIS!!!</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="gemd.util.impl.set_uuids">
+<code class="sig-prename descclassname">gemd.util.impl.</code><code class="sig-name descname">set_uuids</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">name='auto'</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.util.impl.set_uuids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recursively assign a uuid to every BaseEntity that doesn’t already contain a uuid.</p>
+<p>This ensures that all of the pointers in the object can be replaced with LinkByUID objects
+:param obj: to recursively assign uuids to
+:param name: of the uuid to assign (default: “auto”)
+:return: None</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gemd.util.impl.substitute_links">
+<code class="sig-prename descclassname">gemd.util.impl.</code><code class="sig-name descname">substitute_links</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">native_uid=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.util.impl.substitute_links" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recursively replace pointers to BaseEntity with LinkByUID objects.</p>
+<p>This prepares the object to be serialized or written to the API.
+It is the inverse of substitute_objects.
+:param obj: target of the operation
+:param native_uid: preferred uid to use for creating LinkByUID objects (Default: None)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gemd.util.impl.substitute_objects">
+<code class="sig-prename descclassname">gemd.util.impl.</code><code class="sig-name descname">substitute_objects</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">index</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.util.impl.substitute_objects" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recursively replace LinkByUID objects with pointers to the objects with that UID in the index.</p>
+<p>This prepares the object to be used after being deserialized.
+It is the inverse of substitute_links.
+:param obj: target of the operation
+:param index: containing the objects that the uids point to</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gemd.util.impl.writable_sort_order">
+<code class="sig-prename descclassname">gemd.util.impl.</code><code class="sig-name descname">writable_sort_order</code><span class="sig-paren">(</span><em class="sig-param">key: Union[gemd.entity.base_entity.BaseEntity, str]</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#gemd.util.impl.writable_sort_order" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sort order for flattening such that the objects can be read back and re-nested.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">GEMD</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../depth/index.html">1. In depth documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Citrine Informatics.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/reference/gemd.util.impl.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

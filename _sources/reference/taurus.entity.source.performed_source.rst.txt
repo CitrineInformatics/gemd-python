@@ -1,7 +1,0 @@
-taurus.entity.source.performed\_source module
-=============================================
-
-.. automodule:: taurus.entity.source.performed_source
-   :members:
-   :undoc-members:
-   :show-inheritance:

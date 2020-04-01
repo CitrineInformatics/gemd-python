@@ -1,7 +1,0 @@
-taurus.entity.bounds.composition\_bounds module
-===============================================
-
-.. automodule:: taurus.entity.bounds.composition_bounds
-   :members:
-   :undoc-members:
-   :show-inheritance:

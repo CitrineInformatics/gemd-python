@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>gemd.entity.valid_list module &#8212; GEMD 0.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-gemd.entity.valid_list">
+<span id="gemd-entity-valid-list-module"></span><h1>gemd.entity.valid_list module<a class="headerlink" href="#module-gemd.entity.valid_list" title="Permalink to this headline">¶</a></h1>
+<p>A list that can validate its contents.</p>
+<dl class="class">
+<dt id="gemd.entity.valid_list.ValidList">
+<em class="property">class </em><code class="sig-prename descclassname">gemd.entity.valid_list.</code><code class="sig-name descname">ValidList</code><span class="sig-paren">(</span><em class="sig-param">_list</em>, <em class="sig-param">content_type=None</em>, <em class="sig-param">trigger=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.valid_list.ValidList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></p>
+<p>A list-like class that verifies that its content conforms to specified types.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>_list</strong> (<em>Iterable</em>) – The initial values for the elements of the list.</p></li>
+<li><p><strong>content_type</strong> (<em>Type</em><em> or </em><em>Iterable</em><em>[</em><em>Type</em><em>]</em>) – The allowed type(s) for the content of the list.</p></li>
+<li><p><strong>trigger</strong> (<em>function</em>) – A function that gets invoked whenever a new element is added.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="gemd.entity.valid_list.ValidList.append">
+<code class="sig-name descname">append</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.valid_list.ValidList.append" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an item to the end of the list; equivalent to a[len(a):] = [x].</p>
+<p>Validates that <cite>value</cite> is one of the allowed types.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>Any</em>) – The value to append at the end of the list.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>value</cite> is appended at the end of the list, if it is valid.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="gemd.entity.valid_list.ValidList.extend">
+<code class="sig-name descname">extend</code><span class="sig-paren">(</span><em class="sig-param">list_</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.valid_list.ValidList.extend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extend the list by appending all the items in the given list; equivalent to a[len(a):] = L.</p>
+<p>Validates that <cite>value</cite> is one of the allowed types.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>list_</strong> (<em>list</em>) – The list of values to append at the end of the list.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>list_</cite> is appended at the end of the list, if all its entries are valid.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="gemd.entity.valid_list.ValidList.insert">
+<code class="sig-name descname">insert</code><span class="sig-paren">(</span><em class="sig-param">i</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.valid_list.ValidList.insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert a value at a given position, if it is one of the allowed types.</p>
+<p>a.insert(0, x) inserts at the front of the list, and a.insert(len(a), x)
+is equivalent to a.append(x).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>i</strong> (<em>int</em>) – The index of the element before which to insert.</p></li>
+<li><p><strong>value</strong> (<em>Any</em>) – The value to insert into the list.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>value</cite> is inserted into the list at position <cite>i</cite>, if it is valid.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">GEMD</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../depth/index.html">1. In depth documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Citrine Informatics.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/reference/gemd.entity.valid_list.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

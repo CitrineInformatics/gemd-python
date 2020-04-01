@@ -1,0 +1,7 @@
+gemd.entity.value.base\_value module
+====================================
+
+.. automodule:: gemd.entity.value.base_value
+   :members:
+   :undoc-members:
+   :show-inheritance:

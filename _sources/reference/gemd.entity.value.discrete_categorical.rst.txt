@@ -1,0 +1,7 @@
+gemd.entity.value.discrete\_categorical module
+==============================================
+
+.. automodule:: gemd.entity.value.discrete_categorical
+   :members:
+   :undoc-members:
+   :show-inheritance:

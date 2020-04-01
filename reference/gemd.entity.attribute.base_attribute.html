@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>gemd.entity.attribute.base_attribute module &#8212; GEMD 0.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-gemd.entity.attribute.base_attribute">
+<span id="gemd-entity-attribute-base-attribute-module"></span><h1>gemd.entity.attribute.base_attribute module<a class="headerlink" href="#module-gemd.entity.attribute.base_attribute" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="gemd.entity.attribute.base_attribute.BaseAttribute">
+<em class="property">class </em><code class="sig-prename descclassname">gemd.entity.attribute.base_attribute.</code><code class="sig-name descname">BaseAttribute</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">template=None</em>, <em class="sig-param">origin='unknown'</em>, <em class="sig-param">value=None</em>, <em class="sig-param">notes=None</em>, <em class="sig-param">file_links=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.attribute.base_attribute.BaseAttribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemd.entity.dict_serializable.DictSerializable</span></code></a></p>
+<p>Base class for all attributes, which include property, condition, parameter, and metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Required name of the attribute. Each attribute within an object must have a unique name.</p></li>
+<li><p><strong>notes</strong> (<em>str</em>) – Optional free-form notes about the attribute.</p></li>
+<li><p><strong>value</strong> (<a class="reference internal" href="gemd.entity.value.base_value.html#gemd.entity.value.base_value.BaseValue" title="gemd.entity.value.base_value.BaseValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseValue</span></code></a>) – The value of the attribute.</p></li>
+<li><p><strong>template</strong> (<a class="reference internal" href="gemd.entity.template.attribute_template.html#gemd.entity.template.attribute_template.AttributeTemplate" title="gemd.entity.template.attribute_template.AttributeTemplate"><code class="xref py py-class docutils literal notranslate"><span class="pre">AttributeTemplate</span></code></a>) – Attribute template that defines the allowed bounds of this attribute. If a template
+and value are both present then the value must be within the template bounds.</p></li>
+<li><p><strong>origin</strong> (<em>str</em>) – The origin of the attribute. Must be one of “measured”, “predicted”, “summary”,
+“specified”, “computed”, or “unknown.” Default is “unknown.”</p></li>
+<li><p><strong>file_links</strong> (<em>List</em><em>[</em><a class="reference internal" href="gemd.entity.file_link.html#gemd.entity.file_link.FileLink" title="gemd.entity.file_link.FileLink"><em>FileLink</em></a><em>]</em>) – Links to files associated with the attribute.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="gemd.entity.attribute.base_attribute.BaseAttribute.file_links">
+<em class="property">property </em><code class="sig-name descname">file_links</code><a class="headerlink" href="#gemd.entity.attribute.base_attribute.BaseAttribute.file_links" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get file links.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gemd.entity.attribute.base_attribute.BaseAttribute.origin">
+<em class="property">property </em><code class="sig-name descname">origin</code><a class="headerlink" href="#gemd.entity.attribute.base_attribute.BaseAttribute.origin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get origin.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gemd.entity.attribute.base_attribute.BaseAttribute.template">
+<em class="property">property </em><code class="sig-name descname">template</code><a class="headerlink" href="#gemd.entity.attribute.base_attribute.BaseAttribute.template" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get template.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gemd.entity.attribute.base_attribute.BaseAttribute.value">
+<em class="property">property </em><code class="sig-name descname">value</code><a class="headerlink" href="#gemd.entity.attribute.base_attribute.BaseAttribute.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get value.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">GEMD</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../depth/index.html">1. In depth documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Citrine Informatics.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/reference/gemd.entity.attribute.base_attribute.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,7 @@
+gemd.ingest.material\_run\_example module
+=========================================
+
+.. automodule:: gemd.ingest.material_run_example
+   :members:
+   :undoc-members:
+   :show-inheritance:

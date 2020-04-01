@@ -1,7 +1,0 @@
-taurus.entity.bounds.real\_bounds module
-========================================
-
-.. automodule:: taurus.entity.bounds.real_bounds
-   :members:
-   :undoc-members:
-   :show-inheritance:

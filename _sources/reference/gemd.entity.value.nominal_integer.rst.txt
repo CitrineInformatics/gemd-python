@@ -1,0 +1,7 @@
+gemd.entity.value.nominal\_integer module
+=========================================
+
+.. automodule:: gemd.entity.value.nominal_integer
+   :members:
+   :undoc-members:
+   :show-inheritance:

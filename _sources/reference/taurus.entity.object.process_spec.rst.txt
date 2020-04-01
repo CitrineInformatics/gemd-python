@@ -1,7 +1,0 @@
-taurus.entity.object.process\_spec module
-=========================================
-
-.. automodule:: taurus.entity.object.process_spec
-   :members:
-   :undoc-members:
-   :show-inheritance:

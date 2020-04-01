@@ -1,0 +1,7 @@
+gemd.ingest.table\_example module
+=================================
+
+.. automodule:: gemd.ingest.table_example
+   :members:
+   :undoc-members:
+   :show-inheritance:

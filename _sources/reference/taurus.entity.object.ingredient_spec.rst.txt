@@ -1,7 +1,0 @@
-taurus.entity.object.ingredient\_spec module
-============================================
-
-.. automodule:: taurus.entity.object.ingredient_spec
-   :members:
-   :undoc-members:
-   :show-inheritance:

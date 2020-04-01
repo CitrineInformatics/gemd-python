@@ -1,7 +1,0 @@
-taurus.entity.template.has\_parameter\_templates module
-=======================================================
-
-.. automodule:: taurus.entity.template.has_parameter_templates
-   :members:
-   :undoc-members:
-   :show-inheritance:

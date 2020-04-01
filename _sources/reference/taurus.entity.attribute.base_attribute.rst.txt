@@ -1,7 +1,0 @@
-taurus.entity.attribute.base\_attribute module
-==============================================
-
-.. automodule:: taurus.entity.attribute.base_attribute
-   :members:
-   :undoc-members:
-   :show-inheritance:

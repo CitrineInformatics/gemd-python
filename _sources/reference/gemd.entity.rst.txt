@@ -1,0 +1,36 @@
+gemd.entity package
+===================
+
+Subpackages
+-----------
+
+.. toctree::
+
+   gemd.entity.attribute
+   gemd.entity.bounds
+   gemd.entity.object
+   gemd.entity.source
+   gemd.entity.template
+   gemd.entity.value
+
+Submodules
+----------
+
+.. toctree::
+
+   gemd.entity.base_entity
+   gemd.entity.case_insensitive_dict
+   gemd.entity.dict_serializable
+   gemd.entity.file_link
+   gemd.entity.link_by_uid
+   gemd.entity.setters
+   gemd.entity.util
+   gemd.entity.valid_list
+
+Module contents
+---------------
+
+.. automodule:: gemd.entity
+   :members:
+   :undoc-members:
+   :show-inheritance:

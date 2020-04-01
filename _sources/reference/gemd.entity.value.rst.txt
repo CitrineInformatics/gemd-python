@@ -1,0 +1,30 @@
+gemd.entity.value package
+=========================
+
+Submodules
+----------
+
+.. toctree::
+
+   gemd.entity.value.base_value
+   gemd.entity.value.categorical_value
+   gemd.entity.value.composition_value
+   gemd.entity.value.continuous_value
+   gemd.entity.value.discrete_categorical
+   gemd.entity.value.empirical_formula
+   gemd.entity.value.integer_value
+   gemd.entity.value.nominal_categorical
+   gemd.entity.value.nominal_composition
+   gemd.entity.value.nominal_integer
+   gemd.entity.value.nominal_real
+   gemd.entity.value.normal_real
+   gemd.entity.value.uniform_integer
+   gemd.entity.value.uniform_real
+
+Module contents
+---------------
+
+.. automodule:: gemd.entity.value
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+gemd.entity.attribute.property module
+=====================================
+
+.. automodule:: gemd.entity.attribute.property
+   :members:
+   :undoc-members:
+   :show-inheritance:

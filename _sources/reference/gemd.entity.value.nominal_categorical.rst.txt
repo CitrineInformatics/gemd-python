@@ -1,0 +1,7 @@
+gemd.entity.value.nominal\_categorical module
+=============================================
+
+.. automodule:: gemd.entity.value.nominal_categorical
+   :members:
+   :undoc-members:
+   :show-inheritance:

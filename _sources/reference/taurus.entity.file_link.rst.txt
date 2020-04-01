@@ -1,7 +1,0 @@
-taurus.entity.file\_link module
-===============================
-
-.. automodule:: taurus.entity.file_link
-   :members:
-   :undoc-members:
-   :show-inheritance:

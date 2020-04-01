@@ -1,0 +1,153 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>gemd.entity.base_entity module &#8212; GEMD 0.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-gemd.entity.base_entity">
+<span id="gemd-entity-base-entity-module"></span><h1>gemd.entity.base_entity module<a class="headerlink" href="#module-gemd.entity.base_entity" title="Permalink to this headline">¶</a></h1>
+<p>Base class for all entities.</p>
+<dl class="class">
+<dt id="gemd.entity.base_entity.BaseEntity">
+<em class="property">class </em><code class="sig-prename descclassname">gemd.entity.base_entity.</code><code class="sig-name descname">BaseEntity</code><span class="sig-paren">(</span><em class="sig-param">uids</em>, <em class="sig-param">tags</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.base_entity.BaseEntity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemd.entity.dict_serializable.DictSerializable</span></code></a></p>
+<p>Base class for any entity, which includes objects and templates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>uids</strong> (<em>Map</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em>) – A collection of
+<a class="reference external" href="https://citrineinformatics.github.io/gemd-documentation/specification/unique-identifiers/">unique IDs</a>.</p></li>
+<li><p><strong>tags</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – <a class="reference external" href="https://citrineinformatics.github.io/gemd-documentation/specification/tags/">Tags</a>
+are hierarchical strings that store information about an entity. They can be used
+for filtering and discoverability.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="gemd.entity.base_entity.BaseEntity.add_uid">
+<code class="sig-name descname">add_uid</code><span class="sig-paren">(</span><em class="sig-param">scope</em>, <em class="sig-param">uid</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.base_entity.BaseEntity.add_uid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a uid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scope</strong> (<em>str</em>) – scope of the uid</p></li>
+<li><p><strong>uid</strong> (<em>str</em>) – Unique identifier</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="gemd.entity.base_entity.BaseEntity.tags">
+<em class="property">property </em><code class="sig-name descname">tags</code><a class="headerlink" href="#gemd.entity.base_entity.BaseEntity.tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the tags.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gemd.entity.base_entity.BaseEntity.typ">
+<code class="sig-name descname">typ</code><em class="property"> = 'base'</em><a class="headerlink" href="#gemd.entity.base_entity.BaseEntity.typ" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gemd.entity.base_entity.BaseEntity.uids">
+<em class="property">property </em><code class="sig-name descname">uids</code><a class="headerlink" href="#gemd.entity.base_entity.BaseEntity.uids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the uids.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">GEMD</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../depth/index.html">1. In depth documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Citrine Informatics.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/reference/gemd.entity.base_entity.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

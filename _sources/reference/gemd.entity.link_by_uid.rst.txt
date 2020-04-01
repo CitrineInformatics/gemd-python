@@ -1,0 +1,7 @@
+gemd.entity.link\_by\_uid module
+================================
+
+.. automodule:: gemd.entity.link_by_uid
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,7 +1,0 @@
-taurus.enumeration.base\_enumeration module
-===========================================
-
-.. automodule:: taurus.enumeration.base_enumeration
-   :members:
-   :undoc-members:
-   :show-inheritance:

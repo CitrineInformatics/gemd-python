@@ -1,7 +1,0 @@
-taurus.entity.object.has\_template module
-=========================================
-
-.. automodule:: taurus.entity.object.has_template
-   :members:
-   :undoc-members:
-   :show-inheritance:

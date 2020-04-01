@@ -1,7 +1,0 @@
-taurus.ingest.material\_run\_example module
-===========================================
-
-.. automodule:: taurus.ingest.material_run_example
-   :members:
-   :undoc-members:
-   :show-inheritance:

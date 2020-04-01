@@ -1,7 +1,0 @@
-taurus.entity.link\_by\_uid module
-==================================
-
-.. automodule:: taurus.entity.link_by_uid
-   :members:
-   :undoc-members:
-   :show-inheritance:

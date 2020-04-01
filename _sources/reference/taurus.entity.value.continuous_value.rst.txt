@@ -1,7 +1,0 @@
-taurus.entity.value.continuous\_value module
-============================================
-
-.. automodule:: taurus.entity.value.continuous_value
-   :members:
-   :undoc-members:
-   :show-inheritance:

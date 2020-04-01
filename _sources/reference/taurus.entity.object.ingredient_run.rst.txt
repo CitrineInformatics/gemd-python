@@ -1,7 +1,0 @@
-taurus.entity.object.ingredient\_run module
-===========================================
-
-.. automodule:: taurus.entity.object.ingredient_run
-   :members:
-   :undoc-members:
-   :show-inheritance:

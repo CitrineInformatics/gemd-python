@@ -1,0 +1,7 @@
+gemd.enumeration.origin module
+==============================
+
+.. automodule:: gemd.enumeration.origin
+   :members:
+   :undoc-members:
+   :show-inheritance:

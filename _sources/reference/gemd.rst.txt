@@ -1,0 +1,24 @@
+gemd package
+============
+
+Subpackages
+-----------
+
+.. toctree::
+
+   gemd.client
+   gemd.demo
+   gemd.entity
+   gemd.enumeration
+   gemd.ingest
+   gemd.json
+   gemd.units
+   gemd.util
+
+Module contents
+---------------
+
+.. automodule:: gemd
+   :members:
+   :undoc-members:
+   :show-inheritance:

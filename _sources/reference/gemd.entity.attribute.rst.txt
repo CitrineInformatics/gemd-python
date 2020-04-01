@@ -1,0 +1,21 @@
+gemd.entity.attribute package
+=============================
+
+Submodules
+----------
+
+.. toctree::
+
+   gemd.entity.attribute.base_attribute
+   gemd.entity.attribute.condition
+   gemd.entity.attribute.parameter
+   gemd.entity.attribute.property
+   gemd.entity.attribute.property_and_conditions
+
+Module contents
+---------------
+
+.. automodule:: gemd.entity.attribute
+   :members:
+   :undoc-members:
+   :show-inheritance:

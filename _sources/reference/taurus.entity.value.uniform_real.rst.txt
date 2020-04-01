@@ -1,7 +1,0 @@
-taurus.entity.value.uniform\_real module
-========================================
-
-.. automodule:: taurus.entity.value.uniform_real
-   :members:
-   :undoc-members:
-   :show-inheritance:

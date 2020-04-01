@@ -1,7 +1,0 @@
-taurus.entity.object.material\_run module
-=========================================
-
-.. automodule:: taurus.entity.object.material_run
-   :members:
-   :undoc-members:
-   :show-inheritance:

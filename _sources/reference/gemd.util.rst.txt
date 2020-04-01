@@ -1,0 +1,17 @@
+gemd.util package
+=================
+
+Submodules
+----------
+
+.. toctree::
+
+   gemd.util.impl
+
+Module contents
+---------------
+
+.. automodule:: gemd.util
+   :members:
+   :undoc-members:
+   :show-inheritance:

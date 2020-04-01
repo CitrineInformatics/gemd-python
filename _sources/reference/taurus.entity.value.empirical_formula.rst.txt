@@ -1,7 +1,0 @@
-taurus.entity.value.empirical\_formula module
-=============================================
-
-.. automodule:: taurus.entity.value.empirical_formula
-   :members:
-   :undoc-members:
-   :show-inheritance:

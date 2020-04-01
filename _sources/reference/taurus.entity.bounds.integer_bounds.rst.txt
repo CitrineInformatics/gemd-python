@@ -1,7 +1,0 @@
-taurus.entity.bounds.integer\_bounds module
-===========================================
-
-.. automodule:: taurus.entity.bounds.integer_bounds
-   :members:
-   :undoc-members:
-   :show-inheritance:

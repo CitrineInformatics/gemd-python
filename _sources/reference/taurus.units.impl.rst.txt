@@ -1,7 +1,0 @@
-taurus.units.impl module
-========================
-
-.. automodule:: taurus.units.impl
-   :members:
-   :undoc-members:
-   :show-inheritance:

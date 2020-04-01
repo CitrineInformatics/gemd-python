@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>gemd.entity.case_insensitive_dict module &#8212; GEMD 0.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-gemd.entity.case_insensitive_dict">
+<span id="gemd-entity-case-insensitive-dict-module"></span><h1>gemd.entity.case_insensitive_dict module<a class="headerlink" href="#module-gemd.entity.case_insensitive_dict" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="gemd.entity.case_insensitive_dict.CaseInsensitiveDict">
+<em class="property">class </em><code class="sig-prename descclassname">gemd.entity.case_insensitive_dict.</code><code class="sig-name descname">CaseInsensitiveDict</code><span class="sig-paren">(</span><em class="sig-param">seq=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.case_insensitive_dict.CaseInsensitiveDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+<p>A dictionary in which the keys are case-insensitive.</p>
+<p>It is initialized the same way as a typical dict, but the values can be accessed without
+regard to key case. The value associated with key “Key” can also be accessed with “key”
+or “KEY” or “kEy”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>seq</strong> (<em>iterable</em><em> or </em><em>mapping</em><em>, </em><em>optional</em>) – The key-value pairs of the dictionary. Can either be a mapping object with (key, value)
+pairs, or an iterable of tuples of the form (key, value).</p></li>
+<li><p><strong>**kwargs</strong> (<em>keyword args</em><em>, </em><em>optional</em>) – An alternative way of initializing the dictionary with key-value pairs.
+Example: CaseInsensitiveDict(one=1, two=”two”).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="gemd.entity.case_insensitive_dict.CaseInsensitiveDict.get">
+<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param">key: str</em>, <em class="sig-param">default=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.case_insensitive_dict.CaseInsensitiveDict.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the value for a given case-insensitive key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>str</em>) – The key to look up (possibly with a different casing).</p></li>
+<li><p><strong>default</strong> (<em>Any</em>) – The result to return if the key is not present.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The value associated with the case-insensitive version of <cite>key</cite>, or None
+if <cite>key</cite> is not present.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">GEMD</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../depth/index.html">1. In depth documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Citrine Informatics.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/reference/gemd.entity.case_insensitive_dict.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

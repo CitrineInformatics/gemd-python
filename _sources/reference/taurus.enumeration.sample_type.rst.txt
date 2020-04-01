@@ -1,7 +1,0 @@
-taurus.enumeration.sample\_type module
-======================================
-
-.. automodule:: taurus.enumeration.sample_type
-   :members:
-   :undoc-members:
-   :show-inheritance:

@@ -1,0 +1,17 @@
+gemd.entity.source package
+==========================
+
+Submodules
+----------
+
+.. toctree::
+
+   gemd.entity.source.performed_source
+
+Module contents
+---------------
+
+.. automodule:: gemd.entity.source
+   :members:
+   :undoc-members:
+   :show-inheritance:

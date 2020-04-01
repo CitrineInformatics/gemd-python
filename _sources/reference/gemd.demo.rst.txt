@@ -1,0 +1,19 @@
+gemd.demo package
+=================
+
+Submodules
+----------
+
+.. toctree::
+
+   gemd.demo.cake
+   gemd.demo.measurement_example
+   gemd.demo.strehlow_and_cook
+
+Module contents
+---------------
+
+.. automodule:: gemd.demo
+   :members:
+   :undoc-members:
+   :show-inheritance:

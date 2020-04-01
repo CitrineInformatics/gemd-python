@@ -1,0 +1,7 @@
+gemd.entity.object.has\_source module
+=====================================
+
+.. automodule:: gemd.entity.object.has_source
+   :members:
+   :undoc-members:
+   :show-inheritance:

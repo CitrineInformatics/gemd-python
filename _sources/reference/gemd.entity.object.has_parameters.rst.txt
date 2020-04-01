@@ -1,0 +1,7 @@
+gemd.entity.object.has\_parameters module
+=========================================
+
+.. automodule:: gemd.entity.object.has_parameters
+   :members:
+   :undoc-members:
+   :show-inheritance:

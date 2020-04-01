@@ -1,7 +1,0 @@
-taurus.entity.value.normal\_real module
-=======================================
-
-.. automodule:: taurus.entity.value.normal_real
-   :members:
-   :undoc-members:
-   :show-inheritance:

@@ -1,0 +1,7 @@
+gemd.enumeration.sample\_type module
+====================================
+
+.. automodule:: gemd.enumeration.sample_type
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+gemd.entity.value.uniform\_real module
+======================================
+
+.. automodule:: gemd.entity.value.uniform_real
+   :members:
+   :undoc-members:
+   :show-inheritance:

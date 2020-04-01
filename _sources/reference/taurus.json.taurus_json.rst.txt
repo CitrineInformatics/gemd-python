@@ -1,7 +1,0 @@
-taurus.json.taurus\_json module
-===============================
-
-.. automodule:: taurus.json.taurus_json
-   :members:
-   :undoc-members:
-   :show-inheritance:

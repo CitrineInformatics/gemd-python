@@ -1,0 +1,7 @@
+gemd.demo.strehlow\_and\_cook module
+====================================
+
+.. automodule:: gemd.demo.strehlow_and_cook
+   :members:
+   :undoc-members:
+   :show-inheritance:

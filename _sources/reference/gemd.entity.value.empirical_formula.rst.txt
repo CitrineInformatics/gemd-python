@@ -1,0 +1,7 @@
+gemd.entity.value.empirical\_formula module
+===========================================
+
+.. automodule:: gemd.entity.value.empirical_formula
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,17 @@
+gemd.client package
+===================
+
+Submodules
+----------
+
+.. toctree::
+
+   gemd.client.json_encoder
+
+Module contents
+---------------
+
+.. automodule:: gemd.client
+   :members:
+   :undoc-members:
+   :show-inheritance:

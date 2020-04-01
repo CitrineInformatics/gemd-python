@@ -1,0 +1,21 @@
+gemd.entity.bounds package
+==========================
+
+Submodules
+----------
+
+.. toctree::
+
+   gemd.entity.bounds.base_bounds
+   gemd.entity.bounds.categorical_bounds
+   gemd.entity.bounds.composition_bounds
+   gemd.entity.bounds.integer_bounds
+   gemd.entity.bounds.real_bounds
+
+Module contents
+---------------
+
+.. automodule:: gemd.entity.bounds
+   :members:
+   :undoc-members:
+   :show-inheritance:

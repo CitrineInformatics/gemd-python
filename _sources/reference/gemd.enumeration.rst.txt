@@ -1,0 +1,19 @@
+gemd.enumeration package
+========================
+
+Submodules
+----------
+
+.. toctree::
+
+   gemd.enumeration.base_enumeration
+   gemd.enumeration.origin
+   gemd.enumeration.sample_type
+
+Module contents
+---------------
+
+.. automodule:: gemd.enumeration
+   :members:
+   :undoc-members:
+   :show-inheritance:

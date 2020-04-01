@@ -1,0 +1,7 @@
+gemd.entity.template.measurement\_template module
+=================================================
+
+.. automodule:: gemd.entity.template.measurement_template
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+gemd.entity.value.uniform\_integer module
+=========================================
+
+.. automodule:: gemd.entity.value.uniform_integer
+   :members:
+   :undoc-members:
+   :show-inheritance:

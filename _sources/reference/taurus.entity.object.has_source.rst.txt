@@ -1,7 +1,0 @@
-taurus.entity.object.has\_source module
-=======================================
-
-.. automodule:: taurus.entity.object.has_source
-   :members:
-   :undoc-members:
-   :show-inheritance:

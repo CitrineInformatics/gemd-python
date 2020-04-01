@@ -1,0 +1,31 @@
+gemd.entity.object package
+==========================
+
+Submodules
+----------
+
+.. toctree::
+
+   gemd.entity.object.base_object
+   gemd.entity.object.has_conditions
+   gemd.entity.object.has_parameters
+   gemd.entity.object.has_properties
+   gemd.entity.object.has_quantities
+   gemd.entity.object.has_source
+   gemd.entity.object.has_template
+   gemd.entity.object.ingredient_run
+   gemd.entity.object.ingredient_spec
+   gemd.entity.object.material_run
+   gemd.entity.object.material_spec
+   gemd.entity.object.measurement_run
+   gemd.entity.object.measurement_spec
+   gemd.entity.object.process_run
+   gemd.entity.object.process_spec
+
+Module contents
+---------------
+
+.. automodule:: gemd.entity.object
+   :members:
+   :undoc-members:
+   :show-inheritance:

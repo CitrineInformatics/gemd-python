@@ -1,7 +1,0 @@
-taurus.client.json\_encoder module
-==================================
-
-.. automodule:: taurus.client.json_encoder
-   :members:
-   :undoc-members:
-   :show-inheritance:

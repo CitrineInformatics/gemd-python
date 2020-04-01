@@ -1,0 +1,18 @@
+gemd.ingest package
+===================
+
+Submodules
+----------
+
+.. toctree::
+
+   gemd.ingest.material_run_example
+   gemd.ingest.table_example
+
+Module contents
+---------------
+
+.. automodule:: gemd.ingest
+   :members:
+   :undoc-members:
+   :show-inheritance:

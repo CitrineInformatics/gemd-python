@@ -1,7 +1,0 @@
-taurus.entity.bounds.categorical\_bounds module
-===============================================
-
-.. automodule:: taurus.entity.bounds.categorical_bounds
-   :members:
-   :undoc-members:
-   :show-inheritance:

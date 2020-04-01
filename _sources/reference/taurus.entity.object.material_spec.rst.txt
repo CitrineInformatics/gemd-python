@@ -1,7 +1,0 @@
-taurus.entity.object.material\_spec module
-==========================================
-
-.. automodule:: taurus.entity.object.material_spec
-   :members:
-   :undoc-members:
-   :show-inheritance:

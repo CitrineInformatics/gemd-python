@@ -1,0 +1,27 @@
+gemd.entity.template package
+============================
+
+Submodules
+----------
+
+.. toctree::
+
+   gemd.entity.template.attribute_template
+   gemd.entity.template.base_template
+   gemd.entity.template.condition_template
+   gemd.entity.template.has_condition_templates
+   gemd.entity.template.has_parameter_templates
+   gemd.entity.template.has_property_templates
+   gemd.entity.template.material_template
+   gemd.entity.template.measurement_template
+   gemd.entity.template.parameter_template
+   gemd.entity.template.process_template
+   gemd.entity.template.property_template
+
+Module contents
+---------------
+
+.. automodule:: gemd.entity.template
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,7 +1,0 @@
-taurus.enumeration.origin module
-================================
-
-.. automodule:: taurus.enumeration.origin
-   :members:
-   :undoc-members:
-   :show-inheritance:
