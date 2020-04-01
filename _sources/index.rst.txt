@@ -3,10 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to the GEMD Documentation!
+Welcome to the GEMD-Python Documentation!
 ===================================================
 
-GEMD is the Python implementation of the Citrine data model, the full documentation of which
+``gemd`` is the Python implementation of the Citrine data model, the full documentation of which
 can be found `here <https://citrineinformatics.github.io/gemd-docs/>`_.
 
 To learn about the details of specific classes, please see the module index.
