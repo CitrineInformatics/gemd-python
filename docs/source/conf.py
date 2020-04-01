@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.abspath('../../gemd'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'GEMD'
+project = 'GEMD-python'
 copyright = '2020, Citrine Informatics'
 author = 'Citrine Informatics'
 
