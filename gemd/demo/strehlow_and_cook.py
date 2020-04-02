@@ -225,12 +225,12 @@ def make_strehlow_objects(table=None):
     for row in table:
         formula = formula_clean(row['chemicalFormula'])
         if formula not in compounds:
-            compounds[formula] = MaterialSpec(name=formula_latex(formula),
-                                              template=tmpl["Chemical"],
-                                              process=ProcessSpec(name="Sample preparation",
-                                                                  template=tmpl["Sample preparation"]
-                                                                  )
-                                              )
+            compounds[formula] = MaterialSpec(
+                name=formula_latex(formula),
+                template=tmpl["Chemical"],
+                process=ProcessSpec(name="Sample preparation",
+                                    template=tmpl["Sample preparation"]
+                                    ))
         spec = compounds[formula]
         run = make_instance(spec)
         datapoints.append(run)
