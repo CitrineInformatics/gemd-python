@@ -224,13 +224,14 @@ def make_strehlow_objects(table=None):
     compounds = dict()
     for row in table:
         formula = formula_clean(row['chemicalFormula'])
-        spec = compounds.get(formula,
-                             MaterialSpec(name=formula_latex(formula),
-                                          template=tmpl["Chemical"],
-                                          process=ProcessSpec(name="Sample preparation",
-                                                              template=tmpl["Sample preparation"]
-                                                              )
-                                          ))
+        if formula not in compounds:
+            compounds[formula] = MaterialSpec(
+                name=formula_latex(formula),
+                template=tmpl["Chemical"],
+                process=ProcessSpec(name="Sample preparation",
+                                    template=tmpl["Sample preparation"]
+                                    ))
+        spec = compounds[formula]
         run = make_instance(spec)
         datapoints.append(run)
 

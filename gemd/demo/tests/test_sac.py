@@ -14,6 +14,12 @@ def test_sac():
     for comp in sac:
         assert je.loads(je.dumps(comp)) == comp
 
+    # Verify that specs are shared when compounds match
+    for comp1 in sac:
+        for comp2 in sac:
+            # xand
+            assert (comp1.name == comp2.name) == (comp1.spec.uids == comp2.spec.uids)
+
     # Look at each different combination of Value types in a S&C record
     smaller = minimal_subset(sac_tbl['content'])
     # Make sure that the diversity of value types isn't lost, e.g. something is being None'd
