@@ -30,7 +30,7 @@ from gemd.enumeration.origin import Origin
 
 
 # For now, module constant, though likely this should get promoted to a package level
-DEMO_SCOPE = 'citrine-demo-sac'
+DEMO_TEMPLATE_SCOPE = 'citrine-demo-sac-template'
 FULL_TABLE = "strehlow_and_cook.pif"
 SMALL_TABLE = "strehlow_and_cook_small.pif"
 
@@ -78,7 +78,7 @@ def formula_clean(old):
     return re.sub(r"(?<=[A-Za-z])1(?=[A-Za-z]|$)", '', old)
 
 
-def make_templates():
+def make_templates(template_scope=DEMO_TEMPLATE_SCOPE):
     """Build all templates needed for the table."""
     tmpl = dict()
 
@@ -141,7 +141,7 @@ def make_templates():
         assert name not in tmpl
         tmpl[name] = typ(name=name,
                          bounds=bounds,
-                         uids={DEMO_SCOPE + '-template': name},
+                         uids={template_scope: name},
                          tags=['citrine::demo::template::attribute']
                          )
 
@@ -182,16 +182,16 @@ def make_templates():
     for (name, (typ, kw_args)) in object_feed.items():
         assert name not in tmpl
         tmpl[name] = typ(name=name,
-                         uids={DEMO_SCOPE + '-template': name},
+                         uids={template_scope: name},
                          tags=['citrine::demo::template::object'],
                          **kw_args)
 
     return tmpl
 
 
-def make_strehlow_objects(table=None):
+def make_strehlow_objects(table=None, template_scope=DEMO_TEMPLATE_SCOPE):
     """Make a table with Strehlow & Cook data."""
-    tmpl = make_templates()
+    tmpl = make_templates(template_scope)
 
     if table is None:
         table = import_table()
@@ -441,12 +441,21 @@ if __name__ == "__main__":
     """
     When run as a script, this will clobber the SMALL_TABLE file with a newly-generated
     minimal subset input table.
+
+    Takes one optional argument - the name to use for the template scope.
+    Defaults to DEMO_TEMPLATE_SCOPE if none provided.
     """
     import os.path
     import json
+    import sys
 
+    args = sys.argv[1:]
+    if len(args) >= 1:
+        template_scope = args[0]
+    else:
+        template_scope = DEMO_TEMPLATE_SCOPE
     imported_table = import_table(FULL_TABLE)
-    full_compounds = make_strehlow_objects(imported_table)
+    full_compounds = make_strehlow_objects(imported_table, template_scope)
     full_table = make_strehlow_table(full_compounds)
     small_table = minimal_subset(full_table['content'])
     todo = set(_fingerprint(x) for x in small_table)
