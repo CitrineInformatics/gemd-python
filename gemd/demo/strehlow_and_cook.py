@@ -441,7 +441,7 @@ if __name__ == "__main__":
     """
     When run as a script, this will clobber the SMALL_TABLE file with a newly-generated
     minimal subset input table.
-    
+
     Takes one optional argument - the name to use for the template scope.
     Defaults to DEMO_TEMPLATE_SCOPE if none provided.
     """
