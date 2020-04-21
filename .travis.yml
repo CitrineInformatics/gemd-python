@@ -14,6 +14,7 @@ script:
 - flake8 gemd
 - cd docs; make html; cd ..;
 - touch ./docs/_build/html/.nojekyll
+- if [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then bash ./scripts/validate-version-bump.sh; fi
 deploy:
   - provider: pages
     skip_cleanup: true
