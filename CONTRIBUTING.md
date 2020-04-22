@@ -10,7 +10,7 @@ For additional (non-binding) inspiration, check out the [Google Python Style Gui
 
 This project currently follows a [feature branch workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow) (i.e. _masterflow_):
  * Feature branches and bugfixes are branched off of master and then opened as PRs into master
- * Every PR must contain a version bump following [semantic versioning](https://semver.org/).
+ * Every PR must contain a version bump following [semantic versioning](https://semver.org/)
  * Backport branches for historical versions are created as-needed off of master; backports are branched off of and merged into them
  
  During periods of rapid development activity, the branching strategy may change to accomodate it, but it will be kept up to date here.
