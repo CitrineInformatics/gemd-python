@@ -5,7 +5,7 @@
 Changes are gated on:
  * Passing unit tests
  * 100% unit test coverage
- * pep8 style complaince, with some exceptions in the [tox file](tox.ini)
+ * pep8 style compliance, with some exceptions in the [tox file](tox.ini)
 Check out the [.travis.yml](.travis.yml) file for the exact testing procedure.
 
 ## Coding Style
@@ -21,7 +21,7 @@ This project currently follows a [feature branch workflow](https://www.atlassian
  * Every PR must contain a version bump following [semantic versioning](https://semver.org/)
  * Backport branches for historical versions are created as-needed off of master; backports are branched off of and merged into them
  
- During periods of rapid development activity, the branching strategy may change to accomodate it, but it will be kept up to date here.
+ During periods of rapid development activity, the branching strategy may change to accommodate it, but it will be kept up to date here.
 
 ## Release process
 

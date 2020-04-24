@@ -15,4 +15,4 @@ Documentation of this package can be found [here](https://citrineinformatics.git
 
 ## Developer instructions
 
-See [Contributing.md](Contributing.md)
+See the [contributing guide](./CONTRIBUTING.md).
