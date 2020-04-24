@@ -5,7 +5,7 @@
 Changes are gated on:
  * Passing unit tests
  * 100% unit test coverage
- * pep8 style compliance, with some exceptions in the [tox file](tox.ini)
+ * PEP8 style compliance, with some exceptions in the [tox file](tox.ini)
 Check out the [.travis.yml](.travis.yml) file for the exact testing procedure.
 
 ## Coding Style
@@ -26,17 +26,19 @@ This project currently follows a [feature branch workflow](https://www.atlassian
 ## Release process
 
 The master branch **does not** continuously deploy to [pypi](https://pypi.org/project/gemd/).
-Rather, releases are cut explicitly by using [Github's releases](https://github.com/CitrineInformatics/gemd-python/releases).
+Rather, releases are cut explicitly by using [GitHub's releases](https://github.com/CitrineInformatics/gemd-python/releases).
 To create a release:
- * Navigate to the [github compare page](https://github.com/CitrineInformatics/gemd-python/compare)
- * Set the `base` to the most recent tag (which corresponds to the most recent release)
- * Set the `compare` to the commit you want to deploy, typically `master`
+ * Catalog the changes in order to inform release notes
+   * To do this through the GitHub interface:
+     * Navigate to the [GitHub compare page](https://github.com/CitrineInformatics/gemd-python/compare)
+     * Set the `base` to the most recent tag (which corresponds to the most recent release)
+     * Set the `compare` to the commit you want to deploy, typically `master`
    * You can use `git diff` as well, if you prefer
- * In another tab, navigate to the [github release creation page](https://github.com/CitrineInformatics/gemd-python/releases/new)
+ * In another tab, navigate to the [GitHub release creation page](https://github.com/CitrineInformatics/gemd-python/releases/new)
  * Set the `Target` to the commit you want to deploy, typically `master`
  * Set the `Tag version` to `v{x.y.z}` where `x.y.z` is the version in [setup.py](setup.py), e.g. `v1.2.3`
  * Set the `Release title` to "GEMD v{x.y.z} is released!"
- * Populate the release notes with a 1 or 2 sentence summary and `What's new`, `Improvemenets`, `Fixes`, and `Deprecated` sections, as appropriate.
+ * Populate the release notes with a 1 or 2 sentence summary and `What's New`, `Improvements`, `Fixes`, and `Deprecated` sections, as appropriate
 
 Travis will trigger the deploy due to the addition of the tag.
 Only commits on the **master** or backports branches can be released, but it need not be the most recent commit on the branch.
