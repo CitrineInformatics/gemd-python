@@ -36,7 +36,7 @@ class PostDevelopCommand(develop):
 
 
 setup(name='gemd',
-      version='0.6.4',
+      version='0.6.5',
       url='http://github.com/CitrineInformatics/gemd-python',
       description="Python binding for Citrine's GEMD data model",
       author='Max Hutchinson',
@@ -58,6 +58,13 @@ setup(name='gemd',
           "pint>=0.9",
           "strip-hints>=0.1.5",
           "deprecation>=2.0.7,<3"
+      ],
+      classifiers=[
+          'Programming Language :: Python :: 3',
+          'Programming Language :: Python :: 3.5',
+          'Programming Language :: Python :: 3.6',
+          'Programming Language :: Python :: 3.7',
+          'Programming Language :: Python :: 3.8',
       ],
       # TODO: add this back when we apply them on deployments
       # cmdclass={
