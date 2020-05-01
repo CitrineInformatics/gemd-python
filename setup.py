@@ -36,7 +36,7 @@ class PostDevelopCommand(develop):
 
 
 setup(name='gemd',
-      version='0.6.6',
+      version='0.6.7',
       url='http://github.com/CitrineInformatics/gemd-python',
       description="Python binding for Citrine's GEMD data model",
       author='Max Hutchinson',
