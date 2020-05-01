@@ -9,3 +9,5 @@ from .discrete_categorical import DiscreteCategorical
 from .nominal_categorical import NominalCategorical
 from .empirical_formula import EmpiricalFormula
 from .nominal_composition import NominalComposition
+from .inchi_value import InChI
+from .smiles_value import SMILES

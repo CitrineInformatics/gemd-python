@@ -34,6 +34,8 @@ from gemd.entity.value.nominal_real import NominalReal
 from gemd.entity.value.normal_real import NormalReal
 from gemd.entity.value.uniform_integer import UniformInteger
 from gemd.entity.value.uniform_real import UniformReal
+from gemd.entity.value.smiles_value import SMILES
+from gemd.entity.value.inchi_value import InChI
 from gemd.json import GEMDEncoder
 from gemd.util import flatten, substitute_links, set_uuids
 import json as json_builtin
@@ -57,7 +59,7 @@ class GEMDJson(object):
         MolecularBounds,
         NominalComposition, EmpiricalFormula,
         NominalReal, UniformReal, NormalReal, DiscreteCategorical, NominalCategorical,
-        UniformInteger, NominalInteger,
+        UniformInteger, NominalInteger, SMILES, InChI,
         FileLink, PerformedSource
     ]
 
