@@ -3,5 +3,5 @@
 from .categorical_bounds import CategoricalBounds
 from .composition_bounds import CompositionBounds
 from .integer_bounds import IntegerBounds
-from .molecular_bounds import MolecularBounds
+from .molecular_structure_bounds import MolecularStructureBounds
 from .real_bounds import RealBounds
