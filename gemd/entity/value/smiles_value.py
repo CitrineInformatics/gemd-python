@@ -2,7 +2,7 @@
 from gemd.entity.value.molecular_value import MolecularValue
 
 
-class SMILES(MolecularValue):
+class Smiles(MolecularValue):
     """
     A molecular structure encoded according to SMILES.
 
