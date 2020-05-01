@@ -4,8 +4,7 @@ import json
 import random
 
 from gemd.entity.attribute import Condition, Parameter, Property, PropertyAndConditions
-from gemd.entity.bounds import IntegerBounds, RealBounds, CategoricalBounds, CompositionBounds, \
-    MolecularBounds
+from gemd.entity.bounds import IntegerBounds, RealBounds, CategoricalBounds, CompositionBounds
 from gemd.entity.object import ProcessSpec, ProcessRun, MaterialSpec, MaterialRun, \
     MeasurementSpec, MeasurementRun, IngredientSpec, IngredientRun
 from gemd.entity.template import ProcessTemplate, MaterialTemplate, MeasurementTemplate, \
@@ -13,8 +12,7 @@ from gemd.entity.template import ProcessTemplate, MaterialTemplate, MeasurementT
 from gemd.entity.value import NominalInteger, UniformInteger, \
     NominalReal, NormalReal, UniformReal, \
     NominalCategorical, DiscreteCategorical, \
-    NominalComposition, EmpiricalFormula, \
-    SMILES, InChI
+    NominalComposition, EmpiricalFormula
 from gemd.enumeration.origin import Origin
 
 from gemd.entity.util import complete_material_history, make_instance
@@ -115,11 +113,6 @@ def make_cake_templates():
         description="The chemical formula of a material",
         bounds=CompositionBounds(components=EmpiricalFormula.all_elements())
     )
-    tmpl["Molecular Structure"] = PropertyTemplate(
-        name="Molecular Structure",
-        description="The molecular structure of the material",
-        bounds=MolecularBounds()
-    )
 
     # Objects
     tmpl["Baking in an oven"] = ProcessTemplate(
@@ -172,8 +165,7 @@ def make_cake_templates():
         name="Formulaic Material",
         description="A material with chemical characterization",
         properties=[
-            tmpl["Chemical Formula"],
-            tmpl["Molecular Structure"]
+            tmpl["Chemical Formula"]
         ]
     )
     tmpl["Icing"] = ProcessTemplate(name="Icing",
@@ -439,10 +431,7 @@ def make_cake_spec(tmpl=None):
         ],
         notes='Plain old NaCl',
         properties=[
-            PropertyAndConditions(Property(name='Formula', value=EmpiricalFormula("NaCl"))),
-            PropertyAndConditions(
-                Property(name='InChI', value=InChI("InChI=1S/ClH.Na/h1H;/q;+1/p-1"))
-            )
+            PropertyAndConditions(Property(name='Formula', value=EmpiricalFormula("NaCl")))
         ]
     )
     IngredientSpec(
@@ -467,11 +456,7 @@ def make_cake_spec(tmpl=None):
         ],
         notes='Sugar',
         properties=[
-            PropertyAndConditions(Property(name="Formula", value=EmpiricalFormula("C12H22O11"))),
-            PropertyAndConditions(
-                Property(name='SMILES',
-                         value=SMILES("C(C1C(C(C(C(O1)OC2(C(C(C(O2)CO)O)O)CO)O)O)O)O"))
-            )
+            PropertyAndConditions(Property(name="Formula", value=EmpiricalFormula("C12H22O11")))
         ]
     )
     IngredientSpec(
