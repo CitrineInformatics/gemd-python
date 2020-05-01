@@ -8,7 +8,7 @@ from gemd.entity.base_entity import BaseEntity
 from gemd.entity.bounds.categorical_bounds import CategoricalBounds
 from gemd.entity.bounds.composition_bounds import CompositionBounds
 from gemd.entity.bounds.integer_bounds import IntegerBounds
-from gemd.entity.bounds.molecular_bounds import MolecularBounds
+from gemd.entity.bounds.molecular_structure_bounds import MolecularStructureBounds
 from gemd.entity.bounds.real_bounds import RealBounds
 from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
@@ -56,7 +56,7 @@ class GEMDJson(object):
         Property, Condition, Parameter, PropertyAndConditions,
         PropertyTemplate, ConditionTemplate, ParameterTemplate,
         RealBounds, IntegerBounds, CategoricalBounds, CompositionBounds,
-        MolecularBounds,
+        MolecularStructureBounds,
         NominalComposition, EmpiricalFormula,
         NominalReal, UniformReal, NormalReal, DiscreteCategorical, NominalCategorical,
         UniformInteger, NominalInteger, Smiles, InChI,

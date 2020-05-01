@@ -6,10 +6,10 @@ In the future, this may include substructural restrictions.
 from gemd.entity.bounds.base_bounds import BaseBounds
 
 
-class MolecularBounds(BaseBounds):
+class MolecularStructureBounds(BaseBounds):
     """Molecular bounds, with no component or substructural restrictions (yet)."""
 
-    typ = "molecular_bounds"
+    typ = "molecular_structure_bounds"
 
     def __init__(self):
         pass
@@ -34,7 +34,7 @@ class MolecularBounds(BaseBounds):
         """
         if not super().contains(bounds):
             return False
-        if not isinstance(bounds, MolecularBounds):
+        if not isinstance(bounds, MolecularStructureBounds):
             return False
 
         return True

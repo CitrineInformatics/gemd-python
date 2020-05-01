@@ -2,14 +2,14 @@
 import pytest
 
 from gemd.json import dumps, loads
-from gemd.entity.bounds.molecular_bounds import MolecularBounds
+from gemd.entity.bounds.molecular_structure_bounds import MolecularStructureBounds
 from gemd.entity.bounds.real_bounds import RealBounds
 
 
 def test_contains():
     """Test basic contains logic."""
-    bounds = MolecularBounds()
-    assert bounds.contains(MolecularBounds())
+    bounds = MolecularStructureBounds()
+    assert bounds.contains(MolecularStructureBounds())
     assert not bounds.contains(RealBounds(0.0, 2.0, ''))
     assert not bounds.contains(None)
     with pytest.raises(TypeError):
@@ -20,6 +20,6 @@ def test_contains():
 
 def test_json():
     """Test that serialization works (empty dictionary)."""
-    bounds = MolecularBounds()
+    bounds = MolecularStructureBounds()
     copy = loads(dumps(bounds))
     assert copy == bounds
