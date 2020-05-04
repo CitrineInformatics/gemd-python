@@ -441,7 +441,9 @@ def make_cake_spec(tmpl=None):
         properties=[
             PropertyAndConditions(Property(name='Formula', value=EmpiricalFormula("NaCl"))),
             PropertyAndConditions(
-                Property(name='InChI', value=InChI("InChI=1S/ClH.Na/h1H;/q;+1/p-1"))
+                Property(name='InChI',
+                         value=InChI("InChI=1S/ClH.Na/h1H;/q;+1/p-1"),
+                         template=tmpl["Molecular Structure"])
             )
         ]
     )
@@ -470,7 +472,9 @@ def make_cake_spec(tmpl=None):
             PropertyAndConditions(Property(name="Formula", value=EmpiricalFormula("C12H22O11"))),
             PropertyAndConditions(
                 Property(name='SMILES',
-                         value=Smiles("C(C1C(C(C(C(O1)OC2(C(C(C(O2)CO)O)O)CO)O)O)O)O"))
+                         value=Smiles("C(C1C(C(C(C(O1)OC2(C(C(C(O2)CO)O)O)CO)O)O)O)O"),
+                         template=tmpl["Molecular Structure"]
+                         )
             )
         ]
     )
