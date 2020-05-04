@@ -12,12 +12,15 @@ Submodules
    gemd.entity.value.continuous_value
    gemd.entity.value.discrete_categorical
    gemd.entity.value.empirical_formula
+   gemd.entity.value.inchi_value
    gemd.entity.value.integer_value
+   gemd.entity.value.molecular_value
    gemd.entity.value.nominal_categorical
    gemd.entity.value.nominal_composition
    gemd.entity.value.nominal_integer
    gemd.entity.value.nominal_real
    gemd.entity.value.normal_real
+   gemd.entity.value.smiles_value
    gemd.entity.value.uniform_integer
    gemd.entity.value.uniform_real
 

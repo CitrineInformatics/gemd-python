@@ -1,0 +1,7 @@
+gemd.entity.value.inchi\_value module
+=====================================
+
+.. automodule:: gemd.entity.value.inchi_value
+   :members:
+   :undoc-members:
+   :show-inheritance:

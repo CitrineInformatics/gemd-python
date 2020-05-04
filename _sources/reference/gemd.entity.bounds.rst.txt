@@ -10,6 +10,7 @@ Submodules
    gemd.entity.bounds.categorical_bounds
    gemd.entity.bounds.composition_bounds
    gemd.entity.bounds.integer_bounds
+   gemd.entity.bounds.molecular_structure_bounds
    gemd.entity.bounds.real_bounds
 
 Module contents

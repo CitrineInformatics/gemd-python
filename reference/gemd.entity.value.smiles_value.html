@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>gemd.json.gemd_encoder module &#8212; GEMD-python 0.0.0 documentation</title>
+    <title>gemd.entity.value.smiles_value module &#8212; GEMD-python 0.0.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -30,18 +30,30 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-gemd.json.gemd_encoder">
-<span id="gemd-json-gemd-encoder-module"></span><h1>gemd.json.gemd_encoder module<a class="headerlink" href="#module-gemd.json.gemd_encoder" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-gemd.entity.value.smiles_value">
+<span id="gemd-entity-value-smiles-value-module"></span><h1>gemd.entity.value.smiles_value module<a class="headerlink" href="#module-gemd.entity.value.smiles_value" title="Permalink to this headline">¶</a></h1>
+<p>An empirical chemical formaula.</p>
 <dl class="class">
-<dt id="gemd.json.gemd_encoder.GEMDEncoder">
-<em class="property">class </em><code class="sig-prename descclassname">gemd.json.gemd_encoder.</code><code class="sig-name descname">GEMDEncoder</code><span class="sig-paren">(</span><em class="sig-param">*</em>, <em class="sig-param">skipkeys=False</em>, <em class="sig-param">ensure_ascii=True</em>, <em class="sig-param">check_circular=True</em>, <em class="sig-param">allow_nan=True</em>, <em class="sig-param">sort_keys=False</em>, <em class="sig-param">indent=None</em>, <em class="sig-param">separators=None</em>, <em class="sig-param">default=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.json.gemd_encoder.GEMDEncoder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">json.encoder.JSONEncoder</span></code></p>
-<p>Rules for encoding gemd objects as json strings.</p>
+<dt id="gemd.entity.value.smiles_value.Smiles">
+<em class="property">class </em><code class="sig-prename descclassname">gemd.entity.value.smiles_value.</code><code class="sig-name descname">Smiles</code><span class="sig-paren">(</span><em class="sig-param">smiles=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.value.smiles_value.Smiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemd.entity.value.molecular_value.html#gemd.entity.value.molecular_value.MolecularValue" title="gemd.entity.value.molecular_value.MolecularValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemd.entity.value.molecular_value.MolecularValue</span></code></a></p>
+<p>A molecular structure encoded according to SMILES.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>smiles</strong> (<em>str</em>) – A string formatted according to the Simplified molecular-input line-entry system
+(SMILES) informal standard.</p>
+</dd>
+</dl>
 <dl class="method">
-<dt id="gemd.json.gemd_encoder.GEMDEncoder.default">
-<code class="sig-name descname">default</code><span class="sig-paren">(</span><em class="sig-param">o</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.json.gemd_encoder.GEMDEncoder.default" title="Permalink to this definition">¶</a></dt>
-<dd><p>Default encoder implementation.</p>
+<dt id="gemd.entity.value.smiles_value.Smiles.smiles">
+<em class="property">property </em><code class="sig-name descname">smiles</code><a class="headerlink" href="#gemd.entity.value.smiles_value.Smiles.smiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the formula as a string.</p>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="gemd.entity.value.smiles_value.Smiles.typ">
+<code class="sig-name descname">typ</code><em class="property"> = 'smiles'</em><a class="headerlink" href="#gemd.entity.value.smiles_value.Smiles.typ" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -105,7 +117,7 @@
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="../_sources/reference/gemd.json.gemd_encoder.rst.txt"
+      <a href="../_sources/reference/gemd.entity.value.smiles_value.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

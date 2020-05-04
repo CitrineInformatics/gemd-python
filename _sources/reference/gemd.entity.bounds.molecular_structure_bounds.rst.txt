@@ -1,0 +1,7 @@
+gemd.entity.bounds.molecular\_structure\_bounds module
+======================================================
+
+.. automodule:: gemd.entity.bounds.molecular_structure_bounds
+   :members:
+   :undoc-members:
+   :show-inheritance:
