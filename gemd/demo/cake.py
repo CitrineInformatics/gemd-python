@@ -685,9 +685,10 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
                                std=0.05 * item.spec.absolute_quantity.nominal,
                                units=item.spec.absolute_quantity.units)
             if item.spec.volume_fraction is not None:
+                # The only element here is dry mix, and it's almost entirely flour
                 item.volume_fraction = \
-                    NormalReal(mean=fuzz * item.spec.volume_fraction.nominal,
-                               std=0.05 * item.spec.volume_fraction.nominal,
+                    NormalReal(mean=0.01 * (fuzz - 0.5) + item.spec.volume_fraction.nominal,
+                               std=0.005,
                                units=item.spec.volume_fraction.units)
             if item.spec.mass_fraction is not None:
                 item.mass_fraction = \
