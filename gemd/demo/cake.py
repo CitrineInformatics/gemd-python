@@ -439,12 +439,7 @@ def make_cake_spec(tmpl=None):
         ],
         notes='Plain old NaCl',
         properties=[
-            PropertyAndConditions(Property(name='Formula', value=EmpiricalFormula("NaCl"))),
-            PropertyAndConditions(
-                Property(name='InChI',
-                         value=InChI("InChI=1S/ClH.Na/h1H;/q;+1/p-1"),
-                         template=tmpl["Molecular Structure"])
-            )
+            PropertyAndConditions(Property(name='Formula', value=EmpiricalFormula("NaCl")))
         ]
     )
     IngredientSpec(
