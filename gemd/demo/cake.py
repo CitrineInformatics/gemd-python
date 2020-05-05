@@ -439,12 +439,7 @@ def make_cake_spec(tmpl=None):
         ],
         notes='Plain old NaCl',
         properties=[
-            PropertyAndConditions(Property(name='Formula', value=EmpiricalFormula("NaCl"))),
-            PropertyAndConditions(
-                Property(name='InChI',
-                         value=InChI("InChI=1S/ClH.Na/h1H;/q;+1/p-1"),
-                         template=tmpl["Molecular Structure"])
-            )
+            PropertyAndConditions(Property(name='Formula', value=EmpiricalFormula("NaCl")))
         ]
     )
     IngredientSpec(
@@ -547,7 +542,16 @@ def make_cake_spec(tmpl=None):
         ),
         tags=[
         ],
-        notes=''
+        notes='Vanilla Extract is mostly alcohol but the most important component '
+              'is vanillin (see attached structure)',
+        properties=[
+            PropertyAndConditions(
+                Property(name='Component Structure',
+                         value=InChI("InChI=1S/C8H8O3/c1-11-8-4-6(5-9)2-3-7(8)10/h2-5,10H,1H3"),
+                         template=tmpl["Molecular Structure"]
+                         )
+            )
+        ]
     )
     IngredientSpec(
         **ingredient_kwargs(vanilla),
