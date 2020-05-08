@@ -7,6 +7,8 @@ from gemd.entity.dict_serializable import DictSerializable
 from gemd.entity.link_by_uid import LinkByUID
 from toolz import concatv
 
+from gemd.entity.object.material_run import MaterialRun
+
 
 def set_uuids(obj, name="auto"):
     """
@@ -265,3 +267,106 @@ def writable_sort_order(key: Union[BaseEntity, str]) -> int:
         return 5
 
     raise ValueError("Unrecognized type string: {}".format(typ))
+
+
+def walk_gemd_tree(material: MaterialRun):
+    """Walks through a root material node to build a list of GEMD objects."""
+    from gemd.entity.object import MaterialRun, ProcessRun, MeasurementRun, IngredientRun
+    from gemd.entity.attribute.property_and_conditions import PropertyAndConditions
+    from gemd.entity.template.condition_template import ConditionTemplate
+    from gemd.entity.template.parameter_template import ParameterTemplate
+    from gemd.entity.template.property_template import PropertyTemplate
+    from gemd.entity.attribute.condition import Condition
+    from gemd.entity.attribute.parameter import Parameter
+    from gemd.entity.attribute.property import Property
+
+    if not isinstance(material, MaterialRun):
+        raise ValueError("Can only walk MaterialRun objects")
+
+    def extract_attr_templates(attributes, gems):
+        """Extracts attribute templates out of a list of attributes."""
+        new_attributes = list()
+        for attribute in attributes:
+            if isinstance(attribute, PropertyAndConditions):
+                new_attributes.append(attribute.property)
+                new_attributes.extend(attribute.conditions)
+            else:
+                new_attributes.append(attribute)
+        for attribute in new_attributes:
+            if isinstance(attribute, (tuple, list)):
+                attribute = attribute[0]
+            if isinstance(attribute, (PropertyTemplate, ParameterTemplate, ConditionTemplate)):
+                gems.add(attribute)
+            elif isinstance(attribute, (Property, Condition, Parameter)) and attribute.template:
+                gems.add(attribute.template)
+
+    def extract_gems_from_material(material):
+        """Extracts gems from material run, spec, and template."""
+        gems = set()
+        gems.add(material)
+        gems.add(material.spec)
+        extract_attr_templates(material.spec.properties, gems)
+        if material.spec.template:
+            gems.add(material.spec.template)
+            extract_attr_templates(material.spec.template.properties, gems)
+        return gems
+
+    def extract_gems_from_process(process):
+        """Extracts gems from process run, spec, and template."""
+        gems = set()
+        if process:
+            gems.add(process)
+            extract_attr_templates(process.parameters, gems)
+            extract_attr_templates(process.conditions, gems)
+            gems.add(process.spec)
+            extract_attr_templates(process.spec.parameters, gems)
+            extract_attr_templates(process.spec.conditions, gems)
+            if process.spec.template:
+                gems.add(process.spec.template)
+                extract_attr_templates(process.spec.template.parameters, gems)
+                extract_attr_templates(process.spec.template.conditions, gems)
+        return gems
+
+    def extract_gems_from_measurement(measurement):
+        """Extracts gems from measurement runs, specs, and templates."""
+        gems = set()
+        gems.add(measurement)
+        extract_attr_templates(measurement.properties, gems)
+        extract_attr_templates(measurement.parameters, gems)
+        extract_attr_templates(measurement.conditions, gems)
+        gems.add(measurement.spec)
+        extract_attr_templates(measurement.spec.parameters, gems)
+        extract_attr_templates(measurement.spec.conditions, gems)
+        if measurement.spec.template:
+            gems.add(measurement.spec.template)
+            extract_attr_templates(measurement.spec.template.properties, gems)
+            extract_attr_templates(measurement.spec.template.parameters, gems)
+            extract_attr_templates(measurement.spec.template.conditions, gems)
+        return gems
+
+    def extract_gems_from_ingredient(ingredient):
+        """Extracts gems from ingredient runs and specs."""
+        gems = set()
+        gems.add(ingredient)
+        gems.add(ingredient.spec)
+        return gems
+
+    gems = set()
+    queue = [material]
+    while queue:
+        gem = queue.pop(0)
+        if isinstance(gem, MaterialRun):
+            extracted_gems = extract_gems_from_material(gem)
+            queue.append(gem.process)
+            queue.extend(gem.measurements)
+        elif isinstance(gem, ProcessRun):
+            extracted_gems = extract_gems_from_process(gem)
+            queue.extend(gem.ingredients)
+        elif isinstance(gem, MeasurementRun):
+            extracted_gems = extract_gems_from_measurement(gem)
+        elif isinstance(gem, IngredientRun):
+            extracted_gems = extract_gems_from_ingredient(gem)
+            queue.append(gem.material)
+        gems.update(extracted_gems)
+
+    return gems
