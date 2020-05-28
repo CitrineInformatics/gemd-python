@@ -74,6 +74,10 @@ class GEMDJson(object):
         for clazz in self._clazzes:
             self._clazz_index[clazz.typ] = clazz
 
+    @property
+    def scope(self):
+        return self._scope
+
     def dumps(self, obj, **kwargs):
         """
         Serialize a gemd object, or container of them, into a json-formatting string.
@@ -94,7 +98,7 @@ class GEMDJson(object):
         # create a top level list of [flattened_objects, link-i-fied return value]
         res = {"object": obj}
 
-        additional = flatten(res, self._scope)
+        additional = flatten(res, self.scope)
         res = substitute_links(res)
         res["context"] = additional
         return json_builtin.dumps(res, cls=GEMDEncoder, sort_keys=True, **kwargs)
@@ -218,7 +222,7 @@ class GEMDJson(object):
             A serialized string of `obj`, with link_by_uid in place of pointers to other objects.
 
         """
-        set_uuids(obj, self._scope)
+        set_uuids(obj, self.scope)
         res = substitute_links(obj)
         return json_builtin.dumps(res, cls=GEMDEncoder, sort_keys=True, **kwargs)
 
