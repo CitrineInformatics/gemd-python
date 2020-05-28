@@ -663,7 +663,3 @@ def test_deeply_nested_rehydration():
     copied = loads(dumps(material_history))
     assert isinstance(copied.process.ingredients[1].spec, IngredientSpec)
     assert isinstance(copied.measurements[0], MeasurementRun)
-
-
-if __name__ == '__main__':
-    test_scope_control()

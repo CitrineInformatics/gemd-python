@@ -76,6 +76,7 @@ class GEMDJson(object):
 
     @property
     def scope(self):
+        """Return the default scope value."""
         return self._scope
 
     def dumps(self, obj, **kwargs):
