@@ -60,6 +60,33 @@ def test_deserialize():
     assert(copy_meas.uids["auto"] == measurement.uids["auto"])
 
 
+def test_scope_control():
+    """Serializing a nested object should be identical to individually serializing each piece."""
+    input_material = MaterialSpec()
+    process = ProcessSpec()
+    IngredientSpec(material=input_material, process=process)
+    material = MaterialSpec(process=process)
+
+    # Verify the default scope is there
+    default_json = GEMDJson()
+    default_text = default_json.dumps(material)
+    assert "auto" in default_text
+    assert "custom" not in default_text
+
+    # Clear out ids
+    input_material.uids = {}
+    process.uids = {}
+    process.ingredients[0].uids = {}
+    input_material.uids = {}
+    material.uids = {}
+
+    # Verify the default scope is there
+    custom_json = GEMDJson(scope='custom')
+    custom_text = custom_json.dumps(material)
+    assert "auto" not in custom_text
+    assert "custom" in custom_text
+
+
 def test_deserialize_extra_fields():
     """Extra JSON fields should be ignored in deserialization."""
     json_data = '{"context": [],' \
@@ -636,3 +663,7 @@ def test_deeply_nested_rehydration():
     copied = loads(dumps(material_history))
     assert isinstance(copied.process.ingredients[1].spec, IngredientSpec)
     assert isinstance(copied.measurements[0], MeasurementRun)
+
+
+if __name__ == '__main__':
+    test_scope_control()

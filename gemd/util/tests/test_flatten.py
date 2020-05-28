@@ -15,7 +15,7 @@ def test_flatten_bounds():
     )
     spec = ProcessSpec(name="spec", template=template)
 
-    flat = flatten(spec)
+    flat = flatten(spec, 'test-scope')
     assert len(flat) == 2, "Expected 2 flattened objects"
 
 
@@ -31,15 +31,16 @@ def test_flatten_empty_history():
     transform_run = ProcessRun(name="transformed", spec=transform)
     ingredient_run = IngredientRun(material=input_run, process=transform_run, spec=ingredient)
 
-    assert len(flatten(procured)) == 1
-    assert len(flatten(input)) == 1
-    assert len(flatten(ingredient)) == 3
-    assert len(flatten(transform)) == 3
+    assert len(flatten(procured, 'test-scope')) == 1
+    assert 'test-scope' in procured.uids
+    assert len(flatten(input, 'test-scope')) == 1
+    assert len(flatten(ingredient, 'test-scope')) == 3
+    assert len(flatten(transform, 'test-scope')) == 3
 
-    assert len(flatten(procured_run)) == 3
-    assert len(flatten(input_run)) == 3
-    assert len(flatten(ingredient_run)) == 7
-    assert len(flatten(transform_run)) == 7
+    assert len(flatten(procured_run, 'test-scope')) == 3
+    assert len(flatten(input_run, 'test-scope')) == 3
+    assert len(flatten(ingredient_run, 'test-scope')) == 7
+    assert len(flatten(transform_run, 'test-scope')) == 7
 
 
 def test_flatmap_unidirectional_ordering():
