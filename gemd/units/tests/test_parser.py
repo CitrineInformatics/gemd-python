@@ -16,7 +16,8 @@ def test_parse_expected():
         "inch", "ft", "mm", "um",
         "second", "ms", "hour", "minute", "ns",
         "g/cm^3", "g/mL", "kg/cm^3",
-        _ureg("kg").u
+        _ureg("kg").u,
+        "amu"  # A line that was edited
     ]
     for unit in expected:
         parse_units(unit)
@@ -26,7 +27,9 @@ def test_parse_unexpected():
     """Test that we cannot parse the units that we do not expect to."""
     unexpected = [
         "gibberish",
-        5
+        5,
+        "cp",  # Removed because of risk of collision with cP
+        "chain"  # Survey units eliminated
     ]
     for unit in unexpected:
         with pytest.raises(UndefinedUnitError):
