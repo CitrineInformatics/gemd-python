@@ -59,7 +59,8 @@ class BaseTemplate(BaseEntity):
         # check that the bounds is consistent with that of the template
         elif isinstance(template_or_tuple, (tuple, list)):
             first, second = template_or_tuple
-            if isinstance(first, (LinkByUID, AttributeTemplate)) and (isinstance(second, BaseBounds) or second is None):
+            if isinstance(first, (LinkByUID, AttributeTemplate)) and \
+                    (isinstance(second, BaseBounds) or second is None):
                 if isinstance(first, AttributeTemplate) and isinstance(second, BaseBounds):
                     if not first.bounds.contains(second):
                         raise ValueError("Range and template are inconsistent")

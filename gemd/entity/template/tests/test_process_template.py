@@ -45,7 +45,7 @@ def test_allowed_labels():
 
 
 def test_passthrough_bounds():
-    """Test that unspecified Bounds are accepted and set to None"""
+    """Test that unspecified Bounds are accepted and set to None."""
     template = ProcessTemplate('foo', conditions=[
         (LinkByUID('1', '2'), None),
         [LinkByUID('3', '4'), None],
