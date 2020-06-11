@@ -1,4 +1,5 @@
 """For entities that have a parameter template."""
+from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.setters import validate_list
 from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.template.parameter_template import ParameterTemplate
@@ -34,7 +35,7 @@ class HasParameterTemplates(object):
 
     @parameters.setter
     def parameters(self, parameters):
-        lst = validate_list(parameters, (ParameterTemplate, list, tuple))
+        lst = validate_list(parameters, (ParameterTemplate, LinkByUID, list, tuple))
 
         # make sure attribute can be a Parameter
         # TODO: list.map(_.validate_scope(AttributeType.PARAMETER)) all true

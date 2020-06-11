@@ -1,4 +1,5 @@
 """For entities that have a property template."""
+from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.setters import validate_list
 from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.template.property_template import PropertyTemplate
@@ -35,7 +36,7 @@ class HasPropertyTemplates(object):
     @properties.setter
     def properties(self, properties):
         # make sure the properties are a list
-        lst = validate_list(properties, (PropertyTemplate, list, tuple))
+        lst = validate_list(properties, (PropertyTemplate, LinkByUID, list, tuple))
 
         # make sure attribute can be a Property
         # TODO: list.map(_.validate_scope(AttributeType.PROPERTY)) all true
