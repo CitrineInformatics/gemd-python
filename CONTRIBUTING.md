@@ -12,6 +12,11 @@ Check out the [.travis.yml](.travis.yml) file for the exact testing procedure.
 This project follows [PEP8](https://www.python.org/dev/peps/pep-0008/), with the following exceptions:
 * Maximum line length is 99 characters
 
+Type hints are strongly encouraged.
+
+Positional arguments are strongly discouraged for methods with multiple arguments.
+Any positional argument should be required.
+
 For additional (non-binding) inspiration, check out the [Google Python Style Guide](https://github.com/google/styleguide/blob/gh-pages/pyguide.md).
 
 ## Branching strategy
