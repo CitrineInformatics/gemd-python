@@ -139,7 +139,13 @@ class IngredientRun(BaseObject, HasQuantities):
 
     @classmethod
     def from_dict(cls, d):
-        """Suppresses name/label warnings during deserializaton."""
-        with warnings.catch_warnings():
-            warnings.filterwarnings('ignore', category=DeprecationWarning)
-            return super().from_dict(d)
+        # Overload from_dict because we may get name/labels from an independent
+        # resource, but not get the associated IngredientSpec
+        name = d.pop("name", None)
+        labels = d.pop("labels", None)
+        obj = super().from_dict(d)
+        if name is not None:
+            obj._name = name
+        if labels is not None:
+            obj._labels = labels
+        return obj
