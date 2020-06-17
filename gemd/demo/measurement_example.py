@@ -46,6 +46,7 @@ def make_flexural_test_measurement(my_id, deflection, extra_tags=frozenset()):
     modulus = stress / strain
 
     measurement = MeasurementRun(
+        name="3 Point Bend",
         uids={"my_id": my_id},
         tags=["3_pt_bend", "mechanical", "flex"] + list(extra_tags),
         properties=[

@@ -53,7 +53,7 @@ class ProcessRun(BaseObject, HasConditions, HasParameters, HasSource):
 
     skip = {"_output_material", "_ingredients"}
 
-    def __init__(self, name=None, spec=None,
+    def __init__(self, name, *, spec=None,
                  conditions=None, parameters=None,
                  uids=None, tags=None, notes=None, file_links=None, source=None):
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,

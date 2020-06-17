@@ -31,7 +31,7 @@ firing_temperature_template = ConditionTemplate(
     bounds=RealBounds(lower_bound=0, upper_bound=1.0e9, default_units='degC')
 )
 
-measurement_template = MeasurementTemplate(properties=density_template)
+measurement_template = MeasurementTemplate("Density Measurement", properties=density_template)
 firing_template = ProcessTemplate(
     name="Firing in a kiln",
     conditions=(firing_temperature_template, RealBounds(lower_bound=500, upper_bound=1000,
@@ -48,8 +48,8 @@ def make_data_island(density, bulk_modulus, firing_temperature, binders, powders
     binder_specs = keymap(lambda x: MaterialSpec(name=x), binders)
     powder_specs = keymap(lambda x: MaterialSpec(name=x), powders)
 
-    binder_runs = keymap(lambda x: MaterialRun(spec=x), binder_specs)
-    powder_runs = keymap(lambda x: MaterialRun(spec=x), powder_specs)
+    binder_runs = keymap(lambda x: MaterialRun(name=x.name, spec=x), binder_specs)
+    powder_runs = keymap(lambda x: MaterialRun(name=x.name, spec=x), powder_specs)
 
     all_input_materials = keymap(lambda x: x.spec.name, merge(binder_runs, powder_runs))
     mixing_composition = Condition(
@@ -57,6 +57,7 @@ def make_data_island(density, bulk_modulus, firing_temperature, binders, powders
         value=NominalComposition(all_input_materials)
     )
     mixing_process = ProcessRun(
+        name="Mixing",
         tags=["mixing"],
         conditions=[mixing_composition]
     )
@@ -80,7 +81,7 @@ def make_data_island(density, bulk_modulus, firing_temperature, binders, powders
             )
         )
 
-    green_sample = MaterialRun(process=mixing_process)
+    green_sample = MaterialRun("Green", process=mixing_process)
 
     measured_firing_temperature = Condition(
         name="Firing Temperature",
@@ -92,8 +93,9 @@ def make_data_island(density, bulk_modulus, firing_temperature, binders, powders
         name="Firing setting",
         value=DiscreteCategorical("hot")
     )
-    firing_spec = ProcessSpec(template=firing_template)
+    firing_spec = ProcessSpec("Firing", template=firing_template)
     firing_process = ProcessRun(
+        name=firing_spec.name,
         conditions=[measured_firing_temperature],
         parameters=[specified_firing_setting],
         spec=firing_spec
@@ -115,16 +117,19 @@ def make_data_island(density, bulk_modulus, firing_temperature, binders, powders
         name="Bulk modulus",
         value=NormalReal(bulk_modulus, bulk_modulus / 100.0, '')
     )
-    measurement_spec = MeasurementSpec(template=measurement_template)
+    measurement_spec = MeasurementSpec("Mechanical Properties",
+                                       template=measurement_template)
     measurement = MeasurementRun(
+        measurement_spec.name,
         properties=[measured_density, measured_modulus],
         spec=measurement_spec
     )
 
     tags = [tag] if tag else []
 
-    material_spec = MaterialSpec(template=material_template)
-    material_run = MaterialRun(process=firing_process, tags=tags, spec=material_spec)
+    material_spec = MaterialSpec("Coupon", template=material_template)
+    material_run = MaterialRun(material_spec.name, process=firing_process,
+                               tags=tags, spec=material_spec)
     measurement.material = material_run
     return material_run
 

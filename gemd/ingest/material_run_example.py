@@ -81,7 +81,7 @@ def ingest_material_run(data, material_spec=None, process_run=None):
     if not isinstance(data, dict):
         raise ValueError("This ingester operates on dict, but got {}".format(type(data)))
 
-    material = MaterialRun()
+    material = MaterialRun("Material Run")
 
     sample_id = data.get("sample_id")
     if sample_id:
@@ -92,7 +92,7 @@ def ingest_material_run(data, material_spec=None, process_run=None):
         material.tags = tags
 
     for experiment in data.get("experiments", []):
-        measurement = MeasurementRun()
+        measurement = MeasurementRun("Measurement Run")
 
         for name in set(known_properties.keys()).intersection(experiment.keys()):
             prop = Property(

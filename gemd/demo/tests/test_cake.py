@@ -117,3 +117,7 @@ def test_cake():
 def test_import():
     """Make sure picture import runs."""
     import_toothpick_picture()
+
+
+if __name__ == "__main__":
+    test_cake()

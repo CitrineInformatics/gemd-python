@@ -11,7 +11,7 @@ def test_recursive_foreach():
     mat_run = MaterialRun("foo")
     process_run = ProcessRun("bar")
     IngredientRun(process=process_run, material=mat_run)
-    output = MaterialRun(process=process_run)
+    output = MaterialRun("material", process=process_run)
 
     # property templates are trickier than templates because they are referenced in attributes
     template = PropertyTemplate("prop", bounds=RealBounds(0, 1, ""))

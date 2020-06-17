@@ -10,7 +10,7 @@ class MaterialRun(BaseObject):
 
     Parameters
     ----------
-    name: str, optional
+    name: str, required
         Name of the material run.
     uids: Map[str, str], optional
         A collection of
@@ -44,7 +44,7 @@ class MaterialRun(BaseObject):
 
     skip = {"_measurements"}
 
-    def __init__(self, name=None, spec=None, process=None, sample_type="unknown",
+    def __init__(self, name, *, spec=None, process=None, sample_type="unknown",
                  uids=None, tags=None, notes=None, file_links=None):
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)

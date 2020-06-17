@@ -27,7 +27,7 @@ def test_measurement_spec():
     )
 
     # Create a measurement run from this measurement spec
-    measurement = MeasurementRun(conditions=condition, spec=spec)
+    measurement = MeasurementRun("The Measurement", conditions=condition, spec=spec)
 
     copy = loads(dumps(measurement))
     assert dumps(copy.spec) == dumps(measurement.spec), \
@@ -41,7 +41,7 @@ def test_material_soft_link():
 
     # The .measurements member should not be settable
     with pytest.raises(AttributeError):
-        dye.measurements = [MeasurementRun()]
+        dye.measurements = [MeasurementRun("Dummy")]
 
     absorbance = MeasurementRun(
         name="Absorbance",
@@ -80,7 +80,7 @@ def test_material_soft_link():
 def test_material_id_link():
     """Check that a measurement can be linked to a material that is a LinkByUID."""
     mat = LinkByUID('id', str(uuid4()))
-    meas = MeasurementRun(material=mat)
+    meas = MeasurementRun("name", material=mat)
     assert meas.material == mat
     assert loads(dumps(meas)) == meas
 

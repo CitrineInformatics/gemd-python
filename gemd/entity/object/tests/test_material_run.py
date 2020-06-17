@@ -39,8 +39,8 @@ def test_material_run():
 
     # Create a MaterialRun, and make sure an inappropriate value for sample_type throws ValueError
     with pytest.raises(ValueError):
-        mat = MaterialRun(spec=mat_spec, sample_type="imaginary")
-    mat = MaterialRun(spec=mat_spec, sample_type="virtual")
+        mat = MaterialRun("name", spec=mat_spec, sample_type="imaginary")
+    mat = MaterialRun("name", spec=mat_spec, sample_type="virtual")
 
     # ensure that serialization does not change the MaterialRun
     copy = loads(dumps(mat))

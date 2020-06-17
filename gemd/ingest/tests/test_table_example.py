@@ -14,7 +14,7 @@ data = [
 
 def test_table():
     """Convert a dictionary to a pandas dataframe and then to a table."""
-    material = MaterialRun()
+    material = MaterialRun("name")
     df = pd.DataFrame.from_records(data)
     result = ingest_table(material, df)
     assert isinstance(result, MaterialRun)

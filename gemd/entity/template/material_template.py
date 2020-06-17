@@ -13,7 +13,7 @@ class MaterialTemplate(BaseTemplate, HasPropertyTemplates):
 
     Parameters
     ----------
-    name: str, optional
+    name: str, required
         The name of the material template.
     description: str, optional
         Long-form description of the material template.
@@ -37,6 +37,10 @@ class MaterialTemplate(BaseTemplate, HasPropertyTemplates):
 
     typ = "material_template"
 
-    def __init__(self, name=None, description=None, properties=None, uids=None, tags=None):
-        BaseTemplate.__init__(self, name, description, uids, tags)
+    def __init__(self, name, *, description=None,
+                 properties=None,
+                 uids=None, tags=None):
+        BaseTemplate.__init__(self, name=name, description=description,
+                              uids=uids, tags=tags
+                              )
         HasPropertyTemplates.__init__(self, properties)

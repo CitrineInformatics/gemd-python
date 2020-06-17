@@ -12,7 +12,7 @@ class MaterialSpec(BaseObject, HasTemplate):
 
     Parameters
     ----------
-    name: str, optional
+    name: str, required
         Name of the material spec.
     uids: Map[str, str], optional
         A collection of
@@ -38,7 +38,7 @@ class MaterialSpec(BaseObject, HasTemplate):
 
     typ = "material_spec"
 
-    def __init__(self, name=None, template=None,
+    def __init__(self, name, *, template=None,
                  properties=None, process=None, uids=None, tags=None,
                  notes=None, file_links=None):
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,

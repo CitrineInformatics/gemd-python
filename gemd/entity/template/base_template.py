@@ -11,7 +11,7 @@ class BaseTemplate(BaseEntity):
 
     Parameters
     ----------
-    name: str, optional
+    name: str, required
         The name of the object template.
     description: str, optional
         Long-form description of the object template.
@@ -26,7 +26,7 @@ class BaseTemplate(BaseEntity):
 
     """
 
-    def __init__(self, name=None, description=None, uids=None, tags=None):
+    def __init__(self, name, *, description=None, uids=None, tags=None):
         BaseEntity.__init__(self, uids, tags)
         self.name = name
         self.description = description

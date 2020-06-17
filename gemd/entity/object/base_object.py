@@ -11,8 +11,8 @@ class BaseObject(BaseEntity):
 
     Parameters
     ----------
-    name: str, optional
-        Name of the material spec.
+    name: str, required
+        Name of the object.
     uids: Map[str, str], optional
         A collection of
         `unique IDs <https://citrineinformatics.github.io/gemd-documentation/
@@ -22,13 +22,13 @@ class BaseObject(BaseEntity):
         are hierarchical strings that store information about an entity. They can be used
         for filtering and discoverability.
     notes: str, optional
-        Long-form notes about the material spec.
+        Long-form notes about the object.
     file_links: List[FileLink], optional
         Links to associated files, with resource paths into the files API.
 
     """
 
-    def __init__(self, name=None, uids=None, tags=None, notes=None, file_links=None):
+    def __init__(self, name, *, uids=None, tags=None, notes=None, file_links=None):
         BaseEntity.__init__(self, uids, tags)
         self.notes = notes
         self._name = None

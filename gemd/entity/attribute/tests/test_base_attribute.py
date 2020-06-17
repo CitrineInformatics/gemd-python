@@ -8,7 +8,7 @@ from gemd.entity.value.nominal_real import NominalReal
 
 def test_invalid_assignment():
     """Test that invalid assignments throw the appropriate errors."""
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         Property(value=NominalReal(10, ''))
     with pytest.raises(TypeError):
         Property(name="property", value=10)

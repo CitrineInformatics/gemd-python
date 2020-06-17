@@ -40,10 +40,6 @@ class IngredientRun(BaseObject, HasQuantities):
     absolute_quantity: :py:class:`ContinuousValue \
     <gemd.entity.value.continuous_value.ContinuousValue>`, optional
         The absolute quantity of the ingredient in the process.
-    name: str, optional
-        Label on the ingredient that is unique within the process that contains it.
-    labels: List[str], optional
-        Additional labels on the ingredient that must be unique.
     spec: IngredientSpec
         The specification of which this ingredient is a realization.
     file_links: List[FileLink], optional
@@ -53,22 +49,14 @@ class IngredientRun(BaseObject, HasQuantities):
 
     typ = "ingredient_run"
 
-    def __init__(self, material=None, process=None, name=None, labels=None,
-                 mass_fraction=None, volume_fraction=None, number_fraction=None,
-                 absolute_quantity=None,
+    def __init__(self, material=None, process=None, mass_fraction=None,
+                 volume_fraction=None, number_fraction=None, absolute_quantity=None,
                  spec=None, uids=None, tags=None, notes=None, file_links=None):
-        BaseObject.__init__(self, name=name, uids=uids, tags=tags,
+        BaseObject.__init__(self, name=None, uids=uids, tags=tags,
                             notes=notes, file_links=file_links)
-        HasQuantities.__init__(self, mass_fraction, volume_fraction, number_fraction,
-                               absolute_quantity)
-        if name is not None:
-            warnings.warn("The 'name' argument for ingredient runs is deprecated. "
-                          "It may be overwritten by the name of this object's spec.",
-                          DeprecationWarning)
-        if labels is not None:
-            warnings.warn("The 'labels' argument for ingredient runs is deprecated. "
-                          "It may be overwritten by the labels of this object's spec.",
-                          DeprecationWarning)
+        HasQuantities.__init__(self, mass_fraction=mass_fraction, volume_fraction=volume_fraction,
+                               number_fraction=number_fraction, absolute_quantity=absolute_quantity
+                               )
         self._material = None
         self._process = None
         self._spec = None
@@ -76,8 +64,7 @@ class IngredientRun(BaseObject, HasQuantities):
 
         self.material = material
         self.process = process
-        self.labels = labels
-        # this may overwrite name/labels
+        # this will overwrite name/labels if/when they are set
         self.spec = spec
 
     @property

@@ -12,6 +12,8 @@ class IngredientSpec(BaseObject, HasQuantities):
 
     Parameters
     ----------
+    name: str, required
+        Label on the ingredient that is unique within the process that contains it.
     uids: Map[str, str], optional
         A collection of
         `unique IDs <https://citrineinformatics.github.io/gemd-documentation/
@@ -38,8 +40,6 @@ class IngredientSpec(BaseObject, HasQuantities):
     absolute_quantity: :py:class:`ContinuousValue \
     <gemd.entity.value.continuous_value.ContinuousValue>`, optional
         The absolute quantity of the ingredient in the process.
-    name: str, optional
-        Label on the ingredient that is unique within the process that contains it.
     labels: List[str], optional
         Additional labels on the ingredient that must be unique.
     file_links: List[FileLink], optional
@@ -49,7 +49,7 @@ class IngredientSpec(BaseObject, HasQuantities):
 
     typ = "ingredient_spec"
 
-    def __init__(self, material=None, process=None, name=None, labels=None,
+    def __init__(self, name, *, material=None, process=None, labels=None,
                  mass_fraction=None, volume_fraction=None, number_fraction=None,
                  absolute_quantity=None,
                  uids=None, tags=None, notes=None, file_links=None):
@@ -57,18 +57,20 @@ class IngredientSpec(BaseObject, HasQuantities):
         Create an IngredientSpec object.
 
         Assigns a unique_label and other descriptive labels to a material used as an ingredient
+        :param name: of the ingredient as used in the process, i.e. "the peanut butter"
         :param material: MaterialSpec that is being used as the ingredient
         :param process: ProcessSpec that uses this ingredient
-        :param name: of the ingredient as used in the process, i.e. "the peanut butter"
         :param labels: that this ingredient belongs to, e.g. "spread" or "solvent"
         :param mass_fraction: fraction of the ingredients that is this input ingredient, by mass
         :param volume_fraction: fraction of the ingredients that is this ingredient, by volume
         :param number_fraction: fraction of the ingredients that is this ingredient, by number
         :param absolute_quantity: quantity of this ingredient in an absolute sense, e.g. 2 cups
         """
-        BaseObject.__init__(self, name, uids, tags, notes=notes, file_links=file_links)
-        HasQuantities.__init__(self, mass_fraction, volume_fraction, number_fraction,
-                               absolute_quantity)
+        BaseObject.__init__(self, name=name,
+                            uids=uids, tags=tags, notes=notes, file_links=file_links)
+        HasQuantities.__init__(self, mass_fraction=mass_fraction, volume_fraction=volume_fraction,
+                               number_fraction=number_fraction, absolute_quantity=absolute_quantity
+                               )
 
         self._material = None
         self._process = None
