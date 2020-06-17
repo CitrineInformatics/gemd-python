@@ -121,6 +121,8 @@ def test_invalid_assignment():
         MeasurementRun("name", spec=Condition("value of pi", value=NominalReal(3.14159, '')))
     with pytest.raises(TypeError):
         MeasurementRun("name", material=FileLink("filename", "url"))
+    with pytest.raises(TypeError):
+        MeasurementRun()  # Name is required
 
 
 def test_template_access():

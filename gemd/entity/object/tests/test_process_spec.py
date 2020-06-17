@@ -57,3 +57,9 @@ def test_ingredient_spec():
     proc_spec_copy = loads(dumps(proc_spec))
 
     assert proc_spec_copy == proc_spec, "Full structure wasn't preserved across serialization"
+
+
+def test_invalid_assignment():
+    """Omitting a name throws a TypeError."""
+    with pytest.raises(TypeError):
+        ProcessSpec()  # Name is required

@@ -96,6 +96,8 @@ def test_invalid_assignment():
         MaterialRun("name", spec=ProcessRun("a process"))
     with pytest.raises(TypeError):
         MaterialRun("name", process=MaterialSpec("a spec"))
+    with pytest.raises(TypeError):
+        MaterialRun()  # Name is required
 
 
 def test_template_access():

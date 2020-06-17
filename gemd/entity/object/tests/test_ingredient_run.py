@@ -35,3 +35,5 @@ def test_invalid_assignment():
         IngredientRun(process="process")
     with pytest.raises(TypeError):
         IngredientRun(spec=5)
+    with pytest.raises(TypeError):
+        IngredientRun(name="Flour")  # IngredientRuns don't have their own name

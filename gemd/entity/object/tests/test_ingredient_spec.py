@@ -84,3 +84,5 @@ def test_invalid_assignment():
         IngredientSpec(name="name", material=NominalReal(3, ''))
     with pytest.raises(TypeError):
         IngredientSpec(name="name", process="process")
+    with pytest.raises(TypeError):
+        IngredientSpec()  # Name is required

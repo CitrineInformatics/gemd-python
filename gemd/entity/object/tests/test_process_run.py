@@ -46,6 +46,8 @@ def test_invalid_assignment():
     """Invalid assignments to `spec` throw a TypeError."""
     with pytest.raises(TypeError):
         ProcessRun("name", spec=[ProcessSpec("spec")])
+    with pytest.raises(TypeError):
+        ProcessRun()  # Name is required
 
 
 def test_template_access():
