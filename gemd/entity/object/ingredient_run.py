@@ -1,3 +1,4 @@
+import deprecation
 import warnings
 
 from gemd.entity.object.base_object import BaseObject
@@ -68,13 +69,40 @@ class IngredientRun(BaseObject, HasQuantities):
         self.spec = spec
 
     @property
+    def name(self):
+        """Get name."""
+        return super().name
+
+    @name.setter
+    def name(self, name):
+        # This messiness is a consequence of name being an inherited attribute
+        if name is not None:
+            warnings.warn("Labels are set implicitly by associating with an "
+                          "IngredientSpec; this value will likely be overwritten",
+                          DeprecationWarning)
+        self.__class__._name_setter(self, name)
+
+    @classmethod
+    def _name_setter(cls, obj, name):
+        """Misdirection so assignment in from_dict doesn't hit deprecation warning."""
+        super(IngredientRun, cls).name.fset(obj, name)
+
+    @property
     def labels(self):
         """Get labels."""
         return self._labels
 
     @labels.setter
+    @deprecation.deprecated(deprecated_in="0.10", removed_in="0.11",
+                            details="Labels are set implicitly by associating with an "
+                                    "IngredientSpec")
     def labels(self, labels):
-        self._labels = validate_list(labels, str)
+        self.__class__._labels_setter(self, labels)
+
+    @classmethod
+    def _labels_setter(cls, obj, labels):
+        """Misdirection so assignment in from_dict doesn't hit deprecation warning."""
+        obj._labels = validate_list(labels, str)
 
     @property
     def material(self):
@@ -132,20 +160,32 @@ class IngredientRun(BaseObject, HasQuantities):
         elif isinstance(spec, (IngredientSpec, LinkByUID)):
             self._spec = spec
             if isinstance(spec, IngredientSpec):
-                self.name = spec.name
-                self.labels = spec.labels
+                self.__class__._labels_setter(self, spec.labels)
+                self.__class__._name_setter(self, spec.name)
         else:
             raise TypeError("spec must be a IngredientSpec or LinkByUID: {}".format(spec))
 
     @classmethod
     def from_dict(cls, d):
-        # Overload from_dict because we may get name/labels from an independent
-        # resource, but not get the associated IngredientSpec
+        """
+        Overloaded method from DictSerializable to intercept `name` and `labels` fields.
+
+        Parameters
+        ----------
+        d: dict
+            The object as a dictionary of key-value pairs that correspond to the object's fields.
+
+        Returns
+        -------
+        DictSerializable
+            The deserialized object.
+
+        """
         name = d.pop("name", None)
         labels = d.pop("labels", None)
         obj = super().from_dict(d)
         if name is not None:
-            obj._name = name
+            cls._name_setter(obj, name)
         if labels is not None:
-            obj._labels = labels
+            cls._labels_setter(obj, labels)
         return obj

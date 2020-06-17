@@ -40,7 +40,7 @@ def test_invalid_assignment():
 
 
 def test_name_persistance():
-    """Verify that a serialized IngredientRun doesn't lose its name"""
+    """Verify that a serialized IngredientRun doesn't lose its name."""
     from gemd.entity.object import IngredientSpec
     from gemd.entity.link_by_uid import LinkByUID
     from gemd.json import GEMDJson
