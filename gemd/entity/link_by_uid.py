@@ -52,4 +52,3 @@ class LinkByUID(DictSerializable):
                 entity.add_uid(name, str(uuid.uuid4()))
             scope, uid = next((s, i) for s, i in entity.uids.items())
         return LinkByUID(scope, uid)
-
