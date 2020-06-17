@@ -1,11 +1,9 @@
 import inspect
 
-from gemd.entity.base_entity import BaseEntity
-from gemd.entity.link_by_uid import LinkByUID
-
 import gemd.entity.attribute
 import gemd.entity.bounds
 import gemd.entity.file_link
+import gemd.entity.link_by_uid
 import gemd.entity.object
 import gemd.entity.source
 import gemd.entity.template
@@ -30,6 +28,7 @@ class GEMDJson(object):
         gemd.entity.attribute,
         gemd.entity.bounds,
         gemd.entity.file_link,
+        gemd.entity.link_by_uid,
         gemd.entity.object,
         gemd.entity.source,
         gemd.entity.template,
@@ -40,7 +39,8 @@ class GEMDJson(object):
         if inspect.isclass(obj) and not inspect.isabstract(obj)
     ]
 
-    _link_type = LinkByUID
+    # Substitution requires tracking this object
+    _link_type = gemd.entity.link_by_uid.LinkByUID
 
     def __init__(self, scope='auto'):
         self._scope = scope
@@ -264,19 +264,17 @@ class GEMDJson(object):
         if "type" not in d:
             return d
         typ = d.pop("type")
-
-        if typ in self._clazz_index:
-            clz = self._clazz_index[typ]
-            obj = clz.from_dict(d)
-        elif typ == self._link_type.typ:
-            obj = self._link_type.from_dict(d)
-            if substitute and (obj.scope.lower(), obj.id) in object_index:
-                return object_index[(obj.scope.lower(), obj.id)]
-            return obj
-        else:
+        if typ not in self._clazz_index:
             raise TypeError("Unexpected base object type: {}".format(typ))
 
-        if isinstance(obj, BaseEntity):
+        obj = self._clazz_index[typ].from_dict(d)
+        if substitute:
+            if typ == self._link_type.typ:
+                if (obj.scope.lower(), obj.id) in object_index:
+                    return object_index[(obj.scope.lower(), obj.id)]
+
+        if "uids" in d:  # we should index it; isinstance is slow
             for (scope, uid) in obj.uids.items():
                 object_index[(scope.lower(), uid)] = obj
+
         return obj
