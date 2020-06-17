@@ -22,11 +22,10 @@ class LinkByUID(DictSerializable):
     def __init__(self, scope, id):
         # TODO: parse to make sure it's valid
         self.scope = scope
-        self.id = id #keeping for legacy code
-        self.uid = id
+        self.id = id
 
     def __repr__(self):
-        return str({"scope": self.scope, "uid": self.uid})
+        return str({"scope": self.scope, "id": self.id})
 
     @classmethod
     def from_entity(cls, entity, name="auto"):
