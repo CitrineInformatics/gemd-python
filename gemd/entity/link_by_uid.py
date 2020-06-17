@@ -25,7 +25,7 @@ class LinkByUID(DictSerializable):
         self.id = id
 
     def __repr__(self):
-        return str({"scope": self.scope, "uid": self.id})
+        return str({"scope": self.scope, "id": self.id})
 
     @classmethod
     def from_entity(cls, entity, name="auto"):
