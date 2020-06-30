@@ -58,3 +58,19 @@ def test_name_persistance():
     run.spec = LinkByUID(scope='local', id='ing_spec')
     # Name and labels are now stashed but not stored
     assert run == je.copy(run)
+
+
+def test_deprecated():
+    """These are tests that will be obsolete but are required for 100 %."""
+    name = 'name'
+    labels = ['label', 'also']
+    with pytest.raises(TypeError):
+        IngredientRun(name=name)
+    with pytest.raises(TypeError):
+        IngredientRun(labels=labels)
+
+    run = IngredientRun()
+    run.name = name
+    run.labels = labels
+    assert run.name == name
+    assert run.labels == labels
