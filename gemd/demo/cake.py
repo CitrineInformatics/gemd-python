@@ -169,6 +169,10 @@ def make_cake_templates():
             tmpl["Molecular Structure"]
         ]
     )
+    tmpl["Baked Good"] = MaterialTemplate(
+        name="Baked Good",
+        properties=[tmpl["Toothpick test"], tmpl["Color"]]
+    )
     tmpl["Dessert"] = MaterialTemplate(
         name="Dessert",
         properties=[tmpl["Tastiness"]]
@@ -314,7 +318,24 @@ def make_cake_spec(tmpl=None):
                 "notes": 'Using heat to convert batter into a solid matrix'
             }
         ),
-        template=tmpl["Generic Material"],
+        template=tmpl["Baked Good"],
+        properties=[
+            PropertyAndConditions(
+                property=Property(
+                    name="Toothpick test",
+                    value=NominalCategorical("completely clean"),
+                    template=tmpl["Toothpick test"]
+                )
+            ),
+            PropertyAndConditions(
+                property=Property(
+                    name="Color",
+                    value=NominalCategorical("Golden brown"),
+                    template=tmpl["Color"],
+                    origin="specified"
+                )
+            )
+        ],
         tags=[
             'substrate'
         ],
