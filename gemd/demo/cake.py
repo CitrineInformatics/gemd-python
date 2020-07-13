@@ -42,6 +42,12 @@ def make_cake_templates():
     tmpl = dict()
 
     # Attributes
+    tmpl["Mixer speed setting"] = ParameterTemplate(
+        name="Mixer speed setting",
+        description="What speed setting to use on the mixer",
+        bounds=IntegerBounds(0, 10)
+    )
+
     tmpl['Cooking time'] = ConditionTemplate(
         name="Cooking time",
         description="The time elapsed during a cooking process",
@@ -142,7 +148,8 @@ def make_cake_templates():
         name="Mixing",
         description='Physically combining ingredients',
         allowed_labels=['wet', 'dry', 'leavening', 'seasoning',
-                        'sweetener', 'shortening', 'flavoring']
+                        'sweetener', 'shortening', 'flavoring'],
+        parameters=[tmpl["Mixer speed setting"]]
     )
 
     tmpl["Generic Material"] = MaterialTemplate(name="Generic")
@@ -262,6 +269,12 @@ def make_cake_spec(tmpl=None):
                 "tags": [
                     'mixing'
                 ],
+                "parameters": [
+                    Parameter(name='Mixer speed setting',
+                              template=tmpl['Mixer speed setting'],
+                              origin='specified',
+                              value=NominalInteger(2))
+                ],
                 "notes": 'Combining ingredients to make a sweet frosting'
             }
         ),
@@ -312,6 +325,12 @@ def make_cake_spec(tmpl=None):
                 "tags": [
                     'mixing'
                 ],
+                "parameters": [
+                    Parameter(name='Mixer speed setting',
+                              template=tmpl['Mixer speed setting'],
+                              origin='specified',
+                              value=NominalInteger(2))
+                ],
                 "notes": 'Combining ingredients to make a baking feedstock'
             }
         ),
@@ -335,6 +354,12 @@ def make_cake_spec(tmpl=None):
             process_kwargs={
                 "tags": [
                     'mixing'
+                ],
+                "parameters": [
+                    Parameter(name='Mixer speed setting',
+                              template=tmpl['Mixer speed setting'],
+                              origin='specified',
+                              value=NominalInteger(2))
                 ],
                 "notes": 'Combining wet ingredients to make a baking feedstock'
             }
