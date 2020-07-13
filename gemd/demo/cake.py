@@ -227,7 +227,6 @@ def make_cake_spec(tmpl=None):
             ),
         }
 
-
     ###############################################################################################
     # Objects
     cake = MaterialSpec(
@@ -235,9 +234,7 @@ def make_cake_spec(tmpl=None):
             material_name="Cake",
             process_tmpl_name="Icing",
             process_kwargs={
-                "tags": [
-                         'spreading'
-                     ],
+                "tags": ['spreading'],
                 "notes": 'The act of covering a baked output with frosting'
             }
         ),
@@ -750,7 +747,7 @@ def make_cake_spec(tmpl=None):
     return cake
 
 
-def make_cake(seed=None, tmpl=None, cake_spec=None):
+def make_cake(seed=None, tmpl=None, cake_spec=None, toothpick_img=None):
     """Define all objects that go into making a demo cake."""
     import struct
     import hashlib
@@ -852,6 +849,9 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     flour_content = MeasurementRun(name='Flour nutritional analysis', material=flour)
     salt_content = MeasurementRun(name='Salt elemental analysis', material=salt)
     sugar_content = MeasurementRun(name='Sugar elemental analysis', material=sugar)
+
+    if toothpick_img is not None:
+        baked_doneness.file_links.append(toothpick_img)
 
     # and spec out the measurements
     cake_taste.spec = MeasurementSpec(name='Taste', template=tmpl['Taste test'])
@@ -1032,7 +1032,10 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
             name_count[name] = 1
             return name
 
-    recursive_foreach(cake, lambda obj: obj.uids or obj.add_uid(DEMO_SCOPE, _disambig(obj.name) + run_key))
+    recursive_foreach(
+        cake,
+        lambda obj: obj.uids or obj.add_uid(DEMO_SCOPE, _disambig(obj.name) + run_key)
+    )
 
     cake.notes = cake.notes + "; Très délicieux! 😀"
     cake.file_links = [FileLink(
