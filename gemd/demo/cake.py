@@ -122,6 +122,10 @@ def make_cake_templates():
     )
 
     # Objects
+    tmpl["Procuring"] = ProcessTemplate(
+        name="Procuring",
+        description="Buyin' stuff"
+    )
     tmpl["Baking"] = ProcessTemplate(
         name="Baking",
         description='Using heat to promote chemical reactions in a material',
@@ -129,38 +133,19 @@ def make_cake_templates():
         conditions=[(tmpl["Oven temperature"], RealBounds(0, 700, "degF"))],
         parameters=[(tmpl["Oven temperature setting"], RealBounds(100, 550, "degF"))]
     )
-
-    tmpl["Doneness"] = MeasurementTemplate(
-        name="Doneness test",
-        description="An ensemble of tests to determine the doneness of a baked good",
-        properties=[tmpl["Toothpick test"], tmpl["Color"]]
+    tmpl["Icing"] = ProcessTemplate(
+        name="Icing",
+        description='Applying a coating to a substrate',
+        allowed_labels=['coating', 'substrate']
     )
-
-    tmpl["Taste test"] = MeasurementTemplate(
-        name="Taste test",
-        properties=[tmpl["Tastiness"]]
-    )
-
-    tmpl["Nutritional Analysis"] = MeasurementTemplate(
-        name="Nutritional Analysis",
-        properties=[tmpl["Nutritional Information"]],
-        conditions=[tmpl["Sample Mass"]],
-        parameters=[tmpl["Expected Sample Mass"]]
-    )
-    tmpl["Elemental Analysis"] = MeasurementTemplate(
-        name="Elemental Analysis",
-        properties=[tmpl["Chemical Formula"]],
-        conditions=[tmpl["Sample Mass"]],
-        parameters=[tmpl["Expected Sample Mass"]]
-    )
-
-    tmpl["Dessert"] = MaterialTemplate(
-        name="Dessert",
-        properties=[tmpl["Tastiness"]]
+    tmpl["Mixing"] = ProcessTemplate(
+        name="Mixing",
+        description='Physically combining ingredients',
+        allowed_labels=['wet', 'dry', 'leavening', 'seasoning',
+                        'sweetener', 'shortening', 'flavoring']
     )
 
     tmpl["Generic Material"] = MaterialTemplate(name="Generic")
-
     tmpl["Nutritional Material"] = MaterialTemplate(
         name="Nutritional Material",
         description="A material with FDA Nutrition Facts attached",
@@ -176,15 +161,32 @@ def make_cake_templates():
             tmpl["Molecular Structure"]
         ]
     )
-    tmpl["Icing"] = ProcessTemplate(name="Icing",
-                                    description='Applying a coating to a substrate',
-                                    allowed_labels=['coating', 'substrate'])
-    tmpl["Mixing"] = ProcessTemplate(name="Mixing",
-                                     description='Physically combining ingredients',
-                                     allowed_labels=['wet', 'dry', 'leavening', 'seasoning',
-                                                     'sweetener', 'shortening', 'flavoring'])
-    tmpl["Procuring"] = ProcessTemplate(name="Procuring",
-                                        description="Obtaining materials from a third party.")
+    tmpl["Dessert"] = MaterialTemplate(
+        name="Dessert",
+        properties=[tmpl["Tastiness"]]
+    )
+
+    tmpl["Doneness"] = MeasurementTemplate(
+        name="Doneness test",
+        description="An ensemble of tests to determine the doneness of a baked good",
+        properties=[tmpl["Toothpick test"], tmpl["Color"]]
+    )
+    tmpl["Taste test"] = MeasurementTemplate(
+        name="Taste test",
+        properties=[tmpl["Tastiness"]]
+    )
+    tmpl["Nutritional Analysis"] = MeasurementTemplate(
+        name="Nutritional Analysis",
+        properties=[tmpl["Nutritional Information"]],
+        conditions=[tmpl["Sample Mass"]],
+        parameters=[tmpl["Expected Sample Mass"]]
+    )
+    tmpl["Elemental Analysis"] = MeasurementTemplate(
+        name="Elemental Analysis",
+        properties=[tmpl["Chemical Formula"]],
+        conditions=[tmpl["Sample Mass"]],
+        parameters=[tmpl["Expected Sample Mass"]]
+    )
 
     for key in tmpl:
         tmpl[key].add_uid(DEMO_SCOPE + "-template", key)
