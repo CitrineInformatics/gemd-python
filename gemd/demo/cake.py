@@ -27,6 +27,7 @@ from gemd.util.impl import recursive_foreach
 
 # For now, module constant, though likely this should get promoted to a package level
 DEMO_SCOPE = 'citrine-demo'
+TEMPLATE_SCOPE = DEMO_SCOPE + '-template'
 
 
 def import_toothpick_picture():
@@ -196,7 +197,7 @@ def make_cake_templates():
     )
 
     for key in tmpl:
-        tmpl[key].add_uid(DEMO_SCOPE + "-template", key)
+        tmpl[key].add_uid(TEMPLATE_SCOPE, key)
     return tmpl
 
 
