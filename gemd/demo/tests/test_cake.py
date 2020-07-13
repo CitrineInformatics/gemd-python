@@ -54,7 +54,7 @@ def test_cake():
         for scope in obj.uids:
             lbl = '{}::{}'.format(scope, obj.uids[scope])
             if lbl in uid_seen:
-                assert uid_seen[lbl] == id(obj)
+                assert uid_seen[lbl] == id(obj), "'{}' seen twice".format(lbl)
             uid_seen[lbl] = id(obj)
     recursive_foreach(cake, check_ids)
 

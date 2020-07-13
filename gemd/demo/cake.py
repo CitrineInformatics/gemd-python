@@ -622,6 +622,7 @@ def make_cake_spec(tmpl=None):
                 "notes": 'Purchasing milk'
             }
         ),
+        template=tmpl["Generic Material"],
         tags=[
             'raw material',
             'produce',
@@ -653,6 +654,7 @@ def make_cake_spec(tmpl=None):
                 "notes": 'Purchasing chocolate'
             }
         ),
+        template=tmpl["Generic Material"],
         tags=[
             'raw material'
         ],
@@ -789,7 +791,7 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
 
     def find_name(name, material):
         # Recursively search for the right material
-        if name == material.name:
+        if name in material.name:
             return material
         for ingredient in material.process.ingredients:
             result = find_name(name, ingredient.material)
@@ -986,7 +988,18 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     run_key = md5.hexdigest()
 
     # Crawl tree and annotate with uids; only add ids if there's nothing there
-    recursive_foreach(cake, lambda obj: obj.uids or obj.add_uid(DEMO_SCOPE, obj.name + run_key))
+    name_count = dict()
+
+    def _disambig(name):
+        nonlocal name_count
+        if name in name_count:
+            name_count[name] = name_count[name] + 1
+            return "{}-{}".format(name, name_count[name])
+        else:
+            name_count[name] = 1
+            return name
+
+    recursive_foreach(cake, lambda obj: obj.uids or obj.add_uid(DEMO_SCOPE, _disambig(obj.name) + run_key))
 
     cake.notes = cake.notes + "; Très délicieux! 😀"
     cake.file_links = [FileLink(
