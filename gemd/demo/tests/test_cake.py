@@ -119,13 +119,22 @@ def test_cake():
 def test_cake_sigs():
     """Verify that all arguments for create methods work as expected."""
     templates = make_cake_templates()
+    tmpl_snap = dumps(templates)
+
     specs = make_cake_spec(templates)
+    spec_snap = dumps(specs)
+    assert dumps(templates) == tmpl_snap
+
     cake1 = make_cake(seed=27, cake_spec=specs, tmpl=templates)
+    assert dumps(templates) == tmpl_snap
+    assert dumps(specs) == spec_snap
+
     filelink = FileLink(filename='The name of the file', url='www.file.gov')
     cake2 = make_cake(seed=27, cake_spec=specs, tmpl=templates, toothpick_img=filelink)
 
     assert filelink.filename not in dumps(cake1)
     assert filelink.filename in dumps(cake2)
+    assert cake1.uids == cake2.uids
 
 
 def test_import():
