@@ -302,6 +302,18 @@ def make_cake_spec(tmpl=None):
                 "tags": [
                     'oven::baking'
                 ],
+                "conditions": [
+                    Condition(name='Cooking time',
+                              template=tmpl['Cooking time'],
+                              origin=Origin.SPECIFIED,
+                              value=NormalReal(mean=50, std=5, units='min'))
+                ],
+                "parameters": [
+                    Parameter(name='Oven temperature setting',
+                              template=tmpl['Oven temperature setting'],
+                              origin="specified",
+                              value=NominalReal(nominal=350, units='degF'))
+                ],
                 "notes": 'Using heat to convert batter into a solid matrix'
             }
         ),
@@ -864,17 +876,10 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
                                               template=tmpl['Cooking time'],
                                               origin=Origin.MEASURED,
                                               value=NominalReal(nominal=48, units='min')))
-    baked.spec.process.conditions.append(Condition(name='Cooking time',
-                                                   template=tmpl['Cooking time'],
-                                                   origin=Origin.SPECIFIED,
-                                                   value=NormalReal(mean=50, std=5, units='min')))
     baked.process.conditions.append(Condition(name='Oven temperature',
                                               origin="measured",
                                               value=NominalReal(nominal=362, units='degF')))
-    baked.spec.process.parameters.append(Parameter(name='Oven temperature setting',
-                                                   template=tmpl['Oven temperature setting'],
-                                                   origin="specified",
-                                                   value=NominalReal(nominal=350, units='degF')))
+
     cake_taste.properties.append(Property(name='Tastiness',
                                           origin=Origin.MEASURED,
                                           template=tmpl['Tastiness'],
