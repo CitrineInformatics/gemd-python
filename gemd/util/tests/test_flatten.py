@@ -51,7 +51,3 @@ def test_flatmap_unidirectional_ordering():
 
     assert len(recursive_flatmap(proc, lambda x: [x], unidirectional=False)) == 2
     assert len(recursive_flatmap(proc, lambda x: [x], unidirectional=True)) == 0
-
-
-if __name__ == '__main__':
-    test_flatten_empty_history()
