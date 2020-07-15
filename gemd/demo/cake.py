@@ -233,16 +233,16 @@ def make_cake_spec(tmpl=None):
     if tmpl is None:
         tmpl = make_cake_templates()
 
-    def ingredient_kwargs(material):
-        # Pulls the elements of a material that all ingredients consume out
+    def _ingredient_kwargs(material):
+        """Convenience method to utilize material fields in creating an ingredient's arguments."""
         return {
             "name": material.name.lower(),
             "tags": list(material.tags),
             "material": material
         }
 
-    def material_kwargs(material_name, process_tmpl_name, process_kwargs):
-        # Handles some nicities in naming
+    def _material_kwargs(material_name, process_tmpl_name, process_kwargs):
+        """Convenience method to reuse material name in creating a material's arguments."""
         return {
             "name": material_name,
             "process": ProcessSpec(
@@ -255,7 +255,7 @@ def make_cake_spec(tmpl=None):
     ###############################################################################################
     # Objects
     cake = MaterialSpec(
-        **material_kwargs(
+        **_material_kwargs(
             material_name="Cake",
             process_tmpl_name="Icing",
             process_kwargs={
@@ -285,7 +285,7 @@ def make_cake_spec(tmpl=None):
 
     ########################
     frosting = MaterialSpec(
-        **material_kwargs(
+        **_material_kwargs(
             material_name="Frosting",
             process_tmpl_name="Mixing",
             process_kwargs={
@@ -309,7 +309,7 @@ def make_cake_spec(tmpl=None):
         notes='Chocolate frosting'
     )
     IngredientSpec(
-        **ingredient_kwargs(frosting),
+        **_ingredient_kwargs(frosting),
         notes='Seems like a lot of frosting',
         labels=['coating'],
         process=cake.process,
@@ -317,7 +317,7 @@ def make_cake_spec(tmpl=None):
     )
 
     baked_cake = MaterialSpec(
-        **material_kwargs(
+        **_material_kwargs(
             material_name="Baked Cake",
             process_tmpl_name="Baking",
             process_kwargs={
@@ -363,14 +363,14 @@ def make_cake_spec(tmpl=None):
         notes='The cakey part of the cake'
     )
     IngredientSpec(
-        **ingredient_kwargs(baked_cake),
+        **_ingredient_kwargs(baked_cake),
         labels=['substrate'],
         process=cake.process
     )
 
     ########################
     batter = MaterialSpec(
-        **material_kwargs(
+        **_material_kwargs(
             material_name="Batter",
             process_tmpl_name="Mixing",
             process_kwargs={
@@ -393,14 +393,14 @@ def make_cake_spec(tmpl=None):
         notes='The fluid that converts to cake with heat'
     )
     IngredientSpec(
-        **ingredient_kwargs(batter),
+        **_ingredient_kwargs(batter),
         labels=['precursor'],
         process=baked_cake.process
     )
 
     ########################
     wetmix = MaterialSpec(
-        **material_kwargs(
+        **_material_kwargs(
             material_name="Wet Ingredients",
             process_tmpl_name="Mixing",
             process_kwargs={
@@ -423,13 +423,13 @@ def make_cake_spec(tmpl=None):
         notes='The wet fraction of a batter'
     )
     IngredientSpec(
-        **ingredient_kwargs(wetmix),
+        **_ingredient_kwargs(wetmix),
         labels=['wet'],
         process=batter.process
     )
 
     drymix = MaterialSpec(
-        **material_kwargs(
+        **_material_kwargs(
             material_name="Dry Ingredients",
             process_tmpl_name="Mixing",
             process_kwargs={
@@ -446,7 +446,7 @@ def make_cake_spec(tmpl=None):
         notes='The dry fraction of a batter'
     )
     IngredientSpec(
-        **ingredient_kwargs(drymix),
+        **_ingredient_kwargs(drymix),
         labels=['dry'],
         process=batter.process,
         absolute_quantity=NominalReal(nominal=3.052, units='cups')
@@ -454,7 +454,7 @@ def make_cake_spec(tmpl=None):
 
     ########################
     flour = MaterialSpec(
-        **material_kwargs(
+        **_material_kwargs(
             material_name="Flour",
             process_tmpl_name="Procuring",
             process_kwargs={
@@ -497,14 +497,14 @@ def make_cake_spec(tmpl=None):
         notes='All-purpose flour'
     )
     IngredientSpec(
-        **ingredient_kwargs(flour),
+        **_ingredient_kwargs(flour),
         labels=['dry'],
         process=drymix.process,
         volume_fraction=NominalReal(nominal=0.9829, units='')  # 3 cups
     )
 
     baking_powder = MaterialSpec(
-        **material_kwargs(
+        **_material_kwargs(
             material_name="Baking Powder",
             process_tmpl_name="Procuring",
             process_kwargs={
@@ -523,14 +523,14 @@ def make_cake_spec(tmpl=None):
         notes='Leavening agent for cake'
     )
     IngredientSpec(
-        **ingredient_kwargs(baking_powder),
+        **_ingredient_kwargs(baking_powder),
         labels=['leavening', 'dry'],
         process=drymix.process,
         volume_fraction=NominalReal(nominal=0.0137, units='')  # 2 teaspoons
     )
 
     salt = MaterialSpec(
-        **material_kwargs(
+        **_material_kwargs(
             material_name="Salt",
             process_tmpl_name="Procuring",
             process_kwargs={
@@ -552,14 +552,14 @@ def make_cake_spec(tmpl=None):
         ]
     )
     IngredientSpec(
-        **ingredient_kwargs(salt),
+        **_ingredient_kwargs(salt),
         labels=['dry', 'seasoning'],
         process=drymix.process,
         volume_fraction=NominalReal(nominal=0.0034, units='')  # 1/2 teaspoon
     )
 
     sugar = MaterialSpec(
-        **material_kwargs(
+        **_material_kwargs(
             material_name="Sugar",
             process_tmpl_name="Procuring",
             process_kwargs={
@@ -587,14 +587,14 @@ def make_cake_spec(tmpl=None):
         ]
     )
     IngredientSpec(
-        **ingredient_kwargs(sugar),
+        **_ingredient_kwargs(sugar),
         labels=['wet', 'sweetener'],
         process=wetmix.process,
         absolute_quantity=NominalReal(nominal=2, units='cups')
     )
 
     butter = MaterialSpec(
-        **material_kwargs(
+        **_material_kwargs(
             material_name="Butter",
             process_tmpl_name="Procuring",
             process_kwargs={
@@ -614,20 +614,20 @@ def make_cake_spec(tmpl=None):
         notes='Shortening for making rich, buttery baked goods'
     )
     IngredientSpec(
-        **ingredient_kwargs(butter),
+        **_ingredient_kwargs(butter),
         labels=['wet', 'shortening'],
         process=wetmix.process,
         absolute_quantity=NominalReal(nominal=1, units='cups')
     )
     IngredientSpec(
-        **ingredient_kwargs(butter),
+        **_ingredient_kwargs(butter),
         labels=['shortening'],
         process=frosting.process,
         mass_fraction=NominalReal(nominal=0.1434, units='')  # 1/2 c @ 0.911 g/cc
     )
 
     eggs = MaterialSpec(
-        **material_kwargs(
+        **_material_kwargs(
             material_name="Eggs",
             process_tmpl_name="Procuring",
             process_kwargs={
@@ -645,13 +645,13 @@ def make_cake_spec(tmpl=None):
         notes='A custard waiting to happen'
     )
     IngredientSpec(
-        **ingredient_kwargs(eggs),
+        **_ingredient_kwargs(eggs),
         labels=['wet'],
         absolute_quantity=NominalReal(nominal=4, units='')
     )
 
     vanilla = MaterialSpec(
-        **material_kwargs(
+        **_material_kwargs(
             material_name="Vanilla",
             process_tmpl_name="Procuring",
             process_kwargs={
@@ -678,20 +678,20 @@ def make_cake_spec(tmpl=None):
         ]
     )
     IngredientSpec(
-        **ingredient_kwargs(vanilla),
+        **_ingredient_kwargs(vanilla),
         labels=['wet', 'flavoring'],
         process=wetmix.process,
         absolute_quantity=NominalReal(nominal=2, units='teaspoons')
     )
     IngredientSpec(
-        **ingredient_kwargs(vanilla),
+        **_ingredient_kwargs(vanilla),
         labels=['flavoring'],
         process=frosting.process,
         mass_fraction=NominalReal(nominal=0.0231, units='')  # 2 tsp @ 0.879 g/cc
     )
 
     milk = MaterialSpec(
-        **material_kwargs(
+        **_material_kwargs(
             material_name="Milk",
             process_tmpl_name="Procuring",
             process_kwargs={
@@ -710,20 +710,20 @@ def make_cake_spec(tmpl=None):
         notes=''
     )
     IngredientSpec(
-        **ingredient_kwargs(milk),
+        **_ingredient_kwargs(milk),
         labels=['wet'],
         process=batter.process,
         absolute_quantity=NominalReal(nominal=1, units='cup')
     )
     IngredientSpec(
-        **ingredient_kwargs(milk),
+        **_ingredient_kwargs(milk),
         labels=[],
         process=frosting.process,
         mass_fraction=NominalReal(nominal=0.0816, units='')  # 1/4 c @ 1.037 g/cc
     )
 
     chocolate = MaterialSpec(
-        **material_kwargs(
+        **_material_kwargs(
             material_name="Chocolate",
             process_tmpl_name="Procuring",
             process_kwargs={
@@ -740,14 +740,14 @@ def make_cake_spec(tmpl=None):
         notes=''
     )
     IngredientSpec(
-        **ingredient_kwargs(chocolate),
+        **_ingredient_kwargs(chocolate),
         labels=['flavoring'],
         process=frosting.process,
         mass_fraction=NominalReal(nominal=0.1132, units='')  # 3 oz.
     )
 
     powder_sugar = MaterialSpec(
-        **material_kwargs(
+        **_material_kwargs(
             material_name="Powdered Sugar",
             process_tmpl_name="Procuring",
             process_kwargs={
@@ -766,7 +766,7 @@ def make_cake_spec(tmpl=None):
         notes='Granulated sugar mixed with corn starch'
     )
     IngredientSpec(
-        **ingredient_kwargs(powder_sugar),
+        **_ingredient_kwargs(powder_sugar),
         labels=['flavoring'],
         process=frosting.process,
         mass_fraction=NominalReal(nominal=0.6387, units='')  # 4 c @ 30 g/ 0.25 cups
@@ -873,19 +873,19 @@ def make_cake(seed=None, tmpl=None, cake_spec=None, toothpick_img=None):
     baked = \
         next(x.material for x in cake.process.ingredients if 'aked' in x.name)
 
-    def find_name(name, material):
-        # Recursively search for the right material
+    def _find_name(name, material):
+        """Recursively search for the right material."""
         if name in material.name:
             return material
         for ingredient in material.process.ingredients:
-            result = find_name(name, ingredient.material)
+            result = _find_name(name, ingredient.material)
             if result:
                 return result
         return
 
-    flour = find_name('Flour', cake)
-    salt = find_name('Salt', cake)
-    sugar = find_name('Sugar', cake)
+    flour = _find_name('Flour', cake)
+    salt = _find_name('Salt', cake)
+    sugar = _find_name('Sugar', cake)
 
     # Add measurements
     cake_taste = MeasurementRun(name='Final Taste', material=cake)
