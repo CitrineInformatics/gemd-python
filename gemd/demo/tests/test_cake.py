@@ -11,7 +11,7 @@ from gemd.entity.file_link import FileLink
 
 from gemd.json import dumps, loads
 from gemd.demo.cake import make_cake_templates, make_cake_spec, make_cake, \
-    import_toothpick_picture
+    import_toothpick_picture, change_scope
 from gemd.util import recursive_foreach
 from gemd.entity.util import complete_material_history
 
@@ -140,3 +140,27 @@ def test_cake_sigs():
 def test_import():
     """Make sure picture import runs."""
     import_toothpick_picture()
+
+
+def test_scope():
+    """Make sure change scope does what we want it to."""
+    default_cake = make_cake()
+    default_scope = next(iter(default_cake.uids))
+    change_scope('second-scope')
+    second_cake = make_cake()
+    change_scope(data='third-scope', templates='also-a-scope')
+    third_cake = make_cake()
+
+    assert 'second-scope' not in default_cake.uids
+    assert 'third-scope' not in default_cake.uids
+
+    assert default_scope not in second_cake.uids
+    assert 'second-scope' in second_cake.uids
+    assert 'third-scope' not in second_cake.uids
+
+    assert default_scope not in third_cake.uids
+    assert 'second-scope' not in third_cake.uids
+    assert 'third-scope' in third_cake.uids
+
+    assert any('template' in x for x in default_cake.spec.template.uids)
+    assert not any('template' in x for x in third_cake.spec.template.uids)

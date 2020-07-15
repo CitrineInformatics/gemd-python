@@ -30,6 +30,27 @@ DEMO_SCOPE = 'citrine-demo'
 TEMPLATE_SCOPE = DEMO_SCOPE + '-template'
 
 
+def change_scope(data, *, templates=None):
+    """
+    Change scope(s) of internal uids.
+
+    Parameters
+    ----------
+    data: str
+        Scope for the Run and Spec objects
+    templates: str, optional
+        Scope for the Attribute Templates and Object Templates.  If `None`,
+        will be set to `data + '-template'`
+
+    """
+    global DEMO_SCOPE, TEMPLATE_SCOPE
+    DEMO_SCOPE = data
+    if templates is None:
+        TEMPLATE_SCOPE = DEMO_SCOPE + '-template'
+    else:
+        TEMPLATE_SCOPE = templates
+
+
 def import_toothpick_picture():
     """Return the stream of the toothpick picture."""
     import pkg_resources
