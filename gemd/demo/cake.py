@@ -773,18 +773,23 @@ def make_cake_spec(tmpl=None):
     )
 
     # Crawl tree and annotate with uids; only add ids if there's nothing there
-    seen = set()
+    def _make_fuzzer():
+        """Generate closure that knows if it's seen a given name."""
+        seen = set()
 
-    def name_fuzz(obj):
-        # Add fuzz to name in ID as necessary
-        nonlocal seen
-        name = 'ing-' if isinstance(obj, IngredientSpec) else ''
-        name += obj.name
-        while name.lower() in seen:
-            name += '-again'
-        seen.add(name.lower())
-        return name
-    recursive_foreach(cake, lambda obj: obj.uids or obj.add_uid(DEMO_SCOPE, name_fuzz(obj)))
+        def _fuzz_func(obj):
+            """Add fuzz to name in ID as necessary."""
+            name = 'ing-' if isinstance(obj, IngredientSpec) else ''
+            name += obj.name
+            while name.lower() in seen:
+                name += '-again'
+            seen.add(name.lower())
+            return name
+
+        return _fuzz_func
+
+    _name_fuzz = _make_fuzzer()
+    recursive_foreach(cake, lambda obj: obj.uids or obj.add_uid(DEMO_SCOPE, _name_fuzz(obj)))
 
     return cake
 
@@ -1063,17 +1068,22 @@ def make_cake(seed=None, tmpl=None, cake_spec=None, toothpick_img=None):
     run_key = md5.hexdigest()
 
     # Crawl tree and annotate with uids; only add ids if there's nothing there
-    name_count = dict()
+    def _make_disambiguator():
+        """Generate a closure to post-annotate for disambiguation."""
+        count = dict()
 
-    def _disambig(name):
-        nonlocal name_count
-        if name in name_count:
-            name_count[name] = name_count[name] + 1
-            return "{}-{}".format(name, name_count[name])
-        else:
-            name_count[name] = 1
-            return name
+        def _disambiguator(name):
+            """Add a number to the name if you've seen it more than once."""
+            if name in count:
+                count[name] = count[name] + 1
+                return "{}-{}".format(name, count[name])
+            else:
+                count[name] = 1
+                return name
 
+        return _disambiguator
+
+    _disambig = _make_disambiguator()
     recursive_foreach(
         cake,
         lambda obj: obj.uids or obj.add_uid(DEMO_SCOPE, _disambig(obj.name) + run_key)
