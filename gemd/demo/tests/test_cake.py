@@ -164,4 +164,3 @@ def test_scope():
 
     assert any('template' in x for x in default_cake.spec.template.uids)
     assert not any('template' in x for x in third_cake.spec.template.uids)
-
