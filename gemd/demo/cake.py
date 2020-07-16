@@ -27,6 +27,28 @@ from gemd.util.impl import recursive_foreach
 
 # For now, module constant, though likely this should get promoted to a package level
 DEMO_SCOPE = 'citrine-demo'
+TEMPLATE_SCOPE = DEMO_SCOPE + '-template'
+
+
+def change_scope(data, *, templates=None):
+    """
+    Change scope(s) of internal uids.
+
+    Parameters
+    ----------
+    data: str
+        Scope for the Run and Spec objects
+    templates: str, optional
+        Scope for the Attribute Templates and Object Templates.  If `None`,
+        will be set to `data + '-template'`
+
+    """
+    global DEMO_SCOPE, TEMPLATE_SCOPE
+    DEMO_SCOPE = data
+    if templates is None:
+        TEMPLATE_SCOPE = DEMO_SCOPE + '-template'
+    else:
+        TEMPLATE_SCOPE = templates
 
 
 def import_toothpick_picture():
@@ -42,6 +64,12 @@ def make_cake_templates():
     tmpl = dict()
 
     # Attributes
+    tmpl["Mixer speed setting"] = ParameterTemplate(
+        name="Mixer speed setting",
+        description="What speed setting to use on the mixer",
+        bounds=IntegerBounds(0, 10)
+    )
+
     tmpl['Cooking time'] = ConditionTemplate(
         name="Cooking time",
         description="The time elapsed during a cooking process",
@@ -122,45 +150,31 @@ def make_cake_templates():
     )
 
     # Objects
-    tmpl["Baking in an oven"] = ProcessTemplate(
-        name="Baking in an oven",
+    tmpl["Procuring"] = ProcessTemplate(
+        name="Procuring",
+        description="Buyin' stuff"
+    )
+    tmpl["Baking"] = ProcessTemplate(
+        name="Baking",
         description='Using heat to promote chemical reactions in a material',
         allowed_labels=['precursor'],
         conditions=[(tmpl["Oven temperature"], RealBounds(0, 700, "degF"))],
         parameters=[(tmpl["Oven temperature setting"], RealBounds(100, 550, "degF"))]
     )
-
-    tmpl["Doneness"] = MeasurementTemplate(
-        name="Doneness test",
-        description="An ensemble of tests to determine the doneness of a baked good",
-        properties=[tmpl["Toothpick test"], tmpl["Color"]]
+    tmpl["Icing"] = ProcessTemplate(
+        name="Icing",
+        description='Applying a coating to a substrate',
+        allowed_labels=['coating', 'substrate']
     )
-
-    tmpl["Taste test"] = MeasurementTemplate(
-        name="Taste test",
-        properties=[tmpl["Tastiness"]]
-    )
-
-    tmpl["Nutritional Analysis"] = MeasurementTemplate(
-        name="Nutritional Analysis",
-        properties=[tmpl["Nutritional Information"]],
-        conditions=[tmpl["Sample Mass"]],
-        parameters=[tmpl["Expected Sample Mass"]]
-    )
-    tmpl["Elemental Analysis"] = MeasurementTemplate(
-        name="Elemental Analysis",
-        properties=[tmpl["Chemical Formula"]],
-        conditions=[tmpl["Sample Mass"]],
-        parameters=[tmpl["Expected Sample Mass"]]
-    )
-
-    tmpl["Dessert"] = MaterialTemplate(
-        name="Dessert",
-        properties=[tmpl["Tastiness"]]
+    tmpl["Mixing"] = ProcessTemplate(
+        name="Mixing",
+        description='Physically combining ingredients',
+        allowed_labels=['wet', 'dry', 'leavening', 'seasoning',
+                        'sweetener', 'shortening', 'flavoring'],
+        parameters=[tmpl["Mixer speed setting"]]
     )
 
     tmpl["Generic Material"] = MaterialTemplate(name="Generic")
-
     tmpl["Nutritional Material"] = MaterialTemplate(
         name="Nutritional Material",
         description="A material with FDA Nutrition Facts attached",
@@ -176,18 +190,39 @@ def make_cake_templates():
             tmpl["Molecular Structure"]
         ]
     )
-    tmpl["Icing"] = ProcessTemplate(name="Icing",
-                                    description='Applying a coating to a substrate',
-                                    allowed_labels=['coating', 'substrate'])
-    tmpl["Mixing"] = ProcessTemplate(name="Mixing",
-                                     description='Physically combining ingredients',
-                                     allowed_labels=['wet', 'dry', 'leavening', 'seasoning',
-                                                     'sweetener', 'shortening', 'flavoring'])
-    tmpl["Procurement"] = ProcessTemplate(name="Procurement",
-                                          description="Buyin' stuff")
+    tmpl["Baked Good"] = MaterialTemplate(
+        name="Baked Good",
+        properties=[tmpl["Toothpick test"], tmpl["Color"]]
+    )
+    tmpl["Dessert"] = MaterialTemplate(
+        name="Dessert",
+        properties=[tmpl["Tastiness"]]
+    )
+
+    tmpl["Doneness"] = MeasurementTemplate(
+        name="Doneness test",
+        description="An ensemble of tests to determine the doneness of a baked good",
+        properties=[tmpl["Toothpick test"], tmpl["Color"]]
+    )
+    tmpl["Taste test"] = MeasurementTemplate(
+        name="Taste test",
+        properties=[tmpl["Tastiness"]]
+    )
+    tmpl["Nutritional Analysis"] = MeasurementTemplate(
+        name="Nutritional Analysis",
+        properties=[tmpl["Nutritional Information"]],
+        conditions=[tmpl["Sample Mass"]],
+        parameters=[tmpl["Expected Sample Mass"]]
+    )
+    tmpl["Elemental Analysis"] = MeasurementTemplate(
+        name="Elemental Analysis",
+        properties=[tmpl["Chemical Formula"]],
+        conditions=[tmpl["Sample Mass"]],
+        parameters=[tmpl["Expected Sample Mass"]]
+    )
 
     for key in tmpl:
-        tmpl[key].add_uid(DEMO_SCOPE + "-template", key)
+        tmpl[key].add_uid(TEMPLATE_SCOPE, key)
     return tmpl
 
 
@@ -198,31 +233,36 @@ def make_cake_spec(tmpl=None):
     if tmpl is None:
         tmpl = make_cake_templates()
 
-    count = dict()
+    def _make_ingredient(material, **kwargs):
+        """Convenience method to utilize material fields in creating an ingredient's arguments."""
+        return IngredientSpec(
+            name=material.name.lower(),
+            tags=list(material.tags),
+            material=material,
+            **kwargs
+        )
 
-    def ingredient_kwargs(material):
-        # Pulls the elements of a material that all ingredients consume out
-        count[material.name] = count.get(material.name, 0) + 1
-        return {
-            "name": "{} input{}".format(material.name.replace('Abstract ', ''),
-                                        " (Again)" * (count[material.name] - 1)),
-            "tags": list(material.tags),
-            "material": material
-        }
+    def _make_material(material_name, process_tmpl_name, process_kwargs, **material_kwargs):
+        """Convenience method to reuse material name in creating a material's arguments."""
+        return MaterialSpec(
+            name=material_name,
+            process=ProcessSpec(
+                name="{} {}".format(process_tmpl_name, material_name),
+                template=tmpl[process_tmpl_name],
+                **process_kwargs
+            ),
+            **material_kwargs)
 
     ###############################################################################################
     # Objects
-    cake = MaterialSpec(
-        name="Abstract Cake",
+    cake = _make_material(
+        material_name="Cake",
+        process_tmpl_name="Icing",
+        process_kwargs={
+            "tags": ['spreading'],
+            "notes": 'The act of covering a baked output with frosting'
+        },
         template=tmpl["Dessert"],
-        process=ProcessSpec(
-            name='Icing Cake, in General',
-            template=tmpl["Icing"],
-            tags=[
-                'spreading'
-            ],
-            notes='The act of covering a baked output with frosting'
-        ),
         properties=[
             PropertyAndConditions(Property(name="Tastiness",
                                            value=NominalInteger(5),
@@ -243,121 +283,174 @@ def make_cake_spec(tmpl=None):
     )
 
     ########################
-    frosting = MaterialSpec(
-        name="Abstract Frosting",
-        template=tmpl["Dessert"],
-        process=ProcessSpec(
-            name='Mixing Frosting, in General',
-            template=tmpl["Mixing"],
-            tags=[
+    frosting = _make_material(
+        material_name="Frosting",
+        process_tmpl_name="Mixing",
+        process_kwargs={
+            "tags": [
                 'mixing'
             ],
-            notes='Combining ingredients to make a sweet frosting'
-        ),
+            "parameters": [
+                Parameter(name='Mixer speed setting',
+                          template=tmpl['Mixer speed setting'],
+                          origin='specified',
+                          value=NominalInteger(2))
+            ],
+            "notes": 'Combining ingredients to make a sweet frosting'
+        },
+        template=tmpl["Dessert"],
         tags=[
             'frosting::chocolate',
             'topping::chocolate'
         ],
         notes='Chocolate frosting'
     )
-    IngredientSpec(
-        **ingredient_kwargs(frosting),
+    _make_ingredient(
+        material=frosting,
         notes='Seems like a lot of frosting',
         labels=['coating'],
         process=cake.process,
         absolute_quantity=NominalReal(nominal=0.751, units='kg')
     )
 
-    baked_cake = MaterialSpec(
-        name="Abstract Baked Cake",
-        template=tmpl["Generic Material"],
-        process=ProcessSpec(
-            name='Baking, in General',
-            template=tmpl["Baking in an oven"],
-            tags=[
+    baked_cake = _make_material(
+        material_name="Baked Cake",
+        process_tmpl_name="Baking",
+        process_kwargs={
+            "tags": [
                 'oven::baking'
             ],
-            notes='Using heat to convert batter into a solid matrix'
-        ),
+            "conditions": [
+                Condition(name='Cooking time',
+                          template=tmpl['Cooking time'],
+                          origin=Origin.SPECIFIED,
+                          value=NormalReal(mean=50, std=5, units='min'))
+            ],
+            "parameters": [
+                Parameter(name='Oven temperature setting',
+                          template=tmpl['Oven temperature setting'],
+                          origin="specified",
+                          value=NominalReal(nominal=350, units='degF'))
+            ],
+            "notes": 'Using heat to convert batter into a solid matrix'
+        },
+        template=tmpl["Baked Good"],
+        properties=[
+            PropertyAndConditions(
+                property=Property(
+                    name="Toothpick test",
+                    value=NominalCategorical("completely clean"),
+                    template=tmpl["Toothpick test"]
+                )
+            ),
+            PropertyAndConditions(
+                property=Property(
+                    name="Color",
+                    value=NominalCategorical("Golden brown"),
+                    template=tmpl["Color"],
+                    origin="specified"
+                )
+            )
+        ],
         tags=[
+            'substrate'
         ],
         notes='The cakey part of the cake'
     )
-    IngredientSpec(
-        **ingredient_kwargs(baked_cake),
+    _make_ingredient(
+        material=baked_cake,
         labels=['substrate'],
         process=cake.process
     )
 
     ########################
-    batter = MaterialSpec(
-        name="Abstract Batter",
-        template=tmpl["Generic Material"],
-        process=ProcessSpec(
-            name='Mixing Batter, in General',
-            template=tmpl["Mixing"],
-            tags=[
+    batter = _make_material(
+        material_name="Batter",
+        process_tmpl_name="Mixing",
+        process_kwargs={
+            "tags": [
                 'mixing'
             ],
-            notes='Combining ingredients to make a baking feedstock'
-        ),
+            "parameters": [
+                Parameter(name='Mixer speed setting',
+                          template=tmpl['Mixer speed setting'],
+                          origin='specified',
+                          value=NominalInteger(2))
+            ],
+            "notes": 'Combining ingredients to make a baking feedstock'
+        },
+        template=tmpl["Generic Material"],
         tags=[
+            'mixture'
         ],
         notes='The fluid that converts to cake with heat'
     )
-    IngredientSpec(
-        **ingredient_kwargs(batter),
+    _make_ingredient(
+        material=batter,
         labels=['precursor'],
         process=baked_cake.process
     )
 
     ########################
-    wetmix = MaterialSpec(
-        name="Abstract Wet Mix",
-        template=tmpl["Generic Material"],
-        process=ProcessSpec(
-            name='Mixing Wet, in General',
-            template=tmpl["Mixing"],
-            tags=[
+    wetmix = _make_material(
+        material_name="Wet Ingredients",
+        process_tmpl_name="Mixing",
+        process_kwargs={
+            "tags": [
                 'mixing'
             ],
-            notes='Combining wet ingredients to make a baking feedstock'
-        ),
+            "parameters": [
+                Parameter(name='Mixer speed setting',
+                          template=tmpl['Mixer speed setting'],
+                          origin='specified',
+                          value=NominalInteger(2))
+            ],
+            "notes": 'Combining wet ingredients to make a baking feedstock'
+        },
+        template=tmpl["Generic Material"],
         tags=[
+            "mixture"
         ],
         notes='The wet fraction of a batter'
     )
-    IngredientSpec(
-        **ingredient_kwargs(wetmix),
+    _make_ingredient(
+        material=wetmix,
         labels=['wet'],
         process=batter.process
     )
 
-    drymix = MaterialSpec(
-        name="Abstract Dry Mix",
-        template=tmpl["Generic Material"],
-        process=ProcessSpec(
-            name='Mixing Dry, in General',
-            template=tmpl["Mixing"],
-            tags=[
+    drymix = _make_material(
+        material_name="Dry Ingredients",
+        process_tmpl_name="Mixing",
+        process_kwargs={
+            "tags": [
                 'mixing'
             ],
-            notes='Combining dry ingredients to make a baking feedstock'
-        ),
+            "notes": 'Combining dry ingredients to make a baking feedstock'
+        },
+        template=tmpl["Generic Material"],
         tags=[
+            "mixture"
         ],
         notes='The dry fraction of a batter'
     )
-    IngredientSpec(
-        **ingredient_kwargs(drymix),
+    _make_ingredient(
+        material=drymix,
         labels=['dry'],
         process=batter.process,
         absolute_quantity=NominalReal(nominal=3.052, units='cups')
     )
 
     ########################
-    flour = MaterialSpec(
-        name="Abstract Flour",
+    flour = _make_material(
+        material_name="Flour",
+        process_tmpl_name="Procuring",
+        process_kwargs={
+            "tags": [
+                'purchase::dry-goods'
+            ],
+            "notes": 'Purchasing all purpose flour'
+        },
         template=tmpl["Nutritional Material"],
         properties=[
             PropertyAndConditions(
@@ -383,84 +476,85 @@ def make_cake_spec(tmpl=None):
                 )
             )
         ],
-        process=ProcessSpec(
-            name='Buying Flour, in General',
-            template=tmpl["Procurement"],
-            tags=[
-                'purchase::dry-goods'
-            ],
-            notes='Purchasing all purpose flour'
-        ),
         tags=[
+            'raw material',
+            'flour',
+            'dry-goods'
         ],
         notes='All-purpose flour'
     )
-    IngredientSpec(
-        **ingredient_kwargs(flour),
+    _make_ingredient(
+        material=flour,
         labels=['dry'],
         process=drymix.process,
         volume_fraction=NominalReal(nominal=0.9829, units='')  # 3 cups
     )
 
-    baking_powder = MaterialSpec(
-        name="Abstract Baking Powder",
-        template=tmpl["Generic Material"],
-        process=ProcessSpec(
-            name='Buying Baking Powder, in General',
-            template=tmpl["Procurement"],
-            tags=[
+    baking_powder = _make_material(
+        material_name="Baking Powder",
+        process_tmpl_name="Procuring",
+        process_kwargs={
+            "tags": [
                 'purchase::dry-goods'
             ],
-            notes='Purchasing baking powder'
-        ),
+            "notes": 'Purchasing baking powder'
+        },
+        template=tmpl["Generic Material"],
         tags=[
+            'raw material',
+            'levening',
+            'dry-goods'
         ],
         notes='Leavening agent for cake'
     )
-    IngredientSpec(
-        **ingredient_kwargs(baking_powder),
+    _make_ingredient(
+        material=baking_powder,
         labels=['leavening', 'dry'],
         process=drymix.process,
         volume_fraction=NominalReal(nominal=0.0137, units='')  # 2 teaspoons
     )
 
-    salt = MaterialSpec(
-        name="Abstract Salt",
-        template=tmpl["Formulaic Material"],
-        process=ProcessSpec(
-            name='Buying Salt, in General',
-            template=tmpl["Procurement"],
-            tags=[
+    salt = _make_material(
+        material_name="Salt",
+        process_tmpl_name="Procuring",
+        process_kwargs={
+            "tags": [
                 'purchase::dry-goods'
             ],
-            notes='Purchasing salt'
-        ),
+            "notes": 'Purchasing salt'
+        },
+        template=tmpl["Formulaic Material"],
         tags=[
+            'raw material',
+            'seasoning',
+            'dry-goods'
         ],
         notes='Plain old NaCl',
         properties=[
             PropertyAndConditions(Property(name='Formula', value=EmpiricalFormula("NaCl")))
         ]
     )
-    IngredientSpec(
-        **ingredient_kwargs(salt),
+    _make_ingredient(
+        material=salt,
         labels=['dry', 'seasoning'],
         process=drymix.process,
         volume_fraction=NominalReal(nominal=0.0034, units='')  # 1/2 teaspoon
     )
 
-    sugar = MaterialSpec(
-        name="Abstract Sugar",
-        template=tmpl["Formulaic Material"],
-        process=ProcessSpec(
-            name='Buying Sugar, in General',
-            template=tmpl["Procurement"],
-            tags=[
+    sugar = _make_material(
+        material_name="Sugar",
+        process_tmpl_name="Procuring",
+        process_kwargs={
+            "tags": [
                 'purchase::dry-goods'
             ],
-            notes='Purchasing all purpose flour'
-        ),
+            "notes": 'Purchasing all purpose flour'
+        },
+        template=tmpl["Formulaic Material"],
         tags=[
+            'raw material',
+            'sweetener',
+            'dry-goods'
         ],
         notes='Sugar',
         properties=[
@@ -473,74 +567,79 @@ def make_cake_spec(tmpl=None):
             )
         ]
     )
-    IngredientSpec(
-        **ingredient_kwargs(sugar),
+    _make_ingredient(
+        material=sugar,
         labels=['wet', 'sweetener'],
         process=wetmix.process,
         absolute_quantity=NominalReal(nominal=2, units='cups')
     )
 
-    butter = MaterialSpec(
-        name="Abstract Butter",
-        template=tmpl["Generic Material"],
-        process=ProcessSpec(
-            name='Buying Butter, in General',
-            template=tmpl["Procurement"],
-            tags=[
+    butter = _make_material(
+        material_name="Butter",
+        process_tmpl_name="Procuring",
+        process_kwargs={
+            "tags": [
                 'purchase::produce'
             ],
-            notes='Purchasing butter'
-        ),
+            "notes": 'Purchasing butter'
+        },
+        template=tmpl["Generic Material"],
         tags=[
+            'raw material',
+            'produce',
+            'shortening',
+            'dairy'
         ],
         notes='Shortening for making rich, buttery baked goods'
     )
-    IngredientSpec(
-        **ingredient_kwargs(butter),
+    _make_ingredient(
+        material=butter,
         labels=['wet', 'shortening'],
         process=wetmix.process,
         absolute_quantity=NominalReal(nominal=1, units='cups')
     )
-    IngredientSpec(
-        **ingredient_kwargs(butter),
+    _make_ingredient(
+        material=butter,
         labels=['shortening'],
         process=frosting.process,
         mass_fraction=NominalReal(nominal=0.1434, units='')  # 1/2 c @ 0.911 g/cc
     )
 
-    eggs = MaterialSpec(
-        name="Abstract Eggs",
-        template=tmpl["Generic Material"],
-        process=ProcessSpec(
-            name='Buying Eggs, in General',
-            template=tmpl["Procurement"],
-            tags=[
+    eggs = _make_material(
+        material_name="Eggs",
+        process_tmpl_name="Procuring",
+        process_kwargs={
+            "tags": [
                 'purchase::produce'
             ],
-            notes='Purchasing eggs'
-        ),
+            "notes": 'Purchasing eggs'
+        },
+        template=tmpl["Generic Material"],
         tags=[
+            'raw material',
+            'produce',
         ],
-        notes=''
+        notes='A custard waiting to happen'
     )
-    IngredientSpec(
-        **ingredient_kwargs(eggs),
+    _make_ingredient(
+        material=eggs,
         labels=['wet'],
         absolute_quantity=NominalReal(nominal=4, units='')
     )
 
-    vanilla = MaterialSpec(
-        name="Abstract Vanilla",
-        template=tmpl["Generic Material"],
-        process=ProcessSpec(
-            name='Buying Vanilla, in General',
-            template=tmpl["Procurement"],
-            tags=[
-                'purchase::dry-goods'
+    vanilla = _make_material(
+        material_name="Vanilla",
+        process_tmpl_name="Procuring",
+        process_kwargs={
+            "tags": [
+                'purchase::solution'
             ],
-            notes='Purchasing vanilla'
-        ),
+            "notes": 'Purchasing vanilla'
+        },
+        template=tmpl["Generic Material"],
         tags=[
+            'raw material',
+            'seasoning'
         ],
         notes='Vanilla Extract is mostly alcohol but the most important component '
               'is vanillin (see attached structure)',
@@ -553,98 +652,118 @@ def make_cake_spec(tmpl=None):
             )
         ]
     )
-    IngredientSpec(
-        **ingredient_kwargs(vanilla),
+    _make_ingredient(
+        material=vanilla,
         labels=['wet', 'flavoring'],
         process=wetmix.process,
         absolute_quantity=NominalReal(nominal=2, units='teaspoons')
     )
-    IngredientSpec(
-        **ingredient_kwargs(vanilla),
+    _make_ingredient(
+        material=vanilla,
         labels=['flavoring'],
         process=frosting.process,
         mass_fraction=NominalReal(nominal=0.0231, units='')  # 2 tsp @ 0.879 g/cc
     )
 
-    milk = MaterialSpec(
-        name="Abstract Milk",
-        template=tmpl["Generic Material"],
-        process=ProcessSpec(
-            name='Buying Milk, in General',
-            template=tmpl["Procurement"],
-            tags=[
+    milk = _make_material(
+        material_name="Milk",
+        process_tmpl_name="Procuring",
+        process_kwargs={
+            "tags": [
                 'purchase::produce'
             ],
-            notes='Purchasing milk'
-        ),
+            "notes": 'Purchasing milk'
+        },
+        template=tmpl["Generic Material"],
         tags=[
+            'raw material',
+            'produce',
+            'dairy'
         ],
         notes=''
     )
-    IngredientSpec(
-        **ingredient_kwargs(milk),
+    _make_ingredient(
+        material=milk,
         labels=['wet'],
         process=batter.process,
         absolute_quantity=NominalReal(nominal=1, units='cup')
     )
-    IngredientSpec(
-        **ingredient_kwargs(milk),
+    _make_ingredient(
+        material=milk,
         labels=[],
         process=frosting.process,
         mass_fraction=NominalReal(nominal=0.0816, units='')  # 1/4 c @ 1.037 g/cc
     )
 
-    chocolate = MaterialSpec(
-        name="Abstract Chocolate",
-        template=tmpl["Generic Material"],
-        process=ProcessSpec(
-            name='Buying Chocolate, in General',
-            template=tmpl["Procurement"],
-            tags=[
+    chocolate = _make_material(
+        material_name="Chocolate",
+        process_tmpl_name="Procuring",
+        process_kwargs={
+            "tags": [
                 'purchase::dry-goods'
             ],
-            notes='Purchasing chocolate'
-        ),
+            "notes": 'Purchasing chocolate'
+        },
+        template=tmpl["Generic Material"],
         tags=[
+            'raw material'
         ],
         notes=''
     )
-    IngredientSpec(
-        **ingredient_kwargs(chocolate),
+    _make_ingredient(
+        material=chocolate,
         labels=['flavoring'],
         process=frosting.process,
         mass_fraction=NominalReal(nominal=0.1132, units='')  # 3 oz.
     )
 
-    powder_sugar = MaterialSpec(
-        name="Abstract Powdered Sugar",
-        template=tmpl["Generic Material"],
-        process=ProcessSpec(
-            name='Buying Powdered Sugar, in General',
-            template=tmpl["Procurement"],
-            tags=[
+    powder_sugar = _make_material(
+        material_name="Powdered Sugar",
+        process_tmpl_name="Procuring",
+        process_kwargs={
+            "tags": [
                 'purchase::dry-goods'
             ],
-            notes='Purchasing powdered sugar'
-        ),
+            "notes": 'Purchasing powdered sugar'
+        },
+        template=tmpl["Generic Material"],
         tags=[
+            'raw material',
+            'sweetener',
+            'dry-goods'
         ],
         notes='Granulated sugar mixed with corn starch'
     )
-    IngredientSpec(
-        **ingredient_kwargs(powder_sugar),
+    _make_ingredient(
+        material=powder_sugar,
         labels=['flavoring'],
         process=frosting.process,
         mass_fraction=NominalReal(nominal=0.6387, units='')  # 4 c @ 30 g/ 0.25 cups
     )
 
     # Crawl tree and annotate with uids; only add ids if there's nothing there
-    recursive_foreach(cake, lambda obj: obj.uids or obj.add_uid(DEMO_SCOPE, obj.name))
+    def _make_fuzzer():
+        """Generate closure that knows if it's seen a given name."""
+        seen = set()
+
+        def _fuzz_func(obj):
+            """Add fuzz to name in ID as necessary."""
+            name = 'ing-' if isinstance(obj, IngredientSpec) else ''
+            name += obj.name
+            while name.lower() in seen:
+                name += '-again'
+            seen.add(name.lower())
+            return name
+
+        return _fuzz_func
+
+    _name_fuzz = _make_fuzzer()
+    recursive_foreach(cake, lambda obj: obj.uids or obj.add_uid(DEMO_SCOPE, _name_fuzz(obj)))
 
     return cake
 
 
-def make_cake(seed=None, tmpl=None, cake_spec=None):
+def make_cake(seed=None, tmpl=None, cake_spec=None, toothpick_img=None):
     """Define all objects that go into making a demo cake."""
     import struct
     import hashlib
@@ -662,6 +781,8 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     # Objects
     cake = make_instance(cake_spec)
     operators = ['gwash', 'jadams', 'thomasj', 'jmadison', 'jmonroe']
+    producers = ['Fresh Farm', 'Sunnydale', 'Greenbrook']
+    drygoods = ['Acme', 'A1', 'Reliable', "Big Box"]
     cake.process.source = PerformedSource(performed_by=random.choice(operators),
                                           performed_date='2015-03-14')
     # Replace Abstract/In General
@@ -670,18 +791,22 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
         item = queue.pop(0)
         if item.spec.tags is not None:
             item.tags = list(item.spec.tags)
-        if item.spec.notes:  # None or empty string
+        if item.spec.notes:  # Neither None or empty string
             item.notes = 'The spec says "{}"'.format(item.spec.notes)
-
         if isinstance(item, MaterialRun):
-            item.name = item.name.replace('Abstract ', '')
+            if 'raw material' in item.tags:
+                if 'produce' in item.tags:
+                    supplier = random.choice(producers)
+                else:
+                    supplier = random.choice(drygoods)
+                item.name = "{} {}".format(supplier, item.spec.name)
             queue.append(item.process)
         elif isinstance(item, ProcessRun):
-            item.name = item.name.replace(', in General', '')
             queue.extend(item.ingredients)
-            if item.template.name == "Procurement":
+            if item.template.name == "Procuring":
                 item.source = PerformedSource(performed_by='hamilton',
                                               performed_date='2015-02-17')
+                item.name = "{} {}".format(item.template.name, item.output_material.name)
             else:
                 item.source = cake.process.source
         elif isinstance(item, IngredientRun):
@@ -717,19 +842,19 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     baked = \
         next(x.material for x in cake.process.ingredients if 'aked' in x.name)
 
-    def find_name(name, material):
-        # Recursively search for the right material
-        if name == material.name:
+    def _find_name(name, material):
+        """Recursively search for the right material."""
+        if name in material.name:
             return material
         for ingredient in material.process.ingredients:
-            result = find_name(name, ingredient.material)
+            result = _find_name(name, ingredient.material)
             if result:
                 return result
         return
 
-    flour = find_name('Flour', cake)
-    salt = find_name('Salt', cake)
-    sugar = find_name('Sugar', cake)
+    flour = _find_name('Flour', cake)
+    salt = _find_name('Salt', cake)
+    sugar = _find_name('Sugar', cake)
 
     # Add measurements
     cake_taste = MeasurementRun(name='Final Taste', material=cake)
@@ -740,6 +865,9 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     flour_content = MeasurementRun(name='Flour nutritional analysis', material=flour)
     salt_content = MeasurementRun(name='Salt elemental analysis', material=salt)
     sugar_content = MeasurementRun(name='Sugar elemental analysis', material=sugar)
+
+    if toothpick_img is not None:
+        baked_doneness.file_links.append(toothpick_img)
 
     # and spec out the measurements
     cake_taste.spec = MeasurementSpec(name='Taste', template=tmpl['Taste test'])
@@ -764,17 +892,10 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
                                               template=tmpl['Cooking time'],
                                               origin=Origin.MEASURED,
                                               value=NominalReal(nominal=48, units='min')))
-    baked.spec.process.conditions.append(Condition(name='Cooking time',
-                                                   template=tmpl['Cooking time'],
-                                                   origin=Origin.SPECIFIED,
-                                                   value=NormalReal(mean=50, std=5, units='min')))
     baked.process.conditions.append(Condition(name='Oven temperature',
                                               origin="measured",
                                               value=NominalReal(nominal=362, units='degF')))
-    baked.spec.process.parameters.append(Parameter(name='Oven temperature setting',
-                                                   template=tmpl['Oven temperature setting'],
-                                                   origin="specified",
-                                                   value=NominalReal(nominal=350, units='degF')))
+
     cake_taste.properties.append(Property(name='Tastiness',
                                           origin=Origin.MEASURED,
                                           template=tmpl['Tastiness'],
@@ -916,7 +1037,26 @@ def make_cake(seed=None, tmpl=None, cake_spec=None):
     run_key = md5.hexdigest()
 
     # Crawl tree and annotate with uids; only add ids if there's nothing there
-    recursive_foreach(cake, lambda obj: obj.uids or obj.add_uid(DEMO_SCOPE, obj.name + run_key))
+    def _make_disambiguator():
+        """Generate a closure to post-annotate for disambiguation."""
+        count = dict()
+
+        def _disambiguator(name):
+            """Add a number to the name if you've seen it more than once."""
+            if name in count:
+                count[name] = count[name] + 1
+                return "{}-{}".format(name, count[name])
+            else:
+                count[name] = 1
+                return name
+
+        return _disambiguator
+
+    _disambig = _make_disambiguator()
+    recursive_foreach(
+        cake,
+        lambda obj: obj.uids or obj.add_uid(DEMO_SCOPE, _disambig(obj.name) + run_key)
+    )
 
     cake.notes = cake.notes + "; Très délicieux! 😀"
     cake.file_links = [FileLink(

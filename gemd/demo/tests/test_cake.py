@@ -7,16 +7,18 @@ from gemd.entity.object.measurement_spec import MeasurementSpec
 from gemd.entity.object.measurement_run import MeasurementRun
 from gemd.entity.object.ingredient_spec import IngredientSpec
 from gemd.entity.object.ingredient_run import IngredientRun
+from gemd.entity.file_link import FileLink
 
 from gemd.json import dumps, loads
-from gemd.demo.cake import make_cake, import_toothpick_picture
+from gemd.demo.cake import make_cake_templates, make_cake_spec, make_cake, \
+    import_toothpick_picture, change_scope
 from gemd.util import recursive_foreach
 from gemd.entity.util import complete_material_history
 
 
 def test_cake():
     """Create cake, serialize, deserialize."""
-    cake = make_cake()
+    cake = make_cake(seed=42)
 
     def test_for_loss(obj):
         assert(obj == loads(dumps(obj)))
@@ -39,12 +41,12 @@ def test_cake():
         tot_count += 1
 
     recursive_foreach(cake, increment)
-    assert tot_count == 131
+    assert tot_count == 133
 
     # And make sure nothing was lost
     tot_count = 0
     recursive_foreach(loads(dumps(complete_material_history(cake))), increment)
-    assert tot_count == 131
+    assert tot_count == 133
 
     # Check that no UIDs collide
     uid_seen = dict()
@@ -54,7 +56,7 @@ def test_cake():
         for scope in obj.uids:
             lbl = '{}::{}'.format(scope, obj.uids[scope])
             if lbl in uid_seen:
-                assert uid_seen[lbl] == id(obj)
+                assert uid_seen[lbl] == id(obj), "'{}' seen twice".format(lbl)
             uid_seen[lbl] = id(obj)
     recursive_foreach(cake, check_ids)
 
@@ -114,6 +116,51 @@ def test_cake():
                 queue.append(obj.material)
 
 
+def test_cake_sigs():
+    """Verify that all arguments for create methods work as expected."""
+    templates = make_cake_templates()
+    tmpl_snap = dumps(templates)
+
+    specs = make_cake_spec(templates)
+    spec_snap = dumps(specs)
+    assert dumps(templates) == tmpl_snap
+
+    cake1 = make_cake(seed=27, cake_spec=specs, tmpl=templates)
+    assert dumps(templates) == tmpl_snap
+    assert dumps(specs) == spec_snap
+
+    filelink = FileLink(filename='The name of the file', url='www.file.gov')
+    cake2 = make_cake(seed=27, cake_spec=specs, tmpl=templates, toothpick_img=filelink)
+
+    assert filelink.filename not in dumps(cake1)
+    assert filelink.filename in dumps(cake2)
+    assert cake1.uids == cake2.uids
+
+
 def test_import():
     """Make sure picture import runs."""
     import_toothpick_picture()
+
+
+def test_scope():
+    """Make sure change scope does what we want it to."""
+    default_cake = make_cake()
+    default_scope = next(iter(default_cake.uids))
+    change_scope('second-scope')
+    second_cake = make_cake()
+    change_scope(data='third-scope', templates='also-a-scope')
+    third_cake = make_cake()
+
+    assert 'second-scope' not in default_cake.uids
+    assert 'third-scope' not in default_cake.uids
+
+    assert default_scope not in second_cake.uids
+    assert 'second-scope' in second_cake.uids
+    assert 'third-scope' not in second_cake.uids
+
+    assert default_scope not in third_cake.uids
+    assert 'second-scope' not in third_cake.uids
+    assert 'third-scope' in third_cake.uids
+
+    assert any('template' in x for x in default_cake.spec.template.uids)
+    assert not any('template' in x for x in third_cake.spec.template.uids)
