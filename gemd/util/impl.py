@@ -128,11 +128,9 @@ def flatten(obj, scope):
 
     # list of uids that we've seen, to avoid returning duplicates
     known_uids = set()
-    if isinstance(obj, BaseEntity):
-        for uid in obj.uids.items():
-            known_uids.add(uid)
 
     def _flatten(base_obj):
+        nonlocal known_uids
         to_return = []
         # get all the uids of this object
         uids = list(base_obj.uids.items())
