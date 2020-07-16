@@ -34,6 +34,21 @@
 <span id="gemd-demo-cake-module"></span><h1>gemd.demo.cake module<a class="headerlink" href="#module-gemd.demo.cake" title="Permalink to this headline">¶</a></h1>
 <p>Bake a cake.</p>
 <dl class="function">
+<dt id="gemd.demo.cake.change_scope">
+<code class="sig-prename descclassname">gemd.demo.cake.</code><code class="sig-name descname">change_scope</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">*</em>, <em class="sig-param">templates=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.demo.cake.change_scope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change scope(s) of internal uids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>str</em>) – Scope for the Run and Spec objects</p></li>
+<li><p><strong>templates</strong> (<em>str</em><em>, </em><em>optional</em>) – Scope for the Attribute Templates and Object Templates.  If <cite>None</cite>,
+will be set to <cite>data + ‘-template’</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="gemd.demo.cake.import_toothpick_picture">
 <code class="sig-prename descclassname">gemd.demo.cake.</code><code class="sig-name descname">import_toothpick_picture</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gemd.demo.cake.import_toothpick_picture" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the stream of the toothpick picture.</p>
@@ -41,7 +56,7 @@
 
 <dl class="function">
 <dt id="gemd.demo.cake.make_cake">
-<code class="sig-prename descclassname">gemd.demo.cake.</code><code class="sig-name descname">make_cake</code><span class="sig-paren">(</span><em class="sig-param">seed=None</em>, <em class="sig-param">tmpl=None</em>, <em class="sig-param">cake_spec=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.demo.cake.make_cake" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gemd.demo.cake.</code><code class="sig-name descname">make_cake</code><span class="sig-paren">(</span><em class="sig-param">seed=None</em>, <em class="sig-param">tmpl=None</em>, <em class="sig-param">cake_spec=None</em>, <em class="sig-param">toothpick_img=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.demo.cake.make_cake" title="Permalink to this definition">¶</a></dt>
 <dd><p>Define all objects that go into making a demo cake.</p>
 </dd></dl>
 
