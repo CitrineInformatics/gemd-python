@@ -242,28 +242,26 @@ def make_cake_spec(tmpl=None):
             **kwargs
         )
 
-    def _material_kwargs(material_name, process_tmpl_name, process_kwargs):
+    def _make_material(material_name, process_tmpl_name, process_kwargs, **material_kwargs):
         """Convenience method to reuse material name in creating a material's arguments."""
-        return {
-            "name": material_name,
-            "process": ProcessSpec(
+        return MaterialSpec(
+            name=material_name,
+            process=ProcessSpec(
                 name="{} {}".format(process_tmpl_name, material_name),
                 template=tmpl[process_tmpl_name],
                 **process_kwargs
             ),
-        }
+            **material_kwargs)
 
     ###############################################################################################
     # Objects
-    cake = MaterialSpec(
-        **_material_kwargs(
-            material_name="Cake",
-            process_tmpl_name="Icing",
-            process_kwargs={
-                "tags": ['spreading'],
-                "notes": 'The act of covering a baked output with frosting'
-            }
-        ),
+    cake = _make_material(
+        material_name="Cake",
+        process_tmpl_name="Icing",
+        process_kwargs={
+            "tags": ['spreading'],
+            "notes": 'The act of covering a baked output with frosting'
+        },
         template=tmpl["Dessert"],
         properties=[
             PropertyAndConditions(Property(name="Tastiness",
@@ -285,23 +283,21 @@ def make_cake_spec(tmpl=None):
     )
 
     ########################
-    frosting = MaterialSpec(
-        **_material_kwargs(
-            material_name="Frosting",
-            process_tmpl_name="Mixing",
-            process_kwargs={
-                "tags": [
-                    'mixing'
-                ],
-                "parameters": [
-                    Parameter(name='Mixer speed setting',
-                              template=tmpl['Mixer speed setting'],
-                              origin='specified',
-                              value=NominalInteger(2))
-                ],
-                "notes": 'Combining ingredients to make a sweet frosting'
-            }
-        ),
+    frosting = _make_material(
+        material_name="Frosting",
+        process_tmpl_name="Mixing",
+        process_kwargs={
+            "tags": [
+                'mixing'
+            ],
+            "parameters": [
+                Parameter(name='Mixer speed setting',
+                          template=tmpl['Mixer speed setting'],
+                          origin='specified',
+                          value=NominalInteger(2))
+            ],
+            "notes": 'Combining ingredients to make a sweet frosting'
+        },
         template=tmpl["Dessert"],
         tags=[
             'frosting::chocolate',
@@ -317,29 +313,27 @@ def make_cake_spec(tmpl=None):
         absolute_quantity=NominalReal(nominal=0.751, units='kg')
     )
 
-    baked_cake = MaterialSpec(
-        **_material_kwargs(
-            material_name="Baked Cake",
-            process_tmpl_name="Baking",
-            process_kwargs={
-                "tags": [
-                    'oven::baking'
-                ],
-                "conditions": [
-                    Condition(name='Cooking time',
-                              template=tmpl['Cooking time'],
-                              origin=Origin.SPECIFIED,
-                              value=NormalReal(mean=50, std=5, units='min'))
-                ],
-                "parameters": [
-                    Parameter(name='Oven temperature setting',
-                              template=tmpl['Oven temperature setting'],
-                              origin="specified",
-                              value=NominalReal(nominal=350, units='degF'))
-                ],
-                "notes": 'Using heat to convert batter into a solid matrix'
-            }
-        ),
+    baked_cake = _make_material(
+        material_name="Baked Cake",
+        process_tmpl_name="Baking",
+        process_kwargs={
+            "tags": [
+                'oven::baking'
+            ],
+            "conditions": [
+                Condition(name='Cooking time',
+                          template=tmpl['Cooking time'],
+                          origin=Origin.SPECIFIED,
+                          value=NormalReal(mean=50, std=5, units='min'))
+            ],
+            "parameters": [
+                Parameter(name='Oven temperature setting',
+                          template=tmpl['Oven temperature setting'],
+                          origin="specified",
+                          value=NominalReal(nominal=350, units='degF'))
+            ],
+            "notes": 'Using heat to convert batter into a solid matrix'
+        },
         template=tmpl["Baked Good"],
         properties=[
             PropertyAndConditions(
@@ -370,23 +364,21 @@ def make_cake_spec(tmpl=None):
     )
 
     ########################
-    batter = MaterialSpec(
-        **_material_kwargs(
-            material_name="Batter",
-            process_tmpl_name="Mixing",
-            process_kwargs={
-                "tags": [
-                    'mixing'
-                ],
-                "parameters": [
-                    Parameter(name='Mixer speed setting',
-                              template=tmpl['Mixer speed setting'],
-                              origin='specified',
-                              value=NominalInteger(2))
-                ],
-                "notes": 'Combining ingredients to make a baking feedstock'
-            }
-        ),
+    batter = _make_material(
+        material_name="Batter",
+        process_tmpl_name="Mixing",
+        process_kwargs={
+            "tags": [
+                'mixing'
+            ],
+            "parameters": [
+                Parameter(name='Mixer speed setting',
+                          template=tmpl['Mixer speed setting'],
+                          origin='specified',
+                          value=NominalInteger(2))
+            ],
+            "notes": 'Combining ingredients to make a baking feedstock'
+        },
         template=tmpl["Generic Material"],
         tags=[
             'mixture'
@@ -400,23 +392,21 @@ def make_cake_spec(tmpl=None):
     )
 
     ########################
-    wetmix = MaterialSpec(
-        **_material_kwargs(
-            material_name="Wet Ingredients",
-            process_tmpl_name="Mixing",
-            process_kwargs={
-                "tags": [
-                    'mixing'
-                ],
-                "parameters": [
-                    Parameter(name='Mixer speed setting',
-                              template=tmpl['Mixer speed setting'],
-                              origin='specified',
-                              value=NominalInteger(2))
-                ],
-                "notes": 'Combining wet ingredients to make a baking feedstock'
-            }
-        ),
+    wetmix = _make_material(
+        material_name="Wet Ingredients",
+        process_tmpl_name="Mixing",
+        process_kwargs={
+            "tags": [
+                'mixing'
+            ],
+            "parameters": [
+                Parameter(name='Mixer speed setting',
+                          template=tmpl['Mixer speed setting'],
+                          origin='specified',
+                          value=NominalInteger(2))
+            ],
+            "notes": 'Combining wet ingredients to make a baking feedstock'
+        },
         template=tmpl["Generic Material"],
         tags=[
             "mixture"
@@ -429,17 +419,15 @@ def make_cake_spec(tmpl=None):
         process=batter.process
     )
 
-    drymix = MaterialSpec(
-        **_material_kwargs(
-            material_name="Dry Ingredients",
-            process_tmpl_name="Mixing",
-            process_kwargs={
-                "tags": [
-                    'mixing'
-                ],
-                "notes": 'Combining dry ingredients to make a baking feedstock'
-            }
-        ),
+    drymix = _make_material(
+        material_name="Dry Ingredients",
+        process_tmpl_name="Mixing",
+        process_kwargs={
+            "tags": [
+                'mixing'
+            ],
+            "notes": 'Combining dry ingredients to make a baking feedstock'
+        },
         template=tmpl["Generic Material"],
         tags=[
             "mixture"
@@ -454,17 +442,15 @@ def make_cake_spec(tmpl=None):
     )
 
     ########################
-    flour = MaterialSpec(
-        **_material_kwargs(
-            material_name="Flour",
-            process_tmpl_name="Procuring",
-            process_kwargs={
-                "tags": [
-                    'purchase::dry-goods'
-                ],
-                "notes": 'Purchasing all purpose flour'
-            }
-        ),
+    flour = _make_material(
+        material_name="Flour",
+        process_tmpl_name="Procuring",
+        process_kwargs={
+            "tags": [
+                'purchase::dry-goods'
+            ],
+            "notes": 'Purchasing all purpose flour'
+        },
         template=tmpl["Nutritional Material"],
         properties=[
             PropertyAndConditions(
@@ -504,17 +490,15 @@ def make_cake_spec(tmpl=None):
         volume_fraction=NominalReal(nominal=0.9829, units='')  # 3 cups
     )
 
-    baking_powder = MaterialSpec(
-        **_material_kwargs(
-            material_name="Baking Powder",
-            process_tmpl_name="Procuring",
-            process_kwargs={
-                "tags": [
-                    'purchase::dry-goods'
-                ],
-                "notes": 'Purchasing baking powder'
-            }
-        ),
+    baking_powder = _make_material(
+        material_name="Baking Powder",
+        process_tmpl_name="Procuring",
+        process_kwargs={
+            "tags": [
+                'purchase::dry-goods'
+            ],
+            "notes": 'Purchasing baking powder'
+        },
         template=tmpl["Generic Material"],
         tags=[
             'raw material',
@@ -530,17 +514,15 @@ def make_cake_spec(tmpl=None):
         volume_fraction=NominalReal(nominal=0.0137, units='')  # 2 teaspoons
     )
 
-    salt = MaterialSpec(
-        **_material_kwargs(
-            material_name="Salt",
-            process_tmpl_name="Procuring",
-            process_kwargs={
-                "tags": [
-                    'purchase::dry-goods'
-                ],
-                "notes": 'Purchasing salt'
-            }
-        ),
+    salt = _make_material(
+        material_name="Salt",
+        process_tmpl_name="Procuring",
+        process_kwargs={
+            "tags": [
+                'purchase::dry-goods'
+            ],
+            "notes": 'Purchasing salt'
+        },
         template=tmpl["Formulaic Material"],
         tags=[
             'raw material',
@@ -559,17 +541,15 @@ def make_cake_spec(tmpl=None):
         volume_fraction=NominalReal(nominal=0.0034, units='')  # 1/2 teaspoon
     )
 
-    sugar = MaterialSpec(
-        **_material_kwargs(
-            material_name="Sugar",
-            process_tmpl_name="Procuring",
-            process_kwargs={
-                "tags": [
-                    'purchase::dry-goods'
-                ],
-                "notes": 'Purchasing all purpose flour'
-            }
-        ),
+    sugar = _make_material(
+        material_name="Sugar",
+        process_tmpl_name="Procuring",
+        process_kwargs={
+            "tags": [
+                'purchase::dry-goods'
+            ],
+            "notes": 'Purchasing all purpose flour'
+        },
         template=tmpl["Formulaic Material"],
         tags=[
             'raw material',
@@ -594,17 +574,15 @@ def make_cake_spec(tmpl=None):
         absolute_quantity=NominalReal(nominal=2, units='cups')
     )
 
-    butter = MaterialSpec(
-        **_material_kwargs(
-            material_name="Butter",
-            process_tmpl_name="Procuring",
-            process_kwargs={
-                "tags": [
-                    'purchase::produce'
-                ],
-                "notes": 'Purchasing butter'
-            }
-        ),
+    butter = _make_material(
+        material_name="Butter",
+        process_tmpl_name="Procuring",
+        process_kwargs={
+            "tags": [
+                'purchase::produce'
+            ],
+            "notes": 'Purchasing butter'
+        },
         template=tmpl["Generic Material"],
         tags=[
             'raw material',
@@ -627,17 +605,15 @@ def make_cake_spec(tmpl=None):
         mass_fraction=NominalReal(nominal=0.1434, units='')  # 1/2 c @ 0.911 g/cc
     )
 
-    eggs = MaterialSpec(
-        **_material_kwargs(
-            material_name="Eggs",
-            process_tmpl_name="Procuring",
-            process_kwargs={
-                "tags": [
-                    'purchase::produce'
-                ],
-                "notes": 'Purchasing eggs'
-            }
-        ),
+    eggs = _make_material(
+        material_name="Eggs",
+        process_tmpl_name="Procuring",
+        process_kwargs={
+            "tags": [
+                'purchase::produce'
+            ],
+            "notes": 'Purchasing eggs'
+        },
         template=tmpl["Generic Material"],
         tags=[
             'raw material',
@@ -651,17 +627,15 @@ def make_cake_spec(tmpl=None):
         absolute_quantity=NominalReal(nominal=4, units='')
     )
 
-    vanilla = MaterialSpec(
-        **_material_kwargs(
-            material_name="Vanilla",
-            process_tmpl_name="Procuring",
-            process_kwargs={
-                "tags": [
-                    'purchase::solution'
-                ],
-                "notes": 'Purchasing vanilla'
-            }
-        ),
+    vanilla = _make_material(
+        material_name="Vanilla",
+        process_tmpl_name="Procuring",
+        process_kwargs={
+            "tags": [
+                'purchase::solution'
+            ],
+            "notes": 'Purchasing vanilla'
+        },
         template=tmpl["Generic Material"],
         tags=[
             'raw material',
@@ -691,17 +665,15 @@ def make_cake_spec(tmpl=None):
         mass_fraction=NominalReal(nominal=0.0231, units='')  # 2 tsp @ 0.879 g/cc
     )
 
-    milk = MaterialSpec(
-        **_material_kwargs(
-            material_name="Milk",
-            process_tmpl_name="Procuring",
-            process_kwargs={
-                "tags": [
-                    'purchase::produce'
-                ],
-                "notes": 'Purchasing milk'
-            }
-        ),
+    milk = _make_material(
+        material_name="Milk",
+        process_tmpl_name="Procuring",
+        process_kwargs={
+            "tags": [
+                'purchase::produce'
+            ],
+            "notes": 'Purchasing milk'
+        },
         template=tmpl["Generic Material"],
         tags=[
             'raw material',
@@ -723,17 +695,15 @@ def make_cake_spec(tmpl=None):
         mass_fraction=NominalReal(nominal=0.0816, units='')  # 1/4 c @ 1.037 g/cc
     )
 
-    chocolate = MaterialSpec(
-        **_material_kwargs(
-            material_name="Chocolate",
-            process_tmpl_name="Procuring",
-            process_kwargs={
-                "tags": [
-                    'purchase::dry-goods'
-                ],
-                "notes": 'Purchasing chocolate'
-            }
-        ),
+    chocolate = _make_material(
+        material_name="Chocolate",
+        process_tmpl_name="Procuring",
+        process_kwargs={
+            "tags": [
+                'purchase::dry-goods'
+            ],
+            "notes": 'Purchasing chocolate'
+        },
         template=tmpl["Generic Material"],
         tags=[
             'raw material'
@@ -747,17 +717,15 @@ def make_cake_spec(tmpl=None):
         mass_fraction=NominalReal(nominal=0.1132, units='')  # 3 oz.
     )
 
-    powder_sugar = MaterialSpec(
-        **_material_kwargs(
-            material_name="Powdered Sugar",
-            process_tmpl_name="Procuring",
-            process_kwargs={
-                "tags": [
-                    'purchase::dry-goods'
-                ],
-                "notes": 'Purchasing powdered sugar'
-            }
-        ),
+    powder_sugar = _make_material(
+        material_name="Powdered Sugar",
+        process_tmpl_name="Procuring",
+        process_kwargs={
+            "tags": [
+                'purchase::dry-goods'
+            ],
+            "notes": 'Purchasing powdered sugar'
+        },
         template=tmpl["Generic Material"],
         tags=[
             'raw material',
