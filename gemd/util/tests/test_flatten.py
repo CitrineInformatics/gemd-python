@@ -31,16 +31,16 @@ def test_flatten_empty_history():
     transform_run = ProcessRun(name="transformed", spec=transform)
     ingredient_run = IngredientRun(material=input_run, process=transform_run, spec=ingredient)
 
-    assert len(flatten(procured, 'test-scope')) == 1
+    assert len(flatten(procured, 'test-scope')) == 2
     assert 'test-scope' in procured.uids
-    assert len(flatten(input, 'test-scope')) == 1
-    assert len(flatten(ingredient, 'test-scope')) == 3
-    assert len(flatten(transform, 'test-scope')) == 3
+    assert len(flatten(input, 'test-scope')) == 2
+    assert len(flatten(ingredient, 'test-scope')) == 4
+    assert len(flatten(transform, 'test-scope')) == 4
 
-    assert len(flatten(procured_run, 'test-scope')) == 3
-    assert len(flatten(input_run, 'test-scope')) == 3
-    assert len(flatten(ingredient_run, 'test-scope')) == 7
-    assert len(flatten(transform_run, 'test-scope')) == 7
+    assert len(flatten(procured_run, 'test-scope')) == 4
+    assert len(flatten(input_run, 'test-scope')) == 4
+    assert len(flatten(ingredient_run, 'test-scope')) == 8
+    assert len(flatten(transform_run, 'test-scope')) == 8
 
 
 def test_flatmap_unidirectional_ordering():
