@@ -41,12 +41,12 @@ def test_cake():
         tot_count += 1
 
     recursive_foreach(cake, increment)
-    assert tot_count == 133
+    assert tot_count == 139
 
     # And make sure nothing was lost
     tot_count = 0
     recursive_foreach(loads(dumps(complete_material_history(cake))), increment)
-    assert tot_count == 133
+    assert tot_count == 139
 
     # Check that no UIDs collide
     uid_seen = dict()

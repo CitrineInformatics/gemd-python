@@ -222,7 +222,7 @@ def make_cake_templates():
     )
 
     for key in tmpl:
-        tmpl[key].add_uid(TEMPLATE_SCOPE, key)
+        tmpl[key].add_uid(TEMPLATE_SCOPE, key.lower().replace(' ', '-'))
     return tmpl
 
 
@@ -233,21 +233,27 @@ def make_cake_spec(tmpl=None):
     if tmpl is None:
         tmpl = make_cake_templates()
 
-    def _make_ingredient(material, **kwargs):
+    def _make_ingredient(*, material, process, **kwargs):
         """Convenience method to utilize material fields in creating an ingredient's arguments."""
         return IngredientSpec(
             name=material.name.lower(),
             tags=list(material.tags),
             material=material,
+            process=process,
+            uids={DEMO_SCOPE: "{}--{}".format(material.uids[DEMO_SCOPE], process.uids[DEMO_SCOPE])},
             **kwargs
         )
 
-    def _make_material(material_name, process_tmpl_name, process_kwargs, **material_kwargs):
+    def _make_material(material_name, template, process_tmpl_name, process_kwargs, **material_kwargs):
         """Convenience method to reuse material name in creating a material's arguments."""
+        process_name = "{} {}".format(process_tmpl_name, material_name)
         return MaterialSpec(
             name=material_name,
+            uids={DEMO_SCOPE: material_name.lower().replace(' ', '-')},
+            template=template,
             process=ProcessSpec(
-                name="{} {}".format(process_tmpl_name, material_name),
+                name=process_name,
+                uids={DEMO_SCOPE: process_name.lower().replace(' ', '-')},
                 template=tmpl[process_tmpl_name],
                 **process_kwargs
             ),
@@ -624,6 +630,7 @@ def make_cake_spec(tmpl=None):
     _make_ingredient(
         material=eggs,
         labels=['wet'],
+        process=wetmix.process,
         absolute_quantity=NominalReal(nominal=4, units='')
     )
 
@@ -741,25 +748,6 @@ def make_cake_spec(tmpl=None):
         mass_fraction=NominalReal(nominal=0.6387, units='')  # 4 c @ 30 g/ 0.25 cups
     )
 
-    # Crawl tree and annotate with uids; only add ids if there's nothing there
-    def _make_fuzzer():
-        """Generate closure that knows if it's seen a given name."""
-        seen = set()
-
-        def _fuzz_func(obj):
-            """Add fuzz to name in ID as necessary."""
-            name = 'ing-' if isinstance(obj, IngredientSpec) else ''
-            name += obj.name
-            while name.lower() in seen:
-                name += '-again'
-            seen.add(name.lower())
-            return name
-
-        return _fuzz_func
-
-    _name_fuzz = _make_fuzzer()
-    recursive_foreach(cake, lambda obj: obj.uids or obj.add_uid(DEMO_SCOPE, _name_fuzz(obj)))
-
     return cake
 
 
@@ -770,6 +758,13 @@ def make_cake(seed=None, tmpl=None, cake_spec=None, toothpick_img=None):
 
     if seed is not None:
         random.seed(seed)
+    # Code to generate quasi-repeatable run annotations
+    # Note there are potential machine dependencies
+    md5 = hashlib.md5()
+    for x in random.getstate()[1]:
+        md5.update(struct.pack(">I", x))
+    run_key = md5.hexdigest()
+
     ######################################################################
     # Parent Objects
     if tmpl is None:
@@ -789,6 +784,7 @@ def make_cake(seed=None, tmpl=None, cake_spec=None, toothpick_img=None):
     queue = [cake]
     while queue:
         item = queue.pop(0)
+        item.add_uid(DEMO_SCOPE, '{}-{}'.format(item.spec.uids[DEMO_SCOPE], run_key))
         if item.spec.tags is not None:
             item.tags = list(item.spec.tags)
         if item.spec.notes:  # Neither None or empty string
@@ -882,9 +878,14 @@ def make_cake(seed=None, tmpl=None, cake_spec=None, toothpick_img=None):
                                         )
     sugar_content.spec = salt_content.spec
 
+    # Note that while specs are regenerated each make_cake invocation, they are all identical
     for msr in (cake_taste, cake_appearance, frosting_taste, frosting_sweetness,
                 baked_doneness, flour_content, salt_content, sugar_content):
-        msr.spec.add_uid(DEMO_SCOPE, msr.spec.name)
+        msr.spec.add_uid(DEMO_SCOPE, msr.spec.name.lower())
+        msr.add_uid(DEMO_SCOPE, '{}--{}-{}'.format(msr.spec.uids[DEMO_SCOPE],
+                                                   msr.material.spec.uids[DEMO_SCOPE],
+                                                   run_key
+                                                   ))
 
     ######################################################################
     # Let's add some attributes
@@ -1028,35 +1029,6 @@ def make_cake(seed=None, tmpl=None, cake_spec=None, toothpick_img=None):
         template=tmpl["Expected Sample Mass"],
         origin="specified"
     ))
-
-    # Code to generate quasi-repeatable run annotations
-    # Note there are potential machine dependencies
-    md5 = hashlib.md5()
-    for x in random.getstate()[1]:
-        md5.update(struct.pack(">I", x))
-    run_key = md5.hexdigest()
-
-    # Crawl tree and annotate with uids; only add ids if there's nothing there
-    def _make_disambiguator():
-        """Generate a closure to post-annotate for disambiguation."""
-        count = dict()
-
-        def _disambiguator(name):
-            """Add a number to the name if you've seen it more than once."""
-            if name in count:
-                count[name] = count[name] + 1
-                return "{}-{}".format(name, count[name])
-            else:
-                count[name] = 1
-                return name
-
-        return _disambiguator
-
-    _disambig = _make_disambiguator()
-    recursive_foreach(
-        cake,
-        lambda obj: obj.uids or obj.add_uid(DEMO_SCOPE, _disambig(obj.name) + run_key)
-    )
 
     cake.notes = cake.notes + "; Très délicieux! 😀"
     cake.file_links = [FileLink(
