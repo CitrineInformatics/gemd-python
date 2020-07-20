@@ -51,69 +51,39 @@ def test_cake():
     # Check that no UIDs collide
     uid_seen = dict()
 
-    def check_ids(obj):
+    def _check_ids(obj):
         nonlocal uid_seen
         for scope in obj.uids:
-            lbl = '{}::{}'.format(scope, obj.uids[scope])
+            lbl = '{}::{}'.format(scope, obj.uids[scope].lower())
             if lbl in uid_seen:
                 assert uid_seen[lbl] == id(obj), "'{}' seen twice".format(lbl)
             uid_seen[lbl] = id(obj)
-    recursive_foreach(cake, check_ids)
+    recursive_foreach(cake, _check_ids)
 
-    queue = [cake]
-    seen = set()
-    while queue:
-        obj = queue.pop()
-        if obj in seen:
-            continue
-
-        seen.add(obj)
-
+    # Check that all recursive and square links are structured correctly
+    def _check_crosslinks(obj):
         if isinstance(obj, MaterialSpec):
-            if obj.process is not None:
-                queue.append(obj.process)
-                assert obj.process.output_material == obj
+            assert obj.process.output_material == obj
         elif isinstance(obj, MaterialRun):
-            if obj.process is not None:
-                queue.append(obj.process)
-                assert obj.process.output_material == obj
-            if obj.measurements:
-                queue.extend(obj.measurements)
-                for msr in obj.measurements:
-                    assert msr.material == obj
-            if obj.spec is not None:
-                queue.append(obj.spec)
-                if obj.process is not None:
-                    assert obj.spec.process == obj.process.spec
+            assert obj.process.output_material == obj
+            for msr in obj.measurements:
+                assert msr.material == obj
+            assert obj.spec.process == obj.process.spec
         elif isinstance(obj, ProcessRun):
-            if obj.ingredients:
-                queue.extend(obj.ingredients)
-            if obj.output_material is not None:
-                queue.append(obj.output_material)
-                assert obj.output_material.process == obj
-                if obj.spec is not None:
-                    assert obj.spec.output_material == obj.output_material.spec
+            assert obj.output_material.process == obj
+            assert obj.spec.output_material == obj.output_material.spec
         elif isinstance(obj, ProcessSpec):
-            if obj.ingredients:
-                queue.extend(obj.ingredients)
-            if obj.output_material is not None:
-                queue.append(obj.output_material)
-                assert obj.output_material.process == obj
+            assert obj.output_material.process == obj
         elif isinstance(obj, MeasurementSpec):
             pass  # Doesn't link
         elif isinstance(obj, MeasurementRun):
-            if obj.spec:
-                queue.append(obj.spec)
+            assert obj in obj.material.measurements
         elif isinstance(obj, IngredientSpec):
-            if obj.material:
-                queue.append(obj.material)
+            assert obj in obj.process.ingredients
         elif isinstance(obj, IngredientRun):
-            if obj.spec:
-                queue.append(obj.spec)
-                if obj.material and isinstance(obj.material, MaterialRun):
-                    assert obj.spec.material == obj.material.spec
-            if obj.material:
-                queue.append(obj.material)
+            assert obj in obj.process.ingredients
+            assert obj.spec.material == obj.material.spec
+    recursive_foreach(cake, _check_crosslinks)
 
 
 def test_cake_sigs():
