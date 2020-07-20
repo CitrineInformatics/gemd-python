@@ -240,11 +240,14 @@ def make_cake_spec(tmpl=None):
             tags=list(material.tags),
             material=material,
             process=process,
-            uids={DEMO_SCOPE: "{}--{}".format(material.uids[DEMO_SCOPE], process.uids[DEMO_SCOPE])},
+            uids={DEMO_SCOPE: "{}--{}".format(material.uids[DEMO_SCOPE],
+                                              process.uids[DEMO_SCOPE]
+                                              )},
             **kwargs
         )
 
-    def _make_material(material_name, template, process_tmpl_name, process_kwargs, **material_kwargs):
+    def _make_material(*, material_name, template, process_tmpl_name, process_kwargs,
+                       **material_kwargs):
         """Convenience method to reuse material name in creating a material's arguments."""
         process_name = "{} {}".format(process_tmpl_name, material_name)
         return MaterialSpec(
@@ -780,10 +783,12 @@ def make_cake(seed=None, tmpl=None, cake_spec=None, toothpick_img=None):
     drygoods = ['Acme', 'A1', 'Reliable', "Big Box"]
     cake.process.source = PerformedSource(performed_by=random.choice(operators),
                                           performed_date='2015-03-14')
-    # Replace Abstract/In General
-    queue = [cake]
-    while queue:
-        item = queue.pop(0)
+
+    def _randomize_object(item):
+        # Add in the randomized particular values
+        if not isinstance(item, (MaterialRun, ProcessRun, IngredientRun)):
+            return
+
         item.add_uid(DEMO_SCOPE, '{}-{}'.format(item.spec.uids[DEMO_SCOPE], run_key))
         if item.spec.tags is not None:
             item.tags = list(item.spec.tags)
@@ -796,17 +801,14 @@ def make_cake(seed=None, tmpl=None, cake_spec=None, toothpick_img=None):
                 else:
                     supplier = random.choice(drygoods)
                 item.name = "{} {}".format(supplier, item.spec.name)
-            queue.append(item.process)
-        elif isinstance(item, ProcessRun):
-            queue.extend(item.ingredients)
+        if isinstance(item, ProcessRun):
             if item.template.name == "Procuring":
                 item.source = PerformedSource(performed_by='hamilton',
                                               performed_date='2015-02-17')
                 item.name = "{} {}".format(item.template.name, item.output_material.name)
             else:
                 item.source = cake.process.source
-        elif isinstance(item, IngredientRun):
-            queue.append(item.material)
+        if isinstance(item, IngredientRun):
             fuzz = 0.95 + 0.1 * random.random()
             if item.spec.absolute_quantity is not None:
                 item.absolute_quantity = \
@@ -829,9 +831,7 @@ def make_cake(seed=None, tmpl=None, cake_spec=None, toothpick_img=None):
                     NormalReal(mean=fuzz * item.spec.number_fraction.nominal,
                                std=0.05 * item.spec.number_fraction.nominal,
                                units=item.spec.number_fraction.units)
-
-        else:
-            raise TypeError("Unexpected object in the queue")
+    recursive_foreach(cake, _randomize_object)
 
     frosting = \
         next(x.material for x in cake.process.ingredients if 'rosting' in x.name)
