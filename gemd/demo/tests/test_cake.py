@@ -9,29 +9,15 @@ from gemd.entity.object.ingredient_spec import IngredientSpec
 from gemd.entity.object.ingredient_run import IngredientRun
 from gemd.entity.file_link import FileLink
 
-from gemd.json import dumps, loads
+from gemd.json import dumps
 from gemd.demo.cake import make_cake_templates, make_cake_spec, make_cake, \
     import_toothpick_picture, change_scope
 from gemd.util import recursive_foreach
-from gemd.entity.util import complete_material_history
 
 
 def test_cake():
     """Create cake, serialize, deserialize."""
     cake = make_cake(seed=42)
-
-    def test_for_loss(obj):
-        assert(obj == loads(dumps(obj)))
-    recursive_foreach(cake, test_for_loss)
-
-    # And verify equality was working in the first place
-    cake2 = loads(dumps(cake))
-    cake2.name = "It's a trap!"
-    assert(cake2 != cake)
-    cake2.name = cake.name
-    assert(cake == cake2)
-    cake2.uids['new'] = "It's a trap!"
-    assert(cake2 != cake)
 
     # Check that all the objects show up
     tot_count = 0
@@ -41,11 +27,6 @@ def test_cake():
         tot_count += 1
 
     recursive_foreach(cake, increment)
-    assert tot_count == 139
-
-    # And make sure nothing was lost
-    tot_count = 0
-    recursive_foreach(loads(dumps(complete_material_history(cake))), increment)
     assert tot_count == 139
 
     # Check that no UIDs collide
