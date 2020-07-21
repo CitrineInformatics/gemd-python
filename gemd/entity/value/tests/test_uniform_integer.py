@@ -16,5 +16,5 @@ def test_bounds_are_integers():
     """Lower bound and upper bound must be integers."""
     with pytest.raises(AssertionError):
         UniformInteger(5.7, 10)
-    with pytest.raises(AssertionError):
+    with pytest.raises(ValueError):
         UniformInteger(1, "five")
