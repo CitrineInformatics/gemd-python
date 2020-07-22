@@ -8,13 +8,17 @@ def test_bounds_order():
     """Lower bound must be <= upper bound."""
     UniformInteger(3, 7)
     UniformInteger(12, 12)
-    with pytest.raises(AssertionError):
+    with pytest.raises(ValueError):
         UniformInteger(22, 18)
+    with pytest.raises(ValueError):
+        UniformInteger(3, 7).lower_bound = 10
+    with pytest.raises(ValueError):
+        UniformInteger(3, 7).upper_bound = 1
 
 
 def test_bounds_are_integers():
     """Lower bound and upper bound must be integers."""
-    with pytest.raises(AssertionError):
+    with pytest.raises(TypeError):
         UniformInteger(5.7, 10)
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         UniformInteger(1, "five")

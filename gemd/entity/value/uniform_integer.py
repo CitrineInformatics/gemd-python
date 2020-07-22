@@ -23,8 +23,6 @@ class UniformInteger(IntegerValue):
 
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
-        assert self.lower_bound <= self.upper_bound, \
-            "the lower bound must be <= the upper bound"
 
     @property
     def lower_bound(self) -> int:
@@ -34,8 +32,13 @@ class UniformInteger(IntegerValue):
     @lower_bound.setter
     def lower_bound(self, lower_bound: int) -> None:
         """The lower bound of a uniform distribution."""
-        # This check is necessary to handle JSON serialization behavior under 3.5
-        assert float(int(lower_bound)) == float(lower_bound), "lower bound must be an int"
+        # This check/cast is necessary to handle JSON serialization behavior under 3.6
+        if not isinstance(lower_bound, (int, float)) or int(lower_bound) != lower_bound:
+            raise TypeError(
+                "lower_bound must be an int; got {}({})".format(type(lower_bound), lower_bound))
+        if self._upper_bound is not None:
+            if lower_bound > self.upper_bound:
+                raise ValueError("lower_bound ({}) must be <= upper_bound ({})".format(lower_bound, self.upper_bound))
         self._lower_bound = int(lower_bound)
 
     @property
@@ -46,6 +49,10 @@ class UniformInteger(IntegerValue):
     @upper_bound.setter
     def upper_bound(self, upper_bound: int) -> None:
         """The upper bound of a uniform distribution."""
-        # This check is necessary to handle JSON serialization behavior under 3.5
-        assert float(int(upper_bound)) == float(upper_bound), "upper bound must be an int"
+        # This check/cast is necessary to handle JSON serialization behavior under 3.6
+        if not isinstance(upper_bound, (int, float)) or int(upper_bound) != upper_bound:
+            raise TypeError(
+                "upper_bound must be an int; got {}({})".format(type(upper_bound), upper_bound))
+        if self.lower_bound > upper_bound:
+            raise ValueError("upper_bound ({}) must be >= lower_bound ({})".format(upper_bound, self.lower_bound))
         self._upper_bound = int(upper_bound)
