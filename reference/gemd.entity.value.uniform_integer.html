@@ -35,7 +35,7 @@
 <p>A uniformly distributed integer value.</p>
 <dl class="class">
 <dt id="gemd.entity.value.uniform_integer.UniformInteger">
-<em class="property">class </em><code class="sig-prename descclassname">gemd.entity.value.uniform_integer.</code><code class="sig-name descname">UniformInteger</code><span class="sig-paren">(</span><em class="sig-param">lower_bound=None</em>, <em class="sig-param">upper_bound=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.value.uniform_integer.UniformInteger" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gemd.entity.value.uniform_integer.</code><code class="sig-name descname">UniformInteger</code><span class="sig-paren">(</span><em class="sig-param">lower_bound: int</em>, <em class="sig-param">upper_bound: int</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.value.uniform_integer.UniformInteger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="gemd.entity.value.integer_value.html#gemd.entity.value.integer_value.IntegerValue" title="gemd.entity.value.integer_value.IntegerValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemd.entity.value.integer_value.IntegerValue</span></code></a></p>
 <p>Uniform integer distribution, with inclusive lower and upper bounds.</p>
 <dl class="field-list simple">
@@ -46,10 +46,22 @@
 </ul>
 </dd>
 </dl>
+<dl class="method">
+<dt id="gemd.entity.value.uniform_integer.UniformInteger.lower_bound">
+<em class="property">property </em><code class="sig-name descname">lower_bound</code><a class="headerlink" href="#gemd.entity.value.uniform_integer.UniformInteger.lower_bound" title="Permalink to this definition">¶</a></dt>
+<dd><p>The lower bound of a uniform distribution.</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="gemd.entity.value.uniform_integer.UniformInteger.typ">
 <code class="sig-name descname">typ</code><em class="property"> = 'uniform_integer'</em><a class="headerlink" href="#gemd.entity.value.uniform_integer.UniformInteger.typ" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="gemd.entity.value.uniform_integer.UniformInteger.upper_bound">
+<em class="property">property </em><code class="sig-name descname">upper_bound</code><a class="headerlink" href="#gemd.entity.value.uniform_integer.UniformInteger.upper_bound" title="Permalink to this definition">¶</a></dt>
+<dd><p>The upper bound of a uniform distribution.</p>
+</dd></dl>
 
 </dd></dl>
 

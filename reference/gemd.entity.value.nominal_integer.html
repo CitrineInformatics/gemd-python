@@ -35,7 +35,7 @@
 <p>A nominal integer value.</p>
 <dl class="class">
 <dt id="gemd.entity.value.nominal_integer.NominalInteger">
-<em class="property">class </em><code class="sig-prename descclassname">gemd.entity.value.nominal_integer.</code><code class="sig-name descname">NominalInteger</code><span class="sig-paren">(</span><em class="sig-param">nominal=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.value.nominal_integer.NominalInteger" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gemd.entity.value.nominal_integer.</code><code class="sig-name descname">NominalInteger</code><span class="sig-paren">(</span><em class="sig-param">nominal</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.value.nominal_integer.NominalInteger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="gemd.entity.value.integer_value.html#gemd.entity.value.integer_value.IntegerValue" title="gemd.entity.value.integer_value.IntegerValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemd.entity.value.integer_value.IntegerValue</span></code></a></p>
 <p>Nominal integer, which does not specify an uncertainty but is not assumed to be exact.</p>
 <dl class="field-list simple">
@@ -43,6 +43,12 @@
 <dd class="field-odd"><p><strong>nominal</strong> (<em>int</em>) – A nominal value–not assumed to be exact.</p>
 </dd>
 </dl>
+<dl class="method">
+<dt id="gemd.entity.value.nominal_integer.NominalInteger.nominal">
+<em class="property">property </em><code class="sig-name descname">nominal</code><a class="headerlink" href="#gemd.entity.value.nominal_integer.NominalInteger.nominal" title="Permalink to this definition">¶</a></dt>
+<dd><p>A proscribed integer value without uncertainty.</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="gemd.entity.value.nominal_integer.NominalInteger.typ">
 <code class="sig-name descname">typ</code><em class="property"> = 'nominal_integer'</em><a class="headerlink" href="#gemd.entity.value.nominal_integer.NominalInteger.typ" title="Permalink to this definition">¶</a></dt>
