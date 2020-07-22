@@ -38,7 +38,9 @@ class UniformInteger(IntegerValue):
                 "lower_bound must be an int; got {}({})".format(type(lower_bound), lower_bound))
         if self._upper_bound is not None:
             if lower_bound > self.upper_bound:
-                raise ValueError("lower_bound ({}) must be <= upper_bound ({})".format(lower_bound, self.upper_bound))
+                raise ValueError(
+                    "lower_bound ({}) must be <= upper_bound ({})".format(lower_bound,
+                                                                          self.upper_bound))
         self._lower_bound = int(lower_bound)
 
     @property
@@ -54,5 +56,7 @@ class UniformInteger(IntegerValue):
             raise TypeError(
                 "upper_bound must be an int; got {}({})".format(type(upper_bound), upper_bound))
         if self.lower_bound > upper_bound:
-            raise ValueError("upper_bound ({}) must be >= lower_bound ({})".format(upper_bound, self.lower_bound))
+            raise ValueError(
+                "upper_bound ({}) must be >= lower_bound ({})".format(upper_bound,
+                                                                      self.lower_bound))
         self._upper_bound = int(upper_bound)
