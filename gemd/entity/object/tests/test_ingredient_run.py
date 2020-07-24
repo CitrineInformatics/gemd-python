@@ -55,9 +55,13 @@ def test_name_persistance():
                           process=ps_link, material=ms_link)
     run = IngredientRun(spec=spec,
                         process=pr_link, material=mr_link)
+    assert run.name == spec.name
+    assert run.labels == spec.labels
     run.spec = LinkByUID(scope='local', id='ing_spec')
     # Name and labels are now stashed but not stored
     assert run == je.copy(run)
+    assert run.name == spec.name
+    assert run.labels == spec.labels
 
 
 @pytest.mark.filterwarnings("ignore:Name is set implicitly")
