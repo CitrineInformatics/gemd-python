@@ -101,7 +101,7 @@ def make_data_island(density, bulk_modulus, firing_temperature, binders, powders
         spec=firing_spec
     )
     IngredientRun(
-        green_sample,
+        material=green_sample,
         process=firing_process,
         mass_fraction=NormalReal(1.0, 0.0, ''),
         volume_fraction=NormalReal(1.0, 0.0, ''),

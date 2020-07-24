@@ -50,7 +50,7 @@ class IngredientRun(BaseObject, HasQuantities):
 
     typ = "ingredient_run"
 
-    def __init__(self, material=None, process=None, mass_fraction=None,
+    def __init__(self, *, material=None, process=None, mass_fraction=None,
                  volume_fraction=None, number_fraction=None, absolute_quantity=None,
                  spec=None, uids=None, tags=None, notes=None, file_links=None):
         BaseObject.__init__(self, name=None, uids=uids, tags=tags,
@@ -77,7 +77,7 @@ class IngredientRun(BaseObject, HasQuantities):
     def name(self, name):
         # This messiness is a consequence of name being an inherited attribute
         if name is not None:
-            warnings.warn("Labels are set implicitly by associating with an "
+            warnings.warn("Name is set implicitly by associating with an "
                           "IngredientSpec; this value will likely be overwritten",
                           DeprecationWarning)
         self.__class__._name_setter(self, name)
@@ -93,7 +93,7 @@ class IngredientRun(BaseObject, HasQuantities):
         return self._labels
 
     @labels.setter
-    @deprecation.deprecated(deprecated_in="0.10", removed_in="0.11",
+    @deprecation.deprecated(deprecated_in="0.12", removed_in="0.13",
                             details="Labels are set implicitly by associating with an "
                                     "IngredientSpec")
     def labels(self, labels):

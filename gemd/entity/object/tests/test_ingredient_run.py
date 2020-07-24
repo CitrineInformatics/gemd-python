@@ -60,6 +60,9 @@ def test_name_persistance():
     assert run == je.copy(run)
 
 
+@pytest.mark.filterwarnings("ignore:Name is set implicitly")
+@pytest.mark.filterwarnings("ignore:Labels are set implicitly")
+@pytest.mark.filterwarnings("ignore:labels is deprecated")
 def test_deprecated():
     """These are tests that will be obsolete but are required for 100 %."""
     name = 'name'
