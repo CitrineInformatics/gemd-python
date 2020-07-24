@@ -26,3 +26,5 @@ def test_invalid_assignment():
         MaterialSpec("name", process=["Process 1", "Process 2"])
     with pytest.raises(TypeError):
         MaterialSpec("name", template=MaterialSpec("another spec"))
+    with pytest.raises(TypeError):
+        MaterialSpec()  # Name is required

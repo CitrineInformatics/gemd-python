@@ -16,7 +16,7 @@ class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters, Ha
 
     Parameters
     ----------
-    name: str, optional
+    name: str, required
         Name of the measurement run.
     uids: Map[str, str], optional
         A collection of
@@ -49,7 +49,7 @@ class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters, Ha
 
     typ = "measurement_run"
 
-    def __init__(self, name=None, spec=None, material=None,
+    def __init__(self, name, *, spec=None, material=None,
                  properties=None, conditions=None, parameters=None,
                  uids=None, tags=None, notes=None, file_links=None, source=None):
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,

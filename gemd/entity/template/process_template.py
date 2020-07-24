@@ -15,7 +15,7 @@ class ProcessTemplate(BaseTemplate, HasConditionTemplates, HasParameterTemplates
 
     Parameters
     ----------
-    name: str, optional
+    name: str, required
         The name of the process template.
     description: str, optional
         Long-form description of the process template.
@@ -46,11 +46,12 @@ class ProcessTemplate(BaseTemplate, HasConditionTemplates, HasParameterTemplates
 
     typ = "process_template"
 
-    def __init__(self, name=None, description=None,
+    def __init__(self, name, *, description=None,
                  conditions=None, parameters=None,
                  allowed_names=None, allowed_labels=None,
                  uids=None, tags=None):
-        BaseTemplate.__init__(self, name, description, uids, tags)
+        BaseTemplate.__init__(self, name=name, description=description,
+                              uids=uids, tags=tags)
         HasConditionTemplates.__init__(self, conditions)
         HasParameterTemplates.__init__(self, parameters)
 

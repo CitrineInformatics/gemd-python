@@ -20,7 +20,7 @@ from gemd.entity.value.uniform_real import UniformReal
 
 def test_make_instance():
     """Build up several linked objects and test their properties."""
-    msr_spec = MeasurementSpec()
+    msr_spec = MeasurementSpec("Measurement")
     assert isinstance(make_instance(msr_spec), MeasurementRun)
 
     mat_spec = MaterialSpec(name='Mat name')

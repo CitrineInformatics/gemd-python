@@ -1,3 +1,4 @@
+import deprecation
 import warnings
 
 from gemd.entity.object.base_object import BaseObject
@@ -40,10 +41,6 @@ class IngredientRun(BaseObject, HasQuantities):
     absolute_quantity: :py:class:`ContinuousValue \
     <gemd.entity.value.continuous_value.ContinuousValue>`, optional
         The absolute quantity of the ingredient in the process.
-    name: str, optional
-        Label on the ingredient that is unique within the process that contains it.
-    labels: List[str], optional
-        Additional labels on the ingredient that must be unique.
     spec: IngredientSpec
         The specification of which this ingredient is a realization.
     file_links: List[FileLink], optional
@@ -53,22 +50,14 @@ class IngredientRun(BaseObject, HasQuantities):
 
     typ = "ingredient_run"
 
-    def __init__(self, material=None, process=None, name=None, labels=None,
-                 mass_fraction=None, volume_fraction=None, number_fraction=None,
-                 absolute_quantity=None,
+    def __init__(self, *, material=None, process=None, mass_fraction=None,
+                 volume_fraction=None, number_fraction=None, absolute_quantity=None,
                  spec=None, uids=None, tags=None, notes=None, file_links=None):
-        BaseObject.__init__(self, name=name, uids=uids, tags=tags,
+        BaseObject.__init__(self, name=None, uids=uids, tags=tags,
                             notes=notes, file_links=file_links)
-        HasQuantities.__init__(self, mass_fraction, volume_fraction, number_fraction,
-                               absolute_quantity)
-        if name is not None:
-            warnings.warn("The 'name' argument for ingredient runs is deprecated. "
-                          "It may be overwritten by the name of this object's spec.",
-                          DeprecationWarning)
-        if labels is not None:
-            warnings.warn("The 'labels' argument for ingredient runs is deprecated. "
-                          "It may be overwritten by the labels of this object's spec.",
-                          DeprecationWarning)
+        HasQuantities.__init__(self, mass_fraction=mass_fraction, volume_fraction=volume_fraction,
+                               number_fraction=number_fraction, absolute_quantity=absolute_quantity
+                               )
         self._material = None
         self._process = None
         self._spec = None
@@ -76,9 +65,27 @@ class IngredientRun(BaseObject, HasQuantities):
 
         self.material = material
         self.process = process
-        self.labels = labels
-        # this may overwrite name/labels
+        # this will overwrite name/labels if/when they are set
         self.spec = spec
+
+    @property
+    def name(self):
+        """Get name."""
+        return super().name
+
+    @name.setter
+    def name(self, name):
+        # This messiness is a consequence of name being an inherited attribute
+        if name is not None:
+            warnings.warn("Name is set implicitly by associating with an "
+                          "IngredientSpec; this value will likely be overwritten",
+                          DeprecationWarning)
+        self.__class__._name_setter(self, name)
+
+    @classmethod
+    def _name_setter(cls, obj, name):
+        """Misdirection so assignment in from_dict doesn't hit deprecation warning."""
+        super(IngredientRun, cls).name.fset(obj, name)
 
     @property
     def labels(self):
@@ -86,8 +93,16 @@ class IngredientRun(BaseObject, HasQuantities):
         return self._labels
 
     @labels.setter
+    @deprecation.deprecated(deprecated_in="0.12", removed_in="0.13",
+                            details="Labels are set implicitly by associating with an "
+                                    "IngredientSpec")
     def labels(self, labels):
-        self._labels = validate_list(labels, str)
+        self.__class__._labels_setter(self, labels)
+
+    @classmethod
+    def _labels_setter(cls, obj, labels):
+        """Misdirection so assignment in from_dict doesn't hit deprecation warning."""
+        obj._labels = validate_list(labels, str)
 
     @property
     def material(self):
@@ -145,14 +160,32 @@ class IngredientRun(BaseObject, HasQuantities):
         elif isinstance(spec, (IngredientSpec, LinkByUID)):
             self._spec = spec
             if isinstance(spec, IngredientSpec):
-                self.name = spec.name
-                self.labels = spec.labels
+                self.__class__._labels_setter(self, spec.labels)
+                self.__class__._name_setter(self, spec.name)
         else:
             raise TypeError("spec must be a IngredientSpec or LinkByUID: {}".format(spec))
 
     @classmethod
     def from_dict(cls, d):
-        """Suppresses name/label warnings during deserializaton."""
-        with warnings.catch_warnings():
-            warnings.filterwarnings('ignore', category=DeprecationWarning)
-            return super().from_dict(d)
+        """
+        Overloaded method from DictSerializable to intercept `name` and `labels` fields.
+
+        Parameters
+        ----------
+        d: dict
+            The object as a dictionary of key-value pairs that correspond to the object's fields.
+
+        Returns
+        -------
+        DictSerializable
+            The deserialized object.
+
+        """
+        name = d.pop("name", None)
+        labels = d.pop("labels", None)
+        obj = super().from_dict(d)
+        if name is not None:
+            cls._name_setter(obj, name)
+        if labels is not None:
+            cls._labels_setter(obj, labels)
+        return obj

@@ -16,7 +16,7 @@ class MeasurementTemplate(BaseTemplate,
 
     Parameters
     ----------
-    name: str, optional
+    name: str, required
         The name of the measurement template.
     description: str, optional
         Long-form description of the measurement template.
@@ -54,11 +54,11 @@ class MeasurementTemplate(BaseTemplate,
 
     typ = "measurement_template"
 
-    def __init__(self,
-                 name=None, description=None,
+    def __init__(self, name, *, description=None,
                  properties=None, conditions=None, parameters=None,
                  uids=None, tags=None):
-        BaseTemplate.__init__(self, name, description, uids, tags)
+        BaseTemplate.__init__(self, name=name, description=description,
+                              uids=uids, tags=tags)
         HasPropertyTemplates.__init__(self, properties)
         HasConditionTemplates.__init__(self, conditions)
         HasParameterTemplates.__init__(self, parameters)

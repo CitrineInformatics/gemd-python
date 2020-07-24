@@ -9,7 +9,7 @@ class AttributeTemplate(BaseEntity):
 
     Parameters
     ----------
-    name: str
+    name: str, required
         The name of the attribute template.
     bounds: :py:class:`BaseBounds <gemd.entity.bounds.base_bounds.BaseBounds>`
         Bounds circumscribe the values that are valid according to this attribute template.
@@ -26,7 +26,7 @@ class AttributeTemplate(BaseEntity):
 
     """
 
-    def __init__(self, name=None, description=None, bounds=None, uids=None, tags=None):
+    def __init__(self, name, *, description=None, bounds=None, uids=None, tags=None):
         BaseEntity.__init__(self, uids, tags)
         self.name = name
         self.description = description

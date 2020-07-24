@@ -28,11 +28,11 @@ def test_serialize():
     """Serializing a nested object should be identical to individually serializing each piece."""
     condition = Condition(name="A condition", value=NominalReal(7, ''))
     parameter = Parameter(name="A parameter", value=NormalReal(mean=17, std=1, units=''))
-    input_material = MaterialRun(tags="input")
-    process = ProcessRun(tags="A tag on a process run")
+    input_material = MaterialRun("name", tags="input")
+    process = ProcessRun("name", tags="A tag on a process run")
     ingredient = IngredientRun(material=input_material, process=process)
-    material = MaterialRun(tags=["A tag on a material"], process=process)
-    measurement = MeasurementRun(tags="A tag on a measurement", conditions=condition,
+    material = MaterialRun("name", tags=["A tag on a material"], process=process)
+    measurement = MeasurementRun("name", tags="A tag on a measurement", conditions=condition,
                                  parameters=parameter, material=material)
 
     # serialize the root of the tree
@@ -52,7 +52,7 @@ def test_deserialize():
     """Round-trip serde should leave the object unchanged."""
     condition = Condition(name="A condition", value=NominalReal(7, ''))
     parameter = Parameter(name="A parameter", value=NormalReal(mean=17, std=1, units=''))
-    measurement = MeasurementRun(tags="A tag on a measurement", conditions=condition,
+    measurement = MeasurementRun("name", tags="A tag on a measurement", conditions=condition,
                                  parameters=parameter)
     copy_meas = GEMDJson().copy(measurement)
     assert(copy_meas.conditions[0].value == measurement.conditions[0].value)
@@ -62,10 +62,10 @@ def test_deserialize():
 
 def test_scope_control():
     """Serializing a nested object should be identical to individually serializing each piece."""
-    input_material = MaterialSpec()
-    process = ProcessSpec()
-    IngredientSpec(material=input_material, process=process)
-    material = MaterialSpec(process=process)
+    input_material = MaterialSpec("input_material")
+    process = ProcessSpec("process")
+    IngredientSpec("ingredient", material=input_material, process=process)
+    material = MaterialSpec("name", process=process)
 
     # Verify the default scope is there
     default_json = GEMDJson()
@@ -466,6 +466,7 @@ def test_deeply_nested_rehydration():
     },
     {
       "type": "ingredient_spec",
+      "name": "Shortening",
       "material": {
         "type": "link_by_uid",
         "scope": "id",
@@ -485,6 +486,7 @@ def test_deeply_nested_rehydration():
     },
     {
       "type": "ingredient_spec",
+      "name": "Flour",
       "material": {
         "type": "link_by_uid",
         "scope": "id",

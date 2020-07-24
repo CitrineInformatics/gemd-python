@@ -14,7 +14,7 @@ class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
 
     Parameters
     ----------
-    name: str, optional
+    name: str, required
         Name of the process spec.
     uids: Map[str, str], optional
         A collection of
@@ -51,7 +51,7 @@ class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
 
     skip = {"_output_material", "_ingredients"}
 
-    def __init__(self, name=None, template=None,
+    def __init__(self, name, *, template=None,
                  parameters=None, conditions=None,
                  uids=None, tags=None, notes=None, file_links=None):
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,

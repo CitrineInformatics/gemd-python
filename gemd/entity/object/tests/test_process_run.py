@@ -16,11 +16,11 @@ def test_process_spec():
     """Tests that the Process Spec/Run connection persists when serializing."""
     # Create the ProcessSpec
     condition1 = Condition(name="a condition on the process in general")
-    spec = ProcessSpec(conditions=condition1)
+    spec = ProcessSpec("Spec", conditions=condition1)
 
     # Create the ProcessRun with a link to the ProcessSpec from above
     condition2 = Condition(name="a condition on this process run in particular")
-    process = ProcessRun(conditions=condition2, spec=spec)
+    process = ProcessRun("Run", conditions=condition2, spec=spec)
 
     copy_process = loads(dumps(process))
     assert dumps(copy_process.spec) == dumps(spec), \
@@ -46,6 +46,8 @@ def test_invalid_assignment():
     """Invalid assignments to `spec` throw a TypeError."""
     with pytest.raises(TypeError):
         ProcessRun("name", spec=[ProcessSpec("spec")])
+    with pytest.raises(TypeError):
+        ProcessRun()  # Name is required
 
 
 def test_template_access():

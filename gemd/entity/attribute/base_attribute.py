@@ -31,10 +31,8 @@ class BaseAttribute(DictSerializable):
 
     """
 
-    def __init__(self, name=None, template=None, origin="unknown", value=None, notes=None,
+    def __init__(self, name, *, template=None, origin="unknown", value=None, notes=None,
                  file_links=None):
-        if name is None:
-            raise ValueError("Attributes must be named")
         self.name = name
         self.notes = notes
 

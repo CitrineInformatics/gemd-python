@@ -32,6 +32,7 @@ class DictSerializable(ABC):
 
         """
         expected_arg_names = inspect.getfullargspec(cls.__init__).args
+        expected_arg_names += inspect.getfullargspec(cls.__init__).kwonlyargs
         kwargs = {}
         for name, arg in d.items():
             if name in expected_arg_names:
