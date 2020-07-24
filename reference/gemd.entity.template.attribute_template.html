@@ -35,13 +35,13 @@
 <p>Attribute templates.</p>
 <dl class="class">
 <dt id="gemd.entity.template.attribute_template.AttributeTemplate">
-<em class="property">class </em><code class="sig-prename descclassname">gemd.entity.template.attribute_template.</code><code class="sig-name descname">AttributeTemplate</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">description=None</em>, <em class="sig-param">bounds=None</em>, <em class="sig-param">uids=None</em>, <em class="sig-param">tags=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.template.attribute_template.AttributeTemplate" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gemd.entity.template.attribute_template.</code><code class="sig-name descname">AttributeTemplate</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">*</em>, <em class="sig-param">description=None</em>, <em class="sig-param">bounds=None</em>, <em class="sig-param">uids=None</em>, <em class="sig-param">tags=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.template.attribute_template.AttributeTemplate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemd.entity.base_entity.BaseEntity</span></code></a></p>
 <p>An attribute template, which can be a property, parameter, or condition template.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em>) – The name of the attribute template.</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>required</em>) – The name of the attribute template.</p></li>
 <li><p><strong>bounds</strong> (<a class="reference internal" href="gemd.entity.bounds.base_bounds.html#gemd.entity.bounds.base_bounds.BaseBounds" title="gemd.entity.bounds.base_bounds.BaseBounds"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseBounds</span></code></a>) – Bounds circumscribe the values that are valid according to this attribute template.</p></li>
 <li><p><strong>description</strong> (<em>str</em><em>, </em><em>optional</em>) – A long-form description of the attribute template.</p></li>
 <li><p><strong>uids</strong> (<em>Map</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – A collection of

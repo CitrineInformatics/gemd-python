@@ -35,7 +35,7 @@
 <p>A material template.</p>
 <dl class="class">
 <dt id="gemd.entity.template.material_template.MaterialTemplate">
-<em class="property">class </em><code class="sig-prename descclassname">gemd.entity.template.material_template.</code><code class="sig-name descname">MaterialTemplate</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">description=None</em>, <em class="sig-param">properties=None</em>, <em class="sig-param">uids=None</em>, <em class="sig-param">tags=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.template.material_template.MaterialTemplate" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gemd.entity.template.material_template.</code><code class="sig-name descname">MaterialTemplate</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">*</em>, <em class="sig-param">description=None</em>, <em class="sig-param">properties=None</em>, <em class="sig-param">uids=None</em>, <em class="sig-param">tags=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.template.material_template.MaterialTemplate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="gemd.entity.template.base_template.html#gemd.entity.template.base_template.BaseTemplate" title="gemd.entity.template.base_template.BaseTemplate"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemd.entity.template.base_template.BaseTemplate</span></code></a>, <a class="reference internal" href="gemd.entity.template.has_property_templates.html#gemd.entity.template.has_property_templates.HasPropertyTemplates" title="gemd.entity.template.has_property_templates.HasPropertyTemplates"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemd.entity.template.has_property_templates.HasPropertyTemplates</span></code></a></p>
 <p>A material template.</p>
 <p>Material templates are collections of property templates that constrain the values of
@@ -44,7 +44,7 @@ materials.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – The name of the material template.</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>required</em>) – The name of the material template.</p></li>
 <li><p><strong>description</strong> (<em>str</em><em>, </em><em>optional</em>) – Long-form description of the material template.</p></li>
 <li><p><strong>uids</strong> (<em>Map</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – A collection of
 <a class="reference external" href="https://citrineinformatics.github.io/gemd-documentation/specification/unique-identifiers/">unique IDs</a>.</p></li>

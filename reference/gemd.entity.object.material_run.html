@@ -34,14 +34,14 @@
 <span id="gemd-entity-object-material-run-module"></span><h1>gemd.entity.object.material_run module<a class="headerlink" href="#module-gemd.entity.object.material_run" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="gemd.entity.object.material_run.MaterialRun">
-<em class="property">class </em><code class="sig-prename descclassname">gemd.entity.object.material_run.</code><code class="sig-name descname">MaterialRun</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">spec=None</em>, <em class="sig-param">process=None</em>, <em class="sig-param">sample_type='unknown'</em>, <em class="sig-param">uids=None</em>, <em class="sig-param">tags=None</em>, <em class="sig-param">notes=None</em>, <em class="sig-param">file_links=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.object.material_run.MaterialRun" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gemd.entity.object.material_run.</code><code class="sig-name descname">MaterialRun</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">*</em>, <em class="sig-param">spec=None</em>, <em class="sig-param">process=None</em>, <em class="sig-param">sample_type='unknown'</em>, <em class="sig-param">uids=None</em>, <em class="sig-param">tags=None</em>, <em class="sig-param">notes=None</em>, <em class="sig-param">file_links=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.object.material_run.MaterialRun" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="gemd.entity.object.base_object.html#gemd.entity.object.base_object.BaseObject" title="gemd.entity.object.base_object.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemd.entity.object.base_object.BaseObject</span></code></a></p>
 <p>A material run.</p>
 <p>This includes a link to the originating process and soft links to measurements.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the material run.</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>required</em>) – Name of the material run.</p></li>
 <li><p><strong>uids</strong> (<em>Map</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – A collection of
 <a class="reference external" href="https://citrineinformatics.github.io/gemd-documentation/specification/unique-identifiers/">unique IDs</a>.</p></li>
 <li><p><strong>tags</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – <a class="reference external" href="https://citrineinformatics.github.io/gemd-documentation/specification/tags/">Tags</a>
