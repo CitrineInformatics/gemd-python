@@ -71,7 +71,13 @@ class IngredientRun(BaseObject, HasQuantities):
     @property
     def name(self):
         """Get name."""
-        return super().name
+        from gemd.entity.object.ingredient_spec import IngredientSpec
+        if isinstance(self.spec, IngredientSpec):
+            name = self.spec.name
+            self.__class__._name_setter(self, name)
+            return name
+        else:
+            return super().name
 
     @name.setter
     def name(self, name):
@@ -90,7 +96,13 @@ class IngredientRun(BaseObject, HasQuantities):
     @property
     def labels(self):
         """Get labels."""
-        return self._labels
+        from gemd.entity.object.ingredient_spec import IngredientSpec
+        if isinstance(self.spec, IngredientSpec):
+            labels = self.spec.labels
+            self.__class__._labels_setter(self, labels)
+            return labels
+        else:
+            return self._labels
 
     @labels.setter
     @deprecation.deprecated(deprecated_in="0.12", removed_in="0.13",
@@ -155,11 +167,16 @@ class IngredientRun(BaseObject, HasQuantities):
     def spec(self, spec):
         from gemd.entity.object.ingredient_spec import IngredientSpec
         from gemd.entity.link_by_uid import LinkByUID
+
+        if isinstance(self._spec, IngredientSpec):  # Store values if you had them
+            self.__class__._labels_setter(self, self.spec.labels)
+            self.__class__._name_setter(self, self.spec.name)
+
         if spec is None:
             self._spec = None
         elif isinstance(spec, (IngredientSpec, LinkByUID)):
             self._spec = spec
-            if isinstance(spec, IngredientSpec):
+            if isinstance(spec, IngredientSpec):  # Update values
                 self.__class__._labels_setter(self, spec.labels)
                 self.__class__._name_setter(self, spec.name)
         else:
