@@ -73,9 +73,7 @@ class IngredientRun(BaseObject, HasQuantities):
         """Get name."""
         from gemd.entity.object.ingredient_spec import IngredientSpec
         if isinstance(self.spec, IngredientSpec):
-            name = self.spec.name
-            self.__class__._name_setter(self, name)
-            return name
+            return self.spec.name
         else:
             return super().name
 
@@ -98,9 +96,7 @@ class IngredientRun(BaseObject, HasQuantities):
         """Get labels."""
         from gemd.entity.object.ingredient_spec import IngredientSpec
         if isinstance(self.spec, IngredientSpec):
-            labels = self.spec.labels
-            self.__class__._labels_setter(self, labels)
-            return labels
+            return self.spec.labels
         else:
             return self._labels
 
@@ -176,9 +172,6 @@ class IngredientRun(BaseObject, HasQuantities):
             self._spec = None
         elif isinstance(spec, (IngredientSpec, LinkByUID)):
             self._spec = spec
-            if isinstance(spec, IngredientSpec):  # Update values
-                self.__class__._labels_setter(self, spec.labels)
-                self.__class__._name_setter(self, spec.name)
         else:
             raise TypeError("spec must be a IngredientSpec or LinkByUID: {}".format(spec))
 
