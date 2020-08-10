@@ -2,7 +2,7 @@
 from gemd.entity.valid_list import ValidList
 
 
-def validate_list(obj, typ, trigger=None):
+def validate_list(obj, typ, *, trigger=None):
     """
     Attempts to return obj as a list, each element of which has type typ.
 
