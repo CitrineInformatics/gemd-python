@@ -3,6 +3,8 @@ from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.setters import validate_list
 from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.template.property_template import PropertyTemplate
+from gemd.entity.bounds.base_bounds import BaseBounds
+from typing import Iterable
 
 
 class HasPropertyTemplates(object):
@@ -11,8 +13,9 @@ class HasPropertyTemplates(object):
 
     Parameters
     ----------
-    properties: List[PropertyTemplate]
-        A list of this entity's property templates.
+    properties: List[(PropertyTemplate, BaseBounds)]
+        A list of tuples containing this entity's property templates as well
+        as any restrictions on those templates' bounds.
 
     """
 
@@ -23,24 +26,37 @@ class HasPropertyTemplates(object):
     @property
     def properties(self):
         """
-        Get the list of property templates.
+        Get the list of property template/bounds tuples.
 
         Returns
         -------
-        List[PropertyTemplate]
-            List of this entity's property templates
+        List[(PropertyTemplate, bounds)]
+            List of this entity's property template/bounds pairs
 
         """
         return self._properties
 
     @properties.setter
     def properties(self, properties):
-        # make sure the properties are a list
-        lst = validate_list(properties, (PropertyTemplate, LinkByUID, list, tuple))
+        """
+        Set the list of parameter templates.
 
-        # make sure attribute can be a Property
-        # TODO: list.map(_.validate_scope(AttributeType.PROPERTY)) all true
+        Parameters
+        ----------
+        properties: List[(PropertyTemplate, bounds)]
+            A list of tuples containing this entity's property templates as well
+            as any restrictions on those templates' bounds.
 
-        # convert any templates into (template, bounds) pairs and
-        # validate that any (template, bounds) pairs are consistent
-        self._properties = list(map(BaseTemplate._homogenize_ranges, lst))
+        Returns
+        -------
+        List[(PropertyTemplate, bounds)]
+            List of this entity's property template/bounds pairs
+
+        """
+        if isinstance(properties, Iterable):
+            if any(isinstance(x, BaseBounds) for x in properties):
+                properties = [properties]  # It's a template/bounds tuple (probably)
+        self._properties = validate_list(properties,
+                                         (PropertyTemplate, LinkByUID, list, tuple),
+                                         trigger=BaseTemplate._homogenize_ranges
+                                         )
