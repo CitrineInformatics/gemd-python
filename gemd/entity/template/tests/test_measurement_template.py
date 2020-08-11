@@ -55,3 +55,18 @@ def test_mixins():
             assert isinstance(y[0], AttributeTemplate)
             if y[1] is not None:
                 assert isinstance(y[1], BaseBounds)
+
+    second = MeasurementTemplate("Name",
+                                 properties=[PropertyTemplate("Name", bounds=IntegerBounds(0, 1)),
+                                             IntegerBounds(0, 1)
+                                             ],
+                                 conditions=[ConditionTemplate("Name", bounds=IntegerBounds(0, 1)),
+                                             IntegerBounds(0, 1)
+                                             ],
+                                 parameters=[ParameterTemplate("Name", bounds=IntegerBounds(0, 1)),
+                                             IntegerBounds(0, 1)
+                                             ],
+                                 )
+    assert len(second.properties) == 1
+    assert len(second.conditions) == 1
+    assert len(second.parameters) == 1

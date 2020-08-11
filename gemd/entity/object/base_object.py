@@ -44,10 +44,7 @@ class BaseObject(BaseEntity):
 
     @name.setter
     def name(self, name):
-        if name is None:
-            self._name = None
-        else:
-            self._name = validate_str(name)
+        self._name = validate_str(name)
 
     @property
     def file_links(self):
