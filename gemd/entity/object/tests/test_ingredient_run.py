@@ -70,12 +70,17 @@ def test_name_persistance():
     assert run.name == spec.name
     assert run.labels == spec.labels
 
+    # Test that serialization doesn't get confused after a deser and set
+    spec_too = IngredientSpec(name='Jorge', labels=[],
+                              process=ps_link, material=ms_link)
+    run.spec = spec_too
+    assert run == je.copy(run)
+    assert run.name == spec_too.name
+    assert run.labels == spec_too.labels
 
-@pytest.mark.filterwarnings("ignore:Name is set implicitly")
-@pytest.mark.filterwarnings("ignore:Labels are set implicitly")
-@pytest.mark.filterwarnings("ignore:labels is deprecated")
-def test_deprecated():
-    """These are tests that will be obsolete but are required for 100 %."""
+
+def test_implicit_fields():
+    """These test that users can't directly set names and labels."""
     name = 'name'
     labels = ['label', 'also']
     with pytest.raises(TypeError):
@@ -84,7 +89,7 @@ def test_deprecated():
         IngredientRun(labels=labels)
 
     run = IngredientRun()
-    run.name = name
-    run.labels = labels
-    assert run.name == name
-    assert run.labels == labels
+    with pytest.raises(AttributeError):
+        run.name = name
+    with pytest.raises(AttributeError):
+        run.labels = labels
