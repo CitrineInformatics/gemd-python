@@ -36,7 +36,7 @@ def test_triggers():
 
     stash = []
 
-    def dummy(lst, val):
+    def dummy(val):
         stash.append(val)
 
     with pytest.raises(TypeError):
@@ -49,6 +49,23 @@ def test_triggers():
     vlst[0] = 17
     assert len(vlst) == 5
     assert len(stash) == 6
+
+
+def test_transform():
+    """Test that transformations do what we expect in changing data."""
+    first = [1, 2]
+    vlst = ValidList(first,
+                     content_type=int,
+                     trigger=lambda x: x + 1)
+    vlst.append(3)
+    vlst.extend([4])
+    vlst.insert(2, 5)
+    assert vlst == [2, 3, 6, 4, 5]
+
+    vlst[0] = 0
+    assert vlst[0] == 1
+
+    assert first == [1, 2]
 
 
 def test_invalid_content():

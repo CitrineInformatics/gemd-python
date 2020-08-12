@@ -14,6 +14,9 @@ class ValidList(list):
         The allowed type(s) for the content of the list.
     trigger: function
         A function that gets invoked whenever a new element is added.
+        The function will get passed the value (or each individual value in a separate
+        invocation for list operations) and, if it returns something other than None,
+        it will use that returned value for the assignment.
 
     """
 
@@ -34,14 +37,19 @@ class ValidList(list):
                 raise TypeError('Content filters must be types')
         for value in _list:
             self._validate(value)
+
         self._trigger = None
+        cache = list(_list)
         if trigger is not None:
             if not callable(trigger):
                 raise TypeError('Triggers must be callable')
             self._trigger = trigger
-            for value in _list:
-                self._trigger(self, value)
-        list.__init__(self, _list)
+            for i, value in enumerate(_list):
+                result = self._trigger(value)
+                if result is not None:
+                    cache[i] = result
+
+        list.__init__(self, cache)
 
     def _validate(self, value):
         """
@@ -87,7 +95,9 @@ class ValidList(list):
         """
         self._validate(value)
         if self._trigger is not None:
-            self._trigger(self, value)
+            result = self._trigger(value)
+            if result is not None:
+                value = result
         super().__setitem__(index, value)
 
     def append(self, value):
@@ -109,7 +119,9 @@ class ValidList(list):
         """
         self._validate(value)
         if self._trigger is not None:
-            self._trigger(self, value)
+            result = self._trigger(value)
+            if result is not None:
+                value = result
         super().append(value)
 
     def extend(self, list_):
@@ -134,10 +146,15 @@ class ValidList(list):
                 self._validate(value)
         else:
             raise TypeError("'{}' object is not iterable".format(type(list_)))
+
+        cache = list(list_)  # So that we don't edit a passed reference
         if self._trigger is not None:
-            for value in list_:
-                self._trigger(self, value)
-        super().extend(list_)
+            for i, value in enumerate(cache):
+                result = self._trigger(value)
+                if result is not None:
+                    cache[i] = result
+
+        super().extend(cache)
 
     def insert(self, i, value):
         """
@@ -161,5 +178,7 @@ class ValidList(list):
         """
         self._validate(value)
         if self._trigger is not None:
-            self._trigger(self, value)
+            result = self._trigger(value)
+            if result is not None:
+                value = result
         super().insert(i, value)

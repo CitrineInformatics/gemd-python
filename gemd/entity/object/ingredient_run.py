@@ -1,6 +1,3 @@
-import deprecation
-import warnings
-
 from gemd.entity.object.base_object import BaseObject
 from gemd.entity.object.has_quantities import HasQuantities
 from gemd.entity.setters import validate_list
@@ -81,15 +78,9 @@ class IngredientRun(BaseObject, HasQuantities):
     def name(self, name):
         # This messiness is a consequence of name being an inherited attribute
         if name is not None:
-            warnings.warn("Name is set implicitly by associating with an "
-                          "IngredientSpec; this value will likely be overwritten",
-                          DeprecationWarning)
-        self.__class__._name_setter(self, name)
-
-    @classmethod
-    def _name_setter(cls, obj, name):
-        """Misdirection so assignment in from_dict doesn't hit deprecation warning."""
-        super(IngredientRun, cls).name.fset(obj, name)
+            raise AttributeError("Name is set implicitly by associating with an "
+                                 "IngredientSpec")
+        self._name = name
 
     @property
     def labels(self):
@@ -99,18 +90,6 @@ class IngredientRun(BaseObject, HasQuantities):
             return self.spec.labels
         else:
             return self._labels
-
-    @labels.setter
-    @deprecation.deprecated(deprecated_in="0.12", removed_in="0.13",
-                            details="Labels are set implicitly by associating with an "
-                                    "IngredientSpec")
-    def labels(self, labels):
-        self.__class__._labels_setter(self, labels)
-
-    @classmethod
-    def _labels_setter(cls, obj, labels):
-        """Misdirection so assignment in from_dict doesn't hit deprecation warning."""
-        obj._labels = validate_list(labels, str)
 
     @property
     def material(self):
@@ -165,8 +144,8 @@ class IngredientRun(BaseObject, HasQuantities):
         from gemd.entity.link_by_uid import LinkByUID
 
         if isinstance(self._spec, IngredientSpec):  # Store values if you had them
-            self.__class__._labels_setter(self, self.spec.labels)
-            self.__class__._name_setter(self, self.spec.name)
+            self._name = self.spec.name
+            self._labels = validate_list(self.spec.labels, str)
 
         if spec is None:
             self._spec = None
@@ -195,7 +174,7 @@ class IngredientRun(BaseObject, HasQuantities):
         labels = d.pop("labels", None)
         obj = super().from_dict(d)
         if name is not None:
-            cls._name_setter(obj, name)
+            obj._name = name
         if labels is not None:
-            cls._labels_setter(obj, labels)
+            obj._labels = validate_list(labels, str)
         return obj
