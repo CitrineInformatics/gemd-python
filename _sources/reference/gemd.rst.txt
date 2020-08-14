@@ -6,7 +6,6 @@ Subpackages
 
 .. toctree::
 
-   gemd.client
    gemd.demo
    gemd.entity
    gemd.enumeration

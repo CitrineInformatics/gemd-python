@@ -43,7 +43,10 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>_list</strong> (<em>Iterable</em>) – The initial values for the elements of the list.</p></li>
 <li><p><strong>content_type</strong> (<em>Type</em><em> or </em><em>Iterable</em><em>[</em><em>Type</em><em>]</em>) – The allowed type(s) for the content of the list.</p></li>
-<li><p><strong>trigger</strong> (<em>function</em>) – A function that gets invoked whenever a new element is added.</p></li>
+<li><p><strong>trigger</strong> (<em>function</em>) – A function that gets invoked whenever a new element is added.
+The function will get passed the value (or each individual value in a separate
+invocation for list operations) and, if it returns something other than None,
+it will use that returned value for the assignment.</p></li>
 </ul>
 </dd>
 </dl>

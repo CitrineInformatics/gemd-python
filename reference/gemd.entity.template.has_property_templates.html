@@ -40,19 +40,20 @@
 <p>Mixin-trait for entities that include property templates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>properties</strong> (<em>List</em><em>[</em><a class="reference internal" href="gemd.entity.template.property_template.html#gemd.entity.template.property_template.PropertyTemplate" title="gemd.entity.template.property_template.PropertyTemplate"><em>PropertyTemplate</em></a><em>]</em>) – A list of this entity’s property templates.</p>
+<dd class="field-odd"><p><strong>properties</strong> (<em>List</em><em>[</em><em>(</em><a class="reference internal" href="gemd.entity.template.property_template.html#gemd.entity.template.property_template.PropertyTemplate" title="gemd.entity.template.property_template.PropertyTemplate"><em>PropertyTemplate</em></a><em>, </em><a class="reference internal" href="gemd.entity.bounds.base_bounds.html#gemd.entity.bounds.base_bounds.BaseBounds" title="gemd.entity.bounds.base_bounds.BaseBounds"><em>BaseBounds</em></a><em>)</em><em>]</em>) – A list of tuples containing this entity’s property templates as well
+as any restrictions on those templates’ bounds.</p>
 </dd>
 </dl>
 <dl class="method">
 <dt id="gemd.entity.template.has_property_templates.HasPropertyTemplates.properties">
 <em class="property">property </em><code class="sig-name descname">properties</code><a class="headerlink" href="#gemd.entity.template.has_property_templates.HasPropertyTemplates.properties" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the list of property templates.</p>
+<dd><p>Get the list of property template/bounds tuples.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>List of this entity’s property templates</p>
+<dd class="field-odd"><p>List of this entity’s property template/bounds pairs</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>List[<a class="reference internal" href="gemd.entity.template.property_template.html#gemd.entity.template.property_template.PropertyTemplate" title="gemd.entity.template.property_template.PropertyTemplate">PropertyTemplate</a>]</p>
+<dd class="field-even"><p>List[(<a class="reference internal" href="gemd.entity.template.property_template.html#gemd.entity.template.property_template.PropertyTemplate" title="gemd.entity.template.property_template.PropertyTemplate">PropertyTemplate</a>, bounds)]</p>
 </dd>
 </dl>
 </dd></dl>

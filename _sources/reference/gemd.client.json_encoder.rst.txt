@@ -1,7 +1,0 @@
-gemd.client.json\_encoder module
-================================
-
-.. automodule:: gemd.client.json_encoder
-   :members:
-   :undoc-members:
-   :show-inheritance:
