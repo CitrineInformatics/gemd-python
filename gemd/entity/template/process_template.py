@@ -27,6 +27,10 @@ class ProcessTemplate(BaseTemplate, HasConditionTemplates, HasParameterTemplates
         `Tags <https://citrineinformatics.github.io/gemd-documentation/specification/tags/>`_
         are hierarchical strings that store information about an entity. They can be used
         for filtering and discoverability.
+    allowed_names: List[str], optional
+        The set of names that a process' ingredients are allowed to use in their name field.
+    allowed_labels: List[str], optional
+        The set of labels that a process' ingredients are allowed to use in their labels field.
     conditions: List[:class:`ConditionTemplate \
     <gemd.entity.template.condition_template.ConditionTemplate>`] or \
     List[:class:`ConditionTemplate <gemd.entity.template.condition_template.ConditionTemplate>`,\
