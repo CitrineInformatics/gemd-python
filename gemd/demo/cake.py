@@ -162,11 +162,13 @@ def make_cake_templates():
     # Objects
     tmpl["Procuring"] = ProcessTemplate(
         name="Procuring",
-        description="Buyin' stuff"
+        description="Buyin' stuff",
+        allowed_names=[]  # Takes no ingredients by definition
     )
     tmpl["Baking"] = ProcessTemplate(
         name="Baking",
         description='Using heat to promote chemical reactions in a material',
+        allowed_names=['batter'],
         allowed_labels=['precursor'],
         conditions=[(tmpl["Oven temperature"], RealBounds(0, 700, "degF"))],
         parameters=[(tmpl["Oven temperature setting"], RealBounds(100, 550, "degF"))]
@@ -274,7 +276,7 @@ def make_cake_spec(tmpl=None):
 
     ###############################################################################################
     # Objects
-    cake = _make_material(
+    cake_obj = _make_material(
         material_name="Cake",
         process_tmpl_name="Icing",
         process_kwargs={
@@ -328,7 +330,7 @@ def make_cake_spec(tmpl=None):
         material=frosting,
         notes='Seems like a lot of frosting',
         labels=['coating'],
-        process=cake.process,
+        process=cake_obj.process,
         absolute_quantity=NominalReal(nominal=0.751, units='kg')
     )
 
@@ -379,7 +381,7 @@ def make_cake_spec(tmpl=None):
     _make_ingredient(
         material=baked_cake,
         labels=['substrate'],
-        process=cake.process
+        process=cake_obj.process
     )
 
     ########################
@@ -521,7 +523,7 @@ def make_cake_spec(tmpl=None):
         template=tmpl["Generic Material"],
         tags=[
             'raw material',
-            'levening',
+            'leavening',
             'dry-goods'
         ],
         notes='Leavening agent for cake'
@@ -761,7 +763,7 @@ def make_cake_spec(tmpl=None):
         mass_fraction=NominalReal(nominal=0.6387, units='')  # 4 c @ 30 g/ 0.25 cups
     )
 
-    return cake
+    return cake_obj
 
 
 def make_cake(seed=None, tmpl=None, cake_spec=None, toothpick_img=None):
@@ -787,12 +789,12 @@ def make_cake(seed=None, tmpl=None, cake_spec=None, toothpick_img=None):
 
     ######################################################################
     # Objects
-    cake = make_instance(cake_spec)
+    cake_obj = make_instance(cake_spec)
     operators = ['gwash', 'jadams', 'thomasj', 'jmadison', 'jmonroe']
     producers = ['Fresh Farm', 'Sunnydale', 'Greenbrook']
     drygoods = ['Acme', 'A1', 'Reliable', "Big Box"]
-    cake.process.source = PerformedSource(performed_by=random.choice(operators),
-                                          performed_date='2015-03-14')
+    cake_obj.process.source = PerformedSource(performed_by=random.choice(operators),
+                                              performed_date='2015-03-14')
 
     def _randomize_object(item):
         # Add in the randomized particular values
@@ -817,7 +819,7 @@ def make_cake(seed=None, tmpl=None, cake_spec=None, toothpick_img=None):
                                               performed_date='2015-02-17')
                 item.name = "{} {}".format(item.template.name, item.output_material.name)
             else:
-                item.source = cake.process.source
+                item.source = cake_obj.process.source
         if isinstance(item, IngredientRun):
             fuzz = 0.95 + 0.1 * random.random()
             if item.spec.absolute_quantity is not None:
@@ -841,12 +843,12 @@ def make_cake(seed=None, tmpl=None, cake_spec=None, toothpick_img=None):
                     NormalReal(mean=fuzz * item.spec.number_fraction.nominal,
                                std=0.05 * item.spec.number_fraction.nominal,
                                units=item.spec.number_fraction.units)
-    recursive_foreach(cake, _randomize_object)
+    recursive_foreach(cake_obj, _randomize_object)
 
     frosting = \
-        next(x.material for x in cake.process.ingredients if 'rosting' in x.name)
+        next(x.material for x in cake_obj.process.ingredients if 'rosting' in x.name)
     baked = \
-        next(x.material for x in cake.process.ingredients if 'aked' in x.name)
+        next(x.material for x in cake_obj.process.ingredients if 'aked' in x.name)
 
     def _find_name(name, material):
         """Recursively search for the right material."""
@@ -858,13 +860,13 @@ def make_cake(seed=None, tmpl=None, cake_spec=None, toothpick_img=None):
                 return result
         return
 
-    flour = _find_name('Flour', cake)
-    salt = _find_name('Salt', cake)
-    sugar = _find_name('Sugar', cake)
+    flour = _find_name('Flour', cake_obj)
+    salt = _find_name('Salt', cake_obj)
+    sugar = _find_name('Sugar', cake_obj)
 
     # Add measurements
-    cake_taste = MeasurementRun(name='Final Taste', material=cake)
-    cake_appearance = MeasurementRun(name='Final Appearance', material=cake)
+    cake_taste = MeasurementRun(name='Final Taste', material=cake_obj)
+    cake_appearance = MeasurementRun(name='Final Appearance', material=cake_obj)
     frosting_taste = MeasurementRun(name='Frosting Taste', material=frosting)
     frosting_sweetness = MeasurementRun(name='Frosting Sweetness', material=frosting)
     baked_doneness = MeasurementRun(name='Baking doneness', material=baked)
@@ -1040,14 +1042,15 @@ def make_cake(seed=None, tmpl=None, cake_spec=None, toothpick_img=None):
         origin="specified"
     ))
 
-    cake.notes = cake.notes + "; Très délicieux! 😀"
-    cake.file_links = [FileLink(
+    cake_obj.notes = cake_obj.notes + "; Très délicieux! 😀"
+    cake_obj.file_links = [FileLink(
         filename="Photo",
-        url='https://www.landolakes.com/RecipeManagementSystem/media/'
-            'Recipe-Media-Files/Recipes/Retail/x17/16730-beckys-butter-cake-600x600.jpg?ext=.jpg'
+        url='https://storcpdkenticomedia.blob.core.windows.net/media/'
+            'recipemanagementsystem/media/recipe-media-files/recipes/retail/x17/'
+            '16730-beckys-butter-cake-600x600.jpg?ext=.jpg'
     )]
 
-    return cake
+    return cake_obj
 
 
 if __name__ == "__main__":
