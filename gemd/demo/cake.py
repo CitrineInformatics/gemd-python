@@ -334,7 +334,7 @@ def make_cake_spec(tmpl=None):
             "conditions": [
                 Condition(name='Cooking time',
                           template=tmpl['Cooking time'],
-                          origin=Origin.SPECIFIED.value,
+                          origin=Origin.SPECIFIED,
                           value=NormalReal(mean=50, std=5, units='min'))
             ],
             "parameters": [
@@ -893,25 +893,25 @@ def make_cake(seed=None, tmpl=None, cake_spec=None, toothpick_img=None):
     # Let's add some attributes
     baked.process.conditions.append(Condition(name='Cooking time',
                                               template=tmpl['Cooking time'],
-                                              origin=Origin.MEASURED.value,
+                                              origin=Origin.MEASURED,
                                               value=NominalReal(nominal=48, units='min')))
     baked.process.conditions.append(Condition(name='Oven temperature',
                                               origin="measured",
                                               value=NominalReal(nominal=362, units='degF')))
 
     cake_taste.properties.append(Property(name='Tastiness',
-                                          origin=Origin.MEASURED.value,
+                                          origin=Origin.MEASURED,
                                           template=tmpl['Tastiness'],
                                           value=UniformInteger(4, 5)))
     cake_appearance.properties.append(Property(name='Visual Appeal',
-                                               origin=Origin.MEASURED.value,
+                                               origin=Origin.MEASURED,
                                                value=NominalInteger(nominal=5)))
     frosting_taste.properties.append(Property(name='Tastiness',
-                                              origin=Origin.MEASURED.value,
+                                              origin=Origin.MEASURED,
                                               template=tmpl['Tastiness'],
                                               value=NominalInteger(nominal=4)))
     frosting_sweetness.properties.append(Property(name='Sweetness (Sucrose-basis)',
-                                                  origin=Origin.MEASURED.value,
+                                                  origin=Origin.MEASURED,
                                                   value=NominalReal(nominal=1.7, units='')))
 
     baked_doneness.properties.append(Property(
