@@ -51,6 +51,16 @@ def change_scope(data, *, templates=None):
         TEMPLATE_SCOPE = templates
 
 
+def get_demo_scope():
+    """Return the value of the DEMO_SCOPE variable."""
+    return DEMO_SCOPE
+
+
+def get_template_scope():
+    """Return the value of the DEMO_SCOPE variable."""
+    return TEMPLATE_SCOPE
+
+
 def import_toothpick_picture():
     """Return the stream of the toothpick picture."""
     import pkg_resources
