@@ -56,3 +56,46 @@ def test_contains():
         assert k in data_dict
 
     assert 'not_a_key' not in data_dict
+
+
+def test_full_api():
+    """Tests checking consistency of all standard dictionary methods."""
+    data = {'K'+x: 'V'+x for x in ('1', '2', '3', '4', '5')}
+    ci_dict = CaseInsensitiveDict(**data)
+
+    assert sorted(list(ci_dict)) == sorted(list(data))
+    assert len(ci_dict) == len(data)
+    assert ci_dict['K1'] == data['K1']
+    ci_dict['K6'] = 'V6'
+    assert ci_dict['K6'] == 'V6'
+    del ci_dict['K6']
+    assert 'K6' not in ci_dict
+    ci_iter = iter(ci_dict)
+    for k in ci_iter:
+        assert k in data
+    ci_dict.clear()
+    assert len(ci_dict) == 0
+    for k, v in data.items():
+        ci_dict[k.lower()] = v.lower()
+    dup = ci_dict.copy()
+    assert type(dup) == type(ci_dict)
+    key_copy = CaseInsensitiveDict.fromkeys(dup)
+    assert set(dup) == set(key_copy)
+    assert type(dup) == type(key_copy)
+    assert ci_dict.get('K1') == 'v1'
+    assert ci_dict.get('K6', None) is None
+    for k, v in ci_dict.items():
+        assert data[k.upper()] == v.lower()
+    for k in ci_dict.keys():
+        assert k not in data  # because the cases are all wrong
+    assert ci_dict.pop('K1') == 'v1'
+    assert 'K1' not in ci_dict
+    with pytest.raises(KeyError):
+        ci_dict.pop('K1')
+    assert ci_dict.pop('K1', None) is None
+    pop_k, pop_v = ci_dict.popitem()
+    assert pop_k not in ci_dict
+    assert ci_dict.setdefault(pop_k.upper(), pop_v.upper()) == pop_v.upper()
+    assert ci_dict.setdefault(pop_k.upper(), pop_v.lower()) == pop_v.upper()
+    ci_dict.update({pop_k.upper(): pop_v.lower(), 'K6': 'v6'})
+    assert 'v6' in ci_dict.values()
