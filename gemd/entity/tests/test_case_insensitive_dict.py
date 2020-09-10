@@ -75,6 +75,7 @@ def test_full_api():
         assert k in data
     ci_dict.clear()
     assert len(ci_dict) == 0
+    assert len(ci_dict.lowercase_dict) == 0
     for k, v in data.items():
         ci_dict[k.lower()] = v.lower()
     dup = ci_dict.copy()
@@ -85,14 +86,14 @@ def test_full_api():
     assert ci_dict.get('K1') == 'v1'
     assert ci_dict.get('K6', None) is None
     for k, v in ci_dict.items():
-        assert data[k.upper()] == v.lower()
+        assert data[k.upper()] == v.upper()
     for k in ci_dict.keys():
         assert k not in data  # because the cases are all wrong
-    assert ci_dict.pop('K1') == 'v1'
+    assert ci_dict.pop('k1') == 'v1'
     assert 'K1' not in ci_dict
     with pytest.raises(KeyError):
-        ci_dict.pop('K1')
-    assert ci_dict.pop('K1', None) is None
+        ci_dict.pop('k1')
+    assert ci_dict.pop('k1', None) is None
     pop_k, pop_v = ci_dict.popitem()
     assert pop_k not in ci_dict
     assert ci_dict.setdefault(pop_k.upper(), pop_v.upper()) == pop_v.upper()

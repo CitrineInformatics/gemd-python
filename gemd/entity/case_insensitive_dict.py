@@ -1,3 +1,8 @@
+from typing import Tuple
+
+_RaiseKeyError = object() # singleton for no-default behavior
+
+
 class CaseInsensitiveDict(dict):
     """
     A dictionary in which the keys are case-insensitive.
@@ -56,6 +61,33 @@ class CaseInsensitiveDict(dict):
 
     def __contains__(self, key: str):
         return self.lowercase_dict.__contains__(key.lower())
+
+    def __delitem__(self, key):
+        super().__delitem__(key)
+        del self.lowercase_dict[key.lower()]
+
+    def clear(self) -> None:
+        super().clear()
+        self.lowercase_dict.clear()
+
+    def pop(self, key: str, default=_RaiseKeyError):
+        if default is _RaiseKeyError:
+            if key not in self:
+                raise KeyError(key)
+            val = super().pop(self.lowercase_dict[key.lower()])
+        else:
+            val = super().pop(self.lowercase_dict.get(key.lower()), default)
+        if key in self:
+            del self.lowercase_dict[key.lower()]
+        return val
+
+    def popitem(self) -> Tuple:
+        result = super().popitem()
+        del self.lowercase_dict[result[0].lower()]
+        return result
+        
+    def copy(self) -> 'CaseInsensitiveDict':
+        return CaseInsensitiveDict(super().copy())
 
     def _register_key(self, key: str):
         """
