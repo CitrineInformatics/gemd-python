@@ -159,6 +159,9 @@ class CaseInsensitiveDict(dict):
         """
         if mapping is None:
             mapping = dict()
+            no_mapping = True
+        else:
+            no_mapping = False
         for key in list(mapping.keys()) + list(kwargs.keys()):
             if key.lower() in self.lowercase_dict:
                 prev = self.lowercase_dict[key.lower()]
@@ -166,7 +169,7 @@ class CaseInsensitiveDict(dict):
                     raise ValueError(
                         "Key '{}' already exists in dict with different case: "
                         "'{}'".format(key, prev))
-        if mapping is None:
+        if no_mapping:
             super().update(**kwargs)
         else:
             super().update(mapping, **kwargs)
