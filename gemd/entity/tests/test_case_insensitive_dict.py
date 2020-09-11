@@ -60,7 +60,7 @@ def test_contains():
 
 def test_full_api():
     """Tests checking consistency of all standard dictionary methods."""
-    data = {'K'+x: 'V'+x for x in ('1', '2', '3', '4', '5')}
+    data = {'K' + x: 'V' + x for x in ('1', '2', '3', '4', '5')}
     ci_dict = CaseInsensitiveDict(**data)
 
     assert sorted(list(ci_dict)) == sorted(list(data))
@@ -99,4 +99,8 @@ def test_full_api():
     assert ci_dict.setdefault(pop_k.upper(), pop_v.upper()) == pop_v.upper()
     assert ci_dict.setdefault(pop_k.upper(), pop_v.lower()) == pop_v.upper()
     ci_dict.update({pop_k.upper(): pop_v.lower(), 'K6': 'v6'})
+    with pytest.raises(ValueError):
+        ci_dict.update(k6='v6')
+    with pytest.raises(ValueError):
+        ci_dict.update({k.lower(): v for k, v in ci_dict.items()})
     assert 'v6' in ci_dict.values()
