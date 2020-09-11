@@ -56,3 +56,83 @@ def test_contains():
         assert k in data_dict
 
     assert 'not_a_key' not in data_dict
+
+
+def test_all_dict_methods():
+    """Tests checking consistency of all standard dictionary methods."""
+    # __init__
+    data = {'K' + x: 'V' + x for x in ('1', '2', '3', '4', '5')}
+    ci_dict = CaseInsensitiveDict(**data)
+
+    assert sorted(list(ci_dict)) == sorted(list(data))
+    assert len(ci_dict) == len(data)
+
+    # __getitem__
+    assert ci_dict['K1'] == data['K1']
+
+    # __setitem__
+    ci_dict['K6'] = 'V6'
+    assert ci_dict['K6'] == 'V6'
+
+    # __delitem__
+    del ci_dict['K6']
+    assert 'K6' not in ci_dict
+
+    # iter(d)
+    ci_iter = iter(ci_dict)
+    for k in ci_iter:
+        assert k in data
+
+    # clear
+    ci_dict.clear()
+    assert len(ci_dict) == 0
+    assert len(ci_dict.lowercase_dict) == 0
+    for k, v in data.items():
+        ci_dict[k.lower()] = v.lower()
+
+    # copy
+    dup = ci_dict.copy()
+    assert type(dup) == type(ci_dict)
+
+    # fromkeys
+    key_copy = CaseInsensitiveDict.fromkeys(dup)
+    assert set(dup) == set(key_copy)
+    assert type(dup) == type(key_copy)
+
+    # get
+    assert ci_dict.get('K1') == 'v1'
+    assert ci_dict.get('K6', None) is None
+
+    # items
+    for k, v in ci_dict.items():
+        assert data[k.upper()] == v.upper()
+
+    # keys
+    for k in ci_dict.keys():
+        assert k not in data  # because the cases are all wrong
+
+    # pop
+    assert ci_dict.pop('k1') == 'v1'
+    assert 'K1' not in ci_dict
+    with pytest.raises(KeyError):
+        ci_dict.pop('k1')
+    assert ci_dict.pop('k1', None) is None
+
+    # popitem
+    pop_k, pop_v = ci_dict.popitem()
+    assert pop_k not in ci_dict
+
+    # setdefault
+    assert ci_dict.setdefault(pop_k.upper(), pop_v.upper()) == pop_v.upper()
+    assert ci_dict.setdefault(pop_k.upper(), pop_v.lower()) == pop_v.upper()
+
+    # update
+    ci_dict.update({pop_k.upper(): pop_v.lower(), 'K6': 'v6'})
+    ci_dict.update(K6='V6')
+    with pytest.raises(ValueError):
+        ci_dict.update(k6='v6')
+    with pytest.raises(ValueError):
+        ci_dict.update({k.lower(): v for k, v in ci_dict.items()})
+
+    # values
+    assert 'V6' in ci_dict.values()
