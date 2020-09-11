@@ -34,7 +34,7 @@
 <span id="gemd-entity-case-insensitive-dict-module"></span><h1>gemd.entity.case_insensitive_dict module<a class="headerlink" href="#module-gemd.entity.case_insensitive_dict" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="gemd.entity.case_insensitive_dict.CaseInsensitiveDict">
-<em class="property">class </em><code class="sig-prename descclassname">gemd.entity.case_insensitive_dict.</code><code class="sig-name descname">CaseInsensitiveDict</code><span class="sig-paren">(</span><em class="sig-param">seq=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.case_insensitive_dict.CaseInsensitiveDict" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gemd.entity.case_insensitive_dict.</code><code class="sig-name descname">CaseInsensitiveDict</code><span class="sig-paren">(</span><em class="sig-param">seq: Sequence = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.case_insensitive_dict.CaseInsensitiveDict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
 <p>A dictionary in which the keys are case-insensitive.</p>
 <p>It is initialized the same way as a typical dict, but the values can be accessed without
@@ -51,8 +51,28 @@ Example: CaseInsensitiveDict(one=1, two=”two”).</p></li>
 </dd>
 </dl>
 <dl class="method">
+<dt id="gemd.entity.case_insensitive_dict.CaseInsensitiveDict.clear">
+<code class="sig-name descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#gemd.entity.case_insensitive_dict.CaseInsensitiveDict.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all items from the dictionary.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gemd.entity.case_insensitive_dict.CaseInsensitiveDict.copy">
+<code class="sig-name descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; gemd.entity.case_insensitive_dict.CaseInsensitiveDict<a class="headerlink" href="#gemd.entity.case_insensitive_dict.CaseInsensitiveDict.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a shallow copy of the dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A duplicate of the dictionary</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#gemd.entity.case_insensitive_dict.CaseInsensitiveDict" title="gemd.entity.case_insensitive_dict.CaseInsensitiveDict">CaseInsensitiveDict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="gemd.entity.case_insensitive_dict.CaseInsensitiveDict.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param">key: str</em>, <em class="sig-param">default=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.case_insensitive_dict.CaseInsensitiveDict.get" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param">key: str</em>, <em class="sig-param">default: Any = None</em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#gemd.entity.case_insensitive_dict.CaseInsensitiveDict.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the value for a given case-insensitive key.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -67,6 +87,66 @@ if <cite>key</cite> is not present.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="gemd.entity.case_insensitive_dict.CaseInsensitiveDict.pop">
+<code class="sig-name descname">pop</code><span class="sig-paren">(</span><em class="sig-param">key: str</em>, <em class="sig-param">default=&lt;object object&gt;</em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#gemd.entity.case_insensitive_dict.CaseInsensitiveDict.pop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove and return the value for a given key from the dictionary.</p>
+<p>If key is in the dictionary, remove it and return its value, else return default.
+If default is not given and key is not in the dictionary, a KeyError is raised.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>str</em>) – The key to look up (possibly with a different casing).</p></li>
+<li><p><strong>default</strong> (<em>Any</em>) – The result to return if the key is not present.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The value associated with the case-insensitive version of <cite>key</cite>, or None
+if <cite>key</cite> is not present.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="gemd.entity.case_insensitive_dict.CaseInsensitiveDict.popitem">
+<code class="sig-name descname">popitem</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Tuple<a class="headerlink" href="#gemd.entity.case_insensitive_dict.CaseInsensitiveDict.popitem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove and return a (key, value) pair from the dictionary.</p>
+<p>popitem() is useful to destructively iterate over a dictionary, as often used
+in set algorithms.  If the dictionary is empty, calling popitem() raises a
+KeyError.</p>
+<p>Changed in version 3.7: LIFO order is now guaranteed. In prior versions,
+popitem() would return an arbitrary key/value pair.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The key-value pair</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Tuple(str, Any)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="gemd.entity.case_insensitive_dict.CaseInsensitiveDict.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">mapping: Optional[Mapping[str</em>, <em class="sig-param">Any]] = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#gemd.entity.case_insensitive_dict.CaseInsensitiveDict.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the dictionary with the key/value pairs from other, overwriting existing keys.</p>
+<p>update() accepts either another dictionary object or an iterable of
+key/value pairs (as tuples or other iterables of length two). If keyword
+arguments are specified, the dictionary is then updated with those
+key/value pairs: d.update(red=1, blue=2).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mapping</strong> (<em>Mapping</em>) – The set of (key, value) pairs to store</p></li>
+<li><p><strong>kwargs</strong> (<em>(</em><em>str</em><em>, </em><em>Any</em><em>)</em>) – Alternatively, the set of keyword arguments</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
