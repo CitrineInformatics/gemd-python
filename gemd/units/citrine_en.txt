@@ -146,11 +146,11 @@ sesqui- = 1.5
 
 meter = [length] = m = metre
 second = [time] = s = sec
-ampere = [current] = A = amp
+ampere = [current] = A = amp = Ampere = Ampère
 candela = [luminosity] = cd = candle
 gram = [mass] = g
 mole = [substance] = mol
-kelvin = [temperature]; offset: 0 = K = degK = °K = degree_Kelvin = degreeK  # older names supported for compatibility
+kelvin = [temperature]; offset: 0 = K = Kelvin = degK = °K = degree_Kelvin = degreeK  # older names supported for compatibility
 radian = [] = rad
 neper = [] = Np
 bit = []
@@ -188,14 +188,14 @@ byte = 8 * bit = B = octet
 baud = bit / second = Bd = bps
 
 # Length
-angstrom = 1e-10 * meter = Å = ångström = Å
+angstrom = 1e-10 * meter = Å = ångström = Angstrom = Ångstrom = Å
 micron = micrometer = µ
-fermi = femtometer = fm
+fermi = femtometer = fm = Fermi
 light_year = speed_of_light * julian_year = ly = lightyear
 astronomical_unit = 149597870700 * meter = au  # since Aug 2012
 parsec = 1 / tansec * astronomical_unit = pc
 nautical_mile = 1852 * meter = nmi
-bohr = hbar / (alpha * m_e * c) = a_0 = a0 = bohr_radius = atomic_unit_of_length = a_u_length
+bohr = hbar / (alpha * m_e * c) = a_0 = a0 = Bohr = bohr_radius = atomic_unit_of_length = a_u_length
 x_unit_Cu = K_alpha_Cu_d_220 * d_220 / 1537.4 = Xu_Cu
 x_unit_Mo = K_alpha_Mo_d_220 * d_220 / 707.831 = Xu_Mo
 angstrom_star = K_alpha_W_d_220 * d_220 / 0.2090100 = Å_star
@@ -204,7 +204,7 @@ planck_length = (hbar * gravitational_constant / c ** 3) ** 0.5
 # Mass
 metric_ton = 1e3 * kilogram = _ = tonne
 unified_atomic_mass_unit = atomic_mass_constant = _ = amu
-dalton = atomic_mass_constant = Da
+dalton = atomic_mass_constant = Da = Dalton
 grain = 64.79891 * milligram = gr
 gamma_mass = microgram
 carat = 200 * milligram = _ = karat
@@ -223,7 +223,7 @@ century = 100 * year = _ = centuries
 millennium = 1e3 * year = _ = millennia
 eon = 1e9 * year
 shake = 1e-8 * second
-svedberg = 1e-13 * second
+svedberg = 1e-13 * second = _ = Svedberg
 atomic_unit_of_time = hbar / E_h = a_u_time
 gregorian_year = 365.2425 * day
 sidereal_year = 365.256363004 * day                # approximate, as of J2000 epoch
@@ -237,10 +237,10 @@ synodic_month = 29.530589 * day = _ = lunar_month  # approximate
 planck_time = (hbar * gravitational_constant / c ** 5) ** 0.5
 
 # Temperature
-degree_Celsius = kelvin; offset: 273.15 = °C = celsius = degC = degreeC
-degree_Rankine = 5 / 9 * kelvin; offset: 0 = °R = rankine = degR = degreeR
-degree_Fahrenheit = 5 / 9 * kelvin; offset: 233.15 + 200 / 9 = °F = fahrenheit = degF = degreeF
-degree_Reaumur = 4 / 5 * kelvin; offset: 273.15 = °Re = reaumur = degRe = degreeRe = degree_Réaumur = réaumur
+degree_Celsius = kelvin; offset: 273.15 = °C = celsius = Celsius = degC = degreeC
+degree_Rankine = 5 / 9 * kelvin; offset: 0 = °R = rankine = Rankine = degR = degreeR
+degree_Fahrenheit = 5 / 9 * kelvin; offset: 233.15 + 200 / 9 = °F = fahrenheit = Fahrenheit = degF = degreeF
+degree_Reaumur = 4 / 5 * kelvin; offset: 273.15 = °Re = reaumur = Reaumur = degRe = degreeRe = degree_Réaumur = réaumur = Réaumur
 atomic_unit_of_temperature = E_h / k = a_u_temp
 planck_temperature = (hbar * c ** 5 / gravitational_constant / k ** 2) ** 0.5
 
@@ -248,7 +248,7 @@ planck_temperature = (hbar * c ** 5 / gravitational_constant / k ** 2) ** 0.5
 [area] = [length] ** 2
 are = 100 * meter ** 2
 barn = 1e-28 * meter ** 2 = b
-darcy = centipoise * centimeter ** 2 / (second * atmosphere)
+darcy = centipoise * centimeter ** 2 / (second * atmosphere) = _ = Darcy
 hectare = 100 * are = ha
 
 # Volume
@@ -260,13 +260,13 @@ stere = meter ** 3
 
 # Frequency
 [frequency] = 1 / [time]
-hertz = 1 / second = Hz
+hertz = 1 / second = Hz = Hertz
 revolutions_per_minute = revolution / minute = rpm
 counts_per_second = count / second = cps
 
 # Wavenumber
 [wavenumber] = 1 / [length]
-reciprocal_centimeter = 1 / cm = cm_1 = kayser
+reciprocal_centimeter = 1 / cm = cm_1 = kayser = Kayser
 
 # Velocity
 [velocity] = [length] / [time] = [speed]
@@ -279,11 +279,11 @@ foot_per_second = foot / second = fps
 
 # Acceleration
 [acceleration] = [velocity] / [time]
-galileo = centimeter / second ** 2 = Gal
+galileo = centimeter / second ** 2 = Gal = Galileo
 
 # Force
 [force] = [mass] * [acceleration]
-newton = kilogram * meter / second ** 2 = N
+newton = kilogram * meter / second ** 2 = N = Newton
 dyne = gram * centimeter / second ** 2 = dyn
 force_kilogram = g_0 * kilogram = kgf = kilogram_force = pond
 force_gram = g_0 * gram = gf = gram_force
@@ -292,12 +292,12 @@ atomic_unit_of_force = E_h / a_0 = a_u_force
 
 # Energy
 [energy] = [force] * [length]
-joule = newton * meter = J
+joule = newton * meter = J = Joule
 erg = dyne * centimeter
-watt_hour = watt * hour = Wh = watthour
+watt_hour = watt * hour = Wh = watthour = Whr
 electron_volt = e * volt = eV
-rydberg = h * c * R_inf = Ry
-hartree = 2 * rydberg = E_h = Eh = hartree_energy = atomic_unit_of_energy = a_u_energy
+rydberg = h * c * R_inf = Ry = Rydberg
+hartree = 2 * rydberg = E_h = Eh = Hartree = hartree_energy = atomic_unit_of_energy = a_u_energy
 calorie = 4.184 * joule = cal = thermochemical_calorie = cal_th
 international_calorie = 4.1868 * joule = cal_it = international_steam_table_calorie
 fifteen_degree_calorie = 4.1855 * joule = cal_15
@@ -313,7 +313,7 @@ atmosphere_liter = atmosphere * liter = atm_l
 
 # Power
 [power] = [energy] / [time]
-watt = joule / second = W
+watt = joule / second = W = Watt
 volt_ampere = volt * ampere = VA
 horsepower = 550 * foot * force_pound / second = hp = UK_horsepower = hydraulic_horsepower
 boiler_horsepower = 33475 * Btu / hour                            # unclear which Btu
@@ -333,12 +333,12 @@ water_60F = 0.999001 * kilogram / liter             # approximate
 
 # Pressure
 [pressure] = [force] / [area]
-pascal = newton / meter ** 2 = Pa
+pascal = newton / meter ** 2 = Pa = Pascal
 barye = dyne / centimeter ** 2 = Ba = barie = barad = barrie = baryd
 bar = 1e5 * pascal
 technical_atmosphere = kilogram * g_0 / centimeter ** 2 = at
-torr = atm / 760
-pound_force_per_square_inch = force_pound / inch ** 2 = psi
+torr = atm / 760 = _ = Torr
+pound_force_per_square_inch = force_pound / inch ** 2 = psi = PSI
 kip_per_square_inch = kip / inch ** 2 = ksi
 millimeter_Hg = millimeter * Hg * g_0 = mmHg = mm_Hg = millimeter_Hg_0C
 centimeter_Hg = centimeter * Hg * g_0 = cmHg = cm_Hg = centimeter_Hg_0C
@@ -360,7 +360,7 @@ reyn = psi * second
 
 # Kinematic viscosity
 [kinematic_viscosity] = [area] / [time]
-stokes = centimeter ** 2 / second = St
+stokes = centimeter ** 2 / second = St = Stokes
 
 # Fluidity
 [fluidity] = 1 / [viscosity]
@@ -380,32 +380,32 @@ enzyme_unit = micromole / minute = U = enzymeunit
 
 # Entropy
 [entropy] = [energy] / [temperature]
-clausius = calorie / kelvin = _ = clausius
+clausius = calorie / kelvin = _ = Clausius
 
 # Molar entropy
 [molar_entropy] = [entropy] / [substance]
 entropy_unit = calorie / kelvin / mole = eu
 
 # Radiation
-becquerel = counts_per_second = Bq
-curie = 3.7e10 * becquerel = Ci
-rutherford = 1e6 * becquerel = Rd
-gray = joule / kilogram = Gy
-sievert = joule / kilogram = Sv
+becquerel = counts_per_second = Bq = Becquerel
+curie = 3.7e10 * becquerel = Ci = Curie
+rutherford = 1e6 * becquerel = Rd = Rutherford
+gray = joule / kilogram = Gy = Gray
+sievert = joule / kilogram = Sv = Sievert
 rads = 0.01 * gray
 rem = 0.01 * sievert
-roentgen = 2.58e-4 * coulomb / kilogram = _ = röntgen  # approximate, depends on medium
+roentgen = 2.58e-4 * coulomb / kilogram = _ = Roentgen = röntgen = Röntgen  # approximate, depends on medium
 
 # Heat transimission
 [heat_transmission] = [energy] / [area]
 peak_sun_hour = 1e3 * watt_hour / meter ** 2 = PSH
-langley = thermochemical_calorie / centimeter ** 2 = Ly
+langley = thermochemical_calorie / centimeter ** 2 = Ly = Langley
 
 # Luminance
 [luminance] = [luminosity] / [area]
 nit = candela / meter ** 2
 stilb = candela / centimeter ** 2
-lambert = 1 / π * candela / centimeter ** 2
+lambert = 1 / π * candela / centimeter ** 2 = _ = Lambert
 
 # Luminous flux
 [luminous_flux] = [luminosity]
@@ -420,7 +420,7 @@ lux = lumen / meter ** 2 = lx
 atomic_unit_of_intensity = 0.5 * ε_0 * c * atomic_unit_of_electric_field ** 2 = a_u_intensity
 
 # Current
-biot = 10 * ampere = Bi
+biot = 10 * ampere = Bi = Biot
 abampere = biot = abA
 atomic_unit_of_current = e / atomic_unit_of_time = a_u_current
 mean_international_ampere = mean_international_volt / mean_international_ohm = A_it
@@ -430,14 +430,14 @@ planck_current = (c ** 6 / gravitational_constant / k_C) ** 0.5
 
 # Charge
 [charge] = [current] * [time]
-coulomb = ampere * second = C
+coulomb = ampere * second = C = Coulomb
 abcoulomb = 10 * C = abC
-faraday = e * N_A * mole
+faraday = e * N_A * mole = _ = Faraday
 conventional_coulomb_90 = K_J90 * R_K90 / (K_J * R_K) * coulomb = C_90
 
 # Electric potential
 [electric_potential] = [energy] / [charge]
-volt = joule / coulomb = V
+volt = joule / coulomb = V = Volt
 abvolt = 1e-8 * volt = abV
 mean_international_volt = 1.00034 * volt = V_it  # approximate
 US_international_volt = 1.00033 * volt = V_US    # approximate
@@ -452,7 +452,7 @@ atomic_unit_of_electric_field = e * k_C / a_0 ** 2 = a_u_electric_field
 
 # Resistance
 [resistance] = [electric_potential] / [current]
-ohm = volt / ampere = Ω
+ohm = volt / ampere = Ω = Ohm
 abohm = 1e-9 * ohm = abΩ
 mean_international_ohm = 1.00049 * ohm = Ω_it = ohm_it  # approximate
 US_international_ohm = 1.000495 * ohm = Ω_US = ohm_US   # approximate
@@ -463,7 +463,7 @@ conventional_ohm_90 = R_K / R_K90 * ohm = Ω_90 = ohm_90
 
 # Conductance
 [conductance] = [current] / [electric_potential]
-siemens = ampere / volt = S = mho
+siemens = ampere / volt = S = mho = Siemens
 absiemens = 1e9 * siemens = abS = abmho
 
 # Capacitance
@@ -474,36 +474,36 @@ conventional_farad_90 = R_K90 / R_K * farad = F_90
 
 # Inductance
 [inductance] = [magnetic_flux] / [current]
-henry = weber / ampere = H
+henry = weber / ampere = H = Henry
 abhenry = 1e-9 * henry = abH
 conventional_henry_90 = R_K / R_K90 * henry = H_90
 
 # Magnetic flux
 [magnetic_flux] = [electric_potential] * [time]
-weber = volt * second = Wb
+weber = volt * second = Wb = Weber
 unit_pole = µ_0 * biot * centimeter
 
 # Magnetic field
 [magnetic_field] = [magnetic_flux] / [area]
-tesla = weber / meter ** 2 = T
+tesla = weber / meter ** 2 = T = Tesla
 gamma = 1e-9 * tesla = γ
 
 # Magnetomotive force
 [magnetomotive_force] = [current]
 ampere_turn = ampere = At
 biot_turn = biot
-gilbert = 1 / (4 * π) * biot_turn = _ = gilbert
+gilbert = 1 / (4 * π) * biot_turn = _ = Gilbert
 
 # Magnetic field strength
 [magnetic_field_strength] = [current] / [length]
 
 # Electric dipole moment
 [electric_dipole] = [charge] * [length]
-debye = 1e-9 / ζ * coulomb * angstrom = D  # formally 1 D = 1e-10 Fr*Å, but we generally want to use it outside the Gaussian context
+debye = 1e-9 / ζ * coulomb * angstrom = D = Debye # formally 1 D = 1e-10 Fr*Å, but we generally want to use it outside the Gaussian context
 
 # Electric quadrupole moment
 [electric_quadrupole] = [charge] * [area]
-buckingham = debye * angstrom
+buckingham = debye * angstrom = Buckingham
 
 # Magnetic dipole moment
 [magnetic_dipole] = [current] * [area]
@@ -681,12 +681,12 @@ nuclear_magneton = e * hbar / (2 * m_p) = µ_N = mu_N
 
 # === Gaussian system of units ===
 @group Gaussian
-    franklin = erg ** 0.5 * centimeter ** 0.5 = Fr = statcoulomb = statC = esu
+    franklin = erg ** 0.5 * centimeter ** 0.5 = Fr = Franklin = statcoulomb = statC = esu
     statvolt = erg / franklin = statV
     statampere = franklin / second = statA
-    gauss = dyne / franklin = G
-    maxwell = gauss * centimeter ** 2 = Mx
-    oersted = dyne / maxwell = Oe = ørsted
+    gauss = dyne / franklin = G = Gauss
+    maxwell = gauss * centimeter ** 2 = Mx = Maxwell
+    oersted = dyne / maxwell = Oe = ørsted = Oersted = Ørsted
     statohm = statvolt / statampere = statΩ
     statfarad = franklin / statvolt = statF
     statmho = statampere / statvolt
