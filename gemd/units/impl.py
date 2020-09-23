@@ -60,18 +60,20 @@ def convert_units(value: float, starting_unit: str, final_unit: str) -> float:
     -------
     [float]
         The converted number
+
     """
     return _ureg.Quantity(value, starting_unit).to(final_unit).magnitude
 
 
 def change_definitions_file(filename: str):
     """
-    Change which file is used for units definition
+    Change which file is used for units definition.
 
     Parameters
     ----------
     filename: str
         The file to use
+
     """
     global _ureg
     _ureg = UnitRegistry(filename=filename)
