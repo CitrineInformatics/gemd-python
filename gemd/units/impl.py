@@ -1,13 +1,14 @@
 """Implementation of units."""
 import pint
 import pkg_resources
+from typing import Union
 from pint import UnitRegistry
-from pint.quantity import _Quantity
 from pint.unit import _Unit
 
 
 # use the default unit registry for now
-_ureg = UnitRegistry(filename=pkg_resources.resource_filename("gemd.units", "citrine_en.txt"))
+DEFAULT_FILE = pkg_resources.resource_filename("gemd.units", "citrine_en.txt")
+_ureg = UnitRegistry(filename=DEFAULT_FILE)
 
 
 # alias the error that is thrown when units are incompatible
@@ -16,33 +17,66 @@ IncompatibleUnitsError = pint.errors.DimensionalityError
 UndefinedUnitError = pint.errors.UndefinedUnitError
 
 
-def _unit_to_str(unit):
-    """Helper that pulls a string representation of the unit from a quantity."""
-    if not isinstance(unit, _Quantity):
-        raise TypeError("Expecting a quantity")  # pragma: no cover
-    return str(unit.units)
+def parse_units(units: Union[str, _Unit, None]) -> Union[str, _Unit, None]:
+    """
+    Parse a string or _Unit into a standard string representation of the unit.
 
+    Parameters
+    ----------
+    units: Union[str, _Unit, None]
+        The string or _Unit representation of the object we wish to display
 
-def parse_units(units):
-    """Parse a string or _Unit into a standard string representation of the unit."""
+    Returns
+    -------
+    [Union[str, _Unit, None]]
+        The representation; note that the same type that was passed is returned
+
+    """
     if units is None:
         return None
     elif units == '':
         return 'dimensionless'
     elif isinstance(units, str):
-        return _unit_to_str(_ureg(units))
+        return str(_ureg(units).units)
     elif isinstance(units, _Unit):
         return units
     else:
         raise UndefinedUnitError("Units must be given as a recognized unit string or Units object")
 
 
-def convert_units(value, starting_unit, final_unit):
+def convert_units(value: float, starting_unit: str, final_unit: str) -> float:
     """
     Convert the value from the starting_unit to the final_unit.
 
-    :param value: magnitude to convert (number)
-    :param starting_unit: unit that the magnitude is currently in (str)
-    :param final_unit: unit that the magnitude should be returned in (str)
+    Parameters
+    ----------
+    value: float
+        magnitude to convert
+    starting_unit: str
+        unit that the magnitude is currently in
+    final_unit: str
+        unit that the magnitude should be returned in
+
+    Returns
+    -------
+    [float]
+        The converted number
+
     """
     return _ureg.Quantity(value, starting_unit).to(final_unit).magnitude
+
+
+def change_definitions_file(filename: str = None):
+    """
+    Change which file is used for units definition.
+
+    Parameters
+    ----------
+    filename: str
+        The file to use
+
+    """
+    global _ureg
+    if filename is None:
+        filename = DEFAULT_FILE
+    _ureg = UnitRegistry(filename=filename)
