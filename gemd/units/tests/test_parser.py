@@ -44,7 +44,7 @@ def test_parse_none():
 
 
 @contextmanager
-def change_units(filename):
+def _change_units(filename):
     try:
         change_definitions_file(filename)
         yield
@@ -57,7 +57,8 @@ def test_file_change():
     assert convert_units(1, 'm', 'cm') == 100
     with pytest.raises(UndefinedUnitError):
         assert convert_units(1, 'usd', 'usd') == 1
-    with change_units(filename=pkg_resources.resource_filename("gemd.units", "tests/test_units.txt")):
+    with _change_units(filename=pkg_resources.resource_filename("gemd.units",
+                                                                "tests/test_units.txt")):
         with pytest.raises(UndefinedUnitError):
             assert convert_units(1, 'm', 'cm') == 100
         assert convert_units(1, 'usd', 'usd') == 1
