@@ -7,7 +7,8 @@ from pint.unit import _Unit
 
 
 # use the default unit registry for now
-_ureg = UnitRegistry(filename=pkg_resources.resource_filename("gemd.units", "citrine_en.txt"))
+DEFAULT_FILE = pkg_resources.resource_filename("gemd.units", "citrine_en.txt")
+_ureg = UnitRegistry(filename=DEFAULT_FILE)
 
 
 # alias the error that is thrown when units are incompatible
@@ -65,7 +66,7 @@ def convert_units(value: float, starting_unit: str, final_unit: str) -> float:
     return _ureg.Quantity(value, starting_unit).to(final_unit).magnitude
 
 
-def change_definitions_file(filename: str):
+def change_definitions_file(filename: str = None):
     """
     Change which file is used for units definition.
 
@@ -76,4 +77,6 @@ def change_definitions_file(filename: str):
 
     """
     global _ureg
+    if filename is None:
+        filename = DEFAULT_FILE
     _ureg = UnitRegistry(filename=filename)

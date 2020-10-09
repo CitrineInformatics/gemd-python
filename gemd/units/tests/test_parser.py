@@ -1,5 +1,6 @@
 import pytest
 import pkg_resources
+from contextlib import contextmanager
 from pint import UnitRegistry
 from gemd.units import parse_units, convert_units, change_definitions_file, UndefinedUnitError
 
@@ -42,17 +43,22 @@ def test_parse_none():
     assert parse_units(None) is None
 
 
+@contextmanager
+def change_units(filename):
+    try:
+        change_definitions_file(filename)
+        yield
+    finally:
+        change_definitions_file()
+
+
 def test_file_change():
     """Test that swapping units files works."""
     assert convert_units(1, 'm', 'cm') == 100
     with pytest.raises(UndefinedUnitError):
         assert convert_units(1, 'usd', 'usd') == 1
-    change_definitions_file(
-        filename=pkg_resources.resource_filename("gemd.units", "tests/test_units.txt")
-    )
-    with pytest.raises(UndefinedUnitError):
-        assert convert_units(1, 'm', 'cm') == 100
-    assert convert_units(1, 'usd', 'usd') == 1
-    change_definitions_file(
-        filename=pkg_resources.resource_filename("gemd.units", "citrine_en.txt")
-    )
+    with change_units(filename=pkg_resources.resource_filename("gemd.units", "tests/test_units.txt")):
+        with pytest.raises(UndefinedUnitError):
+            assert convert_units(1, 'm', 'cm') == 100
+        assert convert_units(1, 'usd', 'usd') == 1
+    assert convert_units(1, 'm', 'cm') == 100  # And verify we're back to normal
