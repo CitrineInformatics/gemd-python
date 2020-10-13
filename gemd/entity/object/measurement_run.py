@@ -1,13 +1,20 @@
+from gemd.entity.attribute import Property, Condition, Parameter
 from gemd.entity.object.base_object import BaseObject
+from gemd.entity.object.has_spec import HasSpec
 from gemd.entity.object.has_conditions import HasConditions
 from gemd.entity.object.has_properties import HasProperties
 from gemd.entity.object.has_parameters import HasParameters
 from gemd.entity.object.has_source import HasSource
+from gemd.entity.source.performed_source import PerformedSource
+from gemd.entity.link_by_uid import LinkByUID
+from gemd.entity.file_link import FileLink
 from gemd.entity.setters import validate_list
 from gemd.entity.valid_list import ValidList
 
+from typing import Union, Optional, Type, Collection, Mapping
 
-class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters, HasSource):
+
+class MeasurementRun(BaseObject, HasSpec, HasConditions, HasProperties, HasParameters, HasSource):
     """
     A measurement run.
 
@@ -49,11 +56,21 @@ class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters, Ha
 
     typ = "measurement_run"
 
-    def __init__(self, name, *, spec=None, material=None,
-                 properties=None, conditions=None, parameters=None,
-                 uids=None, tags=None, notes=None, file_links=None, source=None):
+    def __init__(self, name: str, *,
+                 spec: Union[BaseObject, LinkByUID, None] = None,
+                 material: Union[BaseObject, LinkByUID, None] = None,
+                 properties: Optional[Property] = None,
+                 conditions: Optional[Condition] = None,
+                 parameters: Optional[Parameter] = None,
+                 uids: Optional[Mapping[str, str]] = None,
+                 tags: Union[Collection[str], str, None] = None,
+                 notes: Optional[str] = None,
+                 file_links: Optional[Collection[FileLink]] = None,
+                 source: Optional[PerformedSource] = None
+                 ):
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)
+        HasSpec.__init__(self, spec)
         HasProperties.__init__(self, properties)
         HasConditions.__init__(self, conditions)
         HasParameters.__init__(self, parameters)
@@ -61,8 +78,6 @@ class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters, Ha
 
         self._material = None
         self.material = material
-        self._spec = None
-        self.spec = spec
 
     @property
     def material(self):
@@ -88,27 +103,8 @@ class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters, Ha
         else:
             raise TypeError("material must be a MaterialRun or LinkByUID: {}".format(value))
 
-    @property
-    def spec(self):
-        """Get the measurement spec."""
-        return self._spec
-
-    @spec.setter
-    def spec(self, spec):
-        from gemd.entity.object.measurement_spec import MeasurementSpec
-        from gemd.entity.link_by_uid import LinkByUID
-        if spec is None:
-            self._spec = None
-        elif isinstance(spec, (MeasurementSpec, LinkByUID)):
-            self._spec = spec
-        else:
-            raise TypeError("spec must be a MeasurementSpec or LinkByUID: {}".format(spec))
-
-    @property
-    def template(self):
-        """Get the template of the spec, if applicable."""
-        from gemd.entity.object.measurement_spec import MeasurementSpec
-        if isinstance(self.spec, MeasurementSpec):
-            return self.spec.template
-        else:
-            return None
+    @staticmethod
+    def _spec_type() -> Type:
+        """Get the expected type of spec for this object (property of child)."""
+        from gemd.entity.object import MeasurementSpec
+        return MeasurementSpec
