@@ -36,7 +36,8 @@ class BaseAttribute(DictSerializable):
 
     def __init__(self, name: str, *,
                  template: Union[AttributeTemplate, LinkByUID, None] = None,
-                 origin: Union[Origin, str] = "unknown", value: Optional[BaseValue] = None,
+                 origin: Union[Origin, str] = Origin.UNKNOWN,
+                 value: Optional[BaseValue] = None,
                  notes: str = None,
                  file_links: Union[Collection[FileLink], FileLink, None] = None):
         self.name = name
@@ -93,7 +94,7 @@ class BaseAttribute(DictSerializable):
         return self._origin
 
     @origin.setter
-    def origin(self, origin: Union[Origin, str, None]):
+    def origin(self, origin: Union[Origin, str]):
         if origin is None:
             raise ValueError("origin must be specified (but may be `unknown`)")
         self._origin = Origin.get_value(origin)
