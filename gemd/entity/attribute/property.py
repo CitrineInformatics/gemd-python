@@ -1,4 +1,7 @@
 from gemd.entity.attribute.base_attribute import BaseAttribute
+from gemd.entity.template import PropertyTemplate
+
+from typing import Type
 
 
 class Property(BaseAttribute):
@@ -11,3 +14,7 @@ class Property(BaseAttribute):
     """
 
     typ = "property"
+
+    @staticmethod
+    def _template_type() -> Type:
+        return PropertyTemplate

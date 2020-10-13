@@ -1,4 +1,7 @@
 from gemd.entity.attribute.base_attribute import BaseAttribute
+from gemd.entity.template import ConditionTemplate
+
+from typing import Type
 
 
 class Condition(BaseAttribute):
@@ -11,3 +14,7 @@ class Condition(BaseAttribute):
     """
 
     typ = "condition"
+
+    @staticmethod
+    def _template_type() -> Type:
+        return ConditionTemplate
