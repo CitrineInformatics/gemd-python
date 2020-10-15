@@ -1,5 +1,6 @@
 """A normally distributed real value."""
 from gemd.entity.value.continuous_value import ContinuousValue
+from gemd.entity.bounds import RealBounds
 
 
 class NormalReal(ContinuousValue):
@@ -24,3 +25,18 @@ class NormalReal(ContinuousValue):
         ContinuousValue.__init__(self, units)
         self.mean = mean
         self.std = std
+
+    def to_bounds(self) -> RealBounds:
+        """
+        Return the smallest bounds object that is consistent with the Value.
+
+        Returns
+        -------
+        RealBounds
+            The minimally consistent
+            :class:`bounds <gemd.entity.bounds.real_bounds.RealBounds>`.
+
+        """
+        return RealBounds(lower_bound=self.mean,
+                          upper_bound=self.mean,
+                          default_units=self.units)

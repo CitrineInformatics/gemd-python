@@ -3,6 +3,7 @@ from toolz import keymap
 
 from gemd.entity.setters import validate_str
 from gemd.entity.value.categorical_value import CategoricalValue
+from gemd.entity.bounds import CategoricalBounds
 
 
 class DiscreteCategorical(CategoricalValue):
@@ -45,3 +46,16 @@ class DiscreteCategorical(CategoricalValue):
             self._probabilities = keymap(validate_str, probabilities)
         else:
             raise TypeError("probabilities must be dict or single value")
+
+    def to_bounds(self) -> CategoricalBounds:
+        """
+        Return the smallest bounds object that is consistent with the Value.
+
+        Returns
+        -------
+        BaseBounds
+            The minimally consistent
+            :class:`bounds <gemd.entity.bounds.categorical_bounds.CategoricalBounds>`.
+
+        """
+        return CategoricalBounds(categories=set(self.probabilities))

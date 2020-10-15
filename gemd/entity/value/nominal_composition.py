@@ -1,5 +1,6 @@
 """A nominal composition value."""
 from gemd.entity.value.composition_value import CompositionValue
+from gemd.entity.bounds import CompositionBounds
 
 
 class NominalComposition(CompositionValue):
@@ -42,3 +43,16 @@ class NominalComposition(CompositionValue):
             self._quantities = dict(quantities)
         else:
             raise TypeError("quantities must be dict or List of two-item lists or None")
+
+    def to_bounds(self) -> CompositionBounds:
+        """
+        Return the smallest bounds object that is consistent with the Value.
+
+        Returns
+        -------
+        BaseBounds
+            The minimally consistent
+            :class:`bounds <gemd.entity.bounds.categorical_bounds.CategoricalBounds>`.
+
+        """
+        return CompositionBounds(components=set(self.quantities))

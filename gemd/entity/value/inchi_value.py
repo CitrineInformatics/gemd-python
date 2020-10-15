@@ -1,5 +1,6 @@
 """An empirical chemical formaula."""
 from gemd.entity.value.molecular_value import MolecularValue
+from gemd.entity.bounds import MolecularStructureBounds
 
 
 class InChI(MolecularValue):
@@ -32,3 +33,17 @@ class InChI(MolecularValue):
             self._inchi = value
         else:
             raise TypeError("InChI must be given as a string; got {}".format(type(value)))
+
+    def to_bounds(self) -> MolecularStructureBounds:
+        """
+        Return the smallest bounds object that is consistent with the Value.
+
+        Returns
+        -------
+        MolecularStructureBounds
+            The minimally consistent
+            :class:`bounds
+            <gemd.entity.bounds.molecular_structure_bounds.MolecularStructureBounds>`.
+
+        """
+        return MolecularStructureBounds()

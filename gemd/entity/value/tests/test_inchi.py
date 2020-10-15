@@ -3,6 +3,7 @@ import pytest
 
 from gemd.json import dumps, loads
 from gemd.entity.value.inchi_value import InChI
+from gemd.entity.bounds import MolecularStructureBounds
 
 
 def test_json():
@@ -29,3 +30,10 @@ def test_invalid_inchi():
     """
     with pytest.raises(TypeError):
         InChI({"Al": 2, "O": 3})
+
+
+def test_contains():
+    """Test that bounds know if a Value is contained within it."""
+    bounds = MolecularStructureBounds()
+    inchi = InChI("InChI=1/C8H8O3/c1-11-8-4-6(5-9)2-3-7(8)10/h2-5,10H,1H3")
+    assert bounds.contains(inchi.to_bounds())

@@ -2,6 +2,7 @@
 import pytest
 
 from gemd.entity.value.nominal_composition import NominalComposition
+from gemd.entity.bounds import CompositionBounds
 
 
 def test_quantities_are_dict():
@@ -18,3 +19,10 @@ def test_invalid_assignment():
     """Test that invalid assignment produces a TypeError."""
     with pytest.raises(TypeError):
         NominalComposition(("a quantity", 55))
+
+
+def test_contains():
+    """Test that bounds know if a Value is contained within it."""
+    bounds = CompositionBounds({"acetone", "methanol"})
+    assert bounds.contains(NominalComposition(dict(acetone=0.25, methanol=0.75)).to_bounds())
+    assert not bounds.contains(NominalComposition(dict(acetone=0.25, water=0.75)).to_bounds())

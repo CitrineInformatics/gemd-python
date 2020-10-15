@@ -1,5 +1,6 @@
 """A uniformly distributed real value."""
 from gemd.entity.value.continuous_value import ContinuousValue
+from gemd.entity.bounds import RealBounds
 
 
 class UniformReal(ContinuousValue):
@@ -32,3 +33,18 @@ class UniformReal(ContinuousValue):
         self.upper_bound = upper_bound
         assert lower_bound <= upper_bound, \
             "the lower bound must be <= the upper bound"
+
+    def to_bounds(self) -> RealBounds:
+        """
+        Return the smallest bounds object that is consistent with the Value.
+
+        Returns
+        -------
+        RealBounds
+            The minimally consistent
+            :class:`bounds <gemd.entity.bounds.real_bounds.RealBounds>`.
+
+        """
+        return RealBounds(lower_bound=self.lower_bound,
+                          upper_bound=self.upper_bound,
+                          default_units=self.units)

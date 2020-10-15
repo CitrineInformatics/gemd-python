@@ -2,6 +2,7 @@
 import pytest
 
 from gemd.entity.value.discrete_categorical import DiscreteCategorical
+from gemd.entity.bounds import CategoricalBounds
 
 
 def test_probabilities_setter():
@@ -19,3 +20,10 @@ def test_invalid_assignment():
         DiscreteCategorical(probabilities=["solid", "liquid"])
     with pytest.raises(ValueError):
         DiscreteCategorical(probabilities={"solid": 0.9, "liquid": 0.2})
+
+
+def test_contains():
+    """Test that bounds know if a Value is contained within it."""
+    bounds = CategoricalBounds({"solid", "liquid"})
+    assert bounds.contains(DiscreteCategorical({"solid": 0.9, "liquid": 0.1}).to_bounds())
+    assert not bounds.contains(DiscreteCategorical({"solid": 0.9, "gas": 0.1}).to_bounds())
