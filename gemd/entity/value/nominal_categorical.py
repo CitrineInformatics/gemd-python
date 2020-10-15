@@ -22,12 +22,12 @@ class NominalCategorical(CategoricalValue):
         self.category = category
 
     @property
-    def category(self):
+    def category(self) -> str:
         """Get the category."""
         return self._category
 
     @category.setter
-    def category(self, category):
+    def category(self, category: str):
         if category is None:
             self._category = None
         else:

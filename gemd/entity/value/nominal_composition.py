@@ -29,12 +29,12 @@ class NominalComposition(CompositionValue):
         self.quantities = quantities
 
     @property
-    def quantities(self):
+    def quantities(self) -> dict:
         """Get a map from the components to their quantities."""
         return self._quantities
 
     @quantities.setter
-    def quantities(self, quantities):
+    def quantities(self, quantities: dict):
         if quantities is None:
             self._quantities = {}
         elif isinstance(quantities, dict):

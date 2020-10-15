@@ -30,12 +30,12 @@ class DiscreteCategorical(CategoricalValue):
         self.probabilities = probabilities
 
     @property
-    def probabilities(self):
+    def probabilities(self) -> dict:
         """Get the map from categories to probabilities."""
         return self._probabilities
 
     @probabilities.setter
-    def probabilities(self, probabilities):
+    def probabilities(self, probabilities: dict):
         if probabilities is None:
             self._probabilities = None
         elif isinstance(probabilities, str):

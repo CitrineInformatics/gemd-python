@@ -33,7 +33,7 @@ class EmpiricalFormula(CompositionValue):
         self.formula = formula
 
     @property
-    def formula(self):
+    def formula(self) -> str:
         """Get the formula as a string."""
         return self._formula
 
@@ -43,7 +43,7 @@ class EmpiricalFormula(CompositionValue):
         return set(re.findall('[A-Z][a-z]*', value))
 
     @formula.setter
-    def formula(self, value):
+    def formula(self, value: str):
         if value is None:
             self._formula = None
         elif isinstance(value, str):
@@ -69,6 +69,6 @@ class EmpiricalFormula(CompositionValue):
         return CompositionBounds(components=EmpiricalFormula._elements(self.formula))
 
     @staticmethod
-    def all_elements():
+    def all_elements() -> set:
         """The set of all elements in the periodic table."""
         return _all_elements

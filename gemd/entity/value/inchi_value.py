@@ -21,12 +21,12 @@ class InChI(MolecularValue):
         self.inchi = inchi
 
     @property
-    def inchi(self):
+    def inchi(self) -> str:
         """Get the formula as a string."""
         return self._inchi
 
     @inchi.setter
-    def inchi(self, value):
+    def inchi(self, value: str):
         if value is None:
             self._inchi = None
         elif isinstance(value, str):

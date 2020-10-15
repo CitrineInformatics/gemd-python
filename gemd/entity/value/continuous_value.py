@@ -28,12 +28,12 @@ class ContinuousValue(BaseValue):
         self.units = units
 
     @property
-    def units(self):
+    def units(self) -> str:
         """Get the units of the value."""
         return self._units
 
     @units.setter
-    def units(self, units):
+    def units(self, units: str):
         if units is None:
             raise ValueError("Continuous values must have units. "
                              "Use an empty string for a dimensionless quantity.")

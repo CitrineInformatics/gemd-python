@@ -22,12 +22,12 @@ class Smiles(MolecularValue):
         self.smiles = smiles
 
     @property
-    def smiles(self):
+    def smiles(self) -> str:
         """Get the formula as a string."""
         return self._smiles
 
     @smiles.setter
-    def smiles(self, value):
+    def smiles(self, value: str):
         if value is None:
             self._smiles = None
         elif isinstance(value, str):
