@@ -28,4 +28,3 @@ class BaseValue(DictSerializable):
             :class:`bounds <gemd.entity.bounds.base_bounds.BaseBounds>`.
 
         """
-        pass

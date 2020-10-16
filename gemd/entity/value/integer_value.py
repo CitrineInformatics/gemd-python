@@ -20,4 +20,3 @@ class IntegerValue(BaseValue):
             :class:`bounds <gemd.entity.bounds.integer_bounds.IntegerBounds>`.
 
         """
-        pass

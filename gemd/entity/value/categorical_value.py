@@ -24,4 +24,3 @@ class CategoricalValue(BaseValue):
             :class:`bounds <gemd.entity.bounds.categorical_bounds.CategoricalBounds>`.
 
         """
-        pass

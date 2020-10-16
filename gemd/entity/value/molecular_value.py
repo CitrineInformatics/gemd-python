@@ -21,4 +21,3 @@ class MolecularValue(BaseValue):
             <gemd.entity.bounds.molecular_structure_bounds.MolecularStructureBounds>`.
 
         """
-        pass

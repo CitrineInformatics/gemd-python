@@ -51,4 +51,3 @@ class ContinuousValue(BaseValue):
             :class:`bounds <gemd.entity.bounds.real_bounds.RealBounds>`.
 
         """
-        pass

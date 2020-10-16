@@ -20,4 +20,3 @@ class CompositionValue(BaseValue):
             :class:`bounds <gemd.entity.bounds.composition_bounds.CompositionBounds>`.
 
         """
-        pass
