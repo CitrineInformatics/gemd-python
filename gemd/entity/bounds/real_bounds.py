@@ -2,6 +2,8 @@
 from gemd.entity.bounds.base_bounds import BaseBounds
 import gemd.units as units
 
+from typing import Union
+
 
 class RealBounds(BaseBounds):
     """
@@ -49,26 +51,32 @@ class RealBounds(BaseBounds):
                              "Use an empty string for a dimensionless quantity.")
         self._default_units = units.parse_units(default_units)
 
-    def contains(self, bounds: BaseBounds) -> bool:
+    def contains(self, bounds: Union[BaseBounds, "BaseValue"]) -> bool:
         """
-        Check if another bounds is a subset of this range.
+        Check if another bounds or value object is a subset of this range.
 
-        The other bounds must also be a RealBounds and its lower and upper bound must *both*
-        be within the range of this bounds object.
+        The other object must also be Real and its lower and upper bound must *both*
+        be within the range of this bounds object.  Values that are unbounded
+        distributions (e.g., Gaussian) are generally assumed to be truncated and
+        logic around permissibility is delegated to the Value implementation.
 
         Parameters
         ----------
-        bounds: BaseBounds
-            Other bounds object to check.
+        bounds: Union[BaseBounds, BaseValue]
+            Other bounds or value object to check.
 
         Returns
         -------
         bool
-            True if the other bounds is contained by this bounds.
+            True if the other object is contained by this bounds.
 
         """
+        from gemd.entity.value.base_value import BaseValue
+
         if not super().contains(bounds):
             return False
+        if isinstance(bounds, BaseValue):
+            bounds = bounds.to_bounds()
         if not isinstance(bounds, RealBounds):
             return False
 

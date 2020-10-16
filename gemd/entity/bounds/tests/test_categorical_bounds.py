@@ -33,6 +33,11 @@ def test_contains():
     with pytest.raises(TypeError):
         bounds.contains({"spam", "eggs"})
 
+    from gemd.entity.value import NominalCategorical
+
+    assert bounds.contains(NominalCategorical("spam"))
+    assert not bounds.contains(NominalCategorical("foo"))
+
 
 def test_json():
     """Test that serialization works (categories is encoded as a list)."""
