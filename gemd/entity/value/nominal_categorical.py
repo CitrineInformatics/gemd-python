@@ -33,7 +33,7 @@ class NominalCategorical(CategoricalValue):
         else:
             self._category = validate_str(category)
 
-    def to_bounds(self) -> CategoricalBounds:
+    def _to_bounds(self) -> CategoricalBounds:
         """
         Return the smallest bounds object that is consistent with the Value.
 

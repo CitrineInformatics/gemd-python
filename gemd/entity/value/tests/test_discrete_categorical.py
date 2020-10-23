@@ -25,5 +25,5 @@ def test_invalid_assignment():
 def test_contains():
     """Test that bounds know if a Value is contained within it."""
     bounds = CategoricalBounds({"solid", "liquid"})
-    assert bounds.contains(DiscreteCategorical({"solid": 0.9, "liquid": 0.1}).to_bounds())
-    assert not bounds.contains(DiscreteCategorical({"solid": 0.9, "gas": 0.1}).to_bounds())
+    assert bounds.contains(DiscreteCategorical({"solid": 0.9, "liquid": 0.1})._to_bounds())
+    assert not bounds.contains(DiscreteCategorical({"solid": 0.9, "gas": 0.1})._to_bounds())

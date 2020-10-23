@@ -44,7 +44,7 @@ class NominalComposition(CompositionValue):
         else:
             raise TypeError("quantities must be dict or List of two-item lists or None")
 
-    def to_bounds(self) -> CompositionBounds:
+    def _to_bounds(self) -> CompositionBounds:
         """
         Return the smallest bounds object that is consistent with the Value.
 

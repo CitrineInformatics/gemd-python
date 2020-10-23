@@ -62,7 +62,7 @@ class UniformInteger(IntegerValue):
                                                                       self.lower_bound))
         self._upper_bound = int(upper_bound)
 
-    def to_bounds(self) -> IntegerBounds:
+    def _to_bounds(self) -> IntegerBounds:
         """
         Return the smallest bounds object that is consistent with the Value.
 

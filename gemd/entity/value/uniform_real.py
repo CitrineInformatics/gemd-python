@@ -34,7 +34,7 @@ class UniformReal(ContinuousValue):
         assert lower_bound <= upper_bound, \
             "the lower bound must be <= the upper bound"
 
-    def to_bounds(self) -> RealBounds:
+    def _to_bounds(self) -> RealBounds:
         """
         Return the smallest bounds object that is consistent with the Value.
 

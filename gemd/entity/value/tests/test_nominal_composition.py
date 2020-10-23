@@ -24,5 +24,5 @@ def test_invalid_assignment():
 def test_contains():
     """Test that bounds know if a Value is contained within it."""
     bounds = CompositionBounds({"acetone", "methanol"})
-    assert bounds.contains(NominalComposition(dict(acetone=0.25, methanol=0.75)).to_bounds())
-    assert not bounds.contains(NominalComposition(dict(acetone=0.25, water=0.75)).to_bounds())
+    assert bounds.contains(NominalComposition(dict(acetone=0.25, methanol=0.75))._to_bounds())
+    assert not bounds.contains(NominalComposition(dict(acetone=0.25, water=0.75))._to_bounds())

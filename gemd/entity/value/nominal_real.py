@@ -25,7 +25,7 @@ class NominalReal(ContinuousValue):
             "nominal value must be an int or float"
         self.nominal = float(nominal)
 
-    def to_bounds(self) -> RealBounds:
+    def _to_bounds(self) -> RealBounds:
         """
         Return the smallest bounds object that is consistent with the Value.
 

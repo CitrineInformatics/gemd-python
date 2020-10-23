@@ -47,7 +47,7 @@ class DiscreteCategorical(CategoricalValue):
         else:
             raise TypeError("probabilities must be dict or single value")
 
-    def to_bounds(self) -> CategoricalBounds:
+    def _to_bounds(self) -> CategoricalBounds:
         """
         Return the smallest bounds object that is consistent with the Value.
 

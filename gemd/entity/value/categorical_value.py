@@ -13,7 +13,7 @@ class CategoricalValue(BaseValue):
     """
 
     @abstractmethod
-    def to_bounds(self) -> CategoricalBounds:
+    def _to_bounds(self) -> CategoricalBounds:
         """
         Return the smallest bounds object that is consistent with the Value.
 

@@ -26,7 +26,7 @@ class NormalReal(ContinuousValue):
         self.mean = mean
         self.std = std
 
-    def to_bounds(self) -> RealBounds:
+    def _to_bounds(self) -> RealBounds:
         """
         Return the smallest bounds object that is consistent with the Value.
 

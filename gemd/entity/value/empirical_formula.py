@@ -55,7 +55,7 @@ class EmpiricalFormula(CompositionValue):
         else:
             raise TypeError("Formula must be given as a string; got {}".format(type(value)))
 
-    def to_bounds(self) -> CompositionBounds:
+    def _to_bounds(self) -> CompositionBounds:
         """
         Return the smallest bounds object that is consistent with the Value.
 

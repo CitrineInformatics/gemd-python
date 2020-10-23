@@ -36,4 +36,4 @@ def test_contains():
     """Test that bounds know if a Value is contained within it."""
     bounds = MolecularStructureBounds()
     smiles = Smiles("c1(C=O)cc(OC)c(O)cc1")
-    assert bounds.contains(smiles.to_bounds())
+    assert bounds.contains(smiles._to_bounds())

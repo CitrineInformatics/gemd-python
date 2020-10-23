@@ -34,7 +34,7 @@ class NominalInteger(IntegerValue):
 
         self._nominal = int(nominal)
 
-    def to_bounds(self) -> IntegerBounds:
+    def _to_bounds(self) -> IntegerBounds:
         """
         Return the smallest bounds object that is consistent with the Value.
 

@@ -40,7 +40,7 @@ class ContinuousValue(BaseValue):
         self._units = parse_units(units)
 
     @abstractmethod
-    def to_bounds(self) -> RealBounds:
+    def _to_bounds(self) -> RealBounds:
         """
         Return the smallest bounds object that is consistent with the Value.
 

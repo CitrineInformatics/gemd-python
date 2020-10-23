@@ -28,5 +28,5 @@ def test_bounds_are_integers():
 def test_contains():
     """Test that bounds know if a Value is contained within it."""
     bounds = IntegerBounds(1, 3)
-    assert bounds.contains(UniformInteger(1, 2).to_bounds())
-    assert not bounds.contains(UniformInteger(3, 5).to_bounds())
+    assert bounds.contains(UniformInteger(1, 2)._to_bounds())
+    assert not bounds.contains(UniformInteger(3, 5)._to_bounds())

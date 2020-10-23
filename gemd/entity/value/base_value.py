@@ -17,7 +17,7 @@ class BaseValue(DictSerializable):
     typ = "value"
 
     @abstractmethod
-    def to_bounds(self) -> BaseBounds:
+    def _to_bounds(self) -> BaseBounds:
         """
         Return the smallest bounds object that is consistent with the Value.
 

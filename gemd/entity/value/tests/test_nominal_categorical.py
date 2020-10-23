@@ -15,5 +15,5 @@ def test_category_setter():
 def test_contains():
     """Test that bounds know if a Value is contained within it."""
     bounds = CategoricalBounds({"solid", "liquid"})
-    assert bounds.contains(NominalCategorical("solid").to_bounds())
-    assert not bounds.contains(NominalCategorical("gas").to_bounds())
+    assert bounds.contains(NominalCategorical("solid")._to_bounds())
+    assert not bounds.contains(NominalCategorical("gas")._to_bounds())

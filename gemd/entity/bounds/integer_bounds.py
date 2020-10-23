@@ -55,7 +55,7 @@ class IntegerBounds(BaseBounds):
         if not super().contains(bounds):
             return False
         if isinstance(bounds, BaseValue):
-            bounds = bounds.to_bounds()
+            bounds = bounds._to_bounds()
         if not isinstance(bounds, IntegerBounds):
             return False
 

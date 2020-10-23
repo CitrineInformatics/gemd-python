@@ -9,7 +9,7 @@ class CompositionValue(BaseValue):
     """Base class for composition values."""
 
     @abstractmethod
-    def to_bounds(self) -> CompositionBounds:
+    def _to_bounds(self) -> CompositionBounds:
         """
         Return the smallest bounds object that is consistent with the Value.
 

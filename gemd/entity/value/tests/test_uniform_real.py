@@ -28,6 +28,6 @@ def test_equality():
 def test_contains():
     """Test that bounds know if a Value is contained within it."""
     bounds = RealBounds(1, 3, 'm')
-    assert bounds.contains(UniformReal(100, 200, 'cm').to_bounds())
-    assert not bounds.contains(UniformReal(3, 5, 'm').to_bounds())
-    assert not bounds.contains(UniformReal(1, 3, '').to_bounds())
+    assert bounds.contains(UniformReal(100, 200, 'cm')._to_bounds())
+    assert not bounds.contains(UniformReal(3, 5, 'm')._to_bounds())
+    assert not bounds.contains(UniformReal(1, 3, '')._to_bounds())

@@ -9,7 +9,7 @@ class IntegerValue(BaseValue):
     """A base class for values that correspond to a distribution over the integers."""
 
     @abstractmethod
-    def to_bounds(self) -> IntegerBounds:
+    def _to_bounds(self) -> IntegerBounds:
         """
         Return the smallest bounds object that is consistent with the Value.
 
