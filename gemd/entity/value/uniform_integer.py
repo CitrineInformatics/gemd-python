@@ -1,5 +1,6 @@
 """A uniformly distributed integer value."""
 from gemd.entity.value.integer_value import IntegerValue
+from gemd.entity.bounds import IntegerBounds
 
 
 class UniformInteger(IntegerValue):
@@ -60,3 +61,16 @@ class UniformInteger(IntegerValue):
                 "upper_bound ({}) must be >= lower_bound ({})".format(upper_bound,
                                                                       self.lower_bound))
         self._upper_bound = int(upper_bound)
+
+    def _to_bounds(self) -> IntegerBounds:
+        """
+        Return the smallest bounds object that is consistent with the Value.
+
+        Returns
+        -------
+        IntegerBounds
+            The minimally consistent
+            :class:`bounds <gemd.entity.bounds.integer_bounds.IntegerBounds>`.
+
+        """
+        return IntegerBounds(lower_bound=self.lower_bound, upper_bound=self.upper_bound)

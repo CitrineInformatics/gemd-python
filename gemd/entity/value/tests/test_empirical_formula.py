@@ -3,6 +3,7 @@ import pytest
 
 from gemd.json import dumps, loads
 from gemd.entity.value.empirical_formula import EmpiricalFormula
+from gemd.entity.bounds import CompositionBounds
 
 
 def test_all_elements():
@@ -32,3 +33,12 @@ def test_invalid_formula():
     """Check that an invalid formula throws a TypeError."""
     with pytest.raises(TypeError):
         EmpiricalFormula(formula={"Al": 2, "O": 3})
+    with pytest.raises(ValueError):
+        EmpiricalFormula(formula="WoRdS")
+
+
+def test_contains():
+    """Test that bounds know if a Value is contained within it."""
+    bounds = CompositionBounds({"C", "H", "O", "N"})
+    assert bounds.contains(EmpiricalFormula('C2H5OH')._to_bounds())
+    assert not bounds.contains(EmpiricalFormula('NaCl')._to_bounds())

@@ -1,5 +1,6 @@
 """A nominal integer value."""
 from gemd.entity.value.integer_value import IntegerValue
+from gemd.entity.bounds import IntegerBounds
 
 
 class NominalInteger(IntegerValue):
@@ -32,3 +33,16 @@ class NominalInteger(IntegerValue):
             raise TypeError("nominal must be an int; got an {}({})".format(type(nominal), nominal))
 
         self._nominal = int(nominal)
+
+    def _to_bounds(self) -> IntegerBounds:
+        """
+        Return the smallest bounds object that is consistent with the Value.
+
+        Returns
+        -------
+        IntegerBounds
+            The minimally consistent
+            :class:`bounds <gemd.entity.bounds.integer_bounds.IntegerBounds>`.
+
+        """
+        return IntegerBounds(lower_bound=self.nominal, upper_bound=self.nominal)

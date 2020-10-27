@@ -1,5 +1,8 @@
 """Base class for all values."""
 from gemd.entity.dict_serializable import DictSerializable
+from gemd.entity.bounds.base_bounds import BaseBounds
+
+from abc import abstractmethod
 
 
 class BaseValue(DictSerializable):
@@ -12,3 +15,16 @@ class BaseValue(DictSerializable):
     """
 
     typ = "value"
+
+    @abstractmethod
+    def _to_bounds(self) -> BaseBounds:
+        """
+        Return the smallest bounds object that is consistent with the Value.
+
+        Returns
+        -------
+        BaseBounds
+            The minimally consistent
+            :class:`bounds <gemd.entity.bounds.base_bounds.BaseBounds>`.
+
+        """
