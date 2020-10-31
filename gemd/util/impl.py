@@ -209,30 +209,21 @@ def recursive_flatmap(obj, func, seen=None, unidirectional=True):
             return res
         else:
             seen.add(obj)
+    if isinstance(obj, BaseEntity):
+        res.extend(func(obj))
 
     if isinstance(obj, (list, tuple)):
         for i, x in enumerate(obj):
-            if isinstance(x, BaseEntity):
-                res.extend(recursive_flatmap(x, func, seen, unidirectional))
-                res.extend(func(x))
-            else:
-                res.extend(recursive_flatmap(x, func, seen, unidirectional))
+            res.extend(recursive_flatmap(x, func, seen, unidirectional))
     elif isinstance(obj, dict):
         for x in concatv(obj.keys(), obj.values()):
-            if isinstance(x, BaseEntity):
-                res.extend(recursive_flatmap(x, func, seen, unidirectional))
-                res.extend(func(x))
-            else:
-                res.extend(recursive_flatmap(x, func, seen, unidirectional))
+            res.extend(recursive_flatmap(x, func, seen, unidirectional))
     elif isinstance(obj, DictSerializable):
         for k, x in sorted(obj.__dict__.items()):
             if unidirectional and isinstance(obj, BaseEntity) and k in obj.skip:
                 continue
-            if isinstance(x, BaseEntity):
-                res.extend(recursive_flatmap(x, func, seen, unidirectional))
-                res.extend(func(x))
-            else:
-                res.extend(recursive_flatmap(x, func, seen, unidirectional))
+            res.extend(recursive_flatmap(x, func, seen, unidirectional))
+
     return res
 
 
