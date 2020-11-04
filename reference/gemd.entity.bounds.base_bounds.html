@@ -40,11 +40,12 @@
 <p>Base class for bounds, including RealBounds and CategoricalBounds.</p>
 <dl class="method">
 <dt id="gemd.entity.bounds.base_bounds.BaseBounds.contains">
-<em class="property">abstract </em><code class="sig-name descname">contains</code><span class="sig-paren">(</span><em class="sig-param">bounds</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.bounds.base_bounds.BaseBounds.contains" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">contains</code><span class="sig-paren">(</span><em class="sig-param">bounds: Union[BaseBounds, BaseValue]</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.bounds.base_bounds.BaseBounds.contains" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if another bounds is contained within this bounds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>bounds</strong> (<a class="reference internal" href="#gemd.entity.bounds.base_bounds.BaseBounds" title="gemd.entity.bounds.base_bounds.BaseBounds"><em>BaseBounds</em></a>) – Other bounds object to check.</p>
+<dd class="field-odd"><p><strong>bounds</strong> (<em>Union</em><em>[</em><a class="reference internal" href="#gemd.entity.bounds.base_bounds.BaseBounds" title="gemd.entity.bounds.base_bounds.BaseBounds"><em>BaseBounds</em></a><em>, </em><a class="reference internal" href="gemd.entity.value.base_value.html#gemd.entity.value.base_value.BaseValue" title="gemd.entity.value.base_value.BaseValue"><em>BaseValue</em></a><em>]</em>) – Other bounds object to check.  If it’s a Value object, check against
+the smallest compatible bounds, as returned by the</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>True if any value that validates true for bounds also validates true for this</p>

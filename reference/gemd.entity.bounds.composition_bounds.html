@@ -65,16 +65,16 @@
 
 <dl class="method">
 <dt id="gemd.entity.bounds.composition_bounds.CompositionBounds.contains">
-<code class="sig-name descname">contains</code><span class="sig-paren">(</span><em class="sig-param">bounds: gemd.entity.bounds.base_bounds.BaseBounds</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#gemd.entity.bounds.composition_bounds.CompositionBounds.contains" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if another bounds is contained by this bounds.</p>
-<p>The other bounds must also be a CompositionBounds and its components must be a subset of
-this bounds’s set of required components.</p>
+<code class="sig-name descname">contains</code><span class="sig-paren">(</span><em class="sig-param">bounds: Union[gemd.entity.bounds.base_bounds.BaseBounds, BaseValue]</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#gemd.entity.bounds.composition_bounds.CompositionBounds.contains" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if another bounds or value object is contained by this bounds.</p>
+<p>The other object must also be a Composition and its components must be a subset of
+this bounds’s set of allowed components.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>bounds</strong> (<a class="reference internal" href="gemd.entity.bounds.base_bounds.html#gemd.entity.bounds.base_bounds.BaseBounds" title="gemd.entity.bounds.base_bounds.BaseBounds"><em>BaseBounds</em></a>) – Other bounds object to check.</p>
+<dd class="field-odd"><p><strong>bounds</strong> (<em>Union</em><em>[</em><a class="reference internal" href="gemd.entity.bounds.base_bounds.html#gemd.entity.bounds.base_bounds.BaseBounds" title="gemd.entity.bounds.base_bounds.BaseBounds"><em>BaseBounds</em></a><em>, </em><a class="reference internal" href="gemd.entity.value.base_value.html#gemd.entity.value.base_value.BaseValue" title="gemd.entity.value.base_value.BaseValue"><em>BaseValue</em></a><em>]</em>) – Other object to check.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True if the other bounds is contained by this bounds.</p>
+<dd class="field-even"><p>True if the other object is contained by this bounds.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>bool</p>

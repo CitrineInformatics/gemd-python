@@ -34,24 +34,52 @@
 <span id="gemd-units-impl-module"></span><h1>gemd.units.impl module<a class="headerlink" href="#module-gemd.units.impl" title="Permalink to this headline">¶</a></h1>
 <p>Implementation of units.</p>
 <dl class="function">
+<dt id="gemd.units.impl.change_definitions_file">
+<code class="sig-prename descclassname">gemd.units.impl.</code><code class="sig-name descname">change_definitions_file</code><span class="sig-paren">(</span><em class="sig-param">filename: str = None</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.units.impl.change_definitions_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change which file is used for units definition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – The file to use</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="gemd.units.impl.convert_units">
-<code class="sig-prename descclassname">gemd.units.impl.</code><code class="sig-name descname">convert_units</code><span class="sig-paren">(</span><em class="sig-param">value</em>, <em class="sig-param">starting_unit</em>, <em class="sig-param">final_unit</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.units.impl.convert_units" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gemd.units.impl.</code><code class="sig-name descname">convert_units</code><span class="sig-paren">(</span><em class="sig-param">value: float</em>, <em class="sig-param">starting_unit: str</em>, <em class="sig-param">final_unit: str</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#gemd.units.impl.convert_units" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert the value from the starting_unit to the final_unit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>value</strong> – magnitude to convert (number)</p></li>
-<li><p><strong>starting_unit</strong> – unit that the magnitude is currently in (str)</p></li>
-<li><p><strong>final_unit</strong> – unit that the magnitude should be returned in (str)</p></li>
+<li><p><strong>value</strong> (<em>float</em>) – magnitude to convert</p></li>
+<li><p><strong>starting_unit</strong> (<em>str</em>) – unit that the magnitude is currently in</p></li>
+<li><p><strong>final_unit</strong> (<em>str</em>) – unit that the magnitude should be returned in</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The converted number</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[float]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="gemd.units.impl.parse_units">
-<code class="sig-prename descclassname">gemd.units.impl.</code><code class="sig-name descname">parse_units</code><span class="sig-paren">(</span><em class="sig-param">units</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.units.impl.parse_units" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gemd.units.impl.</code><code class="sig-name descname">parse_units</code><span class="sig-paren">(</span><em class="sig-param">units: Union[str, pint.unit._Unit, None]</em><span class="sig-paren">)</span> &#x2192; Union[str, pint.unit._Unit, None]<a class="headerlink" href="#gemd.units.impl.parse_units" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse a string or _Unit into a standard string representation of the unit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>units</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>_Unit</em><em>, </em><em>None</em><em>]</em>) – The string or _Unit representation of the object we wish to display</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The representation; note that the same type that was passed is returned</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[Union[str, _Unit, None]]</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
