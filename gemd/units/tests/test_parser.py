@@ -18,7 +18,8 @@ def test_parse_expected():
         "second", "ms", "hour", "minute", "ns",
         "g/cm^3", "g/mL", "kg/cm^3",
         _ureg("kg").u,
-        "amu"  # A line that was edited
+        "amu",  # A line that was edited
+        "Seconds"  # Added support for some title-case units
     ]
     for unit in expected:
         parse_units(unit)
@@ -31,7 +32,8 @@ def test_parse_unexpected():
         "gibberish",
         5,
         "cp",  # Removed because of risk of collision with cP
-        "chain"  # Survey units eliminated
+        "chain",  # Survey units eliminated
+        "SECONDS"  # Not just case insensitivity
     ]
     for unit in unexpected:
         with pytest.raises(UndefinedUnitError):
