@@ -33,7 +33,9 @@ class Smiles(MolecularValue):
         elif isinstance(value, str):
             self._smiles = value
         else:
-            raise TypeError("SMILES must be given as a string; got {}".format(type(value)))
+            raise TypeError(
+                "SMILES must be given as a string; got {}".format(type(value))
+            )
 
     def _to_bounds(self) -> MolecularStructureBounds:
         """

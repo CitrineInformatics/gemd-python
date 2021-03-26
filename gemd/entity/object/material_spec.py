@@ -38,11 +38,21 @@ class MaterialSpec(BaseObject, HasTemplate):
 
     typ = "material_spec"
 
-    def __init__(self, name, *, template=None,
-                 properties=None, process=None, uids=None, tags=None,
-                 notes=None, file_links=None):
-        BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
-                            file_links=file_links)
+    def __init__(
+        self,
+        name,
+        *,
+        template=None,
+        properties=None,
+        process=None,
+        uids=None,
+        tags=None,
+        notes=None,
+        file_links=None
+    ):
+        BaseObject.__init__(
+            self, name=name, uids=uids, tags=tags, notes=notes, file_links=file_links
+        )
         self._properties = None
         self.properties = properties
         self._process = None
@@ -74,6 +84,7 @@ class MaterialSpec(BaseObject, HasTemplate):
         """
         from gemd.entity.object.process_spec import ProcessSpec
         from gemd.entity.link_by_uid import LinkByUID
+
         if self.process is not None and isinstance(self.process, ProcessSpec):
             self.process._output_material = None
         if process is None:
@@ -84,5 +95,7 @@ class MaterialSpec(BaseObject, HasTemplate):
             process._output_material = self
             self._process = process
         else:
-            raise TypeError("process must be an instance of ProcessSpec or LinkByUID; "
-                            "instead received type {}: {}".format(type(process), process))
+            raise TypeError(
+                "process must be an instance of ProcessSpec or LinkByUID; "
+                "instead received type {}: {}".format(type(process), process)
+            )

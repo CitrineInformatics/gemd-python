@@ -13,8 +13,8 @@ def test_contains():
 
     from gemd.entity.value import NominalReal
 
-    assert dim.contains(NominalReal(5, 'degC'))
-    assert not dim.contains(NominalReal(5, 'K'))
+    assert dim.contains(NominalReal(5, "degC"))
+    assert not dim.contains(NominalReal(5, "K"))
 
 
 def test_contains_no_units():
@@ -28,7 +28,7 @@ def test_contains_incompatible_units():
     """Make sure contains returns false when the units don't match."""
     dim = RealBounds(lower_bound=0, upper_bound=100, default_units="m")
     dim2 = RealBounds(lower_bound=0, upper_bound=100, default_units="kJ")
-    dim3 = RealBounds(lower_bound=0, upper_bound=100, default_units='')
+    dim3 = RealBounds(lower_bound=0, upper_bound=100, default_units="")
     assert not dim.contains(dim2)
     assert not dim.contains(dim3)
 
@@ -42,7 +42,7 @@ def test_constructor_error():
         RealBounds(0, float("inf"), "meter")
 
     with pytest.raises(ValueError):
-        RealBounds(None, 10, '')
+        RealBounds(None, 10, "")
 
     with pytest.raises(ValueError):
         RealBounds(0, 100)
@@ -57,4 +57,4 @@ def test_type_mismatch():
     assert not bounds.contains(IntegerBounds(0, 1))
     assert not bounds.contains(None)
     with pytest.raises(TypeError):
-        bounds.contains([.33, .66])
+        bounds.contains([0.33, 0.66])

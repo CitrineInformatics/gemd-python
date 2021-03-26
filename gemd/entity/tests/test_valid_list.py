@@ -6,12 +6,12 @@ from gemd.entity.valid_list import ValidList
 
 def test_access_data():
     """Test that valid data can be inserted into the list and that invalid data throws an error."""
-    lo_strings = ValidList(['z'], str)
-    lo_strings[0] = 'a'
-    lo_strings.append('b')
-    lo_strings.extend(tuple(['d', 'e', 'f']))
-    lo_strings.insert(2, 'c')
-    assert lo_strings == ['a', 'b', 'c', 'd', 'e', 'f']
+    lo_strings = ValidList(["z"], str)
+    lo_strings[0] = "a"
+    lo_strings.append("b")
+    lo_strings.extend(tuple(["d", "e", "f"]))
+    lo_strings.insert(2, "c")
+    assert lo_strings == ["a", "b", "c", "d", "e", "f"]
 
     with pytest.raises(TypeError):
         lo_strings[0] = 1
@@ -24,7 +24,7 @@ def test_access_data():
     with pytest.raises(TypeError):
         lo_strings.insert(2, 1)
 
-    lo_both = ValidList(_list=tuple([1, 'a']), content_type=[int, str])
+    lo_both = ValidList(_list=tuple([1, "a"]), content_type=[int, str])
     with pytest.raises(TypeError):
         lo_both[0] = 1.1
 
@@ -54,9 +54,7 @@ def test_triggers():
 def test_transform():
     """Test that transformations do what we expect in changing data."""
     first = [1, 2]
-    vlst = ValidList(first,
-                     content_type=int,
-                     trigger=lambda x: x + 1)
+    vlst = ValidList(first, content_type=int, trigger=lambda x: x + 1)
     vlst.append(3)
     vlst.extend([4])
     vlst.insert(2, 5)
@@ -71,7 +69,7 @@ def test_transform():
 def test_invalid_content():
     """Test that an invalid content_type throws a TypeError."""
     with pytest.raises(TypeError):
-        ValidList(['z'], content_type={'types': [str]})
+        ValidList(["z"], content_type={"types": [str]})
     with pytest.raises(TypeError):
         ValidList(_list=tuple([1, 1]), content_type=1)
     with pytest.raises(TypeError):

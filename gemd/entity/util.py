@@ -33,28 +33,21 @@ def make_instance(base_spec):
             return seen[id(spec)]
 
         if isinstance(spec, MeasurementSpec):
-            seen[id(spec)] = MeasurementRun(
-                name=spec.name,
-                spec=spec
-            )
+            seen[id(spec)] = MeasurementRun(name=spec.name, spec=spec)
         elif isinstance(spec, MaterialSpec):
-            seen[id(spec)] = MaterialRun(
-                name=spec.name,
-                spec=spec
-            )
+            seen[id(spec)] = MaterialRun(name=spec.name, spec=spec)
             seen[id(spec)].process = crawler(spec.process) if spec.process else None
         elif isinstance(spec, IngredientSpec):
             seen[id(spec)] = IngredientRun(spec=spec)
             seen[id(spec)].material = crawler(spec.material) if spec.material else None
         elif isinstance(spec, ProcessSpec):
-            seen[id(spec)] = ProcessRun(
-                name=spec.name,
-                spec=spec
-            )
+            seen[id(spec)] = ProcessRun(name=spec.name, spec=spec)
             for x in spec.ingredients:
                 crawler(x).process = seen[id(spec)]
         else:
-            raise TypeError('Passed object is not a spec-like object({})'.format(type(spec)))
+            raise TypeError(
+                "Passed object is not a spec-like object({})".format(type(spec))
+            )
 
         # Should we assume that the same MaterialSpec in different parts of the tree
         # yields the same MaterialRun?
@@ -82,8 +75,10 @@ def array_like():
         return _array_like
     try:
         import numpy as np
+
         try:
             import pandas as pd
+
             _array_like = (list, tuple, np.ndarray, pd.core.base.PandasObject)
         except ImportError:  # pragma: no cover
             _array_like = (list, tuple, np.ndarray)  # pragma: no cover

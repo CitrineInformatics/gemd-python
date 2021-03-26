@@ -10,7 +10,7 @@ def test_json():
     """Check that we can json ser/de round-robin."""
     inchi = InChI("InChI=1/C8H8O3/c1-11-8-4-6(5-9)2-3-7(8)10/h2-5,10H,1H3")
     copy = loads(dumps(inchi))
-    assert(copy == inchi)
+    assert copy == inchi
 
 
 def test_inchi_setter():

@@ -53,11 +53,22 @@ class ProcessRun(BaseObject, HasConditions, HasParameters, HasSource):
 
     skip = {"_output_material", "_ingredients"}
 
-    def __init__(self, name, *, spec=None,
-                 conditions=None, parameters=None,
-                 uids=None, tags=None, notes=None, file_links=None, source=None):
-        BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
-                            file_links=file_links)
+    def __init__(
+        self,
+        name,
+        *,
+        spec=None,
+        conditions=None,
+        parameters=None,
+        uids=None,
+        tags=None,
+        notes=None,
+        file_links=None,
+        source=None
+    ):
+        BaseObject.__init__(
+            self, name=name, uids=uids, tags=tags, notes=notes, file_links=file_links
+        )
         HasConditions.__init__(self, conditions)
         HasParameters.__init__(self, parameters)
         HasSource.__init__(self, source)
@@ -92,6 +103,7 @@ class ProcessRun(BaseObject, HasConditions, HasParameters, HasSource):
     def spec(self, spec):
         from gemd.entity.object.process_spec import ProcessSpec
         from gemd.entity.link_by_uid import LinkByUID
+
         if spec is None:
             self._spec = None
         elif isinstance(spec, (ProcessSpec, LinkByUID)):
@@ -103,6 +115,7 @@ class ProcessRun(BaseObject, HasConditions, HasParameters, HasSource):
     def template(self):
         """Get the template of the spec, if applicable."""
         from gemd.entity.object.process_spec import ProcessSpec
+
         if isinstance(self.spec, ProcessSpec):
             return self.spec.template
         else:

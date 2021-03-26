@@ -31,8 +31,7 @@ class UniformReal(ContinuousValue):
         ContinuousValue.__init__(self, units)
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
-        assert lower_bound <= upper_bound, \
-            "the lower bound must be <= the upper bound"
+        assert lower_bound <= upper_bound, "the lower bound must be <= the upper bound"
 
     def _to_bounds(self) -> RealBounds:
         """
@@ -45,6 +44,8 @@ class UniformReal(ContinuousValue):
             :class:`bounds <gemd.entity.bounds.real_bounds.RealBounds>`.
 
         """
-        return RealBounds(lower_bound=self.lower_bound,
-                          upper_bound=self.upper_bound,
-                          default_units=self.units)
+        return RealBounds(
+            lower_bound=self.lower_bound,
+            upper_bound=self.upper_bound,
+            default_units=self.units,
+        )

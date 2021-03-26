@@ -2,28 +2,50 @@ import pytest
 import pkg_resources
 from contextlib import contextmanager
 from pint import UnitRegistry
-from gemd.units import parse_units, convert_units, change_definitions_file, UndefinedUnitError
+from gemd.units import (
+    parse_units,
+    convert_units,
+    change_definitions_file,
+    UndefinedUnitError,
+)
 
 # use the default unit registry for now
-_ureg = UnitRegistry(filename=pkg_resources.resource_filename("gemd.units", "citrine_en.txt"))
+_ureg = UnitRegistry(
+    filename=pkg_resources.resource_filename("gemd.units", "citrine_en.txt")
+)
 
 
 def test_parse_expected():
     """Test that we can parse the units that we expect to be able to."""
     expected = [
-        "degC", "degF", "K",
-        "g", "kg", "mg", "ton",
-        "L", "mL",
-        "inch", "ft", "mm", "um",
-        "second", "ms", "hour", "minute", "ns",
-        "g/cm^3", "g/mL", "kg/cm^3",
+        "degC",
+        "degF",
+        "K",
+        "g",
+        "kg",
+        "mg",
+        "ton",
+        "L",
+        "mL",
+        "inch",
+        "ft",
+        "mm",
+        "um",
+        "second",
+        "ms",
+        "hour",
+        "minute",
+        "ns",
+        "g/cm^3",
+        "g/mL",
+        "kg/cm^3",
         _ureg("kg").u,
         "amu",  # A line that was edited
-        "Seconds"  # Added support for some title-case units
+        "Seconds",  # Added support for some title-case units
     ]
     for unit in expected:
         parse_units(unit)
-    assert parse_units("") == 'dimensionless'
+    assert parse_units("") == "dimensionless"
 
 
 def test_parse_unexpected():
@@ -33,7 +55,7 @@ def test_parse_unexpected():
         5,
         "cp",  # Removed because of risk of collision with cP
         "chain",  # Survey units eliminated
-        "SECONDS"  # Not just case insensitivity
+        "SECONDS",  # Not just case insensitivity
     ]
     for unit in unexpected:
         with pytest.raises(UndefinedUnitError):
@@ -56,12 +78,13 @@ def _change_units(filename):
 
 def test_file_change():
     """Test that swapping units files works."""
-    assert convert_units(1, 'm', 'cm') == 100
+    assert convert_units(1, "m", "cm") == 100
     with pytest.raises(UndefinedUnitError):
-        assert convert_units(1, 'usd', 'usd') == 1
-    with _change_units(filename=pkg_resources.resource_filename("gemd.units",
-                                                                "tests/test_units.txt")):
+        assert convert_units(1, "usd", "usd") == 1
+    with _change_units(
+        filename=pkg_resources.resource_filename("gemd.units", "tests/test_units.txt")
+    ):
         with pytest.raises(UndefinedUnitError):
-            assert convert_units(1, 'm', 'cm') == 100
-        assert convert_units(1, 'usd', 'usd') == 1
-    assert convert_units(1, 'm', 'cm') == 100  # And verify we're back to normal
+            assert convert_units(1, "m", "cm") == 100
+        assert convert_units(1, "usd", "usd") == 1
+    assert convert_units(1, "m", "cm") == 100  # And verify we're back to normal

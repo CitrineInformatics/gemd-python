@@ -47,5 +47,7 @@ class AttributeTemplate(BaseEntity):
         if bounds is None:
             raise ValueError("Bounds are required on AttributeTemplate")
         if not isinstance(bounds, BaseBounds):
-            raise TypeError("Bounds must be an instance of BaseBounds: {}".format(bounds))
+            raise TypeError(
+                "Bounds must be an instance of BaseBounds: {}".format(bounds)
+            )
         self._bounds = bounds

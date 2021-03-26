@@ -37,10 +37,10 @@ class MaterialTemplate(BaseTemplate, HasPropertyTemplates):
 
     typ = "material_template"
 
-    def __init__(self, name, *, description=None,
-                 properties=None,
-                 uids=None, tags=None):
-        BaseTemplate.__init__(self, name=name, description=description,
-                              uids=uids, tags=tags
-                              )
+    def __init__(
+        self, name, *, description=None, properties=None, uids=None, tags=None
+    ):
+        BaseTemplate.__init__(
+            self, name=name, description=description, uids=uids, tags=tags
+        )
         HasPropertyTemplates.__init__(self, properties)

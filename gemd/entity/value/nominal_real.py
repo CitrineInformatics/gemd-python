@@ -21,8 +21,9 @@ class NominalReal(ContinuousValue):
 
     def __init__(self, nominal=None, units=None):
         ContinuousValue.__init__(self, units)
-        assert isinstance(nominal, (int, float)), \
-            "nominal value must be an int or float"
+        assert isinstance(
+            nominal, (int, float)
+        ), "nominal value must be an int or float"
         self.nominal = float(nominal)
 
     def _to_bounds(self) -> RealBounds:
@@ -36,6 +37,6 @@ class NominalReal(ContinuousValue):
             :class:`bounds <gemd.entity.bounds.real_bounds.RealBounds>`.
 
         """
-        return RealBounds(lower_bound=self.nominal,
-                          upper_bound=self.nominal,
-                          default_units=self.units)
+        return RealBounds(
+            lower_bound=self.nominal, upper_bound=self.nominal, default_units=self.units
+        )

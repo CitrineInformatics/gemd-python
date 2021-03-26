@@ -28,7 +28,7 @@ def test_contains():
     bounds = CompositionBounds(components={"spam", "eggs"})
     assert bounds.contains(CompositionBounds(components={"spam"}))
     assert not bounds.contains(CompositionBounds(components={"foo"}))
-    assert not bounds.contains(RealBounds(0.0, 2.0, ''))
+    assert not bounds.contains(RealBounds(0.0, 2.0, ""))
     assert not bounds.contains(None)
     with pytest.raises(TypeError):
         bounds.contains({"spam"})
@@ -53,7 +53,9 @@ def test_numpy():
     if len(array_like()) > 2:  # Test numpy
         import numpy as np
 
-        np_bounds = CompositionBounds(components=np.array(["spam", "eggs"], dtype=object))
+        np_bounds = CompositionBounds(
+            components=np.array(["spam", "eggs"], dtype=object)
+        )
         np_copy = loads(dumps(np_bounds))
         assert np_copy == np_bounds
 

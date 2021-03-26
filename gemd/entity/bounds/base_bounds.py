@@ -33,4 +33,4 @@ class BaseBounds(DictSerializable):
             bounds = bounds._to_bounds()
         if isinstance(bounds, BaseBounds):
             return True
-        raise TypeError('{} is not a Bounds object'.format(bounds))
+        raise TypeError("{} is not a Bounds object".format(bounds))

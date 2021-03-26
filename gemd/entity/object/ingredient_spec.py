@@ -49,10 +49,22 @@ class IngredientSpec(BaseObject, HasQuantities):
 
     typ = "ingredient_spec"
 
-    def __init__(self, name, *, material=None, process=None, labels=None,
-                 mass_fraction=None, volume_fraction=None, number_fraction=None,
-                 absolute_quantity=None,
-                 uids=None, tags=None, notes=None, file_links=None):
+    def __init__(
+        self,
+        name,
+        *,
+        material=None,
+        process=None,
+        labels=None,
+        mass_fraction=None,
+        volume_fraction=None,
+        number_fraction=None,
+        absolute_quantity=None,
+        uids=None,
+        tags=None,
+        notes=None,
+        file_links=None
+    ):
         """
         Create an IngredientSpec object.
 
@@ -66,11 +78,16 @@ class IngredientSpec(BaseObject, HasQuantities):
         :param number_fraction: fraction of the ingredients that is this ingredient, by number
         :param absolute_quantity: quantity of this ingredient in an absolute sense, e.g. 2 cups
         """
-        BaseObject.__init__(self, name=name,
-                            uids=uids, tags=tags, notes=notes, file_links=file_links)
-        HasQuantities.__init__(self, mass_fraction=mass_fraction, volume_fraction=volume_fraction,
-                               number_fraction=number_fraction, absolute_quantity=absolute_quantity
-                               )
+        BaseObject.__init__(
+            self, name=name, uids=uids, tags=tags, notes=notes, file_links=file_links
+        )
+        HasQuantities.__init__(
+            self,
+            mass_fraction=mass_fraction,
+            volume_fraction=volume_fraction,
+            number_fraction=number_fraction,
+            absolute_quantity=absolute_quantity,
+        )
 
         self._material = None
         self._process = None
@@ -98,12 +115,15 @@ class IngredientSpec(BaseObject, HasQuantities):
     def material(self, material):
         from gemd.entity.object.material_spec import MaterialSpec
         from gemd.entity.link_by_uid import LinkByUID
+
         if material is None:
             self._material = None
         elif isinstance(material, (MaterialSpec, LinkByUID)):
             self._material = material
         else:
-            raise TypeError("IngredientSpec.material must be a MaterialSpec or LinkByUID")
+            raise TypeError(
+                "IngredientSpec.material must be a MaterialSpec or LinkByUID"
+            )
 
     @property
     def process(self):
@@ -114,6 +134,7 @@ class IngredientSpec(BaseObject, HasQuantities):
     def process(self, process):
         from gemd.entity.object import ProcessSpec
         from gemd.entity.link_by_uid import LinkByUID
+
         if self._process is not None and isinstance(self._process, ProcessSpec):
             self._process._unset_ingredient(self)
         if process is None:

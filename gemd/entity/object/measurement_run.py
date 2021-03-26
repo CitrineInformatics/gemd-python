@@ -7,7 +7,9 @@ from gemd.entity.setters import validate_list
 from gemd.entity.valid_list import ValidList
 
 
-class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters, HasSource):
+class MeasurementRun(
+    BaseObject, HasConditions, HasProperties, HasParameters, HasSource
+):
     """
     A measurement run.
 
@@ -49,11 +51,24 @@ class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters, Ha
 
     typ = "measurement_run"
 
-    def __init__(self, name, *, spec=None, material=None,
-                 properties=None, conditions=None, parameters=None,
-                 uids=None, tags=None, notes=None, file_links=None, source=None):
-        BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
-                            file_links=file_links)
+    def __init__(
+        self,
+        name,
+        *,
+        spec=None,
+        material=None,
+        properties=None,
+        conditions=None,
+        parameters=None,
+        uids=None,
+        tags=None,
+        notes=None,
+        file_links=None,
+        source=None
+    ):
+        BaseObject.__init__(
+            self, name=name, uids=uids, tags=tags, notes=notes, file_links=file_links
+        )
         HasProperties.__init__(self, properties)
         HasConditions.__init__(self, conditions)
         HasParameters.__init__(self, parameters)
@@ -73,6 +88,7 @@ class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters, Ha
     def material(self, value):
         from gemd.entity.object import MaterialRun
         from gemd.entity.link_by_uid import LinkByUID
+
         if self._material is not None and isinstance(self._material, MaterialRun):
             self._material._unset_measurement(self)
         if value is None:
@@ -86,7 +102,9 @@ class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters, Ha
         elif isinstance(value, LinkByUID):
             self._material = value
         else:
-            raise TypeError("material must be a MaterialRun or LinkByUID: {}".format(value))
+            raise TypeError(
+                "material must be a MaterialRun or LinkByUID: {}".format(value)
+            )
 
     @property
     def spec(self):
@@ -97,17 +115,21 @@ class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters, Ha
     def spec(self, spec):
         from gemd.entity.object.measurement_spec import MeasurementSpec
         from gemd.entity.link_by_uid import LinkByUID
+
         if spec is None:
             self._spec = None
         elif isinstance(spec, (MeasurementSpec, LinkByUID)):
             self._spec = spec
         else:
-            raise TypeError("spec must be a MeasurementSpec or LinkByUID: {}".format(spec))
+            raise TypeError(
+                "spec must be a MeasurementSpec or LinkByUID: {}".format(spec)
+            )
 
     @property
     def template(self):
         """Get the template of the spec, if applicable."""
         from gemd.entity.object.measurement_spec import MeasurementSpec
+
         if isinstance(self.spec, MeasurementSpec):
             return self.spec.template
         else:

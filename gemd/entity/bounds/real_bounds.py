@@ -31,7 +31,9 @@ class RealBounds(BaseBounds):
         self.default_units = default_units
 
         if self.lower_bound is None or abs(self.lower_bound) >= float("inf"):
-            raise ValueError("Lower bound must be given and finite: {}".format(self.lower_bound))
+            raise ValueError(
+                "Lower bound must be given and finite: {}".format(self.lower_bound)
+            )
 
         if self.upper_bound is None or abs(self.upper_bound) >= float("inf"):
             raise ValueError("Upper bound must be given and finite")
@@ -47,8 +49,10 @@ class RealBounds(BaseBounds):
     @default_units.setter
     def default_units(self, default_units):
         if default_units is None:
-            raise ValueError("Real bounds must have units. "
-                             "Use an empty string for a dimensionless quantity.")
+            raise ValueError(
+                "Real bounds must have units. "
+                "Use an empty string for a dimensionless quantity."
+            )
         self._default_units = units.parse_units(default_units)
 
     def contains(self, bounds: Union[BaseBounds, "BaseValue"]) -> bool:
@@ -103,9 +107,11 @@ class RealBounds(BaseBounds):
         """
         try:
             lower_bound = units.convert_units(
-                self.lower_bound, self.default_units, target_units)
+                self.lower_bound, self.default_units, target_units
+            )
             upper_bound = units.convert_units(
-                self.upper_bound, self.default_units, target_units)
+                self.upper_bound, self.default_units, target_units
+            )
             return lower_bound, upper_bound
         except units.IncompatibleUnitsError:
             return None, None

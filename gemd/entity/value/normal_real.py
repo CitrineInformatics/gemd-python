@@ -37,6 +37,6 @@ class NormalReal(ContinuousValue):
             :class:`bounds <gemd.entity.bounds.real_bounds.RealBounds>`.
 
         """
-        return RealBounds(lower_bound=self.mean,
-                          upper_bound=self.mean,
-                          default_units=self.units)
+        return RealBounds(
+            lower_bound=self.mean, upper_bound=self.mean, default_units=self.units
+        )

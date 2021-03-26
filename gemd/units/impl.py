@@ -34,14 +34,16 @@ def parse_units(units: Union[str, _Unit, None]) -> Union[str, _Unit, None]:
     """
     if units is None:
         return None
-    elif units == '':
-        return 'dimensionless'
+    elif units == "":
+        return "dimensionless"
     elif isinstance(units, str):
         return str(_ureg(units).units)
     elif isinstance(units, _Unit):
         return units
     else:
-        raise UndefinedUnitError("Units must be given as a recognized unit string or Units object")
+        raise UndefinedUnitError(
+            "Units must be given as a recognized unit string or Units object"
+        )
 
 
 def convert_units(value: float, starting_unit: str, final_unit: str) -> float:

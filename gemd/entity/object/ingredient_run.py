@@ -47,14 +47,31 @@ class IngredientRun(BaseObject, HasQuantities):
 
     typ = "ingredient_run"
 
-    def __init__(self, *, material=None, process=None, mass_fraction=None,
-                 volume_fraction=None, number_fraction=None, absolute_quantity=None,
-                 spec=None, uids=None, tags=None, notes=None, file_links=None):
-        BaseObject.__init__(self, name=None, uids=uids, tags=tags,
-                            notes=notes, file_links=file_links)
-        HasQuantities.__init__(self, mass_fraction=mass_fraction, volume_fraction=volume_fraction,
-                               number_fraction=number_fraction, absolute_quantity=absolute_quantity
-                               )
+    def __init__(
+        self,
+        *,
+        material=None,
+        process=None,
+        mass_fraction=None,
+        volume_fraction=None,
+        number_fraction=None,
+        absolute_quantity=None,
+        spec=None,
+        uids=None,
+        tags=None,
+        notes=None,
+        file_links=None
+    ):
+        BaseObject.__init__(
+            self, name=None, uids=uids, tags=tags, notes=notes, file_links=file_links
+        )
+        HasQuantities.__init__(
+            self,
+            mass_fraction=mass_fraction,
+            volume_fraction=volume_fraction,
+            number_fraction=number_fraction,
+            absolute_quantity=absolute_quantity,
+        )
         self._material = None
         self._process = None
         self._spec = None
@@ -69,6 +86,7 @@ class IngredientRun(BaseObject, HasQuantities):
     def name(self):
         """Get name."""
         from gemd.entity.object.ingredient_spec import IngredientSpec
+
         if isinstance(self.spec, IngredientSpec):
             return self.spec.name
         else:
@@ -78,14 +96,16 @@ class IngredientRun(BaseObject, HasQuantities):
     def name(self, name):
         # This messiness is a consequence of name being an inherited attribute
         if name is not None:
-            raise AttributeError("Name is set implicitly by associating with an "
-                                 "IngredientSpec")
+            raise AttributeError(
+                "Name is set implicitly by associating with an " "IngredientSpec"
+            )
         self._name = name
 
     @property
     def labels(self):
         """Get labels."""
         from gemd.entity.object.ingredient_spec import IngredientSpec
+
         if isinstance(self.spec, IngredientSpec):
             return self.spec.labels
         else:
@@ -100,13 +120,16 @@ class IngredientRun(BaseObject, HasQuantities):
     def material(self, material):
         from gemd.entity.object import MaterialRun
         from gemd.entity.link_by_uid import LinkByUID
+
         if material is None:
             self._material = None
         elif isinstance(material, (MaterialRun, LinkByUID)):
             self._material = material
         else:
-            raise TypeError("IngredientRun.material must be a MaterialRun or "
-                            "LinkByUID: {}".format(material))
+            raise TypeError(
+                "IngredientRun.material must be a MaterialRun or "
+                "LinkByUID: {}".format(material)
+            )
 
     @property
     def process(self):
@@ -117,6 +140,7 @@ class IngredientRun(BaseObject, HasQuantities):
     def process(self, process):
         from gemd.entity.object import ProcessRun
         from gemd.entity.link_by_uid import LinkByUID
+
         if self._process is not None and isinstance(self._process, ProcessRun):
             self._process._unset_ingredient(self)
         if process is None:
@@ -130,8 +154,10 @@ class IngredientRun(BaseObject, HasQuantities):
         elif isinstance(process, LinkByUID):
             self._process = process
         else:
-            raise TypeError("IngredientRun.process must be a ProcessRun or "
-                            "LinkByUID: {}".format(process))
+            raise TypeError(
+                "IngredientRun.process must be a ProcessRun or "
+                "LinkByUID: {}".format(process)
+            )
 
     @property
     def spec(self):
@@ -152,7 +178,9 @@ class IngredientRun(BaseObject, HasQuantities):
         elif isinstance(spec, (IngredientSpec, LinkByUID)):
             self._spec = spec
         else:
-            raise TypeError("spec must be a IngredientSpec or LinkByUID: {}".format(spec))
+            raise TypeError(
+                "spec must be a IngredientSpec or LinkByUID: {}".format(spec)
+            )
 
     @classmethod
     def from_dict(cls, d):

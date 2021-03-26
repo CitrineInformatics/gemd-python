@@ -35,8 +35,10 @@ class ContinuousValue(BaseValue):
     @units.setter
     def units(self, units: str):
         if units is None:
-            raise ValueError("Continuous values must have units. "
-                             "Use an empty string for a dimensionless quantity.")
+            raise ValueError(
+                "Continuous values must have units. "
+                "Use an empty string for a dimensionless quantity."
+            )
         self._units = parse_units(units)
 
     @abstractmethod

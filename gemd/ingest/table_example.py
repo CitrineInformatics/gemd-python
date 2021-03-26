@@ -14,12 +14,14 @@ def ingest_table(material_run, table):
         exp = MeasurementRun("Material Run")
         for prop_name in known_properties:
             if prop_name in row:
-                exp.properties.append(Property(name=prop_name,
-                                               value=NominalReal(row[prop_name], '')))
+                exp.properties.append(
+                    Property(name=prop_name, value=NominalReal(row[prop_name], ""))
+                )
         for cond_name in known_conditions:
             if cond_name in row:
-                exp.conditions.append(Condition(name=cond_name,
-                                                value=NominalReal(row[cond_name], '')))
+                exp.conditions.append(
+                    Condition(name=cond_name, value=NominalReal(row[cond_name], ""))
+                )
         exp.material = material_run
 
     return material_run

@@ -5,8 +5,9 @@ from gemd.entity.template.has_parameter_templates import HasParameterTemplates
 from gemd.entity.template.has_property_templates import HasPropertyTemplates
 
 
-class MeasurementTemplate(BaseTemplate,
-                          HasPropertyTemplates, HasConditionTemplates, HasParameterTemplates):
+class MeasurementTemplate(
+    BaseTemplate, HasPropertyTemplates, HasConditionTemplates, HasParameterTemplates
+):
     """
     A measurement template.
 
@@ -54,11 +55,20 @@ class MeasurementTemplate(BaseTemplate,
 
     typ = "measurement_template"
 
-    def __init__(self, name, *, description=None,
-                 properties=None, conditions=None, parameters=None,
-                 uids=None, tags=None):
-        BaseTemplate.__init__(self, name=name, description=description,
-                              uids=uids, tags=tags)
+    def __init__(
+        self,
+        name,
+        *,
+        description=None,
+        properties=None,
+        conditions=None,
+        parameters=None,
+        uids=None,
+        tags=None
+    ):
+        BaseTemplate.__init__(
+            self, name=name, description=description, uids=uids, tags=tags
+        )
         HasPropertyTemplates.__init__(self, properties)
         HasConditionTemplates.__init__(self, conditions)
         HasParameterTemplates.__init__(self, parameters)

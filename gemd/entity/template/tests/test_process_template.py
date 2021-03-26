@@ -11,11 +11,13 @@ from gemd.json import dumps, loads
 
 def test_bounds_mismatch():
     """Test that a mismatch between the attribute and given bounds throws a ValueError."""
-    attribute_bounds = RealBounds(0, 100, '')
-    object_bounds = RealBounds(200, 300, '')
+    attribute_bounds = RealBounds(0, 100, "")
+    object_bounds = RealBounds(200, 300, "")
     cond_template = ConditionTemplate("a condition", bounds=attribute_bounds)
     with pytest.raises(ValueError):
-        ProcessTemplate("a process template", conditions=[[cond_template, object_bounds]])
+        ProcessTemplate(
+            "a process template", conditions=[[cond_template, object_bounds]]
+        )
 
 
 def test_allowed_names():
@@ -46,12 +48,15 @@ def test_allowed_labels():
 
 def test_passthrough_bounds():
     """Test that unspecified Bounds are accepted and set to None."""
-    template = ProcessTemplate('foo', conditions=[
-        (LinkByUID('1', '2'), None),
-        [LinkByUID('3', '4'), None],
-        LinkByUID('5', '6'),
-        ConditionTemplate('foo', bounds=IntegerBounds(0, 10)),
-    ])
+    template = ProcessTemplate(
+        "foo",
+        conditions=[
+            (LinkByUID("1", "2"), None),
+            [LinkByUID("3", "4"), None],
+            LinkByUID("5", "6"),
+            ConditionTemplate("foo", bounds=IntegerBounds(0, 10)),
+        ],
+    )
     assert len(template.conditions) == 4
     for _, bounds in template.conditions:
         assert bounds is None
@@ -59,18 +64,20 @@ def test_passthrough_bounds():
     assert len(copied.conditions) == 4
     for _, bounds in copied.conditions:
         assert bounds is None
-    from_dict = ProcessTemplate.build({
-        'type': 'process_template',
-        'name': 'foo',
-        'conditions': [
-            [
-                {
-                    'scope': 'foo',
-                    'id': 'bar',
-                    'type': 'link_by_uid',
-                },
-                None,
-            ]
-        ],
-    })
+    from_dict = ProcessTemplate.build(
+        {
+            "type": "process_template",
+            "name": "foo",
+            "conditions": [
+                [
+                    {
+                        "scope": "foo",
+                        "id": "bar",
+                        "type": "link_by_uid",
+                    },
+                    None,
+                ]
+            ],
+        }
+    )
     assert len(from_dict.conditions) == 1

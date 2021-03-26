@@ -33,9 +33,9 @@ def test_ingredient_reassignment():
 
 
 VALID_QUANTITIES = [
-    NominalReal(14.0, ''),
-    UniformReal(0.5, 0.6, 'm'),
-    NormalReal(-0.3, 0.6, "kg")
+    NominalReal(14.0, ""),
+    UniformReal(0.5, 0.6, "m"),
+    NormalReal(-0.3, 0.6, "kg"),
 ]
 
 INVALID_QUANTITIES = [
@@ -43,7 +43,7 @@ INVALID_QUANTITIES = [
     NominalInteger(5),
     EmpiricalFormula("CH4"),
     0.33,
-    "0.5"
+    "0.5",
 ]
 
 
@@ -81,7 +81,7 @@ def test_invalid_quantities(invalid_quantity):
 def test_invalid_assignment():
     """Invalid assignments to `process` or `material` throw a TypeError."""
     with pytest.raises(TypeError):
-        IngredientSpec(name="name", material=NominalReal(3, ''))
+        IngredientSpec(name="name", material=NominalReal(3, ""))
     with pytest.raises(TypeError):
         IngredientSpec(name="name", process="process")
     with pytest.raises(TypeError):

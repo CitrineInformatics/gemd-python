@@ -80,10 +80,10 @@ def _substitute(
 
 def make_index(gems):
     """
-    Given a list of GEMD objects, generates an index that can be used for substitute_links and substitute_objects methods.
+    Given a list of GEMD objects, generates an index that can be used for
+    substitute_links and substitute_objects methods.
 
     :gems list: List of GEMD objects from which to create an index
-
     """
     gem_index = {}
     for gem in gems:

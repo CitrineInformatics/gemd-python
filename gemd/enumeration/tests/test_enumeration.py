@@ -9,6 +9,7 @@ from gemd.json import loads, dumps
 
 def test_values():
     """Test that values can be validated and pulled from an enumeration."""
+
     class GoodClass(BaseEnumeration):
         RED = "Red"
         BLUE = "Blue"
@@ -38,12 +39,14 @@ def test_json_serde():
 def test_restrictions():
     """Test that restrictions apply to enumerations--all values must be unique strings."""
     with pytest.raises(ValueError):
+
         class BadClass1(BaseEnumeration):
             RED = "red"
             BLUE = "blue"
             MAROON = "red"
 
     with pytest.raises(ValueError):
+
         class BadClass2(BaseEnumeration):
             FIRST = "one"
             SECOND = 2

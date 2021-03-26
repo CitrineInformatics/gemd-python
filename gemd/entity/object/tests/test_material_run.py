@@ -22,19 +22,23 @@ def test_material_run():
     """
     # Define a property, and make sure that an inappropriate value for origin throws ValueError
     with pytest.raises(ValueError):
-        prop = Property(name="A property", origin="bad origin", value=NominalReal(17, units=''))
+        prop = Property(
+            name="A property", origin="bad origin", value=NominalReal(17, units="")
+        )
 
     # Create a MaterialSpec with a property
-    prop = Property(name="A property", origin="specified", value=NominalReal(17, units=''))
+    prop = Property(
+        name="A property", origin="specified", value=NominalReal(17, units="")
+    )
     mat_spec = MaterialSpec(
         name="a specification for a material",
         properties=PropertyAndConditions(prop),
-        notes="Funny lookin'"
+        notes="Funny lookin'",
     )
 
     # Make sure that when property is serialized, origin (an enumeration) is serialized as a string
     copy_prop = json.loads(dumps(mat_spec))
-    copy_origin = copy_prop["context"][0]["properties"][0]['property']['origin']
+    copy_origin = copy_prop["context"][0]["properties"][0]["property"]["origin"]
     assert isinstance(copy_origin, str)
 
     # Create a MaterialRun, and make sure an inappropriate value for sample_type throws ValueError
@@ -44,13 +48,14 @@ def test_material_run():
 
     # ensure that serialization does not change the MaterialRun
     copy = loads(dumps(mat))
-    assert dumps(copy) == dumps(mat), \
-        "Material run is modified by serialization or deserialization"
+    assert dumps(copy) == dumps(
+        mat
+    ), "Material run is modified by serialization or deserialization"
 
 
 def test_process_run():
     """Test that a process run can house a material, and that it survives serde."""
-    process_run = ProcessRun("Bake a cake", uids={'My_ID': str(17)})
+    process_run = ProcessRun("Bake a cake", uids={"My_ID": str(17)})
     material_run = MaterialRun("A cake", process=process_run)
 
     # Check that a bi-directional link is established
@@ -60,14 +65,14 @@ def test_process_run():
     copy_material = loads(dumps(material_run))
     assert dumps(copy_material) == dumps(material_run)
 
-    assert 'output_material' in repr(process_run)
-    assert 'process' in repr(material_run)
+    assert "output_material" in repr(process_run)
+    assert "process" in repr(material_run)
 
 
 def test_process_id_link():
     """Test that a process run can house a LinkByUID object, and that it survives serde."""
     uid = str(uuid4())
-    proc_link = LinkByUID(scope='id', id=uid)
+    proc_link = LinkByUID(scope="id", id=uid)
     mat_run = MaterialRun("Another cake", process=proc_link)
     copy_material = loads(dumps(mat_run))
     assert dumps(copy_material) == dumps(mat_run)
@@ -102,9 +107,9 @@ def test_invalid_assignment():
 
 def test_template_access():
     """A material run's template should be equal to its spec's template."""
-    template = MaterialTemplate("material template", uids={'id': str(uuid4())})
-    spec = MaterialSpec("A spec", uids={'id': str(uuid4())}, template=template)
-    mat = MaterialRun("A run", uids=['id', str(uuid4())], spec=spec)
+    template = MaterialTemplate("material template", uids={"id": str(uuid4())})
+    spec = MaterialSpec("A spec", uids={"id": str(uuid4())}, template=template)
+    mat = MaterialRun("A run", uids=["id", str(uuid4())], spec=spec)
     assert mat.template == template
 
     mat.spec = LinkByUID.from_entity(spec)
@@ -113,22 +118,28 @@ def test_template_access():
 
 def test_build():
     """Test that build recreates the material."""
-    spec = MaterialSpec("A spec",
-                        properties=PropertyAndConditions(
-                            property=Property("a property", value=NominalReal(3, ''))),
-                        tags=["a tag"])
+    spec = MaterialSpec(
+        "A spec",
+        properties=PropertyAndConditions(
+            property=Property("a property", value=NominalReal(3, ""))
+        ),
+        tags=["a tag"],
+    )
     mat = MaterialRun(name="a material", spec=spec)
     mat_dict = mat.as_dict()
-    mat_dict['spec'] = mat.spec.as_dict()
+    mat_dict["spec"] = mat.spec.as_dict()
     assert MaterialRun.build(mat_dict) == mat
 
 
 def test_equality():
     """Test that equality check works as expected."""
-    spec = MaterialSpec("A spec",
-                        properties=PropertyAndConditions(
-                            property=Property("a property", value=NominalReal(3, ''))),
-                        tags=["a tag"])
+    spec = MaterialSpec(
+        "A spec",
+        properties=PropertyAndConditions(
+            property=Property("a property", value=NominalReal(3, ""))
+        ),
+        tags=["a tag"],
+    )
     mat1 = MaterialRun("A material", spec=spec)
     mat2 = MaterialRun("A material", spec=spec, tags=["A tag"])
     assert mat1 == deepcopy(mat1)

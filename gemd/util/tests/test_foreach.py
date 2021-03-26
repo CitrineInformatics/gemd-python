@@ -21,10 +21,12 @@ def test_recursive_foreach():
     types = []
     recursive_foreach(output, lambda x: types.append(x.typ))
 
-    expected = ["ingredient_run",
-                "material_run", "material_run",
-                "process_run",
-                "measurement_run",
-                "property_template"
-                ]
+    expected = [
+        "ingredient_run",
+        "material_run",
+        "material_run",
+        "process_run",
+        "measurement_run",
+        "property_template",
+    ]
     assert sorted(types) == sorted(expected)

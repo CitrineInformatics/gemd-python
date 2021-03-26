@@ -1,9 +1,10 @@
-from gemd.entity.object import *
+from gemd.entity.object import ProcessRun, ProcessSpec, MaterialRun, MaterialSpec
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.util.impl import make_index
 
 
 def test_make_index():
+    """Test for the make_index function which generates an index of GEMD objects."""
     ps1 = ProcessSpec(name="hello", uids={"test_scope": "test_value"})
     pr1 = ProcessRun(
         name="world",

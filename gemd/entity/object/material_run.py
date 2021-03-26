@@ -44,10 +44,21 @@ class MaterialRun(BaseObject):
 
     skip = {"_measurements"}
 
-    def __init__(self, name, *, spec=None, process=None, sample_type="unknown",
-                 uids=None, tags=None, notes=None, file_links=None):
-        BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
-                            file_links=file_links)
+    def __init__(
+        self,
+        name,
+        *,
+        spec=None,
+        process=None,
+        sample_type="unknown",
+        uids=None,
+        tags=None,
+        notes=None,
+        file_links=None
+    ):
+        BaseObject.__init__(
+            self, name=name, uids=uids, tags=tags, notes=notes, file_links=file_links
+        )
         self._process = None
         self._measurements = []
         self._sample_type = None
@@ -66,6 +77,7 @@ class MaterialRun(BaseObject):
     def process(self, process):
         from gemd.entity.object.process_run import ProcessRun
         from gemd.entity.link_by_uid import LinkByUID
+
         if self.process is not None and isinstance(self.process, ProcessRun):
             self.process._output_material = None
         if process is None:
@@ -76,7 +88,9 @@ class MaterialRun(BaseObject):
             process._output_material = self
             self._process = process
         else:
-            raise TypeError("process must be a ProcessRun or LinkByUID: {}".format(process))
+            raise TypeError(
+                "process must be a ProcessRun or LinkByUID: {}".format(process)
+            )
 
     @property
     def measurements(self):
@@ -106,6 +120,7 @@ class MaterialRun(BaseObject):
     def spec(self, spec):
         from gemd.entity.object.material_spec import MaterialSpec
         from gemd.entity.link_by_uid import LinkByUID
+
         if spec is None:
             self._spec = None
         elif isinstance(spec, (MaterialSpec, LinkByUID)):
@@ -117,6 +132,7 @@ class MaterialRun(BaseObject):
     def template(self):
         """Get the template of the spec, if applicable."""
         from gemd.entity.object.material_spec import MaterialSpec
+
         if isinstance(self.spec, MaterialSpec):
             return self.spec.template
         else:

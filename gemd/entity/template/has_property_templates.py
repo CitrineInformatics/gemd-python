@@ -56,7 +56,8 @@ class HasPropertyTemplates(object):
         if isinstance(properties, Iterable):
             if any(isinstance(x, BaseBounds) for x in properties):
                 properties = [properties]  # It's a template/bounds tuple (probably)
-        self._properties = validate_list(properties,
-                                         (PropertyTemplate, LinkByUID, list, tuple),
-                                         trigger=BaseTemplate._homogenize_ranges
-                                         )
+        self._properties = validate_list(
+            properties,
+            (PropertyTemplate, LinkByUID, list, tuple),
+            trigger=BaseTemplate._homogenize_ranges,
+        )

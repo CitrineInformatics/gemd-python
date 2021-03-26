@@ -31,15 +31,23 @@ class BaseAttribute(DictSerializable):
 
     """
 
-    def __init__(self, name, *, template=None, origin="unknown", value=None, notes=None,
-                 file_links=None):
+    def __init__(
+        self,
+        name,
+        *,
+        template=None,
+        origin="unknown",
+        value=None,
+        notes=None,
+        file_links=None
+    ):
         self.name = name
         self.notes = notes
 
         self._value = None
         self._template = None
         self._origin = None
-        self._file_links = None,
+        self._file_links = (None,)
 
         self.value = value
         self.template = template
@@ -58,7 +66,9 @@ class BaseAttribute(DictSerializable):
         elif isinstance(value, (BaseValue, str, bool)):
             self._value = value
         else:
-            raise TypeError("value must be a BaseValue, string or bool: {}".format(value))
+            raise TypeError(
+                "value must be a BaseValue, string or bool: {}".format(value)
+            )
 
     @property
     def template(self):
@@ -72,8 +82,10 @@ class BaseAttribute(DictSerializable):
         elif isinstance(template, (LinkByUID, AttributeTemplate)):
             self._template = template
         else:
-            raise TypeError("template must be a BaseAttributeTemplate or "
-                            "LinkByUID: {}".format(template))
+            raise TypeError(
+                "template must be a BaseAttributeTemplate or "
+                "LinkByUID: {}".format(template)
+            )
 
     @property
     def origin(self):

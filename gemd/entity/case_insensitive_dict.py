@@ -125,7 +125,7 @@ class CaseInsensitiveDict(dict):
         del self.lowercase_dict[result[0].lower()]
         return result
 
-    def copy(self) -> 'CaseInsensitiveDict':
+    def copy(self) -> "CaseInsensitiveDict":
         """
         Return a shallow copy of the dictionary.
 
@@ -166,7 +166,8 @@ class CaseInsensitiveDict(dict):
                 if prev != key:
                     raise ValueError(
                         "Key '{}' already exists in dict with different case: "
-                        "'{}'".format(key, prev))
+                        "'{}'".format(key, prev)
+                    )
         if no_mapping:
             super().update(**kwargs)
         else:
@@ -189,5 +190,8 @@ class CaseInsensitiveDict(dict):
         prev = self.lowercase_dict.get(key.lower())
         if prev is not None and prev != key:
             raise ValueError(
-                "Key '{}' already exists in dict with different case: '{}'".format(key, prev))
+                "Key '{}' already exists in dict with different case: '{}'".format(
+                    key, prev
+                )
+            )
         self.lowercase_dict[key.lower()] = key

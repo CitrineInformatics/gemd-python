@@ -30,7 +30,7 @@ def test_ingredient_reassignment():
 def test_invalid_assignment():
     """Invalid assignments to `process` or `material` throw a TypeError."""
     with pytest.raises(TypeError):
-        IngredientRun(material=RealBounds(0, 5.0, ''))
+        IngredientRun(material=RealBounds(0, 5.0, ""))
     with pytest.raises(TypeError):
         IngredientRun(process="process")
     with pytest.raises(TypeError):
@@ -47,32 +47,33 @@ def test_name_persistance():
 
     je = GEMDJson()
 
-    ms_link = LinkByUID(scope='local', id='mat_spec')
-    mr_link = LinkByUID(scope='local', id='mat_run')
-    ps_link = LinkByUID(scope='local', id='pro_spec')
-    pr_link = LinkByUID(scope='local', id='pro_run')
-    spec = IngredientSpec(name='Ingred', labels=['some', 'words'],
-                          process=ps_link, material=ms_link)
-    run = IngredientRun(spec=spec,
-                        process=pr_link, material=mr_link)
+    ms_link = LinkByUID(scope="local", id="mat_spec")
+    mr_link = LinkByUID(scope="local", id="mat_run")
+    ps_link = LinkByUID(scope="local", id="pro_spec")
+    pr_link = LinkByUID(scope="local", id="pro_run")
+    spec = IngredientSpec(
+        name="Ingred", labels=["some", "words"], process=ps_link, material=ms_link
+    )
+    run = IngredientRun(spec=spec, process=pr_link, material=mr_link)
     assert run.name == spec.name
     assert run.labels == spec.labels
 
     # Try changing them and make sure they change
-    spec.name = 'Frank'
-    spec.labels = ['other', 'words']
+    spec.name = "Frank"
+    spec.labels = ["other", "words"]
     assert run.name == spec.name
     assert run.labels == spec.labels
 
-    run.spec = LinkByUID(scope='local', id='ing_spec')
+    run.spec = LinkByUID(scope="local", id="ing_spec")
     # Name and labels are now stashed but not stored
     assert run == je.copy(run)
     assert run.name == spec.name
     assert run.labels == spec.labels
 
     # Test that serialization doesn't get confused after a deser and set
-    spec_too = IngredientSpec(name='Jorge', labels=[],
-                              process=ps_link, material=ms_link)
+    spec_too = IngredientSpec(
+        name="Jorge", labels=[], process=ps_link, material=ms_link
+    )
     run.spec = spec_too
     assert run == je.copy(run)
     assert run.name == spec_too.name
@@ -81,8 +82,8 @@ def test_name_persistance():
 
 def test_implicit_fields():
     """These test that users can't directly set names and labels."""
-    name = 'name'
-    labels = ['label', 'also']
+    name = "name"
+    labels = ["label", "also"]
     with pytest.raises(TypeError):
         IngredientRun(name=name)
     with pytest.raises(TypeError):

@@ -5,40 +5,36 @@ import tempfile
 
 # Example data (that could have been loaded from a json file)
 example = {
-    "sample_id": '37e6b61f-b55c-43f1-a14d-534fc29c86f8',
+    "sample_id": "37e6b61f-b55c-43f1-a14d-534fc29c86f8",
     "tags": ["example", "demo", "json"],
     "experiments": [
         {
             "knob_2_setting": "low",
             "temperature": "300 degF",
             "density": "1.0 +- 0.5 g/cm^3",
-            "tags": "warm up"
+            "tags": "warm up",
         },
         {
             "knob_2_setting": "low",
             "temperature": "302 degF",
             "density": "1.04 +- 0.1 g/cm^3",
-            "tags": ["high quality", "hutch"]
+            "tags": ["high quality", "hutch"],
         },
-        {
-            "knob_2_setting": "medium",
-            "density": "0.9 +- 0.4 g/cm^3",
-            "tags": ["oops"]
-        },
+        {"knob_2_setting": "medium", "density": "0.9 +- 0.4 g/cm^3", "tags": ["oops"]},
         {
             "knob_2_setting": "medium",
             "temperature": "456 degF",
             "density": "0.87 +- 0.1 g/cm^3",
-            "tags": ["high quality", "hutch"]
+            "tags": ["high quality", "hutch"],
         },
         {
             "knob_2_setting": "high",
             "temperature": "624 degF",
             "density": "0.80 +- 0.12 g/cm^3",
             "kinematic viscosity": "0.1 m^2/s",
-            "tags": ["hutch", "viscous"]
-        }
-    ]
+            "tags": ["hutch", "viscous"],
+        },
+    ],
 }
 
 

@@ -27,14 +27,14 @@ class ValidList(list):
             content_type = tuple()
 
         if isinstance(content_type, dict):
-            raise TypeError('A dict is not an acceptable container for content filters')
+            raise TypeError("A dict is not an acceptable container for content filters")
         elif isinstance(content_type, Iterable):
             self._content_type = tuple(content_type)
         else:
             self._content_type = tuple([content_type])
         for elem in self._content_type:
             if not isinstance(elem, type):
-                raise TypeError('Content filters must be types')
+                raise TypeError("Content filters must be types")
         for value in _list:
             self._validate(value)
 
@@ -42,7 +42,7 @@ class ValidList(list):
         cache = list(_list)
         if trigger is not None:
             if not callable(trigger):
-                raise TypeError('Triggers must be callable')
+                raise TypeError("Triggers must be callable")
             self._trigger = trigger
             for i, value in enumerate(_list):
                 result = self._trigger(value)
@@ -72,7 +72,10 @@ class ValidList(list):
         """
         if not isinstance(value, self._content_type):
             raise TypeError(
-                'Value is not of an accepted type: {} =/= {}'.format(value, self._content_type))
+                "Value is not of an accepted type: {} =/= {}".format(
+                    value, self._content_type
+                )
+            )
 
     def __setitem__(self, index, value):
         """

@@ -37,9 +37,12 @@ class DictSerializable(ABC):
         for name, arg in d.items():
             if name in expected_arg_names:
                 kwargs[name] = arg
-            elif name != 'type':
-                logger.warning('Ignoring unexpected keyword argument in {}: {}'.format(
-                    cls.__name__, name))
+            elif name != "type":
+                logger.warning(
+                    "Ignoring unexpected keyword argument in {}: {}".format(
+                        cls.__name__, name
+                    )
+                )
         # noinspection PyArgumentList
         # DictSerializable's constructor is not intended for use,
         # but all of its children will use from_dict like this.
@@ -55,7 +58,7 @@ class DictSerializable(ABC):
             A dictionary representation of the object, where the keys are its fields.
 
         """
-        keys = {x.lstrip('_') for x in vars(self) if x not in self.skip}
+        keys = {x.lstrip("_") for x in vars(self) if x not in self.skip}
         attributes = {k: self.__getattribute__(k) for k in keys}
         attributes["type"] = self.typ
         return attributes
@@ -73,6 +76,7 @@ class DictSerializable(ABC):
 
         """
         from gemd.json import GEMDJson
+
         encoder = GEMDJson()
         return json.loads(encoder.raw_dumps(self))
 
@@ -96,13 +100,14 @@ class DictSerializable(ABC):
 
         """
         from gemd.json import GEMDJson
+
         encoder = GEMDJson()
         return encoder.raw_loads(encoder.raw_dumps(d))
 
     def __repr__(self):
         object_dict = self.as_dict()
         # as_dict() skips over keys in `skip`, but they should be in the representation.
-        skipped_keys = {x.lstrip('_') for x in vars(self) if x in self.skip}
+        skipped_keys = {x.lstrip("_") for x in vars(self) if x in self.skip}
         for key in skipped_keys:
             skipped_field = getattr(self, key, None)
             object_dict[key] = self._name_repr(skipped_field)
@@ -132,7 +137,7 @@ class DictSerializable(ABC):
         elif entity is None:
             return None
         else:
-            name = getattr(entity, 'name', '<unknown name>')
+            name = getattr(entity, "name", "<unknown name>")
             return "<{} '{}'>".format(type(entity).__name__, name)
 
     def __eq__(self, other):

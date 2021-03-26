@@ -50,12 +50,21 @@ class ProcessTemplate(BaseTemplate, HasConditionTemplates, HasParameterTemplates
 
     typ = "process_template"
 
-    def __init__(self, name, *, description=None,
-                 conditions=None, parameters=None,
-                 allowed_names=None, allowed_labels=None,
-                 uids=None, tags=None):
-        BaseTemplate.__init__(self, name=name, description=description,
-                              uids=uids, tags=tags)
+    def __init__(
+        self,
+        name,
+        *,
+        description=None,
+        conditions=None,
+        parameters=None,
+        allowed_names=None,
+        allowed_labels=None,
+        uids=None,
+        tags=None
+    ):
+        BaseTemplate.__init__(
+            self, name=name, description=description, uids=uids, tags=tags
+        )
         HasConditionTemplates.__init__(self, conditions)
         HasParameterTemplates.__init__(self, parameters)
 

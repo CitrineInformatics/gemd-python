@@ -9,7 +9,9 @@ class BaseEnumeration(Enum):
         """Ensure that there are no duplicates in the enumeration."""
         cls = self.__class__
         if any(self.value == e.value for e in cls):
-            raise ValueError("Duplicates not allowed in enumerated set of values {}".format(cls))
+            raise ValueError(
+                "Duplicates not allowed in enumerated set of values {}".format(cls)
+            )
         if not isinstance(self.value, str):
             raise ValueError("All values of enum {} must be strings".format(cls))
 
@@ -27,7 +29,9 @@ class BaseEnumeration(Enum):
             return name
         if any(name == e for e in cls):
             return name.value
-        raise ValueError("'{}' is not a valid choice for enumeration {}".format(name, cls))
+        raise ValueError(
+            "'{}' is not a valid choice for enumeration {}".format(name, cls)
+        )
 
     @classmethod
     def get_enum(cls, name):
@@ -43,4 +47,6 @@ class BaseEnumeration(Enum):
             return next(e for e in cls if e.value == name)
         if any(name == e for e in cls):
             return name
-        raise ValueError("'{}' is not a valid choice for enumeration {}".format(name, cls))
+        raise ValueError(
+            "'{}' is not a valid choice for enumeration {}".format(name, cls)
+        )

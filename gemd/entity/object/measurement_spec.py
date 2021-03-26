@@ -39,11 +39,21 @@ class MeasurementSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
 
     typ = "measurement_spec"
 
-    def __init__(self, name, *, template=None,
-                 parameters=None, conditions=None,
-                 uids=None, tags=None, notes=None, file_links=None):
-        BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
-                            file_links=file_links)
+    def __init__(
+        self,
+        name,
+        *,
+        template=None,
+        parameters=None,
+        conditions=None,
+        uids=None,
+        tags=None,
+        notes=None,
+        file_links=None
+    ):
+        BaseObject.__init__(
+            self, name=name, uids=uids, tags=tags, notes=notes, file_links=file_links
+        )
         HasParameters.__init__(self, parameters=parameters)
         HasConditions.__init__(self, conditions=conditions)
         HasTemplate.__init__(self, template=template)

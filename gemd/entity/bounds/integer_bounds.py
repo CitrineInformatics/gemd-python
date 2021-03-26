@@ -24,7 +24,9 @@ class IntegerBounds(BaseBounds):
         self.upper_bound = upper_bound
 
         if self.lower_bound is None or abs(self.lower_bound) >= float("inf"):
-            raise ValueError("Lower bound must be given and finite: {}".format(self.lower_bound))
+            raise ValueError(
+                "Lower bound must be given and finite: {}".format(self.lower_bound)
+            )
 
         if self.upper_bound is None or abs(self.upper_bound) >= float("inf"):
             raise ValueError("Upper bound must be given and finite")
@@ -59,4 +61,7 @@ class IntegerBounds(BaseBounds):
         if not isinstance(bounds, IntegerBounds):
             return False
 
-        return bounds.lower_bound >= self.lower_bound and bounds.upper_bound <= self.upper_bound
+        return (
+            bounds.lower_bound >= self.lower_bound
+            and bounds.upper_bound <= self.upper_bound
+        )

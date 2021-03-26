@@ -2,15 +2,20 @@
 from gemd.entity.bounds.real_bounds import RealBounds
 from gemd.entity.value.continuous_value import ContinuousValue
 
-fraction_bounds = RealBounds(lower_bound=0.0, upper_bound=1.0, default_units='')
+fraction_bounds = RealBounds(lower_bound=0.0, upper_bound=1.0, default_units="")
 
 
 class HasQuantities(object):
     """Mixin-trait that includes the mass, volume, number fraction, and absolute quantity."""
 
-    def __init__(self, *,
-                 mass_fraction=None, volume_fraction=None, number_fraction=None,
-                 absolute_quantity=None):
+    def __init__(
+        self,
+        *,
+        mass_fraction=None,
+        volume_fraction=None,
+        number_fraction=None,
+        absolute_quantity=None
+    ):
 
         self._mass_fraction = None
         self.mass_fraction = mass_fraction

@@ -52,22 +52,47 @@ class GEMDJson(object):
     """
 
     _clazzes = [
-        MaterialTemplate, MeasurementTemplate, ProcessTemplate,
-        MaterialSpec, MeasurementSpec, ProcessSpec, IngredientSpec,
-        ProcessRun, MaterialRun, MeasurementRun, IngredientRun,
-        Property, Condition, Parameter, PropertyAndConditions,
-        PropertyTemplate, ConditionTemplate, ParameterTemplate,
-        RealBounds, IntegerBounds, CategoricalBounds, CompositionBounds,
+        MaterialTemplate,
+        MeasurementTemplate,
+        ProcessTemplate,
+        MaterialSpec,
+        MeasurementSpec,
+        ProcessSpec,
+        IngredientSpec,
+        ProcessRun,
+        MaterialRun,
+        MeasurementRun,
+        IngredientRun,
+        Property,
+        Condition,
+        Parameter,
+        PropertyAndConditions,
+        PropertyTemplate,
+        ConditionTemplate,
+        ParameterTemplate,
+        RealBounds,
+        IntegerBounds,
+        CategoricalBounds,
+        CompositionBounds,
         MolecularStructureBounds,
-        NominalComposition, EmpiricalFormula,
-        NominalReal, UniformReal, NormalReal, DiscreteCategorical, NominalCategorical,
-        UniformInteger, NominalInteger, Smiles, InChI,
-        FileLink, PerformedSource
+        NominalComposition,
+        EmpiricalFormula,
+        NominalReal,
+        UniformReal,
+        NormalReal,
+        DiscreteCategorical,
+        NominalCategorical,
+        UniformInteger,
+        NominalInteger,
+        Smiles,
+        InChI,
+        FileLink,
+        PerformedSource,
     ]
 
     _link_type = LinkByUID
 
-    def __init__(self, scope='auto'):
+    def __init__(self, scope="auto"):
         self._scope = scope
         self._clazz_index = {}
         # build index from the class's typ member to the class itself
@@ -126,7 +151,10 @@ class GEMDJson(object):
         # so we can replace links with pointers
         index = {}
         raw = json_builtin.loads(
-            json_str, object_hook=lambda x: self._load_and_index(x, index, True), **kwargs)
+            json_str,
+            object_hook=lambda x: self._load_and_index(x, index, True),
+            **kwargs
+        )
         # the return value is in the 2nd position.
         return raw["object"]
 
@@ -248,7 +276,8 @@ class GEMDJson(object):
         # so we can replace links with pointers
         index = {}
         return json_builtin.loads(
-            json_str, object_hook=lambda x: self._load_and_index(x, index), **kwargs)
+            json_str, object_hook=lambda x: self._load_and_index(x, index), **kwargs
+        )
 
     def register_classes(self, classes):
         """
@@ -267,11 +296,15 @@ class GEMDJson(object):
         non_string_keys = [x for x in classes.keys() if not isinstance(x, str)]
         if len(non_string_keys) > 0:
             raise ValueError(
-                "The keys must be strings, but got {} as keys".format(non_string_keys))
+                "The keys must be strings, but got {} as keys".format(non_string_keys)
+            )
         non_class_values = [x for x in classes.values() if not inspect.isclass(x)]
         if len(non_class_values) > 0:
             raise ValueError(
-                "The values must be classes, but got {} as values".format(non_class_values))
+                "The values must be classes, but got {} as values".format(
+                    non_class_values
+                )
+            )
 
         self._clazz_index.update(classes)
 

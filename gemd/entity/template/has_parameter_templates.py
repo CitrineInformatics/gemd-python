@@ -56,7 +56,8 @@ class HasParameterTemplates(object):
         if isinstance(parameters, Iterable):
             if any(isinstance(x, BaseBounds) for x in parameters):
                 parameters = [parameters]  # It's a template/bounds tuple (probably)
-        self._parameters = validate_list(parameters,
-                                         (ParameterTemplate, LinkByUID, list, tuple),
-                                         trigger=BaseTemplate._homogenize_ranges
-                                         )
+        self._parameters = validate_list(
+            parameters,
+            (ParameterTemplate, LinkByUID, list, tuple),
+            trigger=BaseTemplate._homogenize_ranges,
+        )

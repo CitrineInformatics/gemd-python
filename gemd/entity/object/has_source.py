@@ -21,4 +21,6 @@ class HasSource(object):
         elif isinstance(value, PerformedSource):
             self._source = value
         else:
-            raise TypeError("Source must be a PerformedSource; was {}".format(type(value)))
+            raise TypeError(
+                "Source must be a PerformedSource; was {}".format(type(value))
+            )

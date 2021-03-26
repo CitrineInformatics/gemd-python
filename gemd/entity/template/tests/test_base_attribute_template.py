@@ -31,7 +31,7 @@ def test_invalid_bounds():
     with pytest.raises(ValueError):
         SampleAttributeTemplate(name="name")  # Must have a bounds
     with pytest.raises(TypeError):
-        SampleAttributeTemplate(name="name", bounds=UniformReal(0, 1, ''))
+        SampleAttributeTemplate(name="name", bounds=UniformReal(0, 1, ""))
 
 
 def test_json():

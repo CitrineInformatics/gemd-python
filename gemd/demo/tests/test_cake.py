@@ -10,8 +10,15 @@ from gemd.entity.object.ingredient_run import IngredientRun
 from gemd.entity.file_link import FileLink
 
 from gemd.json import dumps
-from gemd.demo.cake import make_cake_templates, make_cake_spec, make_cake, \
-    import_toothpick_picture, change_scope, get_demo_scope, get_template_scope
+from gemd.demo.cake import (
+    make_cake_templates,
+    make_cake_spec,
+    make_cake,
+    import_toothpick_picture,
+    change_scope,
+    get_demo_scope,
+    get_template_scope,
+)
 from gemd.util import recursive_foreach
 
 
@@ -35,10 +42,11 @@ def test_cake():
     def _check_ids(obj):
         nonlocal uid_seen
         for scope in obj.uids:
-            lbl = '{}::{}'.format(scope, obj.uids[scope].lower())
+            lbl = "{}::{}".format(scope, obj.uids[scope].lower())
             if lbl in uid_seen:
                 assert uid_seen[lbl] == id(obj), "'{}' seen twice".format(lbl)
             uid_seen[lbl] = id(obj)
+
     recursive_foreach(cake, _check_ids)
 
     # Check that all recursive and square links are structured correctly
@@ -64,6 +72,7 @@ def test_cake():
         elif isinstance(obj, IngredientRun):
             assert obj in obj.process.ingredients
             assert obj.spec.material == obj.material.spec
+
     recursive_foreach(cake, _check_crosslinks)
 
 
@@ -80,7 +89,7 @@ def test_cake_sigs():
     assert dumps(templates) == tmpl_snap
     assert dumps(specs) == spec_snap
 
-    filelink = FileLink(filename='The name of the file', url='www.file.gov')
+    filelink = FileLink(filename="The name of the file", url="www.file.gov")
     cake2 = make_cake(seed=27, cake_spec=specs, tmpl=templates, toothpick_img=filelink)
 
     assert filelink.filename not in dumps(cake1)
@@ -98,24 +107,24 @@ def test_scope():
     default_cake = make_cake()
     default_scope = next(iter(default_cake.uids))
 
-    change_scope('second-scope')
+    change_scope("second-scope")
     second_cake = make_cake()
 
-    change_scope(data='third-scope', templates='also-a-scope')
-    assert get_demo_scope() == 'third-scope'
-    assert get_template_scope() == 'also-a-scope'
+    change_scope(data="third-scope", templates="also-a-scope")
+    assert get_demo_scope() == "third-scope"
+    assert get_template_scope() == "also-a-scope"
     third_cake = make_cake()
 
-    assert 'second-scope' not in default_cake.uids
-    assert 'third-scope' not in default_cake.uids
+    assert "second-scope" not in default_cake.uids
+    assert "third-scope" not in default_cake.uids
 
     assert default_scope not in second_cake.uids
-    assert 'second-scope' in second_cake.uids
-    assert 'third-scope' not in second_cake.uids
+    assert "second-scope" in second_cake.uids
+    assert "third-scope" not in second_cake.uids
 
     assert default_scope not in third_cake.uids
-    assert 'second-scope' not in third_cake.uids
-    assert 'third-scope' in third_cake.uids
+    assert "second-scope" not in third_cake.uids
+    assert "third-scope" in third_cake.uids
 
-    assert any('template' in x for x in default_cake.spec.template.uids)
-    assert not any('template' in x for x in third_cake.spec.template.uids)
+    assert any("template" in x for x in default_cake.spec.template.uids)
+    assert not any("template" in x for x in third_cake.spec.template.uids)

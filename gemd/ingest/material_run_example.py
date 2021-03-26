@@ -16,25 +16,29 @@ from gemd.entity.value.normal_real import NormalReal
 known_properties = {
     "density": PropertyTemplate(
         name="density",
-        bounds=RealBounds(lower_bound=0.0, upper_bound=1000.0, default_units='g / cm^3')
+        bounds=RealBounds(
+            lower_bound=0.0, upper_bound=1000.0, default_units="g / cm^3"
+        ),
     ),
     "kinematic viscosity": PropertyTemplate(
         name="kinematic viscosity",
-        bounds=RealBounds(lower_bound=0.0, upper_bound=10.0**40, default_units="m^2 / s")
-    )
+        bounds=RealBounds(
+            lower_bound=0.0, upper_bound=10.0 ** 40, default_units="m^2 / s"
+        ),
+    ),
 }
 
 known_conditions = {
     "temperature": ConditionTemplate(
         name="temperature",
-        bounds=RealBounds(lower_bound=0.0, upper_bound=1000.0, default_units='K')
+        bounds=RealBounds(lower_bound=0.0, upper_bound=1000.0, default_units="K"),
     )
 }
 
 known_parameters = {
     "knob_2_setting": ParameterTemplate(
         name="knob_2_setting",
-        bounds=CategoricalBounds(categories={"low", "medium", "high"})
+        bounds=CategoricalBounds(categories={"low", "medium", "high"}),
     )
 }
 
@@ -53,7 +57,7 @@ def _parse_value(val):
             unit = units.parse_units(toks[-1])
         except (ValueError, units.UndefinedUnitError):
             print("Couldn't find {}".format(toks[-1]))
-            unit = ''
+            unit = ""
 
         if std >= 0:
             return NormalReal(mean=mean, std=std, units=unit)
@@ -61,12 +65,12 @@ def _parse_value(val):
             return NominalReal(mean, units=unit)
     # if it is just a number wrap it in a nominal value
     elif isinstance(val, (float, int)):
-        return NominalReal(val, '')
+        return NominalReal(val, "")
     # if it is a single string, its either a single number of a category
     elif isinstance(val, str):
         try:
             num = float(val)
-            return NominalReal(num, '')
+            return NominalReal(num, "")
         except ValueError:
             return DiscreteCategorical(val)
     else:
@@ -79,7 +83,9 @@ def ingest_material_run(data, material_spec=None, process_run=None):
         return [ingest_material_run(x, material_spec) for x in data]
 
     if not isinstance(data, dict):
-        raise ValueError("This ingester operates on dict, but got {}".format(type(data)))
+        raise ValueError(
+            "This ingester operates on dict, but got {}".format(type(data))
+        )
 
     material = MaterialRun("Material Run")
 
@@ -98,7 +104,7 @@ def ingest_material_run(data, material_spec=None, process_run=None):
             prop = Property(
                 name=name,
                 template=known_properties[name],
-                value=_parse_value(experiment[name])
+                value=_parse_value(experiment[name]),
             )
             measurement.properties.append(prop)
 
@@ -106,7 +112,7 @@ def ingest_material_run(data, material_spec=None, process_run=None):
             cond = Condition(
                 name=name,
                 template=known_conditions[name],
-                value=_parse_value(experiment[name])
+                value=_parse_value(experiment[name]),
             )
             measurement.conditions.append(cond)
 
@@ -114,7 +120,7 @@ def ingest_material_run(data, material_spec=None, process_run=None):
             param = Parameter(
                 name=name,
                 template=known_parameters[name],
-                value=_parse_value(experiment[name])
+                value=_parse_value(experiment[name]),
             )
             measurement.parameters.append(param)
 

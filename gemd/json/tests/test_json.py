@@ -26,38 +26,51 @@ from gemd.util import substitute_objects, substitute_links
 
 def test_serialize():
     """Serializing a nested object should be identical to individually serializing each piece."""
-    condition = Condition(name="A condition", value=NominalReal(7, ''))
-    parameter = Parameter(name="A parameter", value=NormalReal(mean=17, std=1, units=''))
+    condition = Condition(name="A condition", value=NominalReal(7, ""))
+    parameter = Parameter(
+        name="A parameter", value=NormalReal(mean=17, std=1, units="")
+    )
     input_material = MaterialRun("name", tags="input")
     process = ProcessRun("name", tags="A tag on a process run")
     ingredient = IngredientRun(material=input_material, process=process)
     material = MaterialRun("name", tags=["A tag on a material"], process=process)
-    measurement = MeasurementRun("name", tags="A tag on a measurement", conditions=condition,
-                                 parameters=parameter, material=material)
+    measurement = MeasurementRun(
+        "name",
+        tags="A tag on a measurement",
+        conditions=condition,
+        parameters=parameter,
+        material=material,
+    )
 
     # serialize the root of the tree
     native_object = json.loads(dumps(measurement))
     # ingredients don't get serialized on the process
-    assert(len(native_object["context"]) == 5)
-    assert(native_object["object"]["type"] == LinkByUID.typ)
+    assert len(native_object["context"]) == 5
+    assert native_object["object"]["type"] == LinkByUID.typ
 
     # serialize all of the nodes
     native_batch = json.loads(dumps([material, process, measurement, ingredient]))
-    assert(len(native_batch["context"]) == 5)
-    assert(len(native_batch["object"]) == 4)
-    assert(all(x["type"] == LinkByUID.typ for x in native_batch["object"]))
+    assert len(native_batch["context"]) == 5
+    assert len(native_batch["object"]) == 4
+    assert all(x["type"] == LinkByUID.typ for x in native_batch["object"])
 
 
 def test_deserialize():
     """Round-trip serde should leave the object unchanged."""
-    condition = Condition(name="A condition", value=NominalReal(7, ''))
-    parameter = Parameter(name="A parameter", value=NormalReal(mean=17, std=1, units=''))
-    measurement = MeasurementRun("name", tags="A tag on a measurement", conditions=condition,
-                                 parameters=parameter)
+    condition = Condition(name="A condition", value=NominalReal(7, ""))
+    parameter = Parameter(
+        name="A parameter", value=NormalReal(mean=17, std=1, units="")
+    )
+    measurement = MeasurementRun(
+        "name",
+        tags="A tag on a measurement",
+        conditions=condition,
+        parameters=parameter,
+    )
     copy_meas = GEMDJson().copy(measurement)
-    assert(copy_meas.conditions[0].value == measurement.conditions[0].value)
-    assert(copy_meas.parameters[0].value == measurement.parameters[0].value)
-    assert(copy_meas.uids["auto"] == measurement.uids["auto"])
+    assert copy_meas.conditions[0].value == measurement.conditions[0].value
+    assert copy_meas.parameters[0].value == measurement.parameters[0].value
+    assert copy_meas.uids["auto"] == measurement.uids["auto"]
 
 
 def test_scope_control():
@@ -81,7 +94,7 @@ def test_scope_control():
     material.uids = {}
 
     # Verify the default scope is there
-    custom_json = GEMDJson(scope='custom')
+    custom_json = GEMDJson(scope="custom")
     custom_text = custom_json.dumps(material)
     assert "auto" not in custom_text
     assert "custom" in custom_text
@@ -89,9 +102,11 @@ def test_scope_control():
 
 def test_deserialize_extra_fields():
     """Extra JSON fields should be ignored in deserialization."""
-    json_data = '{"context": [],' \
-                ' "object": {"nominal": 5, "type": "nominal_integer", "extra garbage": "foo"}}'
-    assert(loads(json_data) == NominalInteger(nominal=5))
+    json_data = (
+        '{"context": [],'
+        ' "object": {"nominal": 5, "type": "nominal_integer", "extra garbage": "foo"}}'
+    )
+    assert loads(json_data) == NominalInteger(nominal=5)
 
 
 def test_enumeration_serde():
@@ -103,13 +118,8 @@ def test_enumeration_serde():
 
 def test_attribute_serde():
     """An attribute with a link to an attribute template should be copy-able."""
-    prop_tmpl = PropertyTemplate(name='prop_tmpl',
-                                 bounds=RealBounds(0, 2, 'm')
-                                 )
-    prop = Property(name='prop',
-                    template=prop_tmpl,
-                    value=NominalReal(1, 'm')
-                    )
+    prop_tmpl = PropertyTemplate(name="prop_tmpl", bounds=RealBounds(0, 2, "m"))
+    prop = Property(name="prop", template=prop_tmpl, value=NominalReal(1, "m"))
     meas_spec = MeasurementSpec("a spec")
     meas = MeasurementRun("a measurement", spec=meas_spec, properties=[prop])
     assert loads(dumps(prop)) == prop
@@ -120,32 +130,32 @@ def test_attribute_serde():
 def test_thin_dumps():
     """Test that thin_dumps turns pointers into links."""
     mat = MaterialRun("The actual material")
-    meas_spec = MeasurementSpec("measurement", uids={'my_scope': '324324'})
+    meas_spec = MeasurementSpec("measurement", uids={"my_scope": "324324"})
     meas = MeasurementRun("The measurement", spec=meas_spec, material=mat)
 
     thin_copy = MeasurementRun.build(json.loads(GEMDJson().thin_dumps(meas)))
     assert isinstance(thin_copy, MeasurementRun)
     assert isinstance(thin_copy.material, LinkByUID)
     assert isinstance(thin_copy.spec, LinkByUID)
-    assert thin_copy.spec.id == meas_spec.uids['my_scope']
+    assert thin_copy.spec.id == meas_spec.uids["my_scope"]
 
     # Check that LinkByUID objects are correctly converted their JSON equivalent
     expected_json = '{"id": "my_id", "scope": "scope", "type": "link_by_uid"}'
-    assert GEMDJson().thin_dumps(LinkByUID('scope', 'my_id')) == expected_json
+    assert GEMDJson().thin_dumps(LinkByUID("scope", "my_id")) == expected_json
 
     # Check that objects lacking .uid attributes will raise an exception when dumped
     with pytest.raises(TypeError):
-        GEMDJson().thin_dumps({{'key': 'value'}})
+        GEMDJson().thin_dumps({{"key": "value"}})
 
 
 def test_uid_deser():
     """Test that uids continue to be a CaseInsensitiveDict after deserialization."""
-    material = MaterialRun("Input material", tags="input", uids={'Sample ID': '500-B'})
+    material = MaterialRun("Input material", tags="input", uids={"Sample ID": "500-B"})
     ingredient = IngredientRun(material=material)
     ingredient_copy = loads(dumps(ingredient))
     assert isinstance(ingredient_copy.uids, CaseInsensitiveDict)
     assert ingredient_copy.material == material
-    assert ingredient_copy.material.uids['sample id'] == material.uids['Sample ID']
+    assert ingredient_copy.material.uids["sample id"] == material.uids["Sample ID"]
 
 
 def test_dict_serialization():
@@ -159,6 +169,7 @@ def test_dict_serialization():
 
 def test_unexpected_serialization():
     """Trying to serialize an unexpected class should throw a TypeError."""
+
     class DummyClass:
         def __init__(self, foo):
             self.foo = foo
@@ -169,8 +180,9 @@ def test_unexpected_serialization():
 
 def test_unexpected_deserialization():
     """Trying to deserialize an unexpected class should throw a TypeError."""
+
     class DummyClass(DictSerializable):
-        typ = 'dummy_class'
+        typ = "dummy_class"
 
         def __init__(self, foo):
             self.foo = foo
@@ -183,6 +195,7 @@ def test_unexpected_deserialization():
 
 def test_register_classes_override():
     """Test that register_classes overrides existing entries in the class index."""
+
     class MyProcessSpec(ProcessSpec):
         pass
 
@@ -191,11 +204,13 @@ def test_register_classes_override():
     custom.register_classes({MyProcessSpec.typ: MyProcessSpec})
 
     obj = ProcessSpec(name="foo")
-    assert not isinstance(normal.copy(obj), MyProcessSpec),\
-        "Class registration bled across GEMDJson() objects"
+    assert not isinstance(
+        normal.copy(obj), MyProcessSpec
+    ), "Class registration bled across GEMDJson() objects"
 
-    assert isinstance(custom.copy(obj), ProcessSpec),\
-        "Custom GEMDJson didn't deserialize as MyProcessSpec"
+    assert isinstance(
+        custom.copy(obj), ProcessSpec
+    ), "Custom GEMDJson didn't deserialize as MyProcessSpec"
 
 
 def test_register_argument_validation():
@@ -214,7 +229,7 @@ def test_register_argument_validation():
 
 def test_pure_subsitutions():
     """Make sure substitute methods don't mutate inputs."""
-    json_str = '''
+    json_str = """
           [
             [
               {
@@ -242,9 +257,11 @@ def test_pure_subsitutions():
               }
             }
           ]
-       '''
+       """
     index = {}
-    original = json.loads(json_str, object_hook=lambda x: GEMDJson()._load_and_index(x, index))
+    original = json.loads(
+        json_str, object_hook=lambda x: GEMDJson()._load_and_index(x, index)
+    )
     frozen = deepcopy(original)
     loaded = substitute_objects(original, index)
     assert original == frozen
@@ -268,7 +285,7 @@ def test_case_insensitive_rehydration():
     # A simple json string that could be loaded, representing an ingredient linked to a material.
     # The material link has "scope": "ID", whereas the material in the context list, which is
     # to be loaded, has uid with scope "id".
-    json_str = '''
+    json_str = """
           {
             "context": [
               {
@@ -296,7 +313,7 @@ def test_case_insensitive_rehydration():
               }
             }
           }
-       '''
+       """
     loaded_ingredient = loads(json_str)
     # The ingredient's material will either be a MaterialRun (pass) or a LinkByUID (fail)
     assert isinstance(loaded_ingredient.material, MaterialRun)
@@ -308,7 +325,9 @@ def test_many_ingredients():
     expected = []
     for i in range(10):
         mat = MaterialRun(name=str(i), spec=MaterialSpec("s{}".format(i)))
-        i_spec = IngredientSpec(name="i{}".format(i), material=mat.spec, process=proc.spec)
+        i_spec = IngredientSpec(
+            name="i{}".format(i), material=mat.spec, process=proc.spec
+        )
         IngredientRun(process=proc, material=mat, spec=i_spec)
         expected.append("i{}".format(i))
 
@@ -325,7 +344,7 @@ def test_deeply_nested_rehydration():
     In particular, this test makes sure that loads is robust to objects being referenced by
     LinkByUid before they are "declared" in the JSON array.
     """
-    json_str = '''
+    json_str = """
 {
   "context": [
     {
@@ -657,7 +676,7 @@ def test_deeply_nested_rehydration():
     "id": "f0f41fb9-32dc-4903-aaf4-f369de71530f"
   }
 }
-    '''
+    """
     material_history = loads(json_str)
     assert isinstance(material_history.process.ingredients[1].spec, IngredientSpec)
     assert isinstance(material_history.measurements[0], MeasurementRun)

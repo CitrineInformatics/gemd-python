@@ -10,7 +10,7 @@ def test_json():
     """Check that we can json ser/de round-robin."""
     smiles = Smiles("c1(C=O)cc(OC)c(O)cc1")
     copy = loads(dumps(smiles))
-    assert(copy == smiles)
+    assert copy == smiles
 
 
 def test_smiles_setter():

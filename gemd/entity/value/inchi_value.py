@@ -32,7 +32,9 @@ class InChI(MolecularValue):
         elif isinstance(value, str):
             self._inchi = value
         else:
-            raise TypeError("InChI must be given as a string; got {}".format(type(value)))
+            raise TypeError(
+                "InChI must be given as a string; got {}".format(type(value))
+            )
 
     def _to_bounds(self) -> MolecularStructureBounds:
         """

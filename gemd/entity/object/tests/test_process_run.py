@@ -23,23 +23,26 @@ def test_process_spec():
     process = ProcessRun("Run", conditions=condition2, spec=spec)
 
     copy_process = loads(dumps(process))
-    assert dumps(copy_process.spec) == dumps(spec), \
-        "Process spec should be preserved through serialization"
+    assert dumps(copy_process.spec) == dumps(
+        spec
+    ), "Process spec should be preserved through serialization"
 
 
 def test_ingredient_run():
     """Tests that a process can house an ingredient, and that pairing survives serialization."""
     # Create a ProcessSpec
     proc_run = ProcessRun(name="a process spec", tags=["tag1", "tag2"])
-    ingred_run = IngredientRun(material=MaterialRun(name='Raw'), process=proc_run)
+    ingred_run = IngredientRun(material=MaterialRun(name="Raw"), process=proc_run)
 
     # Make copies of both specs
     proc_run_copy = loads(dumps(proc_run))
 
-    assert proc_run_copy == proc_run, "Full structure wasn't preserved across serialization"
+    assert (
+        proc_run_copy == proc_run
+    ), "Full structure wasn't preserved across serialization"
 
-    assert 'process' in repr(ingred_run)
-    assert 'ingredients' in repr(proc_run)
+    assert "process" in repr(ingred_run)
+    assert "ingredients" in repr(proc_run)
 
 
 def test_invalid_assignment():
@@ -52,9 +55,9 @@ def test_invalid_assignment():
 
 def test_template_access():
     """A process run's template should be equal to its spec's template."""
-    template = ProcessTemplate("process template", uids={'id': str(uuid4())})
-    spec = ProcessSpec("A spec", uids={'id': str(uuid4())}, template=template)
-    proc = ProcessRun("A run", uids={'id': str(uuid4())}, spec=spec)
+    template = ProcessTemplate("process template", uids={"id": str(uuid4())})
+    spec = ProcessSpec("A spec", uids={"id": str(uuid4())}, template=template)
+    proc = ProcessRun("A run", uids={"id": str(uuid4())}, spec=spec)
     assert proc.template == template
 
     proc.spec = LinkByUID.from_entity(spec)

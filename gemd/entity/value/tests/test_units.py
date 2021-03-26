@@ -23,7 +23,10 @@ def test_invalid_units():
 
 def test_unit_normalization():
     """Make sure units are internally represented in a reasonable way."""
-    assert NominalReal(2.7, "newton / m^2").units == NominalReal(2.7, "m^-1 newton / meter").units
+    assert (
+        NominalReal(2.7, "newton / m^2").units
+        == NominalReal(2.7, "m^-1 newton / meter").units
+    )
 
     val = NominalReal(2.7, "cm")
     assert val.units == "centimeter"

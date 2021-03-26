@@ -56,7 +56,8 @@ class HasConditionTemplates(object):
         if isinstance(conditions, Iterable):
             if any(isinstance(x, BaseBounds) for x in conditions):
                 conditions = [conditions]  # It's a template/bounds tuple (probably)
-        self._conditions = validate_list(conditions,
-                                         (ConditionTemplate, LinkByUID, list, tuple),
-                                         trigger=BaseTemplate._homogenize_ranges
-                                         )
+        self._conditions = validate_list(
+            conditions,
+            (ConditionTemplate, LinkByUID, list, tuple),
+            trigger=BaseTemplate._homogenize_ranges,
+        )
