@@ -5,7 +5,7 @@ _RaiseKeyError = object()  # singleton for no-default behavior
 
 class CaseInsensitiveDict(dict):
     """
-    A dictionary in which the keys are case-insensitive.
+    A dictionary in which the keys are case-insensitive. Making a change to an existing file.
 
     It is initialized the same way as a typical dict, but the values can be accessed without
     regard to key case. The value associated with key "Key" can also be accessed with "key"
