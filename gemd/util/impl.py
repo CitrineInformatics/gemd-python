@@ -17,18 +17,22 @@ def set_uuids(obj, scope):
     :param scope: of the uuid to assign
     :return: None
     """
+
     def func(base_obj):
         if len(base_obj.uids) == 0:
             base_obj.add_uid(scope, str(uuid.uuid4()))
         return
+
     recursive_foreach(obj, func)
     return
 
 
-def _substitute(thing,
-                sub: Callable[[object], object],
-                applies: Callable[[object], bool],
-                visited: Dict[object, object] = None) -> object:
+def _substitute(
+    thing,
+    sub: Callable[[object], object],
+    applies: Callable[[object], bool],
+    visited: Dict[object, object] = None,
+) -> object:
     """
     Generic recursive substitute function.
 
@@ -52,11 +56,15 @@ def _substitute(thing,
     elif isinstance(thing, tuple):
         new = tuple(_substitute(x, sub, applies, visited) for x in thing)
     elif isinstance(thing, dict):
-        new = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
-               for k, v in thing.items()}
+        new = {
+            _substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
+            for k, v in thing.items()
+        }
     elif isinstance(thing, DictSerializable):
-        new_attrs = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
-                     for k, v in thing.as_dict().items()}
+        new_attrs = {
+            _substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
+            for k, v in thing.as_dict().items()
+        }
         new = thing.build(new_attrs)
     else:
         new = thing
@@ -69,6 +77,7 @@ def _substitute(thing,
     # assert type(thing) == type(new), "{} is not {}".format(type(thing), type(new))
     return new
 
+
 def make_index(gems):
     """
     Given a list of GEMD objects, generates an index that can be used for substitute_links and substitute_objects methods.
@@ -79,8 +88,9 @@ def make_index(gems):
     gem_index = {}
     for gem in gems:
         for k, v in gem.uids.items():
-            gem_index[(k,v)] = gem
+            gem_index[(k, v)] = gem
     return gem_index
+
 
 def substitute_links(obj, native_uid=None):
     """
@@ -91,6 +101,7 @@ def substitute_links(obj, native_uid=None):
     :param obj: target of the operation
     :param native_uid: preferred uid to use for creating LinkByUID objects (Default: None)
     """
+
     def make_link(entity: BaseEntity):
         if len(entity.uids) == 0:
             raise ValueError("No UID for {}".format(entity))
@@ -99,8 +110,9 @@ def substitute_links(obj, native_uid=None):
         else:
             return LinkByUID.from_entity(entity)
 
-    return _substitute(obj, sub=make_link,
-                       applies=lambda o: o is not obj and isinstance(o, BaseEntity))
+    return _substitute(
+        obj, sub=make_link, applies=lambda o: o is not obj and isinstance(o, BaseEntity)
+    )
 
 
 def substitute_objects(obj, index):
@@ -112,9 +124,11 @@ def substitute_objects(obj, index):
     :param obj: target of the operation
     :param index: containing the objects that the uids point to
     """
-    return _substitute(obj,
-                       sub=lambda l: index.get((l.scope.lower(), l.id), l),
-                       applies=lambda o: isinstance(o, LinkByUID))
+    return _substitute(
+        obj,
+        sub=lambda l: index.get((l.scope.lower(), l.id), l),
+        applies=lambda o: isinstance(o, LinkByUID),
+    )
 
 
 def flatten(obj, scope):
@@ -158,7 +172,9 @@ def flatten(obj, scope):
         return to_return
 
     res = recursive_flatmap(obj, _flatten, unidirectional=False)
-    return sorted([substitute_links(x) for x in res], key=lambda x: writable_sort_order(x))
+    return sorted(
+        [substitute_links(x) for x in res], key=lambda x: writable_sort_order(x)
+    )
 
 
 def recursive_foreach(obj, func, apply_first=False, seen=None):
@@ -241,17 +257,33 @@ def recursive_flatmap(obj, func, seen=None, unidirectional=True):
 
 def writable_sort_order(key: Union[BaseEntity, str]) -> int:
     """Sort order for flattening such that the objects can be read back and re-nested."""
-    from gemd.entity.object import MeasurementSpec, ProcessSpec, MaterialSpec, IngredientSpec, \
-        MeasurementRun, IngredientRun, MaterialRun, ProcessRun
-    from gemd.entity.template import ConditionTemplate, MaterialTemplate, MeasurementTemplate, \
-        ParameterTemplate, ProcessTemplate, PropertyTemplate
+    from gemd.entity.object import (
+        MeasurementSpec,
+        ProcessSpec,
+        MaterialSpec,
+        IngredientSpec,
+        MeasurementRun,
+        IngredientRun,
+        MaterialRun,
+        ProcessRun,
+    )
+    from gemd.entity.template import (
+        ConditionTemplate,
+        MaterialTemplate,
+        MeasurementTemplate,
+        ParameterTemplate,
+        ProcessTemplate,
+        PropertyTemplate,
+    )
 
     if isinstance(key, BaseEntity):
         typ = key.typ
     elif isinstance(key, str):
         typ = key
     else:
-        raise ValueError("Can ony sort BaseEntities and type strings, not {}".format(key))
+        raise ValueError(
+            "Can ony sort BaseEntities and type strings, not {}".format(key)
+        )
 
     if typ in [ConditionTemplate.typ, ParameterTemplate.typ, PropertyTemplate.typ]:
         return 0
