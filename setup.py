@@ -6,7 +6,7 @@ import subprocess
 
 
 setup(name='gemd',
-      version='0.17.1',
+      version='0.17.2',
       url='http://github.com/CitrineInformatics/gemd-python',
       description="Python binding for Citrine's GEMD data model",
       author='Max Hutchinson',
