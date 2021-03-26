@@ -3,6 +3,8 @@ from gemd.entity.object import ProcessSpec, MaterialSpec, IngredientSpec, Proces
     MaterialRun, IngredientRun
 from gemd.entity.template.condition_template import ConditionTemplate
 from gemd.entity.template.process_template import ProcessTemplate
+from gemd.entity.attribute.condition import Condition
+from gemd.entity.value.nominal_categorical import NominalCategorical
 from gemd.util import flatten, recursive_flatmap
 
 
@@ -16,7 +18,8 @@ def test_flatten_bounds():
     spec = ProcessSpec(name="spec", template=template)
 
     flat = flatten(spec, 'test-scope')
-    assert len(flat) == 2, "Expected 2 flattened objects"
+    # 3 objects: 1 Process Template, 1 Condition Template and 1 Process Spec
+    assert len(flat) == 3, "Expected 3 flattened objects"
 
 
 def test_flatten_empty_history():
@@ -50,4 +53,19 @@ def test_flatmap_unidirectional_ordering():
     IngredientRun(notes="bar", process=proc)
 
     assert len(recursive_flatmap(proc, lambda x: [x], unidirectional=False)) == 2
-    assert len(recursive_flatmap(proc, lambda x: [x], unidirectional=True)) == 0
+    assert len(recursive_flatmap(proc, lambda x: [x], unidirectional=True)) == 1
+
+
+def test_repeated_objects():
+    """Test that objects aren't double counted."""
+    ct = ConditionTemplate(name="color",
+                           bounds=CategoricalBounds(categories=["black", "white"]))
+    pt = ProcessTemplate(name="painting", conditions=[ct])
+    ps = ProcessSpec(name='painting',
+                     template=pt,
+                     conditions=Condition(name='Paint color',
+                                          value=NominalCategorical("black"),
+                                          template=ct
+                                          )
+                     )
+    assert len(recursive_flatmap(ps, lambda x: [x])) == 3

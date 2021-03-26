@@ -34,3 +34,8 @@ def test_contains():
     assert not int_bounds.contains(None)
     with pytest.raises(TypeError):
         int_bounds.contains([0, 1])
+
+    from gemd.entity.value import NominalInteger
+
+    assert int_bounds.contains(NominalInteger(1))
+    assert not int_bounds.contains(NominalInteger(5))

@@ -2,6 +2,8 @@
 from gemd.entity.bounds.base_bounds import BaseBounds
 from gemd.entity.util import array_like
 
+from typing import Union
+
 
 class CompositionBounds(BaseBounds):
     """
@@ -39,26 +41,30 @@ class CompositionBounds(BaseBounds):
         if not all(isinstance(x, str) for x in self.components):
             raise ValueError("All the components must be strings")
 
-    def contains(self, bounds: BaseBounds) -> bool:
+    def contains(self, bounds: Union[BaseBounds, "BaseValue"]) -> bool:
         """
-        Check if another bounds is contained by this bounds.
+        Check if another bounds or value object is contained by this bounds.
 
-        The other bounds must also be a CompositionBounds and its components must be a subset of
-        this bounds's set of required components.
+        The other object must also be a Composition and its components must be a subset of
+        this bounds's set of allowed components.
 
         Parameters
         ----------
-        bounds: BaseBounds
-            Other bounds object to check.
+        bounds: Union[BaseBounds, BaseValue]
+            Other object to check.
 
         Returns
         -------
         bool
-            True if the other bounds is contained by this bounds.
+            True if the other object is contained by this bounds.
 
         """
+        from gemd.entity.value.base_value import BaseValue
+
         if not super().contains(bounds):
             return False
+        if isinstance(bounds, BaseValue):
+            bounds = bounds._to_bounds()
         if not isinstance(bounds, CompositionBounds):
             return False
 

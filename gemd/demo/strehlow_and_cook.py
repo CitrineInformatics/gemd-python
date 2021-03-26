@@ -28,6 +28,7 @@ from gemd.entity.bounds.real_bounds import RealBounds
 
 from gemd.enumeration.origin import Origin
 
+from gemd.units import convert_units
 
 # For now, module constant, though likely this should get promoted to a package level
 DEMO_TEMPLATE_SCOPE = 'citrine-demo-sac-template'
@@ -204,10 +205,24 @@ def make_strehlow_objects(table=None, template_scope=DEMO_TEMPLATE_SCOPE):
     def real_mapper(prop):
         """Mapping methods for RealBounds."""
         if 'uncertainty' in prop['scalars'][0]:
-            val = NormalReal(mean=float(prop['scalars'][0]['value']),
-                             units=prop['units'],
-                             std=float(prop['scalars'][0]['uncertainty'])
-                             )
+            if prop['units'] == 'eV':  # Arbitrarily convert to attojoules
+                mean = convert_units(value=float(prop['scalars'][0]['value']),
+                                     starting_unit=prop['units'],
+                                     final_unit='aJ'
+                                     )
+                std = convert_units(value=float(prop['scalars'][0]['value']),
+                                    starting_unit=prop['units'],
+                                    final_unit='aJ'
+                                    )
+                val = NormalReal(mean=mean,
+                                 units='aJ',
+                                 std=std
+                                 )
+            else:
+                val = NormalReal(mean=float(prop['scalars'][0]['value']),
+                                 units=prop['units'],
+                                 std=float(prop['scalars'][0]['uncertainty'])
+                                 )
         else:
             val = NominalReal(nominal=float(prop['scalars'][0]['value']),
                               units=prop['units']

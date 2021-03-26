@@ -33,6 +33,11 @@ def test_contains():
     with pytest.raises(TypeError):
         bounds.contains({"spam"})
 
+    from gemd.entity.value import NominalComposition
+
+    assert bounds.contains(NominalComposition({"spam": 0.2, "eggs": 0.8}))
+    assert not bounds.contains(NominalComposition({"foo": 1.0}))
+
 
 def test_json():
     """Test serialization (components is encoded as a list)."""

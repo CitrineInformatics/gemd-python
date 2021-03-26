@@ -5,6 +5,8 @@ In the future, this may include substructural restrictions.
 """
 from gemd.entity.bounds.base_bounds import BaseBounds
 
+from typing import Union
+
 
 class MolecularStructureBounds(BaseBounds):
     """Molecular bounds, with no component or substructural restrictions (yet)."""
@@ -14,17 +16,17 @@ class MolecularStructureBounds(BaseBounds):
     def __init__(self):
         pass
 
-    def contains(self, bounds: BaseBounds) -> bool:
+    def contains(self, bounds: Union[BaseBounds, "BaseValue"]) -> bool:
         """
-        Check if another bounds is contained by this bounds.
+        Check if another bounds or value object is contained by this bounds.
 
-        The other bounds must also be a MolecularBounds.  There are no other
+        The other object must also be or type Molecular.  There are no other
         conditions at this time.
 
         Parameters
         ----------
-        bounds: BaseBounds
-            Other bounds object to check.
+        bounds: Union[BaseBounds, BaseValue]
+            Other bounds or value object to check.
 
         Returns
         -------
@@ -32,8 +34,12 @@ class MolecularStructureBounds(BaseBounds):
             True if the other bounds is contained by this bounds.
 
         """
+        from gemd.entity.value.base_value import BaseValue
+
         if not super().contains(bounds):
             return False
+        if isinstance(bounds, BaseValue):
+            bounds = bounds._to_bounds()
         if not isinstance(bounds, MolecularStructureBounds):
             return False
 
