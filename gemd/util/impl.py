@@ -69,9 +69,10 @@ def _substitute(thing,
     # assert type(thing) == type(new), "{} is not {}".format(type(thing), type(new))
     return new
 
+
 def make_index(gems):
     """
-    Given a list of GEMD objects, generates an index that can be used for substitute_links and substitute_objects methods.
+    Generates an index that can be used for substitute_links and substitute_objects methods.
 
     :gems list: List of GEMD objects from which to create an index
 
@@ -79,8 +80,9 @@ def make_index(gems):
     gem_index = {}
     for gem in gems:
         for k, v in gem.uids.items():
-            gem_index[(k,v)] = gem
+            gem_index[(k, v)] = gem
     return gem_index
+
 
 def substitute_links(obj, native_uid=None):
     """
