@@ -70,18 +70,24 @@ def _substitute(thing,
     return new
 
 
-def make_index(gems):
+def make_index(obj):
     """
     Generates an index that can be used for substitute_links and substitute_objects methods.
 
-    :gems list: List of GEMD objects from which to create an index
+    This method builds a dictionary of GEMD objects found by recursively crawling the passed
+    object, indexed by all scope:id tuples found in the objects.
+
+    :param obj: target container from which to create an index of GEMD objects
 
     """
-    gem_index = {}
-    for gem in gems:
-        for k, v in gem.uids.items():
-            gem_index[(k, v)] = gem
-    return gem_index
+    def _gather_index(_target: BaseEntity):
+        return (((scope, _target.uids[scope]), _target) for scope in _target.uids)
+
+    idx = {}
+    for uid, target in recursive_flatmap(obj, _gather_index):
+        idx[uid] = target
+
+    return idx
 
 
 def substitute_links(obj, native_uid=None):
