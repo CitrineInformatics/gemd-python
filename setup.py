@@ -1,12 +1,8 @@
 from setuptools import setup, find_packages
-from setuptools.command.install import install
-from setuptools.command.develop import develop
-import sys
-import subprocess
 
 
 setup(name='gemd',
-      version='0.17.2',
+      version='0.17.3',
       url='http://github.com/CitrineInformatics/gemd-python',
       description="Python binding for Citrine's GEMD data model",
       author='Max Hutchinson',
@@ -34,4 +30,4 @@ setup(name='gemd',
           'Programming Language :: Python :: 3.7',
           'Programming Language :: Python :: 3.8',
       ],
-)
+      )
