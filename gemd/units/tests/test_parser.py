@@ -19,7 +19,8 @@ def test_parse_expected():
         "g/cm^3", "g/mL", "kg/cm^3",
         _ureg("kg").u,
         "amu",  # A line that was edited
-        "Seconds"  # Added support for some title-case units
+        "Seconds",  # Added support for some title-case units
+        "delta_Celsius / hour"  # Added to make sure pint version is right (>0.10)
     ]
     for unit in expected:
         parse_units(unit)
