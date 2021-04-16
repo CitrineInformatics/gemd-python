@@ -3,7 +3,8 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
     <title>1.2. Serialization (with Graphs!) &#8212; GEMD-python 0.0.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -31,7 +32,7 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="serialization-with-graphs">
+  <section id="serialization-with-graphs">
 <span id="serialization-in-depth"></span><h1>1.2. Serialization (with Graphs!)<a class="headerlink" href="#serialization-with-graphs" title="Permalink to this headline">¶</a></h1>
 <p>GEMD objects link together to form graphs with directional edges.
 For example, a <a class="reference internal" href="../reference/gemd.entity.object.material_run.html#gemd.entity.object.material_run.MaterialRun" title="gemd.entity.object.material_run.MaterialRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">MaterialRun</span></code></a> links back to the <a class="reference internal" href="../reference/gemd.entity.object.process_run.html#gemd.entity.object.process_run.ProcessRun" title="gemd.entity.object.process_run.ProcessRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessRun</span></code></a> that produced it.
@@ -111,7 +112,7 @@ and it replaces any <a class="reference internal" href="../reference/gemd.entity
 The only thing left to do is return the <code class="docutils literal notranslate"><span class="pre">&quot;object&quot;</span></code> item from the resulting dictionary.</p>
 <p>This strategy is implemented in the <a class="reference internal" href="../reference/gemd.json.gemd_json.html#gemd.json.gemd_json.GEMDJson" title="gemd.json.gemd_json.GEMDJson"><code class="xref py py-class docutils literal notranslate"><span class="pre">GEMDJson</span></code></a> class
 and conveniently exposed in the <a class="reference internal" href="../reference/gemd.json.html#module-gemd.json" title="gemd.json"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gemd.json</span></code></a> module, which provides the familiar <cite>json</cite> interface.</p>
-</div>
+</section>
 
 
           </div>

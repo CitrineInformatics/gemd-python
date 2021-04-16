@@ -3,7 +3,8 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
     <title>gemd.util.impl module &#8212; GEMD-python 0.0.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -30,7 +31,7 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-gemd.util.impl">
+  <section id="module-gemd.util.impl">
 <span id="gemd-util-impl-module"></span><h1>gemd.util.impl module<a class="headerlink" href="#module-gemd.util.impl" title="Permalink to this headline">¶</a></h1>
 <p>Utility functions.</p>
 <dl class="function">
@@ -58,6 +59,20 @@ This supports the flattening of entire material histories.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a list of BaseEntity with LinkByUIDs to any BaseEntity members</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="gemd.util.impl.make_index">
+<code class="sig-prename descclassname">gemd.util.impl.</code><code class="sig-name descname">make_index</code><span class="sig-paren">(</span><em class="sig-param">obj</em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.util.impl.make_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an index that can be used for the substitute_objects method.</p>
+<p>This method builds a dictionary of GEMD objects found by recursively crawling the passed
+object, indexed by all scope:id tuples found in any of the objects.  The passed object can
+be a list, tuple, dictionary or GEMD object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>obj</strong> – target container (dict, list, ..) from which to create an index of GEMD objects</p>
 </dd>
 </dl>
 </dd></dl>
@@ -139,7 +154,7 @@ It is the inverse of substitute_links.
 <dd><p>Sort order for flattening such that the objects can be read back and re-nested.</p>
 </dd></dl>
 
-</div>
+</section>
 
 
           </div>
