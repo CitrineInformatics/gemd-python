@@ -172,7 +172,7 @@ turn = 2 * π * radian = _ = revolution = cycle = circle = Turn = Revolution = C
 degree = π / 180 * radian = deg = arcdeg = arcdegree = angular_degree = Degree = Deg = Arcdeg = Arcdegree = Angular_Degree
 arcminute = degree / 60 = arcmin = arc_minute = angular_minute = Arcminute = Arc_Minute = Angular_Minute
 arcsecond = arcminute / 60 = arcsec = arc_second = angular_second = Arcsecond = Arc_Second = Angular_Second
-milliarcsecond = 1e-3 * arcsecond = mas = Milliarcsecond
+milliarcsecond = 1e-3 * arcsecond = Milliarcsecond
 grade = π / 200 * radian = grad = gon = Grade
 mil = π / 32000 * radian = Mil
 
