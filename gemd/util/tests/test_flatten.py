@@ -69,3 +69,7 @@ def test_repeated_objects():
                                           )
                      )
     assert len(recursive_flatmap(ps, lambda x: [x])) == 3
+
+
+if __name__ == "__main__":
+    test_flatmap_unidirectional_ordering()

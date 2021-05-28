@@ -170,7 +170,7 @@ def flatten(obj, scope):
     return sorted([substitute_links(x) for x in res], key=lambda x: writable_sort_order(x))
 
 
-def recursive_foreach(obj, func, apply_first=False, seen=None):
+def recursive_foreach(obj, func, *, apply_first=False):
     """
     Apply a function recursively to each BaseEntity object.
 
@@ -181,37 +181,39 @@ def recursive_foreach(obj, func, apply_first=False, seen=None):
     :param obj: target of the operation
     :param func: to apply to each contained BaseEntity
     :param apply_first: whether to apply the func before applying it to members (default: false)
-    :param seen: set of seen objects (default=None).  DON'T PASS THIS!!!
     :return: None
     """
-    if seen is None:
-        seen = set({})
-    if obj.__hash__ is not None:
-        if obj in seen:
-            return
-        else:
-            seen.add(obj)
+    seen = set()
 
-    if apply_first and isinstance(obj, BaseEntity):
-        func(obj)
+    queue = [obj]
+    while queue:
+        this = queue.pop()
+        if this.__hash__ is not None:
+            if this in seen:
+                continue
+            else:
+                seen.add(this)
 
-    if isinstance(obj, (list, tuple)):
-        for i, x in enumerate(obj):
-            recursive_foreach(x, func, apply_first, seen)
-    elif isinstance(obj, dict):
-        for x in concatv(obj.keys(), obj.values()):
-            recursive_foreach(x, func, apply_first, seen)
-    elif isinstance(obj, DictSerializable):
-        for k, x in obj.__dict__.items():
-            recursive_foreach(x, func, apply_first, seen)
+        if apply_first and isinstance(this, BaseEntity):
+            func(this)
 
-    if isinstance(obj, BaseEntity) and not apply_first:
-        func(obj)
+        if isinstance(this, (list, tuple)):
+            for i, x in enumerate(this):
+                queue.append(x)
+        elif isinstance(this, dict):
+            for x in concatv(this.keys(), this.values()):
+                queue.append(x)
+        elif isinstance(this, DictSerializable):
+            for k, x in this.__dict__.items():
+                queue.append(x)
+
+        if isinstance(this, BaseEntity) and not apply_first:
+            func(this)
 
     return
 
 
-def recursive_flatmap(obj, func, seen=None, unidirectional=True):
+def recursive_flatmap(obj, func, *, unidirectional=True):
     """
     Recursively apply and accumulate a list-valued function to BaseEntity members.
 
@@ -222,28 +224,32 @@ def recursive_flatmap(obj, func, seen=None, unidirectional=True):
     :return: a list of accumulated return values
     """
     res = []
+    seen = set()
+    queue = [obj]
 
-    if seen is None:
-        seen = set({})
-    if obj.__hash__ is not None:
-        if obj in seen:
-            return res
-        else:
-            seen.add(obj)
-    if isinstance(obj, BaseEntity):
-        res.extend(func(obj))
+    while queue:
+        this = queue.pop()
 
-    if isinstance(obj, (list, tuple)):
-        for i, x in enumerate(obj):
-            res.extend(recursive_flatmap(x, func, seen, unidirectional))
-    elif isinstance(obj, dict):
-        for x in concatv(obj.keys(), obj.values()):
-            res.extend(recursive_flatmap(x, func, seen, unidirectional))
-    elif isinstance(obj, DictSerializable):
-        for k, x in sorted(obj.__dict__.items()):
-            if unidirectional and isinstance(obj, BaseEntity) and k in obj.skip:
+        if this.__hash__ is not None:
+            if this in seen:
                 continue
-            res.extend(recursive_flatmap(x, func, seen, unidirectional))
+            else:
+                seen.add(this)
+
+        if isinstance(this, BaseEntity):
+            res.extend(func(this))
+
+        if isinstance(this, (list, tuple)):
+            for i, x in enumerate(this):
+                queue.append(x)
+        elif isinstance(this, dict):
+            for x in concatv(this.keys(), this.values()):
+                queue.append(x)
+        elif isinstance(this, DictSerializable):
+            for k, x in sorted(this.__dict__.items()):
+                if unidirectional and isinstance(this, BaseEntity) and k in this.skip:
+                    continue
+                queue.append(x)
 
     return res
 
