@@ -1,6 +1,6 @@
 """Utility functions."""
 import uuid
-from typing import Dict, Callable, Union, Type, Tuple
+from typing import Dict, Callable, Union, Type, Tuple, List
 
 from gemd.entity.base_entity import BaseEntity
 from gemd.entity.dict_serializable import DictSerializable
@@ -189,7 +189,10 @@ def flatten(obj, scope):
     return sorted([substitute_links(x) for x in res], key=lambda x: writable_sort_order(x))
 
 
-def recursive_foreach(obj, func, *, apply_first=False):
+def recursive_foreach(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable],
+                      func: Callable[[BaseEntity], None],
+                      *,
+                      apply_first=False):
     """
     Apply a function recursively to each BaseEntity object.
 
@@ -238,13 +241,15 @@ def recursive_foreach(obj, func, *, apply_first=False):
     return
 
 
-def recursive_flatmap(obj, func, *, unidirectional=True):
+def recursive_flatmap(obj:  Union[List, Tuple, Dict, BaseEntity, DictSerializable],
+                      func: Callable[[BaseEntity], Union[List, Tuple]],
+                      *,
+                      unidirectional=True):
     """
     Recursively apply and accumulate a list-valued function to BaseEntity members.
 
     :param obj: target of the operation
     :param func: function to apply; must be list-valued
-    :param seen: set of seen objects (default=None).  DON'T PASS THIS
     :param unidirectional: only recurse through the writeable direction of bidirectional links
     :return: a list of accumulated return values
     """
