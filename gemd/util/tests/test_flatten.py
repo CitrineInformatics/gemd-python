@@ -71,5 +71,8 @@ def test_repeated_objects():
     assert len(recursive_flatmap(ps, lambda x: [x])) == 3
 
 
-if __name__ == "__main__":
-    test_flatmap_unidirectional_ordering()
+def test_recursive_flatmap_maintains_order():
+    p1 = ProcessSpec(name="one")
+    p2 = ProcessSpec(name="two")
+    orig = [p1, p2]
+    assert [x.name for x in orig] == recursive_flatmap(orig, lambda x: [x.name])

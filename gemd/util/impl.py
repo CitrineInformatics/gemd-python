@@ -1,6 +1,6 @@
 """Utility functions."""
 import uuid
-from typing import Dict, Callable, Union, Type, Tuple, List
+from typing import Dict, Callable, Union, Type, Tuple, List, Any
 
 from gemd.entity.base_entity import BaseEntity
 from gemd.entity.dict_serializable import DictSerializable
@@ -44,7 +44,16 @@ def _cached_isinstance_generator(
     return func
 
 
-def _substitute(thing,
+# The overhead for all the invocations of isinstance was substantial
+isinstance_base_entity = _cached_isinstance_generator(BaseEntity)
+isinstance_list_or_tuple = _cached_isinstance_generator((list, tuple))
+isinstance_list = _cached_isinstance_generator(list)
+isinstance_tuple = _cached_isinstance_generator(tuple)
+isinstance_dict = _cached_isinstance_generator(dict)
+isinstance_dict_serializable = _cached_isinstance_generator(DictSerializable)
+
+
+def _substitute(thing: Any,
                 sub: Callable[[object], object],
                 applies: Callable[[object], bool],
                 visited: Dict[object, object] = None) -> object:
@@ -66,14 +75,14 @@ def _substitute(thing,
         if thing.__hash__ is not None:
             visited[thing] = replacement
         new = _substitute(replacement, sub, applies, visited)
-    elif isinstance(thing, list):
+    elif isinstance_list(thing):
         new = [_substitute(x, sub, applies, visited) for x in thing]
-    elif isinstance(thing, tuple):
+    elif isinstance_tuple(thing):
         new = tuple(_substitute(x, sub, applies, visited) for x in thing)
-    elif isinstance(thing, dict):
+    elif isinstance_dict(thing):
         new = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
                for k, v in thing.items()}
-    elif isinstance(thing, DictSerializable):
+    elif isinstance_dict_serializable(thing):
         new_attrs = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
                      for k, v in thing.as_dict().items()}
         new = thing.build(new_attrs)
@@ -206,14 +215,8 @@ def recursive_foreach(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable
     :return: None
     """
     seen = set()
-
-    # The overhead for all the invocations of isinstance was substantial
-    isinstance_base_entity = _cached_isinstance_generator(BaseEntity)
-    isinstance_list_or_tuple = _cached_isinstance_generator((list, tuple))
-    isinstance_dict = _cached_isinstance_generator(dict)
-    isinstance_dict_serializable = _cached_isinstance_generator(DictSerializable)
-
     queue = [obj]
+
     while queue:
         this = queue.pop()
         if this.__hash__ is not None:
@@ -257,12 +260,6 @@ def recursive_flatmap(obj:  Union[List, Tuple, Dict, BaseEntity, DictSerializabl
     seen = set()
     queue = [obj]
 
-    # The overhead for all the invocations of isinstance was substantial
-    isinstance_base_entity = _cached_isinstance_generator(BaseEntity)
-    isinstance_list_or_tuple = _cached_isinstance_generator((list, tuple))
-    isinstance_dict = _cached_isinstance_generator(dict)
-    isinstance_dict_serializable = _cached_isinstance_generator(DictSerializable)
-
     while queue:
         this = queue.pop()
 
@@ -276,11 +273,9 @@ def recursive_flatmap(obj:  Union[List, Tuple, Dict, BaseEntity, DictSerializabl
             res.extend(func(this))
 
         if isinstance_list_or_tuple(this):
-            for x in this:
-                queue.append(x)
+            queue.extend(reversed(this))  # Preserve order of the list/tuple
         elif isinstance_dict(this):
-            for x in concatv(this.keys(), this.values()):
-                queue.append(x)
+            queue.extend(concatv(this.keys(), this.values()))
         elif isinstance_dict_serializable(this):
             for k, x in sorted(this.__dict__.items()):
                 if unidirectional and isinstance_base_entity(this) and k in this.skip:
