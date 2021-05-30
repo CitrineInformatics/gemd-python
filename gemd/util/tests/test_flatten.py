@@ -72,6 +72,7 @@ def test_repeated_objects():
 
 
 def test_recursive_flatmap_maintains_order():
+    """Test flatmap preserves order in lists."""
     p1 = ProcessSpec(name="one")
     p2 = ProcessSpec(name="two")
     orig = [p1, p2]

@@ -244,7 +244,7 @@ def recursive_foreach(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable
     return
 
 
-def recursive_flatmap(obj:  Union[List, Tuple, Dict, BaseEntity, DictSerializable],
+def recursive_flatmap(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable],
                       func: Callable[[BaseEntity], Union[List, Tuple]],
                       *,
                       unidirectional=True):
