@@ -15,7 +15,7 @@ extract_minor() {
 }
 
 extract_patch() {
-  sed -En "s/.*([0-9]+)/\1/p" <<< "$1"
+  sed -En "s/.*\.([0-9]+)/\1/p" <<< "$1"
 }
 
 trap "$(set +eu)" EXIT
@@ -30,6 +30,10 @@ CURRENT_PATCH="$(extract_patch ${CURRENT})"
 MASTER_MAJOR="$(extract_major ${MASTER})"
 MASTER_MINOR="$(extract_minor ${MASTER})"
 MASTER_PATCH="$(extract_patch ${MASTER})"
+
+echo "$CURRENT_MAJOR $CURRENT_MINOR $CURRENT_PATCH"
+echo "$MASTER_MAJOR $MASTER_MINOR $MASTER_PATCH"
+
 
 if [ "${CURRENT_MAJOR}" -gt "${MASTER_MAJOR}" ]; then
   echo "major version bump"
