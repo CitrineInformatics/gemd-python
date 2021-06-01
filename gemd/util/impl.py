@@ -1,6 +1,6 @@
 """Utility functions."""
 import uuid
-from typing import Dict, Callable, Union
+from typing import Dict, Callable, Union, Type, Tuple, List, Any
 
 from gemd.entity.base_entity import BaseEntity
 from gemd.entity.dict_serializable import DictSerializable
@@ -25,7 +25,35 @@ def set_uuids(obj, scope):
     return
 
 
-def _substitute(thing,
+def _cached_isinstance_generator(
+        class_or_tuple: Union[Type, Tuple[Type]]) -> Callable[[object], bool]:
+    """
+    Generate a function that checks and caches an isinstance(obj, class_or_tuple) call.
+
+    :param class_or_tuple:
+    :return: function with signature function(obj), returning isinstance(obj, class_or_tuple)
+    """
+    cache = dict()
+
+    def func(obj):
+        obj_type = type(obj)
+        if obj_type not in cache:
+            cache[obj_type] = isinstance(obj, class_or_tuple)
+        return cache[obj_type]
+
+    return func
+
+
+# The overhead for all the invocations of isinstance was substantial
+isinstance_base_entity = _cached_isinstance_generator(BaseEntity)
+isinstance_list_or_tuple = _cached_isinstance_generator((list, tuple))
+isinstance_list = _cached_isinstance_generator(list)
+isinstance_tuple = _cached_isinstance_generator(tuple)
+isinstance_dict = _cached_isinstance_generator(dict)
+isinstance_dict_serializable = _cached_isinstance_generator(DictSerializable)
+
+
+def _substitute(thing: Any,
                 sub: Callable[[object], object],
                 applies: Callable[[object], bool],
                 visited: Dict[object, object] = None) -> object:
@@ -47,14 +75,14 @@ def _substitute(thing,
         if thing.__hash__ is not None:
             visited[thing] = replacement
         new = _substitute(replacement, sub, applies, visited)
-    elif isinstance(thing, list):
+    elif isinstance_list(thing):
         new = [_substitute(x, sub, applies, visited) for x in thing]
-    elif isinstance(thing, tuple):
+    elif isinstance_tuple(thing):
         new = tuple(_substitute(x, sub, applies, visited) for x in thing)
-    elif isinstance(thing, dict):
+    elif isinstance_dict(thing):
         new = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
                for k, v in thing.items()}
-    elif isinstance(thing, DictSerializable):
+    elif isinstance_dict_serializable(thing):
         new_attrs = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
                      for k, v in thing.as_dict().items()}
         new = thing.build(new_attrs)
@@ -174,7 +202,10 @@ def flatten(obj, scope=None):
     return sorted([substitute_links(x) for x in res], key=lambda x: writable_sort_order(x))
 
 
-def recursive_foreach(obj, func, apply_first=False, seen=None):
+def recursive_foreach(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable],
+                      func: Callable[[BaseEntity], None],
+                      *,
+                      apply_first=False):
     """
     Apply a function recursively to each BaseEntity object.
 
@@ -185,69 +216,75 @@ def recursive_foreach(obj, func, apply_first=False, seen=None):
     :param obj: target of the operation
     :param func: to apply to each contained BaseEntity
     :param apply_first: whether to apply the func before applying it to members (default: false)
-    :param seen: set of seen objects (default=None).  DON'T PASS THIS!!!
     :return: None
     """
-    if seen is None:
-        seen = set({})
-    if obj.__hash__ is not None:
-        if obj in seen:
-            return
-        else:
-            seen.add(obj)
+    seen = set()
+    queue = [obj]
 
-    if apply_first and isinstance(obj, BaseEntity):
-        func(obj)
+    while queue:
+        this = queue.pop()
+        if this.__hash__ is not None:
+            if this in seen:
+                continue
+            else:
+                seen.add(this)
 
-    if isinstance(obj, (list, tuple)):
-        for i, x in enumerate(obj):
-            recursive_foreach(x, func, apply_first, seen)
-    elif isinstance(obj, dict):
-        for x in concatv(obj.keys(), obj.values()):
-            recursive_foreach(x, func, apply_first, seen)
-    elif isinstance(obj, DictSerializable):
-        for k, x in obj.__dict__.items():
-            recursive_foreach(x, func, apply_first, seen)
+        if apply_first and isinstance_base_entity(this):
+            func(this)
 
-    if isinstance(obj, BaseEntity) and not apply_first:
-        func(obj)
+        if isinstance_list_or_tuple(this):
+            for x in this:
+                queue.append(x)
+        elif isinstance_dict(this):
+            for x in concatv(this.keys(), this.values()):
+                queue.append(x)
+        elif isinstance_dict_serializable(this):
+            for k, x in this.__dict__.items():
+                queue.append(x)
+
+        if not apply_first and isinstance_base_entity(this):
+            func(this)
 
     return
 
 
-def recursive_flatmap(obj, func, seen=None, unidirectional=True):
+def recursive_flatmap(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable],
+                      func: Callable[[BaseEntity], Union[List, Tuple]],
+                      *,
+                      unidirectional=True):
     """
     Recursively apply and accumulate a list-valued function to BaseEntity members.
 
     :param obj: target of the operation
     :param func: function to apply; must be list-valued
-    :param seen: set of seen objects (default=None).  DON'T PASS THIS
     :param unidirectional: only recurse through the writeable direction of bidirectional links
     :return: a list of accumulated return values
     """
     res = []
+    seen = set()
+    queue = [obj]
 
-    if seen is None:
-        seen = set({})
-    if obj.__hash__ is not None:
-        if obj in seen:
-            return res
-        else:
-            seen.add(obj)
-    if isinstance(obj, BaseEntity):
-        res.extend(func(obj))
+    while queue:
+        this = queue.pop()
 
-    if isinstance(obj, (list, tuple)):
-        for i, x in enumerate(obj):
-            res.extend(recursive_flatmap(x, func, seen, unidirectional))
-    elif isinstance(obj, dict):
-        for x in concatv(obj.keys(), obj.values()):
-            res.extend(recursive_flatmap(x, func, seen, unidirectional))
-    elif isinstance(obj, DictSerializable):
-        for k, x in sorted(obj.__dict__.items()):
-            if unidirectional and isinstance(obj, BaseEntity) and k in obj.skip:
+        if this.__hash__ is not None:
+            if this in seen:
                 continue
-            res.extend(recursive_flatmap(x, func, seen, unidirectional))
+            else:
+                seen.add(this)
+
+        if isinstance_base_entity(this):
+            res.extend(func(this))
+
+        if isinstance_list_or_tuple(this):
+            queue.extend(reversed(this))  # Preserve order of the list/tuple
+        elif isinstance_dict(this):
+            queue.extend(concatv(this.keys(), this.values()))
+        elif isinstance_dict_serializable(this):
+            for k, x in sorted(this.__dict__.items()):
+                if unidirectional and isinstance_base_entity(this) and k in this.skip:
+                    continue
+                queue.append(x)
 
     return res
 
