@@ -7,6 +7,8 @@ from gemd.entity.attribute.condition import Condition
 from gemd.entity.value.nominal_categorical import NominalCategorical
 from gemd.util import flatten, recursive_flatmap
 
+import pytest
+
 
 def test_flatten_bounds():
     """Test that flatten works when the objects contain other objects."""
@@ -44,6 +46,25 @@ def test_flatten_empty_history():
     assert len(flatten(input_run, 'test-scope')) == 4
     assert len(flatten(ingredient_run, 'test-scope')) == 8
     assert len(flatten(transform_run, 'test-scope')) == 8
+
+
+def test_default_scope():
+    """Test flatten exceptions around providing a scope."""
+    ps_one = ProcessSpec(name="one")
+
+    with pytest.raises(ValueError):
+        flatten(ps_one)
+
+    pr_one = ProcessRun(name="one", uids={'my': 'outer'}, spec=ps_one)
+
+    with pytest.raises(ValueError):
+        flatten(pr_one)
+
+    ps_one.uids['my'] = 'id'
+    assert len(flatten(pr_one)) == 2
+
+    two = ProcessRun(name="two", spec=ProcessSpec(name="two"))
+    assert len(flatten(two, scope="my")) == 2
 
 
 def test_flatmap_unidirectional_ordering():
