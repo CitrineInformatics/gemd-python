@@ -10,5 +10,5 @@ This file contains the most commonly used units and will grow over time.
 Requests for support of additional units can be made by opening an issue in the `GEMD-python repository`_ on github.
 
 .. _Pint: https://pint.readthedocs.io/en/0.9/
-.. _citrine_en.txt: https://github.com/CitrineInformatics/gemd-python/blob/master/gemd/units/citrine_en.txt
+.. _citrine_en.txt: https://github.com/CitrineInformatics/gemd-python/blob/main/gemd/units/citrine_en.txt
 .. _GEMD-python repository: https://github.com/CitrineInformatics/gemd-python

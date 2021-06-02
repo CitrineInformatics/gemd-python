@@ -21,30 +21,30 @@ For additional (non-binding) inspiration, check out the [Google Python Style Gui
 
 ## Branching strategy
 
-This project currently follows a [feature branch workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow) (i.e. _masterflow_):
- * Feature branches and bugfixes are branched off of master and then opened as PRs into master
+This project currently follows a [feature branch workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow):
+ * Feature branches and bugfixes are branched off of `main` and then opened as PRs into `main`
  * Every PR must contain a version bump following [semantic versioning](https://semver.org/)
- * Backport branches for historical versions are created as-needed off of master; backports are branched off of and merged into them
+ * Backport branches for historical versions are created as-needed off of `main`; backports are branched off of and merged into them
  
  During periods of rapid development activity, the branching strategy may change to accommodate it, but it will be kept up to date here.
 
 ## Release process
 
-The master branch **does not** continuously deploy to [pypi](https://pypi.org/project/gemd/).
+The `main` branch **does not** continuously deploy to [pypi](https://pypi.org/project/gemd/).
 Rather, releases are cut explicitly by using [GitHub's releases](https://github.com/CitrineInformatics/gemd-python/releases).
 To create a release:
  * Catalog the changes in order to inform release notes
    * To do this through the GitHub interface:
      * Navigate to the [GitHub compare page](https://github.com/CitrineInformatics/gemd-python/compare)
      * Set the `base` to the most recent tag (which corresponds to the most recent release)
-     * Set the `compare` to the commit you want to deploy, typically `master`
+     * Set the `compare` to the commit you want to deploy, typically `main`
    * You can use `git diff` as well, if you prefer
  * In another tab, navigate to the [GitHub release creation page](https://github.com/CitrineInformatics/gemd-python/releases/new)
- * Set the `Target` to the commit you want to deploy, typically `master`
+ * Set the `Target` to the commit you want to deploy, typically `main`
  * Set the `Tag version` to `v{x.y.z}` where `x.y.z` is the version in [setup.py](setup.py), e.g. `v1.2.3`
  * Set the `Release title` to "GEMD v{x.y.z} is released!"
  * Populate the release notes with a 1 or 2 sentence summary and `What's New`, `Improvements`, `Fixes`, and `Deprecated` sections, as appropriate
 
 Travis will trigger the deploy due to the addition of the tag.
-Only commits on the **master** or backports branches can be released, but it need not be the most recent commit on the branch.
+Only commits on the **main** or backports branches can be released, but it need not be the most recent commit on the branch.
 The tests contained within this repository are sufficient to verify a release. 
