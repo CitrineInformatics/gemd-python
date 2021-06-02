@@ -21,7 +21,7 @@ For additional (non-binding) inspiration, check out the [Google Python Style Gui
 
 ## Branching strategy
 
-This project currently follows a [feature branch workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow) (i.e. _mainflow_):
+This project currently follows a [feature branch workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow)
  * Feature branches and bugfixes are branched off of `main` and then opened as PRs into `main`
  * Every PR must contain a version bump following [semantic versioning](https://semver.org/)
  * Backport branches for historical versions are created as-needed off of `main`; backports are branched off of and merged into them
