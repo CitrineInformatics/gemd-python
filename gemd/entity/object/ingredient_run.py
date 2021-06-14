@@ -22,9 +22,9 @@ class IngredientRun(BaseObject, HasQuantities):
         for filtering and discoverability.
     notes: str, optional
         Long-form notes about the ingredient run.
-    material: MaterialRun
+    material: :class:`MaterialRun <gemd.entity.object.material_run.MaterialRun>`
         Material that this ingredient is.
-    process: ProcessRun
+    process: :class:`ProcessRun <gemd.entity.object.process_run.ProcessRun>`
         Process that this ingredient is used in.
     mass_fraction: :py:class:`ContinuousValue \
     <gemd.entity.value.continuous_value.ContinuousValue>`, optional
@@ -40,7 +40,7 @@ class IngredientRun(BaseObject, HasQuantities):
         The absolute quantity of the ingredient in the process.
     spec: IngredientSpec
         The specification of which this ingredient is a realization.
-    file_links: List[FileLink], optional
+    file_links: List[:class:`FileLink <gemd.entity.file_link.FileLink>`], optional
         Links to associated files, with resource paths into the files API.
 
     """

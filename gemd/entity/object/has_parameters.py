@@ -8,8 +8,9 @@ class HasParameters(object):
 
     Parameters
     ----------
-    parameters: List[Parameter]
+    parameters: List[:class:`Parameter <gemd.entity.attribute.parameter.Parameter>`]
         A list of parameters associated with this entity.
+
     """
 
     def __init__(self, parameters):

@@ -4,7 +4,14 @@ from gemd.entity.link_by_uid import LinkByUID
 
 
 class HasTemplate(object):
-    """Mix-in trait for objects that can be assigned templates."""
+    """Mix-in trait for objects that can be assigned templates.
+
+    Parameters
+    ----------
+    template: :class:`BaseTemplate <gemd.entity.template.base_template.BaseTemplate>`
+        A template that defines the allowed values.
+
+    """
 
     def __init__(self, template=None):
         self._template = None

@@ -14,7 +14,7 @@ class Property(BaseAttribute):
         Required name of the attribute. Each attribute within an object must have a unique name.
     notes: str
         Optional free-form notes about the attribute.
-    value: :py:class:`BaseValue <gemd.entity.value.base_value.BaseValue>`
+    value: :class:`BaseValue <gemd.entity.value.base_value.BaseValue>`
         The value of the attribute.
     template: :class:`AttributeTemplate \
     <gemd.entity.template.attribute_template.AttributeTemplate>`
@@ -23,7 +23,7 @@ class Property(BaseAttribute):
     origin: str
         The origin of the attribute. Must be one of "measured", "predicted", "summary",
         "specified", "computed", or "unknown." Default is "unknown."
-    file_links: List[FileLink]
+    file_links: List[:class:`FileLink <gemd.entity.file_link.FileLink>`]
         Links to files associated with the attribute.
 
     """

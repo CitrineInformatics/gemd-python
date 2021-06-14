@@ -3,7 +3,14 @@ from gemd.entity.source.performed_source import PerformedSource
 
 
 class HasSource(object):
-    """Mixin-trait for entities that include sources (data provenance)."""
+    """Mixin-trait for entities that include sources (data provenance).
+
+    Parameters
+    ----------
+    source: :class:`PerformedSource <gemd.entity.source.performed_source.PerformedSource>`, optional
+        Information about the person who performed the run and when.
+
+    """
 
     def __init__(self, source):
         self._source = None

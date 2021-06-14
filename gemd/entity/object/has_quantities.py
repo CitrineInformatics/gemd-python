@@ -6,7 +6,24 @@ fraction_bounds = RealBounds(lower_bound=0.0, upper_bound=1.0, default_units='')
 
 
 class HasQuantities(object):
-    """Mixin-trait that includes the mass, volume, number fraction, and absolute quantity."""
+    """Mixin-trait that includes the mass, volume, number fraction, and absolute quantity.
+
+    Parameters
+    ----------
+    mass_fraction: :class:`ContinuousValue \
+    <gemd.entity.value.continuous_value.ContinuousValue>`, optional
+        The mass fraction of the quantity.
+    volume_fraction: :class:`ContinuousValue \
+    <gemd.entity.value.continuous_value.ContinuousValue>`, optional
+        The volume fraction of the quantity.
+    number_fraction: :class:`ContinuousValue \
+    <gemd.entity.value.continuous_value.ContinuousValue>`, optional
+        The number fraction of the quantity.
+    absolute_quantity: :class:`ContinuousValue \
+    <gemd.entity.value.continuous_value.ContinuousValue>`, optional
+        The absolute quantity of the quantity.
+
+    """
 
     def __init__(self, *,
                  mass_fraction=None, volume_fraction=None, number_fraction=None,

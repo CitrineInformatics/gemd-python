@@ -8,8 +8,9 @@ class HasProperties(object):
 
     Parameters
     ----------
-    properties: List[Property]
+    properties: List[:class:`Property <gemd.entity.attribute.property.Property>`]
         A list of properties associated with this entity
+
     """
 
     def __init__(self, properties):

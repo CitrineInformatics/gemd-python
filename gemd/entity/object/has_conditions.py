@@ -8,8 +8,9 @@ class HasConditions(object):
 
     Parameters
     ----------
-    conditions: List[Condition]
+    conditions: List[`Condition <gemd.entity.attribute.condition.Condition>`]
         A list of conditions associated with this entity.
+
     """
 
     def __init__(self, conditions):
