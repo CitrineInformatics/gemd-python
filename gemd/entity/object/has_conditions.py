@@ -4,7 +4,13 @@ from gemd.entity.setters import validate_list
 
 
 class HasConditions(object):
-    """Mixin-trait for entities that include conditions."""
+    """Mixin-trait for entities that include conditions.
+
+    Parameters
+    ----------
+    conditions: List[Condition]
+        A list of conditions associated with this entity.
+    """
 
     def __init__(self, conditions):
         self._conditions = None

@@ -4,7 +4,13 @@ from gemd.entity.setters import validate_list
 
 
 class HasParameters(object):
-    """Mixin-trait for entities that include parameters."""
+    """Mixin-trait for entities that include parameters.
+
+    Parameters
+    ----------
+    parameters: List[Parameter]
+        A list of parameters associated with this entity.
+    """
 
     def __init__(self, parameters):
         self._parameters = None
