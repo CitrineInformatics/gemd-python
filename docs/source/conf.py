@@ -32,7 +32,8 @@ release = '0.0.0'
 # ones.
 extensions = [
     'sphinxcontrib.apidoc',
-    'sphinx.ext.napoleon'
+    'sphinx.ext.napoleon',
+    'sphinx.ext.intersphinx'
 ]
 
 # Use the sphinxcontrib.apidoc extension to wire in the sphinx-apidoc invocation
@@ -59,12 +60,22 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = 'sphinx_rtd_theme'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-# autodoc_mock_imports allows Spyinx to ignore any external modules listed in the array
+# These paths are either relative to html_static_path or fully qualified paths (eg. https://...)
+html_css_files = [
+    'css/custom.css',
+]
+
+autodoc_member_order = 'groupwise'
+# autodoc_mock_imports allows Sphinx to ignore any external modules listed in the array
 autodoc_mock_imports = []
+
+html_theme_options = {
+    "sticky_navigation": False
+}
