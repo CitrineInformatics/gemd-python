@@ -4,4 +4,5 @@ gemd.entity.value.smiles\_value module
 .. automodule:: gemd.entity.value.smiles_value
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

@@ -4,4 +4,5 @@ gemd.entity.attribute.condition module
 .. automodule:: gemd.entity.attribute.condition
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

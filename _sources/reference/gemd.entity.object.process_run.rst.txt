@@ -4,4 +4,5 @@ gemd.entity.object.process\_run module
 .. automodule:: gemd.entity.object.process_run
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

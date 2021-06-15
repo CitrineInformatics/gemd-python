@@ -4,4 +4,5 @@ gemd.entity.object.material\_spec module
 .. automodule:: gemd.entity.object.material_spec
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    gemd.entity.value.base_value
    gemd.entity.value.categorical_value
@@ -30,4 +31,5 @@ Module contents
 .. automodule:: gemd.entity.value
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

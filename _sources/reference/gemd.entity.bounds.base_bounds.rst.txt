@@ -4,4 +4,5 @@ gemd.entity.bounds.base\_bounds module
 .. automodule:: gemd.entity.bounds.base_bounds
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

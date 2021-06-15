@@ -4,4 +4,5 @@ gemd.entity.value.empirical\_formula module
 .. automodule:: gemd.entity.value.empirical_formula
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

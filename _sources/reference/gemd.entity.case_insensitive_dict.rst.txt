@@ -4,4 +4,5 @@ gemd.entity.case\_insensitive\_dict module
 .. automodule:: gemd.entity.case_insensitive_dict
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

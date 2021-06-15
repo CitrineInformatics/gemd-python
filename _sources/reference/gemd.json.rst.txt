@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    gemd.json.gemd_encoder
    gemd.json.gemd_json
@@ -15,4 +16,5 @@ Module contents
 .. automodule:: gemd.json
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

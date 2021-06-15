@@ -4,4 +4,5 @@ gemd.entity.dict\_serializable module
 .. automodule:: gemd.entity.dict_serializable
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

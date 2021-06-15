@@ -4,4 +4,5 @@ gemd.entity.attribute.base\_attribute module
 .. automodule:: gemd.entity.attribute.base_attribute
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

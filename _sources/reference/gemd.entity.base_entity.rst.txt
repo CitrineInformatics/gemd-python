@@ -4,4 +4,5 @@ gemd.entity.base\_entity module
 .. automodule:: gemd.entity.base_entity
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

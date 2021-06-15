@@ -4,4 +4,5 @@ gemd.entity.bounds.composition\_bounds module
 .. automodule:: gemd.entity.bounds.composition_bounds
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

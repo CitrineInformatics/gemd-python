@@ -4,4 +4,5 @@ gemd.entity.bounds.categorical\_bounds module
 .. automodule:: gemd.entity.bounds.categorical_bounds
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

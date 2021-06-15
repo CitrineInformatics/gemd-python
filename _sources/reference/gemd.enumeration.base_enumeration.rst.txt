@@ -4,4 +4,5 @@ gemd.enumeration.base\_enumeration module
 .. automodule:: gemd.enumeration.base_enumeration
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

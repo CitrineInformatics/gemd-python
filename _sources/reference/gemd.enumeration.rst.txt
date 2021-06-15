@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    gemd.enumeration.base_enumeration
    gemd.enumeration.origin
@@ -16,4 +17,5 @@ Module contents
 .. automodule:: gemd.enumeration
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

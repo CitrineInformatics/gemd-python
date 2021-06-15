@@ -4,4 +4,5 @@ gemd.entity.object.process\_spec module
 .. automodule:: gemd.entity.object.process_spec
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

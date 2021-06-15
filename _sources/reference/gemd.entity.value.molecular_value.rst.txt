@@ -4,4 +4,5 @@ gemd.entity.value.molecular\_value module
 .. automodule:: gemd.entity.value.molecular_value
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

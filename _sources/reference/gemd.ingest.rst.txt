@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    gemd.ingest.material_run_example
    gemd.ingest.table_example
@@ -15,4 +16,5 @@ Module contents
 .. automodule:: gemd.ingest
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

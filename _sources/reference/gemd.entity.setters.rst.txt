@@ -4,4 +4,5 @@ gemd.entity.setters module
 .. automodule:: gemd.entity.setters
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

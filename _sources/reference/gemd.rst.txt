@@ -5,6 +5,7 @@ Subpackages
 -----------
 
 .. toctree::
+   :maxdepth: 4
 
    gemd.demo
    gemd.entity
@@ -20,4 +21,5 @@ Module contents
 .. automodule:: gemd
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

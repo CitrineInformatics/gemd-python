@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    gemd.entity.bounds.base_bounds
    gemd.entity.bounds.categorical_bounds
@@ -19,4 +20,5 @@ Module contents
 .. automodule:: gemd.entity.bounds
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

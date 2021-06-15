@@ -4,4 +4,5 @@ gemd.entity.file\_link module
 .. automodule:: gemd.entity.file_link
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

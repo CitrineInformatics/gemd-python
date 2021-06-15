@@ -4,4 +4,5 @@ gemd.entity.source.performed\_source module
 .. automodule:: gemd.entity.source.performed_source
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

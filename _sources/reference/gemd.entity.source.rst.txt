@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    gemd.entity.source.performed_source
 
@@ -14,4 +15,5 @@ Module contents
 .. automodule:: gemd.entity.source
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

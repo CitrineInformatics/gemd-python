@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    gemd.units.impl
 
@@ -14,4 +15,5 @@ Module contents
 .. automodule:: gemd.units
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

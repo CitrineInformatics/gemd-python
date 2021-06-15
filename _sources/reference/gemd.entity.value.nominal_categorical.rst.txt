@@ -4,4 +4,5 @@ gemd.entity.value.nominal\_categorical module
 .. automodule:: gemd.entity.value.nominal_categorical
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

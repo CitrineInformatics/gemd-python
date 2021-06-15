@@ -4,4 +4,5 @@ gemd.entity.value.nominal\_real module
 .. automodule:: gemd.entity.value.nominal_real
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

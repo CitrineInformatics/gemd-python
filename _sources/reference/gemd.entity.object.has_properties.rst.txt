@@ -4,4 +4,5 @@ gemd.entity.object.has\_properties module
 .. automodule:: gemd.entity.object.has_properties
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

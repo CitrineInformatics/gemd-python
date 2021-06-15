@@ -4,4 +4,5 @@ gemd.entity.template.has\_property\_templates module
 .. automodule:: gemd.entity.template.has_property_templates
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

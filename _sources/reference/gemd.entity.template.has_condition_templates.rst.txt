@@ -4,4 +4,5 @@ gemd.entity.template.has\_condition\_templates module
 .. automodule:: gemd.entity.template.has_condition_templates
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

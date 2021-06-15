@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    gemd.demo.cake
    gemd.demo.measurement_example
@@ -16,4 +17,5 @@ Module contents
 .. automodule:: gemd.demo
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

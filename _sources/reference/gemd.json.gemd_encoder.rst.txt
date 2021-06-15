@@ -4,4 +4,5 @@ gemd.json.gemd\_encoder module
 .. automodule:: gemd.json.gemd_encoder
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

@@ -4,4 +4,5 @@ gemd.enumeration.sample\_type module
 .. automodule:: gemd.enumeration.sample_type
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

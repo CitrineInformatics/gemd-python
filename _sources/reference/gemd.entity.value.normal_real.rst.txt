@@ -4,4 +4,5 @@ gemd.entity.value.normal\_real module
 .. automodule:: gemd.entity.value.normal_real
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

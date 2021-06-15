@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    gemd.entity.template.attribute_template
    gemd.entity.template.base_template
@@ -24,4 +25,5 @@ Module contents
 .. automodule:: gemd.entity.template
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:

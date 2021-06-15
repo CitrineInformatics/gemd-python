@@ -5,6 +5,7 @@ Subpackages
 -----------
 
 .. toctree::
+   :maxdepth: 4
 
    gemd.entity.attribute
    gemd.entity.bounds
@@ -17,6 +18,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    gemd.entity.base_entity
    gemd.entity.case_insensitive_dict
@@ -33,4 +35,5 @@ Module contents
 .. automodule:: gemd.entity
    :members:
    :undoc-members:
+   :inherited-members:
    :show-inheritance:
