@@ -8,7 +8,7 @@ class HasConditions(object):
 
     Parameters
     ----------
-    conditions: List[`Condition <gemd.entity.attribute.condition.Condition>`]
+    conditions: List[:class:`Condition <gemd.entity.attribute.condition.Condition>`]
         A list of conditions associated with this entity.
 
     """
