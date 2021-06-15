@@ -22,19 +22,20 @@ class MaterialRun(BaseObject):
         for filtering and discoverability.
     notes: str, optional
         Long-form notes about the material run.
-    process: ProcessRun
+    process: :class:`ProcessRun <gemd.entity.object.process_run.ProcessRun>`
         Process that produces this material.
     sample_type: str, optional
         The form of this sample. Optionals are "experimental", "virtual", "production", or
         "unknown." Default is "unknown."
-    spec: MaterialSpec
+    spec: :class:`MaterialSpec <gemd.entity.object.material_spec.MaterialSpec>`
         The material specification of which this is an instance.
-    file_links: List[FileLink], optional
+    file_links: List[:class:`FileLink <gemd.entity.file_link.FileLink>`], optional
         Links to associated files, with resource paths into the files API.
 
     Attributes
     ----------
-    measurements: List[MeasurementRun], optional
+    measurements: List[:class:`MeasurementRun\
+    <gemd.entity.object.measurement_run.MeasurementRun>`], optional
         Measurements performed on this material. The link is established by creating the
         measurement run and settings its `material` field to this material run.
 

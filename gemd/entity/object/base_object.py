@@ -23,7 +23,7 @@ class BaseObject(BaseEntity):
         for filtering and discoverability.
     notes: str, optional
         Long-form notes about the object.
-    file_links: List[FileLink], optional
+    file_links: List[:class:`FileLink <gemd.entity.file_link.FileLink>`], optional
         Links to associated files, with resource paths into the files API.
 
     """
