@@ -34,7 +34,8 @@ class MaterialRun(BaseObject):
 
     Attributes
     ----------
-    measurements: List[:class:`MeasurementRun <gemd.entity.object.measurement_run.MeasurementRun>`], optional
+    measurements: List[:class:`MeasurementRun\
+    <gemd.entity.object.measurement_run.MeasurementRun>`], optional
         Measurements performed on this material. The link is established by creating the
         measurement run and settings its `material` field to this material run.
 

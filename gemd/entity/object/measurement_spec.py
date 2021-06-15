@@ -29,7 +29,8 @@ class MeasurementSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
         Conditions under which this measurement spec occurs.
     parameters: List[:class:`Parameter <gemd.entity.attribute.parameter.Parameter>`], optional
         Parameters of this measurement spec.
-    template: :class:`MeasurementTemplate <gemd.entity.object.measurement_template.MeasurementTemplate>`
+    template: :class:`MeasurementTemplate\
+    <gemd.entity.object.measurement_template.MeasurementTemplate>`
         A template bounding the valid values for the measurement's properties, parameters,
         and conditions.
     file_links: List[:class:`FileLink <gemd.entity.file_link.FileLink>`], optional

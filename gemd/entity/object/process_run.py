@@ -34,7 +34,8 @@ class ProcessRun(BaseObject, HasConditions, HasParameters, HasSource):
         Spec for this process run.
     file_links: List[:class:`FileLink <gemd.entity.file_link.FileLink>`], optional
         Links to associated files, with resource paths into the files API.
-    source: :class:`PerformedSource <gemd.entity.source.performed_source.PerformedSource>`, optional
+    source: :class:`PerformedSource\
+    <gemd.entity.source.performed_source.PerformedSource>`, optional
         Information about the person who performed the run and when.
 
     Attributes

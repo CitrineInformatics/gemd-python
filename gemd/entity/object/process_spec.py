@@ -30,7 +30,8 @@ class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
         Conditions under which this process spec occurs.
     parameters: List[:class:`Parameter <gemd.entity.attribute.parameter.Parameter>`], optional
         Parameters of this process spec.
-    template: :class:`ProcessTemplate <gemd.entity.template.process_template.ProcessTemplate>`, optional
+    template: :class:`ProcessTemplate\
+    <gemd.entity.template.process_template.ProcessTemplate>`, optional
         A template bounding the valid values for this process's parameters and conditions.
     file_links: List[:class:`FileLink <gemd.entity.file_link.FileLink>`], optional
         Links to associated files, with resource paths into the files API.
@@ -41,7 +42,8 @@ class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
         The material spec that this process spec produces. The link is established by creating
         the material spec and settings its `process` field to this process spec.
 
-    ingredients: List[:class:`IngredientSpec <gemd.entity.object.ingredient_spec.IngredientSpec>`], optional
+    ingredients: List[:class:`IngredientSpec\
+    <gemd.entity.object.ingredient_spec.IngredientSpec>`], optional
         Ingredient specs that act as inputs to this process spec. The link is established by
         creating each ingredient spec and setting its `process` field to this process spec.
 

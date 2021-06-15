@@ -26,10 +26,12 @@ class MaterialSpec(BaseObject, HasTemplate):
         Long-form notes about the material spec.
     process: :class:`ProcessSpec <gemd.entity.object.process_spec.ProcessSpec>`
         Process that produces this material.
-    properties: List[:class:`PropertyAndConditions <gemd.entity.attribute.property_and_conditions.PropertyAndConditions>`], optional
+    properties: List[:class:`PropertyAndConditions\
+    <gemd.entity.attribute.property_and_conditions.PropertyAndConditions>`], optional
         Properties of the material, along with an optional list of conditions under which
         those properties are measured.
-    template: :class:`MaterialTemplate <gemd.entity.template.material_template.MaterialTemplate>`, optional
+    template: :class:`MaterialTemplate\
+    <gemd.entity.template.material_template.MaterialTemplate>`, optional
         A template bounding the valid values for this material's properties.
     file_links: List[:class:`FileLink <gemd.entity.file_link.FileLink>`], optional
         Links to associated files, with resource paths into the files API.

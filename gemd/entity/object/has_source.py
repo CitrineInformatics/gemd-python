@@ -7,7 +7,8 @@ class HasSource(object):
 
     Parameters
     ----------
-    source: :class:`PerformedSource <gemd.entity.source.performed_source.PerformedSource>`, optional
+    source: :class:`PerformedSource\
+    <gemd.entity.source.performed_source.PerformedSource>`, optional
         Information about the person who performed the run and when.
 
     """
