@@ -21,9 +21,9 @@ that :class:`~gemd.entity.object.material_run.MaterialRun` has the :class:`~gemd
 
 This linking structure presents several challenges for serialization and deserialization:
 
-a. The graph cannot be traversed through uni-directional links in the wrong direction.
-b. Only the writeable side of bi-directional links can be persisted.
-c. Objects that are referenced by multiple objects must be deserialized to the same object.
+- The graph cannot be traversed through uni-directional links in the wrong direction.
+- Only the writeable side of bi-directional links can be persisted.
+- Objects that are referenced by multiple objects must be deserialized to the same object.
 
 These challenges are addressed by a custom json serialization procedure and the special :class:`~gemd.entity.link_by_uid.LinkByUID` class.
 
@@ -79,10 +79,10 @@ Here's an example of the serialized output for a :class:`~gemd.entity.object.mat
   }
 
 The deserialization is a comparatively simple two-step process.
-First, the string or file is deserialized with python's builtin deserializer and a custom object hook.
+First, the string or file is deserialized with Python's builtin deserializer and a custom object hook.
 This hook does three things:
 it knows how to build GEMD entities and other :class:`~gemd.entity.dict_serializable.DictSerializable` objects,
-it creates an index with the unique identifiers of the gemd entities that it has seen so far,
+it creates an index with the unique identifiers of the GEMD entities that it has seen so far,
 and it replaces any :class:`~gemd.entity.link_by_uid.LinkByUID` that it encounters with objects from that index.
 The only thing left to do is return the ``"object"`` item from the resulting dictionary.
 
