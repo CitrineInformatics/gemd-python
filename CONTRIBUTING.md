@@ -6,16 +6,16 @@ Changes are gated on:
  * Passing unit tests
  * 100% unit test coverage
  * PEP8 style compliance, with some exceptions in the [tox file](tox.ini)
+
 Check out the [.travis.yml](.travis.yml) file for the exact testing procedure.
 
 ## Coding Style
-This project follows [PEP8](https://www.python.org/dev/peps/pep-0008/), with the following exceptions:
+This project follows [PEP8](https://www.python.org/dev/peps/pep-0008/), with the following exception:
 * Maximum line length is 99 characters
 
-Type hints are strongly encouraged.
-
-Positional arguments are strongly discouraged for methods with multiple arguments.
-Any positional argument should be required.
+Additionally:
+* Type hints are strongly encouraged, but not required.
+* Positional arguments are strongly discouraged for methods with multiple arguments.  Keyword-only arguments are preferred instead.  Every positional argument should be required.
 
 For additional (non-binding) inspiration, check out the [Google Python Style Guide](https://github.com/google/styleguide/blob/gh-pages/pyguide.md).
 
