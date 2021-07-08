@@ -16,7 +16,7 @@ setup(name='gemd',
               join('demo', 'toothpick.jpg'),
               join('units', 'citrine_en.txt'),
               join('units', 'constants_en.txt'),
-              join('units', 'tests/test_units.txt')
+              join('units', 'tests', 'test_units.txt')
           ]
       },
       install_requires=[
