@@ -1,8 +1,9 @@
+from os.path import join
 from setuptools import setup, find_packages
 
 
 setup(name='gemd',
-      version='1.0.1',
+      version='1.0.2',
       url='http://github.com/CitrineInformatics/gemd-python',
       description="Python binding for Citrine's GEMD data model",
       author='Max Hutchinson',
@@ -10,12 +11,12 @@ setup(name='gemd',
       packages=find_packages(),
       package_data={
           'gemd': [
-              'demo/strehlow_and_cook.pif',
-              'demo/strehlow_and_cook_small.pif',
-              'demo/toothpick.jpg',
-              'units/citrine_en.txt',
-              'units/constants_en.txt',
-              'units/tests/test_units.txt'
+              join('demo', 'strehlow_and_cook.pif'),
+              join('demo', 'strehlow_and_cook_small.pif'),
+              join('demo', 'toothpick.jpg'),
+              join('units', 'citrine_en.txt'),
+              join('units', 'constants_en.txt'),
+              join('units', 'tests/test_units.txt')
           ]
       },
       install_requires=[
