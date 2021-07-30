@@ -178,11 +178,11 @@ For example, a <a class="reference internal" href="../reference/gemd.entity.obje
 but a <a class="reference internal" href="../reference/gemd.entity.object.material_run.html#gemd.entity.object.material_run.MaterialRun" title="gemd.entity.object.material_run.MaterialRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">MaterialRun</span></code></a> cannot set the <code class="xref py py-class docutils literal notranslate"><span class="pre">MeasurementRun</span></code>’s <code class="docutils literal notranslate"><span class="pre">material</span></code> field is set,
 that <a class="reference internal" href="../reference/gemd.entity.object.material_run.html#gemd.entity.object.material_run.MaterialRun" title="gemd.entity.object.material_run.MaterialRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">MaterialRun</span></code></a> has the <a class="reference internal" href="../reference/gemd.entity.object.measurement_run.html#gemd.entity.object.measurement_run.MeasurementRun" title="gemd.entity.object.measurement_run.MeasurementRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeasurementRun</span></code></a> appended to its <code class="docutils literal notranslate"><span class="pre">measurements</span></code> field.</p>
 <p>This linking structure presents several challenges for serialization and deserialization:</p>
-<ol class="loweralpha simple">
+<ul class="simple">
 <li><p>The graph cannot be traversed through uni-directional links in the wrong direction.</p></li>
 <li><p>Only the writeable side of bi-directional links can be persisted.</p></li>
 <li><p>Objects that are referenced by multiple objects must be deserialized to the same object.</p></li>
-</ol>
+</ul>
 <p>These challenges are addressed by a custom json serialization procedure and the special <a class="reference internal" href="../reference/gemd.entity.link_by_uid.html#gemd.entity.link_by_uid.LinkByUID" title="gemd.entity.link_by_uid.LinkByUID"><code class="xref py py-class docutils literal notranslate"><span class="pre">LinkByUID</span></code></a> class.</p>
 <ol class="arabic simple">
 <li><p>Each entity that doesn’t already have at least one unique identifier is assigned a unique identifier so it can be referenced.</p></li>
@@ -235,10 +235,10 @@ that <a class="reference internal" href="../reference/gemd.entity.object.materia
 </pre></div>
 </div>
 <p>The deserialization is a comparatively simple two-step process.
-First, the string or file is deserialized with python’s builtin deserializer and a custom object hook.
+First, the string or file is deserialized with Python’s builtin deserializer and a custom object hook.
 This hook does three things:
 it knows how to build GEMD entities and other <a class="reference internal" href="../reference/gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictSerializable</span></code></a> objects,
-it creates an index with the unique identifiers of the gemd entities that it has seen so far,
+it creates an index with the unique identifiers of the GEMD entities that it has seen so far,
 and it replaces any <a class="reference internal" href="../reference/gemd.entity.link_by_uid.html#gemd.entity.link_by_uid.LinkByUID" title="gemd.entity.link_by_uid.LinkByUID"><code class="xref py py-class docutils literal notranslate"><span class="pre">LinkByUID</span></code></a> that it encounters with objects from that index.
 The only thing left to do is return the <code class="docutils literal notranslate"><span class="pre">&quot;object&quot;</span></code> item from the resulting dictionary.</p>
 <p>This strategy is implemented in the <a class="reference internal" href="../reference/gemd.json.gemd_json.html#gemd.json.gemd_json.GEMDJson" title="gemd.json.gemd_json.GEMDJson"><code class="xref py py-class docutils literal notranslate"><span class="pre">GEMDJson</span></code></a> class
