@@ -352,6 +352,7 @@ centimeter_H2O = centimeter * water * g_0 = cmH2O = cm_H2O
 # Torque
 [torque] = [force] * [length]
 foot_pound = foot * force_pound = ft_lb = footpound
+inch_pound = inch * force_pound = in_lb = inchpound
 
 # Viscosity
 [viscosity] = [pressure] * [time]

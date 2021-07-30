@@ -46,6 +46,13 @@ def test_parse_none():
     assert parse_units(None) is None
 
 
+def test_conversion():
+    """Tests that check if particular units are interoperable."""
+    conversions = {"in_lb": "foot_pound"}
+    for source, dest in conversions.items():
+        assert convert_units(convert_units(1, source, dest), dest, source) == 1
+
+
 @contextmanager
 def _change_units(filename):
     try:
