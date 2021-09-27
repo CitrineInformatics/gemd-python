@@ -54,16 +54,16 @@ class LinkByUID(DictSerializable):
             A link object that references `entity` through its scope and id.
 
         """
-        if name is None:
-            if scope is None:
-                scope = "auto"  # set default
-        elif scope is None:
+        if name is None and scope is None:
+            scope = "auto"  # set default
+        elif name is None and scope is not None:  # The rest of these conditions to be deleted
+            pass  # Normal workflow
+        elif name is not None and scope is None:
             warn("The positional argument 'name' is deprecated.  When selecting a default scope, "
                  "use the 'scope' keyword argument.", DeprecationWarning)
             scope = name
-        else:
-            if scope is not None:
-                raise ValueError("Specify the 'name' parameter or 'scope' parameter, not both.")
+        elif name is not None and scope is not None:
+            raise ValueError("Specify the 'name' parameter or 'scope' parameter, not both.")
 
         if scope in entity.uids:
             uid = entity.uids[scope]
