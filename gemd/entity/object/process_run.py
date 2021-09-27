@@ -2,6 +2,7 @@ from gemd.entity.object.base_object import BaseObject
 from gemd.entity.object.has_conditions import HasConditions
 from gemd.entity.object.has_parameters import HasParameters
 from gemd.entity.object.has_source import HasSource
+from gemd.entity.setters import validate_list
 
 
 class ProcessRun(BaseObject, HasConditions, HasParameters, HasSource):
@@ -57,17 +58,19 @@ class ProcessRun(BaseObject, HasConditions, HasParameters, HasSource):
     def __init__(self, name, *, spec=None,
                  conditions=None, parameters=None,
                  uids=None, tags=None, notes=None, file_links=None, source=None):
+        from gemd.entity.object.ingredient_run import IngredientRun
+        from gemd.entity.link_by_uid import LinkByUID
+
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)
         HasConditions.__init__(self, conditions)
         HasParameters.__init__(self, parameters)
         HasSource.__init__(self, source)
 
-        self._ingredients = []
-
         self._spec = None
         self.spec = spec
         self._output_material = None
+        self._ingredients = validate_list(None, [IngredientRun, LinkByUID])
 
     @property
     def output_material(self):
@@ -78,11 +81,6 @@ class ProcessRun(BaseObject, HasConditions, HasParameters, HasSource):
     def ingredients(self):
         """Get the input ingredient runs."""
         return self._ingredients
-
-    def _unset_ingredient(self, ingred):
-        """Remove `ingred` from this process's list of ingredients."""
-        if ingred in self._ingredients:
-            self._ingredients.remove(ingred)
 
     @property
     def spec(self):
@@ -108,3 +106,29 @@ class ProcessRun(BaseObject, HasConditions, HasParameters, HasSource):
             return self.spec.template
         else:
             return None
+
+    # To avoid infinite recursion, fast return on revisit; vulnerable to exceptions
+    global eq_seen
+    eq_seen = set()
+
+    def __eq__(self, other):
+        if (self, other) in eq_seen:  # Cycle encountered
+            return True  # This will functionally be & with the correct result of ==
+        eq_seen.add((self, other))
+        result = super().__eq__(other)
+
+        # Equals needs to crawl into ingredients
+        if result is True and isinstance(other, ProcessRun):
+            if len(self.ingredients) == len(other.ingredients):
+                result = all(ing in other.ingredients for ing in self.ingredients)
+            else:
+                result = False
+
+        eq_seen.remove((self, other))
+        return result
+
+    # Note the hash function checks if objects are identical, as opposed to the equals method,
+    # which checks if fields are equal.  This is because BaseEntities are fundamentally
+    # mutable objects.
+    def __hash__(self):
+        return super().__hash__()

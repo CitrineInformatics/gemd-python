@@ -2,6 +2,7 @@ from gemd.entity.object.base_object import BaseObject
 from gemd.entity.object.has_parameters import HasParameters
 from gemd.entity.object.has_conditions import HasConditions
 from gemd.entity.object.has_template import HasTemplate
+from gemd.entity.setters import validate_list
 
 
 class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
@@ -56,31 +57,53 @@ class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
     def __init__(self, name, *, template=None,
                  parameters=None, conditions=None,
                  uids=None, tags=None, notes=None, file_links=None):
+        from gemd.entity.object.ingredient_spec import IngredientSpec
+        from gemd.entity.link_by_uid import LinkByUID
+
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)
         HasParameters.__init__(self, parameters=parameters)
         HasConditions.__init__(self, conditions=conditions)
-
-        self._ingredients = []
+        HasTemplate.__init__(self, template=template)
 
         # By default, a ProcessSpec is not linked to any MaterialSpec.
         # If a MaterialSpec is linked to this ProcessSpec,
         # then the field self._output_material will be automatically populated
         self._output_material = None
-
-        HasTemplate.__init__(self, template=template)
+        self._ingredients = validate_list(None, [IngredientSpec, LinkByUID])
 
     @property
     def ingredients(self):
         """Get the list of input ingredient specs."""
         return self._ingredients
 
-    def _unset_ingredient(self, ingred):
-        """Remove `ingred` from this process's list of ingredients."""
-        if ingred in self._ingredients:
-            self._ingredients.remove(ingred)
-
     @property
     def output_material(self):
         """Get the output material spec."""
         return self._output_material
+
+    # To avoid infinite recursion, fast return on revisit
+    global eq_seen
+    eq_seen = set()
+
+    def __eq__(self, other):
+        if (self, other) in eq_seen:  # Cycle encountered
+            return True  # This will functionally be & with the correct result of ==
+        eq_seen.add((self, other))
+        result = super().__eq__(other)
+
+        # Equals needs to crawl into ingredients
+        if result is True and isinstance(other, ProcessSpec):
+            if len(self.ingredients) == len(other.ingredients):
+                result = all(ing in other.ingredients for ing in self.ingredients)
+            else:
+                result = False
+
+        eq_seen.remove((self, other))
+        return result
+
+    # Note the hash function checks if objects are identical, as opposed to the equals method,
+    # which checks if fields are equal.  This is because BaseEntities are fundamentally
+    # mutable objects.
+    def __hash__(self):
+        return super().__hash__()

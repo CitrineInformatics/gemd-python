@@ -1,14 +1,12 @@
 """Tests of the process run object."""
 import pytest
 from uuid import uuid4
+from copy import deepcopy
 
 from gemd.json import dumps, loads
-from gemd.entity.object.process_run import ProcessRun
-from gemd.entity.object.process_spec import ProcessSpec
-from gemd.entity.attribute.condition import Condition
-from gemd.entity.object.ingredient_run import IngredientRun
-from gemd.entity.object.material_run import MaterialRun
-from gemd.entity.template.process_template import ProcessTemplate
+from gemd.entity.attribute import Condition
+from gemd.entity.object import ProcessRun, ProcessSpec, IngredientRun, MaterialRun
+from gemd.entity.template import ProcessTemplate
 from gemd.entity.link_by_uid import LinkByUID
 
 
@@ -59,3 +57,19 @@ def test_template_access():
 
     proc.spec = LinkByUID.from_entity(spec)
     assert proc.template is None
+
+
+def test_equality():
+    """Test that equality check works as expected."""
+    spec = ProcessSpec("A spec", tags=["a tag"])
+    run1 = ProcessRun("A process", spec=spec)
+
+    run2 = deepcopy(run1)
+    assert run1 == run2, "Copy somehow failed"
+    IngredientRun(process=run2)
+    assert run1 != run2
+
+    run3 = deepcopy(run2)
+    assert run3 == run2, "Copy somehow failed"
+    run3.ingredients[0].tags.append('A tag')
+    assert run3 != run2

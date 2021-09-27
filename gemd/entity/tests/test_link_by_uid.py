@@ -13,5 +13,13 @@ def test_link_by_uid():
     IngredientRun(process=root.process, material=leaf)
     IngredientRun(process=root.process, material=LinkByUID.from_entity(leaf))
 
+    # Paranoid assertions about equality's symmetry since it's implemented in 2 places
+    assert root.process.ingredients[0].material == root.process.ingredients[1].material
+    assert root.process.ingredients[0].material.__eq__(root.process.ingredients[1].material)
+    assert root.process.ingredients[1].material.__eq__(root.process.ingredients[0].material)
+
+    # Verify hash collision on equal LinkByUIDs
+    assert LinkByUID.from_entity(leaf) in {LinkByUID.from_entity(leaf)}
+
     copy = loads(dumps(root))
     assert copy.process.ingredients[0].material == copy.process.ingredients[1].material

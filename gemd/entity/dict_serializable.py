@@ -141,8 +141,10 @@ class DictSerializable(ABC):
             other_dict = other.as_dict()
             return self_dict == other_dict
         else:
-            return False
+            return NotImplemented
 
-    # TODO make a hash function which reflects __eq__?
+    # Note the hash function checks if objects are identical, as opposed to the equals method,
+    # which checks if fields are equal.  This is because BaseEntities are fundamentally
+    # mutable objects.
     def __hash__(self):
         return super().__hash__()

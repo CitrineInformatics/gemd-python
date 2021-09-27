@@ -52,3 +52,14 @@ class LinkByUID(DictSerializable):
                 entity.add_uid(name, str(uuid.uuid4()))
             scope, uid = next((s, i) for s, i in entity.uids.items())
         return LinkByUID(scope, uid)
+
+    # Note that this could violate transitivity
+    def __eq__(self, other):
+        from gemd.entity.base_entity import BaseEntity
+        if isinstance(other, BaseEntity):
+            return other.uids.get(self.scope) == self.id
+        else:
+            return super().__eq__(other)
+
+    def __hash__(self):
+        return hash((self.scope, self.id))
