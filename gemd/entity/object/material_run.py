@@ -44,7 +44,7 @@ class MaterialRun(BaseObject):
 
     typ = "material_run"
 
-    skip = {"_measurements"}
+    skip = {"_measurements", "_active_comparison"}
 
     def __init__(self, name, *, spec=None, process=None, sample_type="unknown",
                  uids=None, tags=None, notes=None, file_links=None):
@@ -57,6 +57,7 @@ class MaterialRun(BaseObject):
         self._measurements = validate_list(None, [MeasurementRun, LinkByUID])
         self._sample_type = None
         self._spec = None
+        self._active_comparison = set()
 
         self.spec = spec
         self.process = process
@@ -122,24 +123,24 @@ class MaterialRun(BaseObject):
         else:
             return None
 
-    # To avoid infinite recursion, fast return on revisit
-    global eq_seen
-    eq_seen = set()
-
     def __eq__(self, other):
-        if (self, other) in eq_seen:  # Cycle encountered
+        # To avoid infinite recursion, fast return on revisit
+        if other in self._active_comparison:  # Cycle encountered
             return True  # This will functionally be & with the correct result of ==
-        eq_seen.add((self, other))
-        result = super().__eq__(other)
 
-        # Equals needs to crawl into measurements
-        if result is True and isinstance(other, MaterialRun):
-            if len(self.measurements) == len(other.measurements):
-                result = all(msr in other.measurements for msr in self.measurements)
-            else:
-                result = False
+        self._active_comparison.add(other)
+        try:
+            result = super().__eq__(other)
 
-        eq_seen.remove((self, other))
+            # Equals needs to crawl into measurements
+            if result is True and isinstance(other, MaterialRun):
+                if len(self.measurements) == len(other.measurements):
+                    result = all(msr in other.measurements for msr in self.measurements)
+                else:
+                    result = False
+        finally:
+            self._active_comparison.remove(other)
+
         return result
 
     # Note the hash function checks if objects are identical, as opposed to the equals method,

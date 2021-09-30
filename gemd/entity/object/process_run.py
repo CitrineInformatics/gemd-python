@@ -53,7 +53,7 @@ class ProcessRun(BaseObject, HasConditions, HasParameters, HasSource):
 
     typ = "process_run"
 
-    skip = {"_output_material", "_ingredients"}
+    skip = {"_output_material", "_ingredients", "_active_comparison"}
 
     def __init__(self, name, *, spec=None,
                  conditions=None, parameters=None,
@@ -71,6 +71,7 @@ class ProcessRun(BaseObject, HasConditions, HasParameters, HasSource):
         self.spec = spec
         self._output_material = None
         self._ingredients = validate_list(None, [IngredientRun, LinkByUID])
+        self._active_comparison = set()
 
     @property
     def output_material(self):
@@ -107,24 +108,24 @@ class ProcessRun(BaseObject, HasConditions, HasParameters, HasSource):
         else:
             return None
 
-    # To avoid infinite recursion, fast return on revisit; vulnerable to exceptions
-    global eq_seen
-    eq_seen = set()
-
     def __eq__(self, other):
-        if (self, other) in eq_seen:  # Cycle encountered
+        # To avoid infinite recursion, fast return on revisit; vulnerable to exceptions
+        if other in self._active_comparison:  # Cycle encountered
             return True  # This will functionally be & with the correct result of ==
-        eq_seen.add((self, other))
-        result = super().__eq__(other)
 
-        # Equals needs to crawl into ingredients
-        if result is True and isinstance(other, ProcessRun):
-            if len(self.ingredients) == len(other.ingredients):
-                result = all(ing in other.ingredients for ing in self.ingredients)
-            else:
-                result = False
+        self._active_comparison.add(other)
+        try:
+            result = super().__eq__(other)
 
-        eq_seen.remove((self, other))
+            # Equals needs to crawl into ingredients
+            if result is True and isinstance(other, ProcessRun):
+                if len(self.ingredients) == len(other.ingredients):
+                    result = all(ing in other.ingredients for ing in self.ingredients)
+                else:
+                    result = False
+        finally:
+            self._active_comparison.remove(other)
+
         return result
 
     # Note the hash function checks if objects are identical, as opposed to the equals method,
