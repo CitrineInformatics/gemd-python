@@ -239,13 +239,21 @@ corresponding to serialized DictSerializable objects.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.link_by_uid.LinkByUID.from_entity">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_entity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.link_by_uid.LinkByUID.from_entity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create LinkByUID from in-memory object using id with scope ‘name’.</p>
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_entity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.link_by_uid.LinkByUID.from_entity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create LinkByUID from in-memory object.</p>
+<ul class="simple">
+<li><p>If there exists an id with scope (default ‘auto’), the LinkByUID object will be built
+with that scope.</p></li>
+<li><p>If there is no id with scope, an arbitrary scope-id pair will be chosen.</p></li>
+<li><p>If the object has no uids, the object will be mutated to include a uid (UUID4) with the
+chosen scope and the LinkByUID object will be built with that scope and id.</p></li>
+</ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>entity</strong> (<a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><em>BaseEntity</em></a>) – The entity to substitute with a LinkByUID</p></li>
-<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – The scope of the id.</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em><em> (</em><em>Deprecated</em><em>)</em>) – The desired scope of the id.</p></li>
+<li><p><strong>scope</strong> (<em>str</em><em>, </em><em>optional</em>) – The desired scope of the id.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
