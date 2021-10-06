@@ -170,7 +170,7 @@ def substitute_links(obj: Any, native_uid=None):
             return LinkByUID.from_entity(entity)
 
     return _substitute(obj, sub=make_link,
-                       applies=lambda o: o is not obj and isinstance(o, BaseEntity))
+                       applies=lambda o: o is not obj and isinstance_base_entity(o))
 
 
 def substitute_objects(obj, index):
@@ -363,7 +363,7 @@ def writable_sort_order(key: Union[BaseEntity, str]) -> int:
     from gemd.entity.template import ConditionTemplate, MaterialTemplate, MeasurementTemplate, \
         ParameterTemplate, ProcessTemplate, PropertyTemplate
 
-    if isinstance(key, BaseEntity):
+    if isinstance_base_entity(key):
         typ = key.typ
     elif isinstance(key, str):
         typ = key

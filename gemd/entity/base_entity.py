@@ -70,3 +70,20 @@ class BaseEntity(DictSerializable):
 
         """
         self.uids[scope] = uid
+
+    # Note that this could violate transitivity -- Link(scope1) == obj == Link(scope2)
+    def __eq__(self, other):
+        from gemd.entity.link_by_uid import LinkByUID
+        if isinstance(other, LinkByUID):
+            return self.uids.get(other.scope) == other.id
+        else:
+            result = super().__eq__(other)
+            return result
+
+    # Note the hash function checks if objects are identical, as opposed to the equals method,
+    # which checks if fields are equal.  This is because BaseEntities are fundamentally
+    # mutable objects.  Note that if you define an __eq__ method without defining a __hash__
+    # method, the object will become unhashable.
+    # https://docs.python.org/3/reference/datamodel.html#object.__hash
+    def __hash__(self):
+        return super().__hash__()

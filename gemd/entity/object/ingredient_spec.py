@@ -1,7 +1,6 @@
 from gemd.entity.object.base_object import BaseObject
 from gemd.entity.object.has_quantities import HasQuantities
 from gemd.entity.setters import validate_list
-from gemd.entity.valid_list import ValidList
 
 
 class IngredientSpec(BaseObject, HasQuantities):
@@ -64,9 +63,9 @@ class IngredientSpec(BaseObject, HasQuantities):
         self._process = None
         self._labels = None
 
+        self.labels = labels
         self.material = material
         self.process = process
-        self.labels = labels
 
     @property
     def labels(self):
@@ -102,17 +101,14 @@ class IngredientSpec(BaseObject, HasQuantities):
     def process(self, process):
         from gemd.entity.object import ProcessSpec
         from gemd.entity.link_by_uid import LinkByUID
-        if self._process is not None and isinstance(self._process, ProcessSpec):
-            self._process._unset_ingredient(self)
-        if process is None:
-            self._process = None
-        elif isinstance(process, ProcessSpec):
+        if isinstance(self._process, ProcessSpec):
+            # This could throw an exception if it's not in the list, but then something else broke
+            self._process.ingredients.remove(self)
+
+        if process is None or isinstance(process, (LinkByUID, ProcessSpec)):
             self._process = process
-            if not isinstance(process.ingredients, ValidList):
-                process._ingredients = validate_list(self, [IngredientSpec, LinkByUID])
-            else:
-                process._ingredients.append(self)
-        elif isinstance(process, LinkByUID):
-            self._process = process
+            if isinstance(process, ProcessSpec):
+                process.ingredients.append(self)
         else:
-            raise TypeError("IngredientSpec.process must be a ProcessSpec or LinkByUID")
+            raise TypeError("IngredientSpec.process must be a ProcessSpec or "
+                            "LinkByUID: {}".format(process))

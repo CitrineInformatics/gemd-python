@@ -1,7 +1,6 @@
 from gemd.entity.object.base_object import BaseObject
 from gemd.entity.object.has_quantities import HasQuantities
 from gemd.entity.setters import validate_list
-from gemd.entity.valid_list import ValidList
 
 
 class IngredientRun(BaseObject, HasQuantities):
@@ -60,10 +59,10 @@ class IngredientRun(BaseObject, HasQuantities):
         self._spec = None
         self._labels = None
 
-        self.material = material
-        self.process = process
         # this will overwrite name/labels if/when they are set
         self.spec = spec
+        self.material = material
+        self.process = process
 
     @property
     def name(self):
@@ -117,18 +116,14 @@ class IngredientRun(BaseObject, HasQuantities):
     def process(self, process):
         from gemd.entity.object import ProcessRun
         from gemd.entity.link_by_uid import LinkByUID
-        if self._process is not None and isinstance(self._process, ProcessRun):
-            self._process._unset_ingredient(self)
-        if process is None:
-            self._process = None
-        elif isinstance(process, ProcessRun):
+        if isinstance(self._process, ProcessRun):
+            # This could throw an exception if it's not in the list, but then something else broke
+            self._process.ingredients.remove(self)
+
+        if process is None or isinstance(process, (LinkByUID, ProcessRun)):
             self._process = process
-            if not isinstance(process.ingredients, ValidList):
-                process._ingredients = validate_list(self, [IngredientRun, LinkByUID])
-            else:
-                process._ingredients.append(self)
-        elif isinstance(process, LinkByUID):
-            self._process = process
+            if isinstance(process, ProcessRun):
+                process.ingredients.append(self)
         else:
             raise TypeError("IngredientRun.process must be a ProcessRun or "
                             "LinkByUID: {}".format(process))

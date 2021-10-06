@@ -3,8 +3,6 @@ from gemd.entity.object.has_conditions import HasConditions
 from gemd.entity.object.has_properties import HasProperties
 from gemd.entity.object.has_parameters import HasParameters
 from gemd.entity.object.has_source import HasSource
-from gemd.entity.setters import validate_list
-from gemd.entity.valid_list import ValidList
 
 
 class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters, HasSource):
@@ -60,10 +58,10 @@ class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters, Ha
         HasParameters.__init__(self, parameters)
         HasSource.__init__(self, source)
 
-        self._material = None
-        self.material = material
         self._spec = None
         self.spec = spec
+        self._material = None
+        self.material = material
 
     @property
     def material(self):
@@ -74,18 +72,14 @@ class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters, Ha
     def material(self, value):
         from gemd.entity.object import MaterialRun
         from gemd.entity.link_by_uid import LinkByUID
-        if self._material is not None and isinstance(self._material, MaterialRun):
-            self._material._unset_measurement(self)
-        if value is None:
+        if isinstance(self._material, MaterialRun):
+            # This could throw an exception if it's not in the list, but then something else broke
+            self._material.measurements.remove(self)
+
+        if value is None or isinstance(value, (MaterialRun, LinkByUID)):
             self._material = value
-        elif isinstance(value, MaterialRun):
-            self._material = value
-            if not isinstance(value.measurements, ValidList):
-                value._measurements = validate_list(self, [MeasurementRun, LinkByUID])
-            else:
-                value._measurements.append(self)
-        elif isinstance(value, LinkByUID):
-            self._material = value
+            if isinstance(value, MaterialRun):
+                value.measurements.append(self)
         else:
             raise TypeError("material must be a MaterialRun or LinkByUID: {}".format(value))
 
