@@ -96,8 +96,8 @@ class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
             if result is True and isinstance(other, ProcessSpec):
                 if len(self.ingredients) == len(other.ingredients):
                     result = all(ing in other.ingredients for ing in self.ingredients)
-                elif (not self.ingredients and self.uids) \
-                        or (not other.ingredients and other.uids):
+                elif (len(self.ingredients) == 0 and len(self.uids) != 0) \
+                        or (len(other.ingredients) == 0 and len(other.uids) != 0):
                     result = True  # One can be empty if you flattened
                 else:
                     result = False

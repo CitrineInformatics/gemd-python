@@ -136,8 +136,8 @@ class MaterialRun(BaseObject):
             if result is True and isinstance(other, MaterialRun):
                 if len(self.measurements) == len(other.measurements):
                     result = all(msr in other.measurements for msr in self.measurements)
-                elif (not self.measurements and self.uids) \
-                        or (not other.measurements and other.uids):
+                elif (len(self.measurements) == 0 and len(self.uids) != 0) \
+                        or (len(other.measurements) == 0 and len(other.uids) != 0):
                     result = True  # One can be empty if you flattened
                 else:
                     result = False
