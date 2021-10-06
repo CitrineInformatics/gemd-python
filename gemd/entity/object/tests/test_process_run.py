@@ -8,6 +8,7 @@ from gemd.entity.attribute import Condition
 from gemd.entity.object import ProcessRun, ProcessSpec, IngredientRun, MaterialRun
 from gemd.entity.template import ProcessTemplate
 from gemd.entity.link_by_uid import LinkByUID
+from gemd.util import flatten
 
 
 def test_process_spec():
@@ -73,3 +74,6 @@ def test_equality():
     assert run3 == run2, "Copy somehow failed"
     run3.ingredients[0].tags.append('A tag')
     assert run3 != run2
+
+    run4 = next(x for x in flatten(run3, 'test-scope') if isinstance(x, ProcessRun))
+    assert run4 == run3, "Flattening removes measurement references, but that's okay"

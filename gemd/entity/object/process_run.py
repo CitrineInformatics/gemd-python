@@ -121,6 +121,9 @@ class ProcessRun(BaseObject, HasConditions, HasParameters, HasSource):
             if result is True and isinstance(other, ProcessRun):
                 if len(self.ingredients) == len(other.ingredients):
                     result = all(ing in other.ingredients for ing in self.ingredients)
+                elif (not self.ingredients and self.uids) \
+                        or (not other.ingredients and other.uids):
+                    result = True  # One can be empty if you flattened
                 else:
                     result = False
         finally:
@@ -130,6 +133,8 @@ class ProcessRun(BaseObject, HasConditions, HasParameters, HasSource):
 
     # Note the hash function checks if objects are identical, as opposed to the equals method,
     # which checks if fields are equal.  This is because BaseEntities are fundamentally
-    # mutable objects.
+    # mutable objects.  Note that if you define an __eq__ method without defining a __hash__
+    # method, the object will become unhashable.
+    # https://docs.python.org/3/reference/datamodel.html#object.__hash
     def __hash__(self):
         return super().__hash__()

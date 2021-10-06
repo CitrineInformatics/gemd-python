@@ -10,6 +10,7 @@ from gemd.entity.object import MaterialRun, ProcessRun, MaterialSpec, Measuremen
 from gemd.entity.template import MaterialTemplate
 from gemd.entity.value import NominalReal
 from gemd.entity.link_by_uid import LinkByUID
+from gemd.util import flatten
 
 
 def test_material_run():
@@ -143,3 +144,6 @@ def test_equality():
     assert mat4 == mat3, "Copy somehow failed"
     mat4.measurements[0].tags.append('A tag')
     assert mat4 != mat3
+
+    mat5 = next(x for x in flatten(mat4, 'test-scope') if isinstance(x, MaterialRun))
+    assert mat5 == mat4, "Flattening removes measurement references, but that's okay"

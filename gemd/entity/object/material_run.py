@@ -136,6 +136,9 @@ class MaterialRun(BaseObject):
             if result is True and isinstance(other, MaterialRun):
                 if len(self.measurements) == len(other.measurements):
                     result = all(msr in other.measurements for msr in self.measurements)
+                elif (not self.measurements and self.uids) \
+                        or (not other.measurements and other.uids):
+                    result = True  # One can be empty if you flattened
                 else:
                     result = False
         finally:
@@ -145,6 +148,8 @@ class MaterialRun(BaseObject):
 
     # Note the hash function checks if objects are identical, as opposed to the equals method,
     # which checks if fields are equal.  This is because BaseEntities are fundamentally
-    # mutable objects.
+    # mutable objects.  Note that if you define an __eq__ method without defining a __hash__
+    # method, the object will become unhashable.
+    # https://docs.python.org/3/reference/datamodel.html#object.__hash
     def __hash__(self):
         return super().__hash__()

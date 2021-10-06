@@ -6,6 +6,7 @@ from gemd.json import dumps, loads
 from gemd.entity.attribute import PropertyAndConditions, Property
 from gemd.entity.object import ProcessSpec, MaterialSpec, IngredientSpec
 from gemd.entity.value import DiscreteCategorical
+from gemd.util import flatten
 
 
 def test_material_spec():
@@ -78,3 +79,6 @@ def test_equality():
     assert spec4 == spec3, "Copy somehow failed"
     spec4.ingredients[0].tags.append('A tag')
     assert spec4 != spec3
+
+    spec5 = next(x for x in flatten(spec4, 'test-scope') if isinstance(x, ProcessSpec))
+    assert spec5 == spec4, "Flattening removes measurement references, but that's okay"
