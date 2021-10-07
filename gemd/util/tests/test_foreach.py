@@ -31,6 +31,7 @@ def test_recursive_foreach():
 
 
 def test_more_iterable_types():
+    """Verify recursive_foreach behaves for additional iterable types."""
     obj = MaterialRun("foo", tags=["1", "2", "3"])
 
     assert "1" in obj.tags

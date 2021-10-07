@@ -98,3 +98,24 @@ def test_recursive_flatmap_maintains_order():
     p2 = ProcessSpec(name="two")
     orig = [p1, p2]
     assert [x.name for x in orig] == recursive_flatmap(orig, lambda x: [x.name])
+
+
+def test_more_iterable_types():
+    """Verify recursive_flatmap behaves for additional iterable types."""
+    obj = MaterialRun("foo", tags=["1", "2", "3"])
+
+    assert "1" in obj.tags
+    res = recursive_flatmap({obj}, lambda x: [x.tags.pop(0)])
+    assert "1" in res
+    assert "1" not in obj.tags
+
+    dct = {obj: obj}
+    assert "2" in obj.tags
+    res = recursive_flatmap(dct.keys(), lambda x: [x.tags.pop(0)])
+    assert "2" in res
+    assert "2" not in obj.tags
+
+    assert "3" in obj.tags
+    res = recursive_flatmap(dct.values(), lambda x: [x.tags.pop(0)])
+    assert "3" in res
+    assert "3" not in obj.tags
