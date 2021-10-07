@@ -28,3 +28,20 @@ def test_recursive_foreach():
                 "property_template"
                 ]
     assert sorted(types) == sorted(expected)
+
+
+def test_more_iterable_types():
+    obj = MaterialRun("foo", tags=["1", "2", "3"])
+
+    assert "1" in obj.tags
+    recursive_foreach({obj}, lambda x: x.tags.remove("1"))
+    assert "1" not in obj.tags
+
+    dct = {obj: obj}
+    assert "2" in obj.tags
+    recursive_foreach(dct.keys(), lambda x: x.tags.remove("2"))
+    assert "2" not in obj.tags
+
+    assert "3" in obj.tags
+    recursive_foreach(dct.values(), lambda x: x.tags.remove("3"))
+    assert "3" not in obj.tags

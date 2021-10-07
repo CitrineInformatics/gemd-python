@@ -5,6 +5,8 @@ from typing import Dict, Callable, Union, Type, Tuple, List, Any
 from gemd.entity.base_entity import BaseEntity
 from gemd.entity.dict_serializable import DictSerializable
 from gemd.entity.link_by_uid import LinkByUID
+
+from collections.abc import Reversible, Iterable
 from toolz import concatv
 
 
@@ -63,7 +65,8 @@ def _cached_isinstance_generator(
 
 # The overhead for all the invocations of isinstance was substantial
 isinstance_base_entity = _cached_isinstance_generator(BaseEntity)
-isinstance_list_or_tuple = _cached_isinstance_generator((list, tuple))
+isinstance_iterable = _cached_isinstance_generator(Iterable)
+isinstance_reversible = _cached_isinstance_generator(Reversible)
 isinstance_list = _cached_isinstance_generator(list)
 isinstance_tuple = _cached_isinstance_generator(tuple)
 isinstance_dict = _cached_isinstance_generator(dict)
@@ -289,14 +292,14 @@ def recursive_foreach(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable
         if apply_first and isinstance_base_entity(this):
             func(this)
 
-        if isinstance_list_or_tuple(this):
-            for x in this:
-                queue.append(x)
-        elif isinstance_dict(this):
+        if isinstance_dict(this):
             for x in concatv(this.keys(), this.values()):
                 queue.append(x)
         elif isinstance_dict_serializable(this):
             for k, x in this.__dict__.items():
+                queue.append(x)
+        elif isinstance_iterable(this):
+            for x in this:
                 queue.append(x)
 
         if not apply_first and isinstance_base_entity(this):
@@ -343,15 +346,17 @@ def recursive_flatmap(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable
         if isinstance_base_entity(this):
             res.extend(func(this))
 
-        if isinstance_list_or_tuple(this):
-            queue.extend(reversed(this))  # Preserve order of the list/tuple
-        elif isinstance_dict(this):
+        if isinstance_dict(this):
             queue.extend(concatv(this.keys(), this.values()))
         elif isinstance_dict_serializable(this):
             for k, x in sorted(this.__dict__.items()):
                 if unidirectional and isinstance_base_entity(this) and k in this.skip:
                     continue
                 queue.append(x)
+        elif isinstance_reversible(this):
+            queue.extend(reversed(this))  # Preserve order of the list/tuple
+        elif isinstance_iterable(this):
+            queue.extend(this)  # Preserve order of the list/tuple
 
     return res
 
