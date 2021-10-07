@@ -356,7 +356,7 @@ def recursive_flatmap(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable
         elif isinstance_reversible(this):
             queue.extend(reversed(this))  # Preserve order of the list/tuple
         elif isinstance_iterable(this):
-            queue.extend(this)  # Preserve order of the list/tuple
+            queue.extend(this)  # No control over order
 
     return res
 
