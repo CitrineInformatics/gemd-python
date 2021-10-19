@@ -1,6 +1,9 @@
 """Base class for all entities."""
+from typing import Optional
+
 from gemd.entity.dict_serializable import DictSerializable
 from gemd.entity.case_insensitive_dict import CaseInsensitiveDict
+from gemd.entity.link_by_uid import LinkByUID
 
 
 class BaseEntity(DictSerializable):
@@ -71,9 +74,36 @@ class BaseEntity(DictSerializable):
         """
         self.uids[scope] = uid
 
+    def to_link(self, scope: Optional[str] = None, *, allow_fallback: bool = False) -> LinkByUID:
+        """
+        Generate a LinkByUID for this object.
+
+        Parameters
+        ----------
+        scope: str, optional
+            scope of the uid to get
+        allow_fallback: bool
+            whether to grab another scope/id if chosen scope is missing (Default: False).
+
+        Returns
+        -------
+        LinkByUID
+
+        """
+        if len(self.uids) == 0:
+            raise ValueError(f"{type(self)} {self.name} does not have any uids.")
+
+        if scope is None or allow_fallback and scope not in self.uids:
+            scope = next(x for x in self.uids)
+
+        uid = self.uids.get(scope, None)
+        if uid is None:
+            raise ValueError(f"{type(self)} {self.name} has no uid with scope {scope}.")
+
+        return LinkByUID(scope=scope, id=uid)
+
     # Note that this could violate transitivity -- Link(scope1) == obj == Link(scope2)
     def __eq__(self, other):
-        from gemd.entity.link_by_uid import LinkByUID
         if isinstance(other, LinkByUID):
             return self.uids.get(other.scope) == other.id
         else:
