@@ -1,6 +1,7 @@
 """Utility functions."""
 import uuid
-from typing import Dict, Callable, Union, Type, Tuple, List, Any
+from typing import Dict, Callable, Union, Type, Tuple, List, Any, Optional
+from warnings import warn
 
 from gemd.entity.base_entity import BaseEntity
 from gemd.entity.dict_serializable import DictSerializable
@@ -140,7 +141,7 @@ def make_index(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable]):
 
     """
     def _make_index(_obj: BaseEntity):
-        return (((scope, _obj.uids[scope]), _obj) for scope in _obj.uids)
+        return ((LinkByUID(scope=scope, id=_obj.uids[scope]), _obj) for scope in _obj.uids)
 
     idx = {}
     for uid, target in recursive_flatmap(obj, _make_index):
@@ -149,7 +150,12 @@ def make_index(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable]):
     return idx
 
 
-def substitute_links(obj: Any, native_uid=None):
+def substitute_links(obj: Any,
+                     scope: Optional[str] = None,
+                     *,
+                     native_uid: str = None,
+                     allow_fallback: bool = True
+                     ):
     """
     Recursively replace pointers to BaseEntity with LinkByUID objects.
 
@@ -160,19 +166,23 @@ def substitute_links(obj: Any, native_uid=None):
     ----------
     obj: Any
         target of the operation
-    native_uid: Optional[str]
+    scope: Optional[str], optional
         preferred scope to use for creating LinkByUID objects (Default: None)
+    native_uid: str, optional
+        DEPRECATED; former name for scope argument
+    allow_fallback: bool, optional
+        whether to grab another scope/id if chosen scope is missing (Default: True).
 
     """
-    def make_link(entity: BaseEntity):
-        if len(entity.uids) == 0:
-            raise ValueError("No UID for {}".format(entity))
-        elif native_uid and native_uid in entity.uids:
-            return LinkByUID(native_uid, entity.uids[native_uid])
-        else:
-            return LinkByUID.from_entity(entity)
+    if native_uid is not None:
+        warn("The keyword argument 'native_uid' is deprecated.  When selecting a default scope, "
+             "use the 'scope' keyword argument.", DeprecationWarning)
+        if scope is not None:
+            raise ValueError("Both 'scope' and 'native_uid' keywords passed.")
+        scope = native_uid
 
-    return _substitute(obj, sub=make_link,
+    return _substitute(obj,
+                       sub=lambda o: o.to_link(scope=scope, allow_fallback=allow_fallback),
                        applies=lambda o: o is not obj and isinstance_base_entity(o))
 
 
@@ -192,7 +202,7 @@ def substitute_objects(obj, index):
 
     """
     return _substitute(obj,
-                       sub=lambda l: index.get((l.scope.lower(), l.id), l),
+                       sub=lambda l: index.get(l, l),
                        applies=lambda o: isinstance(o, LinkByUID))
 
 

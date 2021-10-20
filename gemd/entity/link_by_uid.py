@@ -78,6 +78,8 @@ class LinkByUID(DictSerializable):
         from gemd.entity.base_entity import BaseEntity
         if isinstance(other, BaseEntity):
             return other.uids.get(self.scope) == self.id
+        elif isinstance(other, tuple):  # Make them interchangeable in a dict
+            return len(other) == 2 and (self.scope, self.id) == other
         else:
             return super().__eq__(other)
 
