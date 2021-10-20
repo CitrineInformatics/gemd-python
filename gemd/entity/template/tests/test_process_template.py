@@ -74,3 +74,11 @@ def test_passthrough_bounds():
         ],
     })
     assert len(from_dict.conditions) == 1
+
+
+def test_dependences():
+    """Test that dependency lists make sense."""
+    attribute_bounds = RealBounds(0, 100, '')
+    cond_template = ConditionTemplate("a condition", bounds=attribute_bounds)
+    proc_template = ProcessTemplate("a process template", conditions=[cond_template])
+    assert cond_template in proc_template.all_dependences()

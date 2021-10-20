@@ -1,5 +1,6 @@
 """Base class for all entities."""
-from typing import Optional
+from abc import abstractmethod
+from typing import Optional, Set
 
 from gemd.entity.dict_serializable import DictSerializable
 from gemd.entity.case_insensitive_dict import CaseInsensitiveDict
@@ -104,6 +105,10 @@ class BaseEntity(DictSerializable):
             raise ValueError(f"{type(self)} {self.name} has no uid with scope {scope}.")
 
         return LinkByUID(scope=scope, id=uid)
+
+    @abstractmethod
+    def all_dependences(self) -> 'Set[BaseEntity]':
+        """Return a set of all immediate dependencies (no recursion)."""
 
     # Note that this could violate transitivity -- Link(scope1) == obj == Link(scope2)
     def __eq__(self, other):

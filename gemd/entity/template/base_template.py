@@ -66,3 +66,23 @@ class BaseTemplate(BaseEntity):
                         raise ValueError("Range and template are inconsistent")
                 return [first, second]
         raise TypeError("Expected a template or (template, bounds) tuple")  # pragma: no cover
+
+    def all_dependences(self):
+        """Return a set of all immediate dependencies (no recursion)."""
+        from gemd.entity.template.has_parameter_templates import HasParameterTemplates
+        from gemd.entity.template.has_condition_templates import HasConditionTemplates
+        from gemd.entity.template.has_property_templates import HasPropertyTemplates
+
+        result = set()
+
+        if isinstance(self, HasPropertyTemplates):
+            for attr in self.properties:
+                result.add(attr[0])
+        if isinstance(self, HasConditionTemplates):
+            for attr in self.conditions:
+                result.add(attr[0])
+        if isinstance(self, HasParameterTemplates):
+            for attr in self.parameters:
+                result.add(attr[0])
+
+        return result
