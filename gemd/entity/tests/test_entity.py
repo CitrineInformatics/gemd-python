@@ -29,3 +29,44 @@ def test_to_link():
 
     assert obj.to_link(scope="Third", allow_fallback=True).scope in obj.uids, \
         "... unless allow_fallback is set"
+
+
+def test_equality():
+    """Test that __eq__ and _cached_equals behave as expected."""
+    from gemd.entity.object import ProcessSpec, IngredientSpec, MaterialSpec
+    from gemd.entity.link_by_uid import LinkByUID
+
+    one = ProcessSpec("Object", tags=["tags!"], uids={"scope": "id"})
+    assert one == LinkByUID(scope="scope", id="id"), "Objects equal their links"
+    assert one == ("scope", "id"), "Objects equal their equivalent tuples"
+    assert one != ("scope", "id", "extra"), "But not if they are too long"
+    assert one != ("epocs", "id"), "Or have the wrong scope"
+    assert one != ("scope", "di"), "Or have the wrong id"
+
+    junk = MaterialSpec("Object", tags=["tags!"], uids={"scope": "id"})
+    assert one != junk, "Objects don't match across types"
+
+    two = ProcessSpec("Object", tags=["tags!"], uids={"scope": "id"}, notes="Notes!")
+    assert one != two, "Objects don't match unless the fields do"
+    one.notes = "Notes!"
+    assert one == two, "And then they will"
+
+    # It ignores the ingredient length mismatch if the uids matched
+    one_ing = IngredientSpec("Ingredient", process=one)
+    assert one == two
+    assert two == one
+
+    # And a cycle is not a problem
+    one_mat = MaterialSpec("Material", tags=["other tags!"], process=one)
+    two_mat = MaterialSpec("Material", tags=["other tags!"], process=two)
+    one_ing.material = one_mat
+    two_ing = IngredientSpec("Ingredient", process=one, material=one_mat)
+    assert one == two
+    assert two == one
+
+    # Order doesn't matter for tags
+    one.tags = ["One", "Two", "Three", "Four"]
+    two.tags = ["Four", "One", "Three", "Two"]
+    assert one == two
+    assert two == one
+

@@ -135,10 +135,14 @@ class DictSerializable(ABC):
             name = getattr(entity, 'name', '<unknown name>')
             return "<{} '{}'>".format(type(entity).__name__, name)
 
+    def _dict_for_compare(self):
+        """Which fields & values are relevant to an equality test."""
+        return self.as_dict()
+
     def __eq__(self, other):
         if isinstance(other, DictSerializable):
-            self_dict = self.as_dict()
-            other_dict = other.as_dict()
+            self_dict = self._dict_for_compare()
+            other_dict = other._dict_for_compare()
             return self_dict == other_dict
         else:
             return NotImplemented

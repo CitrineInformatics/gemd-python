@@ -38,7 +38,8 @@ def set_uuids(obj, scope):
 
 
 def _cached_isinstance_generator(
-        class_or_tuple: Union[Type, Tuple[Type]]) -> Callable[[object], bool]:
+        class_or_tuple: Union[Type, Tuple[Type]],
+        negation: Union[Type, Tuple[Type]] = None) -> Callable[[object], bool]:
     """
     Generate a function that checks and caches an isinstance(obj, class_or_tuple) call.
 
@@ -61,12 +62,18 @@ def _cached_isinstance_generator(
             cache[obj_type] = isinstance(obj, class_or_tuple)
         return cache[obj_type]
 
-    return func
+    def func_with_neg(obj):
+        obj_type = type(obj)
+        if obj_type not in cache:
+            cache[obj_type] = isinstance(obj, class_or_tuple) and not isinstance(obj, negation)
+        return cache[obj_type]
+
+    return func if negation is None else func_with_neg
 
 
 # The overhead for all the invocations of isinstance was substantial
 isinstance_base_entity = _cached_isinstance_generator(BaseEntity)
-isinstance_iterable = _cached_isinstance_generator(Iterable)
+isinstance_iterable_not_str = _cached_isinstance_generator(Iterable, negation=str)
 isinstance_reversible = _cached_isinstance_generator(Reversible)
 isinstance_list = _cached_isinstance_generator(list)
 isinstance_tuple = _cached_isinstance_generator(tuple)
@@ -122,7 +129,6 @@ def _substitute(thing: Any,
     if new.__hash__ is not None:
         visited[new] = new
 
-    # assert type(thing) == type(new), "{} is not {}".format(type(thing), type(new))
     return new
 
 
@@ -308,7 +314,7 @@ def recursive_foreach(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable
         elif isinstance_dict_serializable(this):
             for k, x in this.__dict__.items():
                 queue.append(x)
-        elif isinstance_iterable(this):
+        elif isinstance_iterable_not_str(this):
             for x in this:
                 queue.append(x)
 
@@ -365,7 +371,7 @@ def recursive_flatmap(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable
                 queue.append(x)
         elif isinstance_reversible(this):
             queue.extend(reversed(this))  # Preserve order of the list/tuple
-        elif isinstance_iterable(this):
+        elif isinstance_iterable_not_str(this):
             queue.extend(this)  # No control over order
 
     return res
