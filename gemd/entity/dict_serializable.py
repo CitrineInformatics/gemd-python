@@ -3,6 +3,7 @@ from logging import getLogger
 
 import json
 import inspect
+import functools
 
 # There are some weird (probably resolvable) errors during object cloning if this is an
 # instance variable of DictSerializable.
@@ -31,8 +32,7 @@ class DictSerializable(ABC):
             The deserialized object.
 
         """
-        expected_arg_names = inspect.getfullargspec(cls.__init__).args
-        expected_arg_names += inspect.getfullargspec(cls.__init__).kwonlyargs
+        expected_arg_names = cls._init_sig()
         kwargs = {}
         for name, arg in d.items():
             if name in expected_arg_names:
@@ -44,6 +44,14 @@ class DictSerializable(ABC):
         # DictSerializable's constructor is not intended for use,
         # but all of its children will use from_dict like this.
         return cls(**kwargs)
+
+    @classmethod
+    @functools.lru_cache(maxsize=None)
+    def _init_sig(cls):
+        """Internal method for generating the argument names for the class init method."""
+        expected_arg_names = inspect.getfullargspec(cls.__init__).args
+        expected_arg_names += inspect.getfullargspec(cls.__init__).kwonlyargs
+        return expected_arg_names
 
     def as_dict(self):
         """
