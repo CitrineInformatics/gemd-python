@@ -1,6 +1,7 @@
 """Utility functions."""
 import uuid
 import functools
+from inspect import getmembers
 from typing import Dict, Callable, Union, Type, Tuple, List, Any, Optional
 from warnings import warn
 
@@ -108,31 +109,116 @@ def _substitute(thing: Any,
         visited = {}
     if thing.__hash__ is not None and thing in visited:
         return visited[thing]
+
     if applies(thing):
         replacement = sub(thing)
         if thing.__hash__ is not None:
             visited[thing] = replacement
-        new = _substitute(replacement, sub, applies, visited)
-    elif _cached_isinstance(thing, list):
-        new = [_substitute(x, sub, applies, visited) for x in thing]
-    elif _cached_isinstance(thing, tuple):
-        new = tuple(_substitute(x, sub, applies, visited) for x in thing)
-    elif _cached_isinstance(thing, dict):
-        new = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
-               for k, v in thing.items()}
-    elif _cached_isinstance(thing, DictSerializable):
-        new_attrs = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
-                     for k, v in thing.as_dict().items()}
-        new = thing.build(new_attrs)
     else:
-        new = thing
+        replacement = thing
+
+    if _cached_isinstance(replacement, list):
+        new = [_substitute(x, sub, applies, visited) for x in replacement]
+    elif _cached_isinstance(replacement, tuple):
+        new = tuple(_substitute(x, sub, applies, visited) for x in replacement)
+    elif _cached_isinstance(replacement, dict):
+        new = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
+               for k, v in replacement.items()}
+    elif _cached_isinstance(replacement, DictSerializable):
+        new_attrs = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
+                     for k, v in replacement.as_dict().items()}
+        new = replacement.build(new_attrs)
+    else:
+        new = replacement
 
     if thing.__hash__ is not None:
         visited[thing] = new
-    if new.__hash__ is not None:
-        visited[new] = new
 
     return new
+
+
+def _substitute_inplace(thing: Any,
+                        sub: Callable[[object], object],
+                        applies: Callable[[object], bool],
+                        visited: Dict[object, object] = None) -> object:
+    """
+    Generic recursive in-place substitute function.
+
+    Iteratively crawls the passed structure, substituting elements with sub(element) when
+    applies(element) is true and the element is mutable.
+
+    Parameters
+    ----------
+    thing: Any
+        The object to traverse with substitution.
+    sub: Callable[[object], object]
+        Function which provides substitute for value; should not have side-effects.
+    applies: Callable[[object], bool]
+        Function which defines the domain for the sub function to be invoked.
+
+    """
+    def _key(obj):
+        if obj.__hash__ is not None:
+            return obj
+        else:
+            return id(obj)
+
+    orig_key = _key(thing)
+    if visited is None:
+        visited = {}
+    if orig_key in visited:
+        return visited[orig_key]
+
+    if applies(thing):
+        thing = sub(thing)
+    visited[orig_key] = thing  # Store before we start recursing
+
+    if _cached_isinstance(thing, list):  # Change list in place
+        for i, x in enumerate(thing):
+            thing[i] = _substitute_inplace(x, sub, applies, visited)
+    elif _cached_isinstance(thing, tuple):  # Tuples are immutable; regenerate
+        thing = tuple(_substitute_inplace(x, sub, applies, visited) for x in thing)
+        visited[orig_key] = thing  # We mutated it
+    elif _cached_isinstance(thing, dict):  # Change dict in place, both keys & values
+        remove = set()  # Store todos because can't mutate a dict in a loop
+        update = dict()
+        for k, v in thing.items():
+            new_k = _substitute_inplace(k, sub, applies, visited)
+            new_v = _substitute_inplace(v, sub, applies, visited)
+            if id(k) != id(new_k):
+                remove.add(k)
+                update[new_k] = v
+            if id(v) != id(new_v):
+                update[new_k] = new_v
+        for k in remove:
+            thing.pop(k, None)
+        thing.update(update)
+    elif _cached_isinstance(thing, DictSerializable):
+        for k, v in thing.as_dict().items():  # Assume key can't change b/c it's an attribute
+            new_v = _substitute_inplace(v, sub, applies, visited)
+            if id(v) != id(new_v):
+                _setter_by_name(type(thing), k)(thing, new_v)
+
+    return thing
+
+
+@functools.lru_cache(maxsize=None)
+def _setter_by_name(clazz: type, name: str) -> Callable:
+    """Internal method to get the setter method for an attribute."""
+    from gemd.entity.object import IngredientRun
+
+    def _emulator(inner_name: str) -> Callable:
+        return lambda self, value: setattr(self, inner_name, value)
+
+    prop = next((x[1] for x in getmembers(clazz) if x[0] == name), None)
+    if name == "name" and issubclass(clazz, IngredientRun):  # Weird exceptional case
+        setter = _emulator(f"_name")
+    elif prop is None:  # It's not a property, just an ordinary attribute
+        setter = _emulator(name)
+    else:
+        setter = prop.fset
+
+    return setter
 
 
 def make_index(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable]):
@@ -163,7 +249,8 @@ def substitute_links(obj: Any,
                      scope: Optional[str] = None,
                      *,
                      native_uid: str = None,
-                     allow_fallback: bool = True
+                     allow_fallback: bool = True,
+                     inplace: bool = False
                      ):
     """
     Recursively replace pointers to BaseEntity with LinkByUID objects.
@@ -181,6 +268,8 @@ def substitute_links(obj: Any,
         DEPRECATED; former name for scope argument
     allow_fallback: bool, optional
         whether to grab another scope/id if chosen scope is missing (Default: True).
+    inplace: bool, optional
+        whether to replace objects in place, as opposed to returning a copy (Default: False).
 
     """
     if native_uid is not None:
@@ -190,12 +279,20 @@ def substitute_links(obj: Any,
             raise ValueError("Both 'scope' and 'native_uid' keywords passed.")
         scope = native_uid
 
-    return _substitute(obj,
-                       sub=lambda o: o.to_link(scope=scope, allow_fallback=allow_fallback),
-                       applies=lambda o: o is not obj and _cached_isinstance(o, BaseEntity))
+    if inplace:
+        method = _substitute_inplace
+    else:
+        method = _substitute
+
+    return method(obj,
+                  sub=lambda o: o.to_link(scope=scope, allow_fallback=allow_fallback),
+                  applies=lambda o: o is not obj and _cached_isinstance(o, BaseEntity))
 
 
-def substitute_objects(obj, index):
+def substitute_objects(obj,
+                       index,
+                       *,
+                       inplace: bool = False):
     """
     Recursively replace LinkByUID objects with pointers to the objects with that UID in the index.
 
@@ -208,11 +305,18 @@ def substitute_objects(obj, index):
         target of the operation
     index: Dict[Tuple[str, str], BaseEntity]
         containing the objects that the uids point to
+    inplace: bool, optional
+        whether to replace objects in place, as opposed to returning a copy (Default: False).
 
     """
-    return _substitute(obj,
-                       sub=lambda l: index.get(l, l),
-                       applies=lambda o: _cached_isinstance(o, LinkByUID))
+    if inplace:
+        method = _substitute_inplace
+    else:
+        method = _substitute
+
+    return method(obj,
+                  sub=lambda l: index.get(l, l),
+                  applies=lambda o: _cached_isinstance(o, LinkByUID))
 
 
 def flatten(obj, scope=None):

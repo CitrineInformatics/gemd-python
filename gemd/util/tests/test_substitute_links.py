@@ -97,3 +97,16 @@ def test_signature():
         with pytest.raises(ValueError):  # Test deprecated auto-population
             run5 = ProcessRun("Fifth process run", uids={'my': 'run4'}, spec=spec)
             assert isinstance(substitute_links(run5, scope="my", native_uid="my").spec, LinkByUID)
+
+
+def test_inplace_v_not():
+    """Test that client can copy a dictionary in which keys are BaseEntity objects."""
+    spec = ProcessSpec("A process spec", uids={'id': str(uuid4()), 'auto': str(uuid4())})
+    run1 = ProcessRun("A process run", spec=spec, uids={'id': str(uuid4()), 'auto': str(uuid4())})
+    run2 = ProcessRun("Another process run", spec=spec, uids={'id': str(uuid4())})
+    process_dict = {spec: [run1, run2]}
+
+    subbed = substitute_links(process_dict)
+    assert subbed != process_dict  # This is true because the hashes change, even if objects equal
+    substitute_links(process_dict, inplace=True)
+    assert subbed == process_dict

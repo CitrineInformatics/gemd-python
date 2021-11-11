@@ -59,8 +59,8 @@ def test_equality():
     # And a cycle is not a problem
     one_mat = MaterialSpec("Material", tags=["other tags!"], process=one)
     two_mat = MaterialSpec("Material", tags=["other tags!"], process=two)
-    one_ing.material = one_mat
-    two_ing = IngredientSpec("Ingredient", process=one, material=one_mat)
+    one_ing.material = two_mat
+    IngredientSpec("Ingredient", process=two, material=one_mat)  # two_ing
     assert one == two
     assert two == one
 
@@ -69,4 +69,3 @@ def test_equality():
     two.tags = ["Four", "One", "Three", "Two"]
     assert one == two
     assert two == one
-
