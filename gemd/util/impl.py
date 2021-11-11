@@ -1,5 +1,6 @@
 """Utility functions."""
 import uuid
+import functools
 from typing import Dict, Callable, Union, Type, Tuple, List, Any, Optional
 from warnings import warn
 
@@ -7,7 +8,7 @@ from gemd.entity.base_entity import BaseEntity
 from gemd.entity.dict_serializable import DictSerializable
 from gemd.entity.link_by_uid import LinkByUID
 
-from collections.abc import Reversible, Iterable
+from collections.abc import Reversible, Iterable, ByteString
 from toolz import concatv
 
 
@@ -37,48 +38,50 @@ def set_uuids(obj, scope):
     return
 
 
-def _cached_isinstance_generator(
-        class_or_tuple: Union[Type, Tuple[Type]],
-        negation: Union[Type, Tuple[Type]] = None) -> Callable[[object], bool]:
+def _cached_isinstance(
+        obj: object,
+        class_or_tuple: Union[Type, Tuple[Union[Type, Tuple[Type]]]]) -> bool:
     """
-    Generate a function that checks and caches an isinstance(obj, class_or_tuple) call.
+    Emulate isinstance builtin to take advantage of functools caching.
 
     Parameters
     ----------
-    class_or_tuple: Union[Type, Tuple[Type]]
-        A single type or a tuple of types
+    obj: object
+
+    class_or_tuple: Union[Type, Tuple[Union[Type, Tuple[Type]]]]
+        A single type, a tuple of types (potentially nested)
 
     Returns
     -------
-    Callable[[object], bool]
-        function with signature function(obj), returning isinstance(obj, class_or_tuple)
+    bool
+        Whether an object is an instance of a class or of a subclass thereof.
 
     """
-    cache = dict()
-
-    def func(obj):
-        obj_type = type(obj)
-        if obj_type not in cache:
-            cache[obj_type] = isinstance(obj, class_or_tuple)
-        return cache[obj_type]
-
-    def func_with_neg(obj):
-        obj_type = type(obj)
-        if obj_type not in cache:
-            cache[obj_type] = isinstance(obj, class_or_tuple) and not isinstance(obj, negation)
-        return cache[obj_type]
-
-    return func if negation is None else func_with_neg
+    obj_type = type(obj)
+    return _cached_issubclass(obj_type, class_or_tuple)
 
 
-# The overhead for all the invocations of isinstance was substantial
-isinstance_base_entity = _cached_isinstance_generator(BaseEntity)
-isinstance_iterable_not_str = _cached_isinstance_generator(Iterable, negation=str)
-isinstance_reversible = _cached_isinstance_generator(Reversible)
-isinstance_list = _cached_isinstance_generator(list)
-isinstance_tuple = _cached_isinstance_generator(tuple)
-isinstance_dict = _cached_isinstance_generator(dict)
-isinstance_dict_serializable = _cached_isinstance_generator(DictSerializable)
+@functools.lru_cache(maxsize=None)
+def _cached_issubclass(
+        cls: Type,
+        class_or_tuple: Union[Type, Tuple[Union[Type, Tuple[Type]]]]) -> bool:
+    """
+    Emulate issubclass builtin to take advantage of functools caching.
+
+    Parameters
+    ----------
+    obj: object
+
+    class_or_tuple: Union[Type, Tuple[Union[Type, Tuple[Type]]]]
+        A single type, a tuple of types (potentially nested)
+
+    Returns
+    -------
+    bool
+        Whether 'cls' is a derived from another class or is the same class.
+
+    """
+    return issubclass(cls, class_or_tuple)
 
 
 def _substitute(thing: Any,
@@ -110,14 +113,14 @@ def _substitute(thing: Any,
         if thing.__hash__ is not None:
             visited[thing] = replacement
         new = _substitute(replacement, sub, applies, visited)
-    elif isinstance_list(thing):
+    elif _cached_isinstance(thing, list):
         new = [_substitute(x, sub, applies, visited) for x in thing]
-    elif isinstance_tuple(thing):
+    elif _cached_isinstance(thing, tuple):
         new = tuple(_substitute(x, sub, applies, visited) for x in thing)
-    elif isinstance_dict(thing):
+    elif _cached_isinstance(thing, dict):
         new = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
                for k, v in thing.items()}
-    elif isinstance_dict_serializable(thing):
+    elif _cached_isinstance(thing, DictSerializable):
         new_attrs = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
                      for k, v in thing.as_dict().items()}
         new = thing.build(new_attrs)
@@ -189,7 +192,7 @@ def substitute_links(obj: Any,
 
     return _substitute(obj,
                        sub=lambda o: o.to_link(scope=scope, allow_fallback=allow_fallback),
-                       applies=lambda o: o is not obj and isinstance_base_entity(o))
+                       applies=lambda o: o is not obj and _cached_isinstance(o, BaseEntity))
 
 
 def substitute_objects(obj, index):
@@ -209,7 +212,7 @@ def substitute_objects(obj, index):
     """
     return _substitute(obj,
                        sub=lambda l: index.get(l, l),
-                       applies=lambda o: isinstance(o, LinkByUID))
+                       applies=lambda o: _cached_isinstance(o, LinkByUID))
 
 
 def flatten(obj, scope=None):
@@ -305,20 +308,21 @@ def recursive_foreach(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable
             else:
                 seen.add(this)
 
-        if apply_first and isinstance_base_entity(this):
+        if apply_first and _cached_isinstance(this, BaseEntity):
             func(this)
 
-        if isinstance_dict(this):
+        if _cached_isinstance(this, dict):
             for x in concatv(this.keys(), this.values()):
                 queue.append(x)
-        elif isinstance_dict_serializable(this):
+        elif _cached_isinstance(this, DictSerializable):
             for k, x in this.__dict__.items():
                 queue.append(x)
-        elif isinstance_iterable_not_str(this):
+        elif _cached_isinstance(this, Iterable) \
+                and not _cached_isinstance(this, (str, ByteString)):
             for x in this:
                 queue.append(x)
 
-        if not apply_first and isinstance_base_entity(this):
+        if not apply_first and _cached_isinstance(this, BaseEntity):
             func(this)
 
     return
@@ -359,19 +363,20 @@ def recursive_flatmap(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable
             else:
                 seen.add(this)
 
-        if isinstance_base_entity(this):
+        if _cached_isinstance(this, BaseEntity):
             res.extend(func(this))
 
-        if isinstance_dict(this):
+        if _cached_isinstance(this, dict):
             queue.extend(concatv(this.keys(), this.values()))
-        elif isinstance_dict_serializable(this):
+        elif _cached_isinstance(this, DictSerializable):
             for k, x in sorted(this.__dict__.items()):
-                if unidirectional and isinstance_base_entity(this) and k in this.skip:
+                if unidirectional and _cached_isinstance(this, BaseEntity) and k in this.skip:
                     continue
                 queue.append(x)
-        elif isinstance_reversible(this):
+        elif _cached_isinstance(this, Reversible):
             queue.extend(reversed(this))  # Preserve order of the list/tuple
-        elif isinstance_iterable_not_str(this):
+        elif _cached_isinstance(this, Iterable) \
+                and not _cached_isinstance(this, (str, ByteString)):
             queue.extend(this)  # No control over order
 
     return res
@@ -384,9 +389,9 @@ def writable_sort_order(key: Union[BaseEntity, str]) -> int:
     from gemd.entity.template import ConditionTemplate, MaterialTemplate, MeasurementTemplate, \
         ParameterTemplate, ProcessTemplate, PropertyTemplate
 
-    if isinstance_base_entity(key):
+    if _cached_isinstance(key, BaseEntity):
         typ = key.typ
-    elif isinstance(key, str):
+    elif _cached_isinstance(key, str):
         typ = key
     else:
         raise ValueError("Can ony sort BaseEntities and type strings, not {}".format(key))
