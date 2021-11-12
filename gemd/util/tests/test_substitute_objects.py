@@ -106,8 +106,6 @@ def test_complex_substitutions():
                                  )
     unique = [x for i, x in enumerate(all_objs) if i == all_objs.index(x)]
     assert not any(isinstance(x, LinkByUID) for x in unique), "All are objects"
-    for x in unique:
-        print(x.typ, x.name)
     assert len(links) == len(unique), "Objects are missing"
 
 
