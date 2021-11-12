@@ -1,5 +1,5 @@
 """Base class for all entities."""
-from typing import Optional
+from typing import Optional, Dict, FrozenSet
 from collections.abc import Collection
 
 from gemd.entity.dict_serializable import DictSerializable
@@ -107,8 +107,19 @@ class BaseEntity(DictSerializable):
         return LinkByUID(scope=scope, id=uid)
 
     @staticmethod
-    def _cached_equals(this: 'BaseEntity', that: 'BaseEntity', cache: dict) -> Optional[bool]:
-        """Compute and stash whether two Base Entities are equal in a recursive sense."""
+    def _cached_equals(this: 'BaseEntity',
+                       that: 'BaseEntity',
+                       *,
+                       cache: Dict[FrozenSet, Optional[bool]] = None) -> Optional[bool]:
+        """
+        Compute and stash whether two Base Entities are equal in a recursive sense.
+
+        The cache uses ternary logic to communicate state.  True or False indicate a completed
+        evaluation.  If the cache contains None, this indicates that we have not yet completed
+        an evaluation in an earlier frame of the stack.
+        """
+        if cache is None:
+            cache = {}
         cache_key = frozenset((id(this), id(that)))
         if cache_key in cache:
             return cache[cache_key]
@@ -132,7 +143,7 @@ class BaseEntity(DictSerializable):
             this_value = this_dict[key]
             that_value = that_dict[key]
             if isinstance(this_value, BaseEntity) and isinstance(that_value, BaseEntity):
-                if BaseEntity._cached_equals(this_value, that_value, cache) is False:
+                if BaseEntity._cached_equals(this_value, that_value, cache=cache) is False:
                     cache[cache_key] = False  # Mark as failed
                     return False
             elif isinstance(this_value, Collection) and isinstance(that_value, Collection) \
@@ -158,7 +169,7 @@ class BaseEntity(DictSerializable):
                     if isinstance(x, BaseEntity):
                         for i_found, y in enumerate(that_list):
                             # Unless something really broke, y is a BaseEntity
-                            result = BaseEntity._cached_equals(x, y, cache)
+                            result = BaseEntity._cached_equals(x, y, cache=cache)
                             if result is True:
                                 found = True
                                 break
@@ -190,7 +201,7 @@ class BaseEntity(DictSerializable):
             return len(other) == 2 and other[0] in self.uids and self.uids[other[0]] == other[1]
         elif isinstance(other, BaseEntity):
             # We have to be a little clever for efficiency and to avoid infinite recursion
-            return BaseEntity._cached_equals(self, other, dict())
+            return BaseEntity._cached_equals(self, other)
         else:
             return super().__eq__(other)
 

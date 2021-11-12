@@ -215,6 +215,8 @@ def _setter_by_name(clazz: type, name: str) -> Callable:
         setter = _emulator(f"_name")
     elif prop is None:  # It's not a property, just an ordinary attribute
         setter = _emulator(name)
+    elif prop.fset is None:  # It's read only, so set directly
+        setter = _emulator(f"_name")  # pragma: no cover  citrine-python needs this
     else:
         setter = prop.fset
 
