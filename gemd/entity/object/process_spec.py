@@ -52,7 +52,7 @@ class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
 
     typ = "process_spec"
 
-    skip = {"_output_material", "_ingredients", "_active_comparison"}
+    skip = {"_output_material", "_ingredients"}
 
     def __init__(self, name, *, template=None,
                  parameters=None, conditions=None,
@@ -71,7 +71,6 @@ class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
         # then the field self._output_material will be automatically populated
         self._output_material = None
         self._ingredients = validate_list(None, [IngredientSpec, LinkByUID])
-        self._active_comparison = set()
 
     @property
     def ingredients(self):
@@ -83,33 +82,8 @@ class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
         """Get the output material spec."""
         return self._output_material
 
-    def __eq__(self, other):
-        # To avoid infinite recursion, fast return on revisit
-        if other in self._active_comparison:  # Cycle encountered
-            return True  # This will functionally be & with the correct result of ==
-
-        self._active_comparison.add(other)
-        try:
-            result = super().__eq__(other)
-
-            # Equals needs to crawl into ingredients
-            if result is True and isinstance(other, ProcessSpec):
-                if len(self.ingredients) == len(other.ingredients):
-                    result = all(ing in other.ingredients for ing in self.ingredients)
-                elif (len(self.ingredients) == 0 and len(self.uids) != 0) \
-                        or (len(other.ingredients) == 0 and len(other.uids) != 0):
-                    result = True  # One can be empty if you flattened
-                else:
-                    result = False
-        finally:
-            self._active_comparison.remove(other)
-
-        return result
-
-    # Note the hash function checks if objects are identical, as opposed to the equals method,
-    # which checks if fields are equal.  This is because BaseEntities are fundamentally
-    # mutable objects.  Note that if you define an __eq__ method without defining a __hash__
-    # method, the object will become unhashable.
-    # https://docs.python.org/3/reference/datamodel.html#object.__hash
-    def __hash__(self):
-        return super().__hash__()
+    def _dict_for_compare(self):
+        """Support for recursive equals."""
+        base = super()._dict_for_compare()
+        base['ingredients'] = self.ingredients
+        return base

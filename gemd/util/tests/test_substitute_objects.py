@@ -1,9 +1,10 @@
-from gemd.util.impl import substitute_objects, recursive_foreach
-from gemd.entity.object import ProcessRun, MaterialRun, MeasurementSpec
+from gemd.util import substitute_objects, recursive_foreach, flatten, make_index, recursive_flatmap
+from gemd.util.impl import _substitute, _substitute_inplace
+from gemd.entity.object import MaterialSpec, MaterialRun, ProcessSpec, ProcessRun, IngredientRun, \
+    IngredientSpec, MeasurementSpec
+from gemd.entity.template import ProcessTemplate, ParameterTemplate, MeasurementTemplate
 from gemd.entity.value.normal_real import NormalReal
 from gemd.entity.attribute.parameter import Parameter
-from gemd.entity.template.parameter_template import ParameterTemplate
-from gemd.entity.template.measurement_template import MeasurementTemplate
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.bounds.real_bounds import RealBounds
 
@@ -53,3 +54,118 @@ def test_recursive_foreach():
 
     for ent in [param_template, meas_template, measurement]:
         assert new_tag in ent.tags
+
+
+def test_substitute_equivalence():
+    """PLA-6423: verify that substitutions match up."""
+    spec = ProcessSpec(name="old spec", uids={'scope': 'spec'})
+    run = ProcessRun(name="old run",
+                     uids={'scope': 'run'},
+                     spec=LinkByUID(id='spec', scope="scope"))
+
+    # make a dictionary from ids to objects, to be used in substitute_objects
+    gem_index = make_index([run, spec])
+    substitute_objects(obj=run, index=gem_index, inplace=True)
+    assert spec == run.spec
+
+
+def test_complex_substitutions():
+    """Make sure accounting works for realistic objects."""
+    root = MaterialRun("root",
+                       process=ProcessRun("root", spec=ProcessSpec("root")),
+                       spec=MaterialSpec("root")
+                       )
+    root.spec.process = root.process.spec
+    input = MaterialRun("input",
+                        process=ProcessRun("input", spec=ProcessSpec("input")),
+                        spec=MaterialSpec("input")
+                        )
+    input.spec.process = input.process.spec
+    IngredientRun(process=root.process,
+                  material=input,
+                  spec=IngredientSpec("ingredient",
+                                      process=root.process.spec,
+                                      material=input.spec
+                                      )
+                  )
+    param = ParameterTemplate("Param", bounds=RealBounds(-1, 1, "m"))
+    root.process.spec.template = ProcessTemplate("Proc",
+                                                 parameters=[param]
+                                                 )
+    root.process.parameters.append(Parameter("Param",
+                                             value=NormalReal(0, 1, 'm'),
+                                             template=param))
+
+    links = flatten(root, scope="test-scope")
+    index = make_index(links)
+    rebuild = substitute_objects(links, index, inplace=True)
+    rebuilt_root = next(x for x in rebuild if x.name == root.name and x.typ == root.typ)
+    all_objs = recursive_flatmap(rebuilt_root,
+                                 func=lambda x: [x],
+                                 unidirectional=False
+                                 )
+    unique = [x for i, x in enumerate(all_objs) if i == all_objs.index(x)]
+    assert not any(isinstance(x, LinkByUID) for x in unique), "All are objects"
+    assert len(links) == len(unique), "Objects are missing"
+
+
+def test_sub_inplace_lists():
+    """Verify consistency for nested lists."""
+    lst_one = [1, 2, 3]
+    lol_main = [
+        lst_one,
+        [
+            [1, 2, 3],
+        ],
+        lst_one
+    ]
+    lol_dup = _substitute(lol_main,
+                          applies=lambda x: isinstance(x, int),
+                          sub=lambda x: x + 1)
+    assert lol_dup != lol_main
+
+    lol_mod = _substitute_inplace(lol_main,
+                                  applies=lambda x: isinstance(x, int),
+                                  sub=lambda x: x + 1)
+    assert lol_mod == lol_main
+    assert lol_mod == lol_dup
+
+
+def test_sub_inplace_tuples():
+    """Verify consistency for nested tuples."""
+    lot_main = [  # Base object must mutable to make sense for inplace
+        (1, 2, 3),
+        (
+            (1, 2, 3),
+        ),
+        (1, 2, 3)
+    ]
+    lot_dup = _substitute(lot_main,
+                          applies=lambda x: isinstance(x, int),
+                          sub=lambda x: x + 1)
+    assert lot_dup != lot_main
+
+    lot_mod = _substitute_inplace(lot_main,
+                                  applies=lambda x: isinstance(x, int),
+                                  sub=lambda x: x + 1)
+    assert lot_mod == lot_main
+    assert lot_mod == lot_dup
+
+
+def test_sub_inplace_dicts():
+    """Verify consistency for nested dicts."""
+    dod_main = {
+        1: 1,
+        "sub": {1: 1, 2: 2, 3: 3},
+        3: 3,
+    }
+    dod_dup = _substitute(dod_main,
+                          applies=lambda x: isinstance(x, int),
+                          sub=lambda x: x + 1)
+    assert dod_dup != dod_main
+
+    dod_mod = _substitute_inplace(dod_main,
+                                  applies=lambda x: isinstance(x, int),
+                                  sub=lambda x: x + 1)
+    assert dod_mod == dod_main
+    assert dod_mod == dod_dup
