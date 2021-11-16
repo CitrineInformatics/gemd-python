@@ -169,3 +169,15 @@ def test_sub_inplace_dicts():
                                   sub=lambda x: x + 1)
     assert dod_mod == dod_main
     assert dod_mod == dod_dup
+
+
+def test_sub_inplace_objects():
+    """Verify consistency for GEMD objects."""
+    run = IngredientRun(spec=IngredientSpec("string"), notes="note")
+    run.spec = None
+
+    _substitute_inplace(run,
+                        applies=lambda x: isinstance(x, str),
+                        sub=lambda x: f"{x}s")
+    assert run.name == "strings"
+    assert run.notes == "notes"

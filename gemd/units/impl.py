@@ -1,9 +1,11 @@
 """Implementation of units."""
 import pint
-import pkg_resources
-from typing import Union
 from pint import UnitRegistry
 from pint.unit import _Unit
+import pkg_resources
+
+import functools
+from typing import Union
 
 
 # use the default unit registry for now
@@ -17,6 +19,7 @@ IncompatibleUnitsError = pint.errors.DimensionalityError
 UndefinedUnitError = pint.errors.UndefinedUnitError
 
 
+@functools.lru_cache(maxsize=None)
 def parse_units(units: Union[str, _Unit, None]) -> Union[str, _Unit, None]:
     """
     Parse a string or _Unit into a standard string representation of the unit.
