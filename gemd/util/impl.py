@@ -1,7 +1,6 @@
 """Utility functions."""
 import uuid
 import functools
-from inspect import getmembers
 from typing import Dict, Callable, Union, Type, Tuple, List, Any, Optional
 from warnings import warn
 
@@ -158,20 +157,25 @@ def _substitute_inplace(thing: Any,
 
     """
     def _key(obj):
-        if obj.__hash__ is not None:
+        if _cached_isinstance(obj, (float, int, str)):
+            return None
+        elif obj.__hash__ is not None:
             return obj
-        else:
+        elif _cached_isinstance(obj, Iterable) and not _cached_isinstance(obj, ByteString):
             return id(obj)
+        else:
+            return None  # pragma: no cover  Fallback for caution's sake
 
     orig_key = _key(thing)
     if visited is None:
         visited = {}
-    if orig_key in visited:
+    if orig_key is not None and orig_key in visited:
         return visited[orig_key]
 
     if applies(thing):
         thing = sub(thing)
-    visited[orig_key] = thing  # Store before we start recursing
+    if orig_key is not None:
+        visited[orig_key] = thing  # Store before we start recursing
 
     if _cached_isinstance(thing, list):  # Change list in place
         for i, x in enumerate(thing):
@@ -197,26 +201,41 @@ def _substitute_inplace(thing: Any,
         for k, v in thing.as_dict().items():  # Assume key can't change b/c it's an attribute
             new_v = _substitute_inplace(v, sub, applies, visited)
             if id(v) != id(new_v):
-                _setter_by_name(type(thing), k)(thing, new_v)
+                _setter_by_attribute(type(thing), k)(thing, new_v)
 
     return thing
 
 
 @functools.lru_cache(maxsize=None)
-def _setter_by_name(clazz: type, name: str) -> Callable:
-    """Internal method to get the setter method for an attribute."""
-    from gemd.entity.object import IngredientRun
+def _setter_by_attribute(clazz: type, attribute: str) -> Callable:
+    """
+    Internal method to get the setter method for an attribute.
 
+    Note that if the attribute in question is a @property (read-only attribute),
+    it assumes that the correct choice is just setting the field name with a
+    prepended underscore.
+
+    Parameters
+    ----------
+    clazz: type
+        The class of the object you wish to interrogate.
+    attribute: str
+        The name of the attribute you with to set.
+
+    Returns
+    -------
+    Callable
+        The attribute's setter method, callable w/ setter(object, value).
+
+    """
     def _emulator(inner_name: str) -> Callable:
         return lambda self, value: setattr(self, inner_name, value)
 
-    prop = next((x[1] for x in getmembers(clazz) if x[0] == name), None)
-    if name == "name" and issubclass(clazz, IngredientRun):  # Weird exceptional case
-        setter = _emulator(f"_name")
-    elif prop is None:  # It's not a property, just an ordinary attribute
-        setter = _emulator(name)
+    prop = getattr(clazz, attribute, None)
+    if prop is None:  # It's not a property, just an ordinary attribute
+        setter = _emulator(attribute)
     elif prop.fset is None:  # It's read only, so set directly
-        setter = _emulator(f"_name")  # pragma: no cover  citrine-python needs this
+        setter = _emulator(f"_{attribute}")
     else:
         setter = prop.fset
 

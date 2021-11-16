@@ -4,6 +4,7 @@ from gemd.entity.setters import validate_list
 from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.template.condition_template import ConditionTemplate
 from gemd.entity.bounds.base_bounds import BaseBounds
+
 from typing import Iterable
 
 
@@ -60,3 +61,19 @@ class HasConditionTemplates(object):
                                          (ConditionTemplate, LinkByUID, list, tuple),
                                          trigger=BaseTemplate._homogenize_ranges
                                          )
+
+    def validate_condition(self, condition: "Condition") -> bool:  # noqa: F821
+        """Check if the condition is consistent w/ this template."""
+        if condition.template is not None:
+            attr, bnd = next((x for x in self.conditions if condition.template == x[0]),
+                             (None, None))
+        else:
+            attr, bnd = next((x for x in self.conditions if condition.name == x[0].name),
+                             (None, None))
+
+        if attr is None:
+            return True  # Nothing to check against
+        elif bnd is None:
+            return attr.bounds.contains(condition.value)
+        else:
+            return bnd.contains(condition.value)

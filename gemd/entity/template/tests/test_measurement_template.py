@@ -1,6 +1,8 @@
 import pytest
 
 from gemd.entity.bounds import IntegerBounds
+from gemd.entity.value import NominalInteger
+from gemd.entity.attribute import Condition, Property, Parameter, PropertyAndConditions
 from gemd.entity.template import MeasurementTemplate, PropertyTemplate, ConditionTemplate, \
     ParameterTemplate
 from gemd.entity.template.attribute_template import AttributeTemplate
@@ -70,3 +72,64 @@ def test_mixins():
     assert len(second.properties) == 1
     assert len(second.conditions) == 1
     assert len(second.parameters) == 1
+
+    good_val = NominalInteger(1)
+    bad_val = NominalInteger(2)
+
+    assert second.validate_condition(Condition("Other name",
+                                               value=good_val,
+                                               template=second.conditions[0][0])), \
+        "Condition with template and good value didn't validate."
+    assert not second.validate_condition(Condition("Other name",
+                                                   value=bad_val,
+                                                   template=second.conditions[0][0])), \
+        "Condition with template and bad value DID validate."
+    assert second.validate_parameter(Parameter("Other name",
+                                               value=good_val,
+                                               template=second.parameters[0][0])), \
+        "Parameter with template and good value didn't validate."
+    assert not second.validate_parameter(Parameter("Other name",
+                                                   value=bad_val,
+                                                   template=second.parameters[0][0])), \
+        "Parameter with template and bad value DID validate."
+    assert second.validate_property(Property("Other name",
+                                             value=good_val,
+                                             template=second.properties[0][0])), \
+        "Property with template and good value didn't validate."
+    assert not second.validate_property(Property("Other name",
+                                                 value=bad_val,
+                                                 template=second.properties[0][0])), \
+        "Property with template and bad value DID validate."
+
+    assert second.validate_condition(Condition("Name", value=good_val)), \
+        "Condition without template and good value didn't validate."
+    assert not second.validate_condition(Condition("Name", value=bad_val)), \
+        "Condition without template and bad value DID validate."
+    assert second.validate_parameter(Parameter("Name", value=good_val)), \
+        "Parameter without template and good value didn't validate."
+    assert not second.validate_parameter(Parameter("Name", value=bad_val)), \
+        "Parameter without template and bad value DID validate."
+    assert second.validate_property(Property("Name", value=good_val)), \
+        "Property without template and good value didn't validate."
+    assert not second.validate_property(Property("Name", value=bad_val)), \
+        "Property without template and bad value DID validate."
+
+    assert second.validate_condition(Condition("Other name", value=bad_val)), \
+        "Unmatched condition and bad value didn't validate."
+    assert second.validate_parameter(Parameter("Other name", value=bad_val)), \
+        "Unmatched parameter and bad value didn't validate."
+    assert second.validate_property(Property("Other name", value=bad_val)), \
+        "Unmatched property and bad value didn't validate."
+
+    second.conditions[0][1] = None
+    second.parameters[0][1] = None
+    second.properties[0][1] = None
+    assert second.validate_condition(Condition("Name", value=good_val)), \
+        "Condition and good value with passthrough didn't validate."
+    assert second.validate_parameter(Parameter("Name", value=good_val)), \
+        "Parameter and good value with passthrough didn't validate."
+    assert second.validate_property(Property("Name", value=good_val)), \
+        "Property and good value with passthrough didn't validate."
+    assert second.validate_property(
+        PropertyAndConditions(property=Property("Name", value=good_val))), \
+        "PropertyAndConditions didn't fall back to Property."

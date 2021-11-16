@@ -60,3 +60,19 @@ class HasParameterTemplates(object):
                                          (ParameterTemplate, LinkByUID, list, tuple),
                                          trigger=BaseTemplate._homogenize_ranges
                                          )
+
+    def validate_parameter(self, parameter: "Parameter") -> bool:  # noqa: F821
+        """Check if the parameter is consistent w/ this template."""
+        if parameter.template is not None:
+            attr, bnd = next((x for x in self.parameters if parameter.template == x[0]),
+                             (None, None))
+        else:
+            attr, bnd = next((x for x in self.parameters if parameter.name == x[0].name),
+                             (None, None))
+
+        if attr is None:
+            return True  # Nothing to check against
+        elif bnd is None:
+            return attr.bounds.contains(parameter.value)
+        else:
+            return bnd.contains(parameter.value)

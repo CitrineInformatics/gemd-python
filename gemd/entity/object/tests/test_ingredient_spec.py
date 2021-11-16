@@ -9,6 +9,7 @@ from gemd.entity.value.normal_real import NormalReal
 from gemd.entity.value.nominal_integer import NominalInteger
 from gemd.entity.value.nominal_categorical import NominalCategorical
 from gemd.entity.value.empirical_formula import EmpiricalFormula
+from gemd.entity.bounds_validation import validation_context, WarningLevel
 
 
 def test_ingredient_reassignment():
@@ -48,21 +49,41 @@ INVALID_QUANTITIES = [
 
 
 @pytest.mark.parametrize("valid_quantity", VALID_QUANTITIES)
-def test_valid_quantities(valid_quantity):
+def test_valid_quantities(valid_quantity, caplog):
     """
     Check that all quantities must be continuous values.
 
     There are no restrictions on the value or the units. Although a volume fraction of -5 kg
     does not make physical sense, it will not throw an error.
     """
-    ingred = IngredientSpec(name="name", mass_fraction=valid_quantity)
-    assert ingred.mass_fraction == valid_quantity
-    ingred = IngredientSpec(name="name", volume_fraction=valid_quantity)
-    assert ingred.volume_fraction == valid_quantity
-    ingred = IngredientSpec(name="name", number_fraction=valid_quantity)
-    assert ingred.number_fraction == valid_quantity
-    ingred = IngredientSpec(name="name", absolute_quantity=valid_quantity)
-    assert ingred.absolute_quantity == valid_quantity
+    with validation_context(WarningLevel.IGNORE):
+        ingred = IngredientSpec(name="name", mass_fraction=valid_quantity)
+        assert ingred.mass_fraction == valid_quantity
+        ingred = IngredientSpec(name="name", volume_fraction=valid_quantity)
+        assert ingred.volume_fraction == valid_quantity
+        ingred = IngredientSpec(name="name", number_fraction=valid_quantity)
+        assert ingred.number_fraction == valid_quantity
+        ingred = IngredientSpec(name="name", absolute_quantity=valid_quantity)
+        assert ingred.absolute_quantity == valid_quantity
+    assert len(caplog.records) == 0, "Warned when validation set to IGNORE."
+
+
+def test_validation_control(caplog):
+    """Verify that when validation is requested, limits are enforced."""
+    with validation_context(WarningLevel.WARNING):
+        IngredientSpec(name="name", mass_fraction=NominalReal(0.5, ''))
+        assert len(caplog.records) == 0, "Warned on valid values with WARNING."
+        IngredientSpec(name="name", mass_fraction=NominalReal(5, ''))
+        assert len(caplog.records) == 1, "Didn't warn on invalid values with WARNING."
+        IngredientSpec(name="name", mass_fraction=NominalReal(0.5, 'm'))
+        assert len(caplog.records) == 2, "Didn't warn on invalid units with WARNING."
+    with validation_context(WarningLevel.FATAL):
+        # The following should not raise an exception
+        IngredientSpec(name="name", mass_fraction=NominalReal(0.5, ''))
+        with pytest.raises(ValueError):
+            IngredientSpec(name="name", mass_fraction=NominalReal(5, ''))
+        with pytest.raises(ValueError):
+            IngredientSpec(name="name", mass_fraction=NominalReal(0.5, 'm'))
 
 
 @pytest.mark.parametrize("invalid_quantity", INVALID_QUANTITIES)
