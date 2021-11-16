@@ -73,14 +73,6 @@ class IngredientRun(BaseObject, HasQuantities):
         else:
             return super().name
 
-    @name.setter
-    def name(self, name):
-        # This messiness is a consequence of name being an inherited attribute
-        if name is not None:
-            raise AttributeError("Name is set implicitly by associating with an "
-                                 "IngredientSpec")
-        self._name = name
-
     @property
     def labels(self):
         """Get labels."""
