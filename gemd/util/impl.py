@@ -250,6 +250,43 @@ def flatten(obj, scope=None):
     return sorted([substitute_links(x) for x in res], key=lambda x: writable_sort_order(x))
 
 
+def unravel(obj):
+    """
+    Convert a BaseEntity into a list of it and all contained BaseEntities, recursively.
+
+    This operation gets a list of unique objects.  It follows the traversal patterns of
+    recursive_flatmap.  None of the objects are mutated in any way, copies are just made of the
+    references.
+
+    Parameters
+    ----------
+    obj: Any
+        the object where the graph traversal starts
+
+    Returns
+    -------
+    List[BaseEntity]
+        a list of BaseEntity anywhere in the object
+
+    """
+    # list of uids that we've seen, to avoid returning duplicates
+    known_obj = set()
+
+    def _flatten(base_ent: BaseEntity):
+        nonlocal known_obj
+        to_return = []
+
+        if base_ent not in known_obj:
+            to_return.append(base_ent)
+            known_obj.add(base_ent)
+            # for scope in base_obj.uids:
+            #     known_obj.add(base_obj.to_link(scope))
+
+        return to_return
+
+    return recursive_flatmap(obj, _flatten, unidirectional=False)
+
+
 def recursive_foreach(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable],
                       func: Callable[[BaseEntity], None],
                       *,
