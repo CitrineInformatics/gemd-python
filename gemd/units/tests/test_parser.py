@@ -18,7 +18,9 @@ def test_parse_expected():
         "second", "ms", "hour", "minute", "ns",
         "g/cm^3", "g/mL", "kg/cm^3",
         _ureg("kg").u,
-        "amu"  # A line that was edited
+        "amu",  # A line that was edited
+        "Seconds",  # Added support for some title-case units
+        "delta_Celsius / hour"  # Added to make sure pint version is right (>0.10)
     ]
     for unit in expected:
         parse_units(unit)
@@ -31,7 +33,8 @@ def test_parse_unexpected():
         "gibberish",
         5,
         "cp",  # Removed because of risk of collision with cP
-        "chain"  # Survey units eliminated
+        "chain",  # Survey units eliminated
+        "SECONDS"  # Not just case insensitivity
     ]
     for unit in unexpected:
         with pytest.raises(UndefinedUnitError):
@@ -41,6 +44,13 @@ def test_parse_unexpected():
 def test_parse_none():
     """Test that None parses as None."""
     assert parse_units(None) is None
+
+
+def test_conversion():
+    """Tests that check if particular units are interoperable."""
+    conversions = {"in_lb": "foot_pound"}
+    for source, dest in conversions.items():
+        assert convert_units(convert_units(1, source, dest), dest, source) == 1
 
 
 @contextmanager

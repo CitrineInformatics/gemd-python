@@ -3,6 +3,7 @@ from gemd.entity.object.has_spec import HasSpec
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.file_link import FileLink
 from gemd.enumeration import SampleType
+from gemd.entity.setters import validate_list
 
 from typing import Union, Optional, Type, Collection, Mapping
 
@@ -27,19 +28,20 @@ class MaterialRun(BaseObject, HasSpec):
         for filtering and discoverability.
     notes: str, optional
         Long-form notes about the material run.
-    process: ProcessRun
+    process: :class:`ProcessRun <gemd.entity.object.process_run.ProcessRun>`
         Process that produces this material.
     sample_type: str, optional
         The form of this sample. Optionals are "experimental", "virtual", "production", or
         "unknown." Default is "unknown."
-    spec: MaterialSpec
+    spec: :class:`MaterialSpec <gemd.entity.object.material_spec.MaterialSpec>`
         The material specification of which this is an instance.
-    file_links: List[FileLink], optional
+    file_links: List[:class:`FileLink <gemd.entity.file_link.FileLink>`], optional
         Links to associated files, with resource paths into the files API.
 
     Attributes
     ----------
-    measurements: List[MeasurementRun], optional
+    measurements: List[:class:`MeasurementRun\
+    <gemd.entity.object.measurement_run.MeasurementRun>`], optional
         Measurements performed on this material. The link is established by creating the
         measurement run and settings its `material` field to this material run.
 
@@ -57,11 +59,14 @@ class MaterialRun(BaseObject, HasSpec):
                  tags: Union[Collection[str], str, None] = None,
                  notes: Optional[str] = None,
                  file_links: Optional[Collection[FileLink]] = None):
+        from gemd.entity.object.measurement_run import MeasurementRun
+        from gemd.entity.link_by_uid import LinkByUID
+
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)
         HasSpec.__init__(self, spec)
         self._process = None
-        self._measurements = []
+        self._measurements = validate_list(None, [MeasurementRun, LinkByUID])
         self._sample_type = None
 
         self.spec = spec
@@ -94,11 +99,6 @@ class MaterialRun(BaseObject, HasSpec):
         """Get a list of measurement runs."""
         return self._measurements
 
-    def _unset_measurement(self, meas):
-        """Remove `meas` from this material's list of measurements."""
-        if meas in self._measurements:
-            self._measurements.remove(meas)
-
     @property
     def sample_type(self):
         """Get the sample type."""
@@ -113,3 +113,34 @@ class MaterialRun(BaseObject, HasSpec):
         """Get the expected type of spec for this object (property of child)."""
         from gemd.entity.object import MaterialSpec
         return MaterialSpec
+
+    @property
+    def spec(self):
+        """Get the material spec."""
+        return self._spec
+
+    @spec.setter
+    def spec(self, spec):
+        from gemd.entity.object.material_spec import MaterialSpec
+        from gemd.entity.link_by_uid import LinkByUID
+        if spec is None:
+            self._spec = None
+        elif isinstance(spec, (MaterialSpec, LinkByUID)):
+            self._spec = spec
+        else:
+            raise TypeError("spec must be a MaterialSpec or LinkByUID: {}".format(spec))
+
+    @property
+    def template(self):
+        """Get the template of the spec, if applicable."""
+        from gemd.entity.object.material_spec import MaterialSpec
+        if isinstance(self.spec, MaterialSpec):
+            return self.spec.template
+        else:
+            return None
+
+    def _dict_for_compare(self):
+        """Support for recursive equals."""
+        base = super()._dict_for_compare()
+        base['measurements'] = self.measurements
+        return base

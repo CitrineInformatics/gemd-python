@@ -4,7 +4,14 @@ from gemd.entity.setters import validate_list
 
 
 class HasProperties(object):
-    """Mixin-trait for entities that include properties."""
+    """Mixin-trait for entities that include properties.
+
+    Parameters
+    ----------
+    properties: List[:class:`Property <gemd.entity.attribute.property.Property>`]
+        A list of properties associated with this entity
+
+    """
 
     def __init__(self, properties):
         self._properties = None

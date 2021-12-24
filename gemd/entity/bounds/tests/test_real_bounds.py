@@ -11,6 +11,11 @@ def test_contains():
     dim2 = RealBounds(lower_bound=33, upper_bound=200, default_units="degF")
     assert dim.contains(dim2)
 
+    from gemd.entity.value import NominalReal
+
+    assert dim.contains(NominalReal(5, 'degC'))
+    assert not dim.contains(NominalReal(5, 'K'))
+
 
 def test_contains_no_units():
     """Make sure contains handles boundsless values."""

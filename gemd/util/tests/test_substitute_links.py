@@ -36,7 +36,7 @@ def test_substitution_without_id():
             "subbed = substitute_links should fail if objects don't have uids"
 
 
-def test_native_id_substitution():
+def test_scope_substitution():
     """Test that the native id gets serialized, when specified."""
     native_id = 'id1'
     # Create measurement and material with two ids
@@ -46,13 +46,13 @@ def test_native_id_substitution():
         "some_id": str(uuid4()), native_id: str(uuid4()), "an_id": str(uuid4())})
 
     # Turn the material pointer into a LinkByUID using native_id
-    subbed = substitute_links(meas, native_uid=native_id)
-    assert subbed.material == LinkByUID.from_entity(mat, name=native_id)
+    subbed = substitute_links(meas, scope=native_id)
+    assert subbed.material == LinkByUID.from_entity(mat, scope=native_id)
 
     # Put the measurement into a list and convert that into a LinkByUID using native_id
     measurements_list = [meas]
-    subbed = substitute_links(measurements_list, native_uid=native_id)
-    assert subbed == [LinkByUID.from_entity(meas, name=native_id)]
+    subbed = substitute_links(measurements_list, scope=native_id)
+    assert subbed == [LinkByUID.from_entity(meas, scope=native_id)]
 
 
 def test_object_key_substitution():
@@ -62,14 +62,51 @@ def test_object_key_substitution():
     run2 = ProcessRun("Another process run", spec=spec, uids={'id': str(uuid4())})
     process_dict = {spec: [run1, run2]}
 
-    subbed = substitute_links(process_dict, native_uid='auto')
+    subbed = substitute_links(process_dict, scope='auto')
     for key, value in subbed.items():
-        assert key == LinkByUID.from_entity(spec, name='auto')
-        assert LinkByUID.from_entity(run1, name='auto') in value
+        assert key == LinkByUID.from_entity(spec, scope='auto')
+        assert LinkByUID.from_entity(run1, scope='auto') in value
         assert LinkByUID.from_entity(run2) in value
 
     reverse_process_dict = {run2: spec}
-    subbed = substitute_links(reverse_process_dict, native_uid='auto')
+    subbed = substitute_links(reverse_process_dict, scope='auto')
     for key, value in subbed.items():
         assert key == LinkByUID.from_entity(run2)
-        assert value == LinkByUID.from_entity(spec, name='auto')
+        assert value == LinkByUID.from_entity(spec, scope='auto')
+
+
+def test_signature():
+    """Exercise various permutations of the substitute_links sig."""
+    spec = ProcessSpec("A process spec", uids={'my': 'spec'})
+
+    with pytest.warns(DeprecationWarning):
+        run1 = ProcessRun("First process run", uids={'my': 'run1'}, spec=spec)
+        assert isinstance(substitute_links(run1, native_uid='my').spec, LinkByUID)
+
+    run2 = ProcessRun("Second process run", uids={'my': 'run2'}, spec=spec)
+    assert isinstance(substitute_links(run2, scope='my').spec, LinkByUID)
+
+    run3 = ProcessRun("Third process run", uids={'my': 'run3'}, spec=spec)
+    assert isinstance(substitute_links(run3, 'my').spec, LinkByUID)
+
+    with pytest.raises(ValueError):  # Test deprecated auto-population
+        run4 = ProcessRun("Fourth process run", uids={'my': 'run4'}, spec=spec)
+        assert isinstance(substitute_links(run4, 'other', allow_fallback=False).spec, LinkByUID)
+
+    with pytest.warns(DeprecationWarning):
+        with pytest.raises(ValueError):  # Test deprecated auto-population
+            run5 = ProcessRun("Fifth process run", uids={'my': 'run4'}, spec=spec)
+            assert isinstance(substitute_links(run5, scope="my", native_uid="my").spec, LinkByUID)
+
+
+def test_inplace_v_not():
+    """Test that client can copy a dictionary in which keys are BaseEntity objects."""
+    spec = ProcessSpec("A process spec", uids={'id': str(uuid4()), 'auto': str(uuid4())})
+    run1 = ProcessRun("A process run", spec=spec, uids={'id': str(uuid4()), 'auto': str(uuid4())})
+    run2 = ProcessRun("Another process run", spec=spec, uids={'id': str(uuid4())})
+    process_dict = {spec: [run1, run2]}
+
+    subbed = substitute_links(process_dict)
+    assert subbed != process_dict  # This is true because the hashes change, even if objects equal
+    substitute_links(process_dict, inplace=True)
+    assert subbed == process_dict

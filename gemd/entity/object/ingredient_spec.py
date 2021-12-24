@@ -1,7 +1,6 @@
 from gemd.entity.object.base_object import BaseObject
 from gemd.entity.object.has_quantities import HasQuantities
 from gemd.entity.setters import validate_list
-from gemd.entity.valid_list import ValidList
 
 
 class IngredientSpec(BaseObject, HasQuantities):
@@ -24,25 +23,25 @@ class IngredientSpec(BaseObject, HasQuantities):
         for filtering and discoverability.
     notes: str, optional
         Long-form notes about the ingredient spec.
-    material: MaterialSpec
+    material: :class:`MaterialSpec <gemd.entity.object.material_spec.MaterialSpec>`
         Material that this ingredient is.
-    process: ProcessSpec
+    process: :class:`ProcessSpec <gemd.entity.object.process_spec.ProcessSpec>`
         Process that this ingredient is used in.
     mass_fraction: :py:class:`ContinuousValue \
     <gemd.entity.value.continuous_value.ContinuousValue>`, optional
         The mass fraction of the ingredient in the process.
-    volume_fraction: :py:class:`ContinuousValue \
+    volume_fraction: :class:`ContinuousValue \
     <gemd.entity.value.continuous_value.ContinuousValue>`, optional
         The volume fraction of the ingredient in the process.
-    number_fraction: :py:class:`ContinuousValue \
+    number_fraction: :class:`ContinuousValue \
     <gemd.entity.value.continuous_value.ContinuousValue>`, optional
         The number fraction of the ingredient in the process.
-    absolute_quantity: :py:class:`ContinuousValue \
+    absolute_quantity: :class:`ContinuousValue \
     <gemd.entity.value.continuous_value.ContinuousValue>`, optional
         The absolute quantity of the ingredient in the process.
     labels: List[str], optional
         Additional labels on the ingredient that must be unique.
-    file_links: List[FileLink], optional
+    file_links: List[:class:`FileLink <gemd.entity.file_link.FileLink>`], optional
         Links to associated files, with resource paths into the files API.
 
     """
@@ -53,19 +52,7 @@ class IngredientSpec(BaseObject, HasQuantities):
                  mass_fraction=None, volume_fraction=None, number_fraction=None,
                  absolute_quantity=None,
                  uids=None, tags=None, notes=None, file_links=None):
-        """
-        Create an IngredientSpec object.
 
-        Assigns a unique_label and other descriptive labels to a material used as an ingredient
-        :param name: of the ingredient as used in the process, i.e. "the peanut butter"
-        :param material: MaterialSpec that is being used as the ingredient
-        :param process: ProcessSpec that uses this ingredient
-        :param labels: that this ingredient belongs to, e.g. "spread" or "solvent"
-        :param mass_fraction: fraction of the ingredients that is this input ingredient, by mass
-        :param volume_fraction: fraction of the ingredients that is this ingredient, by volume
-        :param number_fraction: fraction of the ingredients that is this ingredient, by number
-        :param absolute_quantity: quantity of this ingredient in an absolute sense, e.g. 2 cups
-        """
         BaseObject.__init__(self, name=name,
                             uids=uids, tags=tags, notes=notes, file_links=file_links)
         HasQuantities.__init__(self, mass_fraction=mass_fraction, volume_fraction=volume_fraction,
@@ -76,9 +63,9 @@ class IngredientSpec(BaseObject, HasQuantities):
         self._process = None
         self._labels = None
 
+        self.labels = labels
         self.material = material
         self.process = process
-        self.labels = labels
 
     @property
     def labels(self):
@@ -114,17 +101,14 @@ class IngredientSpec(BaseObject, HasQuantities):
     def process(self, process):
         from gemd.entity.object import ProcessSpec
         from gemd.entity.link_by_uid import LinkByUID
-        if self._process is not None and isinstance(self._process, ProcessSpec):
-            self._process._unset_ingredient(self)
-        if process is None:
-            self._process = None
-        elif isinstance(process, ProcessSpec):
+        if isinstance(self._process, ProcessSpec):
+            # This could throw an exception if it's not in the list, but then something else broke
+            self._process.ingredients.remove(self)
+
+        if process is None or isinstance(process, (LinkByUID, ProcessSpec)):
             self._process = process
-            if not isinstance(process.ingredients, ValidList):
-                process._ingredients = validate_list(self, [IngredientSpec, LinkByUID])
-            else:
-                process._ingredients.append(self)
-        elif isinstance(process, LinkByUID):
-            self._process = process
+            if isinstance(process, ProcessSpec):
+                process.ingredients.append(self)
         else:
-            raise TypeError("IngredientSpec.process must be a ProcessSpec or LinkByUID")
+            raise TypeError("IngredientSpec.process must be a ProcessSpec or "
+                            "LinkByUID: {}".format(process))

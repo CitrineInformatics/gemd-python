@@ -1,3 +1,5 @@
+import functools
+
 from gemd.entity.base_entity import BaseEntity
 from gemd.entity.file_link import FileLink
 from gemd.entity.setters import validate_list, validate_str
@@ -23,7 +25,7 @@ class BaseObject(BaseEntity):
         for filtering and discoverability.
     notes: str, optional
         Long-form notes about the object.
-    file_links: List[FileLink], optional
+    file_links: List[:class:`FileLink <gemd.entity.file_link.FileLink>`], optional
         Links to associated files, with resource paths into the files API.
 
     """
@@ -34,8 +36,20 @@ class BaseObject(BaseEntity):
         self._name = None
         self._file_links = None
 
-        self.name = name
+        if self._attribute_has_setter("name"):
+            self.name = name
         self.file_links = file_links
+
+    @classmethod
+    @functools.lru_cache(maxsize=None)
+    def _attribute_has_setter(cls, name: str) -> bool:
+        """
+        Internal method to identify if an attribute has a setter method.
+
+        Necessary because IngredientRun clobbers the name setter.
+        """
+        prop = getattr(cls, name, None)
+        return prop is None or prop.fset is not None
 
     @property
     def name(self):

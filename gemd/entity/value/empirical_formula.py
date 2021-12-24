@@ -1,5 +1,6 @@
 """An empirical chemical formaula."""
 from gemd.entity.value.composition_value import CompositionValue
+from gemd.entity.bounds import CompositionBounds
 
 
 _all_elements = {
@@ -32,20 +33,42 @@ class EmpiricalFormula(CompositionValue):
         self.formula = formula
 
     @property
-    def formula(self):
+    def formula(self) -> str:
         """Get the formula as a string."""
         return self._formula
 
+    @staticmethod
+    def _elements(value: str):
+        import re
+        return set(re.findall('[A-Z][a-z]*', value))
+
     @formula.setter
-    def formula(self, value):
+    def formula(self, value: str):
         if value is None:
             self._formula = None
         elif isinstance(value, str):
+            if not EmpiricalFormula._elements(value).issubset(_all_elements):
+                unknown = sorted(EmpiricalFormula._elements(value).difference(_all_elements))
+                raise ValueError('Formula {} contains unknown elements: {}'
+                                 .format(value, ' '.join(unknown)))
             self._formula = value
         else:
             raise TypeError("Formula must be given as a string; got {}".format(type(value)))
 
+    def _to_bounds(self) -> CompositionBounds:
+        """
+        Return the smallest bounds object that is consistent with the Value.
+
+        Returns
+        -------
+        BaseBounds
+            The minimally consistent
+            :class:`bounds <gemd.entity.bounds.categorical_bounds.CategoricalBounds>`.
+
+        """
+        return CompositionBounds(components=EmpiricalFormula._elements(self.formula))
+
     @staticmethod
-    def all_elements():
+    def all_elements() -> set:
         """The set of all elements in the periodic table."""
         return _all_elements

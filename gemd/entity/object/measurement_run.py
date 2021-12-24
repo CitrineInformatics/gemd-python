@@ -8,8 +8,6 @@ from gemd.entity.object.has_source import HasSource
 from gemd.entity.source.performed_source import PerformedSource
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.file_link import FileLink
-from gemd.entity.setters import validate_list
-from gemd.entity.valid_list import ValidList
 
 from typing import Union, Optional, Type, Collection, Mapping
 
@@ -35,21 +33,22 @@ class MeasurementRun(BaseObject, HasSpec, HasConditions, HasProperties, HasParam
         for filtering and discoverability.
     notes: str, optional
         Long-form notes about the measurement run.
-    conditions: List[Condition], optional
+    conditions: List[:class:`Condition <gemd.entity.attribute.condition.Condition>`], optional
         Conditions under which this measurement run occurs.
-    parameters: List[Parameter], optional
+    parameters: List[:class:`Parameter <gemd.entity.attribute.parameter.Parameter>`], optional
         Parameters of this measurement run.
-    properties: List[Property], optional
+    properties: List[:class:`Property <gemd.entity.attribute.property.Property>`], optional
         Properties that are measured during this measurement run.
-    spec: MeasurementSpec
+    spec: :class:`MeasurementSpec <gemd.entity.object.measurement_spec.MeasurementSpec>`
         The measurement specification of which this is an instance.
-    material: MaterialRun
+    material: :class:`MaterialRun <gemd.entity.object.material_run.MaterialRun>`
         The material run being measured.
-    spec: MaterialSpec
+    spec: :class:`MaterialSpec <gemd.entity.object.material_spec.MaterialSpec>`
         The material specification of which this is an instance.
-    file_links: List[FileLink], optional
+    file_links: List[:class:`FileLink <gemd.entity.file_link.FileLink>`], optional
         Links to associated files, with resource paths into the files API.
-    source: PerformedSource, optional
+    source: :class:`PerformedSource\
+    <gemd.entity.source.performed_source.PerformedSource>`, optional
         Information about the person who performed the run and when.
 
     """
@@ -76,6 +75,8 @@ class MeasurementRun(BaseObject, HasSpec, HasConditions, HasProperties, HasParam
         HasParameters.__init__(self, parameters)
         HasSource.__init__(self, source)
 
+        self._spec = None
+        self.spec = spec
         self._material = None
         self.material = material
 
@@ -88,18 +89,14 @@ class MeasurementRun(BaseObject, HasSpec, HasConditions, HasProperties, HasParam
     def material(self, value):
         from gemd.entity.object import MaterialRun
         from gemd.entity.link_by_uid import LinkByUID
-        if self._material is not None and isinstance(self._material, MaterialRun):
-            self._material._unset_measurement(self)
-        if value is None:
+        if isinstance(self._material, MaterialRun):
+            # This could throw an exception if it's not in the list, but then something else broke
+            self._material.measurements.remove(self)
+
+        if value is None or isinstance(value, (MaterialRun, LinkByUID)):
             self._material = value
-        elif isinstance(value, MaterialRun):
-            self._material = value
-            if not isinstance(value.measurements, ValidList):
-                value._measurements = validate_list(self, [MeasurementRun, LinkByUID])
-            else:
-                value._measurements.append(self)
-        elif isinstance(value, LinkByUID):
-            self._material = value
+            if isinstance(value, MaterialRun):
+                value.measurements.append(self)
         else:
             raise TypeError("material must be a MaterialRun or LinkByUID: {}".format(value))
 

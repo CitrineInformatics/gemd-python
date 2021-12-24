@@ -144,17 +144,17 @@ sesqui- = 1.5
 
 #### BASE UNITS ####
 
-meter = [length] = m = metre
-second = [time] = s = sec
+meter = [length] = m = metre = Meter
+second = [time] = s = sec = Second
 ampere = [current] = A = amp = Ampere = Ampère
-candela = [luminosity] = cd = candle
-gram = [mass] = g
-mole = [substance] = mol
+candela = [luminosity] = cd = candle = Candela = Candle
+gram = [mass] = g = Gram
+mole = [substance] = mol = Mole
 kelvin = [temperature]; offset: 0 = K = Kelvin = degK = °K = degree_Kelvin = degreeK  # older names supported for compatibility
-radian = [] = rad
-neper = [] = Np
-bit = []
-count = []
+radian = [] = rad = Radian
+neper = [] = Np = Neper
+bit = [] = _ = Bit
+count = [] = _ = Count
 
 
 #### CONSTANTS ####
@@ -168,73 +168,73 @@ count = []
 # although floating-point conversion may introduce inaccuracies
 
 # Angle
-turn = 2 * π * radian = _ = revolution = cycle = circle
-degree = π / 180 * radian = deg = arcdeg = arcdegree = angular_degree
-arcminute = degree / 60 = arcmin = arc_minute = angular_minute
-arcsecond = arcminute / 60 = arcsec = arc_second = angular_second
-milliarcsecond = 1e-3 * arcsecond = mas
-grade = π / 200 * radian = grad = gon
-mil = π / 32000 * radian
+turn = 2 * π * radian = _ = revolution = cycle = circle = Turn = Revolution = Cycle = Circle
+degree = π / 180 * radian = deg = arcdeg = arcdegree = angular_degree = Degree = Deg = Arcdeg = Arcdegree = Angular_Degree
+arcminute = degree / 60 = arcmin = arc_minute = angular_minute = Arcminute = Arc_Minute = Angular_Minute
+arcsecond = arcminute / 60 = arcsec = arc_second = angular_second = Arcsecond = Arc_Second = Angular_Second
+milliarcsecond = 1e-3 * arcsecond = Milliarcsecond
+grade = π / 200 * radian = grad = gon = Grade
+mil = π / 32000 * radian = Mil
 
 # Solid angle
-steradian = radian ** 2 = sr
-square_degree = (π / 180) ** 2 * sr = sq_deg = sqdeg
+steradian = radian ** 2 = sr = Steradian
+square_degree = (π / 180) ** 2 * sr = sq_deg = sqdeg = Square_Degree
 
 # Logarithmic ratio
-bel = 0.5 * ln10 * neper
+bel = 0.5 * ln10 * neper = Bel
 
 # Information
-byte = 8 * bit = B = octet
-baud = bit / second = Bd = bps
+byte = 8 * bit = B = octet = Byte = Octet
+baud = bit / second = Bd = bps = Baud = BPS
 
 # Length
 angstrom = 1e-10 * meter = Å = ångström = Angstrom = Ångstrom = Å
-micron = micrometer = µ
+micron = micrometer = µ = Micron
 fermi = femtometer = fm = Fermi
-light_year = speed_of_light * julian_year = ly = lightyear
-astronomical_unit = 149597870700 * meter = au  # since Aug 2012
-parsec = 1 / tansec * astronomical_unit = pc
-nautical_mile = 1852 * meter = nmi
+light_year = speed_of_light * julian_year = ly = lightyear = Light_Year = Lightyear
+astronomical_unit = 149597870700 * meter = au = Astronomical_Unit  # since Aug 2012
+parsec = 1 / tansec * astronomical_unit = pc = Parsec
+nautical_mile = 1852 * meter = nmi = Nautical_Mile
 bohr = hbar / (alpha * m_e * c) = a_0 = a0 = Bohr = bohr_radius = atomic_unit_of_length = a_u_length
 x_unit_Cu = K_alpha_Cu_d_220 * d_220 / 1537.4 = Xu_Cu
 x_unit_Mo = K_alpha_Mo_d_220 * d_220 / 707.831 = Xu_Mo
-angstrom_star = K_alpha_W_d_220 * d_220 / 0.2090100 = Å_star
-planck_length = (hbar * gravitational_constant / c ** 3) ** 0.5
+angstrom_star = K_alpha_W_d_220 * d_220 / 0.2090100 = Å_star = Angstrom_Star
+planck_length = (hbar * gravitational_constant / c ** 3) ** 0.5 = Planck_length = Planck_Length
 
 # Mass
-metric_ton = 1e3 * kilogram = _ = tonne
-unified_atomic_mass_unit = atomic_mass_constant = _ = amu
+metric_ton = 1e3 * kilogram = _ = tonne = Metric_Ton = Tonne
+unified_atomic_mass_unit = atomic_mass_constant = _ = amu = Unified_Atomic_Mass_Unit = AMU
 dalton = atomic_mass_constant = Da = Dalton
-grain = 64.79891 * milligram = gr
-gamma_mass = microgram
-carat = 200 * milligram = _ = karat
-planck_mass = (hbar * c / gravitational_constant) ** 0.5
+grain = 64.79891 * milligram = gr = Grain
+gamma_mass = microgram = Gamma_Mass
+carat = 200 * milligram = _ = karat = Carat = Karat
+planck_mass = (hbar * c / gravitational_constant) ** 0.5 = Planck_mass = Planck_Mass
 
 # Time
-minute = 60 * second = min
-hour = 60 * minute = hr
-day = 24 * hour = d
-week = 7 * day
-fortnight = 2 * week
-year = 365.25 * day = yr = julian_year
-month = year / 12
-decade = 10 * year
-century = 100 * year = _ = centuries
-millennium = 1e3 * year = _ = millennia
-eon = 1e9 * year
-shake = 1e-8 * second
+minute = 60 * second = min = Minute
+hour = 60 * minute = hr = Hour
+day = 24 * hour = d = Day
+week = 7 * day = Week
+fortnight = 2 * week = Fortnight
+year = 365.25 * day = yr = julian_year = Year = Julian_year = Julian_Year
+month = year / 12 = _ = Month
+decade = 10 * year = _ = Decade
+century = 100 * year = _ = centuries = Century = Centuries
+millennium = 1e3 * year = _ = millennia = Millennium = Millennia
+eon = 1e9 * year = _ = Eon
+shake = 1e-8 * second = _ = Shake
 svedberg = 1e-13 * second = _ = Svedberg
 atomic_unit_of_time = hbar / E_h = a_u_time
-gregorian_year = 365.2425 * day
-sidereal_year = 365.256363004 * day                # approximate, as of J2000 epoch
-tropical_year = 365.242190402 * day                # approximate, as of J2000 epoch
-common_year = 365 * day
-leap_year = 366 * day
-sidereal_day = day / 1.00273790935079524           # approximate
-sidereal_month = 27.32166155 * day                 # approximate
-tropical_month = 27.321582 * day                   # approximate
-synodic_month = 29.530589 * day = _ = lunar_month  # approximate
-planck_time = (hbar * gravitational_constant / c ** 5) ** 0.5
+gregorian_year = 365.2425 * day = _ = Gregorian_year = Gregorian_Year
+sidereal_year = 365.256363004 * day = _ = Sidereal_Year                         # approximate, as of J2000 epoch
+tropical_year = 365.242190402 * day = _ = Tropical_Year                         # approximate, as of J2000 epoch
+common_year = 365 * day = _ = Common_Year
+leap_year = 366 * day = _ = Leap_Year
+sidereal_day = day / 1.00273790935079524 = _ = Sidereal_Day                     # approximate
+sidereal_month = 27.32166155 * day = _ = Sidereal_Month                         # approximate
+tropical_month = 27.321582 * day = _ = Tropical_Month                           # approximate
+synodic_month = 29.530589 * day = _ = lunar_month = Synodic_Month = Lunar_Month # approximate
+planck_time = (hbar * gravitational_constant / c ** 5) ** 0.5 = _ = Planck_time = Planck_Time
 
 # Temperature
 degree_Celsius = kelvin; offset: 273.15 = °C = celsius = Celsius = degC = degreeC
@@ -242,40 +242,40 @@ degree_Rankine = 5 / 9 * kelvin; offset: 0 = °R = rankine = Rankine = degR = de
 degree_Fahrenheit = 5 / 9 * kelvin; offset: 233.15 + 200 / 9 = °F = fahrenheit = Fahrenheit = degF = degreeF
 degree_Reaumur = 4 / 5 * kelvin; offset: 273.15 = °Re = reaumur = Reaumur = degRe = degreeRe = degree_Réaumur = réaumur = Réaumur
 atomic_unit_of_temperature = E_h / k = a_u_temp
-planck_temperature = (hbar * c ** 5 / gravitational_constant / k ** 2) ** 0.5
+planck_temperature = (hbar * c ** 5 / gravitational_constant / k ** 2) ** 0.5 = _ = Planck_temperature = Planck_Temperature
 
 # Area
 [area] = [length] ** 2
-are = 100 * meter ** 2
-barn = 1e-28 * meter ** 2 = b
+are = 100 * meter ** 2 = _ = Are
+barn = 1e-28 * meter ** 2 = b = Barn
 darcy = centipoise * centimeter ** 2 / (second * atmosphere) = _ = Darcy
-hectare = 100 * are = ha
+hectare = 100 * are = ha = Hectare
 
 # Volume
 [volume] = [length] ** 3
-liter = decimeter ** 3 = l = L = litre
-cubic_centimeter = centimeter ** 3 = cc
-lambda = microliter = λ
-stere = meter ** 3
+liter = decimeter ** 3 = l = L = litre = Liter = Litre
+cubic_centimeter = centimeter ** 3 = cc = Cubic_Centimeter
+lambda = microliter = λ = Lambda
+stere = meter ** 3 = _ = Stere
 
 # Frequency
 [frequency] = 1 / [time]
 hertz = 1 / second = Hz = Hertz
-revolutions_per_minute = revolution / minute = rpm
-counts_per_second = count / second = cps
+revolutions_per_minute = revolution / minute = rpm = Revolutions_Per_Minute = RPM
+counts_per_second = count / second = cps = Counts_Per_Second = CPS
 
 # Wavenumber
 [wavenumber] = 1 / [length]
-reciprocal_centimeter = 1 / cm = cm_1 = kayser = Kayser
+reciprocal_centimeter = 1 / cm = cm_1 = kayser = Kayser = Reciprocal_Centimeter
 
 # Velocity
 [velocity] = [length] / [time] = [speed]
-knot = nautical_mile / hour = kt = knot_international = international_knot
-mile_per_hour = mile / hour = mph = MPH
-kilometer_per_hour = kilometer / hour = kph = KPH
-kilometer_per_second = kilometer / second = kps
-meter_per_second = meter / second = mps
-foot_per_second = foot / second = fps
+knot = nautical_mile / hour = kt = knot_international = international_knot = Knot = International_Knot
+mile_per_hour = mile / hour = mph = MPH = Mile_Per_Hour = Miles_Per_Hour = miles_per_hour
+kilometer_per_hour = kilometer / hour = kph = KPH = kilometers_per_hour = Kilometer_Per_Hour = Kilometers_Per_Hour
+kilometer_per_second = kilometer / second = kps = kilometers_per_second = Kilometer_Per_Second
+meter_per_second = meter / second = mps = Meter_Per_Second = Meters_Per_Second
+foot_per_second = foot / second = fps = feet_per_second = Foot_Per_Second = Feet_Per_Second
 
 # Acceleration
 [acceleration] = [velocity] / [time]
@@ -284,38 +284,38 @@ galileo = centimeter / second ** 2 = Gal = Galileo
 # Force
 [force] = [mass] * [acceleration]
 newton = kilogram * meter / second ** 2 = N = Newton
-dyne = gram * centimeter / second ** 2 = dyn
-force_kilogram = g_0 * kilogram = kgf = kilogram_force = pond
-force_gram = g_0 * gram = gf = gram_force
-force_metric_ton = g_0 * metric_ton = _ = metric_ton_force = force_t = t_force
+dyne = gram * centimeter / second ** 2 = dyn = Dyne
+force_kilogram = g_0 * kilogram = kgf = kilogram_force = pond = Force_Kilogram = Kilogram_Force = Pond
+force_gram = g_0 * gram = gf = gram_force = Force_Gram = Gram_Force
+force_metric_ton = g_0 * metric_ton = _ = metric_ton_force = force_t = t_force = Force_Metric_Ton = Metric_Ton_Force
 atomic_unit_of_force = E_h / a_0 = a_u_force
 
 # Energy
 [energy] = [force] * [length]
 joule = newton * meter = J = Joule
-erg = dyne * centimeter
-watt_hour = watt * hour = Wh = watthour = Whr
+erg = dyne * centimeter = _ = Erg
+watt_hour = watt * hour = Wh = watthour = Whr = Watt_Hour = Watthour
 electron_volt = e * volt = eV
 rydberg = h * c * R_inf = Ry = Rydberg
 hartree = 2 * rydberg = E_h = Eh = Hartree = hartree_energy = atomic_unit_of_energy = a_u_energy
-calorie = 4.184 * joule = cal = thermochemical_calorie = cal_th
-international_calorie = 4.1868 * joule = cal_it = international_steam_table_calorie
+calorie = 4.184 * joule = cal = thermochemical_calorie = cal_th = Calorie = Thermochemical_Calorie
+international_calorie = 4.1868 * joule = cal_it = international_steam_table_calorie = International_Calorie
 fifteen_degree_calorie = 4.1855 * joule = cal_15
-british_thermal_unit = 1055.056 * joule = Btu = BTU = Btu_iso
-international_british_thermal_unit = 1e3 * pound / kilogram * degR / kelvin * international_calorie = Btu_it
-thermochemical_british_thermal_unit = 1e3 * pound / kilogram * degR / kelvin * calorie = Btu_th
-quadrillion_Btu = 1e15 * Btu = quad
-therm = 1e5 * Btu = thm = EC_therm
+british_thermal_unit = 1055.056 * joule = Btu = BTU = Btu_iso = British_Thermal_Unit
+international_british_thermal_unit = 1e3 * pound / kilogram * degR / kelvin * international_calorie = Btu_it = International_British_Thermal_Unit
+thermochemical_british_thermal_unit = 1e3 * pound / kilogram * degR / kelvin * calorie = Btu_th = Thermochemical_British_Thermal_Unit
+quadrillion_Btu = 1e15 * Btu = quad = Quadrillion_Btu = quadrillion_BTU = Quadrillion_BTU
+therm = 1e5 * Btu = thm = EC_therm = Therm
 US_therm = 1.054804e8 * joule  # approximate, no exact definition
-ton_TNT = 1e9 * calorie = tTNT
+ton_TNT = 1e9 * calorie = tTNT = Ton_TNT
 tonne_of_oil_equivalent = 1e10 * international_calorie = toe
 atmosphere_liter = atmosphere * liter = atm_l
 
 # Power
 [power] = [energy] / [time]
 watt = joule / second = W = Watt
-volt_ampere = volt * ampere = VA
-horsepower = 550 * foot * force_pound / second = hp = UK_horsepower = hydraulic_horsepower
+volt_ampere = volt * ampere = VA = Volt_Ampere
+horsepower = 550 * foot * force_pound / second = hp = UK_horsepower = hydraulic_horsepower = Horsepower
 boiler_horsepower = 33475 * Btu / hour                            # unclear which Btu
 metric_horsepower = 75 * force_kilogram * meter / second
 electrical_horsepower = 746 * watt
@@ -335,11 +335,11 @@ water_60F = 0.999001 * kilogram / liter             # approximate
 [pressure] = [force] / [area]
 pascal = newton / meter ** 2 = Pa = Pascal
 barye = dyne / centimeter ** 2 = Ba = barie = barad = barrie = baryd
-bar = 1e5 * pascal
+bar = 1e5 * pascal = Bar
 technical_atmosphere = kilogram * g_0 / centimeter ** 2 = at
 torr = atm / 760 = _ = Torr
 pound_force_per_square_inch = force_pound / inch ** 2 = psi = PSI
-kip_per_square_inch = kip / inch ** 2 = ksi
+kip_per_square_inch = kip / inch ** 2 = ksi = KSI
 millimeter_Hg = millimeter * Hg * g_0 = mmHg = mm_Hg = millimeter_Hg_0C
 centimeter_Hg = centimeter * Hg * g_0 = cmHg = cm_Hg = centimeter_Hg_0C
 inch_Hg = inch * Hg * g_0 = inHg = in_Hg = inch_Hg_32F
@@ -352,10 +352,11 @@ centimeter_H2O = centimeter * water * g_0 = cmH2O = cm_H2O
 # Torque
 [torque] = [force] * [length]
 foot_pound = foot * force_pound = ft_lb = footpound
+inch_pound = inch * force_pound = in_lb = inchpound
 
 # Viscosity
 [viscosity] = [pressure] * [time]
-poise = 0.1 * Pa * second = P
+poise = 0.1 * Pa * second = P = Poise
 reyn = psi * second
 
 # Kinematic viscosity
@@ -375,7 +376,7 @@ molar = mole / liter = M
 
 # Catalytic activity
 [activity] = [substance] / [time]
-katal = mole / second = kat
+katal = mole / second = kat = Katal
 enzyme_unit = micromole / minute = U = enzymeunit
 
 # Entropy
@@ -403,7 +404,7 @@ langley = thermochemical_calorie / centimeter ** 2 = Ly = Langley
 
 # Luminance
 [luminance] = [luminosity] / [area]
-nit = candela / meter ** 2
+nit = candela / meter ** 2 = _ = Nit
 stilb = candela / centimeter ** 2
 lambert = 1 / π * candela / centimeter ** 2 = _ = Lambert
 
@@ -576,7 +577,7 @@ nuclear_magneton = e * hbar / (2 * m_p) = µ_N = mu_N
 
 @group USCSVolumeOther
     teaspoon = fluid_ounce / 6 = tsp
-    tablespoon = fluid_ounce / 2 = tbsp
+    tablespoon = fluid_ounce / 2 = tbsp = Tbsp
     shot = 3 * tablespoon = jig = US_shot
     cup = pint / 2 = _ = liquid_cup = US_liquid_cup
     barrel = 31.5 * gallon = bbl

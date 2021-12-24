@@ -86,7 +86,6 @@ class BaseAttribute(DictSerializable):
     @abstractmethod
     def _template_type() -> Type:
         """Get the expected type of template for this object (property of child)."""
-        pass
 
     @property
     def origin(self) -> str:

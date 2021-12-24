@@ -34,7 +34,6 @@ class HasSpec(object):
     @abstractmethod
     def _spec_type() -> Type:
         """Get the expected type of spec for this object (property of child)."""
-        pass
 
     @property
     def template(self) -> Optional[BaseTemplate]:

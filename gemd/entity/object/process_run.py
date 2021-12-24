@@ -7,6 +7,7 @@ from gemd.entity.attribute import Condition, Parameter
 from gemd.entity.source.performed_source import PerformedSource
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.file_link import FileLink
+from gemd.entity.setters import validate_list
 
 from typing import Union, Optional, Type, Collection, Mapping
 
@@ -33,24 +34,25 @@ class ProcessRun(BaseObject, HasSpec, HasConditions, HasParameters, HasSource):
         for filtering and discoverability.
     notes: str, optional
         Long-form notes about the process run.
-    conditions: List[Condition], optional
+    conditions: List[:class:`Condition <gemd.entity.attribute.condition.Condition>`], optional
         Conditions under which this process run occurs.
-    parameters: List[Parameter], optional
+    parameters: List[:class:`Parameter <gemd.entity.attribute.parameter.Parameter>`], optional
         Parameters of this process run.
-    spec: ProcessSpec
+    spec: :class:`ProcessSpec <gemd.entity.object.process_spec.ProcessSpec>`
         Spec for this process run.
-    file_links: List[FileLink], optional
+    file_links: List[:class:`FileLink <gemd.entity.file_link.FileLink>`], optional
         Links to associated files, with resource paths into the files API.
-    source: PerformedSource, optional
+    source: :class:`PerformedSource\
+    <gemd.entity.source.performed_source.PerformedSource>`, optional
         Information about the person who performed the run and when.
 
     Attributes
     ----------
-    output_material: MaterialRun
+    output_material: :class:`MaterialRun <gemd.entity.object.material_run.MaterialRun>`
         The material run that this process run produces. The link is established by creating
         the material run and settings its `process` field to this process run.
 
-    ingredients: List[IngredientRun]
+    ingredients: List[:class:`IngredientRun <gemd.entity.object.ingredient_run.IngredientRun>`]
         Ingredient runs that act as inputs to this process run. The link is established by
         creating each ingredient run and setting its `process` field to this process run.
 
@@ -70,6 +72,9 @@ class ProcessRun(BaseObject, HasSpec, HasConditions, HasParameters, HasSource):
                  file_links: Optional[Collection[FileLink]] = None,
                  source: Optional[PerformedSource] = None
                  ):
+        from gemd.entity.object.ingredient_run import IngredientRun
+        from gemd.entity.link_by_uid import LinkByUID
+
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)
         HasSpec.__init__(self, spec)
@@ -78,7 +83,10 @@ class ProcessRun(BaseObject, HasSpec, HasConditions, HasParameters, HasSource):
         HasSource.__init__(self, source)
 
         self._ingredients = []
+        self._spec = None
+        self.spec = spec
         self._output_material = None
+        self._ingredients = validate_list(None, [IngredientRun, LinkByUID])
 
     @property
     def output_material(self):
@@ -90,13 +98,39 @@ class ProcessRun(BaseObject, HasSpec, HasConditions, HasParameters, HasSource):
         """Get the input ingredient runs."""
         return self._ingredients
 
-    def _unset_ingredient(self, ingred):
-        """Remove `ingred` from this process's list of ingredients."""
-        if ingred in self._ingredients:
-            self._ingredients.remove(ingred)
-
     @staticmethod
     def _spec_type() -> Type:
         """Get the expected type of spec for this object (property of child)."""
         from gemd.entity.object import ProcessSpec
         return ProcessSpec
+
+    @property
+    def spec(self):
+        """Get the process spec."""
+        return self._spec
+
+    @spec.setter
+    def spec(self, spec):
+        from gemd.entity.object.process_spec import ProcessSpec
+        from gemd.entity.link_by_uid import LinkByUID
+        if spec is None:
+            self._spec = None
+        elif isinstance(spec, (ProcessSpec, LinkByUID)):
+            self._spec = spec
+        else:
+            raise TypeError("spec must be a ProcessSpec or LinkByUID: {}".format(spec))
+
+    @property
+    def template(self):
+        """Get the template of the spec, if applicable."""
+        from gemd.entity.object.process_spec import ProcessSpec
+        if isinstance(self.spec, ProcessSpec):
+            return self.spec.template
+        else:
+            return None
+
+    def _dict_for_compare(self):
+        """Support for recursive equals."""
+        base = super()._dict_for_compare()
+        base['ingredients'] = self.ingredients
+        return base

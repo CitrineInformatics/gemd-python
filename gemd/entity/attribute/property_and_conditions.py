@@ -15,9 +15,9 @@ class PropertyAndConditions(DictSerializable):
 
     Parameters
     ----------
-    property: Property
+    property: :class:`Property <gemd.entity.attribute.property.Property>`
         A property attribute
-    conditions: List[Condition]
+    conditions: List[:class:`Condition <gemd.entity.attribute.condition.Condition>`]
         An optional list of conditions associated with this property.
 
     """
@@ -75,4 +75,4 @@ class PropertyAndConditions(DictSerializable):
 
     @staticmethod
     def _template_type() -> Type:
-        return PropertyTemplate
+        raise AttributeError("PropertyAndConditions do not have direct template support.")

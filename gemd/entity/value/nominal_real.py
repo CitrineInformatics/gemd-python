@@ -1,5 +1,6 @@
 """A nominal real value."""
 from gemd.entity.value.continuous_value import ContinuousValue
+from gemd.entity.bounds import RealBounds
 
 
 class NominalReal(ContinuousValue):
@@ -23,3 +24,18 @@ class NominalReal(ContinuousValue):
         assert isinstance(nominal, (int, float)), \
             "nominal value must be an int or float"
         self.nominal = float(nominal)
+
+    def _to_bounds(self) -> RealBounds:
+        """
+        Return the smallest bounds object that is consistent with the Value.
+
+        Returns
+        -------
+        RealBounds
+            The minimally consistent
+            :class:`bounds <gemd.entity.bounds.real_bounds.RealBounds>`.
+
+        """
+        return RealBounds(lower_bound=self.nominal,
+                          upper_bound=self.nominal,
+                          default_units=self.units)

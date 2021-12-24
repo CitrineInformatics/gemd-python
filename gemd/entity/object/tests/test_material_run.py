@@ -5,12 +5,12 @@ from uuid import uuid4
 from copy import deepcopy
 
 from gemd.json import loads, dumps
-from gemd.entity.attribute.property_and_conditions import PropertyAndConditions
-from gemd.entity.object import MaterialRun, ProcessRun, MaterialSpec
-from gemd.entity.template.material_template import MaterialTemplate
-from gemd.entity.attribute.property import Property
-from gemd.entity.value.nominal_real import NominalReal
+from gemd.entity.attribute import PropertyAndConditions, Property
+from gemd.entity.object import MaterialRun, ProcessRun, MaterialSpec, MeasurementRun
+from gemd.entity.template import MaterialTemplate
+from gemd.entity.value import NominalReal
 from gemd.entity.link_by_uid import LinkByUID
+from gemd.util import flatten
 
 
 def test_material_run():
@@ -134,3 +134,16 @@ def test_equality():
     assert mat1 == deepcopy(mat1)
     assert mat1 != mat2
     assert mat1 != "A material"
+
+    mat3 = deepcopy(mat1)
+    assert mat1 == mat3, "Copy somehow failed"
+    MeasurementRun("A measurement", material=mat3)
+    assert mat1 != mat3
+
+    mat4 = deepcopy(mat3)
+    assert mat4 == mat3, "Copy somehow failed"
+    mat4.measurements[0].tags.append('A tag')
+    assert mat4 != mat3
+
+    mat5 = next(x for x in flatten(mat4, 'test-scope') if isinstance(x, MaterialRun))
+    assert mat5 == mat4, "Flattening removes measurement references, but that's okay"
