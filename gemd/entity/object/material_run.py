@@ -44,7 +44,7 @@ class MaterialRun(BaseObject):
 
     typ = "material_run"
 
-    skip = {"_measurements", "_active_comparison"}
+    skip = {"_measurements"}
 
     def __init__(self, name, *, spec=None, process=None, sample_type="unknown",
                  uids=None, tags=None, notes=None, file_links=None):
@@ -57,7 +57,6 @@ class MaterialRun(BaseObject):
         self._measurements = validate_list(None, [MeasurementRun, LinkByUID])
         self._sample_type = None
         self._spec = None
-        self._active_comparison = set()
 
         self.spec = spec
         self.process = process
@@ -123,33 +122,8 @@ class MaterialRun(BaseObject):
         else:
             return None
 
-    def __eq__(self, other):
-        # To avoid infinite recursion, fast return on revisit
-        if other in self._active_comparison:  # Cycle encountered
-            return True  # This will functionally be & with the correct result of ==
-
-        self._active_comparison.add(other)
-        try:
-            result = super().__eq__(other)
-
-            # Equals needs to crawl into measurements
-            if result is True and isinstance(other, MaterialRun):
-                if len(self.measurements) == len(other.measurements):
-                    result = all(msr in other.measurements for msr in self.measurements)
-                elif (len(self.measurements) == 0 and len(self.uids) != 0) \
-                        or (len(other.measurements) == 0 and len(other.uids) != 0):
-                    result = True  # One can be empty if you flattened
-                else:
-                    result = False
-        finally:
-            self._active_comparison.remove(other)
-
-        return result
-
-    # Note the hash function checks if objects are identical, as opposed to the equals method,
-    # which checks if fields are equal.  This is because BaseEntities are fundamentally
-    # mutable objects.  Note that if you define an __eq__ method without defining a __hash__
-    # method, the object will become unhashable.
-    # https://docs.python.org/3/reference/datamodel.html#object.__hash
-    def __hash__(self):
-        return super().__hash__()
+    def _dict_for_compare(self):
+        """Support for recursive equals."""
+        base = super()._dict_for_compare()
+        base['measurements'] = self.measurements
+        return base

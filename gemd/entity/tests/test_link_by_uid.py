@@ -44,3 +44,15 @@ def test_from_entity():
 
     with pytest.raises(ValueError):
         LinkByUID.from_entity(run, name='scope1', scope='scope2')
+
+
+def test_equality():
+    """Test that the __eq__ method performs as expected."""
+    link = LinkByUID(scope="foo", id="bar")
+    assert link == ProcessRun("Good", uids={"foo": "bar"})
+    assert link != ProcessRun("Good", uids={"foo": "rab"})
+    assert link != ProcessRun("Good", uids={"oof": "bar"})
+    assert link != LinkByUID(scope="foo", id="rab")
+    assert link == ("foo", "bar")
+    assert link != ("foo", "bar", "baz")
+    assert link != ("foo", "rab")
