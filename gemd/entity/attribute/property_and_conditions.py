@@ -2,9 +2,6 @@ from gemd.entity.attribute.condition import Condition
 from gemd.entity.attribute.property import Property
 from gemd.entity.dict_serializable import DictSerializable
 from gemd.entity.setters import validate_list
-from gemd.entity.template import PropertyTemplate
-
-from typing import Type
 
 
 class PropertyAndConditions(DictSerializable):
@@ -72,7 +69,3 @@ class PropertyAndConditions(DictSerializable):
             self._property = value
         else:
             raise TypeError("property must be a Property")
-
-    @staticmethod
-    def _template_type() -> Type:
-        raise AttributeError("PropertyAndConditions do not have direct template support.")

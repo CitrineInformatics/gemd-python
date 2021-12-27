@@ -39,16 +39,3 @@ def test_invalid_assignment():
     with pytest.raises(TypeError):
         PropertyAndConditions(property=Property("property"),
                               conditions=[Condition("condition"), LinkByUID('scope', 'id')])
-
-
-def test_unsupported_template():
-    """Test that direct assignment of a template raises a useful error."""
-    prop_template = PropertyTemplate(name="cookie eating template", bounds=IntegerBounds(0, 1000))
-    prop = Property(name="number of cookies eaten",
-                    template=prop_template,
-                    origin='measured',
-                    value=NominalInteger(27))
-    with pytest.raises(AttributeError):
-        PropertyAndConditions(property=prop).template = None
-    with pytest.raises(AttributeError):
-        PropertyAndConditions(property=prop).template = prop_template

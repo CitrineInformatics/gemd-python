@@ -105,22 +105,6 @@ class ProcessRun(BaseObject, HasSpec, HasConditions, HasParameters, HasSource):
         return ProcessSpec
 
     @property
-    def spec(self):
-        """Get the process spec."""
-        return self._spec
-
-    @spec.setter
-    def spec(self, spec):
-        from gemd.entity.object.process_spec import ProcessSpec
-        from gemd.entity.link_by_uid import LinkByUID
-        if spec is None:
-            self._spec = None
-        elif isinstance(spec, (ProcessSpec, LinkByUID)):
-            self._spec = spec
-        else:
-            raise TypeError("spec must be a ProcessSpec or LinkByUID: {}".format(spec))
-
-    @property
     def template(self):
         """Get the template of the spec, if applicable."""
         from gemd.entity.object.process_spec import ProcessSpec

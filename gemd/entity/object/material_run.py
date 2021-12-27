@@ -115,22 +115,6 @@ class MaterialRun(BaseObject, HasSpec):
         return MaterialSpec
 
     @property
-    def spec(self):
-        """Get the material spec."""
-        return self._spec
-
-    @spec.setter
-    def spec(self, spec):
-        from gemd.entity.object.material_spec import MaterialSpec
-        from gemd.entity.link_by_uid import LinkByUID
-        if spec is None:
-            self._spec = None
-        elif isinstance(spec, (MaterialSpec, LinkByUID)):
-            self._spec = spec
-        else:
-            raise TypeError("spec must be a MaterialSpec or LinkByUID: {}".format(spec))
-
-    @property
     def template(self):
         """Get the template of the spec, if applicable."""
         from gemd.entity.object.material_spec import MaterialSpec
