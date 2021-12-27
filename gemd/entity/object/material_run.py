@@ -7,7 +7,7 @@ from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.setters import validate_list
 
-from typing import Union, Set, List, Dict, Type
+from typing import Union, Collection, Mapping, Type
 
 
 class MaterialRun(BaseObject, HasSpec):
@@ -59,12 +59,11 @@ class MaterialRun(BaseObject, HasSpec):
                  spec: Union[MaterialSpec, LinkByUID] = None,
                  process: Union[ProcessRun, LinkByUID] = None,
                  sample_type: Union[SampleType, str] = "unknown",
-                 uids: Dict[str, str] = None,
-                 tags: Union[List[str], Set[str]] = None,
+                 uids: Mapping[str, str] = None,
+                 tags: Collection[str] = None,
                  notes: str = None,
-                 file_links: Union[List[FileLink], Set[FileLink]] = None):
+                 file_links: Collection[FileLink] = None):
         from gemd.entity.object.measurement_run import MeasurementRun
-
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)
         HasSpec.__init__(self, spec=spec)
@@ -95,7 +94,7 @@ class MaterialRun(BaseObject, HasSpec):
             raise TypeError("process must be a ProcessRun or LinkByUID: {}".format(process))
 
     @property
-    def measurements(self) -> List["MeasurementRun"]:
+    def measurements(self) -> Collection["MeasurementRun"]:
         """Get a read-only list of the measurement runs."""
         return self._measurements
 
@@ -113,7 +112,7 @@ class MaterialRun(BaseObject, HasSpec):
         """Required method to satisfy HasTemplates mix-in."""
         return MaterialSpec
 
-    def _dict_for_compare(self) -> Dict:
+    def _dict_for_compare(self) -> Mapping:
         """Support for recursive equals."""
         base = super()._dict_for_compare()
         base['measurements'] = self.measurements

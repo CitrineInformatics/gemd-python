@@ -97,7 +97,7 @@ class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
         return self._ingredients
 
     @property
-    def output_material(self) -> "MaterialSpec":
+    def output_material(self) -> "MaterialSpec":  # noqa: F821
         """Get the output material spec."""
         return self._output_material
 

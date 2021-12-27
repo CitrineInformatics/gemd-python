@@ -77,7 +77,7 @@ class BaseObject(BaseEntity):
         from gemd.entity.object.has_spec import HasSpec
         from gemd.entity.object.has_template import HasTemplate
 
-        from gemd.entity.object import IngredientRun, MaterialRun, MeasurementRun # no ProcessRun
+        from gemd.entity.object import IngredientRun, MaterialRun, MeasurementRun  # no ProcessRun
         from gemd.entity.object import IngredientSpec, MaterialSpec  # no ProcessSpec
 
         result = set()

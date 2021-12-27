@@ -11,7 +11,7 @@ from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.setters import validate_list
 
-from typing import Union, Set, List, Dict, Type
+from typing import Union, Collection, Mapping, Type
 
 
 class ProcessRun(BaseObject, HasSpec, HasConditions, HasParameters, HasSource):
@@ -68,12 +68,12 @@ class ProcessRun(BaseObject, HasSpec, HasConditions, HasParameters, HasSource):
                  name: str,
                  *,
                  spec: Union[ProcessSpec, LinkByUID] = None,
-                 conditions: List[Condition] = None,
-                 parameters: List[Parameter] = None,
-                 uids: Dict[str, str] = None,
-                 tags: Union[List[str], Set[str]] = None,
+                 conditions: Collection[Condition] = None,
+                 parameters: Collection[Parameter] = None,
+                 uids: Mapping[str, str] = None,
+                 tags: Collection[str] = None,
                  notes: str = None,
-                 file_links: Union[List[FileLink], Set[FileLink]] = None,
+                 file_links: Collection[FileLink] = None,
                  source: PerformedSource = None):
         from gemd.entity.object.ingredient_run import IngredientRun
 
@@ -84,8 +84,8 @@ class ProcessRun(BaseObject, HasSpec, HasConditions, HasParameters, HasSource):
         HasParameters.__init__(self, parameters)
         HasSource.__init__(self, source)
 
-        self._output_material = None
         self._ingredients = validate_list(None, [IngredientRun, LinkByUID])
+        self._output_material = None
 
     @property
     def output_material(self) -> ["MaterialRun"]:
@@ -93,7 +93,7 @@ class ProcessRun(BaseObject, HasSpec, HasConditions, HasParameters, HasSource):
         return self._output_material
 
     @property
-    def ingredients(self) -> List["IngredientRun"]:
+    def ingredients(self) -> Collection["IngredientRun"]:
         """Get the input ingredient runs."""
         return self._ingredients
 
@@ -102,7 +102,7 @@ class ProcessRun(BaseObject, HasSpec, HasConditions, HasParameters, HasSource):
         """Required method to satisfy HasTemplates mix-in."""
         return ProcessSpec
 
-    def _dict_for_compare(self) -> Dict:
+    def _dict_for_compare(self) -> Mapping:
         """Support for recursive equals."""
         base = super()._dict_for_compare()
         base['ingredients'] = self.ingredients

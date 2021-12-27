@@ -1,4 +1,4 @@
-"""For entities that have templates."""
+"""For entities that have specs."""
 from gemd.entity.object.has_template import HasTemplate
 from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.link_by_uid import LinkByUID
@@ -27,7 +27,6 @@ class HasSpec(object):
         return self._spec
 
     @spec.setter
-    @abstractmethod
     def spec(self, spec: Union[HasTemplate, LinkByUID]):
         """Set the spec."""
         if spec is None:

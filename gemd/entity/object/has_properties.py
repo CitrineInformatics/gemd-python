@@ -24,7 +24,7 @@ class HasProperties(object):
 
     @properties.setter
     def properties(self, properties):
-        """Set the list of properties"""
+        """Set the list of properties."""
         self._properties = validate_list(properties, Property)
 
     def all_dependencies(self):

@@ -64,7 +64,7 @@ class IngredientSpec(BaseObject, HasQuantities, HasTemplate):
                  labels: Union[List[str], Set[str]] = None,
                  mass_fraction: ContinuousValue = None,
                  volume_fraction: ContinuousValue = None,
-                 number_fraction:ContinuousValue = None,
+                 number_fraction: ContinuousValue = None,
                  absolute_quantity: ContinuousValue = None,
                  uids: Dict[str, str] = None,
                  tags: Union[List[str], Set[str]] = None,
