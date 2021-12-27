@@ -6,7 +6,7 @@ from gemd.entity.setters import validate_list
 from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
 
-from typing import Union, Collection, List, Optional, Type
+from typing import Optional, Union, Iterable, List, Type
 from abc import abstractmethod
 
 
@@ -34,12 +34,14 @@ class BaseAttribute(DictSerializable):
 
     """
 
-    def __init__(self, name: str, *,
+    def __init__(self,
+                 name: str,
+                 *,
                  template: Union[AttributeTemplate, LinkByUID, None] = None,
                  origin: Union[Origin, str] = Origin.UNKNOWN,
-                 value: Optional[BaseValue] = None,
+                 value: BaseValue = None,
                  notes: str = None,
-                 file_links: Union[Collection[FileLink], FileLink, None] = None):
+                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
         self.name = name
         self.notes = notes
 
@@ -59,7 +61,7 @@ class BaseAttribute(DictSerializable):
         return self._value
 
     @value.setter
-    def value(self, value: Optional[BaseValue]):
+    def value(self, value: BaseValue):
         if value is None:
             self._value = None
         elif isinstance(value, (BaseValue, str, bool)):
@@ -68,12 +70,12 @@ class BaseAttribute(DictSerializable):
             raise TypeError("value must be a BaseValue, string or bool: {}".format(value))
 
     @property
-    def template(self) -> Union[AttributeTemplate, LinkByUID, None]:
+    def template(self) -> Optional[Union[AttributeTemplate, LinkByUID]]:
         """Get template."""
         return self._template
 
     @template.setter
-    def template(self, template: Union[AttributeTemplate, LinkByUID, None]):
+    def template(self, template: Optional[Union[AttributeTemplate, LinkByUID]]):
         if template is None:
             self._template = None
         elif isinstance(template, (self._template_type(), LinkByUID)):
@@ -104,5 +106,5 @@ class BaseAttribute(DictSerializable):
         return self._file_links
 
     @file_links.setter
-    def file_links(self, file_links: Union[Collection[FileLink], FileLink, None]):
+    def file_links(self, file_links: Optional[Union[Iterable[FileLink], FileLink]]):
         self._file_links = validate_list(file_links, FileLink)

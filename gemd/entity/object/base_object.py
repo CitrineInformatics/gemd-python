@@ -4,6 +4,8 @@ from gemd.entity.base_entity import BaseEntity
 from gemd.entity.file_link import FileLink
 from gemd.entity.setters import validate_list, validate_str
 
+from typing import Optional, Union, Iterable, List, Set, Mapping
+
 
 class BaseObject(BaseEntity):
     """
@@ -30,7 +32,13 @@ class BaseObject(BaseEntity):
 
     """
 
-    def __init__(self, name, *, uids=None, tags=None, notes=None, file_links=None):
+    def __init__(self,
+                 name: str,
+                 *,
+                 uids: Mapping[str, str] = None,
+                 tags: Iterable[str] = None,
+                 notes: str = None,
+                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
         BaseEntity.__init__(self, uids, tags)
         self.notes = notes
         self._name = None
@@ -52,24 +60,24 @@ class BaseObject(BaseEntity):
         return prop is None or prop.fset is not None
 
     @property
-    def name(self):
+    def name(self) -> str:
         """Get name."""
         return self._name
 
     @name.setter
-    def name(self, name):
+    def name(self, name: str):
         self._name = validate_str(name)
 
     @property
-    def file_links(self):
+    def file_links(self) -> List[FileLink]:
         """Get file links."""
         return self._file_links
 
     @file_links.setter
-    def file_links(self, file_links):
+    def file_links(self, file_links: Union[Iterable[FileLink], FileLink]):
         self._file_links = validate_list(file_links, FileLink)
 
-    def all_dependencies(self):
+    def all_dependencies(self) -> Set[BaseEntity]:
         """Return a set of all immediate dependencies (no recursion)."""
         from gemd.entity.object.has_parameters import HasParameters
         from gemd.entity.object.has_conditions import HasConditions

@@ -1,6 +1,9 @@
 """For entities that have properties."""
 from gemd.entity.attribute.property import Property
+from gemd.entity.template.property_template import PropertyTemplate
 from gemd.entity.setters import validate_list
+
+from typing import Iterable, List, Set
 
 
 class HasProperties(object):
@@ -13,20 +16,20 @@ class HasProperties(object):
 
     """
 
-    def __init__(self, properties):
+    def __init__(self, properties: Iterable[Property]):
         self._properties = None
         self.properties = properties
 
     @property
-    def properties(self):
+    def properties(self) -> List[Property]:
         """Get a list of the properties."""
         return self._properties
 
     @properties.setter
-    def properties(self, properties):
+    def properties(self, properties: Iterable[Property]):
         """Set the list of properties."""
         self._properties = validate_list(properties, Property)
 
-    def all_dependencies(self):
+    def all_dependencies(self) -> Set[PropertyTemplate]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {prop.template for prop in self.properties if prop.template is not None}

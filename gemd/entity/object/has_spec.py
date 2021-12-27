@@ -1,10 +1,11 @@
 """For entities that have specs."""
+from gemd.entity.object.base_object import BaseObject
 from gemd.entity.object.has_template import HasTemplate
 from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.link_by_uid import LinkByUID
 
 from abc import abstractmethod
-from typing import Optional, Union, Type
+from typing import Optional, Union, Set, Type
 
 
 class HasSpec(object):
@@ -50,6 +51,6 @@ class HasSpec(object):
         else:
             return None
 
-    def all_dependencies(self):
+    def all_dependencies(self) -> Set[BaseObject]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {self.spec} if self.spec is not None else set()

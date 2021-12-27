@@ -4,7 +4,8 @@ from gemd.entity.setters import validate_list
 from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.template.property_template import PropertyTemplate
 from gemd.entity.bounds.base_bounds import BaseBounds
-from typing import Iterable
+
+from typing import Optional, Union, Iterable, List, Set, Tuple
 
 
 class HasPropertyTemplates(object):
@@ -19,12 +20,15 @@ class HasPropertyTemplates(object):
 
     """
 
-    def __init__(self, properties):
+    def __init__(self, properties: Iterable[Union[Union[PropertyTemplate, LinkByUID],
+                                                  Tuple[Union[PropertyTemplate, LinkByUID],
+                                                        Optional[BaseBounds]]]]):
         self._properties = None
         self.properties = properties
 
     @property
-    def properties(self):
+    def properties(self) -> List[Tuple[Union[PropertyTemplate, LinkByUID],
+                                       Optional[BaseBounds]]]:
         """
         Get the list of property template/bounds tuples.
 
@@ -37,7 +41,9 @@ class HasPropertyTemplates(object):
         return self._properties
 
     @properties.setter
-    def properties(self, properties):
+    def properties(self, properties: Iterable[Union[Union[PropertyTemplate, LinkByUID],
+                                                    Tuple[Union[PropertyTemplate, LinkByUID],
+                                                          Optional[BaseBounds]]]]):
         """
         Set the list of parameter templates.
 
@@ -46,11 +52,6 @@ class HasPropertyTemplates(object):
         properties: List[(PropertyTemplate, bounds)]
             A list of tuples containing this entity's property templates as well
             as any restrictions on those templates' bounds.
-
-        Returns
-        -------
-        List[(PropertyTemplate, bounds)]
-            List of this entity's property template/bounds pairs
 
         """
         if isinstance(properties, Iterable):
@@ -61,6 +62,6 @@ class HasPropertyTemplates(object):
                                          trigger=BaseTemplate._homogenize_ranges
                                          )
 
-    def all_dependencies(self):
+    def all_dependencies(self) -> Set[Union[PropertyTemplate, LinkByUID]]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {attr[0] for attr in self.properties}

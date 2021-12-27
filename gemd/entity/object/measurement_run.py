@@ -13,7 +13,7 @@ from gemd.entity.source.performed_source import PerformedSource
 from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
 
-from typing import Union, Collection, Mapping, Type
+from typing import Optional, Union, Iterable, Mapping, Type
 
 
 class MeasurementRun(BaseObject, HasSpec, HasConditions, HasProperties, HasParameters, HasSource):
@@ -64,13 +64,13 @@ class MeasurementRun(BaseObject, HasSpec, HasConditions, HasProperties, HasParam
                  *,
                  spec: Union[MeasurementSpec, LinkByUID] = None,
                  material: Union[MaterialRun, LinkByUID] = None,
-                 properties: Collection[Property] = None,
-                 conditions: Collection[Condition] = None,
-                 parameters: Collection[Parameter] = None,
+                 properties: Iterable[Property] = None,
+                 conditions: Iterable[Condition] = None,
+                 parameters: Iterable[Parameter] = None,
                  uids: Mapping[str, str] = None,
-                 tags: Collection[str] = None,
+                 tags: Iterable[str] = None,
                  notes: str = None,
-                 file_links: Collection[FileLink] = None,
+                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
                  source: PerformedSource = None):
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)

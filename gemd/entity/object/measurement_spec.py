@@ -8,7 +8,7 @@ from gemd.entity.attribute.parameter import Parameter
 from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
 
-from typing import Optional, Union, Set, List, Dict, Type
+from typing import Optional, Union, Iterable, Mapping, Type
 
 
 class MeasurementSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
@@ -51,12 +51,12 @@ class MeasurementSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
                  name: str,
                  *,
                  template: Optional[Union[MeasurementTemplate, LinkByUID]] = None,
-                 conditions: List[Condition] = None,
-                 parameters: List[Parameter] = None,
-                 uids: Dict[str, str] = None,
-                 tags: Union[List[str], Set[str]] = None,
+                 conditions: Iterable[Condition] = None,
+                 parameters: Iterable[Parameter] = None,
+                 uids: Mapping[str, str] = None,
+                 tags: Iterable[str] = None,
                  notes: str = None,
-                 file_links: Union[List[FileLink], Set[FileLink]] = None):
+                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)
         HasParameters.__init__(self, parameters=parameters)
