@@ -1,11 +1,22 @@
+from gemd.entity.object.measurement_spec import MeasurementSpec
+from gemd.entity.object.material_run import MaterialRun
 from gemd.entity.object.base_object import BaseObject
+from gemd.entity.object.has_spec import HasSpec
 from gemd.entity.object.has_conditions import HasConditions
 from gemd.entity.object.has_properties import HasProperties
 from gemd.entity.object.has_parameters import HasParameters
 from gemd.entity.object.has_source import HasSource
+from gemd.entity.attribute.condition import Condition
+from gemd.entity.attribute.parameter import Parameter
+from gemd.entity.attribute.property import Property
+from gemd.entity.source.performed_source import PerformedSource
+from gemd.entity.file_link import FileLink
+from gemd.entity.link_by_uid import LinkByUID
+
+from typing import Union, Set, List, Dict, Type
 
 
-class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters, HasSource):
+class MeasurementRun(BaseObject, HasSpec, HasConditions, HasProperties, HasParameters, HasSource):
     """
     A measurement run.
 
@@ -48,30 +59,37 @@ class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters, Ha
 
     typ = "measurement_run"
 
-    def __init__(self, name, *, spec=None, material=None,
-                 properties=None, conditions=None, parameters=None,
-                 uids=None, tags=None, notes=None, file_links=None, source=None):
+    def __init__(self,
+                 name: str,
+                 *,
+                 spec: Union[MeasurementSpec, LinkByUID] = None,
+                 material: Union[MaterialRun, LinkByUID] = None,
+                 properties: List[Property] = None,
+                 conditions: List[Condition] = None,
+                 parameters: List[Parameter] = None,
+                 uids: Dict[str, str] = None,
+                 tags: Union[List[str], Set[str]] = None,
+                 notes: str = None,
+                 file_links: Union[List[FileLink], Set[FileLink]] = None,
+                 source: PerformedSource = None):
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)
+        HasSpec.__init__(self, spec=spec)
         HasProperties.__init__(self, properties)
         HasConditions.__init__(self, conditions)
         HasParameters.__init__(self, parameters)
         HasSource.__init__(self, source)
 
-        self._spec = None
-        self.spec = spec
         self._material = None
         self.material = material
 
     @property
-    def material(self):
+    def material(self) -> Union[MaterialRun, LinkByUID]:
         """Get the material."""
         return self._material
 
     @material.setter
-    def material(self, value):
-        from gemd.entity.object import MaterialRun
-        from gemd.entity.link_by_uid import LinkByUID
+    def material(self, value: Union[MaterialRun, LinkByUID]):
         if isinstance(self._material, MaterialRun):
             # This could throw an exception if it's not in the list, but then something else broke
             self._material.measurements.remove(self)
@@ -83,27 +101,7 @@ class MeasurementRun(BaseObject, HasConditions, HasProperties, HasParameters, Ha
         else:
             raise TypeError("material must be a MaterialRun or LinkByUID: {}".format(value))
 
-    @property
-    def spec(self):
-        """Get the measurement spec."""
-        return self._spec
-
-    @spec.setter
-    def spec(self, spec):
-        from gemd.entity.object.measurement_spec import MeasurementSpec
-        from gemd.entity.link_by_uid import LinkByUID
-        if spec is None:
-            self._spec = None
-        elif isinstance(spec, (MeasurementSpec, LinkByUID)):
-            self._spec = spec
-        else:
-            raise TypeError("spec must be a MeasurementSpec or LinkByUID: {}".format(spec))
-
-    @property
-    def template(self):
-        """Get the template of the spec, if applicable."""
-        from gemd.entity.object.measurement_spec import MeasurementSpec
-        if isinstance(self.spec, MeasurementSpec):
-            return self.spec.template
-        else:
-            return None
+    @staticmethod
+    def _spec_type() -> Type:
+        """Required method to satisfy HasTemplates mix-in."""
+        return MeasurementSpec

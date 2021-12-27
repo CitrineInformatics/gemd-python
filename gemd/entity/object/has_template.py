@@ -2,6 +2,9 @@
 from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.link_by_uid import LinkByUID
 
+from abc import abstractmethod
+from typing import Optional, Union, Type
+
 
 class HasTemplate(object):
     """Mix-in trait for objects that can be assigned templates.
@@ -13,20 +16,28 @@ class HasTemplate(object):
 
     """
 
-    def __init__(self, template=None):
+    def __init__(self, template: Optional[Union[BaseTemplate, LinkByUID]] = None):
         self._template = None
         self.template = template
 
+    @staticmethod
+    @abstractmethod
+    def _template_type() -> Type:
+        """Child must report implementation details."""
+
     @property
-    def template(self):
+    def template(self) -> Optional[Union[BaseTemplate, LinkByUID]]:
         """Get the template."""
         return self._template
 
     @template.setter
-    def template(self, template):
+    @abstractmethod
+    def template(self, template: Optional[Union[BaseTemplate, LinkByUID]]):
+        """Set the template."""
         if template is None:
             self._template = None
-        elif isinstance(template, (BaseTemplate, LinkByUID)):
+        elif isinstance(template, (self._template_type(), LinkByUID)):
             self._template = template
         else:
-            raise TypeError("Template must be a template or LinkByUID: {}".format(template))
+            raise TypeError(f"Template must be a {self._template_type()} or LinkByUID, "
+                            f"not {type(template)}")
