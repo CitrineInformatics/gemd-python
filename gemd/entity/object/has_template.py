@@ -3,7 +3,7 @@ from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.link_by_uid import LinkByUID
 
 from abc import abstractmethod
-from typing import Optional, Union, Type
+from typing import Optional, Union, Set, Type
 
 
 class HasTemplate(object):
@@ -42,6 +42,6 @@ class HasTemplate(object):
             raise TypeError(f"Template must be a {self._template_type()} or LinkByUID, "
                             f"not {type(template)}")
 
-    def all_dependencies(self):
+    def all_dependencies(self) -> Set[BaseTemplate]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {self.template} if self.template is not None else set()

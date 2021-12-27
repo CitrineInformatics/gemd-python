@@ -9,7 +9,7 @@ from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.setters import validate_list
 
-from typing import Optional, Union, Set, List, Dict, Type
+from typing import Optional, Union, Iterable, List, Mapping, Dict, Type, Any
 
 
 class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
@@ -62,15 +62,15 @@ class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
     skip = {"_output_material", "_ingredients"}
 
     def __init__(self,
-                 name,
+                 name: str,
                  *,
                  template: Optional[Union[ProcessTemplate, LinkByUID]] = None,
-                 conditions: List[Condition] = None,
-                 parameters: List[Parameter] = None,
-                 uids: Dict[str, str] = None,
-                 tags: Union[List[str], Set[str]] = None,
+                 conditions: Iterable[Condition] = None,
+                 parameters: Iterable[Parameter] = None,
+                 uids: Mapping[str, str] = None,
+                 tags: Iterable[str] = None,
                  notes: str = None,
-                 file_links: Union[List[FileLink], Set[FileLink]] = None):
+                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
         from gemd.entity.object.ingredient_spec import IngredientSpec
         from gemd.entity.link_by_uid import LinkByUID
 
@@ -97,11 +97,11 @@ class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
         return self._ingredients
 
     @property
-    def output_material(self) -> "MaterialSpec":  # noqa: F821
+    def output_material(self) -> Optional["MaterialSpec"]:  # noqa: F821
         """Get the output material spec."""
         return self._output_material
 
-    def _dict_for_compare(self) -> Dict:
+    def _dict_for_compare(self) -> Dict[str, Any]:
         """Support for recursive equals."""
         base = super()._dict_for_compare()
         base['ingredients'] = self.ingredients

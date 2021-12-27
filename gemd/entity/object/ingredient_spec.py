@@ -8,7 +8,7 @@ from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.setters import validate_list
 
-from typing import Union, Set, List, Dict, Type
+from typing import Optional, Union, Iterable, List, Mapping, Type
 
 
 class IngredientSpec(BaseObject, HasQuantities, HasTemplate):
@@ -61,15 +61,15 @@ class IngredientSpec(BaseObject, HasQuantities, HasTemplate):
                  *,
                  material: Union[MaterialSpec, LinkByUID] = None,
                  process: Union[ProcessSpec, LinkByUID] = None,
-                 labels: Union[List[str], Set[str]] = None,
+                 labels: Iterable[str] = None,
                  mass_fraction: ContinuousValue = None,
                  volume_fraction: ContinuousValue = None,
                  number_fraction: ContinuousValue = None,
                  absolute_quantity: ContinuousValue = None,
-                 uids: Dict[str, str] = None,
-                 tags: Union[List[str], Set[str]] = None,
+                 uids: Mapping[str, str] = None,
+                 tags: Iterable[str] = None,
                  notes: str = None,
-                 file_links: Union[List[FileLink], Set[FileLink]] = None):
+                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
 
         BaseObject.__init__(self, name=name,
                             uids=uids, tags=tags, notes=notes, file_links=file_links)
@@ -91,7 +91,7 @@ class IngredientSpec(BaseObject, HasQuantities, HasTemplate):
         return self._labels
 
     @labels.setter
-    def labels(self, labels: Union[List[str], Set[str]]):
+    def labels(self, labels: Iterable[str]):
         self._labels = validate_list(labels, str)
 
     @property
@@ -100,7 +100,7 @@ class IngredientSpec(BaseObject, HasQuantities, HasTemplate):
         return self._material
 
     @material.setter
-    def material(self, material: MaterialSpec):
+    def material(self, material: Union[MaterialSpec, LinkByUID]):
         """Set the material spec."""
         if material is None:
             self._material = None

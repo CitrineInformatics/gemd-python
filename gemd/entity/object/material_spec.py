@@ -7,7 +7,7 @@ from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.setters import validate_list
 
-from typing import Optional, Union, Set, List, Dict, Type
+from typing import Optional, Union, Iterable, List, Mapping, Type
 
 
 class MaterialSpec(BaseObject, HasTemplate):
@@ -50,12 +50,12 @@ class MaterialSpec(BaseObject, HasTemplate):
                  name: str,
                  *,
                  template: Optional[Union[MaterialTemplate, LinkByUID]] = None,
-                 properties: List[PropertyAndConditions] = None,
                  process: Union[ProcessSpec, LinkByUID] = None,
-                 uids: Dict[str, str] = None,
-                 tags: Union[List[str], Set[str]] = None,
+                 properties: Iterable[PropertyAndConditions] = None,
+                 uids: Mapping[str, str] = None,
+                 tags: Iterable[str] = None,
                  notes: str = None,
-                 file_links: Union[List[FileLink], Set[FileLink]] = None):
+                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)
         self._properties = None
@@ -70,8 +70,7 @@ class MaterialSpec(BaseObject, HasTemplate):
         return self._properties
 
     @properties.setter
-    def properties(self, properties: Union[Set[PropertyAndConditions],
-                                           List[PropertyAndConditions]]):
+    def properties(self, properties: Iterable[PropertyAndConditions]):
         self._properties = validate_list(properties, PropertyAndConditions)
 
     @property

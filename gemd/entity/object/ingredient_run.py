@@ -10,7 +10,7 @@ from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.setters import validate_list
 
-from typing import Union, Set, List, Dict, Type
+from typing import Optional, Union, Iterable, List, Mapping, Type, Any
 
 
 class IngredientRun(BaseObject, HasQuantities, HasSpec):
@@ -65,10 +65,10 @@ class IngredientRun(BaseObject, HasQuantities, HasSpec):
                  number_fraction: ContinuousValue = None,
                  absolute_quantity: ContinuousValue = None,
                  spec: Union[IngredientSpec, LinkByUID] = None,
-                 uids: Dict[str, str] = None,
-                 tags: Union[List[str], Set[str]] = None,
+                 uids: Mapping[str, str] = None,
+                 tags: Iterable[str] = None,
                  notes: str = None,
-                 file_links: Union[List[FileLink], Set[FileLink]] = None):
+                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
         BaseObject.__init__(self, name=None, uids=uids, tags=tags,
                             notes=notes, file_links=file_links)
         self._labels = None
@@ -155,7 +155,7 @@ class IngredientRun(BaseObject, HasQuantities, HasSpec):
         getattr(HasSpec, "spec").fset(self, spec)
 
     @classmethod
-    def from_dict(cls, d: Dict) -> DictSerializable:
+    def from_dict(cls, d: Mapping[str, Any]) -> DictSerializable:
         """
         Overloaded method from DictSerializable to intercept `name` and `labels` fields.
 
