@@ -24,4 +24,9 @@ class HasConditions(object):
 
     @conditions.setter
     def conditions(self, conditions):
+        """Set the list of conditions."""
         self._conditions = validate_list(conditions, Condition)
+
+    def all_dependencies(self):
+        """Return a set of all immediate dependencies (no recursion)."""
+        return {cond.template for cond in self.conditions if cond.template is not None}

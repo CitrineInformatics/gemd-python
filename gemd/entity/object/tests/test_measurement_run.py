@@ -138,7 +138,7 @@ def test_template_access():
     assert meas.template is None
 
 
-def test_dependences():
+def test_dependencies():
     """Test that dependency lists make sense."""
     prop = PropertyTemplate(name="name", bounds=IntegerBounds(0, 1))
     cond = ConditionTemplate(name="name", bounds=IntegerBounds(0, 1))
@@ -162,9 +162,9 @@ def test_dependences():
                           ]
                           )
 
-    assert template not in meas.all_dependences()
-    assert spec in meas.all_dependences()
-    assert mat in meas.all_dependences()
-    assert prop in meas.all_dependences()
-    assert cond in meas.all_dependences()
-    assert param in meas.all_dependences()
+    assert template not in meas.all_dependencies()
+    assert spec in meas.all_dependencies()
+    assert mat in meas.all_dependencies()
+    assert prop in meas.all_dependencies()
+    assert cond in meas.all_dependencies()
+    assert param in meas.all_dependencies()

@@ -50,3 +50,7 @@ class HasSpec(object):
             return self.spec.template
         else:
             return None
+
+    def all_dependencies(self):
+        """Return a set of all immediate dependencies (no recursion)."""
+        return {self.spec} if self.spec is not None else set()

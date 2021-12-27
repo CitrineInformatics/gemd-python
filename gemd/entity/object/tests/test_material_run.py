@@ -149,13 +149,13 @@ def test_equality():
     assert mat5 == mat4, "Flattening removes measurement references, but that's okay"
 
 
-def test_dependences():
+def test_dependencies():
     """Test that dependency lists make sense."""
     ps = ProcessSpec(name="ps")
     pr = ProcessRun(name="pr", spec=ps)
     ms = MaterialSpec(name="ms", process=ps)
     mr = MaterialRun(name="mr", spec=ms, process=pr)
 
-    assert ps not in mr.all_dependences()
-    assert pr in mr.all_dependences()
-    assert ms in mr.all_dependences()
+    assert ps not in mr.all_dependencies()
+    assert pr in mr.all_dependencies()
+    assert ms in mr.all_dependencies()

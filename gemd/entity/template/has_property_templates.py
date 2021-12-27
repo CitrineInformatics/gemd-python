@@ -60,3 +60,7 @@ class HasPropertyTemplates(object):
                                          (PropertyTemplate, LinkByUID, list, tuple),
                                          trigger=BaseTemplate._homogenize_ranges
                                          )
+
+    def all_dependencies(self):
+        """Return a set of all immediate dependencies (no recursion)."""
+        return {attr[0] for attr in self.properties}

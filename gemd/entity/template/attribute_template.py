@@ -50,7 +50,7 @@ class AttributeTemplate(BaseEntity):
             raise TypeError("Bounds must be an instance of BaseBounds: {}".format(bounds))
         self._bounds = bounds
 
-    def all_dependences(self):
+    def all_dependencies(self):
         """Return a set of all immediate dependencies (no recursion)."""
         # Attribute Templates never depend on other objects.
         return set()

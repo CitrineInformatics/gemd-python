@@ -41,3 +41,7 @@ class HasTemplate(object):
         else:
             raise TypeError(f"Template must be a {self._template_type()} or LinkByUID, "
                             f"not {type(template)}")
+
+    def all_dependencies(self):
+        """Return a set of all immediate dependencies (no recursion)."""
+        return {self.template} if self.template is not None else set()

@@ -24,4 +24,9 @@ class HasParameters(object):
 
     @parameters.setter
     def parameters(self, parameters):
+        """Set the list of parameters."""
         self._parameters = validate_list(parameters, Parameter)
+
+    def all_dependencies(self):
+        """Return a set of all immediate dependencies (no recursion)."""
+        return {param.template for param in self.parameters if param.template is not None}

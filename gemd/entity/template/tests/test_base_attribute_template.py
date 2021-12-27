@@ -43,7 +43,7 @@ def test_json():
     assert copy == template
 
 
-def test_dependences():
+def test_dependencies():
     """Test that dependency lists make sense."""
     targets = [
         PropertyTemplate(name="name", bounds=RealBounds(0, 1, '')),
@@ -51,4 +51,4 @@ def test_dependences():
         ParameterTemplate(name="name", bounds=RealBounds(0, 1, '')),
     ]
     for target in targets:
-        assert len(target.all_dependences()) == 0, f"{type(target)} had dependencies"
+        assert len(target.all_dependencies()) == 0, f"{type(target)} had dependencies"

@@ -108,7 +108,7 @@ class BaseEntity(DictSerializable):
         return LinkByUID(scope=scope, id=uid)
 
     @abstractmethod
-    def all_dependences(self) -> 'Set[BaseEntity]':
+    def all_dependencies(self) -> 'Set[BaseEntity]':
         """Return a set of all immediate dependencies (no recursion)."""
 
     @staticmethod

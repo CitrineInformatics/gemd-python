@@ -34,7 +34,7 @@ def test_invalid_assignment():
         MaterialSpec()  # Name is required
 
 
-def test_dependences():
+def test_dependencies():
     """Test that dependency lists make sense."""
     prop = PropertyTemplate(name="name", bounds=IntegerBounds(0, 1))
     cond = ConditionTemplate(name="name", bounds=IntegerBounds(0, 1))
@@ -48,6 +48,6 @@ def test_dependences():
                             ]
                         )])
 
-    assert template in spec.all_dependences()
-    assert cond in spec.all_dependences()
-    assert prop in spec.all_dependences()
+    assert template in spec.all_dependencies()
+    assert cond in spec.all_dependencies()
+    assert prop in spec.all_dependencies()

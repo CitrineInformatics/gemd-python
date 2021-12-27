@@ -24,4 +24,9 @@ class HasProperties(object):
 
     @properties.setter
     def properties(self, properties):
+        """Set the list of properties"""
         self._properties = validate_list(properties, Property)
+
+    def all_dependencies(self):
+        """Return a set of all immediate dependencies (no recursion)."""
+        return {prop.template for prop in self.properties if prop.template is not None}

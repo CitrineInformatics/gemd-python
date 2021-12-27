@@ -72,7 +72,7 @@ def test_mixins():
     assert len(second.parameters) == 1
 
 
-def test_dependences():
+def test_dependencies():
     """Test that dependency lists make sense."""
     prop = PropertyTemplate(name="name", bounds=IntegerBounds(0, 1))
     cond = ConditionTemplate(name="name", bounds=IntegerBounds(0, 1))
@@ -82,6 +82,6 @@ def test_dependences():
                                        conditions=[cond],
                                        properties=[prop],
                                        parameters=[param])
-    assert prop in msr_template.all_dependences()
-    assert cond in msr_template.all_dependences()
-    assert param in msr_template.all_dependences()
+    assert prop in msr_template.all_dependencies()
+    assert cond in msr_template.all_dependencies()
+    assert param in msr_template.all_dependencies()
