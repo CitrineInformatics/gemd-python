@@ -421,15 +421,12 @@ def unravel(obj):
 
     def _flatten(base_ent: BaseEntity):
         nonlocal known_obj
-        to_return = []
 
-        if base_ent not in known_obj:
-            to_return.append(base_ent)
+        if base_ent in known_obj:
+            return []
+        else:
             known_obj.add(base_ent)
-            # for scope in base_obj.uids:
-            #     known_obj.add(base_obj.to_link(scope))
-
-        return to_return
+            return [base_ent]
 
     return recursive_flatmap(obj, _flatten, unidirectional=False)
 
