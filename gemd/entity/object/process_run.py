@@ -2,6 +2,7 @@ from gemd.entity.object.base_object import BaseObject
 from gemd.entity.object.has_conditions import HasConditions
 from gemd.entity.object.has_parameters import HasParameters
 from gemd.entity.object.has_source import HasSource
+from gemd.entity.setters import validate_list
 
 
 class ProcessRun(BaseObject, HasConditions, HasParameters, HasSource):
@@ -57,17 +58,19 @@ class ProcessRun(BaseObject, HasConditions, HasParameters, HasSource):
     def __init__(self, name, *, spec=None,
                  conditions=None, parameters=None,
                  uids=None, tags=None, notes=None, file_links=None, source=None):
+        from gemd.entity.object.ingredient_run import IngredientRun
+        from gemd.entity.link_by_uid import LinkByUID
+
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)
         HasConditions.__init__(self, conditions)
         HasParameters.__init__(self, parameters)
         HasSource.__init__(self, source)
 
-        self._ingredients = []
-
         self._spec = None
         self.spec = spec
         self._output_material = None
+        self._ingredients = validate_list(None, [IngredientRun, LinkByUID])
 
     @property
     def output_material(self):
@@ -78,11 +81,6 @@ class ProcessRun(BaseObject, HasConditions, HasParameters, HasSource):
     def ingredients(self):
         """Get the input ingredient runs."""
         return self._ingredients
-
-    def _unset_ingredient(self, ingred):
-        """Remove `ingred` from this process's list of ingredients."""
-        if ingred in self._ingredients:
-            self._ingredients.remove(ingred)
 
     @property
     def spec(self):
@@ -108,3 +106,9 @@ class ProcessRun(BaseObject, HasConditions, HasParameters, HasSource):
             return self.spec.template
         else:
             return None
+
+    def _dict_for_compare(self):
+        """Support for recursive equals."""
+        base = super()._dict_for_compare()
+        base['ingredients'] = self.ingredients
+        return base

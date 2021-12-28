@@ -1,10 +1,14 @@
 """Utility functions."""
 import uuid
-from typing import Dict, Callable, Union, Type, Tuple, List, Any
+import functools
+from typing import Dict, Callable, Union, Type, Tuple, List, Any, Optional
+from warnings import warn
 
 from gemd.entity.base_entity import BaseEntity
 from gemd.entity.dict_serializable import DictSerializable
 from gemd.entity.link_by_uid import LinkByUID
+
+from collections.abc import Reversible, Iterable, ByteString
 from toolz import concatv
 
 
@@ -34,40 +38,50 @@ def set_uuids(obj, scope):
     return
 
 
-def _cached_isinstance_generator(
-        class_or_tuple: Union[Type, Tuple[Type]]) -> Callable[[object], bool]:
+def _cached_isinstance(
+        obj: object,
+        class_or_tuple: Union[Type, Tuple[Union[Type, Tuple[Type]]]]) -> bool:
     """
-    Generate a function that checks and caches an isinstance(obj, class_or_tuple) call.
+    Emulate isinstance builtin to take advantage of functools caching.
 
     Parameters
     ----------
-    class_or_tuple: Union[Type, Tuple[Type]]
-        A single type or a tuple of types
+    obj: object
+
+    class_or_tuple: Union[Type, Tuple[Union[Type, Tuple[Type]]]]
+        A single type, a tuple of types (potentially nested)
 
     Returns
     -------
-    Callable[[object], bool]
-        function with signature function(obj), returning isinstance(obj, class_or_tuple)
+    bool
+        Whether an object is an instance of a class or of a subclass thereof.
 
     """
-    cache = dict()
-
-    def func(obj):
-        obj_type = type(obj)
-        if obj_type not in cache:
-            cache[obj_type] = isinstance(obj, class_or_tuple)
-        return cache[obj_type]
-
-    return func
+    obj_type = type(obj)
+    return _cached_issubclass(obj_type, class_or_tuple)
 
 
-# The overhead for all the invocations of isinstance was substantial
-isinstance_base_entity = _cached_isinstance_generator(BaseEntity)
-isinstance_list_or_tuple = _cached_isinstance_generator((list, tuple))
-isinstance_list = _cached_isinstance_generator(list)
-isinstance_tuple = _cached_isinstance_generator(tuple)
-isinstance_dict = _cached_isinstance_generator(dict)
-isinstance_dict_serializable = _cached_isinstance_generator(DictSerializable)
+@functools.lru_cache(maxsize=None)
+def _cached_issubclass(
+        cls: Type,
+        class_or_tuple: Union[Type, Tuple[Union[Type, Tuple[Type]]]]) -> bool:
+    """
+    Emulate issubclass builtin to take advantage of functools caching.
+
+    Parameters
+    ----------
+    obj: object
+
+    class_or_tuple: Union[Type, Tuple[Union[Type, Tuple[Type]]]]
+        A single type, a tuple of types (potentially nested)
+
+    Returns
+    -------
+    bool
+        Whether 'cls' is a derived from another class or is the same class.
+
+    """
+    return issubclass(cls, class_or_tuple)
 
 
 def _substitute(thing: Any,
@@ -94,32 +108,138 @@ def _substitute(thing: Any,
         visited = {}
     if thing.__hash__ is not None and thing in visited:
         return visited[thing]
+
     if applies(thing):
         replacement = sub(thing)
         if thing.__hash__ is not None:
             visited[thing] = replacement
-        new = _substitute(replacement, sub, applies, visited)
-    elif isinstance_list(thing):
-        new = [_substitute(x, sub, applies, visited) for x in thing]
-    elif isinstance_tuple(thing):
-        new = tuple(_substitute(x, sub, applies, visited) for x in thing)
-    elif isinstance_dict(thing):
-        new = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
-               for k, v in thing.items()}
-    elif isinstance_dict_serializable(thing):
-        new_attrs = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
-                     for k, v in thing.as_dict().items()}
-        new = thing.build(new_attrs)
     else:
-        new = thing
+        replacement = thing
+
+    if _cached_isinstance(replacement, list):
+        new = [_substitute(x, sub, applies, visited) for x in replacement]
+    elif _cached_isinstance(replacement, tuple):
+        new = tuple(_substitute(x, sub, applies, visited) for x in replacement)
+    elif _cached_isinstance(replacement, dict):
+        new = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
+               for k, v in replacement.items()}
+    elif _cached_isinstance(replacement, DictSerializable):
+        new_attrs = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
+                     for k, v in replacement.as_dict().items()}
+        new = replacement.build(new_attrs)
+    else:
+        new = replacement
 
     if thing.__hash__ is not None:
         visited[thing] = new
-    if new.__hash__ is not None:
-        visited[new] = new
 
-    # assert type(thing) == type(new), "{} is not {}".format(type(thing), type(new))
     return new
+
+
+def _substitute_inplace(thing: Any,
+                        sub: Callable[[object], object],
+                        applies: Callable[[object], bool],
+                        visited: Dict[object, object] = None) -> object:
+    """
+    Generic recursive in-place substitute function.
+
+    Iteratively crawls the passed structure, substituting elements with sub(element) when
+    applies(element) is true and the element is mutable.
+
+    Parameters
+    ----------
+    thing: Any
+        The object to traverse with substitution.
+    sub: Callable[[object], object]
+        Function which provides substitute for value; should not have side-effects.
+    applies: Callable[[object], bool]
+        Function which defines the domain for the sub function to be invoked.
+
+    """
+    def _key(obj):
+        if _cached_isinstance(obj, (float, int, str)):
+            return None
+        elif obj.__hash__ is not None:
+            return obj
+        elif _cached_isinstance(obj, Iterable) and not _cached_isinstance(obj, ByteString):
+            return id(obj)
+        else:
+            return None  # pragma: no cover  Fallback for caution's sake
+
+    orig_key = _key(thing)
+    if visited is None:
+        visited = {}
+    if orig_key is not None and orig_key in visited:
+        return visited[orig_key]
+
+    if applies(thing):
+        thing = sub(thing)
+    if orig_key is not None:
+        visited[orig_key] = thing  # Store before we start recursing
+
+    if _cached_isinstance(thing, list):  # Change list in place
+        for i, x in enumerate(thing):
+            thing[i] = _substitute_inplace(x, sub, applies, visited)
+    elif _cached_isinstance(thing, tuple):  # Tuples are immutable; regenerate
+        thing = tuple(_substitute_inplace(x, sub, applies, visited) for x in thing)
+        visited[orig_key] = thing  # We mutated it
+    elif _cached_isinstance(thing, dict):  # Change dict in place, both keys & values
+        remove = set()  # Store todos because can't mutate a dict in a loop
+        update = dict()
+        for k, v in thing.items():
+            new_k = _substitute_inplace(k, sub, applies, visited)
+            new_v = _substitute_inplace(v, sub, applies, visited)
+            if id(k) != id(new_k):
+                remove.add(k)
+                update[new_k] = v
+            if id(v) != id(new_v):
+                update[new_k] = new_v
+        for k in remove:
+            thing.pop(k, None)
+        thing.update(update)
+    elif _cached_isinstance(thing, DictSerializable):
+        for k, v in thing.as_dict().items():  # Assume key can't change b/c it's an attribute
+            new_v = _substitute_inplace(v, sub, applies, visited)
+            if id(v) != id(new_v):
+                _setter_by_attribute(type(thing), k)(thing, new_v)
+
+    return thing
+
+
+@functools.lru_cache(maxsize=None)
+def _setter_by_attribute(clazz: type, attribute: str) -> Callable:
+    """
+    Internal method to get the setter method for an attribute.
+
+    Note that if the attribute in question is a @property (read-only attribute),
+    it assumes that the correct choice is just setting the field name with a
+    prepended underscore.
+
+    Parameters
+    ----------
+    clazz: type
+        The class of the object you wish to interrogate.
+    attribute: str
+        The name of the attribute you with to set.
+
+    Returns
+    -------
+    Callable
+        The attribute's setter method, callable w/ setter(object, value).
+
+    """
+    def _emulator(inner_name: str) -> Callable:
+        return lambda self, value: setattr(self, inner_name, value)
+
+    prop = getattr(clazz, attribute, None)
+    if prop is None:  # It's not a property, just an ordinary attribute
+        setter = _emulator(attribute)
+    elif prop.fset is None:  # It's read only, so set directly
+        setter = _emulator(f"_{attribute}")
+    else:
+        setter = prop.fset
+
+    return setter
 
 
 def make_index(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable]):
@@ -137,7 +257,7 @@ def make_index(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable]):
 
     """
     def _make_index(_obj: BaseEntity):
-        return (((scope, _obj.uids[scope]), _obj) for scope in _obj.uids)
+        return ((LinkByUID(scope=scope, id=_obj.uids[scope]), _obj) for scope in _obj.uids)
 
     idx = {}
     for uid, target in recursive_flatmap(obj, _make_index):
@@ -146,7 +266,13 @@ def make_index(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable]):
     return idx
 
 
-def substitute_links(obj: Any, native_uid=None):
+def substitute_links(obj: Any,
+                     scope: Optional[str] = None,
+                     *,
+                     native_uid: str = None,
+                     allow_fallback: bool = True,
+                     inplace: bool = False
+                     ):
     """
     Recursively replace pointers to BaseEntity with LinkByUID objects.
 
@@ -157,23 +283,37 @@ def substitute_links(obj: Any, native_uid=None):
     ----------
     obj: Any
         target of the operation
-    native_uid: Optional[str]
+    scope: Optional[str], optional
         preferred scope to use for creating LinkByUID objects (Default: None)
+    native_uid: str, optional
+        DEPRECATED; former name for scope argument
+    allow_fallback: bool, optional
+        whether to grab another scope/id if chosen scope is missing (Default: True).
+    inplace: bool, optional
+        whether to replace objects in place, as opposed to returning a copy (Default: False).
 
     """
-    def make_link(entity: BaseEntity):
-        if len(entity.uids) == 0:
-            raise ValueError("No UID for {}".format(entity))
-        elif native_uid and native_uid in entity.uids:
-            return LinkByUID(native_uid, entity.uids[native_uid])
-        else:
-            return LinkByUID.from_entity(entity)
+    if native_uid is not None:
+        warn("The keyword argument 'native_uid' is deprecated.  When selecting a default scope, "
+             "use the 'scope' keyword argument.", DeprecationWarning)
+        if scope is not None:
+            raise ValueError("Both 'scope' and 'native_uid' keywords passed.")
+        scope = native_uid
 
-    return _substitute(obj, sub=make_link,
-                       applies=lambda o: o is not obj and isinstance_base_entity(o))
+    if inplace:
+        method = _substitute_inplace
+    else:
+        method = _substitute
+
+    return method(obj,
+                  sub=lambda o: o.to_link(scope=scope, allow_fallback=allow_fallback),
+                  applies=lambda o: o is not obj and _cached_isinstance(o, BaseEntity))
 
 
-def substitute_objects(obj, index):
+def substitute_objects(obj,
+                       index,
+                       *,
+                       inplace: bool = False):
     """
     Recursively replace LinkByUID objects with pointers to the objects with that UID in the index.
 
@@ -186,11 +326,18 @@ def substitute_objects(obj, index):
         target of the operation
     index: Dict[Tuple[str, str], BaseEntity]
         containing the objects that the uids point to
+    inplace: bool, optional
+        whether to replace objects in place, as opposed to returning a copy (Default: False).
 
     """
-    return _substitute(obj,
-                       sub=lambda l: index.get((l.scope.lower(), l.id), l),
-                       applies=lambda o: isinstance(o, LinkByUID))
+    if inplace:
+        method = _substitute_inplace
+    else:
+        method = _substitute
+
+    return method(obj,
+                  sub=lambda l: index.get(l, l),
+                  applies=lambda o: _cached_isinstance(o, LinkByUID))
 
 
 def flatten(obj, scope=None):
@@ -323,20 +470,21 @@ def recursive_foreach(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable
             else:
                 seen.add(this)
 
-        if apply_first and isinstance_base_entity(this):
+        if apply_first and _cached_isinstance(this, BaseEntity):
             func(this)
 
-        if isinstance_list_or_tuple(this):
-            for x in this:
-                queue.append(x)
-        elif isinstance_dict(this):
+        if _cached_isinstance(this, dict):
             for x in concatv(this.keys(), this.values()):
                 queue.append(x)
-        elif isinstance_dict_serializable(this):
+        elif _cached_isinstance(this, DictSerializable):
             for k, x in this.__dict__.items():
                 queue.append(x)
+        elif _cached_isinstance(this, Iterable) \
+                and not _cached_isinstance(this, (str, ByteString)):
+            for x in this:
+                queue.append(x)
 
-        if not apply_first and isinstance_base_entity(this):
+        if not apply_first and _cached_isinstance(this, BaseEntity):
             func(this)
 
     return
@@ -377,18 +525,21 @@ def recursive_flatmap(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable
             else:
                 seen.add(this)
 
-        if isinstance_base_entity(this):
+        if _cached_isinstance(this, BaseEntity):
             res.extend(func(this))
 
-        if isinstance_list_or_tuple(this):
-            queue.extend(reversed(this))  # Preserve order of the list/tuple
-        elif isinstance_dict(this):
+        if _cached_isinstance(this, dict):
             queue.extend(concatv(this.keys(), this.values()))
-        elif isinstance_dict_serializable(this):
+        elif _cached_isinstance(this, DictSerializable):
             for k, x in sorted(this.__dict__.items()):
-                if unidirectional and isinstance_base_entity(this) and k in this.skip:
+                if unidirectional and _cached_isinstance(this, BaseEntity) and k in this.skip:
                     continue
                 queue.append(x)
+        elif _cached_isinstance(this, Reversible):
+            queue.extend(reversed(this))  # Preserve order of the list/tuple
+        elif _cached_isinstance(this, Iterable) \
+                and not _cached_isinstance(this, (str, ByteString)):
+            queue.extend(this)  # No control over order
 
     return res
 
@@ -400,9 +551,9 @@ def writable_sort_order(key: Union[BaseEntity, str]) -> int:
     from gemd.entity.template import ConditionTemplate, MaterialTemplate, MeasurementTemplate, \
         ParameterTemplate, ProcessTemplate, PropertyTemplate
 
-    if isinstance_base_entity(key):
+    if _cached_isinstance(key, BaseEntity):
         typ = key.typ
-    elif isinstance(key, str):
+    elif _cached_isinstance(key, str):
         typ = key
     else:
         raise ValueError("Can ony sort BaseEntities and type strings, not {}".format(key))

@@ -1,5 +1,6 @@
 from gemd.entity.object.base_object import BaseObject
 from gemd.enumeration import SampleType
+from gemd.entity.setters import validate_list
 
 
 class MaterialRun(BaseObject):
@@ -47,10 +48,13 @@ class MaterialRun(BaseObject):
 
     def __init__(self, name, *, spec=None, process=None, sample_type="unknown",
                  uids=None, tags=None, notes=None, file_links=None):
+        from gemd.entity.object.measurement_run import MeasurementRun
+        from gemd.entity.link_by_uid import LinkByUID
+
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)
         self._process = None
-        self._measurements = []
+        self._measurements = validate_list(None, [MeasurementRun, LinkByUID])
         self._sample_type = None
         self._spec = None
 
@@ -83,11 +87,6 @@ class MaterialRun(BaseObject):
     def measurements(self):
         """Get a list of measurement runs."""
         return self._measurements
-
-    def _unset_measurement(self, meas):
-        """Remove `meas` from this material's list of measurements."""
-        if meas in self._measurements:
-            self._measurements.remove(meas)
 
     @property
     def sample_type(self):
@@ -122,3 +121,9 @@ class MaterialRun(BaseObject):
             return self.spec.template
         else:
             return None
+
+    def _dict_for_compare(self):
+        """Support for recursive equals."""
+        base = super()._dict_for_compare()
+        base['measurements'] = self.measurements
+        return base

@@ -9,7 +9,7 @@ from gemd.entity.object.ingredient_spec import IngredientSpec
 from gemd.entity.object.ingredient_run import IngredientRun
 from gemd.entity.file_link import FileLink
 
-from gemd.json import dumps
+from gemd.json import dumps, loads
 from gemd.demo.cake import make_cake_templates, make_cake_spec, make_cake, \
     import_toothpick_picture, change_scope, get_demo_scope, get_template_scope
 from gemd.util import recursive_foreach
@@ -119,3 +119,13 @@ def test_scope():
 
     assert any('template' in x for x in default_cake.spec.template.uids)
     assert not any('template' in x for x in third_cake.spec.template.uids)
+
+
+def test_recursive_equals():
+    """Verify that the recursive/crawling equals behaves well."""
+    cake = make_cake()
+    copy = loads(dumps(cake))
+    assert cake == copy
+
+    copy.process.ingredients[0].material.process.ingredients[0].material.tags.append('Hi')
+    assert cake != copy

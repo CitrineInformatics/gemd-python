@@ -2,11 +2,10 @@ from setuptools import setup, find_packages
 
 
 setup(name='gemd',
-      version='1.0.2',
+      version='1.4.1',
       url='http://github.com/CitrineInformatics/gemd-python',
       description="Python binding for Citrine's GEMD data model",
-      author='Max Hutchinson',
-      author_email='maxhutch@citrine.io',
+      author='Citrine Informatics',
       packages=find_packages(),
       package_data={
           'gemd': [
@@ -24,6 +23,11 @@ setup(name='gemd',
           "pint>=0.10",
           "deprecation>=2.0.7,<3"
       ],
+      extras_require={
+          "tests": [
+              "pytest"
+          ]
+      },
       classifiers=[
           'Programming Language :: Python :: 3',
           'Programming Language :: Python :: 3.6',

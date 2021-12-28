@@ -72,9 +72,8 @@ class ProcessTemplate(BaseTemplate, HasConditionTemplates, HasParameterTemplates
 
     @allowed_names.setter
     def allowed_names(self, allowed_names):
-        # if none, leave as none; don't set to the empty set
         if allowed_names is None:
-            self._allowed_names = allowed_names
+            self._allowed_names = validate_list([], str)
         else:
             self._allowed_names = validate_list(allowed_names, str)
 
@@ -85,8 +84,7 @@ class ProcessTemplate(BaseTemplate, HasConditionTemplates, HasParameterTemplates
 
     @allowed_labels.setter
     def allowed_labels(self, allowed_labels):
-        # if none, leave as none; don't set to the empty set
         if allowed_labels is None:
-            self._allowed_labels = allowed_labels
+            self._allowed_labels = validate_list([], str)
         else:
             self._allowed_labels = validate_list(allowed_labels, str)

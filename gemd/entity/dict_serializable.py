@@ -3,6 +3,7 @@ from logging import getLogger
 
 import json
 import inspect
+import functools
 
 # There are some weird (probably resolvable) errors during object cloning if this is an
 # instance variable of DictSerializable.
@@ -31,8 +32,7 @@ class DictSerializable(ABC):
             The deserialized object.
 
         """
-        expected_arg_names = inspect.getfullargspec(cls.__init__).args
-        expected_arg_names += inspect.getfullargspec(cls.__init__).kwonlyargs
+        expected_arg_names = cls._init_sig()
         kwargs = {}
         for name, arg in d.items():
             if name in expected_arg_names:
@@ -44,6 +44,14 @@ class DictSerializable(ABC):
         # DictSerializable's constructor is not intended for use,
         # but all of its children will use from_dict like this.
         return cls(**kwargs)
+
+    @classmethod
+    @functools.lru_cache(maxsize=None)
+    def _init_sig(cls):
+        """Internal method for generating the argument names for the class init method."""
+        expected_arg_names = inspect.getfullargspec(cls.__init__).args
+        expected_arg_names += inspect.getfullargspec(cls.__init__).kwonlyargs
+        return expected_arg_names
 
     def as_dict(self):
         """
@@ -135,14 +143,22 @@ class DictSerializable(ABC):
             name = getattr(entity, 'name', '<unknown name>')
             return "<{} '{}'>".format(type(entity).__name__, name)
 
+    def _dict_for_compare(self):
+        """Which fields & values are relevant to an equality test."""
+        return self.as_dict()
+
     def __eq__(self, other):
         if isinstance(other, DictSerializable):
-            self_dict = self.as_dict()
-            other_dict = other.as_dict()
+            self_dict = self._dict_for_compare()
+            other_dict = other._dict_for_compare()
             return self_dict == other_dict
         else:
-            return False
+            return NotImplemented
 
-    # TODO make a hash function which reflects __eq__?
+    # Note the hash function checks if objects are identical, as opposed to the equals method,
+    # which checks if fields are equal.  This is because BaseEntities are fundamentally
+    # mutable objects.  Note that if you define an __eq__ method without defining a __hash__
+    # method, the object will become unhashable.
+    # https://docs.python.org/3/reference/datamodel.html#object.__hash
     def __hash__(self):
         return super().__hash__()

@@ -1,13 +1,12 @@
 """Tests of the process spec object."""
 import pytest
+from copy import deepcopy
 
 from gemd.json import dumps, loads
-from gemd.entity.attribute.property_and_conditions import PropertyAndConditions
-from gemd.entity.object.process_spec import ProcessSpec
-from gemd.entity.object.material_spec import MaterialSpec
-from gemd.entity.object.ingredient_spec import IngredientSpec
-from gemd.entity.attribute.property import Property
-from gemd.entity.value.discrete_categorical import DiscreteCategorical
+from gemd.entity.attribute import PropertyAndConditions, Property
+from gemd.entity.object import ProcessSpec, MaterialSpec, IngredientSpec
+from gemd.entity.value import DiscreteCategorical
+from gemd.util import flatten
 
 
 def test_material_spec():
@@ -63,3 +62,23 @@ def test_invalid_assignment():
     """Omitting a name throws a TypeError."""
     with pytest.raises(TypeError):
         ProcessSpec()  # Name is required
+
+
+def test_equality():
+    """Test that equality check works as expected."""
+    spec1 = ProcessSpec("A spec")
+    spec2 = ProcessSpec("A spec", tags=["a tag"])
+
+    assert spec1 != spec2
+    spec3 = deepcopy(spec1)
+    assert spec1 == spec3, "Copy somehow failed"
+    IngredientSpec("An ingredient", process=spec3)
+    assert spec1 != spec3
+
+    spec4 = deepcopy(spec3)
+    assert spec4 == spec3, "Copy somehow failed"
+    spec4.ingredients[0].tags.append('A tag')
+    assert spec4 != spec3
+
+    spec5 = next(x for x in flatten(spec4, 'test-scope') if isinstance(x, ProcessSpec))
+    assert spec5 == spec4, "Flattening removes measurement references, but that's okay"

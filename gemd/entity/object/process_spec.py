@@ -2,6 +2,7 @@ from gemd.entity.object.base_object import BaseObject
 from gemd.entity.object.has_parameters import HasParameters
 from gemd.entity.object.has_conditions import HasConditions
 from gemd.entity.object.has_template import HasTemplate
+from gemd.entity.setters import validate_list
 
 
 class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
@@ -56,31 +57,33 @@ class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
     def __init__(self, name, *, template=None,
                  parameters=None, conditions=None,
                  uids=None, tags=None, notes=None, file_links=None):
+        from gemd.entity.object.ingredient_spec import IngredientSpec
+        from gemd.entity.link_by_uid import LinkByUID
+
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)
         HasParameters.__init__(self, parameters=parameters)
         HasConditions.__init__(self, conditions=conditions)
-
-        self._ingredients = []
+        HasTemplate.__init__(self, template=template)
 
         # By default, a ProcessSpec is not linked to any MaterialSpec.
         # If a MaterialSpec is linked to this ProcessSpec,
         # then the field self._output_material will be automatically populated
         self._output_material = None
-
-        HasTemplate.__init__(self, template=template)
+        self._ingredients = validate_list(None, [IngredientSpec, LinkByUID])
 
     @property
     def ingredients(self):
         """Get the list of input ingredient specs."""
         return self._ingredients
 
-    def _unset_ingredient(self, ingred):
-        """Remove `ingred` from this process's list of ingredients."""
-        if ingred in self._ingredients:
-            self._ingredients.remove(ingred)
-
     @property
     def output_material(self):
         """Get the output material spec."""
         return self._output_material
+
+    def _dict_for_compare(self):
+        """Support for recursive equals."""
+        base = super()._dict_for_compare()
+        base['ingredients'] = self.ingredients
+        return base
