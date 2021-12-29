@@ -71,9 +71,9 @@ class HasConditionTemplates(object):
             attr, bnd = next((x for x in self.conditions if condition.name == x[0].name),
                              (None, None))
 
-        if attr is None:
-            return True  # Nothing to check against
-        elif bnd is None:
+        if bnd is not None:
+            return bnd.contains(condition.value)
+        elif attr is not None and isinstance(attr, ConditionTemplate):
             return attr.bounds.contains(condition.value)
         else:
-            return bnd.contains(condition.value)
+            return True  # Nothing to check against

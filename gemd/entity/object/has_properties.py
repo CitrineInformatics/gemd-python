@@ -1,4 +1,5 @@
 """For entities that have properties."""
+from gemd.entity.template.has_property_templates import HasPropertyTemplates
 from gemd.entity.attribute.property import Property
 from gemd.entity.setters import validate_list
 from gemd.entity.bounds_validation import get_validation_level, WarningLevel
@@ -30,7 +31,8 @@ class HasProperties(object):
             # if Has_Templates hasn't been called yet, it won't have a _template attribute
             template = getattr(self, "template", None)
             level = get_validation_level()
-            accept = level == WarningLevel.IGNORE or template is None \
+            accept = level == WarningLevel.IGNORE \
+                or not isinstance(template, HasPropertyTemplates) \
                 or self.template.validate_property(x)
 
             if not accept:
