@@ -5,7 +5,7 @@ from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.template.condition_template import ConditionTemplate
 from gemd.entity.bounds.base_bounds import BaseBounds
 
-from typing import Iterable
+from typing import Optional, Union, Iterable, List, Tuple, Set
 
 
 class HasConditionTemplates(object):
@@ -20,12 +20,14 @@ class HasConditionTemplates(object):
 
     """
 
-    def __init__(self, conditions):
+    def __init__(self, conditions: Iterable[Union[Union[ConditionTemplate, LinkByUID],
+                                                  Tuple[Union[ConditionTemplate, LinkByUID],
+                                                        Optional[BaseBounds]]]]):
         self._conditions = None
         self.conditions = conditions
 
     @property
-    def conditions(self):
+    def conditions(self) -> List[Union[ConditionTemplate, LinkByUID]]:
         """
         Get the list of condition template/bounds tuples.
 
@@ -38,7 +40,9 @@ class HasConditionTemplates(object):
         return self._conditions
 
     @conditions.setter
-    def conditions(self, conditions):
+    def conditions(self, conditions: Iterable[Union[Union[ConditionTemplate, LinkByUID],
+                                                    Tuple[Union[ConditionTemplate, LinkByUID],
+                                                          Optional[BaseBounds]]]]):
         """
         Set the list of condition templates.
 
@@ -77,3 +81,7 @@ class HasConditionTemplates(object):
             return attr.bounds.contains(condition.value)
         else:
             return bnd.contains(condition.value)
+
+    def all_dependencies(self) -> Set[Union[ConditionTemplate, LinkByUID]]:
+        """Return a set of all immediate dependencies (no recursion)."""
+        return {attr[0] for attr in self.conditions}

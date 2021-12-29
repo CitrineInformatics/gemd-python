@@ -4,6 +4,8 @@ from gemd.entity.base_entity import BaseEntity
 from gemd.entity.file_link import FileLink
 from gemd.entity.setters import validate_list, validate_str
 
+from typing import Optional, Union, Iterable, List, Set, Mapping
+
 
 class BaseObject(BaseEntity):
     """
@@ -30,7 +32,13 @@ class BaseObject(BaseEntity):
 
     """
 
-    def __init__(self, name, *, uids=None, tags=None, notes=None, file_links=None):
+    def __init__(self,
+                 name: str,
+                 *,
+                 uids: Mapping[str, str] = None,
+                 tags: Iterable[str] = None,
+                 notes: str = None,
+                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
         BaseEntity.__init__(self, uids, tags)
         self.notes = notes
         self._name = None
@@ -52,19 +60,52 @@ class BaseObject(BaseEntity):
         return prop is None or prop.fset is not None
 
     @property
-    def name(self):
+    def name(self) -> str:
         """Get name."""
         return self._name
 
     @name.setter
-    def name(self, name):
+    def name(self, name: str):
         self._name = validate_str(name)
 
     @property
-    def file_links(self):
+    def file_links(self) -> List[FileLink]:
         """Get file links."""
         return self._file_links
 
     @file_links.setter
-    def file_links(self, file_links):
+    def file_links(self, file_links: Union[Iterable[FileLink], FileLink]):
         self._file_links = validate_list(file_links, FileLink)
+
+    def all_dependencies(self) -> Set[BaseEntity]:
+        """Return a set of all immediate dependencies (no recursion)."""
+        from gemd.entity.object.has_parameters import HasParameters
+        from gemd.entity.object.has_conditions import HasConditions
+        from gemd.entity.object.has_properties import HasProperties
+        from gemd.entity.object.has_spec import HasSpec
+        from gemd.entity.object.has_template import HasTemplate
+
+        from gemd.entity.object import IngredientRun, MaterialRun, MeasurementRun  # no ProcessRun
+        from gemd.entity.object import IngredientSpec, MaterialSpec  # no ProcessSpec
+
+        result = set()
+
+        for typ in (HasParameters, HasConditions, HasProperties, HasSpec, HasTemplate):
+            if isinstance(self, typ):
+                result |= typ.all_dependencies(self)
+        if isinstance(self, MaterialSpec):  # is structured inconsistently
+            for attr in self.properties:
+                if attr.property.template is not None:
+                    result.add(attr.property.template)
+                for condition in attr.conditions:
+                    if condition.template is not None:
+                        result.add(condition.template)
+
+        if isinstance(self, (IngredientRun, IngredientSpec, MeasurementRun)):
+            if self.material is not None:
+                result.add(self.material)
+        if isinstance(self, (IngredientRun, IngredientSpec, MaterialRun, MaterialSpec)):
+            if self.process is not None:
+                result.add(self.process)
+
+        return result

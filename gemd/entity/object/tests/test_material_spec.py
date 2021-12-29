@@ -2,9 +2,9 @@
 import pytest
 
 from gemd.entity.object import ProcessSpec, MaterialSpec
-from gemd.entity.template import MaterialTemplate, PropertyTemplate, ConditionTemplate
-from gemd.entity.attribute import Property, Condition, PropertyAndConditions
+from gemd.entity.attribute import PropertyAndConditions, Property, Condition
 from gemd.entity.bounds import IntegerBounds
+from gemd.entity.template import MaterialTemplate, PropertyTemplate, ConditionTemplate
 from gemd.entity.value import NominalInteger
 from gemd.entity.bounds_validation import validation_context, WarningLevel
 
@@ -71,3 +71,22 @@ def test_mat_spec_properties(caplog):
         with pytest.raises(ValueError):
             mat_spec.properties.append(bad_prop)
         mat_spec.properties.append(bad_cond)  # This should probably not be fine
+
+
+def test_dependencies():
+    """Test that dependency lists make sense."""
+    prop = PropertyTemplate(name="name", bounds=IntegerBounds(0, 1))
+    cond = ConditionTemplate(name="name", bounds=IntegerBounds(0, 1))
+
+    template = MaterialTemplate("measurement template")
+    spec = MaterialSpec("A spec", template=template,
+                        properties=[PropertyAndConditions(
+                            property=Property("name", template=prop, value=NominalInteger(1)),
+                            conditions=[
+                                Condition("name", template=cond, value=NominalInteger(1))
+                            ]
+                        )])
+
+    assert template in spec.all_dependencies()
+    assert cond in spec.all_dependencies()
+    assert prop in spec.all_dependencies()

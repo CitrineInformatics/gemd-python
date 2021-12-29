@@ -3,13 +3,14 @@ import pytest
 from uuid import uuid4
 
 from gemd.json import dumps, loads
+from gemd.entity.bounds import IntegerBounds
 from gemd.entity.object import MeasurementRun, MaterialRun
 from gemd.entity.object.measurement_spec import MeasurementSpec
 from gemd.entity.attribute import Condition, Parameter, Property
-from gemd.entity.template import ConditionTemplate, ParameterTemplate, PropertyTemplate
 from gemd.entity.source.performed_source import PerformedSource
-from gemd.entity.template.measurement_template import MeasurementTemplate
-from gemd.entity.value.nominal_real import NominalReal
+from gemd.entity.template import MeasurementTemplate, PropertyTemplate, ParameterTemplate, \
+    ConditionTemplate
+from gemd.entity.value import NominalReal, NominalInteger
 from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.bounds import RealBounds
@@ -166,3 +167,35 @@ def test_template_access():
 
     meas.spec = LinkByUID.from_entity(spec)
     assert meas.template is None
+
+
+def test_dependencies():
+    """Test that dependency lists make sense."""
+    prop = PropertyTemplate(name="name", bounds=IntegerBounds(0, 1))
+    cond = ConditionTemplate(name="name", bounds=IntegerBounds(0, 1))
+    param = ParameterTemplate(name="name", bounds=IntegerBounds(0, 1))
+
+    template = MeasurementTemplate("measurement template",
+                                   parameters=[param],
+                                   conditions=[cond],
+                                   properties=[prop])
+    spec = MeasurementSpec("A spec", template=template)
+    mat = MaterialRun(name="mr")
+    meas = MeasurementRun("A run", spec=spec, material=mat,
+                          properties=[
+                              Property(prop.name, template=prop, value=NominalInteger(1))
+                          ],
+                          conditions=[
+                              Condition(cond.name, template=cond, value=NominalInteger(1))
+                          ],
+                          parameters=[
+                              Parameter(param.name, template=param, value=NominalInteger(1))
+                          ]
+                          )
+
+    assert template not in meas.all_dependencies()
+    assert spec in meas.all_dependencies()
+    assert mat in meas.all_dependencies()
+    assert prop in meas.all_dependencies()
+    assert cond in meas.all_dependencies()
+    assert param in meas.all_dependencies()

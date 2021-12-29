@@ -6,7 +6,7 @@ from copy import deepcopy
 
 from gemd.json import loads, dumps
 from gemd.entity.attribute import PropertyAndConditions, Property
-from gemd.entity.object import MaterialRun, ProcessRun, MaterialSpec, MeasurementRun
+from gemd.entity.object import MaterialRun, ProcessSpec, ProcessRun, MaterialSpec, MeasurementRun
 from gemd.entity.template import MaterialTemplate
 from gemd.entity.value import NominalReal
 from gemd.entity.link_by_uid import LinkByUID
@@ -147,3 +147,15 @@ def test_equality():
 
     mat5 = next(x for x in flatten(mat4, 'test-scope') if isinstance(x, MaterialRun))
     assert mat5 == mat4, "Flattening removes measurement references, but that's okay"
+
+
+def test_dependencies():
+    """Test that dependency lists make sense."""
+    ps = ProcessSpec(name="ps")
+    pr = ProcessRun(name="pr", spec=ps)
+    ms = MaterialSpec(name="ms", process=ps)
+    mr = MaterialRun(name="mr", spec=ms, process=pr)
+
+    assert ps not in mr.all_dependencies()
+    assert pr in mr.all_dependencies()
+    assert ms in mr.all_dependencies()

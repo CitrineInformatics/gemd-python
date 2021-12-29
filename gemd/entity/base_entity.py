@@ -1,9 +1,10 @@
 """Base class for all entities."""
-from typing import Optional, Dict, FrozenSet
-from collections.abc import Collection
+from abc import abstractmethod
+from typing import Optional, Iterable, List, Set, FrozenSet, Mapping, Dict
 
 from gemd.entity.dict_serializable import DictSerializable
 from gemd.entity.case_insensitive_dict import CaseInsensitiveDict
+from gemd.entity.setters import validate_list
 
 
 class BaseEntity(DictSerializable):
@@ -25,7 +26,7 @@ class BaseEntity(DictSerializable):
 
     typ = "base"
 
-    def __init__(self, uids, tags):
+    def __init__(self, uids: Mapping[str, str], tags: Iterable[str]):
         self._tags = None
         self.tags = tags
 
@@ -33,34 +34,29 @@ class BaseEntity(DictSerializable):
         self.uids = uids
 
     @property
-    def tags(self):
+    def tags(self) -> List[str]:
         """Get the tags."""
         return self._tags
 
     @tags.setter
-    def tags(self, tags):
-        if tags is None:
-            self._tags = []
-        elif isinstance(tags, list):
-            self._tags = tags
-        else:
-            self._tags = [tags]
+    def tags(self, tags: Iterable[str]):
+        self._tags = validate_list(tags, str)
 
     @property
-    def uids(self):
+    def uids(self) -> Mapping[str, str]:
         """Get the uids."""
         return self._uids
 
     @uids.setter
-    def uids(self, uids):
+    def uids(self, uids: Mapping[str, str]):
         if uids is None:
             self._uids = CaseInsensitiveDict()
-        elif isinstance(uids, dict):
+        elif isinstance(uids, Mapping):
             self._uids = CaseInsensitiveDict(**uids)
         else:
             self._uids = CaseInsensitiveDict(**{uids[0]: uids[1]})
 
-    def add_uid(self, scope, uid):
+    def add_uid(self, scope: str, uid: str):
         """
         Add a uid.
 
@@ -106,6 +102,10 @@ class BaseEntity(DictSerializable):
 
         return LinkByUID(scope=scope, id=uid)
 
+    @abstractmethod
+    def all_dependencies(self) -> Set['BaseEntity']:
+        """Return a set of all immediate dependencies (no recursion)."""
+
     @staticmethod
     def _cached_equals(this: 'BaseEntity',
                        that: 'BaseEntity',
@@ -146,7 +146,7 @@ class BaseEntity(DictSerializable):
                 if BaseEntity._cached_equals(this_value, that_value, cache=cache) is False:
                     cache[cache_key] = False  # Mark as failed
                     return False
-            elif isinstance(this_value, Collection) and isinstance(that_value, Collection) \
+            elif isinstance(this_value, Iterable) and isinstance(that_value, Iterable) \
                     and not isinstance(this_value, str) and not isinstance(that_value, str):
                 # Necessary to maintain context for recursive parts of the structure
                 this_list = list(this_value)

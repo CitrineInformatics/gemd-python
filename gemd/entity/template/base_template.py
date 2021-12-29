@@ -4,6 +4,8 @@ from gemd.entity.bounds.base_bounds import BaseBounds
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.template.attribute_template import AttributeTemplate
 
+from typing import Union, Iterable, Set, Mapping
+
 
 class BaseTemplate(BaseEntity):
     """
@@ -26,13 +28,21 @@ class BaseTemplate(BaseEntity):
 
     """
 
-    def __init__(self, name, *, description=None, uids=None, tags=None):
+    def __init__(self,
+                 name: str,
+                 *,
+                 description: str = None,
+                 uids: Mapping[str, str] = None,
+                 tags: Iterable[str] = None):
         BaseEntity.__init__(self, uids, tags)
         self.name = name
         self.description = description
 
     @staticmethod
-    def _homogenize_ranges(template_or_tuple):
+    def _homogenize_ranges(template_or_tuple: Union[AttributeTemplate,
+                                                    LinkByUID,
+                                                    Iterable[Union[AttributeTemplate,
+                                                                   BaseBounds]]]):
         """
         Take either a template or pair and turn it into a (template, bounds) pair.
 
@@ -66,3 +76,16 @@ class BaseTemplate(BaseEntity):
                         raise ValueError("Range and template are inconsistent")
                 return [first, second]
         raise TypeError("Expected a template or (template, bounds) tuple")  # pragma: no cover
+
+    def all_dependencies(self) -> Set[AttributeTemplate]:
+        """Return a set of all immediate dependencies (no recursion)."""
+        from gemd.entity.template.has_condition_templates import HasConditionTemplates
+        from gemd.entity.template.has_parameter_templates import HasParameterTemplates
+        from gemd.entity.template.has_property_templates import HasPropertyTemplates
+
+        result = set()
+
+        for typ in (HasConditionTemplates, HasParameterTemplates, HasPropertyTemplates):
+            if isinstance(self, typ):
+                result |= typ.all_dependencies(self)
+        return result

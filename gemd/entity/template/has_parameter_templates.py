@@ -4,7 +4,8 @@ from gemd.entity.setters import validate_list
 from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.template.parameter_template import ParameterTemplate
 from gemd.entity.bounds.base_bounds import BaseBounds
-from typing import Iterable
+
+from typing import Optional, Union, Iterable, List, Tuple, Set
 
 
 class HasParameterTemplates(object):
@@ -19,12 +20,14 @@ class HasParameterTemplates(object):
 
     """
 
-    def __init__(self, parameters):
+    def __init__(self, parameters: Iterable[Union[Union[ParameterTemplate, LinkByUID],
+                                                  Tuple[Union[ParameterTemplate, LinkByUID],
+                                                        Optional[BaseBounds]]]]):
         self._parameters = None
         self.parameters = parameters
 
     @property
-    def parameters(self):
+    def parameters(self) -> List[Union[ParameterTemplate, LinkByUID]]:
         """
         Get the list of parameter template/bounds tuples.
 
@@ -37,7 +40,9 @@ class HasParameterTemplates(object):
         return self._parameters
 
     @parameters.setter
-    def parameters(self, parameters):
+    def parameters(self, parameters: Iterable[Union[Union[ParameterTemplate, LinkByUID],
+                                                    Tuple[Union[ParameterTemplate, LinkByUID],
+                                                          Optional[BaseBounds]]]]):
         """
         Set the list of parameter templates.
 
@@ -76,3 +81,7 @@ class HasParameterTemplates(object):
             return attr.bounds.contains(parameter.value)
         else:
             return bnd.contains(parameter.value)
+
+    def all_dependencies(self) -> Set[Union[ParameterTemplate, LinkByUID]]:
+        """Return a set of all immediate dependencies (no recursion)."""
+        return {attr[0] for attr in self.parameters}

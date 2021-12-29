@@ -1,11 +1,20 @@
+from gemd.entity.object.process_spec import ProcessSpec
 from gemd.entity.object.base_object import BaseObject
+from gemd.entity.object.has_spec import HasSpec
 from gemd.entity.object.has_conditions import HasConditions
 from gemd.entity.object.has_parameters import HasParameters
 from gemd.entity.object.has_source import HasSource
+from gemd.entity.attribute.condition import Condition
+from gemd.entity.attribute.parameter import Parameter
+from gemd.entity.source.performed_source import PerformedSource
+from gemd.entity.file_link import FileLink
+from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.setters import validate_list
 
+from typing import Optional, Union, Iterable, List, Mapping, Dict, Type, Any
 
-class ProcessRun(BaseObject, HasConditions, HasParameters, HasSource):
+
+class ProcessRun(BaseObject, HasSpec, HasConditions, HasParameters, HasSource):
     """
     A process run.
 
@@ -55,59 +64,45 @@ class ProcessRun(BaseObject, HasConditions, HasParameters, HasSource):
 
     skip = {"_output_material", "_ingredients"}
 
-    def __init__(self, name, *, spec=None,
-                 conditions=None, parameters=None,
-                 uids=None, tags=None, notes=None, file_links=None, source=None):
+    def __init__(self,
+                 name: str,
+                 *,
+                 spec: Union[ProcessSpec, LinkByUID] = None,
+                 conditions: Iterable[Condition] = None,
+                 parameters: Iterable[Parameter] = None,
+                 uids: Mapping[str, str] = None,
+                 tags: Iterable[str] = None,
+                 notes: str = None,
+                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
+                 source: PerformedSource = None):
         from gemd.entity.object.ingredient_run import IngredientRun
-        from gemd.entity.link_by_uid import LinkByUID
 
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)
+        HasSpec.__init__(self, spec=spec)
         HasConditions.__init__(self, conditions)
         HasParameters.__init__(self, parameters)
         HasSource.__init__(self, source)
 
-        self._spec = None
-        self.spec = spec
-        self._output_material = None
         self._ingredients = validate_list(None, [IngredientRun, LinkByUID])
+        self._output_material = None
 
     @property
-    def output_material(self):
+    def output_material(self) -> Optional["MaterialRun"]:
         """Get the output material run."""
         return self._output_material
 
     @property
-    def ingredients(self):
+    def ingredients(self) -> List["IngredientRun"]:
         """Get the input ingredient runs."""
         return self._ingredients
 
-    @property
-    def spec(self):
-        """Get the process spec."""
-        return self._spec
+    @staticmethod
+    def _spec_type() -> Type:
+        """Required method to satisfy HasTemplates mix-in."""
+        return ProcessSpec
 
-    @spec.setter
-    def spec(self, spec):
-        from gemd.entity.object.process_spec import ProcessSpec
-        from gemd.entity.link_by_uid import LinkByUID
-        if spec is None:
-            self._spec = None
-        elif isinstance(spec, (ProcessSpec, LinkByUID)):
-            self._spec = spec
-        else:
-            raise TypeError("spec must be a ProcessSpec or LinkByUID: {}".format(spec))
-
-    @property
-    def template(self):
-        """Get the template of the spec, if applicable."""
-        from gemd.entity.object.process_spec import ProcessSpec
-        if isinstance(self.spec, ProcessSpec):
-            return self.spec.template
-        else:
-            return None
-
-    def _dict_for_compare(self):
+    def _dict_for_compare(self) -> Dict[str, Any]:
         """Support for recursive equals."""
         base = super()._dict_for_compare()
         base['ingredients'] = self.ingredients
