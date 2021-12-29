@@ -2,6 +2,8 @@ from gemd.entity.attribute.property_and_conditions import PropertyAndConditions
 from gemd.entity.object.base_object import BaseObject
 from gemd.entity.object.has_template import HasTemplate
 from gemd.entity.setters import validate_list
+from gemd.entity.bounds_validation import get_validation_level, WarningLevel
+from gemd.entity.dict_serializable import logger
 
 
 class MaterialSpec(BaseObject, HasTemplate):
@@ -58,7 +60,24 @@ class MaterialSpec(BaseObject, HasTemplate):
 
     @properties.setter
     def properties(self, properties):
-        self._properties = validate_list(properties, PropertyAndConditions)
+        def _template_check(x: PropertyAndConditions) -> PropertyAndConditions:
+            # if Has_Templates hasn't been called yet, it won't have a _template attribute
+            template = getattr(self, "template", None)
+            level = get_validation_level()
+            accept = level == WarningLevel.IGNORE or template is None \
+                or self.template.validate_property(x)
+
+            if not accept:
+                message = f"Value {x.value} is inconsistent with template {template.name}"
+                if level == WarningLevel.WARNING:
+                    logger.warning(message)
+                else:
+                    raise ValueError(message)
+            return x
+
+        self._properties = validate_list(properties,
+                                         PropertyAndConditions,
+                                         trigger=_template_check)
 
     @property
     def process(self):

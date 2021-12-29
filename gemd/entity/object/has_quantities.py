@@ -1,8 +1,9 @@
 """For entities that hve quantities."""
 from gemd.entity.bounds.real_bounds import RealBounds
 from gemd.entity.value.continuous_value import ContinuousValue
-
-fraction_bounds = RealBounds(lower_bound=0.0, upper_bound=1.0, default_units='')
+from gemd.entity.value.base_value import BaseValue
+from gemd.entity.bounds_validation import get_validation_level, WarningLevel
+from gemd.entity.dict_serializable import logger
 
 
 class HasQuantities(object):
@@ -41,6 +42,18 @@ class HasQuantities(object):
         self._absolute_quantity = None
         self.absolute_quantity = absolute_quantity
 
+    @staticmethod
+    def _check(value: BaseValue):
+        fraction_bounds = RealBounds(lower_bound=0.0, upper_bound=1.0, default_units='')
+        level = get_validation_level()
+        accept = level == WarningLevel.IGNORE or fraction_bounds.contains(value)
+        if not accept:
+            message = f"Value {value} is not between 0 and 1."
+            if level == WarningLevel.WARNING:
+                logger.warning(message)
+            else:
+                raise ValueError(message)
+
     @property
     def mass_fraction(self):
         """Get mass fraction."""
@@ -53,6 +66,7 @@ class HasQuantities(object):
         elif not isinstance(mass_fraction, ContinuousValue):
             raise TypeError("mass_fraction was not given as a continuous value")
         else:
+            self._check(mass_fraction)
             self._mass_fraction = mass_fraction
 
     @property
@@ -67,6 +81,7 @@ class HasQuantities(object):
         elif not isinstance(volume_fraction, ContinuousValue):
             raise TypeError("volume_fraction was not given as a continuous value")
         else:
+            self._check(volume_fraction)
             self._volume_fraction = volume_fraction
 
     @property
@@ -81,6 +96,7 @@ class HasQuantities(object):
         elif not isinstance(number_fraction, ContinuousValue):
             raise TypeError("number_fraction was not given as a continuous value")
         else:
+            self._check(number_fraction)
             self._number_fraction = number_fraction
 
     @property
