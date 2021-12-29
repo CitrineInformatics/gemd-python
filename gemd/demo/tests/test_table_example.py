@@ -3,7 +3,7 @@ import pandas as pd
 
 from gemd.json import load, dump
 from gemd.entity.object import MaterialRun
-from gemd.ingest.table_example import ingest_table
+from gemd.demo.table_example import ingest_table
 
 
 data = [
