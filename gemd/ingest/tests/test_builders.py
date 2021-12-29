@@ -10,7 +10,10 @@ import pytest
 
 
 class UnsupportedBounds(BaseBounds):
-    def contains(self, bounds):  # pragma: no cover  Only here to satisfy abstract method
+    """Dummy class to provide an invalid bounds type."""
+
+    def contains(self, bounds):  # pragma: no cover
+        """Only here to satisfy abstract method."""
         super().contains(bounds)
 
 
@@ -23,7 +26,8 @@ def test_build():
 
     prop_tmpl = PropertyTemplate(name="Property", bounds=RealBounds(0, 10, "m"))
     cond_tmpl = ConditionTemplate(name="Condition", bounds=CategoricalBounds(["a", "b", "c"]))
-    param_tmpl = ParameterTemplate(name="Parameter", bounds=CompositionBounds(EmpiricalFormula.all_elements()))
+    param_tmpl = ParameterTemplate(name="Parameter",
+                                   bounds=CompositionBounds(EmpiricalFormula.all_elements()))
     mol_tmpl = PropertyTemplate(name="Molecule", bounds=MolecularStructureBounds())
     int_tmpl = ConditionTemplate(name="Integer", bounds=IntegerBounds(0, 10))
     bad_tmpl = PropertyTemplate(name="Bad", bounds=UnsupportedBounds())
