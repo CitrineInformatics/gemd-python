@@ -74,9 +74,9 @@ class HasPropertyTemplates(object):
             attr, bnd = next((x for x in self.properties if prop.name == x[0].name),
                              (None, None))
 
-        if attr is None:
-            return True  # Nothing to check against
-        elif bnd is None:
+        if bnd is not None:
+            return bnd.contains(prop.value)
+        elif attr is not None and isinstance(attr, PropertyTemplate):
             return attr.bounds.contains(prop.value)
         else:
-            return bnd.contains(prop.value)
+            return True  # Nothing to check against

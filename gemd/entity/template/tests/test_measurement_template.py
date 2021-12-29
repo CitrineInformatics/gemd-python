@@ -133,3 +133,67 @@ def test_mixins():
     assert second.validate_property(
         PropertyAndConditions(property=Property("Name", value=good_val))), \
         "PropertyAndConditions didn't fall back to Property."
+
+
+def test_links_as_templates():
+    """Verify that LinkByUIDs don't break anything we could have otherwise done."""
+    prop_tmpl = PropertyTemplate("Name", uids={"scope": "prop"}, bounds=IntegerBounds(1, 5))
+    cond_tmpl = ConditionTemplate("Name", uids={"scope": "cond"}, bounds=IntegerBounds(1, 5))
+    param_tmpl = ParameterTemplate("Name", uids={"scope": "param"}, bounds=IntegerBounds(1, 5))
+    no_bounds = MeasurementTemplate("Name",
+                                    properties=[prop_tmpl],
+                                    conditions=[cond_tmpl],
+                                    parameters=[param_tmpl],
+                                    )
+
+    just_right = NominalInteger(2)
+    middling = NominalInteger(4)
+    too_high = NominalInteger(7)
+
+    scenarios = [
+        ("property", Property, MeasurementTemplate.validate_property, prop_tmpl),
+        ("condition", Condition, MeasurementTemplate.validate_condition, cond_tmpl),
+        ("parameter", Parameter, MeasurementTemplate.validate_parameter, param_tmpl),
+    ]
+
+    # Check that Attributes are checked against the template when the attributes links
+    for scenario in scenarios:
+        name, attr, validate, tmpl = scenario
+
+        assert validate(no_bounds,
+                        attr("Other name", template=tmpl.to_link(), value=middling)), \
+            f"{name} didn't validate with {name}.template as LinkByUID."
+        assert not validate(no_bounds,
+                            attr("Other name", template=tmpl.to_link(), value=too_high)), \
+            f"{name} DID validate with {name}.template as LinkByUID and bad value."
+
+    with_bounds = MeasurementTemplate("Name",
+                                      properties=[(prop_tmpl.to_link(), IntegerBounds(1, 3))],
+                                      conditions=[(cond_tmpl.to_link(), IntegerBounds(1, 3))],
+                                      parameters=[(param_tmpl.to_link(), IntegerBounds(1, 3))],
+                                      )
+
+    # Check that Attributes are checked against the bounds when the attributes links
+    for scenario in scenarios:
+        name, attr, validate, tmpl = scenario
+
+        assert validate(with_bounds,
+                        attr("Other name", template=tmpl.to_link(), value=just_right)), \
+            f"{name} didn't validate with {name}.template as LinkByUID and bounds."
+        assert not validate(with_bounds,
+                            attr("Other name", template=tmpl.to_link(), value=middling)), \
+            f"{name} DID validate with {name}.template as LinkByUID, bad value, and bounds."
+
+    with_links = MeasurementTemplate("Name",
+                                     properties=[(prop_tmpl.to_link())],
+                                     conditions=[(cond_tmpl.to_link())],
+                                     parameters=[(param_tmpl.to_link())],
+                                     )
+
+    # Check that tests pass when there's no way to test
+    for scenario in scenarios:
+        name, attr, validate, tmpl = scenario
+
+        assert validate(with_links,
+                        attr("Other name", template=tmpl.to_link(), value=too_high)), \
+            f"{name} didn't validate with LinkByUID for everything."
