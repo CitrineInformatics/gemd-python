@@ -1,4 +1,5 @@
 """For entities that have conditions."""
+from gemd.entity.template.has_condition_templates import HasConditionTemplates
 from gemd.entity.attribute.condition import Condition
 from gemd.entity.template.condition_template import ConditionTemplate
 from gemd.entity.setters import validate_list
@@ -34,7 +35,8 @@ class HasConditions(object):
             # if Has_Templates hasn't been called yet, it won't have a _template attribute
             template = getattr(self, "template", None)
             level = get_validation_level()
-            accept = level == WarningLevel.IGNORE or template is None \
+            accept = level == WarningLevel.IGNORE \
+                or not isinstance(template, HasConditionTemplates) \
                 or self.template.validate_condition(x)
 
             if not accept:

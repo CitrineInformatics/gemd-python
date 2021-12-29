@@ -75,12 +75,12 @@ class HasParameterTemplates(object):
             attr, bnd = next((x for x in self.parameters if parameter.name == x[0].name),
                              (None, None))
 
-        if attr is None:
-            return True  # Nothing to check against
-        elif bnd is None:
+        if bnd is not None:
+            return bnd.contains(parameter.value)
+        elif attr is not None and isinstance(attr, ParameterTemplate):
             return attr.bounds.contains(parameter.value)
         else:
-            return bnd.contains(parameter.value)
+            return True  # Nothing to check against
 
     def all_dependencies(self) -> Set[Union[ParameterTemplate, LinkByUID]]:
         """Return a set of all immediate dependencies (no recursion)."""

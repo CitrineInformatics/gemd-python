@@ -3,6 +3,7 @@ from gemd.entity.object.process_spec import ProcessSpec
 from gemd.entity.object.base_object import BaseObject
 from gemd.entity.object.has_template import HasTemplate
 from gemd.entity.template.material_template import MaterialTemplate
+from gemd.entity.template.has_property_templates import HasPropertyTemplates
 from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.setters import validate_list
@@ -78,7 +79,8 @@ class MaterialSpec(BaseObject, HasTemplate):
             # if Has_Templates hasn't been called yet, it won't have a _template attribute
             template = getattr(self, "template", None)
             level = get_validation_level()
-            accept = level == WarningLevel.IGNORE or template is None \
+            accept = level == WarningLevel.IGNORE \
+                or not isinstance(template, HasPropertyTemplates) \
                 or self.template.validate_property(x)
 
             if not accept:

@@ -1,4 +1,5 @@
 """For entities that have parameters."""
+from gemd.entity.template.has_parameter_templates import HasParameterTemplates
 from gemd.entity.attribute.parameter import Parameter
 from gemd.entity.template.parameter_template import ParameterTemplate
 from gemd.entity.setters import validate_list
@@ -34,7 +35,8 @@ class HasParameters(object):
             # if Has_Templates hasn't been called yet, it won't have a _template attribute
             template = getattr(self, "template", None)
             level = get_validation_level()
-            accept = level == WarningLevel.IGNORE or template is None \
+            accept = level == WarningLevel.IGNORE \
+                or not isinstance(template, HasParameterTemplates) \
                 or self.template.validate_parameter(x)
 
             if not accept:
