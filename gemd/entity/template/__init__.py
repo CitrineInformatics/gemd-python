@@ -6,3 +6,6 @@ from .parameter_template import ParameterTemplate
 from .material_template import MaterialTemplate
 from .measurement_template import MeasurementTemplate
 from .process_template import ProcessTemplate
+
+__all__ = ["PropertyTemplate", "ConditionTemplate", "ParameterTemplate",
+           "ProcessTemplate", "MaterialTemplate", "MeasurementTemplate"]
