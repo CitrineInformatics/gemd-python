@@ -9,7 +9,7 @@ from gemd.entity.value.normal_real import NormalReal
 from gemd.entity.value.nominal_integer import NominalInteger
 from gemd.entity.value.nominal_categorical import NominalCategorical
 from gemd.entity.value.empirical_formula import EmpiricalFormula
-from gemd.entity.bounds_validation import validation_context, WarningLevel
+from gemd.entity.bounds_validation import validation_level, WarningLevel
 
 
 def test_ingredient_reassignment():
@@ -56,7 +56,7 @@ def test_valid_quantities(valid_quantity, caplog):
     There are no restrictions on the value or the units. Although a volume fraction of -5 kg
     does not make physical sense, it will not throw an error.
     """
-    with validation_context(WarningLevel.IGNORE):
+    with validation_level(WarningLevel.IGNORE):
         ingred = IngredientSpec(name="name", mass_fraction=valid_quantity)
         assert ingred.mass_fraction == valid_quantity
         ingred = IngredientSpec(name="name", volume_fraction=valid_quantity)
@@ -70,14 +70,14 @@ def test_valid_quantities(valid_quantity, caplog):
 
 def test_validation_control(caplog):
     """Verify that when validation is requested, limits are enforced."""
-    with validation_context(WarningLevel.WARNING):
+    with validation_level(WarningLevel.WARNING):
         IngredientSpec(name="name", mass_fraction=NominalReal(0.5, ''))
         assert len(caplog.records) == 0, "Warned on valid values with WARNING."
         IngredientSpec(name="name", mass_fraction=NominalReal(5, ''))
         assert len(caplog.records) == 1, "Didn't warn on invalid values with WARNING."
         IngredientSpec(name="name", mass_fraction=NominalReal(0.5, 'm'))
         assert len(caplog.records) == 2, "Didn't warn on invalid units with WARNING."
-    with validation_context(WarningLevel.FATAL):
+    with validation_level(WarningLevel.FATAL):
         # The following should not raise an exception
         IngredientSpec(name="name", mass_fraction=NominalReal(0.5, ''))
         with pytest.raises(ValueError):

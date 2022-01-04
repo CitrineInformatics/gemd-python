@@ -12,7 +12,7 @@ from gemd.entity.setters import validate_list
 from typing import Optional, Union, Iterable, List, Mapping, Dict, Type, Any
 
 
-class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
+class ProcessSpec(BaseObject, HasTemplate, HasParameters, HasConditions):
     """
     A process specification.
 
@@ -76,9 +76,9 @@ class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
 
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)
+        HasTemplate.__init__(self, template=template)
         HasParameters.__init__(self, parameters=parameters)
         HasConditions.__init__(self, conditions=conditions)
-        HasTemplate.__init__(self, template=template)
 
         # By default, a ProcessSpec is not linked to any MaterialSpec.
         # If a MaterialSpec is linked to this ProcessSpec,

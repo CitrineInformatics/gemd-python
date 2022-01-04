@@ -32,7 +32,7 @@ def set_validation_level(level: WarningLevel):
 
 
 @contextmanager
-def validation_context(level: WarningLevel):
+def validation_level(level: WarningLevel):
     """Provide a context for setting a WarningLevel locally."""
     global BOUNDS_VALIDATION
     # Swap values and store

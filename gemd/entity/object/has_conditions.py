@@ -3,10 +3,11 @@ from gemd.entity.has_dependencies import HasDependencies
 from gemd.entity.template.has_condition_templates import HasConditionTemplates
 from gemd.entity.attribute.condition import Condition
 from gemd.entity.setters import validate_list
-from gemd.entity.bounds_validation import get_validation_level, WarningLevel
-from gemd.entity.dict_serializable import logger
 
-from typing import Union, Iterable, List, Set
+from abc import abstractmethod
+from typing import Union, Iterable, List, Set, Callable, TypeVar
+
+T = TypeVar('T')
 
 
 class HasConditions(HasDependencies):
@@ -28,26 +29,15 @@ class HasConditions(HasDependencies):
         """Get a list of the conditions."""
         return self._conditions
 
+    @abstractmethod
+    def _generate_template_check(self, validate: Callable[[T], bool]) -> Callable[[T], T]:
+        """Generate a closure for the object and the validation routine."""
+
     @conditions.setter
     def conditions(self, conditions: Iterable[Condition]):
         """Set the list of conditions."""
-        def _template_check(x: Condition) -> Condition:
-            # if Has_Templates hasn't been called yet, it won't have a _template attribute
-            template = getattr(self, "template", None)
-            level = get_validation_level()
-            accept = level == WarningLevel.IGNORE \
-                or not isinstance(template, HasConditionTemplates) \
-                or self.template.validate_condition(x)
-
-            if not accept:
-                message = f"Value {x.value} is inconsistent with template {template.name}"
-                if level == WarningLevel.WARNING:
-                    logger.warning(message)
-                else:
-                    raise ValueError(message)
-            return x
-
-        self._conditions = validate_list(conditions, Condition, trigger=_template_check)
+        checker = self._generate_template_check(HasConditionTemplates.validate_condition)
+        self._conditions = validate_list(conditions, Condition, trigger=checker)
 
     def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:
         """Return a set of all immediate dependencies (no recursion)."""

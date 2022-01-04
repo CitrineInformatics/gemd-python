@@ -11,7 +11,7 @@ from gemd.entity.link_by_uid import LinkByUID
 from typing import Optional, Union, Iterable, Mapping, Type
 
 
-class MeasurementSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
+class MeasurementSpec(BaseObject, HasTemplate, HasParameters, HasConditions):
     """
     A measurement specification.
 
@@ -59,9 +59,9 @@ class MeasurementSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
                  file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)
+        HasTemplate.__init__(self, template=template)
         HasParameters.__init__(self, parameters=parameters)
         HasConditions.__init__(self, conditions=conditions)
-        HasTemplate.__init__(self, template=template)
 
     @staticmethod
     def _template_type() -> Type:

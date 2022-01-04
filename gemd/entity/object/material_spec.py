@@ -8,8 +8,6 @@ from gemd.entity.template.material_template import MaterialTemplate
 from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.setters import validate_list
-from gemd.entity.bounds_validation import get_validation_level, WarningLevel
-from gemd.entity.dict_serializable import logger
 
 from typing import Optional, Union, Iterable, List, Set, Mapping, Type
 
@@ -62,11 +60,11 @@ class MaterialSpec(BaseObject, HasTemplate, HasProcess):
                  file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)
+        HasTemplate.__init__(self, template)
         self._properties = None
         self.properties = properties
         self._process = None
         self.process = process
-        HasTemplate.__init__(self, template)
 
     @property
     def properties(self) -> List[PropertyAndConditions]:
@@ -76,25 +74,8 @@ class MaterialSpec(BaseObject, HasTemplate, HasProcess):
     @properties.setter
     def properties(self, properties: Iterable[PropertyAndConditions]):
         """Set the list of property-and-conditions."""
-        def _template_check(x: PropertyAndConditions) -> PropertyAndConditions:
-            # if Has_Templates hasn't been called yet, it won't have a _template attribute
-            template = getattr(self, "template", None)
-            level = get_validation_level()
-            accept = level == WarningLevel.IGNORE \
-                or not isinstance(template, HasPropertyTemplates) \
-                or self.template.validate_property(x)
-
-            if not accept:
-                message = f"Value {x.value} is inconsistent with template {template.name}"
-                if level == WarningLevel.WARNING:
-                    logger.warning(message)
-                else:
-                    raise ValueError(message)
-            return x
-
-        self._properties = validate_list(properties,
-                                         PropertyAndConditions,
-                                         trigger=_template_check)
+        checker = self._generate_template_check(HasPropertyTemplates.validate_property)
+        self._properties = validate_list(properties, PropertyAndConditions, trigger=checker)
 
     @property
     def process(self) -> Union[ProcessSpec, LinkByUID]:

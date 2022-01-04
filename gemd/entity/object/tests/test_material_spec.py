@@ -6,7 +6,7 @@ from gemd.entity.bounds import IntegerBounds
 from gemd.entity.object import ProcessSpec, MaterialSpec
 from gemd.entity.template import MaterialTemplate, PropertyTemplate, ConditionTemplate
 from gemd.entity.value import NominalInteger
-from gemd.entity.bounds_validation import validation_context, WarningLevel
+from gemd.entity.bounds_validation import validation_level, WarningLevel
 
 
 def test_process_reassignment():
@@ -52,21 +52,21 @@ def test_mat_spec_properties(caplog):
         property=Property("Name", value=NominalInteger(1), template=prop_tmpl),
         conditions=[Condition("Name", value=NominalInteger(2), template=cond_tmpl)]
     )
-    with validation_context(WarningLevel.IGNORE):
+    with validation_level(WarningLevel.IGNORE):
         mat_spec.properties.append(good_prop)
         assert len(caplog.records) == 0, "Warning encountered on IGNORE"
         mat_spec.properties.append(bad_prop)
         assert len(caplog.records) == 0, "Warning encountered on IGNORE"
         mat_spec.properties.append(bad_cond)
         assert len(caplog.records) == 0, "Warning encountered on IGNORE"
-    with validation_context(WarningLevel.WARNING):
+    with validation_level(WarningLevel.WARNING):
         mat_spec.properties.append(good_prop)
         assert len(caplog.records) == 0, "Warning encountered on Good value"
         mat_spec.properties.append(bad_prop)
         assert len(caplog.records) == 1, "No warning encountered on Bad Value"
         mat_spec.properties.append(bad_cond)
         assert len(caplog.records) == 1, "Warning encountered on Bad condition"
-    with validation_context(WarningLevel.FATAL):
+    with validation_level(WarningLevel.FATAL):
         mat_spec.properties.append(good_prop)  # This is fine
         with pytest.raises(ValueError):
             mat_spec.properties.append(bad_prop)

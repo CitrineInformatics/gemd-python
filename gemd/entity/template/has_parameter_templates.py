@@ -83,7 +83,6 @@ class HasParameterTemplates(HasDependencies):
         else:
             return True  # Nothing to check against
 
-
     def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {attr[0] for attr in self.parameters}

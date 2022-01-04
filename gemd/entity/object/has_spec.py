@@ -5,7 +5,9 @@ from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.link_by_uid import LinkByUID
 
 from abc import abstractmethod
-from typing import Optional, Union, Set, Type
+from typing import Optional, Union, Set, Type, Callable, TypeVar
+
+T = TypeVar('T')
 
 
 class HasSpec(HasDependencies):
@@ -50,6 +52,12 @@ class HasSpec(HasDependencies):
             return self.spec.template
         else:
             return None
+
+    def _generate_template_check(self,
+                                 validate: Callable[[Union["HasSpec", "HasTemplate"], T], bool]
+                                 ) -> Callable[[T], T]:
+        """Generate a closure for the object and the validation routine (from HasTemplate)."""
+        return HasTemplate._generate_template_check(self, validate)
 
     def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:
         """Return a set of all immediate dependencies (no recursion)."""
