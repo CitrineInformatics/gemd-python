@@ -8,3 +8,6 @@ from .measurement_spec import MeasurementSpec
 from .process_spec import ProcessSpec
 from .ingredient_run import IngredientRun
 from .ingredient_spec import IngredientSpec
+
+__all__ = ["ProcessSpec", "MaterialSpec", "IngredientSpec", "MeasurementSpec",
+           "ProcessRun", "MaterialRun", "IngredientRun", "MeasurementRun"]
