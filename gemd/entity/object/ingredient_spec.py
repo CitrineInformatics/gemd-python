@@ -1,9 +1,19 @@
+from gemd.entity.object.material_spec import MaterialSpec
+from gemd.entity.object.process_spec import ProcessSpec
 from gemd.entity.object.base_object import BaseObject
+from gemd.entity.object.has_material import HasMaterial
+from gemd.entity.object.has_process import HasProcess
 from gemd.entity.object.has_quantities import HasQuantities
+from gemd.entity.object.has_template import HasTemplate
+from gemd.entity.value.continuous_value import ContinuousValue
+from gemd.entity.file_link import FileLink
+from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.setters import validate_list
 
+from typing import Optional, Union, Iterable, List, Mapping, Type
 
-class IngredientSpec(BaseObject, HasQuantities):
+
+class IngredientSpec(BaseObject, HasQuantities, HasTemplate, HasMaterial, HasProcess):
     """
     An ingredient specification.
 
@@ -48,10 +58,20 @@ class IngredientSpec(BaseObject, HasQuantities):
 
     typ = "ingredient_spec"
 
-    def __init__(self, name, *, material=None, process=None, labels=None,
-                 mass_fraction=None, volume_fraction=None, number_fraction=None,
-                 absolute_quantity=None,
-                 uids=None, tags=None, notes=None, file_links=None):
+    def __init__(self,
+                 name: str,
+                 *,
+                 material: Union[MaterialSpec, LinkByUID] = None,
+                 process: Union[ProcessSpec, LinkByUID] = None,
+                 labels: Iterable[str] = None,
+                 mass_fraction: ContinuousValue = None,
+                 volume_fraction: ContinuousValue = None,
+                 number_fraction: ContinuousValue = None,
+                 absolute_quantity: ContinuousValue = None,
+                 uids: Mapping[str, str] = None,
+                 tags: Iterable[str] = None,
+                 notes: str = None,
+                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
 
         BaseObject.__init__(self, name=name,
                             uids=uids, tags=tags, notes=notes, file_links=file_links)
@@ -68,23 +88,22 @@ class IngredientSpec(BaseObject, HasQuantities):
         self.process = process
 
     @property
-    def labels(self):
+    def labels(self) -> List[str]:
         """Get labels."""
         return self._labels
 
     @labels.setter
-    def labels(self, labels):
+    def labels(self, labels: Iterable[str]):
         self._labels = validate_list(labels, str)
 
     @property
-    def material(self):
+    def material(self) -> Union[MaterialSpec, LinkByUID]:
         """Get the material spec."""
         return self._material
 
     @material.setter
-    def material(self, material):
-        from gemd.entity.object.material_spec import MaterialSpec
-        from gemd.entity.link_by_uid import LinkByUID
+    def material(self, material: Union[MaterialSpec, LinkByUID]):
+        """Set the material spec."""
         if material is None:
             self._material = None
         elif isinstance(material, (MaterialSpec, LinkByUID)):
@@ -93,14 +112,13 @@ class IngredientSpec(BaseObject, HasQuantities):
             raise TypeError("IngredientSpec.material must be a MaterialSpec or LinkByUID")
 
     @property
-    def process(self):
-        """Get the material."""
+    def process(self) -> Union[ProcessSpec, LinkByUID]:
+        """Get the process."""
         return self._process
 
     @process.setter
-    def process(self, process):
-        from gemd.entity.object import ProcessSpec
-        from gemd.entity.link_by_uid import LinkByUID
+    def process(self, process: Union[ProcessSpec, LinkByUID]):
+        """Set the process."""
         if isinstance(self._process, ProcessSpec):
             # This could throw an exception if it's not in the list, but then something else broke
             self._process.ingredients.remove(self)
@@ -112,3 +130,18 @@ class IngredientSpec(BaseObject, HasQuantities):
         else:
             raise TypeError("IngredientSpec.process must be a ProcessSpec or "
                             "LinkByUID: {}".format(process))
+
+    @property
+    def template(self):
+        """Ingredients do not have templates, so this method always returns None."""
+        return None
+
+    @template.setter
+    def template(self, template):
+        """Ingredients do not have templates, so this method always raises an exception."""
+        raise AttributeError("Ingredients do not support a template.")
+
+    @staticmethod
+    def _template_type() -> Type:
+        """Required method to satisfy HasTemplates mix-in."""
+        return type(None)

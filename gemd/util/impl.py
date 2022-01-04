@@ -1,14 +1,14 @@
 """Utility functions."""
 import uuid
 import functools
-from typing import Dict, Callable, Union, Type, Tuple, List, Any, Optional
+from typing import Optional, Union, Type, Iterable, MutableSequence, List, Tuple, Mapping, \
+    Callable, Any, Reversible, ByteString
 from warnings import warn
 
 from gemd.entity.base_entity import BaseEntity
 from gemd.entity.dict_serializable import DictSerializable
 from gemd.entity.link_by_uid import LinkByUID
 
-from collections.abc import Reversible, Iterable, ByteString
 from toolz import concatv
 
 
@@ -87,7 +87,7 @@ def _cached_issubclass(
 def _substitute(thing: Any,
                 sub: Callable[[object], object],
                 applies: Callable[[object], bool],
-                visited: Dict[object, object] = None) -> object:
+                visited: Mapping[object, object] = None) -> object:
     """
     Generic recursive substitute function.
 
@@ -116,11 +116,11 @@ def _substitute(thing: Any,
     else:
         replacement = thing
 
-    if _cached_isinstance(replacement, list):
+    if _cached_isinstance(replacement, MutableSequence):
         new = [_substitute(x, sub, applies, visited) for x in replacement]
-    elif _cached_isinstance(replacement, tuple):
+    elif _cached_isinstance(replacement, Tuple):
         new = tuple(_substitute(x, sub, applies, visited) for x in replacement)
-    elif _cached_isinstance(replacement, dict):
+    elif _cached_isinstance(replacement, Mapping):
         new = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
                for k, v in replacement.items()}
     elif _cached_isinstance(replacement, DictSerializable):
@@ -139,7 +139,7 @@ def _substitute(thing: Any,
 def _substitute_inplace(thing: Any,
                         sub: Callable[[object], object],
                         applies: Callable[[object], bool],
-                        visited: Dict[object, object] = None) -> object:
+                        visited: Mapping[object, object] = None) -> object:
     """
     Generic recursive in-place substitute function.
 
@@ -177,13 +177,13 @@ def _substitute_inplace(thing: Any,
     if orig_key is not None:
         visited[orig_key] = thing  # Store before we start recursing
 
-    if _cached_isinstance(thing, list):  # Change list in place
+    if _cached_isinstance(thing, MutableSequence):  # Change list in place
         for i, x in enumerate(thing):
             thing[i] = _substitute_inplace(x, sub, applies, visited)
-    elif _cached_isinstance(thing, tuple):  # Tuples are immutable; regenerate
+    elif _cached_isinstance(thing, Tuple):  # Tuples are immutable; regenerate
         thing = tuple(_substitute_inplace(x, sub, applies, visited) for x in thing)
         visited[orig_key] = thing  # We mutated it
-    elif _cached_isinstance(thing, dict):  # Change dict in place, both keys & values
+    elif _cached_isinstance(thing, Mapping):  # Change dict in place, both keys & values
         remove = set()  # Store todos because can't mutate a dict in a loop
         update = dict()
         for k, v in thing.items():
@@ -242,7 +242,7 @@ def _setter_by_attribute(clazz: type, attribute: str) -> Callable:
     return setter
 
 
-def make_index(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable]):
+def make_index(obj: Union[Iterable, BaseEntity, DictSerializable]):
     """
     Generates an index that can be used for the substitute_objects method.
 
@@ -252,7 +252,7 @@ def make_index(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable]):
 
     Parameters
     ----------
-    obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable]
+    obj: Union[Iterable, Mapping, BaseEntity, DictSerializable]
         target container (dict, list, ..) from which to create an index of GEMD objects
 
     """
@@ -340,7 +340,7 @@ def substitute_objects(obj,
                   applies=lambda o: _cached_isinstance(o, LinkByUID))
 
 
-def flatten(obj, scope=None):
+def flatten(obj, scope=None) -> List[BaseEntity]:
     """
     Flatten a BaseEntity (or array of them) into a list of objects connected by LinkByUID objects.
 
@@ -397,7 +397,7 @@ def flatten(obj, scope=None):
     return sorted([substitute_links(x) for x in res], key=lambda x: writable_sort_order(x))
 
 
-def recursive_foreach(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable],
+def recursive_foreach(obj: Union[Iterable, BaseEntity, DictSerializable],
                       func: Callable[[BaseEntity], None],
                       *,
                       apply_first=False):
@@ -410,7 +410,7 @@ def recursive_foreach(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable
 
     Parameters
     ----------
-    obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable]
+    obj: Union[Iterable, Mapping, BaseEntity, DictSerializable]
         target of the operation
     func: Callable[[BaseEntity], None]
         to apply to each contained BaseEntity
@@ -436,7 +436,7 @@ def recursive_foreach(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable
         if apply_first and _cached_isinstance(this, BaseEntity):
             func(this)
 
-        if _cached_isinstance(this, dict):
+        if _cached_isinstance(this, Mapping):
             for x in concatv(this.keys(), this.values()):
                 queue.append(x)
         elif _cached_isinstance(this, DictSerializable):
@@ -453,18 +453,18 @@ def recursive_foreach(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable
     return
 
 
-def recursive_flatmap(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable],
-                      func: Callable[[BaseEntity], Union[List, Tuple]],
+def recursive_flatmap(obj: Union[Iterable, BaseEntity, DictSerializable],
+                      func: Callable[[BaseEntity], Iterable],
                       *,
-                      unidirectional=True):
+                      unidirectional=True) -> List:
     """
     Recursively apply and accumulate a list-valued function to BaseEntity members.
 
     Parameters
     ----------
-    obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable]
+    obj: Union[Iterable, Mapping, BaseEntity, DictSerializable]
         target of the operation
-    func: Callable[[BaseEntity], Union[List[Any], Tuple[Any]]]
+    func: Callable[[BaseEntity], Iterable]
         function to apply; must be list-valued
     unidirectional: bool
         only recurse through the writeable direction of bidirectional links
@@ -491,7 +491,7 @@ def recursive_flatmap(obj: Union[List, Tuple, Dict, BaseEntity, DictSerializable
         if _cached_isinstance(this, BaseEntity):
             res.extend(func(this))
 
-        if _cached_isinstance(this, dict):
+        if _cached_isinstance(this, Mapping):
             queue.extend(concatv(this.keys(), this.values()))
         elif _cached_isinstance(this, DictSerializable):
             for k, x in sorted(this.__dict__.items()):

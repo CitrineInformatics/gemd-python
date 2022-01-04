@@ -1,9 +1,17 @@
+from gemd.entity.object.material_spec import MaterialSpec
+from gemd.entity.object.process_run import ProcessRun
 from gemd.entity.object.base_object import BaseObject
+from gemd.entity.object.has_process import HasProcess
+from gemd.entity.object.has_spec import HasSpec
 from gemd.enumeration import SampleType
+from gemd.entity.file_link import FileLink
+from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.setters import validate_list
 
+from typing import Optional, Union, Iterable, List, Mapping, Type, Any
 
-class MaterialRun(BaseObject):
+
+class MaterialRun(BaseObject, HasSpec, HasProcess):
     """
     A material run.
 
@@ -46,31 +54,34 @@ class MaterialRun(BaseObject):
 
     skip = {"_measurements"}
 
-    def __init__(self, name, *, spec=None, process=None, sample_type="unknown",
-                 uids=None, tags=None, notes=None, file_links=None):
+    def __init__(self,
+                 name: str,
+                 *,
+                 spec: Union[MaterialSpec, LinkByUID] = None,
+                 process: Union[ProcessRun, LinkByUID] = None,
+                 sample_type: Union[SampleType, str] = "unknown",
+                 uids: Mapping[str, str] = None,
+                 tags: Iterable[str] = None,
+                 notes: str = None,
+                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
         from gemd.entity.object.measurement_run import MeasurementRun
-        from gemd.entity.link_by_uid import LinkByUID
-
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)
+        HasSpec.__init__(self, spec=spec)
         self._process = None
         self._measurements = validate_list(None, [MeasurementRun, LinkByUID])
         self._sample_type = None
-        self._spec = None
 
-        self.spec = spec
         self.process = process
         self.sample_type = sample_type
 
     @property
-    def process(self):
+    def process(self) -> Union[ProcessRun, LinkByUID]:
         """Get the originating process run."""
         return self._process
 
     @process.setter
-    def process(self, process):
-        from gemd.entity.object.process_run import ProcessRun
-        from gemd.entity.link_by_uid import LinkByUID
+    def process(self, process: Union[ProcessRun, LinkByUID]):
         if self.process is not None and isinstance(self.process, ProcessRun):
             self.process._output_material = None
         if process is None:
@@ -84,45 +95,25 @@ class MaterialRun(BaseObject):
             raise TypeError("process must be a ProcessRun or LinkByUID: {}".format(process))
 
     @property
-    def measurements(self):
-        """Get a list of measurement runs."""
+    def measurements(self) -> List["MeasurementRun"]:
+        """Get a read-only list of the measurement runs."""
         return self._measurements
 
     @property
-    def sample_type(self):
+    def sample_type(self) -> str:
         """Get the sample type."""
         return self._sample_type
 
     @sample_type.setter
-    def sample_type(self, sample_type):
+    def sample_type(self, sample_type: Union[SampleType, str]):
         self._sample_type = SampleType.get_value(sample_type)
 
-    @property
-    def spec(self):
-        """Get the material spec."""
-        return self._spec
+    @staticmethod
+    def _spec_type() -> Type:
+        """Required method to satisfy HasTemplates mix-in."""
+        return MaterialSpec
 
-    @spec.setter
-    def spec(self, spec):
-        from gemd.entity.object.material_spec import MaterialSpec
-        from gemd.entity.link_by_uid import LinkByUID
-        if spec is None:
-            self._spec = None
-        elif isinstance(spec, (MaterialSpec, LinkByUID)):
-            self._spec = spec
-        else:
-            raise TypeError("spec must be a MaterialSpec or LinkByUID: {}".format(spec))
-
-    @property
-    def template(self):
-        """Get the template of the spec, if applicable."""
-        from gemd.entity.object.material_spec import MaterialSpec
-        if isinstance(self.spec, MaterialSpec):
-            return self.spec.template
-        else:
-            return None
-
-    def _dict_for_compare(self):
+    def _dict_for_compare(self) -> Mapping[str, Any]:
         """Support for recursive equals."""
         base = super()._dict_for_compare()
         base['measurements'] = self.measurements
