@@ -4,6 +4,7 @@ from logging import getLogger
 import json
 import inspect
 import functools
+from typing import Union, Iterable, List, Mapping, Dict, Any
 
 # There are some weird (probably resolvable) errors during object cloning if this is an
 # instance variable of DictSerializable.
@@ -17,7 +18,7 @@ class DictSerializable(ABC):
     skip = set()
 
     @classmethod
-    def from_dict(cls, d):
+    def from_dict(cls, d: Mapping[str, Any]) -> "DictSerializable":
         """
         Reconstitute the object from a dictionary.
 
@@ -47,13 +48,13 @@ class DictSerializable(ABC):
 
     @classmethod
     @functools.lru_cache(maxsize=None)
-    def _init_sig(cls):
+    def _init_sig(cls) -> List[str]:
         """Internal method for generating the argument names for the class init method."""
         expected_arg_names = inspect.getfullargspec(cls.__init__).args
         expected_arg_names += inspect.getfullargspec(cls.__init__).kwonlyargs
         return expected_arg_names
 
-    def as_dict(self):
+    def as_dict(self) -> Dict[str, Any]:
         """
         Convert the object to a dictionary.
 
@@ -68,7 +69,7 @@ class DictSerializable(ABC):
         attributes["type"] = self.typ
         return attributes
 
-    def dump(self):
+    def dump(self) -> str:
         """
         Convert the object to a JSON dictionary, so that every entry is serialized.
 
@@ -85,7 +86,7 @@ class DictSerializable(ABC):
         return json.loads(encoder.raw_dumps(self))
 
     @staticmethod
-    def build(d):
+    def build(d: Mapping[str, Any]) -> "DictSerializable":
         """
         Build an object from a JSON dictionary.
 
@@ -107,7 +108,7 @@ class DictSerializable(ABC):
         encoder = GEMDJson()
         return encoder.raw_loads(encoder.raw_dumps(d))
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         object_dict = self.as_dict()
         # as_dict() skips over keys in `skip`, but they should be in the representation.
         skipped_keys = {x.lstrip('_') for x in vars(self) if x in self.skip}
@@ -116,7 +117,7 @@ class DictSerializable(ABC):
             object_dict[key] = self._name_repr(skipped_field)
         return str(object_dict)
 
-    def _name_repr(self, entity):
+    def _name_repr(self, entity: Union[Iterable["DictSerializable"], "DictSerializable"]) -> str:
         """
         A representation of an object or a list of objects that uses the name and type.
 
@@ -135,15 +136,15 @@ class DictSerializable(ABC):
             A representation of `entity` using its name.
 
         """
-        if isinstance(entity, (list, tuple)):
+        if isinstance(entity, Iterable):
             return [self._name_repr(item) for item in entity]
         elif entity is None:
             return None
         else:
             name = getattr(entity, 'name', '<unknown name>')
-            return "<{} '{}'>".format(type(entity).__name__, name)
+            return f"<{type(entity).__name__} '{name}'>"
 
-    def _dict_for_compare(self):
+    def _dict_for_compare(self) -> Dict[str, Any]:
         """Which fields & values are relevant to an equality test."""
         return self.as_dict()
 

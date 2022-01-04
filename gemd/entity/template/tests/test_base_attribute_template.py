@@ -6,6 +6,8 @@ from gemd.entity.bounds.real_bounds import RealBounds
 from gemd.entity.value.uniform_real import UniformReal
 from gemd.entity.template.attribute_template import AttributeTemplate
 from gemd.entity.template.property_template import PropertyTemplate
+from gemd.entity.template.condition_template import ConditionTemplate
+from gemd.entity.template.parameter_template import ParameterTemplate
 from gemd.json import dumps, loads
 
 
@@ -39,3 +41,14 @@ def test_json():
     template = PropertyTemplate(name="foo", bounds=RealBounds(0, 1, ""))
     copy = loads(dumps(template))
     assert copy == template
+
+
+def test_dependencies():
+    """Test that dependency lists make sense."""
+    targets = [
+        PropertyTemplate(name="name", bounds=RealBounds(0, 1, '')),
+        ConditionTemplate(name="name", bounds=RealBounds(0, 1, '')),
+        ParameterTemplate(name="name", bounds=RealBounds(0, 1, '')),
+    ]
+    for target in targets:
+        assert len(target.all_dependencies()) == 0, f"{type(target)} had dependencies"

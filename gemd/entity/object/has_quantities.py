@@ -27,8 +27,10 @@ class HasQuantities(object):
     """
 
     def __init__(self, *,
-                 mass_fraction=None, volume_fraction=None, number_fraction=None,
-                 absolute_quantity=None):
+                 mass_fraction: ContinuousValue = None,
+                 volume_fraction: ContinuousValue = None,
+                 number_fraction: ContinuousValue = None,
+                 absolute_quantity: ContinuousValue = None):
 
         self._mass_fraction = None
         self.mass_fraction = mass_fraction
@@ -55,12 +57,12 @@ class HasQuantities(object):
                 raise ValueError(message)
 
     @property
-    def mass_fraction(self):
+    def mass_fraction(self) -> ContinuousValue:
         """Get mass fraction."""
         return self._mass_fraction
 
     @mass_fraction.setter
-    def mass_fraction(self, mass_fraction):
+    def mass_fraction(self, mass_fraction: ContinuousValue):
         if mass_fraction is None:
             self._mass_fraction = None
         elif not isinstance(mass_fraction, ContinuousValue):
@@ -70,12 +72,12 @@ class HasQuantities(object):
             self._mass_fraction = mass_fraction
 
     @property
-    def volume_fraction(self):
+    def volume_fraction(self) -> ContinuousValue:
         """Get volume fraction."""
         return self._volume_fraction
 
     @volume_fraction.setter
-    def volume_fraction(self, volume_fraction):
+    def volume_fraction(self, volume_fraction: ContinuousValue):
         if volume_fraction is None:
             self._volume_fraction = None
         elif not isinstance(volume_fraction, ContinuousValue):
@@ -85,12 +87,12 @@ class HasQuantities(object):
             self._volume_fraction = volume_fraction
 
     @property
-    def number_fraction(self):
+    def number_fraction(self) -> ContinuousValue:
         """Get number fraction."""
         return self._number_fraction
 
     @number_fraction.setter
-    def number_fraction(self, number_fraction):
+    def number_fraction(self, number_fraction: ContinuousValue):
         if number_fraction is None:
             self._number_fraction = None
         elif not isinstance(number_fraction, ContinuousValue):
@@ -100,12 +102,12 @@ class HasQuantities(object):
             self._number_fraction = number_fraction
 
     @property
-    def absolute_quantity(self):
+    def absolute_quantity(self) -> ContinuousValue:
         """Get absolute quantity."""
         return self._absolute_quantity
 
     @absolute_quantity.setter
-    def absolute_quantity(self, absolute_quantity):
+    def absolute_quantity(self, absolute_quantity: ContinuousValue):
         if absolute_quantity is None:
             self._absolute_quantity = None
         elif isinstance(absolute_quantity, ContinuousValue):

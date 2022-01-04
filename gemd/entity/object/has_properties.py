@@ -1,12 +1,15 @@
 """For entities that have properties."""
+from gemd.entity.has_dependencies import HasDependencies
 from gemd.entity.template.has_property_templates import HasPropertyTemplates
 from gemd.entity.attribute.property import Property
 from gemd.entity.setters import validate_list
 from gemd.entity.bounds_validation import get_validation_level, WarningLevel
 from gemd.entity.dict_serializable import logger
 
+from typing import Union, Iterable, List, Set
 
-class HasProperties(object):
+
+class HasProperties(HasDependencies):
     """Mixin-trait for entities that include properties.
 
     Parameters
@@ -16,17 +19,18 @@ class HasProperties(object):
 
     """
 
-    def __init__(self, properties):
+    def __init__(self, properties: Iterable[Property]):
         self._properties = None
         self.properties = properties
 
     @property
-    def properties(self):
+    def properties(self) -> List[Property]:
         """Get a list of the properties."""
         return self._properties
 
     @properties.setter
-    def properties(self, properties):
+    def properties(self, properties: Iterable[Property]):
+        """Set the list of properties."""
         def _template_check(x: Property) -> Property:
             # if Has_Templates hasn't been called yet, it won't have a _template attribute
             template = getattr(self, "template", None)
@@ -44,3 +48,7 @@ class HasProperties(object):
             return x
 
         self._properties = validate_list(properties, Property, trigger=_template_check)
+
+    def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:
+        """Return a set of all immediate dependencies (no recursion)."""
+        return {prop.template for prop in self.properties if prop.template is not None}

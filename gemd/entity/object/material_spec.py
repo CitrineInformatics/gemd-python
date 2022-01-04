@@ -1,13 +1,20 @@
 from gemd.entity.attribute.property_and_conditions import PropertyAndConditions
+from gemd.entity.object.process_spec import ProcessSpec
 from gemd.entity.object.base_object import BaseObject
+from gemd.entity.object.has_process import HasProcess
 from gemd.entity.object.has_template import HasTemplate
 from gemd.entity.template.has_property_templates import HasPropertyTemplates
+from gemd.entity.template.material_template import MaterialTemplate
+from gemd.entity.file_link import FileLink
+from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.setters import validate_list
 from gemd.entity.bounds_validation import get_validation_level, WarningLevel
 from gemd.entity.dict_serializable import logger
 
+from typing import Optional, Union, Iterable, List, Set, Mapping, Type
 
-class MaterialSpec(BaseObject, HasTemplate):
+
+class MaterialSpec(BaseObject, HasTemplate, HasProcess):
     """
     A material specification.
 
@@ -43,9 +50,16 @@ class MaterialSpec(BaseObject, HasTemplate):
 
     typ = "material_spec"
 
-    def __init__(self, name, *, template=None,
-                 properties=None, process=None, uids=None, tags=None,
-                 notes=None, file_links=None):
+    def __init__(self,
+                 name: str,
+                 *,
+                 template: Optional[Union[MaterialTemplate, LinkByUID]] = None,
+                 process: Union[ProcessSpec, LinkByUID] = None,
+                 properties: Iterable[PropertyAndConditions] = None,
+                 uids: Mapping[str, str] = None,
+                 tags: Iterable[str] = None,
+                 notes: str = None,
+                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)
         self._properties = None
@@ -55,12 +69,13 @@ class MaterialSpec(BaseObject, HasTemplate):
         HasTemplate.__init__(self, template)
 
     @property
-    def properties(self):
+    def properties(self) -> List[PropertyAndConditions]:
         """Get the list of property-and-conditions."""
         return self._properties
 
     @properties.setter
-    def properties(self, properties):
+    def properties(self, properties: Iterable[PropertyAndConditions]):
+        """Set the list of property-and-conditions."""
         def _template_check(x: PropertyAndConditions) -> PropertyAndConditions:
             # if Has_Templates hasn't been called yet, it won't have a _template attribute
             template = getattr(self, "template", None)
@@ -82,12 +97,12 @@ class MaterialSpec(BaseObject, HasTemplate):
                                          trigger=_template_check)
 
     @property
-    def process(self):
+    def process(self) -> Union[ProcessSpec, LinkByUID]:
         """Get the originating process spec."""
         return self._process
 
     @process.setter
-    def process(self, process):
+    def process(self, process: Union[ProcessSpec, LinkByUID]):
         """
         Link to the ProcessSpec that creates this MaterialSpec.
 
@@ -107,5 +122,21 @@ class MaterialSpec(BaseObject, HasTemplate):
             process._output_material = self
             self._process = process
         else:
-            raise TypeError("process must be an instance of ProcessSpec or LinkByUID; "
-                            "instead received type {}: {}".format(type(process), process))
+            raise TypeError(f"process must be an instance of ProcessSpec or LinkByUID; "
+                            f"instead received type {type(process)}: {process}")
+
+    @staticmethod
+    def _template_type() -> Type:
+        """Communicate expected template type to parent class."""
+        return MaterialTemplate
+
+    def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:
+        """Return a set of all immediate dependencies (no recursion)."""
+        result = set()
+        for attr in self.properties:
+            if attr.property.template is not None:
+                result.add(attr.property.template)
+            for condition in attr.conditions:
+                if condition.template is not None:
+                    result.add(condition.template)
+        return result
