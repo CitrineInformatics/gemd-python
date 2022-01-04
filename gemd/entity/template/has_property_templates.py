@@ -1,4 +1,5 @@
 """For entities that have a property template."""
+from gemd.entity.has_dependencies import HasDependencies
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.setters import validate_list
 from gemd.entity.template.base_template import BaseTemplate
@@ -8,7 +9,7 @@ from gemd.entity.bounds.base_bounds import BaseBounds
 from typing import Optional, Union, Iterable, List, Set, Tuple
 
 
-class HasPropertyTemplates(object):
+class HasPropertyTemplates(HasDependencies):
     """
     Mixin-trait for entities that include property templates.
 
@@ -62,6 +63,6 @@ class HasPropertyTemplates(object):
                                          trigger=BaseTemplate._homogenize_ranges
                                          )
 
-    def all_dependencies(self) -> Set[Union[PropertyTemplate, LinkByUID]]:
+    def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {attr[0] for attr in self.properties}

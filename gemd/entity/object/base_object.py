@@ -4,7 +4,7 @@ from gemd.entity.base_entity import BaseEntity
 from gemd.entity.file_link import FileLink
 from gemd.entity.setters import validate_list, validate_str
 
-from typing import Optional, Union, Iterable, List, Set, Mapping
+from typing import Optional, Union, Iterable, List, Mapping
 
 
 class BaseObject(BaseEntity):
@@ -76,36 +76,3 @@ class BaseObject(BaseEntity):
     @file_links.setter
     def file_links(self, file_links: Union[Iterable[FileLink], FileLink]):
         self._file_links = validate_list(file_links, FileLink)
-
-    def all_dependencies(self) -> Set[BaseEntity]:
-        """Return a set of all immediate dependencies (no recursion)."""
-        from gemd.entity.object.has_parameters import HasParameters
-        from gemd.entity.object.has_conditions import HasConditions
-        from gemd.entity.object.has_properties import HasProperties
-        from gemd.entity.object.has_spec import HasSpec
-        from gemd.entity.object.has_template import HasTemplate
-
-        from gemd.entity.object import IngredientRun, MaterialRun, MeasurementRun  # no ProcessRun
-        from gemd.entity.object import IngredientSpec, MaterialSpec  # no ProcessSpec
-
-        result = set()
-
-        for typ in (HasParameters, HasConditions, HasProperties, HasSpec, HasTemplate):
-            if isinstance(self, typ):
-                result |= typ.all_dependencies(self)
-        if isinstance(self, MaterialSpec):  # is structured inconsistently
-            for attr in self.properties:
-                if attr.property.template is not None:
-                    result.add(attr.property.template)
-                for condition in attr.conditions:
-                    if condition.template is not None:
-                        result.add(condition.template)
-
-        if isinstance(self, (IngredientRun, IngredientSpec, MeasurementRun)):
-            if self.material is not None:
-                result.add(self.material)
-        if isinstance(self, (IngredientRun, IngredientSpec, MaterialRun, MaterialSpec)):
-            if self.process is not None:
-                result.add(self.process)
-
-        return result

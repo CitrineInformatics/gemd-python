@@ -1,16 +1,17 @@
 from gemd.entity.attribute.property_and_conditions import PropertyAndConditions
 from gemd.entity.object.process_spec import ProcessSpec
 from gemd.entity.object.base_object import BaseObject
+from gemd.entity.object.has_process import HasProcess
 from gemd.entity.object.has_template import HasTemplate
 from gemd.entity.template.material_template import MaterialTemplate
 from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.setters import validate_list
 
-from typing import Optional, Union, Iterable, List, Mapping, Type
+from typing import Optional, Union, Iterable, List, Set, Mapping, Type
 
 
-class MaterialSpec(BaseObject, HasTemplate):
+class MaterialSpec(BaseObject, HasTemplate, HasProcess):
     """
     A material specification.
 
@@ -106,3 +107,14 @@ class MaterialSpec(BaseObject, HasTemplate):
     def _template_type() -> Type:
         """Communicate expected template type to parent class."""
         return MaterialTemplate
+
+    def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:
+        """Return a set of all immediate dependencies (no recursion)."""
+        result = set()
+        for attr in self.properties:
+            if attr.property.template is not None:
+                result.add(attr.property.template)
+            for condition in attr.conditions:
+                if condition.template is not None:
+                    result.add(condition.template)
+        return result

@@ -1,6 +1,7 @@
 from gemd.entity.object.measurement_spec import MeasurementSpec
 from gemd.entity.object.material_run import MaterialRun
 from gemd.entity.object.base_object import BaseObject
+from gemd.entity.object.has_material import HasMaterial
 from gemd.entity.object.has_spec import HasSpec
 from gemd.entity.object.has_conditions import HasConditions
 from gemd.entity.object.has_properties import HasProperties
@@ -16,7 +17,8 @@ from gemd.entity.link_by_uid import LinkByUID
 from typing import Optional, Union, Iterable, Mapping, Type
 
 
-class MeasurementRun(BaseObject, HasSpec, HasConditions, HasProperties, HasParameters, HasSource):
+class MeasurementRun(BaseObject, HasMaterial, HasSpec, HasConditions, HasProperties,
+                     HasParameters, HasSource):
     """
     A measurement run.
 

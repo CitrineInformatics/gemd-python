@@ -1,12 +1,12 @@
 """For entities that have parameters."""
+from gemd.entity.has_dependencies import HasDependencies
 from gemd.entity.attribute.parameter import Parameter
-from gemd.entity.template.parameter_template import ParameterTemplate
 from gemd.entity.setters import validate_list
 
-from typing import Iterable, List, Set
+from typing import Union, Iterable, List, Set
 
 
-class HasParameters(object):
+class HasParameters(HasDependencies):
     """Mixin-trait for entities that include parameters.
 
     Parameters
@@ -30,6 +30,6 @@ class HasParameters(object):
         """Set the list of parameters."""
         self._parameters = validate_list(parameters, Parameter)
 
-    def all_dependencies(self) -> Set[ParameterTemplate]:
+    def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {param.template for param in self.parameters if param.template is not None}

@@ -1,8 +1,8 @@
 """Base class for all entities."""
-from abc import abstractmethod
-from typing import Optional, Iterable, List, Set, FrozenSet, Mapping, Dict
+from typing import Optional, Union, Iterable, List, Set, FrozenSet, Mapping, Dict
 
 from gemd.entity.dict_serializable import DictSerializable
+from gemd.entity.has_dependencies import HasDependencies
 from gemd.entity.case_insensitive_dict import CaseInsensitiveDict
 from gemd.entity.setters import validate_list
 
@@ -102,9 +102,17 @@ class BaseEntity(DictSerializable):
 
         return LinkByUID(scope=scope, id=uid)
 
-    @abstractmethod
-    def all_dependencies(self) -> Set['BaseEntity']:
+    def all_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:
         """Return a set of all immediate dependencies (no recursion)."""
+        result = set()
+        queue = [type(self)]
+        while queue:
+            cls = queue.pop()
+            if issubclass(cls, HasDependencies) and \
+                    "_local_dependencies" not in cls.__abstractmethods__:
+                result |= cls._local_dependencies(self)
+                queue.extend(cls.__bases__)
+        return result
 
     @staticmethod
     def _cached_equals(this: 'BaseEntity',

@@ -1,6 +1,7 @@
 from gemd.entity.object.material_spec import MaterialSpec
 from gemd.entity.object.process_run import ProcessRun
 from gemd.entity.object.base_object import BaseObject
+from gemd.entity.object.has_process import HasProcess
 from gemd.entity.object.has_spec import HasSpec
 from gemd.enumeration import SampleType
 from gemd.entity.file_link import FileLink
@@ -10,7 +11,7 @@ from gemd.entity.setters import validate_list
 from typing import Optional, Union, Iterable, List, Mapping, Type, Any
 
 
-class MaterialRun(BaseObject, HasSpec):
+class MaterialRun(BaseObject, HasSpec, HasProcess):
     """
     A material run.
 

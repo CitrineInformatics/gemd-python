@@ -1,6 +1,8 @@
 from gemd.entity.object.material_spec import MaterialSpec
 from gemd.entity.object.process_spec import ProcessSpec
 from gemd.entity.object.base_object import BaseObject
+from gemd.entity.object.has_material import HasMaterial
+from gemd.entity.object.has_process import HasProcess
 from gemd.entity.object.has_quantities import HasQuantities
 from gemd.entity.object.has_template import HasTemplate
 from gemd.entity.value.continuous_value import ContinuousValue
@@ -11,7 +13,7 @@ from gemd.entity.setters import validate_list
 from typing import Optional, Union, Iterable, List, Mapping, Type
 
 
-class IngredientSpec(BaseObject, HasQuantities, HasTemplate):
+class IngredientSpec(BaseObject, HasQuantities, HasTemplate, HasMaterial, HasProcess):
     """
     An ingredient specification.
 

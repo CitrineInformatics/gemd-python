@@ -4,7 +4,7 @@ from gemd.entity.bounds.base_bounds import BaseBounds
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.template.attribute_template import AttributeTemplate
 
-from typing import Union, Iterable, Set, Mapping
+from typing import Union, Iterable, Mapping
 
 
 class BaseTemplate(BaseEntity):
@@ -76,16 +76,3 @@ class BaseTemplate(BaseEntity):
                         raise ValueError("Range and template are inconsistent")
                 return [first, second]
         raise TypeError("Expected a template or (template, bounds) tuple")  # pragma: no cover
-
-    def all_dependencies(self) -> Set[AttributeTemplate]:
-        """Return a set of all immediate dependencies (no recursion)."""
-        from gemd.entity.template.has_condition_templates import HasConditionTemplates
-        from gemd.entity.template.has_parameter_templates import HasParameterTemplates
-        from gemd.entity.template.has_property_templates import HasPropertyTemplates
-
-        result = set()
-
-        for typ in (HasConditionTemplates, HasParameterTemplates, HasPropertyTemplates):
-            if isinstance(self, typ):
-                result |= typ.all_dependencies(self)
-        return result

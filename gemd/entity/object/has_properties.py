@@ -1,12 +1,12 @@
 """For entities that have properties."""
+from gemd.entity.has_dependencies import HasDependencies
 from gemd.entity.attribute.property import Property
-from gemd.entity.template.property_template import PropertyTemplate
 from gemd.entity.setters import validate_list
 
-from typing import Iterable, List, Set
+from typing import Union, Iterable, List, Set
 
 
-class HasProperties(object):
+class HasProperties(HasDependencies):
     """Mixin-trait for entities that include properties.
 
     Parameters
@@ -30,6 +30,6 @@ class HasProperties(object):
         """Set the list of properties."""
         self._properties = validate_list(properties, Property)
 
-    def all_dependencies(self) -> Set[PropertyTemplate]:
+    def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {prop.template for prop in self.properties if prop.template is not None}

@@ -1,4 +1,5 @@
 """For entities that have a condition template."""
+from gemd.entity.has_dependencies import HasDependencies
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.setters import validate_list
 from gemd.entity.template.base_template import BaseTemplate
@@ -8,7 +9,7 @@ from gemd.entity.bounds.base_bounds import BaseBounds
 from typing import Optional, Union, Iterable, List, Tuple, Set
 
 
-class HasConditionTemplates(object):
+class HasConditionTemplates(HasDependencies):
     """
     Mixin-trait for entities that include condition templates.
 
@@ -66,6 +67,6 @@ class HasConditionTemplates(object):
                                          trigger=BaseTemplate._homogenize_ranges
                                          )
 
-    def all_dependencies(self) -> Set[Union[ConditionTemplate, LinkByUID]]:
+    def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {attr[0] for attr in self.conditions}

@@ -1,5 +1,5 @@
 """For entities that have specs."""
-from gemd.entity.object.base_object import BaseObject
+from gemd.entity.has_dependencies import HasDependencies
 from gemd.entity.object.has_template import HasTemplate
 from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.link_by_uid import LinkByUID
@@ -8,7 +8,7 @@ from abc import abstractmethod
 from typing import Optional, Union, Set, Type
 
 
-class HasSpec(object):
+class HasSpec(HasDependencies):
     """Mix-in trait for objects that can be assigned specs.
 
     Parameters
@@ -51,6 +51,6 @@ class HasSpec(object):
         else:
             return None
 
-    def all_dependencies(self) -> Set[BaseObject]:
+    def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {self.spec} if self.spec is not None else set()

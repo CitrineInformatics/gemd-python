@@ -2,6 +2,8 @@ from gemd.entity.object.ingredient_spec import IngredientSpec
 from gemd.entity.object.material_run import MaterialRun
 from gemd.entity.object.process_run import ProcessRun
 from gemd.entity.object.base_object import BaseObject
+from gemd.entity.object.has_material import HasMaterial
+from gemd.entity.object.has_process import HasProcess
 from gemd.entity.object.has_quantities import HasQuantities
 from gemd.entity.object.has_spec import HasSpec
 from gemd.entity.value.continuous_value import ContinuousValue
@@ -13,7 +15,7 @@ from gemd.entity.setters import validate_list
 from typing import Optional, Union, Iterable, List, Mapping, Type, Any
 
 
-class IngredientRun(BaseObject, HasQuantities, HasSpec):
+class IngredientRun(BaseObject, HasQuantities, HasSpec, HasMaterial, HasProcess):
     """
     An ingredient run.
 
