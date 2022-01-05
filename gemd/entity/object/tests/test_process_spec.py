@@ -87,9 +87,6 @@ def test_equality():
 
 def test_template_check_generator():
     """Verify that the generator throws exceptions."""
-    with pytest.raises(ValueError):  # self can't template
-        ProcessSpec._generate_template_check(self=Parameter("An entity without a template"),
-                                             validate=HasParameterTemplates.validate_parameter)
     spec1 = ProcessSpec("A spec")
     with pytest.raises(ValueError):  # Can't find class
         spec1._generate_template_check(validate=lambda x, y: True)

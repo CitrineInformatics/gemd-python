@@ -1,16 +1,14 @@
 """For entities that have conditions."""
 from gemd.entity.has_dependencies import HasDependencies
+from gemd.entity.object.has_template_check_generator import HasTemplateCheckGenerator
 from gemd.entity.template.has_condition_templates import HasConditionTemplates
 from gemd.entity.attribute.condition import Condition
 from gemd.entity.setters import validate_list
 
-from abc import abstractmethod
-from typing import Union, Iterable, List, Set, Callable, TypeVar
-
-T = TypeVar('T')
+from typing import Union, Iterable, List, Set
 
 
-class HasConditions(HasDependencies):
+class HasConditions(HasTemplateCheckGenerator, HasDependencies):
     """Mixin-trait for entities that include conditions.
 
     Parameters
@@ -28,10 +26,6 @@ class HasConditions(HasDependencies):
     def conditions(self) -> List[Condition]:
         """Get a list of the conditions."""
         return self._conditions
-
-    @abstractmethod
-    def _generate_template_check(self, validate: Callable[[T], bool]) -> Callable[[T], T]:
-        """Generate a closure for the object and the validation routine."""
 
     @conditions.setter
     def conditions(self, conditions: Iterable[Condition]):

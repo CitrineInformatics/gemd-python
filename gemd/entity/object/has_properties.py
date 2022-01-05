@@ -1,16 +1,14 @@
 """For entities that have properties."""
 from gemd.entity.has_dependencies import HasDependencies
+from gemd.entity.object.has_template_check_generator import HasTemplateCheckGenerator
 from gemd.entity.template.has_property_templates import HasPropertyTemplates
 from gemd.entity.attribute.property import Property
 from gemd.entity.setters import validate_list
 
-from abc import abstractmethod
-from typing import Union, Iterable, List, Set, Callable, TypeVar
-
-T = TypeVar('T')
+from typing import Union, Iterable, List, Set
 
 
-class HasProperties(HasDependencies):
+class HasProperties(HasTemplateCheckGenerator, HasDependencies):
     """Mixin-trait for entities that include properties.
 
     Parameters
@@ -28,10 +26,6 @@ class HasProperties(HasDependencies):
     def properties(self) -> List[Property]:
         """Get a list of the properties."""
         return self._properties
-
-    @abstractmethod
-    def _generate_template_check(self, validate: Callable[[T], bool]) -> Callable[[T], T]:
-        """Generate a closure for the object and the validation routine."""
 
     @properties.setter
     def properties(self, properties: Iterable[Property]):
