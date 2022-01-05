@@ -3,9 +3,8 @@ import pytest
 from copy import deepcopy
 
 from gemd.json import dumps, loads
-from gemd.entity.attribute import PropertyAndConditions, Property, Parameter
+from gemd.entity.attribute import PropertyAndConditions, Property
 from gemd.entity.object import ProcessSpec, MaterialSpec, IngredientSpec
-from gemd.entity.template.has_parameter_templates import HasParameterTemplates
 from gemd.entity.value import DiscreteCategorical
 from gemd.util import flatten
 

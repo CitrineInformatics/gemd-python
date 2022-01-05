@@ -6,9 +6,7 @@ from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.link_by_uid import LinkByUID
 
 from abc import abstractmethod
-from typing import Optional, Union, Set, Type, Callable, TypeVar
-
-T = TypeVar('T')
+from typing import Optional, Union, Set, Type
 
 
 class HasSpec(HasTemplateCheckGenerator, HasDependencies):
