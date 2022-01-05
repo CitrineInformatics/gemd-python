@@ -1,6 +1,5 @@
 """For entities that have templates."""
 from gemd.entity.has_dependencies import HasDependencies
-from gemd.entity.object.has_template_check_generator import HasTemplateCheckGenerator
 from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.link_by_uid import LinkByUID
 
@@ -8,7 +7,7 @@ from abc import abstractmethod
 from typing import Optional, Union, Set, Type
 
 
-class HasTemplate(HasTemplateCheckGenerator, HasDependencies):
+class HasTemplate(HasDependencies):
     """Mix-in trait for objects that can be assigned templates.
 
     Parameters

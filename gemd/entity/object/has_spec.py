@@ -1,7 +1,6 @@
 """For entities that have specs."""
 from gemd.entity.has_dependencies import HasDependencies
 from gemd.entity.object.has_template import HasTemplate
-from gemd.entity.object.has_template_check_generator import HasTemplateCheckGenerator
 from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.link_by_uid import LinkByUID
 
@@ -9,7 +8,7 @@ from abc import abstractmethod
 from typing import Optional, Union, Set, Type
 
 
-class HasSpec(HasTemplateCheckGenerator, HasDependencies):
+class HasSpec(HasDependencies):
     """Mix-in trait for objects that can be assigned specs.
 
     Parameters

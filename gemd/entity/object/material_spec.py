@@ -2,6 +2,7 @@ from gemd.entity.attribute.property_and_conditions import PropertyAndConditions
 from gemd.entity.object.process_spec import ProcessSpec
 from gemd.entity.object.base_object import BaseObject
 from gemd.entity.object.has_process import HasProcess
+from gemd.entity.object.has_properties import HasProperties
 from gemd.entity.object.has_template import HasTemplate
 from gemd.entity.template.has_property_templates import HasPropertyTemplates
 from gemd.entity.template.material_template import MaterialTemplate
@@ -12,7 +13,7 @@ from gemd.entity.setters import validate_list
 from typing import Optional, Union, Iterable, List, Set, Mapping, Type
 
 
-class MaterialSpec(BaseObject, HasTemplate, HasProcess):
+class MaterialSpec(BaseObject, HasTemplate, HasProcess, HasProperties):
     """
     A material specification.
 
