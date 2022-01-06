@@ -86,3 +86,13 @@ def test_invalid_assignment():
         IngredientSpec(name="name", process="process")
     with pytest.raises(TypeError):
         IngredientSpec()  # Name is required
+
+
+def test_bad_has_template():
+    """Make sure the non-implementation of HasTemplate behaves properly."""
+    assert isinstance(None, IngredientSpec(name="name")._template_type()), \
+        "Ingredients didn't have NoneType templates"
+    assert IngredientSpec(name="name").template is None, \
+        "An ingredient didn't have a null template."
+    with pytest.raises(AttributeError):  # Note an AttributeError, not a TypeError
+        IngredientSpec(name="name").template = 1

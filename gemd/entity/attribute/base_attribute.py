@@ -6,6 +6,9 @@ from gemd.entity.setters import validate_list
 from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
 
+from typing import Optional, Union, Iterable, List, Type
+from abc import abstractmethod
+
 
 class BaseAttribute(DictSerializable):
     """
@@ -31,8 +34,14 @@ class BaseAttribute(DictSerializable):
 
     """
 
-    def __init__(self, name, *, template=None, origin="unknown", value=None, notes=None,
-                 file_links=None):
+    def __init__(self,
+                 name: str,
+                 *,
+                 template: Union[AttributeTemplate, LinkByUID, None] = None,
+                 origin: Union[Origin, str] = Origin.UNKNOWN,
+                 value: BaseValue = None,
+                 notes: str = None,
+                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
         self.name = name
         self.notes = notes
 
@@ -47,12 +56,12 @@ class BaseAttribute(DictSerializable):
         self.file_links = file_links
 
     @property
-    def value(self):
+    def value(self) -> BaseValue:
         """Get value."""
         return self._value
 
     @value.setter
-    def value(self, value):
+    def value(self, value: BaseValue):
         if value is None:
             self._value = None
         elif isinstance(value, (BaseValue, str, bool)):
@@ -61,36 +70,41 @@ class BaseAttribute(DictSerializable):
             raise TypeError("value must be a BaseValue, string or bool: {}".format(value))
 
     @property
-    def template(self):
+    def template(self) -> Optional[Union[AttributeTemplate, LinkByUID]]:
         """Get template."""
         return self._template
 
     @template.setter
-    def template(self, template):
+    def template(self, template: Optional[Union[AttributeTemplate, LinkByUID]]):
         if template is None:
             self._template = None
-        elif isinstance(template, (LinkByUID, AttributeTemplate)):
+        elif isinstance(template, (self._template_type(), LinkByUID)):
             self._template = template
         else:
             raise TypeError("template must be a BaseAttributeTemplate or "
                             "LinkByUID: {}".format(template))
 
+    @staticmethod
+    @abstractmethod
+    def _template_type() -> Type:
+        """Get the expected type of template for this object (property of child)."""
+
     @property
-    def origin(self):
+    def origin(self) -> str:
         """Get origin."""
         return self._origin
 
     @origin.setter
-    def origin(self, origin):
+    def origin(self, origin: Union[Origin, str]):
         if origin is None:
             raise ValueError("origin must be specified (but may be `unknown`)")
         self._origin = Origin.get_value(origin)
 
     @property
-    def file_links(self):
+    def file_links(self) -> List[FileLink]:
         """Get file links."""
         return self._file_links
 
     @file_links.setter
-    def file_links(self, file_links):
+    def file_links(self, file_links: Optional[Union[Iterable[FileLink], FileLink]]):
         self._file_links = validate_list(file_links, FileLink)

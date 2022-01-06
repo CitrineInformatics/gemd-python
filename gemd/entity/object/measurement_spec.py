@@ -2,6 +2,13 @@ from gemd.entity.object.base_object import BaseObject
 from gemd.entity.object.has_parameters import HasParameters
 from gemd.entity.object.has_conditions import HasConditions
 from gemd.entity.object.has_template import HasTemplate
+from gemd.entity.template.measurement_template import MeasurementTemplate
+from gemd.entity.attribute.condition import Condition
+from gemd.entity.attribute.parameter import Parameter
+from gemd.entity.file_link import FileLink
+from gemd.entity.link_by_uid import LinkByUID
+
+from typing import Optional, Union, Iterable, Mapping, Type
 
 
 class MeasurementSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
@@ -40,11 +47,23 @@ class MeasurementSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
 
     typ = "measurement_spec"
 
-    def __init__(self, name, *, template=None,
-                 parameters=None, conditions=None,
-                 uids=None, tags=None, notes=None, file_links=None):
+    def __init__(self,
+                 name: str,
+                 *,
+                 template: Optional[Union[MeasurementTemplate, LinkByUID]] = None,
+                 conditions: Iterable[Condition] = None,
+                 parameters: Iterable[Parameter] = None,
+                 uids: Mapping[str, str] = None,
+                 tags: Iterable[str] = None,
+                 notes: str = None,
+                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)
         HasParameters.__init__(self, parameters=parameters)
         HasConditions.__init__(self, conditions=conditions)
         HasTemplate.__init__(self, template=template)
+
+    @staticmethod
+    def _template_type() -> Type:
+        """Communicate expected template type to parent class."""
+        return MeasurementTemplate

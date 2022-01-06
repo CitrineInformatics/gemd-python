@@ -26,6 +26,10 @@ class UnsupportedBounds(BaseBounds):
 class UnsupportedAttribute(BaseAttribute):
     """Dummy object to test Attribute type checking."""
 
+    def _template_type(self):  # pragma: no cover
+        """Only here to satisfy abstract method."""
+        return str
+
 
 class UnsupportedAttributeTemplate(AttributeTemplate):
     """Dummy object to test Attribute type checking."""

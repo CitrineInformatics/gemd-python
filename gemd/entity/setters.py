@@ -1,8 +1,10 @@
 """Methods for setting and validating."""
 from gemd.entity.valid_list import ValidList
 
+from typing import Iterable
 
-def validate_list(obj, typ, *, trigger=None):
+
+def validate_list(obj, typ, *, trigger=None) -> ValidList:
     """
     Attempts to return obj as a list, each element of which has type typ.
 
@@ -24,13 +26,13 @@ def validate_list(obj, typ, *, trigger=None):
     """
     if obj is None:
         return ValidList([], typ, trigger)
-    elif isinstance(obj, (list, tuple)):
+    elif isinstance(obj, Iterable):
         return ValidList(obj, typ, trigger)
     else:
         return ValidList([obj], typ, trigger)
 
 
-def validate_str(obj):
+def validate_str(obj) -> str:
     """
     Check that obj is a string and then convert it to unicode.
 
@@ -52,9 +54,4 @@ def validate_str(obj):
     """
     if not isinstance(obj, str):
         raise TypeError("Expected a string but got {} instead".format(type(obj)))
-
-    # If python 2 and the string isn't already unicode, turn it into unicode"""
-    try:
-        return obj.decode("utf-8")
-    except AttributeError:
-        return obj
+    return obj

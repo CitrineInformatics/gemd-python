@@ -2,7 +2,14 @@ from gemd.entity.object.base_object import BaseObject
 from gemd.entity.object.has_parameters import HasParameters
 from gemd.entity.object.has_conditions import HasConditions
 from gemd.entity.object.has_template import HasTemplate
+from gemd.entity.template.process_template import ProcessTemplate
+from gemd.entity.attribute.condition import Condition
+from gemd.entity.attribute.parameter import Parameter
+from gemd.entity.file_link import FileLink
+from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.setters import validate_list
+
+from typing import Optional, Union, Iterable, List, Mapping, Dict, Type, Any
 
 
 class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
@@ -54,9 +61,16 @@ class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
 
     skip = {"_output_material", "_ingredients"}
 
-    def __init__(self, name, *, template=None,
-                 parameters=None, conditions=None,
-                 uids=None, tags=None, notes=None, file_links=None):
+    def __init__(self,
+                 name: str,
+                 *,
+                 template: Optional[Union[ProcessTemplate, LinkByUID]] = None,
+                 conditions: Iterable[Condition] = None,
+                 parameters: Iterable[Parameter] = None,
+                 uids: Mapping[str, str] = None,
+                 tags: Iterable[str] = None,
+                 notes: str = None,
+                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
         from gemd.entity.object.ingredient_spec import IngredientSpec
         from gemd.entity.link_by_uid import LinkByUID
 
@@ -72,17 +86,22 @@ class ProcessSpec(BaseObject, HasParameters, HasConditions, HasTemplate):
         self._output_material = None
         self._ingredients = validate_list(None, [IngredientSpec, LinkByUID])
 
+    @staticmethod
+    def _template_type() -> Type:
+        """Communicate expected template type to parent class."""
+        return ProcessTemplate
+
     @property
-    def ingredients(self):
+    def ingredients(self) -> List["IngredientSpec"]:
         """Get the list of input ingredient specs."""
         return self._ingredients
 
     @property
-    def output_material(self):
+    def output_material(self) -> Optional["MaterialSpec"]:  # noqa: F821
         """Get the output material spec."""
         return self._output_material
 
-    def _dict_for_compare(self):
+    def _dict_for_compare(self) -> Dict[str, Any]:
         """Support for recursive equals."""
         base = super()._dict_for_compare()
         base['ingredients'] = self.ingredients

@@ -4,6 +4,8 @@ from gemd.entity.bounds.base_bounds import BaseBounds
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.template.attribute_template import AttributeTemplate
 
+from typing import Union, Iterable, Mapping
+
 
 class BaseTemplate(BaseEntity):
     """
@@ -26,13 +28,21 @@ class BaseTemplate(BaseEntity):
 
     """
 
-    def __init__(self, name, *, description=None, uids=None, tags=None):
+    def __init__(self,
+                 name: str,
+                 *,
+                 description: str = None,
+                 uids: Mapping[str, str] = None,
+                 tags: Iterable[str] = None):
         BaseEntity.__init__(self, uids, tags)
         self.name = name
         self.description = description
 
     @staticmethod
-    def _homogenize_ranges(template_or_tuple):
+    def _homogenize_ranges(template_or_tuple: Union[AttributeTemplate,
+                                                    LinkByUID,
+                                                    Iterable[Union[AttributeTemplate,
+                                                                   BaseBounds]]]):
         """
         Take either a template or pair and turn it into a (template, bounds) pair.
 
