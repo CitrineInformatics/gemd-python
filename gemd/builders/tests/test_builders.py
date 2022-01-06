@@ -1,10 +1,16 @@
-from gemd.ingest import make_node, add_edge, add_attribute, add_measurement
+from gemd.builders import make_node, add_edge, add_measurement, add_attribute, \
+    make_attribute
+from gemd.entity.attribute.base_attribute import BaseAttribute
+from gemd.entity.object import MaterialRun
 from gemd.entity.template import ProcessTemplate, MaterialTemplate, MeasurementTemplate, \
     PropertyTemplate, ConditionTemplate, ParameterTemplate
+from gemd.entity.template.attribute_template import AttributeTemplate
 from gemd.entity.bounds import RealBounds, IntegerBounds, CategoricalBounds, \
     CompositionBounds, MolecularStructureBounds
 from gemd.entity.bounds.base_bounds import BaseBounds
-from gemd.entity.value import EmpiricalFormula
+from gemd.entity.value import EmpiricalFormula, NominalReal
+from gemd.entity.link_by_uid import LinkByUID
+from gemd.units import parse_units
 
 import pytest
 
@@ -15,6 +21,14 @@ class UnsupportedBounds(BaseBounds):
     def contains(self, bounds):  # pragma: no cover
         """Only here to satisfy abstract method."""
         super().contains(bounds)
+
+
+class UnsupportedAttribute(BaseAttribute):
+    """Dummy object to test Attribute type checking."""
+
+
+class UnsupportedAttributeTemplate(AttributeTemplate):
+    """Dummy object to test Attribute type checking."""
 
 
 def test_build():
@@ -90,3 +104,82 @@ def test_build():
         add_attribute(root.process, prop_tmpl, 9)
     assert len(root.process.conditions) == 0, "Failed attribute build still added an object."
     assert len(root.process.parameters) == 0, "Failed attribute build still added an object."
+
+
+def test_quantities():
+    """Exercise the expressions on quantity in add_edge."""
+    ing_one = add_edge(make_node("Input"),
+                       make_node("Output"),
+                       mass_fraction=0.1,
+                       number_fraction=0.2,
+                       volume_fraction=0.3,
+                       absolute_quantity=0.4,
+                       absolute_units='kg')
+
+    assert ing_one.mass_fraction.nominal == 0.1, "Mass fraction got set."
+    assert ing_one.number_fraction.nominal == 0.2, "Number fraction got set."
+    assert ing_one.volume_fraction.nominal == 0.3, "Volume fraction got set."
+    assert ing_one.absolute_quantity.nominal == 0.4, "Absolute quantity got set."
+    assert ing_one.absolute_quantity.units == parse_units('kg'), "Absolute units got set."
+
+    ing_two = add_edge(make_node("Input"),
+                       make_node("Output"),
+                       mass_fraction=NominalReal(0.5, ''),
+                       number_fraction=NominalReal(0.6, ''),
+                       volume_fraction=NominalReal(0.7, ''),
+                       absolute_quantity=NominalReal(0.8, 'liters'))
+
+    assert ing_two.mass_fraction.nominal == 0.5, "Mass fraction got set."
+    assert ing_two.number_fraction.nominal == 0.6, "Number fraction got set."
+    assert ing_two.volume_fraction.nominal == 0.7, "Volume fraction got set."
+    assert ing_two.absolute_quantity.nominal == 0.8, "Absolute quantity got set."
+    assert ing_two.absolute_quantity.units == parse_units('liters'), "Absolute units got set."
+
+    with pytest.raises(ValueError):
+        add_edge(make_node("Input"), make_node("Output"), absolute_quantity=0.4)
+    with pytest.raises(ValueError):
+        add_edge(make_node("Input"), make_node("Output"),
+                 absolute_quantity=NominalReal(0.8, 'liters'), absolute_units='liters')
+
+
+def test_attributes():
+    """Exercise permutations of attributes, bounds and values."""
+    prop_tmpl = PropertyTemplate(name="Property", bounds=RealBounds(0, 10, "m"))
+    cond_tmpl = ConditionTemplate(name="Condition", bounds=CategoricalBounds(["a", "b", "c"]))
+    param_tmpl = ParameterTemplate(name="Parameter",
+                                   bounds=CompositionBounds(EmpiricalFormula.all_elements()))
+    mol_tmpl = PropertyTemplate(name="Molecule", bounds=MolecularStructureBounds())
+    int_tmpl = ConditionTemplate(name="Integer", bounds=IntegerBounds(0, 10))
+
+    msr = add_measurement(make_node('Material'),
+                          name='Measurement',
+                          attributes=[make_attribute(prop_tmpl, 5),
+                                      make_attribute(cond_tmpl, 'a'),
+                                      make_attribute(param_tmpl, 'SiC'),
+                                      make_attribute(mol_tmpl, 'InChI=1S/CSi/c1-2'),
+                                      make_attribute(mol_tmpl, '[C-]#[Si+]'),
+                                      make_attribute(int_tmpl, 5)
+                                      ])
+    assert msr.properties[0].value.nominal == 5
+    assert msr.conditions[0].value.category == 'a'
+    assert msr.parameters[0].value.formula == 'SiC'
+    assert msr.properties[1].value.inchi == 'InChI=1S/CSi/c1-2'
+    assert msr.properties[2].value.smiles == '[C-]#[Si+]'
+    assert msr.conditions[1].value.nominal == 5
+
+
+def test_exceptions():
+    """Additional tests to get full coverage on exceptions."""
+    with pytest.raises(ValueError):
+        add_edge(MaterialRun("Input"), make_node("Output"))
+
+    with pytest.raises(ValueError):
+        add_edge(make_node("Input"), MaterialRun("Output", spec=LinkByUID("Bad", "ID")))
+
+    with pytest.raises(ValueError):
+        add_measurement(make_node('Material'),
+                        name='Measurement',
+                        attributes=[UnsupportedAttribute("Spider-man")])
+
+    with pytest.raises(ValueError):
+        make_attribute(UnsupportedAttributeTemplate, 5)
