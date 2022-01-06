@@ -25,15 +25,27 @@ class HasTemplateCheckGenerator(ABC):
         """
         Generate a closure for the object and the validation routine.
 
+        This method generates a function that takes a single attribute as input and checks it
+        against the relevant templates and restricted bounds of the object template associated
+        with `self` (provided that object template is defined, attribute templates are defined,
+        etc.).
+        The returned function is intended to work as a `trigger` for a
+        :py:class `~gemd.entity.valid_list.ValidList`.
+        The behavior following this check -- ignore, warn or raise exception -- is controlled
+        by the :py:class `~gemd.entity.bounds_validation.WarningLevel` as returned by the
+        :py:func `~gemd.entity.bounds_validation.get_validation_level`.
+
         Parameters
         ----------
         validate: function(HasTemplateCheckGenerator, Attribute) -> bool
-            A method that checks if the object template is consistent with the attribute
+            A method that checks if the attribute is consistent with the object template.
 
         Returns
         -------
-        function(Attribute)
-            If the attribute is inconsistent, ignores, warns or dies based on get_validation_level
+        function(Attribute) -> None
+            A function that checks if the attribute is consistent with `self`'s template.
+            If the attribute is inconsistent, the returned function ignores, warns or raises an
+            exception based on get_validation_level.
 
         Raises
         ------
@@ -41,6 +53,12 @@ class HasTemplateCheckGenerator(ABC):
             If `value` is not one of the allowed types or if mapping types fails.
 
         """
+        # The attribute, validation routine and mixin are all related and required to make sure the
+        # types line up.  Rather than require the user to specify 3 different pieces of
+        # information, we ask them to provide 1 and then use introspection to determine the other
+        # two.  We get `cls` by figuring out which class implemented `validate` and we get `attr`
+        # by looking at the typehints of the arguments to `validate`.
+
         # Determine which class `validate` is from, so we can type check the object template
         module = getmodule(validate)  # Get the module that contains `validate`
         # Get the class that was defined in this module (a.k.a. not imported)
