@@ -1,10 +1,11 @@
-from gemd.entity.dict_serializable import DictSerializable
+from gemd.entity.dict_serializable import DictSerializable, logger
 from gemd.entity.template.attribute_template import AttributeTemplate
 from gemd.entity.value.base_value import BaseValue
 from gemd.enumeration import Origin
 from gemd.entity.setters import validate_list
 from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
+from gemd.entity.bounds_validation import get_validation_level, WarningLevel
 
 from typing import Optional, Union, Iterable, List, Type
 from abc import abstractmethod
@@ -55,6 +56,17 @@ class BaseAttribute(DictSerializable):
         self.origin = origin
         self.file_links = file_links
 
+    @staticmethod
+    def _check(template: AttributeTemplate, value: BaseValue):
+        level = get_validation_level()
+        accept = level == WarningLevel.IGNORE or template.bounds.contains(value)
+        if not accept:
+            message = f"template.bounds {template.bounds} does not contain value {value}"
+            if level == WarningLevel.WARNING:
+                logger.warning(message)
+            else:
+                raise ValueError(message)
+
     @property
     def value(self) -> BaseValue:
         """Get value."""
@@ -64,10 +76,12 @@ class BaseAttribute(DictSerializable):
     def value(self, value: BaseValue):
         if value is None:
             self._value = None
-        elif isinstance(value, (BaseValue, str, bool)):
+        elif isinstance(value, BaseValue):
+            if self.template is not None:
+                self._check(self.template, value)
             self._value = value
         else:
-            raise TypeError("value must be a BaseValue, string or bool: {}".format(value))
+            raise TypeError(f"value must be a BaseValue: {value}")
 
     @property
     def template(self) -> Optional[Union[AttributeTemplate, LinkByUID]]:
@@ -79,6 +93,8 @@ class BaseAttribute(DictSerializable):
         if template is None:
             self._template = None
         elif isinstance(template, (self._template_type(), LinkByUID)):
+            if self.value is not None and isinstance(template, AttributeTemplate):
+                self._check(template, self.value)
             self._template = template
         else:
             raise TypeError("template must be a BaseAttributeTemplate or "

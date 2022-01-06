@@ -2,7 +2,9 @@ from gemd.entity.attribute.property_and_conditions import PropertyAndConditions
 from gemd.entity.object.process_spec import ProcessSpec
 from gemd.entity.object.base_object import BaseObject
 from gemd.entity.object.has_process import HasProcess
+from gemd.entity.object.has_properties import HasProperties
 from gemd.entity.object.has_template import HasTemplate
+from gemd.entity.template.has_property_templates import HasPropertyTemplates
 from gemd.entity.template.material_template import MaterialTemplate
 from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
@@ -11,7 +13,7 @@ from gemd.entity.setters import validate_list
 from typing import Optional, Union, Iterable, List, Set, Mapping, Type
 
 
-class MaterialSpec(BaseObject, HasTemplate, HasProcess):
+class MaterialSpec(BaseObject, HasTemplate, HasProcess, HasProperties):
     """
     A material specification.
 
@@ -59,11 +61,11 @@ class MaterialSpec(BaseObject, HasTemplate, HasProcess):
                  file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
         BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
                             file_links=file_links)
+        HasTemplate.__init__(self, template)
         self._properties = None
         self.properties = properties
         self._process = None
         self.process = process
-        HasTemplate.__init__(self, template)
 
     @property
     def properties(self) -> List[PropertyAndConditions]:
@@ -72,7 +74,9 @@ class MaterialSpec(BaseObject, HasTemplate, HasProcess):
 
     @properties.setter
     def properties(self, properties: Iterable[PropertyAndConditions]):
-        self._properties = validate_list(properties, PropertyAndConditions)
+        """Set the list of property-and-conditions."""
+        checker = self._generate_template_check(HasPropertyTemplates.validate_property)
+        self._properties = validate_list(properties, PropertyAndConditions, trigger=checker)
 
     @property
     def process(self) -> Union[ProcessSpec, LinkByUID]:
