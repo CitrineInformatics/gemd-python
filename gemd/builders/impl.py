@@ -16,7 +16,7 @@ from gemd.entity.value import NominalReal, NominalInteger, NominalCategorical, \
 from gemd.entity.value.continuous_value import ContinuousValue
 from gemd.entity.value.base_value import BaseValue
 
-from typing import Union, List, overload
+from typing import Union, List
 
 
 def make_node(name: str,
@@ -75,34 +75,6 @@ def make_node(name: str,
     return my_mat_run
 
 
-@overload
-def add_edge(input_material: MaterialRun,
-             output_material: MaterialRun,
-             *,
-             name: str = None,
-             mass_fraction: Union[float, ContinuousValue] = None,
-             number_fraction: Union[float, ContinuousValue] = None,
-             volume_fraction: Union[float, ContinuousValue] = None,
-             absolute_quantity: ContinuousValue = None,
-             absolute_units: None = None,
-             ) -> IngredientRun:
-    """Connect two material-process spec-run quadruples with ingredients."""
-
-
-@overload
-def add_edge(input_material: MaterialRun,
-             output_material: MaterialRun,
-             *,
-             name: str = None,
-             mass_fraction: Union[float, ContinuousValue] = None,
-             number_fraction: Union[float, ContinuousValue] = None,
-             volume_fraction: Union[float, ContinuousValue] = None,
-             absolute_quantity: Union[int, float] = None,
-             absolute_units: str = None,
-             ) -> IngredientRun:
-    """Connect two material-process spec-run quadruples with ingredients."""
-
-
 def add_edge(input_material: MaterialRun,
              output_material: MaterialRun,
              *,
@@ -142,8 +114,9 @@ def add_edge(input_material: MaterialRun,
         A IngredientRun with linked processes, specs and materials
 
     """
-    if not isinstance(output_material.spec, MaterialSpec) \
-            or output_material.spec.process is None \
+    output_spec = output_material.spec
+    if not isinstance(output_spec, MaterialSpec) \
+            or output_spec.process is None \
             or output_material.process is None:
         raise ValueError("Output Material must be a MaterialRun with connected "
                          "Specs and Processes.")
@@ -153,7 +126,7 @@ def add_edge(input_material: MaterialRun,
     if name is None:
         name = input_material.name
     my_ingredient_spec = IngredientSpec(name=name,
-                                        process=output_material.spec.process,
+                                        process=output_spec.process,
                                         material=input_material.spec
                                         )
     my_ingredient_run = IngredientRun(spec=my_ingredient_spec,
@@ -241,28 +214,10 @@ def add_measurement(material: MaterialRun,
     return my_measurement_run
 
 
-@overload
-def add_attribute(target: HasProperties,
-                  template: PropertyTemplate,
-                  value: Union[BaseValue, str, float, int]) -> Property:
-    """Generate an attribute, and then add it attribute to a GEMD object."""
-
-
-@overload
-def add_attribute(target: HasConditions,
-                  template: ConditionTemplate,
-                  value: Union[BaseValue, str, float, int]) -> Condition:
-    """Generate an attribute, and then add it attribute to a GEMD object."""
-
-
-@overload
-def add_attribute(target: HasParameters,
-                  template: ParameterTemplate,
-                  value: Union[BaseValue, str, float, int]) -> Parameter:
-    """Generate an attribute, and then add it attribute to a GEMD object."""
-
-
-def add_attribute(target, template, value):
+def add_attribute(target: Union[HasProperties, HasConditions, HasParameters],
+                  template: Union[PropertyTemplate, ConditionTemplate, ParameterTemplate],
+                  value: Union[BaseValue, str, float, int]
+                  ) -> Union[Property, Condition, Parameter]:
     """
     Generate an attribute, and then add it attribute to a GEMD object.
 
@@ -308,25 +263,9 @@ def add_attribute(target, template, value):
     return attribute
 
 
-@overload
-def make_attribute(template: PropertyTemplate,
-                   value: Union[BaseValue, str, float, int]) -> Property:
-    """Generate an Attribute and the contained Value."""
-
-
-@overload
-def make_attribute(template: ConditionTemplate,
-                   value: Union[BaseValue, str, float, int]) -> Condition:
-    """Generate an Attribute and the contained Value."""
-
-
-@overload
-def make_attribute(template: ParameterTemplate,
-                   value: Union[BaseValue, str, float, int]) -> Parameter:
-    """Generate an Attribute and the contained Value."""
-
-
-def make_attribute(template, value):
+def make_attribute(template: Union[PropertyTemplate, ConditionTemplate, ParameterTemplate],
+                   value: Union[BaseValue, str, float, int]
+                   ) -> Union[Property, Condition, Parameter]:
     """
     Generate an Attribute and the contained Value.
 
@@ -359,32 +298,6 @@ def make_attribute(template, value):
     attribute = attr_class(name=template.name, value=value, template=template)
 
     return attribute
-
-
-@overload
-def make_value(value: Union[str, float, int], bounds: RealBounds) -> NominalReal:
-    """Generate a Value object based upon a number or string and a particular bounds."""
-
-
-@overload
-def make_value(value: Union[str, float, int], bounds: IntegerBounds) -> NominalInteger:
-    """Generate a Value object based upon a number or string and a particular bounds."""
-
-
-@overload
-def make_value(value: Union[str, float, int], bounds: CategoricalBounds) -> NominalCategorical:
-    """Generate a Value object based upon a number or string and a particular bounds."""
-
-
-@overload
-def make_value(value: Union[str, float, int], bounds: CompositionBounds) -> EmpiricalFormula:
-    """Generate a Value object based upon a number or string and a particular bounds."""
-
-
-@overload
-def make_value(value: Union[str, float, int],
-               bounds: MolecularStructureBounds) -> Union[InChI, Smiles]:
-    """Generate a Value object based upon a number or string and a particular bounds."""
 
 
 def make_value(value: Union[str, float, int],
