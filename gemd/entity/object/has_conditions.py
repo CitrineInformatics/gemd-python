@@ -1,12 +1,14 @@
 """For entities that have conditions."""
 from gemd.entity.has_dependencies import HasDependencies
+from gemd.entity.object.has_template_check_generator import HasTemplateCheckGenerator
+from gemd.entity.template.has_condition_templates import HasConditionTemplates
 from gemd.entity.attribute.condition import Condition
 from gemd.entity.setters import validate_list
 
 from typing import Union, Iterable, List, Set
 
 
-class HasConditions(HasDependencies):
+class HasConditions(HasTemplateCheckGenerator, HasDependencies):
     """Mixin-trait for entities that include conditions.
 
     Parameters
@@ -28,7 +30,8 @@ class HasConditions(HasDependencies):
     @conditions.setter
     def conditions(self, conditions: Iterable[Condition]):
         """Set the list of conditions."""
-        self._conditions = validate_list(conditions, Condition)
+        checker = self._generate_template_check(HasConditionTemplates.validate_condition)
+        self._conditions = validate_list(conditions, Condition, trigger=checker)
 
     def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:
         """Return a set of all immediate dependencies (no recursion)."""

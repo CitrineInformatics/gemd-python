@@ -82,3 +82,13 @@ def test_equality():
 
     spec5 = next(x for x in flatten(spec4, 'test-scope') if isinstance(x, ProcessSpec))
     assert spec5 == spec4, "Flattening removes measurement references, but that's okay"
+
+
+def test_template_check_generator():
+    """Verify that the generator throws exceptions."""
+    spec1 = ProcessSpec("A spec")
+    with pytest.raises(ValueError):  # Can't find class
+        spec1._generate_template_check(validate=lambda x, y: True)
+
+    with pytest.raises(ValueError):  # Can't find attribute
+        spec1._generate_template_check(validate=ProcessSpec.name.fget)
