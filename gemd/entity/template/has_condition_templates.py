@@ -67,6 +67,22 @@ class HasConditionTemplates(HasDependencies):
                                          trigger=BaseTemplate._homogenize_ranges
                                          )
 
+    def validate_condition(self, condition: "Condition") -> bool:  # noqa: F821
+        """Check if the condition is consistent w/ this template."""
+        if condition.template is not None:
+            attr, bnd = next((x for x in self.conditions if condition.template == x[0]),
+                             (None, None))
+        else:
+            attr, bnd = next((x for x in self.conditions if condition.name == x[0].name),
+                             (None, None))
+
+        if bnd is not None:
+            return bnd.contains(condition.value)
+        elif attr is not None and isinstance(attr, ConditionTemplate):
+            return attr.bounds.contains(condition.value)
+        else:
+            return True  # Nothing to check against
+
     def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {attr[0] for attr in self.conditions}

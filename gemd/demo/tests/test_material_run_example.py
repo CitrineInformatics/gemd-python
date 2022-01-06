@@ -1,6 +1,6 @@
 """Test the ingestion of a material run."""
 from gemd.json import dump, load
-from gemd.ingest.material_run_example import ingest_material_run
+from gemd.demo.material_run_example import ingest_material_run
 import tempfile
 
 # Example data (that could have been loaded from a json file)

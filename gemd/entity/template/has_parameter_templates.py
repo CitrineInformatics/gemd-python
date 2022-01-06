@@ -67,6 +67,22 @@ class HasParameterTemplates(HasDependencies):
                                          trigger=BaseTemplate._homogenize_ranges
                                          )
 
+    def validate_parameter(self, parameter: "Parameter") -> bool:  # noqa: F821
+        """Check if the parameter is consistent w/ this template."""
+        if parameter.template is not None:
+            attr, bnd = next((x for x in self.parameters if parameter.template == x[0]),
+                             (None, None))
+        else:
+            attr, bnd = next((x for x in self.parameters if parameter.name == x[0].name),
+                             (None, None))
+
+        if bnd is not None:
+            return bnd.contains(parameter.value)
+        elif attr is not None and isinstance(attr, ParameterTemplate):
+            return attr.bounds.contains(parameter.value)
+        else:
+            return True  # Nothing to check against
+
     def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {attr[0] for attr in self.parameters}

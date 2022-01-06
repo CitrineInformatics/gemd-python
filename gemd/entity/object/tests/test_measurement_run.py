@@ -6,15 +6,15 @@ from gemd.json import dumps, loads
 from gemd.entity.bounds import IntegerBounds
 from gemd.entity.object import MeasurementRun, MaterialRun
 from gemd.entity.object.measurement_spec import MeasurementSpec
-from gemd.entity.attribute.condition import Condition
-from gemd.entity.attribute.parameter import Parameter
-from gemd.entity.attribute.property import Property
+from gemd.entity.attribute import Condition, Parameter, Property
 from gemd.entity.source.performed_source import PerformedSource
 from gemd.entity.template import MeasurementTemplate, PropertyTemplate, ParameterTemplate, \
     ConditionTemplate
 from gemd.entity.value import NominalReal, NominalInteger
 from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
+from gemd.entity.bounds import RealBounds
+from gemd.entity.bounds_validation import validation_level, WarningLevel
 from gemd.util.impl import substitute_links
 
 
@@ -125,6 +125,37 @@ def test_invalid_assignment():
         MeasurementRun("name", material=FileLink("filename", "url"))
     with pytest.raises(TypeError):
         MeasurementRun()  # Name is required
+
+
+def test_template_validations(caplog):
+    """Make sure template validations and level controls behave as expected."""
+    msr_tmpl = MeasurementTemplate(
+        name="Measurement Template",
+        properties=[PropertyTemplate("Name", bounds=RealBounds(0, 1, ""))],
+        conditions=[ConditionTemplate("Name", bounds=RealBounds(0, 1, ""))],
+        parameters=[ParameterTemplate("Name", bounds=RealBounds(0, 1, ""))],
+    )
+    msr_spec = MeasurementSpec("Measurement Spec", template=msr_tmpl)
+    msr_run = MeasurementRun("MeasurementRun", spec=msr_spec)
+    with validation_level(WarningLevel.IGNORE):
+        msr_run.properties.append(Property("Name", value=NominalReal(-1, "")))
+        msr_run.conditions.append(Condition("Name", value=NominalReal(-1, "")))
+        msr_run.parameters.append(Parameter("Name", value=NominalReal(-1, "")))
+        assert len(caplog.records) == 0, "Logging records wasn't empty"
+    with validation_level(WarningLevel.WARNING):
+        msr_run.properties.append(Property("Name", value=NominalReal(-1, "")))
+        assert len(caplog.records) == 1, "WARNING didn't warn on invalid Property."
+        msr_run.conditions.append(Condition("Name", value=NominalReal(-1, "")))
+        assert len(caplog.records) == 2, "WARNING didn't warn on invalid Condition."
+        msr_run.parameters.append(Parameter("Name", value=NominalReal(-1, "")))
+        assert len(caplog.records) == 3, "WARNING didn't warn on invalid Parameter."
+    with validation_level(WarningLevel.FATAL):
+        with pytest.raises(ValueError):
+            msr_run.properties.append(Property("Name", value=NominalReal(-1, "")))
+        with pytest.raises(ValueError):
+            msr_run.conditions.append(Condition("Name", value=NominalReal(-1, "")))
+        with pytest.raises(ValueError):
+            msr_run.parameters.append(Parameter("Name", value=NominalReal(-1, "")))
 
 
 def test_template_access():
