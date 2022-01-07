@@ -1,0 +1,8 @@
+gemd.entity.object.has\_template\_check\_generator module
+=========================================================
+
+.. automodule:: gemd.entity.object.has_template_check_generator
+   :members:
+   :undoc-members:
+   :inherited-members:
+   :show-inheritance:

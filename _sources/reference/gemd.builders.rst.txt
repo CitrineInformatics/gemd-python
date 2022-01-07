@@ -1,5 +1,5 @@
-gemd.ingest package
-===================
+gemd.builders package
+=====================
 
 Submodules
 ----------
@@ -7,13 +7,12 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   gemd.ingest.material_run_example
-   gemd.ingest.table_example
+   gemd.builders.impl
 
 Module contents
 ---------------
 
-.. automodule:: gemd.ingest
+.. automodule:: gemd.builders
    :members:
    :undoc-members:
    :inherited-members:

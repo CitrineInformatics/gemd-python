@@ -1,0 +1,8 @@
+gemd.entity.object.has\_material module
+=======================================
+
+.. automodule:: gemd.entity.object.has_material
+   :members:
+   :undoc-members:
+   :inherited-members:
+   :show-inheritance:

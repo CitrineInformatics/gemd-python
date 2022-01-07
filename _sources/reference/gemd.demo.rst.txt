@@ -8,8 +8,10 @@ Submodules
    :maxdepth: 4
 
    gemd.demo.cake
+   gemd.demo.material_run_example
    gemd.demo.measurement_example
    gemd.demo.strehlow_and_cook
+   gemd.demo.table_example
 
 Module contents
 ---------------

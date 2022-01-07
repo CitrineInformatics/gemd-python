@@ -21,9 +21,11 @@ Submodules
    :maxdepth: 4
 
    gemd.entity.base_entity
+   gemd.entity.bounds_validation
    gemd.entity.case_insensitive_dict
    gemd.entity.dict_serializable
    gemd.entity.file_link
+   gemd.entity.has_dependencies
    gemd.entity.link_by_uid
    gemd.entity.setters
    gemd.entity.util

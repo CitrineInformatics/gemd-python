@@ -1,0 +1,8 @@
+gemd.entity.has\_dependencies module
+====================================
+
+.. automodule:: gemd.entity.has_dependencies
+   :members:
+   :undoc-members:
+   :inherited-members:
+   :show-inheritance:

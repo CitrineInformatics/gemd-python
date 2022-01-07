@@ -1,0 +1,8 @@
+gemd.demo.table\_example module
+===============================
+
+.. automodule:: gemd.demo.table_example
+   :members:
+   :undoc-members:
+   :inherited-members:
+   :show-inheritance:

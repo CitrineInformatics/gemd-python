@@ -7,10 +7,10 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   gemd.builders
    gemd.demo
    gemd.entity
    gemd.enumeration
-   gemd.ingest
    gemd.json
    gemd.units
    gemd.util
