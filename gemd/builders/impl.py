@@ -35,9 +35,9 @@ def make_node(name: str,
         Name of the ProcessRun and ProcessSpec.  Defaults to
         `process_template.name` if `process_template` is defined, else `name`.
     process_template: ProcessTemplate
-        ProcessTemplate for the quadruple.
+        ProcessTemplate for the ProcessSpec in the quadruple.
     material_template: MaterialTemplate
-        MaterialTemplate for the quadruple.
+        MaterialTemplate for the MaterialSpec in the quadruple.
 
     Returns
     --------
