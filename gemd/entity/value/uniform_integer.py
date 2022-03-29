@@ -14,15 +14,16 @@ class UniformInteger(IntegerValue):
         Inclusive lower bound of the distribution.
     upper_bound: int
         Inclusive upper bound of the distribution.
-    units: str
-        An optional string describing the units. If units are supplied, they
-        must be parseable by Pint. By default, "dimensionless" is used.
+    units: optional[str]
+        An optional string describing the units that must be parseable by Pint, if supplied.
+        If this argument is not supplied, an empty string will be used for the units of a
+        dimensionless quantity.
 
     """
 
     typ = "uniform_integer"
 
-    def __init__(self, lower_bound: int, upper_bound: int, units="dimensionless"):
+    def __init__(self, lower_bound: int, upper_bound: int, units=""):
         self._lower_bound = None
         self._upper_bound = None
         self.lower_bound = lower_bound

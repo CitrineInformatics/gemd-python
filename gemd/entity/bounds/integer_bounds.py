@@ -17,7 +17,7 @@ class IntegerBounds(BaseBounds):
         Lower endpoint.
     upper_bound: int
         Upper endpoint.
-    default_units: str
+    default_units: optional[str]
         An optional string describing the units that must be parseable by Pint, if supplied.
         If this argument is not supplied, an empty string will be used for the units of a
         dimensionless quantity.

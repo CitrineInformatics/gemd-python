@@ -1,7 +1,7 @@
 """Test IntegerBounds."""
 import pytest
 
-from gemd.entity.bounds.integer_bounds import IntegerBounds
+from gemd.entity.bounds.integer_bounds import IntegerBounds, DIMENSIONLESS
 from gemd.entity.bounds.real_bounds import RealBounds
 
 
@@ -46,8 +46,8 @@ def test_contains_with_modified_units():
     units = "kilometer"
     has_units = IntegerBounds(0, 2, default_units=units)
 
-    assert IntegerBounds(0, 2).default_units == "dimensionless"
-    assert IntegerBounds(0, 2, default_units="").default_units == "dimensionless"
+    assert IntegerBounds(0, 2).default_units == DIMENSIONLESS
+    assert IntegerBounds(0, 2, default_units="").default_units == DIMENSIONLESS
     assert has_units.default_units == units
 
     new_units = "meter"

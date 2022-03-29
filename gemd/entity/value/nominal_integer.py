@@ -11,15 +11,16 @@ class NominalInteger(IntegerValue):
     ----------
     nominal: int
         A nominal value--not assumed to be exact.
-    units: str
+    units: optional[str]
         An optional string describing the units that must be parseable by Pint, if supplied.
-        If this argument is not supplied, the 'dimensionless' string will be used.
+        If this argument is not supplied, an empty string will be used for the units of a
+        dimensionless quantity.
 
     """
 
     typ = "nominal_integer"
 
-    def __init__(self, nominal, units="dimensionless"):
+    def __init__(self, nominal, units=""):
         self._nominal = None
         self.nominal = nominal
         self.units = units
