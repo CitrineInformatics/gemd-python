@@ -30,3 +30,24 @@ def test_contains():
     bounds = IntegerBounds(1, 3)
     assert bounds.contains(UniformInteger(1, 2)._to_bounds())
     assert not bounds.contains(UniformInteger(3, 5)._to_bounds())
+
+def test_contains_units():
+    """Test that bounds unit conversion works"""
+    bounds = IntegerBounds(1, 3)
+    assert bounds.contains(UniformInteger(1, 2)._to_bounds())
+    assert not bounds.contains(UniformInteger(3, 5)._to_bounds())
+
+
+def test_contains_units_comparison():
+    """Test optional default units being compared"""
+    units = "kilometer"
+    bounds = IntegerBounds(0, 2, default_units=units)
+
+    assert bounds.contains(bounds)
+    assert bounds.contains(UniformInteger(0, 2000, units="meter")._to_bounds())
+    assert not bounds.contains(UniformInteger(0, 2001, units="meter")._to_bounds())
+    assert not bounds.contains(UniformInteger(-1, 2000, units="meter")._to_bounds())
+
+    with pytest.raises(ValueError):
+        # Cannot compare dimensionless with "kilometers"
+        bounds.contains(UniformInteger(0, 2000)._to_bounds())
