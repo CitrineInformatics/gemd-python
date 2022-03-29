@@ -44,10 +44,10 @@ def test_contains():
 def test_contains_with_modified_units():
     """Test optional default units being converted"""
     units = "kilometer"
-    no_units = IntegerBounds(0, 2)
     has_units = IntegerBounds(0, 2, default_units=units)
 
-    assert no_units.default_units == "dimensionless"
+    assert IntegerBounds(0, 2).default_units == "dimensionless"
+    assert IntegerBounds(0, 2, default_units="").default_units == "dimensionless"
     assert has_units.default_units == units
 
     new_units = "meter"

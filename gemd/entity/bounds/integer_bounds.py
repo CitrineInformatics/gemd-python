@@ -19,13 +19,14 @@ class IntegerBounds(BaseBounds):
         Upper endpoint.
     default_units: str
         An optional string describing the units that must be parseable by Pint, if supplied.
-        If this argument is not supplied, the 'dimensionless' string will be used.
+        If this argument is not supplied, an empty string will be used for the units of a
+        dimensionless quantity.
 
     """
 
     typ = "integer_bounds"
 
-    def __init__(self, lower_bound=None, upper_bound=None, default_units=DIMENSIONLESS):
+    def __init__(self, lower_bound=None, upper_bound=None, default_units=''):
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
 
