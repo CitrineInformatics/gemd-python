@@ -39,3 +39,17 @@ def test_contains():
 
     assert int_bounds.contains(NominalInteger(1))
     assert not int_bounds.contains(NominalInteger(5))
+
+
+def test_default_units():
+    """Test optional default units"""
+    units = "meter"
+    no_units = IntegerBounds(0, 2)
+    has_units = IntegerBounds(0, 2, default_units=units)
+
+    assert no_units.default_units == "dimensionless"
+    assert has_units.default_units == units
+
+    new_units = "kilometer"
+    has_units.default_units = new_units
+    assert has_units.default_units == new_units

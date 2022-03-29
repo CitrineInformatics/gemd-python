@@ -321,7 +321,7 @@ def make_value(value: Union[str, float, int],
     if isinstance(bounds, RealBounds):
         result = NominalReal(value, units=bounds.default_units)
     elif isinstance(bounds, IntegerBounds):
-        result = NominalInteger(value)
+        result = NominalInteger(value, units=bounds.default_units)
     elif isinstance(bounds, CategoricalBounds):
         result = NominalCategorical(value)
     elif isinstance(bounds, CompositionBounds):

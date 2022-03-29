@@ -1,4 +1,5 @@
 """A uniformly distributed integer value."""
+from gemd import units
 from gemd.entity.value.integer_value import IntegerValue
 from gemd.entity.bounds import IntegerBounds
 
@@ -13,17 +14,20 @@ class UniformInteger(IntegerValue):
         Inclusive lower bound of the distribution.
     upper_bound: int
         Inclusive upper bound of the distribution.
+    units: str
+        An optional string describing the units. If units are supplied, they
+        must be parseable by Pint. By default, "dimensionless" is used.
 
     """
 
     typ = "uniform_integer"
 
-    def __init__(self, lower_bound: int, upper_bound: int):
+    def __init__(self, lower_bound: int, upper_bound: int, units="dimensionless"):
         self._lower_bound = None
         self._upper_bound = None
-
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
+        self.units = units
 
     @property
     def lower_bound(self) -> int:
@@ -73,4 +77,4 @@ class UniformInteger(IntegerValue):
             :class:`bounds <gemd.entity.bounds.integer_bounds.IntegerBounds>`.
 
         """
-        return IntegerBounds(lower_bound=self.lower_bound, upper_bound=self.upper_bound)
+        return IntegerBounds(lower_bound=self.lower_bound, upper_bound=self.upper_bound, default_units=self.units)

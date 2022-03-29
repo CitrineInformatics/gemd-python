@@ -1,5 +1,5 @@
 """Bound a real number to be between two values."""
-from gemd.entity.bounds.base_bounds import BaseBounds
+from gemd.entity.bounds.base_bounds import BaseBounds, convert_bounds
 import gemd.units as units
 
 from typing import Union
@@ -79,33 +79,12 @@ class RealBounds(BaseBounds):
             bounds = bounds._to_bounds()
         if not isinstance(bounds, RealBounds):
             return False
+        if (not bounds.default_units) ^ (not self.default_units):
+            raise ValueError("Unit mismatch, cannot compare dimensional and dimensionless bounds")
 
-        lower, upper = self._convert_bounds(bounds.default_units)
+        lower, upper = convert_bounds(self.lower_bound, self.upper_bound,
+                                      self.default_units, bounds.default_units)
         if lower is None:
             return False
 
         return bounds.lower_bound >= lower and bounds.upper_bound <= upper
-
-    def _convert_bounds(self, target_units):
-        """
-        Convert the bounds to the target unit system, or None if not possible.
-
-        Parameters
-        ----------
-        target_units: str
-            The units to convert into.
-
-        Returns
-        -------
-        tuple (float, float)
-            A tuple of the (lower_bound, upper_bound) in the target units.
-
-        """
-        try:
-            lower_bound = units.convert_units(
-                self.lower_bound, self.default_units, target_units)
-            upper_bound = units.convert_units(
-                self.upper_bound, self.default_units, target_units)
-            return lower_bound, upper_bound
-        except units.IncompatibleUnitsError:
-            return None, None

@@ -11,14 +11,18 @@ class NominalInteger(IntegerValue):
     ----------
     nominal: int
         A nominal value--not assumed to be exact.
+    units: str
+        An optional string describing the units that must be parseable by Pint, if supplied.
+        If this argument is not supplied, the 'dimensionless' string will be used.
 
     """
 
     typ = "nominal_integer"
 
-    def __init__(self, nominal):
+    def __init__(self, nominal, units="dimensionless"):
         self._nominal = None
         self.nominal = nominal
+        self.units = units
 
     @property
     def nominal(self) -> int:
@@ -45,4 +49,4 @@ class NominalInteger(IntegerValue):
             :class:`bounds <gemd.entity.bounds.integer_bounds.IntegerBounds>`.
 
         """
-        return IntegerBounds(lower_bound=self.nominal, upper_bound=self.nominal)
+        return IntegerBounds(lower_bound=self.nominal, upper_bound=self.nominal, default_units=self.units)
