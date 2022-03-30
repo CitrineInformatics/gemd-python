@@ -17,14 +17,15 @@ class IntegerBounds(BaseBounds):
         Upper endpoint.
     default_units: optional[str]
         An optional string describing the units that must be parseable by Pint, if supplied.
-        If this argument is not supplied, an empty string will be used for the units of a
-        dimensionless quantity.
+        If this argument is not supplied, the 'dimensionless' string will be used for the
+        units of a dimensionless quantity.  If an empty string is used, it will be converted
+        to 'dimensionless'.
 
     """
 
     typ = "integer_bounds"
 
-    def __init__(self, lower_bound=None, upper_bound=None, default_units=''):
+    def __init__(self, lower_bound=None, upper_bound=None, default_units=DIMENSIONLESS):
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
 
@@ -49,7 +50,7 @@ class IntegerBounds(BaseBounds):
     def default_units(self, default_units):
         if default_units is None:
             raise ValueError("Integer bounds must have units. "
-                             "Use 'default_units=None' for the default dimensionless quantity.")
+                             "Use default_units='' for the default dimensionless quantity.")
         self._default_units = units.parse_units(default_units)
 
     def contains(self, bounds: Union[BaseBounds, "BaseValue"]) -> bool:
