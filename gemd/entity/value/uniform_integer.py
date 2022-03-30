@@ -1,5 +1,4 @@
 """A uniformly distributed integer value."""
-from gemd import units
 from gemd.entity.value.integer_value import IntegerValue
 from gemd.entity.bounds import IntegerBounds
 
@@ -78,4 +77,5 @@ class UniformInteger(IntegerValue):
             :class:`bounds <gemd.entity.bounds.integer_bounds.IntegerBounds>`.
 
         """
-        return IntegerBounds(lower_bound=self.lower_bound, upper_bound=self.upper_bound, default_units=self.units)
+        return IntegerBounds(lower_bound=self.lower_bound, upper_bound=self.upper_bound,
+                             default_units=self.units)

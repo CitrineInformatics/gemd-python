@@ -79,8 +79,6 @@ class RealBounds(BaseBounds):
             bounds = bounds._to_bounds()
         if not isinstance(bounds, RealBounds):
             return False
-        if (not bounds.default_units) ^ (not self.default_units):
-            raise ValueError("Unit mismatch, cannot compare dimensional and dimensionless bounds")
 
         lower, upper = convert_bounds(self.lower_bound, self.upper_bound,
                                       self.default_units, bounds.default_units)

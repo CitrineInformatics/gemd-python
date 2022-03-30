@@ -5,6 +5,8 @@ from typing import Union
 import gemd.units as units
 from gemd.entity.dict_serializable import DictSerializable
 
+DIMENSIONLESS = "dimensionless"
+
 
 class BaseBounds(DictSerializable):
     """Base class for bounds, including RealBounds and CategoricalBounds."""

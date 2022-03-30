@@ -50,4 +50,5 @@ class NominalInteger(IntegerValue):
             :class:`bounds <gemd.entity.bounds.integer_bounds.IntegerBounds>`.
 
         """
-        return IntegerBounds(lower_bound=self.nominal, upper_bound=self.nominal, default_units=self.units)
+        return IntegerBounds(lower_bound=self.nominal, upper_bound=self.nominal,
+                             default_units=self.units)

@@ -1,10 +1,8 @@
 """Bounds an integer to be between two values."""
-from gemd.entity.bounds.base_bounds import BaseBounds, convert_bounds
+from gemd.entity.bounds.base_bounds import BaseBounds, convert_bounds, DIMENSIONLESS
 import gemd.units as units
 
 from typing import Union
-
-DIMENSIONLESS = "dimensionless"
 
 
 class IntegerBounds(BaseBounds):
@@ -85,7 +83,5 @@ class IntegerBounds(BaseBounds):
 
         lower, upper = convert_bounds(self.lower_bound, self.upper_bound,
                                       self.default_units, bounds.default_units)
-        if lower is None:
-            return False
 
         return bounds.lower_bound >= int(lower) and bounds.upper_bound <= int(upper)

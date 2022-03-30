@@ -31,15 +31,16 @@ def test_contains():
     assert bounds.contains(UniformInteger(1, 2)._to_bounds())
     assert not bounds.contains(UniformInteger(3, 5)._to_bounds())
 
+
 def test_contains_units():
-    """Test that bounds unit conversion works"""
+    """Test that bounds unit conversion works."""
     bounds = IntegerBounds(1, 3)
     assert bounds.contains(UniformInteger(1, 2)._to_bounds())
     assert not bounds.contains(UniformInteger(3, 5)._to_bounds())
 
 
 def test_contains_units_comparison():
-    """Test optional default units being compared"""
+    """Test optional default units being compared."""
     units = "kilometer"
     bounds = IntegerBounds(0, 2, default_units=units)
 
