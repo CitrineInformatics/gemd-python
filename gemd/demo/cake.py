@@ -569,7 +569,7 @@ def make_cake_spec(tmpl=None):
             "tags": [
                 'purchase::dry-goods'
             ],
-            "notes": 'Purchasing all purpose flour'
+            "notes": 'Purchasing granulated sugar'
         },
         template=tmpl["Formulaic Material"],
         tags=[
