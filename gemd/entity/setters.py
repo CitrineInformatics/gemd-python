@@ -26,7 +26,7 @@ def validate_list(obj, typ, *, trigger=None) -> ValidList:
     """
     if obj is None:
         return ValidList([], typ, trigger)
-    elif isinstance(obj, Iterable):
+    elif isinstance(obj, Iterable) and not isinstance(obj, str):
         return ValidList(obj, typ, trigger)
     else:
         return ValidList([obj], typ, trigger)
