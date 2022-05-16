@@ -2,6 +2,7 @@
 import pytest
 
 from gemd.entity.valid_list import ValidList
+from gemd.entity.setters import validate_list
 
 
 def test_access_data():
@@ -27,6 +28,14 @@ def test_access_data():
     lo_both = ValidList(_list=tuple([1, 'a']), content_type=[int, str])
     with pytest.raises(TypeError):
         lo_both[0] = 1.1
+
+
+def test_iterables():
+    """Test that Iterables are handled correctly."""
+    assert validate_list("Qwerty", str) == ["Qwerty"]
+    assert validate_list(["Qwerty"], str) == ["Qwerty"]
+    assert validate_list(("Qwerty", ), str) == ["Qwerty"]
+    assert validate_list(["Q", "w"], str) == ["Q", "w"]
 
 
 def test_triggers():
