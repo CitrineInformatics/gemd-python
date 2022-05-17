@@ -227,7 +227,7 @@ def add_attribute(target: Union[HasProperties, HasConditions, HasParameters],
         The object to attach the attribute to
     template: AttributeTemplate
         The AttributeTemplate for the attribute.
-    value: Union[BaseValue, str, float, int])
+    value: Union[BaseValue, str, float, int]
         The value for the attribute.  Accepts any GEMD Value type, or will
         attempt to generate an appropriate Value given a str, float or int.
 
@@ -273,7 +273,7 @@ def make_attribute(template: Union[PropertyTemplate, ConditionTemplate, Paramete
     ----------
     template: AttributeTemplate
         The AttributeTemplate for the attribute.
-    value: Union[BaseValue, str, float, int])
+    value: Union[BaseValue, str, float, int]
         The value for the attribute.  Accepts any GEMD Value type, or will
         attempt to generate an appropriate Value given a str, float or int.
 

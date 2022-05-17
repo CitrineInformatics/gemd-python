@@ -70,8 +70,8 @@ def _cached_issubclass(
 
     Parameters
     ----------
-    obj: object
-
+    cls: type
+        The class to evaluate
     class_or_tuple: Union[Type, Tuple[Union[Type, Tuple[Type]]]]
         A single type, a tuple of types (potentially nested)
 
@@ -99,7 +99,7 @@ def _substitute(thing: Any,
     thing: Any
         The object to traverse with substitution.
     sub: Callable[[object], object]
-        Function which provides substitute for value; should not have side-effects.
+        Function which provides substitute for value; should not have side effects.
     applies: Callable[[object], bool]
         Function which defines the domain for the sub function to be invoked.
 
@@ -151,7 +151,7 @@ def _substitute_inplace(thing: Any,
     thing: Any
         The object to traverse with substitution.
     sub: Callable[[object], object]
-        Function which provides substitute for value; should not have side-effects.
+        Function which provides substitute for value; should not have side effects.
     applies: Callable[[object], bool]
         Function which defines the domain for the sub function to be invoked.
 
@@ -253,7 +253,7 @@ def make_index(obj: Union[Iterable, BaseEntity, DictSerializable]):
     Parameters
     ----------
     obj: Union[Iterable, Mapping, BaseEntity, DictSerializable]
-        target container (dict, list, ..) from which to create an index of GEMD objects
+        target container (dict, list, ...) from which to create an index of GEMD objects
 
     """
     def _make_index(_obj: BaseEntity):
@@ -383,7 +383,7 @@ def flatten(obj, scope=None) -> List[BaseEntity]:
         if len(uids) == 0:
             raise ValueError(f"No UID for {base_obj}; pass `flatten` a `scope` to set one")
 
-        # if none of the uids are known, then its a new object and we should return it
+        # if none of the uids are known, then it's a new object and we should return it
         if not any(uid in known_uids for uid in uids):
             to_return = [base_obj]
 

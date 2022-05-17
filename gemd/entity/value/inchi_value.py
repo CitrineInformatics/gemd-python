@@ -1,4 +1,4 @@
-"""An empirical chemical formaula."""
+"""An empirical chemical formula."""
 from gemd.entity.value.molecular_value import MolecularValue
 from gemd.entity.bounds import MolecularStructureBounds
 

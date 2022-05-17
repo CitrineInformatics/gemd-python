@@ -172,9 +172,10 @@ class IngredientRun(BaseObject, HasQuantities, HasSpec, HasMaterial, HasProcess)
             The deserialized object.
 
         """
-        name = d.pop("name", None)
-        labels = d.pop("labels", None)
-        obj = super().from_dict(d)
+        clean = dict(d)
+        name = clean.pop("name", None)
+        labels = clean.pop("labels", None)
+        obj = super().from_dict(clean)
         if name is not None:
             obj._name = name
         if labels is not None:

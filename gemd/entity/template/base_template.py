@@ -58,7 +58,7 @@ class BaseTemplate(BaseEntity):
         Returns
         -------
         List[AttributeTemplate or LinkByUID, BaseBounds]
-            The attribute template and bounds that should be applied the the attribute
+            The attribute template and bounds that should be applied to the attribute
             when used in the context of **this** object.
 
         """

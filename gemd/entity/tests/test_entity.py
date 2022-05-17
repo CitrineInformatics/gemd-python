@@ -5,14 +5,21 @@ from gemd.entity.object.ingredient_run import IngredientRun
 from gemd.entity.link_by_uid import LinkByUID
 
 
-def test_id_case_sensitivitiy():
-    """Test that uids are case insensitive."""
+def test_id_case_sensitivity():
+    """Test that uids are case-insensitive."""
     with pytest.raises(ValueError):
         IngredientRun(uids={'my_id': 'sample1', 'My_ID': 'sample2'})
 
     ingredient = IngredientRun(uids={'my_id': 'sample1'})
     assert ingredient.uids['my_id'] == 'sample1'
     assert ingredient.uids['MY_id'] == 'sample1'
+
+
+def test_id_iterables():
+    """Test that the uids setter is very forgiving."""
+    assert IngredientRun(uids={'my_id': 'sample1'}).uids['my_id'] == 'sample1'
+    assert IngredientRun(uids=['my_id', 'sample1']).uids['my_id'] == 'sample1'
+    assert IngredientRun(uids=('my_id', 'sample1')).uids['my_id'] == 'sample1'
 
 
 def test_to_link():

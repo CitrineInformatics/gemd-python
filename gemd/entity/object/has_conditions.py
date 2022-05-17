@@ -6,9 +6,10 @@ from gemd.entity.attribute.condition import Condition
 from gemd.entity.setters import validate_list
 
 from typing import Union, Iterable, List, Set
+from abc import ABC
 
 
-class HasConditions(HasTemplateCheckGenerator, HasDependencies):
+class HasConditions(HasTemplateCheckGenerator, HasDependencies, ABC):
     """Mixin-trait for entities that include conditions.
 
     Parameters
@@ -18,7 +19,7 @@ class HasConditions(HasTemplateCheckGenerator, HasDependencies):
 
     """
 
-    def __init__(self, conditions: Iterable[Condition]):
+    def __init__(self, conditions: Union[Condition, Iterable[Condition]]):
         self._conditions = None
         self.conditions = conditions
 
@@ -28,7 +29,7 @@ class HasConditions(HasTemplateCheckGenerator, HasDependencies):
         return self._conditions
 
     @conditions.setter
-    def conditions(self, conditions: Iterable[Condition]):
+    def conditions(self, conditions: Union[Condition, Iterable[Condition]]):
         """Set the list of conditions."""
         checker = self._generate_template_check(HasConditionTemplates.validate_condition)
         self._conditions = validate_list(conditions, Condition, trigger=checker)

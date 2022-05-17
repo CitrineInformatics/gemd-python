@@ -1,10 +1,15 @@
 """Methods for setting and validating."""
 from gemd.entity.valid_list import ValidList
 
-from typing import Iterable
+from typing import Union, Iterable, Optional, Callable, Type, TypeVar
+
+T = TypeVar('T')
 
 
-def validate_list(obj, typ, *, trigger=None) -> ValidList:
+def validate_list(obj: Union[Iterable[T], T],
+                  typ: Union[Iterable[Type], Type],
+                  *,
+                  trigger: Callable[[T], Optional[T]] = None) -> ValidList:
     """
     Attempts to return obj as a list, each element of which has type typ.
 

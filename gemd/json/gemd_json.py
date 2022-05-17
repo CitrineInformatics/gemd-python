@@ -259,8 +259,11 @@ class GEMDJson(object):
         in the gemd package to be subclassed and overridden in the class index by their
         subclass.
 
-        :param classes: a dict mapping the type string to the class
-        :return: None
+        Parameters
+        ----------
+        classes: Dict[str, type]
+            a dict mapping the type string to the class
+
         """
         if not isinstance(classes, dict):
             raise ValueError("Must be given a dict from str -> class")
@@ -281,10 +284,20 @@ class GEMDJson(object):
 
         This function is used as the object hook when deserializing gemd objects
 
-        :param d: dictionary to try to load into a registered class instance
-        :param object_index: to add the object to if it is a BaseEntity
-        :param substitute: whether to substitute LinkByUIDs when they are found in the index
-        :return: the deserialized object, or the input dict if it wasn't recognized
+        Parameters
+        ----------
+        d: dict
+            dictionary to try to load into a registered class instance
+        object_index: dict
+            to add the object to if it is a BaseEntity
+        substitute: bool
+            whether to substitute LinkByUIDs when they are found in the index
+
+        Returns
+        -------
+        object
+            the deserialized object, or the input dict if it wasn't recognized
+
         """
         if "type" not in d:
             return d

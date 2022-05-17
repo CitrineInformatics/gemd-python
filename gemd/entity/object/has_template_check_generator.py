@@ -6,7 +6,7 @@ from gemd.entity.dict_serializable import logger
 
 from abc import ABC, abstractmethod
 from inspect import getmodule, getmembers, isclass, signature
-from typing import Union, Callable, TypeVar
+from typing import Union, Callable, TypeVar, Any
 
 T = TypeVar('T')
 
@@ -21,7 +21,7 @@ class HasTemplateCheckGenerator(ABC):
 
     def _generate_template_check(self,
                                  validate: Callable[["HasTemplateCheckGenerator", T], bool]
-                                 ) -> Callable[[T], None]:
+                                 ) -> Callable[[T], Any]:
         """
         Generate a closure for the object and the validation routine.
 

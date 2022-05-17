@@ -69,7 +69,7 @@ class DictSerializable(ABC):
         attributes["type"] = self.typ
         return attributes
 
-    def dump(self) -> str:
+    def dump(self) -> Dict[str, Any]:
         """
         Convert the object to a JSON dictionary, so that every entry is serialized.
 

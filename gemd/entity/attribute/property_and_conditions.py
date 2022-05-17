@@ -26,7 +26,9 @@ class PropertyAndConditions(DictSerializable):
 
     typ = "property_and_conditions"
 
-    def __init__(self, property: Property = None, conditions: Iterable[Condition] = None):
+    def __init__(self,
+                 property: Property = None,
+                 conditions: Union[Iterable[Condition], Condition] = None):
         self._property = None
         self.property = property
         self._conditions = None

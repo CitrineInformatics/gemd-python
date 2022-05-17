@@ -6,9 +6,10 @@ from gemd.entity.attribute.property import Property
 from gemd.entity.setters import validate_list
 
 from typing import Union, Iterable, List, Set
+from abc import ABC
 
 
-class HasProperties(HasTemplateCheckGenerator, HasDependencies):
+class HasProperties(HasTemplateCheckGenerator, HasDependencies, ABC):
     """Mixin-trait for entities that include properties.
 
     Parameters
@@ -18,7 +19,7 @@ class HasProperties(HasTemplateCheckGenerator, HasDependencies):
 
     """
 
-    def __init__(self, properties: Iterable[Property]):
+    def __init__(self, properties: Union[Property, Iterable[Property]]):
         self._properties = None
         self.properties = properties
 
@@ -28,7 +29,7 @@ class HasProperties(HasTemplateCheckGenerator, HasDependencies):
         return self._properties
 
     @properties.setter
-    def properties(self, properties: Iterable[Property]):
+    def properties(self, properties: Union[Property, Iterable[Property]]):
         """Set the list of properties."""
         checker = self._generate_template_check(HasPropertyTemplates.validate_property)
         self._properties = validate_list(properties, Property, trigger=checker)

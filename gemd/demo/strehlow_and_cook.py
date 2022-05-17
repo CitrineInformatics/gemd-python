@@ -30,6 +30,8 @@ from gemd.enumeration.origin import Origin
 
 from gemd.units import convert_units
 
+from typing import Iterable
+
 # For now, module constant, though likely this should get promoted to a package level
 DEMO_TEMPLATE_SCOPE = 'citrine-demo-sac-template'
 FULL_TABLE = "strehlow_and_cook.pif"
@@ -70,7 +72,7 @@ def minimal_subset(table):
 def formula_latex(old):
     """Transform a formula into one with LaTeX markup."""
     import re
-    return re.sub(r"(?<=[A-Za-z])([\d\.]+)(?=[A-Za-z]|$)", r"$_{\1}$", formula_clean(old))
+    return re.sub(r"(?<=[A-Za-z])([\d.]+)(?=[A-Za-z]|$)", r"$_{\1}$", formula_clean(old))
 
 
 def formula_clean(old):
@@ -79,7 +81,7 @@ def formula_clean(old):
     return re.sub(r"(?<=[A-Za-z])1(?=[A-Za-z]|$)", '', old)
 
 
-def make_templates(template_scope=DEMO_TEMPLATE_SCOPE):
+def make_templates(template_scope: str = DEMO_TEMPLATE_SCOPE):
     """Build all templates needed for the table."""
     tmpl = dict()
 
@@ -190,7 +192,7 @@ def make_templates(template_scope=DEMO_TEMPLATE_SCOPE):
     return tmpl
 
 
-def make_strehlow_objects(table=None, template_scope=DEMO_TEMPLATE_SCOPE):
+def make_strehlow_objects(table: Iterable = None, template_scope: str = DEMO_TEMPLATE_SCOPE):
     """Make a table with Strehlow & Cook data."""
     tmpl = make_templates(template_scope)
 
@@ -323,11 +325,7 @@ def make_strehlow_table(compounds):
     :return:
     """
     # Stash templates in convenience variables
-    for comp in compounds:
-        if comp.spec.properties:
-            chem_tmpl = comp.spec.properties[0].property.template
-            break
-
+    chem_tmpl = next(p.property.template for c in compounds for p in c.spec.properties)
     chem_mat_tmpl = compounds[0].spec.template
 
     tmpl = dict()
@@ -494,5 +492,5 @@ if __name__ == "__main__":
 
     print("\n\nCSV -- Display table")
     display = make_display_table(full_table)
-    for row in display:
-        print(','.join(map(lambda x: str(x), row)))
+    for row_ in display:
+        print(','.join(map(lambda x: str(x), row_)))

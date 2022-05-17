@@ -6,9 +6,10 @@ from gemd.entity.attribute.parameter import Parameter
 from gemd.entity.setters import validate_list
 
 from typing import Union, Iterable, List, Set
+from abc import ABC
 
 
-class HasParameters(HasTemplateCheckGenerator, HasDependencies):
+class HasParameters(HasTemplateCheckGenerator, HasDependencies, ABC):
     """Mixin-trait for entities that include parameters.
 
     Parameters
@@ -18,7 +19,7 @@ class HasParameters(HasTemplateCheckGenerator, HasDependencies):
 
     """
 
-    def __init__(self, parameters: Iterable[Parameter]):
+    def __init__(self, parameters: Union[Parameter, Iterable[Parameter]]):
         self._parameters = None
         self.parameters = parameters
 
@@ -28,7 +29,7 @@ class HasParameters(HasTemplateCheckGenerator, HasDependencies):
         return self._parameters
 
     @parameters.setter
-    def parameters(self, parameters: Iterable[Parameter]):
+    def parameters(self, parameters: Union[Parameter, Iterable[Parameter]]):
         """Set the list of parameters."""
         checker = self._generate_template_check(HasParameterTemplates.validate_parameter)
         self._parameters = validate_list(parameters, Parameter, trigger=checker)

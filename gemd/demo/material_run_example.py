@@ -62,7 +62,7 @@ def _parse_value(val):
     # if it is just a number wrap it in a nominal value
     elif isinstance(val, (float, int)):
         return NominalReal(val, '')
-    # if it is a single string, its either a single number of a category
+    # if it is a single string, it's either a single number of a category
     elif isinstance(val, str):
         try:
             num = float(val)

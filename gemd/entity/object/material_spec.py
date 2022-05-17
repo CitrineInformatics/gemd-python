@@ -54,7 +54,7 @@ class MaterialSpec(BaseObject, HasTemplate, HasProcess, HasProperties):
                  *,
                  template: Optional[Union[MaterialTemplate, LinkByUID]] = None,
                  process: Union[ProcessSpec, LinkByUID] = None,
-                 properties: Iterable[PropertyAndConditions] = None,
+                 properties: Union[Iterable[PropertyAndConditions], PropertyAndConditions] = None,
                  uids: Mapping[str, str] = None,
                  tags: Iterable[str] = None,
                  notes: str = None,
@@ -73,7 +73,8 @@ class MaterialSpec(BaseObject, HasTemplate, HasProcess, HasProperties):
         return self._properties
 
     @properties.setter
-    def properties(self, properties: Iterable[PropertyAndConditions]):
+    def properties(self,
+                   properties: Union[Iterable[PropertyAndConditions], PropertyAndConditions]):
         """Set the list of property-and-conditions."""
         checker = self._generate_template_check(HasPropertyTemplates.validate_property)
         self._properties = validate_list(properties, PropertyAndConditions, trigger=checker)
@@ -89,7 +90,7 @@ class MaterialSpec(BaseObject, HasTemplate, HasProcess, HasProperties):
         Link to the ProcessSpec that creates this MaterialSpec.
 
         If the input, process, is not an instance of ProcessSpec, raise an error.
-        Otherwise, make a bi-directional link: this MaterialSpec is linked to
+        Otherwise, make a bidirectional link: this MaterialSpec is linked to
         process, and process has its output_material field linked to this MaterialSpec
         """
         from gemd.entity.object.process_spec import ProcessSpec
