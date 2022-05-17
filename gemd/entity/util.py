@@ -1,12 +1,14 @@
 """Utility methods."""
 from gemd.util import recursive_foreach
 
+from typing import List, Dict, Any
+
 
 def make_instance(base_spec):
     """
     Create a set of Run objects that mimic the connectivity of the passed Spec object.
 
-    Paramters
+    Parameters
     ---------
     base_spec: BaseObject
         A spec instance that may point to other specs.
@@ -93,16 +95,23 @@ def array_like():
     return _array_like
 
 
-def complete_material_history(mat):
+def complete_material_history(mat) -> List[Dict[str, Any]]:
     """
     Get a list of every single object in the material history, all as dictionaries.
 
     This is useful for testing, if we want the context list that can be used to rehydrate
     an entire material history.
 
-    :param mat: root material run
-    :return: a list containing every object connected to mat, each a dictionary with all
-        links substituted.
+    Parameters
+    ---------
+    mat: MaterialRun
+        root material run
+    Returns
+    -------
+    list
+        a list containing every object connected to mat, each a dictionary with
+        all links substituted.
+
     """
     from gemd.entity.base_entity import BaseEntity
     import json

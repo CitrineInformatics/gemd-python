@@ -1,5 +1,7 @@
 """A list that can validate its contents."""
-from collections.abc import Iterable
+from typing import Optional, Union, Iterable, Callable, Type, TypeVar
+
+T = TypeVar('T')
 
 
 class ValidList(list):
@@ -22,7 +24,10 @@ class ValidList(list):
 
     _content_type = tuple([])
 
-    def __init__(self, _list, content_type=None, trigger=None):
+    def __init__(self,
+                 _list: Iterable,
+                 content_type: Optional[Union[Iterable[Type], Type]] = None,
+                 trigger: Callable[[T], Optional[T]] = None):
         if content_type is None:
             content_type = tuple()
 

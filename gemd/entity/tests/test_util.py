@@ -69,7 +69,7 @@ def test_serialized_history():
     assert taste_dict.get('material').get('id') == cookie_dict.get('uids').get(scope)
 
     # Check that both the material spec and the process run point to the same process spec.
-    # Because that spec was initially a LinkByUID, this also tests the methods ability to
+    # Because that spec was initially a LinkByUID, this also tests the method's ability to
     # serialize a LinkByUID.
     cookie_dough_spec_dict = next(x for x in cookie_history if x.get('type') == 'material_spec')
     buy_cookie_dough_dict = next(x for x in cookie_history if x.get('name') == 'Buy cookie dough')

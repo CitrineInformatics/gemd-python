@@ -6,7 +6,7 @@ from gemd.entity.bounds import CategoricalBounds
 
 class NominalCategorical(CategoricalValue):
     """
-    A nominal category that the value is believe to have. It may not be exact.
+    A nominal category that the value is believed to have. It may not be exact.
 
     Parameters
     ----------

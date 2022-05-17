@@ -203,7 +203,7 @@ def test_register_argument_validation():
         orig.register_classes({ProcessSpec: ProcessSpec})
 
 
-def test_pure_subsitutions():
+def test_pure_substitutions():
     """Make sure substitute methods don't mutate inputs."""
     json_str = '''
           [

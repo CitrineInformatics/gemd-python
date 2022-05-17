@@ -68,7 +68,7 @@ def test_default_scope():
 
 
 def test_flatmap_unidirectional_ordering():
-    """Test that the unidirecitonal setting is obeyed."""
+    """Test that the unidirectional setting is obeyed."""
     # The writeable link is ingredient -> process, not process -> ingredients
     proc = ProcessRun(name="foo")
     IngredientRun(notes="bar", process=proc)

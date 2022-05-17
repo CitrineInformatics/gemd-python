@@ -53,7 +53,7 @@ def test_process_run():
     process_run = ProcessRun("Bake a cake", uids={'My_ID': str(17)})
     material_run = MaterialRun("A cake", process=process_run)
 
-    # Check that a bi-directional link is established
+    # Check that a bidirectional link is established
     assert material_run.process == process_run
     assert process_run.output_material == material_run
 
@@ -104,7 +104,7 @@ def test_template_access():
     """A material run's template should be equal to its spec's template."""
     template = MaterialTemplate("material template", uids={'id': str(uuid4())})
     spec = MaterialSpec("A spec", uids={'id': str(uuid4())}, template=template)
-    mat = MaterialRun("A run", uids=['id', str(uuid4())], spec=spec)
+    mat = MaterialRun("A run", uids={'id': str(uuid4())}, spec=spec)
     assert mat.template == template
 
     mat.spec = LinkByUID.from_entity(spec)

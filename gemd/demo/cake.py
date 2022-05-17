@@ -4,6 +4,7 @@ import json
 import random
 
 from gemd.entity.attribute import Condition, Parameter, Property, PropertyAndConditions
+from gemd.entity.base_entity import BaseEntity
 from gemd.entity.bounds import IntegerBounds, RealBounds, CategoricalBounds, CompositionBounds, \
     MolecularStructureBounds
 from gemd.entity.object import ProcessSpec, ProcessRun, MaterialSpec, MaterialRun, \
@@ -796,7 +797,7 @@ def make_cake(seed=None, tmpl=None, cake_spec=None, toothpick_img=None):
     cake_obj.process.source = PerformedSource(performed_by=random.choice(operators),
                                               performed_date='2015-03-14')
 
-    def _randomize_object(item):
+    def _randomize_object(item: BaseEntity):
         # Add in the randomized particular values
         if not isinstance(item, (MaterialRun, ProcessRun, IngredientRun)):
             return
@@ -804,7 +805,7 @@ def make_cake(seed=None, tmpl=None, cake_spec=None, toothpick_img=None):
         item.add_uid(DEMO_SCOPE, '{}-{}'.format(item.spec.uids[DEMO_SCOPE], run_key))
         if item.spec.tags is not None:
             item.tags = list(item.spec.tags)
-        if item.spec.notes:  # Neither None or empty string
+        if item.spec.notes:  # Neither None nor empty string
             item.notes = 'The spec says "{}"'.format(item.spec.notes)
         if isinstance(item, MaterialRun):
             if 'raw material' in item.tags:

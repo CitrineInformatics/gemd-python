@@ -5,7 +5,7 @@ from enum import Enum
 class BaseEnumeration(Enum):
     """Enumeration class that can convert between enumerations and associated values."""
 
-    def __init__(self, *args):
+    def __init__(self, *_):
         """Ensure that there are no duplicates in the enumeration."""
         cls = self.__class__
         if any(self.value == e.value for e in cls):

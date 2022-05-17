@@ -3,11 +3,11 @@ from gemd.entity.has_dependencies import HasDependencies
 from gemd.entity.object.base_object import BaseObject
 from gemd.entity.link_by_uid import LinkByUID
 
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 from typing import Union, Set
 
 
-class HasMaterial(HasDependencies):
+class HasMaterial(HasDependencies, ABC):
     """Mix-in trait for objects that can be assigned materials."""
 
     @property
