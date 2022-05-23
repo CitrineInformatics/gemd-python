@@ -38,7 +38,7 @@ def set_uuids(obj, scope):
     return
 
 
-def _cached_isinstance(
+def cached_isinstance(
         obj: object,
         class_or_tuple: Union[Type, Tuple[Union[Type, Tuple[Type]]]]) -> bool:
     """
@@ -59,6 +59,10 @@ def _cached_isinstance(
     """
     obj_type = type(obj)
     return _cached_issubclass(obj_type, class_or_tuple)
+
+
+# Older unreleased versions of citrine-python referenced the private method directly
+_cached_isinstance = cached_isinstance
 
 
 @functools.lru_cache(maxsize=None)
@@ -116,14 +120,14 @@ def _substitute(thing: Any,
     else:
         replacement = thing
 
-    if _cached_isinstance(replacement, MutableSequence):
+    if cached_isinstance(replacement, MutableSequence):
         new = [_substitute(x, sub, applies, visited) for x in replacement]
-    elif _cached_isinstance(replacement, Tuple):
+    elif cached_isinstance(replacement, Tuple):
         new = tuple(_substitute(x, sub, applies, visited) for x in replacement)
-    elif _cached_isinstance(replacement, Mapping):
+    elif cached_isinstance(replacement, Mapping):
         new = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
                for k, v in replacement.items()}
-    elif _cached_isinstance(replacement, DictSerializable):
+    elif cached_isinstance(replacement, DictSerializable):
         new_attrs = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
                      for k, v in replacement.as_dict().items()}
         new = replacement.build(new_attrs)
@@ -157,11 +161,11 @@ def _substitute_inplace(thing: Any,
 
     """
     def _key(obj):
-        if _cached_isinstance(obj, (float, int, str)):
+        if cached_isinstance(obj, (float, int, str)):
             return None
         elif obj.__hash__ is not None:
             return obj
-        elif _cached_isinstance(obj, Iterable) and not _cached_isinstance(obj, ByteString):
+        elif cached_isinstance(obj, Iterable) and not cached_isinstance(obj, ByteString):
             return id(obj)
         else:
             return None  # pragma: no cover  Fallback for caution's sake
@@ -177,13 +181,13 @@ def _substitute_inplace(thing: Any,
     if orig_key is not None:
         visited[orig_key] = thing  # Store before we start recursing
 
-    if _cached_isinstance(thing, MutableSequence):  # Change list in place
+    if cached_isinstance(thing, MutableSequence):  # Change list in place
         for i, x in enumerate(thing):
             thing[i] = _substitute_inplace(x, sub, applies, visited)
-    elif _cached_isinstance(thing, Tuple):  # Tuples are immutable; regenerate
+    elif cached_isinstance(thing, Tuple):  # Tuples are immutable; regenerate
         thing = tuple(_substitute_inplace(x, sub, applies, visited) for x in thing)
         visited[orig_key] = thing  # We mutated it
-    elif _cached_isinstance(thing, Mapping):  # Change dict in place, both keys & values
+    elif cached_isinstance(thing, Mapping):  # Change dict in place, both keys & values
         remove = set()  # Store todos because can't mutate a dict in a loop
         update = dict()
         for k, v in thing.items():
@@ -197,7 +201,7 @@ def _substitute_inplace(thing: Any,
         for k in remove:
             thing.pop(k, None)
         thing.update(update)
-    elif _cached_isinstance(thing, DictSerializable):
+    elif cached_isinstance(thing, DictSerializable):
         for k, v in thing.as_dict().items():  # Assume key can't change b/c it's an attribute
             new_v = _substitute_inplace(v, sub, applies, visited)
             if id(v) != id(new_v):
@@ -307,7 +311,7 @@ def substitute_links(obj: Any,
 
     return method(obj,
                   sub=lambda o: o.to_link(scope=scope, allow_fallback=allow_fallback),
-                  applies=lambda o: o is not obj and _cached_isinstance(o, BaseEntity))
+                  applies=lambda o: o is not obj and cached_isinstance(o, BaseEntity))
 
 
 def substitute_objects(obj,
@@ -337,7 +341,7 @@ def substitute_objects(obj,
 
     return method(obj,
                   sub=lambda l: index.get(l, l),
-                  applies=lambda o: _cached_isinstance(o, LinkByUID))
+                  applies=lambda o: cached_isinstance(o, LinkByUID))
 
 
 def flatten(obj, scope=None) -> List[BaseEntity]:
@@ -433,21 +437,21 @@ def recursive_foreach(obj: Union[Iterable, BaseEntity, DictSerializable],
             else:
                 seen.add(this)
 
-        if apply_first and _cached_isinstance(this, BaseEntity):
+        if apply_first and cached_isinstance(this, BaseEntity):
             func(this)
 
-        if _cached_isinstance(this, Mapping):
+        if cached_isinstance(this, Mapping):
             for x in concatv(this.keys(), this.values()):
                 queue.append(x)
-        elif _cached_isinstance(this, DictSerializable):
+        elif cached_isinstance(this, DictSerializable):
             for k, x in this.__dict__.items():
                 queue.append(x)
-        elif _cached_isinstance(this, Iterable) \
-                and not _cached_isinstance(this, (str, ByteString)):
+        elif cached_isinstance(this, Iterable) \
+                and not cached_isinstance(this, (str, ByteString)):
             for x in this:
                 queue.append(x)
 
-        if not apply_first and _cached_isinstance(this, BaseEntity):
+        if not apply_first and cached_isinstance(this, BaseEntity):
             func(this)
 
     return
@@ -488,20 +492,20 @@ def recursive_flatmap(obj: Union[Iterable, BaseEntity, DictSerializable],
             else:
                 seen.add(this)
 
-        if _cached_isinstance(this, BaseEntity):
+        if cached_isinstance(this, BaseEntity):
             res.extend(func(this))
 
-        if _cached_isinstance(this, Mapping):
+        if cached_isinstance(this, Mapping):
             queue.extend(concatv(this.keys(), this.values()))
-        elif _cached_isinstance(this, DictSerializable):
+        elif cached_isinstance(this, DictSerializable):
             for k, x in sorted(this.__dict__.items()):
-                if unidirectional and _cached_isinstance(this, BaseEntity) and k in this.skip:
+                if unidirectional and cached_isinstance(this, BaseEntity) and k in this.skip:
                     continue
                 queue.append(x)
-        elif _cached_isinstance(this, Reversible):
+        elif cached_isinstance(this, Reversible):
             queue.extend(reversed(this))  # Preserve order of the list/tuple
-        elif _cached_isinstance(this, Iterable) \
-                and not _cached_isinstance(this, (str, ByteString)):
+        elif cached_isinstance(this, Iterable) \
+                and not cached_isinstance(this, (str, ByteString)):
             queue.extend(this)  # No control over order
 
     return res
@@ -514,9 +518,9 @@ def writable_sort_order(key: Union[BaseEntity, str]) -> int:
     from gemd.entity.template import ConditionTemplate, MaterialTemplate, MeasurementTemplate, \
         ParameterTemplate, ProcessTemplate, PropertyTemplate
 
-    if _cached_isinstance(key, BaseEntity):
+    if cached_isinstance(key, BaseEntity):
         typ = key.typ
-    elif _cached_isinstance(key, str):
+    elif cached_isinstance(key, str):
         typ = key
     else:
         raise ValueError("Can ony sort BaseEntities and type strings, not {}".format(key))
