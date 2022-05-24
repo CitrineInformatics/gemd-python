@@ -143,7 +143,7 @@ corresponding to serialized DictSerializable objects.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.value.DiscreteCategorical.dump">
-<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#gemd.entity.value.DiscreteCategorical.dump" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.entity.value.DiscreteCategorical.dump" title="Permalink to this definition"></a></dt>
 <dd><p>Convert the object to a JSON dictionary, so that every entry is serialized.</p>
 <p>Uses the json encoder client, so objects with uids are converted to LinkByUID dictionaries.</p>
 <dl class="field-list simple">
@@ -243,7 +243,7 @@ corresponding to serialized DictSerializable objects.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.value.EmpiricalFormula.dump">
-<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#gemd.entity.value.EmpiricalFormula.dump" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.entity.value.EmpiricalFormula.dump" title="Permalink to this definition"></a></dt>
 <dd><p>Convert the object to a JSON dictionary, so that every entry is serialized.</p>
 <p>Uses the json encoder client, so objects with uids are converted to LinkByUID dictionaries.</p>
 <dl class="field-list simple">
@@ -336,7 +336,7 @@ corresponding to serialized DictSerializable objects.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.value.InChI.dump">
-<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#gemd.entity.value.InChI.dump" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.entity.value.InChI.dump" title="Permalink to this definition"></a></dt>
 <dd><p>Convert the object to a JSON dictionary, so that every entry is serialized.</p>
 <p>Uses the json encoder client, so objects with uids are converted to LinkByUID dictionaries.</p>
 <dl class="field-list simple">
@@ -388,7 +388,7 @@ corresponding to serialized DictSerializable objects.</p>
 <dt class="sig sig-object py" id="gemd.entity.value.NominalCategorical">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gemd.entity.value.</span></span><span class="sig-name descname"><span class="pre">NominalCategorical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">category</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.value.NominalCategorical" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="gemd.entity.value.categorical_value.html#gemd.entity.value.categorical_value.CategoricalValue" title="gemd.entity.value.categorical_value.CategoricalValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemd.entity.value.categorical_value.CategoricalValue</span></code></a></p>
-<p>A nominal category that the value is believe to have. It may not be exact.</p>
+<p>A nominal category that the value is believed to have. It may not be exact.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>category</strong> (<em>str</em>) – The nominal category.</p>
@@ -429,7 +429,7 @@ corresponding to serialized DictSerializable objects.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.value.NominalCategorical.dump">
-<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#gemd.entity.value.NominalCategorical.dump" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.entity.value.NominalCategorical.dump" title="Permalink to this definition"></a></dt>
 <dd><p>Convert the object to a JSON dictionary, so that every entry is serialized.</p>
 <p>Uses the json encoder client, so objects with uids are converted to LinkByUID dictionaries.</p>
 <dl class="field-list simple">
@@ -531,7 +531,7 @@ corresponding to serialized DictSerializable objects.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.value.NominalComposition.dump">
-<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#gemd.entity.value.NominalComposition.dump" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.entity.value.NominalComposition.dump" title="Permalink to this definition"></a></dt>
 <dd><p>Convert the object to a JSON dictionary, so that every entry is serialized.</p>
 <p>Uses the json encoder client, so objects with uids are converted to LinkByUID dictionaries.</p>
 <dl class="field-list simple">
@@ -624,7 +624,7 @@ corresponding to serialized DictSerializable objects.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.value.NominalInteger.dump">
-<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#gemd.entity.value.NominalInteger.dump" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.entity.value.NominalInteger.dump" title="Permalink to this definition"></a></dt>
 <dd><p>Convert the object to a JSON dictionary, so that every entry is serialized.</p>
 <p>Uses the json encoder client, so objects with uids are converted to LinkByUID dictionaries.</p>
 <dl class="field-list simple">
@@ -721,7 +721,7 @@ corresponding to serialized DictSerializable objects.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.value.NominalReal.dump">
-<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#gemd.entity.value.NominalReal.dump" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.entity.value.NominalReal.dump" title="Permalink to this definition"></a></dt>
 <dd><p>Convert the object to a JSON dictionary, so that every entry is serialized.</p>
 <p>Uses the json encoder client, so objects with uids are converted to LinkByUID dictionaries.</p>
 <dl class="field-list simple">
@@ -819,7 +819,7 @@ corresponding to serialized DictSerializable objects.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.value.NormalReal.dump">
-<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#gemd.entity.value.NormalReal.dump" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.entity.value.NormalReal.dump" title="Permalink to this definition"></a></dt>
 <dd><p>Convert the object to a JSON dictionary, so that every entry is serialized.</p>
 <p>Uses the json encoder client, so objects with uids are converted to LinkByUID dictionaries.</p>
 <dl class="field-list simple">
@@ -913,7 +913,7 @@ corresponding to serialized DictSerializable objects.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.value.Smiles.dump">
-<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#gemd.entity.value.Smiles.dump" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.entity.value.Smiles.dump" title="Permalink to this definition"></a></dt>
 <dd><p>Convert the object to a JSON dictionary, so that every entry is serialized.</p>
 <p>Uses the json encoder client, so objects with uids are converted to LinkByUID dictionaries.</p>
 <dl class="field-list simple">
@@ -1009,7 +1009,7 @@ corresponding to serialized DictSerializable objects.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.value.UniformInteger.dump">
-<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#gemd.entity.value.UniformInteger.dump" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.entity.value.UniformInteger.dump" title="Permalink to this definition"></a></dt>
 <dd><p>Convert the object to a JSON dictionary, so that every entry is serialized.</p>
 <p>Uses the json encoder client, so objects with uids are converted to LinkByUID dictionaries.</p>
 <dl class="field-list simple">
@@ -1119,7 +1119,7 @@ corresponding to serialized DictSerializable objects.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.value.UniformReal.dump">
-<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#gemd.entity.value.UniformReal.dump" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.entity.value.UniformReal.dump" title="Permalink to this definition"></a></dt>
 <dd><p>Convert the object to a JSON dictionary, so that every entry is serialized.</p>
 <p>Uses the json encoder client, so objects with uids are converted to LinkByUID dictionaries.</p>
 <dl class="field-list simple">

@@ -83,17 +83,20 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="gemd.entity.util.complete_material_history">
-<span class="sig-prename descclassname"><span class="pre">gemd.entity.util.</span></span><span class="sig-name descname"><span class="pre">complete_material_history</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.util.complete_material_history" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">gemd.entity.util.</span></span><span class="sig-name descname"><span class="pre">complete_material_history</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mat</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.entity.util.complete_material_history" title="Permalink to this definition"></a></dt>
 <dd><p>Get a list of every single object in the material history, all as dictionaries.</p>
 <p>This is useful for testing, if we want the context list that can be used to rehydrate
 an entire material history.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>mat</strong> – root material run</p>
+<dd class="field-odd"><p><strong>mat</strong> (<a class="reference internal" href="gemd.html#gemd.MaterialRun" title="gemd.MaterialRun"><em>MaterialRun</em></a>) – root material run</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>a list containing every object connected to mat, each a dictionary with all
-links substituted.</p>
+<dd class="field-even"><p>a list containing every object connected to mat, each a dictionary with
+all links substituted.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
 </dd>
 </dl>
 </dd></dl>
@@ -102,16 +105,15 @@ links substituted.</p>
 <dt class="sig sig-object py" id="gemd.entity.util.make_instance">
 <span class="sig-prename descclassname"><span class="pre">gemd.entity.util.</span></span><span class="sig-name descname"><span class="pre">make_instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_spec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.util.make_instance" title="Permalink to this definition"></a></dt>
 <dd><p>Create a set of Run objects that mimic the connectivity of the passed Spec object.</p>
-<dl class="simple">
-<dt>base_spec: BaseObject</dt><dd><p>A spec instance that may point to other specs.</p>
-</dd>
-</dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The run instance that is created, and may point to other runs.</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>base_spec</strong> (<a class="reference internal" href="gemd.entity.object.base_object.html#gemd.entity.object.base_object.BaseObject" title="gemd.entity.object.base_object.BaseObject"><em>BaseObject</em></a>) – A spec instance that may point to other specs.</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="gemd.entity.object.base_object.html#gemd.entity.object.base_object.BaseObject" title="gemd.entity.object.base_object.BaseObject">BaseObject</a></p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The run instance that is created, and may point to other runs.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="gemd.entity.object.base_object.html#gemd.entity.object.base_object.BaseObject" title="gemd.entity.object.base_object.BaseObject">BaseObject</a></p>
 </dd>
 </dl>
 </dd></dl>

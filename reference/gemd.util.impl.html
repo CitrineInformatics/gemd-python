@@ -68,6 +68,26 @@
 <span id="gemd-util-impl-module"></span><h1>gemd.util.impl module<a class="headerlink" href="#module-gemd.util.impl" title="Permalink to this headline"></a></h1>
 <p>Utility functions.</p>
 <dl class="py function">
+<dt class="sig sig-object py" id="gemd.util.impl.cached_isinstance">
+<span class="sig-prename descclassname"><span class="pre">gemd.util.impl.</span></span><span class="sig-name descname"><span class="pre">cached_isinstance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_or_tuple</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#gemd.util.impl.cached_isinstance" title="Permalink to this definition"></a></dt>
+<dd><p>Emulate isinstance builtin to take advantage of functools caching.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (<em>object</em>) – </p></li>
+<li><p><strong>class_or_tuple</strong> (<em>Union</em><em>[</em><em>Type</em><em>, </em><em>Tuple</em><em>[</em><em>Union</em><em>[</em><em>Type</em><em>, </em><em>Tuple</em><em>[</em><em>Type</em><em>]</em><em>]</em><em>]</em><em>]</em>) – A single type, a tuple of types (potentially nested)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether an object is an instance of a class or of a subclass thereof.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="gemd.util.impl.flatten">
 <span class="sig-prename descclassname"><span class="pre">gemd.util.impl.</span></span><span class="sig-name descname"><span class="pre">flatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><span class="pre">gemd.entity.base_entity.BaseEntity</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.util.impl.flatten" title="Permalink to this definition"></a></dt>
 <dd><p>Flatten a BaseEntity (or array of them) into a list of objects connected by LinkByUID objects.</p>
@@ -109,7 +129,7 @@ object, indexed by all scope:id tuples found in any of the objects.  The passed 
 be a list, tuple, dictionary or GEMD object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>obj</strong> (<em>Union</em><em>[</em><em>Iterable</em><em>, </em><em>Mapping</em><em>, </em><a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><em>BaseEntity</em></a><em>, </em><a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable"><em>DictSerializable</em></a><em>]</em>) – target container (dict, list, ..) from which to create an index of GEMD objects</p>
+<dd class="field-odd"><p><strong>obj</strong> (<em>Union</em><em>[</em><em>Iterable</em><em>, </em><em>Mapping</em><em>, </em><a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><em>BaseEntity</em></a><em>, </em><a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable"><em>DictSerializable</em></a><em>]</em>) – target container (dict, list, …) from which to create an index of GEMD objects</p>
 </dd>
 </dl>
 </dd></dl>

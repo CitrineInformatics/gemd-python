@@ -66,7 +66,7 @@
              
   <section id="module-gemd.entity.value.inchi_value">
 <span id="gemd-entity-value-inchi-value-module"></span><h1>gemd.entity.value.inchi_value module<a class="headerlink" href="#module-gemd.entity.value.inchi_value" title="Permalink to this headline"></a></h1>
-<p>An empirical chemical formaula.</p>
+<p>An empirical chemical formula.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="gemd.entity.value.inchi_value.InChI">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gemd.entity.value.inchi_value.</span></span><span class="sig-name descname"><span class="pre">InChI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inchi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.value.inchi_value.InChI" title="Permalink to this definition"></a></dt>
@@ -112,7 +112,7 @@ corresponding to serialized DictSerializable objects.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.value.inchi_value.InChI.dump">
-<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#gemd.entity.value.inchi_value.InChI.dump" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.entity.value.inchi_value.InChI.dump" title="Permalink to this definition"></a></dt>
 <dd><p>Convert the object to a JSON dictionary, so that every entry is serialized.</p>
 <p>Uses the json encoder client, so objects with uids are converted to LinkByUID dictionaries.</p>
 <dl class="field-list simple">
