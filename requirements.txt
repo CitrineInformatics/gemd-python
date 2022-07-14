@@ -1,5 +1,5 @@
 toolz==0.10.0
-pint==0.10
+pint==0.13
 sphinx==4.3.0
 sphinxcontrib-apidoc==0.3.0
 sphinx-rtd-theme==1.0.0
