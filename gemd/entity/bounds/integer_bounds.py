@@ -60,3 +60,54 @@ class IntegerBounds(BaseBounds):
             return False
 
         return bounds.lower_bound >= self.lower_bound and bounds.upper_bound <= self.upper_bound
+
+    def union(self, *others: Union["IntegerBounds", "IntegerValue"]) -> "IntegerBounds":
+        """
+        Return the union of this bounds and other bounds.
+
+        The others list must also be Integer Bounds or Values.
+
+        Parameters
+        ----------
+        others: Union[IntegerBounds, IntegerValue]
+            Other bounds or value objects to include.
+
+        Returns
+        -------
+        IntegerBounds
+            The union of this bounds and the passed bounds
+
+        """
+        from gemd.entity.value.integer_value import IntegerValue
+
+        if any(not isinstance(x, (IntegerBounds, IntegerValue)) for x in others):
+            misses = {type(x).__name__
+                      for x in others
+                      if not isinstance(x, (IntegerBounds, IntegerValue))}
+            raise TypeError(f"union requires consistent typing; found {misses}")
+        lower = self.lower_bound
+        upper = self.upper_bound
+        for bounds in others:
+            if isinstance(bounds, IntegerValue):
+                bounds = bounds._to_bounds()
+            if bounds.lower_bound < lower:
+                lower = bounds.lower_bound
+            if bounds.upper_bound > upper:
+                upper = bounds.upper_bound
+        return IntegerBounds(lower_bound=lower, upper_bound=upper)
+
+    def update(self, *others: Union["IntegerBounds", "IntegerValue"]):
+        """
+        Update this bounds to include other bounds.
+
+        The others list must also be Categorical Bounds or Values.
+
+        Parameters
+        ----------
+        others: Union[IntegerBounds, IntegerValue]
+            Other bounds or value objects to include.
+
+        """
+        result = self.union(*others)
+        self.lower_bound = result.lower_bound
+        self.upper_bound = result.upper_bound

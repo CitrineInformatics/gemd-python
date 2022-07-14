@@ -5,6 +5,7 @@ from gemd.json import dumps, loads
 from gemd.entity.bounds.categorical_bounds import CategoricalBounds
 from gemd.entity.bounds.real_bounds import RealBounds
 from gemd.entity.util import array_like
+from gemd.entity.value.nominal_categorical import NominalCategorical
 
 
 def test_categories():
@@ -33,10 +34,23 @@ def test_contains():
     with pytest.raises(TypeError):
         bounds.contains({"spam", "eggs"})
 
-    from gemd.entity.value import NominalCategorical
-
     assert bounds.contains(NominalCategorical("spam"))
     assert not bounds.contains(NominalCategorical("foo"))
+
+
+def test_union():
+    """Test basic union & update logic."""
+    bounds = CategoricalBounds(categories={"spam", "eggs"})
+    value = NominalCategorical("cheese")
+    assert bounds.union(value).contains(value), "Bounds didn't get new value"
+    assert bounds.union(value).contains(bounds), "Bounds didn't keep old values"
+    assert not bounds.contains(value), "Bounds got updated"
+
+    bounds.update(value)
+    assert bounds.contains(value), "Bounds didn't get updated"
+
+    with pytest.raises(TypeError):
+        bounds.union(RealBounds(0, 1, ""))
 
 
 def test_json():

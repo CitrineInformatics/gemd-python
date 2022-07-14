@@ -45,6 +45,48 @@ class MolecularStructureBounds(BaseBounds):
 
         return True
 
+    def union(self,
+              *others: Union["MolecularStructureBounds", "MolecularValue"]
+              ) -> "MolecularStructureBounds":
+        """
+        Return the union of this bounds and other bounds.
+
+        The others list must also be Molecular Structure Bounds or Values.
+
+        Parameters
+        ----------
+        others: Union[MolecularStructureBounds, MolecularValue]
+            Other bounds or value objects to include.
+
+        Returns
+        -------
+        CategoricalBounds
+            The union of this bounds and the passed bounds
+
+        """
+        from gemd.entity.value.molecular_value import MolecularValue
+
+        if any(not isinstance(x, (MolecularStructureBounds, MolecularValue)) for x in others):
+            misses = {type(x).__name__
+                      for x in others
+                      if not isinstance(x, (MolecularStructureBounds, MolecularValue))}
+            raise TypeError(f"union requires consistent typing; found {misses}")
+        return MolecularStructureBounds()
+
+    def update(self, *others: Union["MolecularStructureBounds", "MolecularValue"]):
+        """
+        Update this bounds to include other bounds.
+
+        The others list must also be Molecular Structure Bounds or Values.
+
+        Parameters
+        ----------
+        others: Union[MolecularStructureBounds, MolecularValue]
+            Other bounds or value objects to include.
+
+        """
+        pass  # This is a no-op for Molecular structure
+
     def as_dict(self):
         """
         Convert bounds to a dictionary.

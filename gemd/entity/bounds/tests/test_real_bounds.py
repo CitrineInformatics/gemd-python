@@ -3,6 +3,8 @@ import pytest
 
 from gemd.entity.bounds.integer_bounds import IntegerBounds
 from gemd.entity.bounds.real_bounds import RealBounds
+from gemd.entity.value.nominal_real import NominalReal
+from gemd.units import IncompatibleUnitsError
 
 
 def test_contains():
@@ -11,10 +13,30 @@ def test_contains():
     dim2 = RealBounds(lower_bound=33, upper_bound=200, default_units="degF")
     assert dim.contains(dim2)
 
-    from gemd.entity.value import NominalReal
-
     assert dim.contains(NominalReal(5, 'degC'))
     assert not dim.contains(NominalReal(5, 'K'))
+
+
+def test_union():
+    """Test basic union & update logic."""
+    bounds = RealBounds(lower_bound=1, upper_bound=5, default_units='mm')
+    low = NominalReal(0, 'm')
+    high = NominalReal(1, 'cm')
+    bad = NominalReal(1, 'kg')
+    assert bounds.union(low).contains(low), "Bounds didn't get low value"
+    assert bounds.union(high).contains(high), "Bounds didn't get high value"
+    assert bounds.union(low, high).contains(bounds), "Bounds didn't keep old values"
+    assert not bounds.contains(low), "Bounds got updated"
+
+    bounds.update(low)
+    assert bounds.contains(low), "Bounds didn't get updated"
+
+    with pytest.raises(IncompatibleUnitsError):
+        bounds.update(bad)
+    assert not bounds.contains(bad), "Bounds had bad in bounds."
+
+    with pytest.raises(TypeError):
+        bounds.union(IntegerBounds(0, 1))
 
 
 def test_contains_no_units():

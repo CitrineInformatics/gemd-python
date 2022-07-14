@@ -16,7 +16,7 @@ class RealBounds(BaseBounds):
     upper_bound: float
         Upper endpoint.
     default_units: str
-        A string describing the units. Units must be present and they must be parseable by Pint.
+        A string describing the units. Units must be present and parseable by Pint.
         An empty string can be used for the units of a dimensionless quantity.
 
     """
@@ -85,6 +85,62 @@ class RealBounds(BaseBounds):
             return False
 
         return bounds.lower_bound >= lower and bounds.upper_bound <= upper
+
+    def union(self, *others: Union["RealBounds", "ContinuousValue"]) -> "RealBounds":
+        """
+        Return the union of this bounds and other bounds.
+
+        The others list must also be Real Bounds or Values.
+
+        Parameters
+        ----------
+        others: Union[RealBounds, ContinuousValue]
+            Other bounds or value objects to include.
+
+        Returns
+        -------
+        RealBounds
+            The union of this bounds and the passed bounds
+
+        """
+        from gemd.entity.value.continuous_value import ContinuousValue
+
+        if any(not isinstance(x, (RealBounds, ContinuousValue)) for x in others):
+            misses = {type(x).__name__
+                      for x in others
+                      if not isinstance(x, (RealBounds, ContinuousValue))}
+            raise TypeError(f"union requires consistent typing; found {misses}")
+        lower = self.lower_bound
+        upper = self.upper_bound
+        unit_ = self.default_units
+        for bounds in others:
+            if isinstance(bounds, ContinuousValue):
+                this_lo, this_hi = bounds._to_bounds()._convert_bounds(unit_)
+                if this_lo is None or this_hi is None:
+                    raise units.IncompatibleUnitsError(bounds.units, self.default_units)
+                bounds = RealBounds(this_lo, this_hi, default_units=self.default_units)
+            if bounds.lower_bound < lower:
+                lower = bounds.lower_bound
+            if bounds.upper_bound > upper:
+                upper = bounds.upper_bound
+        return RealBounds(lower_bound=lower, upper_bound=upper, default_units=unit_)
+
+    def update(self, *others: Union["RealBounds", "ContinuousValue"]):
+        """
+        Update this bounds to include other bounds.
+
+        The others list must also be Real Bounds or Values.
+
+        Parameters
+        ----------
+        others: Union[RealBounds, ContinuousValue]
+            Other bounds or value objects to include.
+
+        """
+        result = self.union(*others)
+        self.lower_bound = result.lower_bound
+        self.upper_bound = result.upper_bound
+        self.default_units = result.default_units
 
     def _convert_bounds(self, target_units):
         """
