@@ -11,8 +11,7 @@ install:
 - pip install -U -r test_requirements.txt
 - pip install --no-deps -e .
 script:
-- pytest --cov=gemd --cov-report term-missing --cov-report term:skip-covered --cov-config=tox.ini
-  --cov-fail-under=100 -s ./gemd
+- pytest --cov=gemd --cov-report term-missing:skip-covered --cov-config=tox.ini --no-cov-on-fail --cov-fail-under=100 gemd
 - flake8 gemd
 - cd docs; make html; cd ..;
 - touch ./docs/_build/html/.nojekyll
