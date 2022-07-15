@@ -70,6 +70,54 @@ class CompositionBounds(BaseBounds):
 
         return bounds.components.issubset(self.components)
 
+    def union(self,
+              *others: Union["CompositionBounds", "CompositionValue"]
+              ) -> "CompositionBounds":
+        """
+        Return the union of this bounds and other bounds.
+
+        The others list must also be Composition Bounds or Values.
+
+        Parameters
+        ----------
+        others: Union[CompositionBounds, CompositionValue]
+            Other bounds or value objects to include.
+
+        Returns
+        -------
+        CategoricalBounds
+            The union of this bounds and the passed bounds
+
+        """
+        from gemd.entity.value.composition_value import CompositionValue
+
+        if any(not isinstance(x, (CompositionBounds, CompositionValue)) for x in others):
+            misses = {type(x).__name__
+                      for x in others
+                      if not isinstance(x, (CompositionBounds, CompositionValue))}
+            raise TypeError(f"union requires consistent typing; "
+                            f"expected composition, found {misses}")
+        result = self.components.copy()
+        for bounds in others:
+            if isinstance(bounds, CompositionValue):
+                bounds = bounds._to_bounds()
+            result.update(bounds.components)
+        return CompositionBounds(result)
+
+    def update(self, *others: Union["CompositionBounds", "CompositionValue"]):
+        """
+        Update this bounds to include other bounds.
+
+        The others list must also be Categorical Bounds or Values.
+
+        Parameters
+        ----------
+        others: Union[CategoricalBounds, CategoricalValue]
+            Other bounds or value objects to include.
+
+        """
+        self.components = self.union(*others).components
+
     def as_dict(self):
         """
         Convert bounds to a dictionary.

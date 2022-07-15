@@ -2,7 +2,7 @@
 from gemd.entity.bounds.base_bounds import BaseBounds
 from gemd.entity.util import array_like
 
-from typing import Union
+from typing import Union, Set, Optional, Iterable
 
 
 class CategoricalBounds(BaseBounds):
@@ -18,17 +18,17 @@ class CategoricalBounds(BaseBounds):
 
     typ = "categorical_bounds"
 
-    def __init__(self, categories=None):
+    def __init__(self, categories: Optional[Iterable[str]] = None):
         self._categories = None
         self.categories = categories
 
     @property
-    def categories(self):
+    def categories(self) -> Set[str]:
         """Get the set of categories."""
         return self._categories
 
     @categories.setter
-    def categories(self, categories):
+    def categories(self, categories: Optional[Iterable[str]]):
         if categories is None:
             self._categories = set()
         elif isinstance(categories, array_like()):
@@ -69,6 +69,54 @@ class CategoricalBounds(BaseBounds):
             return False
 
         return bounds.categories.issubset(self.categories)
+
+    def union(self,
+              *others: Union["CategoricalBounds", "CategoricalValue"]
+              ) -> "CategoricalBounds":
+        """
+        Return the union of this bounds and other bounds.
+
+        The others list must also be Categorical Bounds or Values.
+
+        Parameters
+        ----------
+        others: Union[CategoricalBounds, CategoricalValue]
+            Other bounds or value objects to include.
+
+        Returns
+        -------
+        CategoricalBounds
+            The union of this bounds and the passed bounds
+
+        """
+        from gemd.entity.value.categorical_value import CategoricalValue
+
+        if any(not isinstance(x, (CategoricalBounds, CategoricalValue)) for x in others):
+            misses = {type(x).__name__
+                      for x in others
+                      if not isinstance(x, (CategoricalBounds, CategoricalValue))}
+            raise TypeError(f"union requires consistent typing; "
+                            f"expected categorical, found {misses}")
+        result = self.categories.copy()
+        for bounds in others:
+            if isinstance(bounds, CategoricalValue):
+                bounds = bounds._to_bounds()
+            result.update(bounds.categories)
+        return CategoricalBounds(result)
+
+    def update(self, *others: Union["CategoricalBounds", "CategoricalValue"]):
+        """
+        Update this bounds to include other bounds.
+
+        The others list must also be Categorical Bounds or Values.
+
+        Parameters
+        ----------
+        others: Union[CategoricalBounds, CategoricalValue]
+            Other bounds or value objects to include.
+
+        """
+        self.categories = self.union(*others).categories
 
     def as_dict(self):
         """

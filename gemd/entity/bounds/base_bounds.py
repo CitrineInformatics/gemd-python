@@ -34,3 +34,38 @@ class BaseBounds(DictSerializable):
         if isinstance(bounds, BaseBounds):
             return True
         raise TypeError('{} is not a Bounds object'.format(bounds))
+
+    @abstractmethod
+    def union(self, *others: Union["BaseBounds", "BaseValue"]) -> "BaseBounds":
+        """
+        Return the union of this bounds and other bounds.
+
+        The others list must also be the same class (e.g., categorical, real...).
+
+        Parameters
+        ----------
+        others: Union[BaseBounds, BaseValue]
+            Other bounds or value objects to include.
+
+        Returns
+        -------
+        BaseBounds
+            The union of this bounds and the passed bounds
+
+        """
+        pass  # pragma: no cover
+
+    @abstractmethod
+    def update(self, *others: Union["BaseBounds", "BaseValue"]):
+        """
+        Update this bounds to include other bounds.
+
+        The others list must also be the same class (e.g., categorical, real...).
+
+        Parameters
+        ----------
+        others: Union[BaseBounds, BaseValue]
+            Other bounds or value objects to include.
+
+        """
+        pass  # pragma: no cover

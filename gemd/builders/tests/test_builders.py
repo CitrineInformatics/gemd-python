@@ -13,6 +13,7 @@ from gemd.entity.link_by_uid import LinkByUID
 from gemd.units import parse_units
 
 import pytest
+from typing import Union
 
 
 class UnsupportedBounds(BaseBounds):
@@ -20,7 +21,15 @@ class UnsupportedBounds(BaseBounds):
 
     def contains(self, bounds):  # pragma: no cover
         """Only here to satisfy abstract method."""
-        super().contains(bounds)
+        pass
+
+    def union(self, *others: Union["BaseBounds", "BaseValue"]) -> "BaseBounds":  # pragma: no cover
+        """Only here to satisfy abstract method."""
+        pass
+
+    def update(self, *others: Union["BaseBounds", "BaseValue"]):  # pragma: no cover
+        """Only here to satisfy abstract method."""
+        pass
 
 
 class UnsupportedAttribute(BaseAttribute):

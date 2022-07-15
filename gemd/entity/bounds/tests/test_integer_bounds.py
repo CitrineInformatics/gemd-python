@@ -3,6 +3,7 @@ import pytest
 
 from gemd.entity.bounds.integer_bounds import IntegerBounds
 from gemd.entity.bounds.real_bounds import RealBounds
+from gemd.entity.value.nominal_integer import NominalInteger
 
 
 def test_errors():
@@ -35,7 +36,22 @@ def test_contains():
     with pytest.raises(TypeError):
         int_bounds.contains([0, 1])
 
-    from gemd.entity.value import NominalInteger
-
     assert int_bounds.contains(NominalInteger(1))
     assert not int_bounds.contains(NominalInteger(5))
+
+
+def test_union():
+    """Test basic union & update logic."""
+    bounds = IntegerBounds(lower_bound=1, upper_bound=5)
+    low = NominalInteger(0)
+    high = NominalInteger(10)
+    assert bounds.union(low).contains(low), "Bounds didn't get low value"
+    assert bounds.union(high).contains(high), "Bounds didn't get high value"
+    assert bounds.union(low, high).contains(bounds), "Bounds didn't keep old values"
+    assert not bounds.contains(low), "Bounds got updated"
+
+    bounds.update(low)
+    assert bounds.contains(low), "Bounds didn't get updated"
+
+    with pytest.raises(TypeError):
+        bounds.union(RealBounds(0, 1, ""))
