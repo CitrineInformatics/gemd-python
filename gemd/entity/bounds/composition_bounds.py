@@ -95,7 +95,8 @@ class CompositionBounds(BaseBounds):
             misses = {type(x).__name__
                       for x in others
                       if not isinstance(x, (CompositionBounds, CompositionValue))}
-            raise TypeError(f"union requires consistent typing; found {misses}")
+            raise TypeError(f"union requires consistent typing; "
+                            f"expected composition, found {misses}")
         result = self.components.copy()
         for bounds in others:
             if isinstance(bounds, CompositionValue):

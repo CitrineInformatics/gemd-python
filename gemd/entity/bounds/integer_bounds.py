@@ -84,7 +84,7 @@ class IntegerBounds(BaseBounds):
             misses = {type(x).__name__
                       for x in others
                       if not isinstance(x, (IntegerBounds, IntegerValue))}
-            raise TypeError(f"union requires consistent typing; found {misses}")
+            raise TypeError(f"union requires consistent typing; expected integer, found {misses}")
         lower = self.lower_bound
         upper = self.upper_bound
         for bounds in others:

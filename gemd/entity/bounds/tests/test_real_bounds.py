@@ -20,7 +20,7 @@ def test_contains():
 def test_union():
     """Test basic union & update logic."""
     bounds = RealBounds(lower_bound=1, upper_bound=5, default_units='mm')
-    low = NominalReal(0, 'm')
+    low = RealBounds(lower_bound=1, upper_bound=5, default_units='um')
     high = NominalReal(1, 'cm')
     bad = NominalReal(1, 'kg')
     assert bounds.union(low).contains(low), "Bounds didn't get low value"

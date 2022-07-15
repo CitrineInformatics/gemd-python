@@ -95,7 +95,8 @@ class CategoricalBounds(BaseBounds):
             misses = {type(x).__name__
                       for x in others
                       if not isinstance(x, (CategoricalBounds, CategoricalValue))}
-            raise TypeError(f"union requires consistent typing; found {misses}")
+            raise TypeError(f"union requires consistent typing; "
+                            f"expected categorical, found {misses}")
         result = self.categories.copy()
         for bounds in others:
             if isinstance(bounds, CategoricalValue):

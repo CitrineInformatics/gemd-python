@@ -70,7 +70,8 @@ class MolecularStructureBounds(BaseBounds):
             misses = {type(x).__name__
                       for x in others
                       if not isinstance(x, (MolecularStructureBounds, MolecularValue))}
-            raise TypeError(f"union requires consistent typing; found {misses}")
+            raise TypeError(f"union requires consistent typing; "
+                            f"expected molecular structure, found {misses}")
         return MolecularStructureBounds()
 
     def update(self, *others: Union["MolecularStructureBounds", "MolecularValue"]):

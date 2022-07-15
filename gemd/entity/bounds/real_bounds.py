@@ -109,20 +109,20 @@ class RealBounds(BaseBounds):
             misses = {type(x).__name__
                       for x in others
                       if not isinstance(x, (RealBounds, ContinuousValue))}
-            raise TypeError(f"union requires consistent typing; found {misses}")
+            raise TypeError(f"union requires consistent typing; expected real, found {misses}")
         lower = self.lower_bound
         upper = self.upper_bound
         unit_ = self.default_units
         for bounds in others:
             if isinstance(bounds, ContinuousValue):
-                this_lo, this_hi = bounds._to_bounds()._convert_bounds(unit_)
-                if this_lo is None or this_hi is None:
-                    raise units.IncompatibleUnitsError(bounds.units, self.default_units)
-                bounds = RealBounds(this_lo, this_hi, default_units=self.default_units)
-            if bounds.lower_bound < lower:
-                lower = bounds.lower_bound
-            if bounds.upper_bound > upper:
-                upper = bounds.upper_bound
+                bounds: RealBounds = bounds._to_bounds()
+            bnd_lo, bnd_hi = bounds._convert_bounds(unit_)
+            if bnd_lo is None or bnd_hi is None:
+                raise units.IncompatibleUnitsError(bounds.default_units, unit_)
+            if bnd_lo < lower:
+                lower = bnd_lo
+            if bnd_hi > upper:
+                upper = bnd_hi
         return RealBounds(lower_bound=lower, upper_bound=upper, default_units=unit_)
 
     def update(self, *others: Union["RealBounds", "ContinuousValue"]):
