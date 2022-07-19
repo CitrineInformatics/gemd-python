@@ -1,4 +1,4 @@
-"""Test parsing and serde of empirical chemical formulae."""
+"""Test parsing and serde of an InChI molecular structure."""
 import pytest
 
 from gemd.json import dumps, loads
@@ -14,12 +14,15 @@ def test_json():
 
 
 def test_inchi_setter():
-    """Check that we can set the formula."""
+    """Check that we can set the inchi."""
     test_struct = "InChI=1/C8H8O3/c1-11-8-4-6(5-9)2-3-7(8)10/h2-5,10H,1H3"
     test_inchi = InChI()
     assert test_inchi.inchi is None
     test_inchi.inchi = test_struct
     assert test_inchi.inchi == test_struct
+
+    assert InChI("inchi=1/C8H8O3").inchi == "InChI=1/C8H8O3"
+    assert InChI("C8H8O3").inchi == "InChI=1S/C8H8O3"
 
 
 def test_invalid_inchi():

@@ -22,14 +22,19 @@ class InChI(MolecularValue):
 
     @property
     def inchi(self) -> str:
-        """Get the formula as a string."""
+        """Get the InChI as a string."""
         return self._inchi
 
     @inchi.setter
     def inchi(self, value: str):
+        """Set the InChI, correcting for some minor variations in format."""
         if value is None:
             self._inchi = None
         elif isinstance(value, str):
+            if not value.lower().startswith('inchi'):
+                value = f"InChI=1S/{value}"
+            elif not value.startswith('InChI'):
+                value = value.replace(value[:5], 'InChI')
             self._inchi = value
         else:
             raise TypeError("InChI must be given as a string; got {}".format(type(value)))
