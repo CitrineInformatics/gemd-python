@@ -23,6 +23,8 @@ def test_inchi_setter():
 
     assert InChI("inchi=1/C8H8O3").inchi == "InChI=1/C8H8O3"
     assert InChI("C8H8O3").inchi == "InChI=1S/C8H8O3"
+    # https://www.sigmaaldrich.com/US/en/product/aldrich/757136
+    assert InChI("1S/C4BO8.Li").inchi == "InChI=1S/C4BO8.Li"
 
 
 def test_invalid_inchi():

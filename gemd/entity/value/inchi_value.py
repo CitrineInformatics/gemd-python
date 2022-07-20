@@ -31,7 +31,9 @@ class InChI(MolecularValue):
         if value is None:
             self._inchi = None
         elif isinstance(value, str):
-            if not value.lower().startswith('inchi'):
+            if value.lower().startswith('1s/'):
+                value = value.replace(value[:2], 'InChI=1S')
+            elif not value.lower().startswith('inchi'):
                 value = f"InChI=1S/{value}"
             elif not value.startswith('InChI'):
                 value = value.replace(value[:5], 'InChI')
