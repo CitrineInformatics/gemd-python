@@ -77,7 +77,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lower_bound</strong> (<em>float</em>) – Lower endpoint.</p></li>
 <li><p><strong>upper_bound</strong> (<em>float</em>) – Upper endpoint.</p></li>
-<li><p><strong>default_units</strong> (<em>str</em>) – A string describing the units. Units must be present and they must be parseable by Pint.
+<li><p><strong>default_units</strong> (<em>str</em>) – A string describing the units. Units must be present and parseable by Pint.
 An empty string can be used for the units of a dimensionless quantity.</p></li>
 </ul>
 </dd>
@@ -164,6 +164,36 @@ logic around permissibility is delegated to the Value implementation.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable">DictSerializable</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemd.entity.bounds.real_bounds.RealBounds.union">
+<span class="sig-name descname"><span class="pre">union</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">others</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#gemd.entity.bounds.real_bounds.RealBounds" title="gemd.entity.bounds.real_bounds.RealBounds"><span class="pre">RealBounds</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ContinuousValue</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gemd.entity.bounds.real_bounds.RealBounds" title="gemd.entity.bounds.real_bounds.RealBounds"><span class="pre">RealBounds</span></a></span></span><a class="headerlink" href="#gemd.entity.bounds.real_bounds.RealBounds.union" title="Permalink to this definition"></a></dt>
+<dd><p>Return the union of this bounds and other bounds.</p>
+<p>The others list must also be Real Bounds or Values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>others</strong> (<em>Union</em><em>[</em><a class="reference internal" href="#gemd.entity.bounds.real_bounds.RealBounds" title="gemd.entity.bounds.real_bounds.RealBounds"><em>RealBounds</em></a><em>, </em><a class="reference internal" href="gemd.entity.value.continuous_value.html#gemd.entity.value.continuous_value.ContinuousValue" title="gemd.entity.value.continuous_value.ContinuousValue"><em>ContinuousValue</em></a><em>]</em>) – Other bounds or value objects to include.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The union of this bounds and the passed bounds</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#gemd.entity.bounds.real_bounds.RealBounds" title="gemd.entity.bounds.real_bounds.RealBounds">RealBounds</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemd.entity.bounds.real_bounds.RealBounds.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">others</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#gemd.entity.bounds.real_bounds.RealBounds" title="gemd.entity.bounds.real_bounds.RealBounds"><span class="pre">RealBounds</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ContinuousValue</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.bounds.real_bounds.RealBounds.update" title="Permalink to this definition"></a></dt>
+<dd><p>Update this bounds to include other bounds.</p>
+<p>The others list must also be Real Bounds or Values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>others</strong> (<em>Union</em><em>[</em><a class="reference internal" href="#gemd.entity.bounds.real_bounds.RealBounds" title="gemd.entity.bounds.real_bounds.RealBounds"><em>RealBounds</em></a><em>, </em><a class="reference internal" href="gemd.entity.value.continuous_value.html#gemd.entity.value.continuous_value.ContinuousValue" title="gemd.entity.value.continuous_value.ContinuousValue"><em>ContinuousValue</em></a><em>]</em>) – Other bounds or value objects to include.</p>
 </dd>
 </dl>
 </dd></dl>

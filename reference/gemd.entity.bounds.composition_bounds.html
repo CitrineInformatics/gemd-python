@@ -161,6 +161,36 @@ this bounds’s set of allowed components.</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="gemd.entity.bounds.composition_bounds.CompositionBounds.union">
+<span class="sig-name descname"><span class="pre">union</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">others</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#gemd.entity.bounds.composition_bounds.CompositionBounds" title="gemd.entity.bounds.composition_bounds.CompositionBounds"><span class="pre">CompositionBounds</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">CompositionValue</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gemd.entity.bounds.composition_bounds.CompositionBounds" title="gemd.entity.bounds.composition_bounds.CompositionBounds"><span class="pre">CompositionBounds</span></a></span></span><a class="headerlink" href="#gemd.entity.bounds.composition_bounds.CompositionBounds.union" title="Permalink to this definition"></a></dt>
+<dd><p>Return the union of this bounds and other bounds.</p>
+<p>The others list must also be Composition Bounds or Values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>others</strong> (<em>Union</em><em>[</em><a class="reference internal" href="#gemd.entity.bounds.composition_bounds.CompositionBounds" title="gemd.entity.bounds.composition_bounds.CompositionBounds"><em>CompositionBounds</em></a><em>, </em><a class="reference internal" href="gemd.entity.value.composition_value.html#gemd.entity.value.composition_value.CompositionValue" title="gemd.entity.value.composition_value.CompositionValue"><em>CompositionValue</em></a><em>]</em>) – Other bounds or value objects to include.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The union of this bounds and the passed bounds</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="gemd.html#gemd.CategoricalBounds" title="gemd.CategoricalBounds">CategoricalBounds</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemd.entity.bounds.composition_bounds.CompositionBounds.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">others</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#gemd.entity.bounds.composition_bounds.CompositionBounds" title="gemd.entity.bounds.composition_bounds.CompositionBounds"><span class="pre">CompositionBounds</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">CompositionValue</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.bounds.composition_bounds.CompositionBounds.update" title="Permalink to this definition"></a></dt>
+<dd><p>Update this bounds to include other bounds.</p>
+<p>The others list must also be Categorical Bounds or Values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>others</strong> (<em>Union</em><em>[</em><a class="reference internal" href="gemd.html#gemd.CategoricalBounds" title="gemd.CategoricalBounds"><em>CategoricalBounds</em></a><em>, </em><a class="reference internal" href="gemd.entity.value.categorical_value.html#gemd.entity.value.categorical_value.CategoricalValue" title="gemd.entity.value.categorical_value.CategoricalValue"><em>CategoricalValue</em></a><em>]</em>) – Other bounds or value objects to include.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="gemd.entity.bounds.composition_bounds.CompositionBounds.components">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">components</span></span><a class="headerlink" href="#gemd.entity.bounds.composition_bounds.CompositionBounds.components" title="Permalink to this definition"></a></dt>

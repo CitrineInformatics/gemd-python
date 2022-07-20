@@ -195,7 +195,7 @@
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-gemd.entity" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="gemd.entity.CategoricalBounds">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gemd.entity.</span></span><span class="sig-name descname"><span class="pre">CategoricalBounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">categories</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.CategoricalBounds" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gemd.entity.</span></span><span class="sig-name descname"><span class="pre">CategoricalBounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">categories</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.CategoricalBounds" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="gemd.entity.bounds.base_bounds.html#gemd.entity.bounds.base_bounds.BaseBounds" title="gemd.entity.bounds.base_bounds.BaseBounds"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemd.entity.bounds.base_bounds.BaseBounds</span></code></a></p>
 <p>Categorical bounds, parameterized by a set of string-valued category labels.</p>
 <dl class="field-list simple">
@@ -287,9 +287,39 @@ subset of this bounds’s allowed categories.</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="gemd.entity.CategoricalBounds.union">
+<span class="sig-name descname"><span class="pre">union</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">others</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#gemd.entity.CategoricalBounds" title="gemd.entity.CategoricalBounds"><span class="pre">CategoricalBounds</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">CategoricalValue</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gemd.entity.CategoricalBounds" title="gemd.entity.CategoricalBounds"><span class="pre">CategoricalBounds</span></a></span></span><a class="headerlink" href="#gemd.entity.CategoricalBounds.union" title="Permalink to this definition"></a></dt>
+<dd><p>Return the union of this bounds and other bounds.</p>
+<p>The others list must also be Categorical Bounds or Values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>others</strong> (<em>Union</em><em>[</em><a class="reference internal" href="#gemd.entity.CategoricalBounds" title="gemd.entity.CategoricalBounds"><em>CategoricalBounds</em></a><em>, </em><a class="reference internal" href="gemd.entity.value.categorical_value.html#gemd.entity.value.categorical_value.CategoricalValue" title="gemd.entity.value.categorical_value.CategoricalValue"><em>CategoricalValue</em></a><em>]</em>) – Other bounds or value objects to include.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The union of this bounds and the passed bounds</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#gemd.entity.CategoricalBounds" title="gemd.entity.CategoricalBounds">CategoricalBounds</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemd.entity.CategoricalBounds.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">others</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#gemd.entity.CategoricalBounds" title="gemd.entity.CategoricalBounds"><span class="pre">CategoricalBounds</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">CategoricalValue</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.CategoricalBounds.update" title="Permalink to this definition"></a></dt>
+<dd><p>Update this bounds to include other bounds.</p>
+<p>The others list must also be Categorical Bounds or Values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>others</strong> (<em>Union</em><em>[</em><a class="reference internal" href="#gemd.entity.CategoricalBounds" title="gemd.entity.CategoricalBounds"><em>CategoricalBounds</em></a><em>, </em><a class="reference internal" href="gemd.entity.value.categorical_value.html#gemd.entity.value.categorical_value.CategoricalValue" title="gemd.entity.value.categorical_value.CategoricalValue"><em>CategoricalValue</em></a><em>]</em>) – Other bounds or value objects to include.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="gemd.entity.CategoricalBounds.categories">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">categories</span></span><a class="headerlink" href="#gemd.entity.CategoricalBounds.categories" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">categories</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gemd.entity.CategoricalBounds.categories" title="Permalink to this definition"></a></dt>
 <dd><p>Get the set of categories.</p>
 </dd></dl>
 
@@ -395,6 +425,36 @@ this bounds’s set of allowed components.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable">DictSerializable</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemd.entity.CompositionBounds.union">
+<span class="sig-name descname"><span class="pre">union</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">others</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#gemd.entity.CompositionBounds" title="gemd.entity.CompositionBounds"><span class="pre">CompositionBounds</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">CompositionValue</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gemd.entity.CompositionBounds" title="gemd.entity.CompositionBounds"><span class="pre">CompositionBounds</span></a></span></span><a class="headerlink" href="#gemd.entity.CompositionBounds.union" title="Permalink to this definition"></a></dt>
+<dd><p>Return the union of this bounds and other bounds.</p>
+<p>The others list must also be Composition Bounds or Values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>others</strong> (<em>Union</em><em>[</em><a class="reference internal" href="#gemd.entity.CompositionBounds" title="gemd.entity.CompositionBounds"><em>CompositionBounds</em></a><em>, </em><a class="reference internal" href="gemd.entity.value.composition_value.html#gemd.entity.value.composition_value.CompositionValue" title="gemd.entity.value.composition_value.CompositionValue"><em>CompositionValue</em></a><em>]</em>) – Other bounds or value objects to include.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The union of this bounds and the passed bounds</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#gemd.entity.CategoricalBounds" title="gemd.entity.CategoricalBounds">CategoricalBounds</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemd.entity.CompositionBounds.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">others</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#gemd.entity.CompositionBounds" title="gemd.entity.CompositionBounds"><span class="pre">CompositionBounds</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">CompositionValue</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.CompositionBounds.update" title="Permalink to this definition"></a></dt>
+<dd><p>Update this bounds to include other bounds.</p>
+<p>The others list must also be Categorical Bounds or Values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>others</strong> (<em>Union</em><em>[</em><a class="reference internal" href="#gemd.entity.CategoricalBounds" title="gemd.entity.CategoricalBounds"><em>CategoricalBounds</em></a><em>, </em><a class="reference internal" href="gemd.entity.value.categorical_value.html#gemd.entity.value.categorical_value.CategoricalValue" title="gemd.entity.value.categorical_value.CategoricalValue"><em>CategoricalValue</em></a><em>]</em>) – Other bounds or value objects to include.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1062,7 +1122,7 @@ corresponding to serialized DictSerializable objects.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="gemd.entity.InChI.inchi">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">inchi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#gemd.entity.InChI.inchi" title="Permalink to this definition"></a></dt>
-<dd><p>Get the formula as a string.</p>
+<dd><p>Get the InChI as a string.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1611,6 +1671,36 @@ be within the range of this bounds object.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable">DictSerializable</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemd.entity.IntegerBounds.union">
+<span class="sig-name descname"><span class="pre">union</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">others</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#gemd.entity.IntegerBounds" title="gemd.entity.IntegerBounds"><span class="pre">IntegerBounds</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">IntegerValue</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gemd.entity.IntegerBounds" title="gemd.entity.IntegerBounds"><span class="pre">IntegerBounds</span></a></span></span><a class="headerlink" href="#gemd.entity.IntegerBounds.union" title="Permalink to this definition"></a></dt>
+<dd><p>Return the union of this bounds and other bounds.</p>
+<p>The others list must also be Integer Bounds or Values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>others</strong> (<em>Union</em><em>[</em><a class="reference internal" href="#gemd.entity.IntegerBounds" title="gemd.entity.IntegerBounds"><em>IntegerBounds</em></a><em>, </em><a class="reference internal" href="gemd.entity.value.integer_value.html#gemd.entity.value.integer_value.IntegerValue" title="gemd.entity.value.integer_value.IntegerValue"><em>IntegerValue</em></a><em>]</em>) – Other bounds or value objects to include.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The union of this bounds and the passed bounds</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#gemd.entity.IntegerBounds" title="gemd.entity.IntegerBounds">IntegerBounds</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemd.entity.IntegerBounds.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">others</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#gemd.entity.IntegerBounds" title="gemd.entity.IntegerBounds"><span class="pre">IntegerBounds</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">IntegerValue</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.IntegerBounds.update" title="Permalink to this definition"></a></dt>
+<dd><p>Update this bounds to include other bounds.</p>
+<p>The others list must also be Categorical Bounds or Values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>others</strong> (<em>Union</em><em>[</em><a class="reference internal" href="#gemd.entity.IntegerBounds" title="gemd.entity.IntegerBounds"><em>IntegerBounds</em></a><em>, </em><a class="reference internal" href="gemd.entity.value.integer_value.html#gemd.entity.value.integer_value.IntegerValue" title="gemd.entity.value.integer_value.IntegerValue"><em>IntegerValue</em></a><em>]</em>) – Other bounds or value objects to include.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -3019,6 +3109,36 @@ conditions at this time.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable">DictSerializable</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemd.entity.MolecularStructureBounds.union">
+<span class="sig-name descname"><span class="pre">union</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">others</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#gemd.entity.MolecularStructureBounds" title="gemd.entity.MolecularStructureBounds"><span class="pre">MolecularStructureBounds</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">MolecularValue</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gemd.entity.MolecularStructureBounds" title="gemd.entity.MolecularStructureBounds"><span class="pre">MolecularStructureBounds</span></a></span></span><a class="headerlink" href="#gemd.entity.MolecularStructureBounds.union" title="Permalink to this definition"></a></dt>
+<dd><p>Return the union of this bounds and other bounds.</p>
+<p>The others list must also be Molecular Structure Bounds or Values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>others</strong> (<em>Union</em><em>[</em><a class="reference internal" href="#gemd.entity.MolecularStructureBounds" title="gemd.entity.MolecularStructureBounds"><em>MolecularStructureBounds</em></a><em>, </em><a class="reference internal" href="gemd.entity.value.molecular_value.html#gemd.entity.value.molecular_value.MolecularValue" title="gemd.entity.value.molecular_value.MolecularValue"><em>MolecularValue</em></a><em>]</em>) – Other bounds or value objects to include.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The union of this bounds and the passed bounds</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#gemd.entity.CategoricalBounds" title="gemd.entity.CategoricalBounds">CategoricalBounds</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemd.entity.MolecularStructureBounds.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">others</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#gemd.entity.MolecularStructureBounds" title="gemd.entity.MolecularStructureBounds"><span class="pre">MolecularStructureBounds</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">MolecularValue</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.MolecularStructureBounds.update" title="Permalink to this definition"></a></dt>
+<dd><p>Update this bounds to include other bounds.</p>
+<p>The others list must also be Molecular Structure Bounds or Values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>others</strong> (<em>Union</em><em>[</em><a class="reference internal" href="#gemd.entity.MolecularStructureBounds" title="gemd.entity.MolecularStructureBounds"><em>MolecularStructureBounds</em></a><em>, </em><a class="reference internal" href="gemd.entity.value.molecular_value.html#gemd.entity.value.molecular_value.MolecularValue" title="gemd.entity.value.molecular_value.MolecularValue"><em>MolecularValue</em></a><em>]</em>) – Other bounds or value objects to include.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -4985,7 +5105,7 @@ corresponding to serialized DictSerializable objects.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lower_bound</strong> (<em>float</em>) – Lower endpoint.</p></li>
 <li><p><strong>upper_bound</strong> (<em>float</em>) – Upper endpoint.</p></li>
-<li><p><strong>default_units</strong> (<em>str</em>) – A string describing the units. Units must be present and they must be parseable by Pint.
+<li><p><strong>default_units</strong> (<em>str</em>) – A string describing the units. Units must be present and parseable by Pint.
 An empty string can be used for the units of a dimensionless quantity.</p></li>
 </ul>
 </dd>
@@ -5072,6 +5192,36 @@ logic around permissibility is delegated to the Value implementation.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable">DictSerializable</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemd.entity.RealBounds.union">
+<span class="sig-name descname"><span class="pre">union</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">others</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#gemd.entity.RealBounds" title="gemd.entity.RealBounds"><span class="pre">RealBounds</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ContinuousValue</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gemd.entity.RealBounds" title="gemd.entity.RealBounds"><span class="pre">RealBounds</span></a></span></span><a class="headerlink" href="#gemd.entity.RealBounds.union" title="Permalink to this definition"></a></dt>
+<dd><p>Return the union of this bounds and other bounds.</p>
+<p>The others list must also be Real Bounds or Values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>others</strong> (<em>Union</em><em>[</em><a class="reference internal" href="#gemd.entity.RealBounds" title="gemd.entity.RealBounds"><em>RealBounds</em></a><em>, </em><a class="reference internal" href="gemd.entity.value.continuous_value.html#gemd.entity.value.continuous_value.ContinuousValue" title="gemd.entity.value.continuous_value.ContinuousValue"><em>ContinuousValue</em></a><em>]</em>) – Other bounds or value objects to include.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The union of this bounds and the passed bounds</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#gemd.entity.RealBounds" title="gemd.entity.RealBounds">RealBounds</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemd.entity.RealBounds.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">others</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#gemd.entity.RealBounds" title="gemd.entity.RealBounds"><span class="pre">RealBounds</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ContinuousValue</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.RealBounds.update" title="Permalink to this definition"></a></dt>
+<dd><p>Update this bounds to include other bounds.</p>
+<p>The others list must also be Real Bounds or Values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>others</strong> (<em>Union</em><em>[</em><a class="reference internal" href="#gemd.entity.RealBounds" title="gemd.entity.RealBounds"><em>RealBounds</em></a><em>, </em><a class="reference internal" href="gemd.entity.value.continuous_value.html#gemd.entity.value.continuous_value.ContinuousValue" title="gemd.entity.value.continuous_value.ContinuousValue"><em>ContinuousValue</em></a><em>]</em>) – Other bounds or value objects to include.</p>
 </dd>
 </dl>
 </dd></dl>

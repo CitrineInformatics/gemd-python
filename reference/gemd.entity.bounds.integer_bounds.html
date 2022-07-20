@@ -164,6 +164,36 @@ be within the range of this bounds object.</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="gemd.entity.bounds.integer_bounds.IntegerBounds.union">
+<span class="sig-name descname"><span class="pre">union</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">others</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#gemd.entity.bounds.integer_bounds.IntegerBounds" title="gemd.entity.bounds.integer_bounds.IntegerBounds"><span class="pre">IntegerBounds</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">IntegerValue</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gemd.entity.bounds.integer_bounds.IntegerBounds" title="gemd.entity.bounds.integer_bounds.IntegerBounds"><span class="pre">IntegerBounds</span></a></span></span><a class="headerlink" href="#gemd.entity.bounds.integer_bounds.IntegerBounds.union" title="Permalink to this definition"></a></dt>
+<dd><p>Return the union of this bounds and other bounds.</p>
+<p>The others list must also be Integer Bounds or Values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>others</strong> (<em>Union</em><em>[</em><a class="reference internal" href="#gemd.entity.bounds.integer_bounds.IntegerBounds" title="gemd.entity.bounds.integer_bounds.IntegerBounds"><em>IntegerBounds</em></a><em>, </em><a class="reference internal" href="gemd.entity.value.integer_value.html#gemd.entity.value.integer_value.IntegerValue" title="gemd.entity.value.integer_value.IntegerValue"><em>IntegerValue</em></a><em>]</em>) – Other bounds or value objects to include.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The union of this bounds and the passed bounds</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#gemd.entity.bounds.integer_bounds.IntegerBounds" title="gemd.entity.bounds.integer_bounds.IntegerBounds">IntegerBounds</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemd.entity.bounds.integer_bounds.IntegerBounds.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">others</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#gemd.entity.bounds.integer_bounds.IntegerBounds" title="gemd.entity.bounds.integer_bounds.IntegerBounds"><span class="pre">IntegerBounds</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">IntegerValue</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.bounds.integer_bounds.IntegerBounds.update" title="Permalink to this definition"></a></dt>
+<dd><p>Update this bounds to include other bounds.</p>
+<p>The others list must also be Categorical Bounds or Values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>others</strong> (<em>Union</em><em>[</em><a class="reference internal" href="#gemd.entity.bounds.integer_bounds.IntegerBounds" title="gemd.entity.bounds.integer_bounds.IntegerBounds"><em>IntegerBounds</em></a><em>, </em><a class="reference internal" href="gemd.entity.value.integer_value.html#gemd.entity.value.integer_value.IntegerValue" title="gemd.entity.value.integer_value.IntegerValue"><em>IntegerValue</em></a><em>]</em>) – Other bounds or value objects to include.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="gemd.entity.bounds.integer_bounds.IntegerBounds.skip">
 <span class="sig-name descname"><span class="pre">skip</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#gemd.entity.bounds.integer_bounds.IntegerBounds.skip" title="Permalink to this definition"></a></dt>
