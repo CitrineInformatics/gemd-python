@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 
 setup(name='gemd',
-      version='1.10.2',
+      version='1.10.3',
       url='http://github.com/CitrineInformatics/gemd-python',
       description="Python binding for Citrine's GEMD data model",
       author='Citrine Informatics',
