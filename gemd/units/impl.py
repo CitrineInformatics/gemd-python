@@ -66,7 +66,10 @@ def convert_units(value: float, starting_unit: str, final_unit: str) -> float:
         The converted number
 
     """
-    return _ureg.Quantity(value, starting_unit).to(final_unit).magnitude
+    if starting_unit == final_unit:
+        return value  # skip computation
+    else:
+        return _ureg.Quantity(value, starting_unit).to(final_unit).magnitude
 
 
 def change_definitions_file(filename: str = None):

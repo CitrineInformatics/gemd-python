@@ -66,10 +66,10 @@ def test_file_change():
     """Test that swapping units files works."""
     assert convert_units(1, 'm', 'cm') == 100
     with pytest.raises(UndefinedUnitError):
-        assert convert_units(1, 'usd', 'usd') == 1
+        assert convert_units(1, 'usd', 'USD') == 1
     with _change_units(filename=pkg_resources.resource_filename("gemd.units",
                                                                 "tests/test_units.txt")):
         with pytest.raises(UndefinedUnitError):
             assert convert_units(1, 'm', 'cm') == 100
-        assert convert_units(1, 'usd', 'usd') == 1
+        assert convert_units(1, 'usd', 'USD') == 1
     assert convert_units(1, 'm', 'cm') == 100  # And verify we're back to normal
