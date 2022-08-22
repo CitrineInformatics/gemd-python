@@ -47,6 +47,7 @@ def parse_units(units: Union[str, _Unit, None]) -> Union[str, _Unit, None]:
         raise UndefinedUnitError("Units must be given as a recognized unit string or Units object")
 
 
+@functools.lru_cache(maxsize=None)
 def convert_units(value: float, starting_unit: str, final_unit: str) -> float:
     """
     Convert the value from the starting_unit to the final_unit.
@@ -83,6 +84,7 @@ def change_definitions_file(filename: str = None):
 
     """
     global _ureg
+    convert_units.cache_clear()  # Units will change
     if filename is None:
         filename = DEFAULT_FILE
     _ureg = UnitRegistry(filename=filename)
