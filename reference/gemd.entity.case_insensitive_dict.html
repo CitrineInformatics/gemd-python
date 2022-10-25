@@ -107,7 +107,7 @@ Example: CaseInsensitiveDict(one=1, two=”two”).</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.case_insensitive_dict.CaseInsensitiveDict.fromkeys">
 <span class="sig-name descname"><span class="pre">fromkeys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.case_insensitive_dict.CaseInsensitiveDict.fromkeys" title="Permalink to this definition"></a></dt>
-<dd><p>Returns a new dict with keys from iterable and values equal to value.</p>
+<dd><p>Create a new dictionary with keys from iterable and values set to value.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -185,8 +185,10 @@ popitem() would return an arbitrary key/value pair.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.case_insensitive_dict.CaseInsensitiveDict.setdefault">
-<span class="sig-name descname"><span class="pre">setdefault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="optional">]</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">D.get(k,d),</span> <span class="pre">also</span> <span class="pre">set</span> <span class="pre">D[k]=d</span> <span class="pre">if</span> <span class="pre">k</span> <span class="pre">not</span> <span class="pre">in</span> <span class="pre">D</span></span></span><a class="headerlink" href="#gemd.entity.case_insensitive_dict.CaseInsensitiveDict.setdefault" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">setdefault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.case_insensitive_dict.CaseInsensitiveDict.setdefault" title="Permalink to this definition"></a></dt>
+<dd><p>Insert key with a value of default if key is not in the dictionary.</p>
+<p>Return the value for key if key is in the dictionary, else default.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.case_insensitive_dict.CaseInsensitiveDict.update">
