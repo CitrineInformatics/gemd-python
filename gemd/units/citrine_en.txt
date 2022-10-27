@@ -1,6 +1,6 @@
 # Citrine customized units input file for Pint, based explicitly on the Pint defaults as
-# included release 0.9 (https://github.com/hgrecco/pint/releases/tag/0.9).  The Pint Authors hold
-# copyright and are documented in https://github.com/hgrecco/pint/blob/0.9/AUTHORS.
+# included release 0.20 (https://github.com/hgrecco/pint/releases/tag/0.20).  The Pint Authors hold
+# copyright and are documented in https://github.com/hgrecco/pint/blob/0.20/AUTHORS.
 #
 # The original copyright statement for the constants file reads:
 #
@@ -80,7 +80,7 @@
 #     [density] = [mass] / [volume]
 #
 # Note that primary dimensions don't need to be declared; they can be
-# defined or the first time in a unit definition.
+# defined for the first time in a unit definition.
 # E.g. see below `meter = [length]`
 #
 #
@@ -112,7 +112,9 @@ atto- =  1e-18 = a-
 femto- = 1e-15 = f-
 pico- =  1e-12 = p-
 nano- =  1e-9  = n-
-micro- = 1e-6  = µ- = u-
+# The micro (U+00B5) and Greek mu (U+03BC) are both valid prefixes,
+# and they often use the same glyph.
+micro- = 1e-6  = µ- = μ- = u-
 milli- = 1e-3  = m-
 centi- = 1e-2  = c-
 deci- =  1e-1  = d-
@@ -152,7 +154,6 @@ gram = [mass] = g = Gram
 mole = [substance] = mol = Mole
 kelvin = [temperature]; offset: 0 = K = Kelvin = degK = °K = degree_Kelvin = degreeK  # older names supported for compatibility
 radian = [] = rad = Radian
-neper = [] = Np = Neper
 bit = [] = _ = Bit
 count = [] = _ = Count
 
@@ -180,12 +181,12 @@ mil = π / 32000 * radian = Mil
 steradian = radian ** 2 = sr = Steradian
 square_degree = (π / 180) ** 2 * sr = sq_deg = sqdeg = Square_Degree
 
-# Logarithmic ratio
-bel = 0.5 * ln10 * neper = Bel
-
 # Information
-byte = 8 * bit = B = octet = Byte = Octet
-baud = bit / second = Bd = bps = Baud = BPS
+baud = bit / second = Bd = bps
+
+byte = 8 * bit = B = octet
+# byte = 8 * bit = _ = octet
+## NOTE: B (byte) symbol can conflict with Bell
 
 # Length
 angstrom = 1e-10 * meter = Å = ångström = Angstrom = Ångstrom = Å
@@ -198,7 +199,7 @@ nautical_mile = 1852 * meter = nmi = Nautical_Mile
 bohr = hbar / (alpha * m_e * c) = a_0 = a0 = Bohr = bohr_radius = atomic_unit_of_length = a_u_length
 x_unit_Cu = K_alpha_Cu_d_220 * d_220 / 1537.4 = Xu_Cu
 x_unit_Mo = K_alpha_Mo_d_220 * d_220 / 707.831 = Xu_Mo
-angstrom_star = K_alpha_W_d_220 * d_220 / 0.2090100 = Å_star = Angstrom_Star
+angstrom_star = K_alpha_W_d_220 * d_220 / 0.2090100 = Å_star = Angstrom_Star = Ångstrom_Star
 planck_length = (hbar * gravitational_constant / c ** 3) ** 0.5 = Planck_length = Planck_Length
 
 # Mass
@@ -218,7 +219,10 @@ week = 7 * day = Week
 fortnight = 2 * week = Fortnight
 year = 365.25 * day = yr = julian_year = Year = Julian_year = Julian_Year
 month = year / 12 = _ = Month
-decade = 10 * year = _ = Decade
+
+# decade = 10 * year = _ = Decade
+## NOTE: decade [time] can conflict with decade [dimensionless]
+
 century = 100 * year = _ = centuries = Century = Centuries
 millennium = 1e3 * year = _ = millennia = Millennium = Millennia
 eon = 1e9 * year = _ = Eon
@@ -262,6 +266,7 @@ stere = meter ** 3 = _ = Stere
 [frequency] = 1 / [time]
 hertz = 1 / second = Hz = Hertz
 revolutions_per_minute = revolution / minute = rpm = Revolutions_Per_Minute = RPM
+revolutions_per_second = revolution / second = rps = Revolutions_Per_Second = RPS
 counts_per_second = count / second = cps = Counts_Per_Second = CPS
 
 # Wavenumber
@@ -269,13 +274,18 @@ counts_per_second = count / second = cps = Counts_Per_Second = CPS
 reciprocal_centimeter = 1 / cm = cm_1 = kayser = Kayser = Reciprocal_Centimeter
 
 # Velocity
-[velocity] = [length] / [time] = [speed]
+[velocity] = [length] / [time]
+[speed] = [velocity]
 knot = nautical_mile / hour = kt = knot_international = international_knot = Knot = International_Knot
 mile_per_hour = mile / hour = mph = MPH = Mile_Per_Hour = Miles_Per_Hour = miles_per_hour
 kilometer_per_hour = kilometer / hour = kph = KPH = kilometers_per_hour = Kilometer_Per_Hour = Kilometers_Per_Hour
 kilometer_per_second = kilometer / second = kps = kilometers_per_second = Kilometer_Per_Second
 meter_per_second = meter / second = mps = Meter_Per_Second = Meters_Per_Second
 foot_per_second = foot / second = fps = feet_per_second = Foot_Per_Second = Feet_Per_Second
+
+# Volumetric Flow Rate
+[volumetric_flow_rate] = [volume] / [time]
+sverdrup = 1e6 * meter ** 3 / second = sv
 
 # Acceleration
 [acceleration] = [velocity] / [time]
@@ -296,7 +306,7 @@ joule = newton * meter = J = Joule
 erg = dyne * centimeter = _ = Erg
 watt_hour = watt * hour = Wh = watthour = Whr = Watt_Hour = Watthour
 electron_volt = e * volt = eV
-rydberg = h * c * R_inf = Ry = Rydberg
+rydberg = ℎ * c * R_inf = Ry = Rydberg
 hartree = 2 * rydberg = E_h = Eh = Hartree = hartree_energy = atomic_unit_of_energy = a_u_energy
 calorie = 4.184 * joule = cal = thermochemical_calorie = cal_th = Calorie = Thermochemical_Calorie
 international_calorie = 4.1868 * joule = cal_it = international_steam_table_calorie = International_Calorie
@@ -320,8 +330,12 @@ boiler_horsepower = 33475 * Btu / hour                            # unclear whic
 metric_horsepower = 75 * force_kilogram * meter / second
 electrical_horsepower = 746 * watt
 refrigeration_ton = 12e3 * Btu / hour = _ = ton_of_refrigeration  # approximate, no exact definition
+cooling_tower_ton = 1.25 * refrigeration_ton # approximate, no exact definition
 standard_liter_per_minute = atmosphere * liter / minute = slpm = slm
 conventional_watt_90 = K_J90 ** 2 * R_K90 / (K_J ** 2 * R_K) * watt = W_90
+
+# Momentum
+[momentum] = [length] * [mass] / [time]
 
 # Density (as auxiliary for pressure)
 [density] = [mass] / [volume]
@@ -348,6 +362,7 @@ inch_H2O_39F = inch * water_39F * g_0
 inch_H2O_60F = inch * water_60F * g_0
 foot_H2O = foot * water * g_0 = ftH2O = feet_H2O
 centimeter_H2O = centimeter * water * g_0 = cmH2O = cm_H2O
+sound_pressure_level = 20e-6 * pascal = SPL
 
 # Torque
 [torque] = [force] * [length]
@@ -381,7 +396,7 @@ enzyme_unit = micromole / minute = U = enzymeunit
 
 # Entropy
 [entropy] = [energy] / [temperature]
-clausius = calorie / kelvin = _ = Clausius
+clausius = calorie / kelvin = Cl = Clausius
 
 # Molar entropy
 [molar_entropy] = [entropy] / [substance]
@@ -474,16 +489,16 @@ farad = coulomb / volt = F
 abfarad = 1e9 * farad = abF
 conventional_farad_90 = R_K90 / R_K * farad = F_90
 
+# Magnetic flux
+[magnetic_flux] = [electric_potential] * [time]
+weber = volt * second = Wb = Weber
+unit_pole = µ_0 * biot * centimeter
+
 # Inductance
 [inductance] = [magnetic_flux] / [current]
 henry = weber / ampere = H = Henry
 abhenry = 1e-9 * henry = abH
 conventional_henry_90 = R_K / R_K90 * henry = H_90
-
-# Magnetic flux
-[magnetic_flux] = [electric_potential] * [time]
-weber = volt * second = Wb = Weber
-unit_pole = µ_0 * biot * centimeter
 
 # Magnetic field
 [magnetic_field] = [magnetic_flux] / [area]
@@ -494,7 +509,7 @@ gamma = 1e-9 * tesla = γ
 [magnetomotive_force] = [current]
 ampere_turn = ampere = At
 biot_turn = biot
-gilbert = 1 / (4 * π) * biot_turn = _ = Gilbert
+gilbert = 1 / (4 * π) * biot_turn = Gb = Gilbert
 
 # Magnetic field strength
 [magnetic_field_strength] = [current] / [length]
@@ -512,6 +527,26 @@ buckingham = debye * angstrom = Buckingham
 bohr_magneton = e * hbar / (2 * m_e) = µ_B = mu_B
 nuclear_magneton = e * hbar / (2 * m_p) = µ_N = mu_N
 
+# Logaritmic Unit Definition
+#  Unit = scale; logbase; logfactor
+#  x_dB = [logfactor] * log( x_lin / [scale] ) / log( [logbase] )
+
+# Logaritmic Units of dimensionless quantity: [ https://en.wikipedia.org/wiki/Level_(logarithmic_quantity) ]
+
+decibelmilliwatt = 1e-3 watt; logbase: 10; logfactor: 10 = dBm
+decibelmicrowatt = 1e-6 watt; logbase: 10; logfactor: 10 = dBu
+
+decibel = 1 ; logbase: 10; logfactor: 10 = dB
+# bell = 1 ; logbase: 10; logfactor: = B
+## NOTE: B (Bell) symbol conflicts with byte
+
+decade = 1 ; logbase: 10; logfactor: 1
+## NOTE: decade [time] can conflict with decade [dimensionless]
+
+octave = 1 ; logbase: 2; logfactor: 1 = oct
+
+neper = 1 ; logbase: 2.71828182845904523536028747135266249775724709369995; logfactor: 0.5 = Np
+# neper = 1 ; logbase: eulers_number; logfactor: 0.5 = Np
 
 #### UNIT GROUPS ####
 # Mostly for length, area, volume, mass, force
@@ -580,7 +615,7 @@ nuclear_magneton = e * hbar / (2 * m_p) = µ_N = mu_N
     teaspoon = fluid_ounce / 6 = tsp
     tablespoon = fluid_ounce / 2 = tbsp = Tbsp
     shot = 3 * tablespoon = jig = US_shot
-    cup = pint / 2 = _ = liquid_cup = US_liquid_cup
+    cup = pint / 2 = _ = liquid_cup = US_liquid_cup  # Removed because of risk of collision with cP
     barrel = 31.5 * gallon = bbl
     oil_barrel = 42 * gallon = oil_bbl
     beer_barrel = 31 * gallon = beer_bbl
@@ -599,6 +634,7 @@ nuclear_magneton = e * hbar / (2 * m_p) = µ_N = mu_N
     ton = 2e3 * pound = _ = short_ton
     long_ton = 2240 * pound
     slug = g_0 * pound * second ** 2 / foot
+    slinch = g_0 * pound * second ** 2 / inch = blob = slugette
 
     force_ounce = g_0 * ounce = ozf = ounce_force
     force_pound = g_0 * pound = lbf = pound_force
@@ -621,9 +657,9 @@ nuclear_magneton = e * hbar / (2 * m_p) = µ_N = mu_N
 @end
 
 @group Troy
-    pennyweight = 24 * grain = _ = pennyweight
-    troy_ounce = 480 * grain = _ = troy_ounce
-    troy_pound = 12 * troy_ounce = _ = troy_pound
+    pennyweight = 24 * grain = dwt
+    troy_ounce = 480 * grain = toz = ozt
+    troy_pound = 12 * troy_ounce = tlb = lbt
 @end
 
 @group Apothecary
@@ -650,7 +686,7 @@ nuclear_magneton = e * hbar / (2 * m_p) = µ_N = mu_N
 
 @group Printer
     pica = inch / 6 = _ = printers_pica
-    point = pica / 12 = _ = printers_point = big_point
+    point = pica / 12 = pp = printers_point = big_point = bp
     didot = 1 / 2660 * m
     cicero = 12 * didot
     tex_point = inch / 72.27
