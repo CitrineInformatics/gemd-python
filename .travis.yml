@@ -5,13 +5,17 @@ python:
 - '3.8'
 - '3.9'
 - '3.10'
+env:
+- PINT_VERSION=0.13
+- PINT_VERSION=0.20
 install:
 - pip install -U -r requirements.txt
+- pip install Pint==$PINT_VERSION
 - pip install -U -r test_requirements.txt
 - pip install --no-deps -e .
 script:
-- pytest --cov=gemd --cov-report term-missing:skip-covered --cov-config=tox.ini --no-cov-on-fail --cov-fail-under=100 gemd
 - flake8 gemd
+- pytest --cov=gemd --cov-report term-missing:skip-covered --cov-config=tox.ini --no-cov-on-fail --cov-fail-under=100 gemd
 - cd docs; make html; cd ..;
 - touch ./docs/_build/html/.nojekyll
 - if [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_BRANCH" == "main" ]; then bash ./scripts/validate-version-bump.sh; fi
