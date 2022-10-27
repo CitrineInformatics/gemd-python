@@ -182,9 +182,9 @@ steradian = radian ** 2 = sr = Steradian
 square_degree = (π / 180) ** 2 * sr = sq_deg = sqdeg = Square_Degree
 
 # Information
-baud = bit / second = Bd = bps
+baud = bit / second = Bd = bps = Baud = BPS
 
-byte = 8 * bit = B = octet
+byte = 8 * bit = B = octet = Byte = Octet
 # byte = 8 * bit = _ = octet
 ## NOTE: B (byte) symbol can conflict with Bell
 
@@ -509,7 +509,7 @@ gamma = 1e-9 * tesla = γ
 [magnetomotive_force] = [current]
 ampere_turn = ampere = At
 biot_turn = biot
-gilbert = 1 / (4 * π) * biot_turn = Gb = Gilbert
+gilbert = 1 / (4 * π) * biot_turn = _ = Gilbert  # Remove Gb for risk of collision with GB
 
 # Magnetic field strength
 [magnetic_field_strength] = [current] / [length]
@@ -545,8 +545,9 @@ decade = 1 ; logbase: 10; logfactor: 1
 
 octave = 1 ; logbase: 2; logfactor: 1 = oct
 
-neper = 1 ; logbase: 2.71828182845904523536028747135266249775724709369995; logfactor: 0.5 = Np
+neper = 1 ; logbase: 2.71828182845904523536028747135266249775724709369995; logfactor: 0.5 = Np = Neper
 # neper = 1 ; logbase: eulers_number; logfactor: 0.5 = Np
+## NOTE: using eulers_number in a logbase definition seems broken under Pint 0.19.2, 0.20.0
 
 #### UNIT GROUPS ####
 # Mostly for length, area, volume, mass, force
