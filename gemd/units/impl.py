@@ -1,37 +1,33 @@
 """Implementation of units."""
-import pint
-from pint import UnitRegistry
-from pint.unit import _Unit
+from pint import UnitRegistry, Unit
 import pkg_resources
 
 import functools
 from typing import Union
 
+# alias the error that is thrown when units are incompatible
+# this helps to isolate the dependence on pint
+from pint.errors import DimensionalityError as IncompatibleUnitsError  # noqa Import
+from pint.errors import UndefinedUnitError
 
 # use the default unit registry for now
 DEFAULT_FILE = pkg_resources.resource_filename("gemd.units", "citrine_en.txt")
-_ureg = UnitRegistry(filename=DEFAULT_FILE)
-
-
-# alias the error that is thrown when units are incompatible
-# this helps to isolate the dependence on pint
-IncompatibleUnitsError = pint.errors.DimensionalityError
-UndefinedUnitError = pint.errors.UndefinedUnitError
+registry = UnitRegistry(filename=DEFAULT_FILE)
 
 
 @functools.lru_cache(maxsize=None)
-def parse_units(units: Union[str, _Unit, None]) -> Union[str, _Unit, None]:
+def parse_units(units: Union[str, Unit, None]) -> Union[str, Unit, None]:
     """
-    Parse a string or _Unit into a standard string representation of the unit.
+    Parse a string or Unit into a standard string representation of the unit.
 
     Parameters
     ----------
-    units: Union[str, _Unit, None]
-        The string or _Unit representation of the object we wish to display
+    units: Union[str, Unit, None]
+        The string or Unit representation of the object we wish to display
 
     Returns
     -------
-    [Union[str, _Unit, None]]
+    [Union[str, Unit, None]]
         The representation; note that the same type that was passed is returned
 
     """
@@ -40,8 +36,8 @@ def parse_units(units: Union[str, _Unit, None]) -> Union[str, _Unit, None]:
     elif units == '':
         return 'dimensionless'
     elif isinstance(units, str):
-        return str(_ureg(units).units)
-    elif isinstance(units, _Unit):
+        return str(registry(units).units)
+    elif isinstance(units, Unit):
         return units
     else:
         raise UndefinedUnitError("Units must be given as a recognized unit string or Units object")
@@ -70,7 +66,7 @@ def convert_units(value: float, starting_unit: str, final_unit: str) -> float:
     if starting_unit == final_unit:
         return value  # skip computation
     else:
-        return _ureg.Quantity(value, starting_unit).to(final_unit).magnitude
+        return registry.Quantity(value, starting_unit).to(final_unit).magnitude
 
 
 def change_definitions_file(filename: str = None):
@@ -83,8 +79,8 @@ def change_definitions_file(filename: str = None):
         The file to use
 
     """
-    global _ureg
+    global registry
     convert_units.cache_clear()  # Units will change
     if filename is None:
         filename = DEFAULT_FILE
-    _ureg = UnitRegistry(filename=filename)
+    registry = UnitRegistry(filename=filename)

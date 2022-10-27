@@ -4,12 +4,12 @@ from contextlib import contextmanager
 from pint import UnitRegistry
 from gemd.units import parse_units, convert_units, change_definitions_file, UndefinedUnitError
 
-# use the default unit registry for now
-_ureg = UnitRegistry(filename=pkg_resources.resource_filename("gemd.units", "citrine_en.txt"))
-
 
 def test_parse_expected():
     """Test that we can parse the units that we expect to be able to."""
+    # use the default unit registry for now
+    reg = UnitRegistry(filename=pkg_resources.resource_filename("gemd.units", "citrine_en.txt"))
+
     expected = [
         "degC", "degF", "K",
         "g", "kg", "mg", "ton",
@@ -17,7 +17,7 @@ def test_parse_expected():
         "inch", "ft", "mm", "um",
         "second", "ms", "hour", "minute", "ns",
         "g/cm^3", "g/mL", "kg/cm^3",
-        _ureg("kg").u,
+        reg("kg").u,
         "amu",  # A line that was edited
         "Seconds",  # Added support for some title-case units
         "delta_Celsius / hour"  # Added to make sure pint version is right (>0.10)
