@@ -8,6 +8,10 @@ python:
 env:
 - PINT_VERSION=0.13
 - PINT_VERSION=0.20
+jobs:
+  exclude:
+    - python: 3.7
+      env: PINT_VERSION=0.20
 install:
 - pip install -U -r requirements.txt
 - pip install Pint==$PINT_VERSION
@@ -28,6 +32,7 @@ deploy:
     on:
       tags: true
       python: '3.7' # only need this to run once
+      env: PINT_VERSION=0.13
   - provider: pypi
     user: "CitrineInformatics"
     password: "$PYPI_PASSWORD"
