@@ -1,3 +1,5 @@
+import re
+
 import pytest
 import pkg_resources
 from contextlib import contextmanager
@@ -20,11 +22,17 @@ def test_parse_expected():
         reg("kg").u,
         "amu",  # A line that was edited
         "Seconds",  # Added support for some title-case units
-        "delta_Celsius / hour"  # Added to make sure pint version is right (>0.10)
+        "delta_Celsius / hour",  # Added to make sure pint version is right (>0.10)
+        "g / 2.5 cm",  # Scaling factors are acceptable
     ]
     for unit in expected:
         parse_units(unit)
     assert parse_units("") == 'dimensionless'
+    # Scaling factors bind tightly to trailing units
+    assert parse_units("g / 2.5 cm") == parse_units("g / (2.5 cm)")
+    assert parse_units("g / 2.5cm") == parse_units("g / (2.5 cm)")
+    assert parse_units("g / 25.mm") == parse_units("g / (25. mm)")
+    assert parse_units("g / 2.5 * cm") == parse_units("g cm / 2.5")
 
 
 def test_parse_unexpected():
@@ -44,6 +52,31 @@ def test_parse_unexpected():
 def test_parse_none():
     """Test that None parses as None."""
     assert parse_units(None) is None
+
+
+def test_format():
+    """Test that custom formatting behaves as we hope."""
+    # use the default unit registry for now
+    reg = UnitRegistry(filename=pkg_resources.resource_filename("gemd.units", "citrine_en.txt"))
+
+    result = parse_units("K^-2 m^-1 C^0 g^1 s^2")
+    assert "-" not in result
+    assert "[time]" in reg(result).dimensionality
+    assert "[current]" not in reg(result).dimensionality
+    kelvin = str(reg("K").units)
+    gram = str(reg("g").units)
+    second = str(reg("s").units)
+    assert kelvin in result
+    assert gram in result
+    assert second in result
+    assert result.index(gram) < result.index(kelvin)
+    assert result.index(gram) < result.index(second)
+
+    assert not re.search(r"\d", parse_units("m kg / s"))
+    assert "/" not in parse_units("m kg s")
+    assert "1" not in parse_units("s")
+    assert "1" in parse_units("s^-1")
+    assert "2.5" in parse_units("g / 2.5 cm")
 
 
 def test_conversion():
