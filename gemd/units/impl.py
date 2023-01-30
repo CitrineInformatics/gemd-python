@@ -1,7 +1,7 @@
 """Implementation of units."""
 import re
 
-from pint import UnitRegistry, Unit
+from pint import UnitRegistry, Unit, register_unit_format
 from pint.compat import tokenizer
 from tokenize import NAME, NUMBER, OP
 # alias the error that is thrown when units are incompatible
@@ -18,7 +18,8 @@ DEFAULT_FILE = pkg_resources.resource_filename("gemd.units", "citrine_en.txt")
 
 
 def _scaling_preprocessor(input_string: str) -> str:
-    global registry
+    """Preprocessor that turns scaling factors into non-dimensional units."""
+    global _REGISTRY
     tokens = tokenizer(input_string)
     exponent = False
     division = False
@@ -41,16 +42,44 @@ def _scaling_preprocessor(input_string: str) -> str:
     for scale, division in scales:
         # There's probably something to be said for stashing these, but this sin
         # should be ameliorated by the LRU cache
-        regex = rf"\b{re.escape(scale)}\b"
+        regex = rf"\b{re.escape(scale)}(?!=[0-9.])"
         valid = "_" + scale.replace(".", "_").replace("+", "").replace("-", "_")
         trailing = "/" if division else ""
-        registry.define(f"{valid} = {scale} = {scale}")
+        _REGISTRY.define(f"{valid} = {scale} = {scale}")
         input_string = re.sub(regex, valid + trailing, input_string)
 
     return input_string
 
 
-registry = UnitRegistry(filename=DEFAULT_FILE, preprocessors=[_scaling_preprocessor])
+_REGISTRY = UnitRegistry(filename=DEFAULT_FILE, preprocessors=[_scaling_preprocessor])
+
+
+@register_unit_format("clean")
+def _format_clean(unit, registry, **options):
+    """Formatter that turns scaling-factor-units into numbers again."""
+    numerator = []
+    denominator = []
+    for u, p in unit.items():
+        if re.match(r"_[\d_]+$", u):
+            # Munged scaling factor; drop leading underscore, restore . and -
+            u = re.sub(r"(?<=\d)_(?=\d)", ".", u[1:]).replace("_", "-")
+
+        if p == 1:
+            numerator.append(u)
+        elif p > 1:
+            numerator.append(f"{u} ** {p}")
+        elif p == -1:
+            denominator.append(u)
+        elif p < -1:
+            denominator.append(f"{u} ** {-p}")
+
+    if len(numerator) == 0:
+        numerator = ["1"]
+
+    if len(denominator) > 0:
+        return " / ".join((" * ".join(numerator), " / ".join(denominator)))
+    else:
+        return " * ".join(numerator)
 
 
 @functools.lru_cache(maxsize=1024)
@@ -74,7 +103,7 @@ def parse_units(units: Union[str, Unit, None]) -> Union[str, Unit, None]:
     elif units == '':
         return 'dimensionless'
     elif isinstance(units, str):
-        return str(registry(units).units)
+        return f"{_REGISTRY(units).u:clean}"
     elif isinstance(units, Unit):
         return units
     else:
@@ -104,7 +133,7 @@ def convert_units(value: float, starting_unit: str, final_unit: str) -> float:
     if starting_unit == final_unit:
         return value  # skip computation
     else:
-        return registry.Quantity(value, starting_unit).to(final_unit).magnitude
+        return _REGISTRY.Quantity(value, starting_unit).to(final_unit).magnitude
 
 
 def change_definitions_file(filename: str = None):
@@ -117,8 +146,8 @@ def change_definitions_file(filename: str = None):
         The file to use
 
     """
-    global registry
+    global _REGISTRY
     convert_units.cache_clear()  # Units will change
     if filename is None:
         filename = DEFAULT_FILE
-    registry = UnitRegistry(filename=filename)
+    _REGISTRY = UnitRegistry(filename=filename)
