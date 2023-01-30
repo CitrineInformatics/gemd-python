@@ -20,11 +20,15 @@ def test_parse_expected():
         reg("kg").u,
         "amu",  # A line that was edited
         "Seconds",  # Added support for some title-case units
-        "delta_Celsius / hour"  # Added to make sure pint version is right (>0.10)
+        "delta_Celsius / hour",  # Added to make sure pint version is right (>0.10)
+        "g / 2.5 cm",  # Scaling factors are acceptable
     ]
     for unit in expected:
         parse_units(unit)
     assert parse_units("") == 'dimensionless'
+    # Scaling factors bind tightly to trailing units
+    assert parse_units("g / 2.5 cm") == parse_units("g / (2.5 cm)")
+    assert parse_units("g / 2.5 * cm") == parse_units("g cm / 2.5")
 
 
 def test_parse_unexpected():

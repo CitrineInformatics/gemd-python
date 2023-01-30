@@ -1,21 +1,59 @@
 """Implementation of units."""
+import re
+
 from pint import UnitRegistry, Unit
-import pkg_resources
-
-import functools
-from typing import Union
-
+from pint.compat import tokenizer
+from tokenize import NAME, NUMBER, OP
 # alias the error that is thrown when units are incompatible
 # this helps to isolate the dependence on pint
 from pint.errors import DimensionalityError as IncompatibleUnitsError  # noqa Import
 from pint.errors import UndefinedUnitError
 
+import functools
+import pkg_resources
+from typing import Union
+
 # use the default unit registry for now
 DEFAULT_FILE = pkg_resources.resource_filename("gemd.units", "citrine_en.txt")
-registry = UnitRegistry(filename=DEFAULT_FILE)
 
 
-@functools.lru_cache(maxsize=None)
+def _scaling_preprocessor(input_string: str) -> str:
+    global registry
+    tokens = tokenizer(input_string)
+    exponent = False
+    division = False
+    tight_division = False
+    scales = []
+
+    for token in tokens:
+        # Note that while this prevents adding a bunch of numbers to the registry,
+        # no test would break if the `exponent` logic were removed
+        if tight_division:
+            # A unit for a scaling factor is in the denominator if the factor is
+            scales[-1][-1] = token.type == NAME
+            tight_division = False
+        if not exponent and token.type == NUMBER:
+            scales.append([token.string, False])
+            tight_division = division
+        exponent = token.type == OP and token.string in {"^", "**"}
+        division = token.type == OP and token.string in {"/", "//"}
+
+    for scale, division in scales:
+        # There's probably something to be said for stashing these, but this sin
+        # should be ameliorated by the LRU cache
+        regex = rf"\b{re.escape(scale)}\b"
+        valid = "_" + scale.replace(".", "o").replace("+", "p").replace("-", "m")
+        trailing = "/" if division else ""
+        registry.define(f"{scale} = {scale} = {scale} = {valid}")
+        input_string = re.sub(regex, valid + trailing, input_string)
+
+    return input_string
+
+
+registry = UnitRegistry(filename=DEFAULT_FILE, preprocessors=[_scaling_preprocessor])
+
+
+@functools.lru_cache(maxsize=1024)
 def parse_units(units: Union[str, Unit, None]) -> Union[str, Unit, None]:
     """
     Parse a string or Unit into a standard string representation of the unit.
