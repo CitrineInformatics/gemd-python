@@ -42,9 +42,9 @@ def _scaling_preprocessor(input_string: str) -> str:
         # There's probably something to be said for stashing these, but this sin
         # should be ameliorated by the LRU cache
         regex = rf"\b{re.escape(scale)}\b"
-        valid = "_" + scale.replace(".", "o").replace("+", "p").replace("-", "m")
+        valid = "_" + scale.replace(".", "_").replace("+", "").replace("-", "_")
         trailing = "/" if division else ""
-        registry.define(f"{scale} = {scale} = {scale} = {valid}")
+        registry.define(f"{valid} = {scale} = {scale}")
         input_string = re.sub(regex, valid + trailing, input_string)
 
     return input_string
