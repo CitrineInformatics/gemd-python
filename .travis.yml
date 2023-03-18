@@ -18,11 +18,9 @@ install:
 - pip install -U -r test_requirements.txt
 - pip install --no-deps -e .
 script:
-- flake8 gemd
-- pytest --cov=gemd --cov-report term-missing:skip-covered --cov-config=tox.ini --no-cov-on-fail --cov-fail-under=100 gemd
+- bash scripts/run_tests.sh
 - cd docs; make html; cd ..;
 - touch ./docs/_build/html/.nojekyll
-- if [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_BRANCH" == "main" ]; then bash ./scripts/validate-version-bump.sh; fi
 deploy:
   - provider: pages
     skip_cleanup: true

@@ -8,20 +8,13 @@ Changes are gated on:
  * PEP8 style compliance, with some exceptions in the [tox file](tox.ini)
  * Incrementing the package version number in [setup.py](setup.py)
 
-Check out the [.travis.yml](.travis.yml) file for the exact testing procedure.
+Travis runs the tests in `scripts/run_tests.sh`, which gives a convenient one-line invocation for testing.
 
 As it can be easy to forget to verify these prior to pushing, it's possible to use [git hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) to enforce compliance during normal workflows.
 Consider editing `.git/hooks/pre-commit` or `.git/hooks/pre-push` (or adding them and marking them as executable: `chmod +x <file>`). 
 For example, you could set your local `.git/hooks/pre-commit` to be
 ```shell
-if [ "`git rev-parse --abbrev-ref HEAD`" == "main" ];
-     then echo "On main branch";
-     exit 1;
-fi                                 &&
-scripts/validate-version-bump.sh   &&
-flake8 gemd                        &&
-pytest --quiet --cov=gemd --cov-report term-missing:skip-covered   \
-  --cov-config=tox.ini --no-cov-on-fail --cov-fail-under=100 -x .
+scripts/run_tests.sh --quiet --exitfirst
 ```
 to make sure you're not on the `main` branch, you've incremented the package version, you pass the linter and you have complete, passing tests.
 
