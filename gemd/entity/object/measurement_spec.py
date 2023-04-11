@@ -11,7 +11,9 @@ from gemd.entity.link_by_uid import LinkByUID
 from typing import Optional, Union, Iterable, Mapping, Type
 
 
-class MeasurementSpec(BaseObject, HasTemplate, HasParameters, HasConditions):
+class MeasurementSpec(BaseObject,
+                      HasTemplate, HasParameters, HasConditions,
+                      typ="measurement_spec"):
     """
     A measurement specification.
 
@@ -44,8 +46,6 @@ class MeasurementSpec(BaseObject, HasTemplate, HasParameters, HasConditions):
         Links to associated files, with resource paths into the files API.
 
     """
-
-    typ = "measurement_spec"
 
     def __init__(self,
                  name: str,

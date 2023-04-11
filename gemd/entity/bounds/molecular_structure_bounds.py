@@ -8,13 +8,8 @@ from gemd.entity.bounds.base_bounds import BaseBounds
 from typing import Union
 
 
-class MolecularStructureBounds(BaseBounds):
+class MolecularStructureBounds(BaseBounds, typ="molecular_structure_bounds"):
     """Molecular bounds, with no component or substructural restrictions (yet)."""
-
-    typ = "molecular_structure_bounds"
-
-    def __init__(self):
-        pass
 
     def contains(self, bounds: Union[BaseBounds, "BaseValue"]) -> bool:
         """

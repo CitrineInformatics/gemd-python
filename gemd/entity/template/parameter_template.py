@@ -1,7 +1,7 @@
 from gemd.entity.template.attribute_template import AttributeTemplate
 
 
-class ParameterTemplate(AttributeTemplate):
+class ParameterTemplate(AttributeTemplate, typ="parameter_template"):
     """A template for the parameter attribute.
 
         Parameters
@@ -22,5 +22,3 @@ class ParameterTemplate(AttributeTemplate):
         for filtering and discoverability.
 
     """
-
-    typ = "parameter_template"

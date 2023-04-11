@@ -5,7 +5,7 @@ from gemd.entity.util import array_like
 from typing import Union
 
 
-class CompositionBounds(BaseBounds):
+class CompositionBounds(BaseBounds, typ="composition_bounds"):
     """
     Composition bounds, parameterized by a set of string-valued category labels.
 
@@ -15,8 +15,6 @@ class CompositionBounds(BaseBounds):
         A collection of the components that must be present in the composition.
 
     """
-
-    typ = "composition_bounds"
 
     def __init__(self, components=None):
         self._components = None

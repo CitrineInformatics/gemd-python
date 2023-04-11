@@ -5,7 +5,7 @@ import gemd.units as units
 from typing import Union
 
 
-class RealBounds(BaseBounds):
+class RealBounds(BaseBounds, typ="real_bounds"):
     """
     Bounded subset of the real numbers, parameterized by a lower and upper bound.
 
@@ -20,8 +20,6 @@ class RealBounds(BaseBounds):
         An empty string can be used for the units of a dimensionless quantity.
 
     """
-
-    typ = "real_bounds"
 
     def __init__(self, lower_bound=None, upper_bound=None, default_units=None):
         self.lower_bound = lower_bound

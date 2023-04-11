@@ -18,7 +18,7 @@ from typing import Optional, Union, Iterable, Mapping, Type
 
 
 class MeasurementRun(BaseObject, HasMaterial, HasSpec, HasConditions, HasProperties,
-                     HasParameters, HasSource):
+                     HasParameters, HasSource, typ="measurement_run"):
     """
     A measurement run.
 
@@ -58,8 +58,6 @@ class MeasurementRun(BaseObject, HasMaterial, HasSpec, HasConditions, HasPropert
         Information about the person who performed the run and when.
 
     """
-
-    typ = "measurement_run"
 
     def __init__(self,
                  name: str,

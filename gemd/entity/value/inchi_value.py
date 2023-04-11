@@ -3,7 +3,7 @@ from gemd.entity.value.molecular_value import MolecularValue
 from gemd.entity.bounds import MolecularStructureBounds
 
 
-class InChI(MolecularValue):
+class InChI(MolecularValue, typ="inchi"):
     """
     A molecular structure encoded according to the IUPAC International Chemical Identifier (InChI).
 
@@ -13,8 +13,6 @@ class InChI(MolecularValue):
         A string formatted according to the InChI standard.
 
     """
-
-    typ = "inchi"
 
     def __init__(self, inchi=None):
         self._inchi = None

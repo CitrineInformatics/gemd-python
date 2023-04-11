@@ -2,7 +2,7 @@
 from gemd.entity.dict_serializable import DictSerializable
 
 
-class FileLink(DictSerializable):
+class FileLink(DictSerializable, typ="file_link"):
     """
     FileLink stores a name and link to an external resource.
 
@@ -20,8 +20,6 @@ class FileLink(DictSerializable):
         URL that can be used to access the file.
 
     """
-
-    typ = "file_link"
 
     def __init__(self, filename, url):
         DictSerializable.__init__(self)

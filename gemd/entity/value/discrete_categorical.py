@@ -6,7 +6,7 @@ from gemd.entity.value.categorical_value import CategoricalValue
 from gemd.entity.bounds import CategoricalBounds
 
 
-class DiscreteCategorical(CategoricalValue):
+class DiscreteCategorical(CategoricalValue, typ="discrete_categorical"):
     """
     Distribution over a discrete set of categories.
 
@@ -22,8 +22,6 @@ class DiscreteCategorical(CategoricalValue):
         of that category. The probabilities *must* sum to 1.0.
 
     """
-
-    typ = "discrete_categorical"
 
     def __init__(self, probabilities=None):
         self._probabilities = None

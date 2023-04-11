@@ -3,7 +3,7 @@ from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.template.has_property_templates import HasPropertyTemplates
 
 
-class MaterialTemplate(BaseTemplate, HasPropertyTemplates):
+class MaterialTemplate(BaseTemplate, HasPropertyTemplates, typ="material_template"):
     """
     A material template.
 
@@ -34,8 +34,6 @@ class MaterialTemplate(BaseTemplate, HasPropertyTemplates):
         the limits of the value for this property.
 
     """
-
-    typ = "material_template"
 
     def __init__(self, name, *, description=None,
                  properties=None,

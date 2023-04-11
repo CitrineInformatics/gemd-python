@@ -3,7 +3,7 @@ from gemd.entity.value.continuous_value import ContinuousValue
 from gemd.entity.bounds import RealBounds
 
 
-class NormalReal(ContinuousValue):
+class NormalReal(ContinuousValue, typ="normal_real"):
     """
     Normal distribution over real numbers, parameterized by a mean and standard deviation.
 
@@ -18,8 +18,6 @@ class NormalReal(ContinuousValue):
         An empty string can be used for the units of a dimensionless quantity.
 
     """
-
-    typ = "normal_real"
 
     def __init__(self, mean=None, std=None, units=None):
         ContinuousValue.__init__(self, units)

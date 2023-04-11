@@ -3,7 +3,7 @@ from gemd.entity.value.molecular_value import MolecularValue
 from gemd.entity.bounds import MolecularStructureBounds
 
 
-class Smiles(MolecularValue):
+class Smiles(MolecularValue, typ="smiles"):
     """
     A molecular structure encoded according to SMILES.
 
@@ -14,8 +14,6 @@ class Smiles(MolecularValue):
         (SMILES) informal standard.
 
     """
-
-    typ = "smiles"
 
     def __init__(self, smiles=None):
         self._smiles = None

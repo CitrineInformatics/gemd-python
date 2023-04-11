@@ -4,7 +4,7 @@ from gemd.entity.bounds.base_bounds import BaseBounds
 from typing import Union
 
 
-class IntegerBounds(BaseBounds):
+class IntegerBounds(BaseBounds, typ="integer_bounds"):
     """
     Bounded subset of the integers, parameterized by a lower and upper bound.
 
@@ -16,8 +16,6 @@ class IntegerBounds(BaseBounds):
         Upper endpoint.
 
     """
-
-    typ = "integer_bounds"
 
     def __init__(self, lower_bound=None, upper_bound=None):
         self.lower_bound = lower_bound

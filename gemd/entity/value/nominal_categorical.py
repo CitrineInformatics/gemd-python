@@ -4,7 +4,7 @@ from gemd.entity.value.categorical_value import CategoricalValue
 from gemd.entity.bounds import CategoricalBounds
 
 
-class NominalCategorical(CategoricalValue):
+class NominalCategorical(CategoricalValue, typ="nominal_categorical"):
     """
     A nominal category that the value is believed to have. It may not be exact.
 
@@ -14,8 +14,6 @@ class NominalCategorical(CategoricalValue):
         The nominal category.
 
     """
-
-    typ = "nominal_categorical"
 
     def __init__(self, category=None):
         self._category = None

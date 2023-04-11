@@ -5,7 +5,7 @@ from warnings import warn
 from gemd.entity.dict_serializable import DictSerializable
 
 
-class LinkByUID(DictSerializable):
+class LinkByUID(DictSerializable, typ="link_by_uid"):
     """
     Link object, which replaces pointers to other entities before serialization and writing.
 
@@ -17,8 +17,6 @@ class LinkByUID(DictSerializable):
         The unique identifier.
 
     """
-
-    typ = "link_by_uid"
 
     def __init__(self, scope, id):
         # TODO: parse to make sure it's valid

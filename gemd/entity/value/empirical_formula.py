@@ -14,7 +14,7 @@ _all_elements = {
 }
 
 
-class EmpiricalFormula(CompositionValue):
+class EmpiricalFormula(CompositionValue, typ="empirical_formula"):
     """
     An empirical chemical formula where only the relative stoichiometries matter.
 
@@ -25,8 +25,6 @@ class EmpiricalFormula(CompositionValue):
         It must be parseable by pymatgen. The order and grouping of the elements is ignored.
 
     """
-
-    typ = "empirical_formula"
 
     def __init__(self, formula=None):
         self._formula = None

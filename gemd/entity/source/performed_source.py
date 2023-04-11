@@ -1,7 +1,7 @@
 from gemd.entity.dict_serializable import DictSerializable
 
 
-class PerformedSource(DictSerializable):
+class PerformedSource(DictSerializable, typ="performed_source"):
     """
     Information about an activity that was performed.
 
@@ -13,8 +13,6 @@ class PerformedSource(DictSerializable):
         When the activity was performed as
 
     """
-
-    typ = "performed_source"
 
     def __init__(self, performed_by=None, performed_date=None):
         self._performed_by = None

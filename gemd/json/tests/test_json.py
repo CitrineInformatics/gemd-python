@@ -7,7 +7,6 @@ import pytest
 from gemd.json import dumps, loads, GEMDJson
 from gemd.entity.attribute.property import Property
 from gemd.entity.bounds.real_bounds import RealBounds
-from gemd.entity.dict_serializable import DictSerializable
 from gemd.entity.case_insensitive_dict import CaseInsensitiveDict
 from gemd.entity.attribute.condition import Condition
 from gemd.entity.attribute.parameter import Parameter
@@ -160,16 +159,10 @@ def test_unexpected_serialization():
 
 def test_unexpected_deserialization():
     """Trying to deserialize an unexpected class should throw a TypeError."""
-    class DummyClass(DictSerializable):
-        typ = 'dummy_class'
-
-        def __init__(self, foo):
-            self.foo = foo
-
     # DummyClass cannot be serialized since dumps will round-robin serialize
     # in the substitute_links method
     with pytest.raises(TypeError):
-        dumps(ProcessRun("A process", notes=DummyClass("something")))
+        dumps(ProcessRun("A process", notes={"type": "unknown"}))
 
 
 def test_register_classes_override():
@@ -179,7 +172,8 @@ def test_register_classes_override():
 
     normal = GEMDJson()
     custom = GEMDJson()
-    custom.register_classes({MyProcessSpec.typ: MyProcessSpec})
+    with pytest.warns(DeprecationWarning, match="register_classes"):
+        custom.register_classes({MyProcessSpec.typ: MyProcessSpec})
 
     obj = ProcessSpec(name="foo")
     assert not isinstance(normal.copy(obj), MyProcessSpec),\
@@ -194,13 +188,16 @@ def test_register_argument_validation():
     orig = GEMDJson()
 
     with pytest.raises(ValueError):
-        orig.register_classes("foo")
+        with pytest.warns(DeprecationWarning, match="register_classes"):
+            orig.register_classes("foo")
 
     with pytest.raises(ValueError):
-        orig.register_classes({"foo": orig})
+        with pytest.warns(DeprecationWarning, match="register_classes"):
+            orig.register_classes({"foo": orig})
 
     with pytest.raises(ValueError):
-        orig.register_classes({ProcessSpec: ProcessSpec})
+        with pytest.warns(DeprecationWarning, match="register_classes"):
+            orig.register_classes({ProcessSpec: ProcessSpec})
 
 
 def test_pure_substitutions():

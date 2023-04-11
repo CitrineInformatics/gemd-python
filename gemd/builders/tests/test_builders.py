@@ -16,7 +16,7 @@ import pytest
 from typing import Union
 
 
-class UnsupportedBounds(BaseBounds):
+class UnsupportedBounds(BaseBounds, typ="unsupported_bounds"):
     """Dummy object to test Bounds type checking."""
 
     def contains(self, bounds):  # pragma: no cover
@@ -32,7 +32,7 @@ class UnsupportedBounds(BaseBounds):
         pass
 
 
-class UnsupportedAttribute(BaseAttribute):
+class UnsupportedAttribute(BaseAttribute, typ="unsupported_attribute"):
     """Dummy object to test Attribute type checking."""
 
     def _template_type(self):  # pragma: no cover
@@ -40,7 +40,7 @@ class UnsupportedAttribute(BaseAttribute):
         return str
 
 
-class UnsupportedAttributeTemplate(AttributeTemplate):
+class UnsupportedAttributeTemplate(AttributeTemplate, typ="unsupported_template"):
     """Dummy object to test Attribute type checking."""
 
 

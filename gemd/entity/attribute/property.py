@@ -4,7 +4,7 @@ from gemd.entity.template import PropertyTemplate
 from typing import Type
 
 
-class Property(BaseAttribute):
+class Property(BaseAttribute, typ="property"):
     """
     Property of a material, measured in a MeasurementRun or specified in a MaterialSpec.
 
@@ -30,8 +30,6 @@ class Property(BaseAttribute):
         Links to files associated with the attribute.
 
     """
-
-    typ = "property"
 
     @staticmethod
     def _template_type() -> Type:

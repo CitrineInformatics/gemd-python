@@ -13,7 +13,9 @@ from gemd.entity.setters import validate_list
 from typing import Optional, Union, Iterable, List, Mapping, Type
 
 
-class IngredientSpec(BaseObject, HasQuantities, HasTemplate, HasMaterial, HasProcess):
+class IngredientSpec(BaseObject,
+                     HasQuantities, HasTemplate, HasMaterial, HasProcess,
+                     typ="ingredient_spec"):
     """
     An ingredient specification.
 
@@ -55,8 +57,6 @@ class IngredientSpec(BaseObject, HasQuantities, HasTemplate, HasMaterial, HasPro
         Links to associated files, with resource paths into the files API.
 
     """
-
-    typ = "ingredient_spec"
 
     def __init__(self,
                  name: str,
