@@ -26,6 +26,9 @@ class DictSerializableMeta(ABCMeta):
     def __init__(cls, name, bases, *args, typ: str = None, skip: Set[str] = frozenset(), **kwargs):
         super().__init__(name, bases, *args, **kwargs)
         if typ is not None:
+            if typ in cls._class and not issubclass(cls, cls._class.get(typ)):
+                raise ValueError(f"{cls} attempted to take typ {typ} from {cls._class.get(typ)}, "
+                                 f"which is not its ancestor.")
             cls.typ = typ
             cls._class[typ] = cls
         elif not hasattr(cls, "typ"):

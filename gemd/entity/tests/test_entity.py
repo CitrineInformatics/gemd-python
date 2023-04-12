@@ -144,3 +144,21 @@ def test_mro():
         pass
 
     TestConditionTemplate(name="Me", bounds=MolecularStructureBounds())
+
+
+def test_derived_collision():
+    """Test that an exception is thrown when multiple classes claim the same typ."""
+    # One parent
+    class Parent(DictSerializable, typ="mine"):
+        pass
+
+    # First kid is fine
+    class ElderChild(Parent, typ="mine"):
+        pass
+
+    # Mapping transferred
+    assert DictSerializable.class_mapping["mine"] is ElderChild
+
+    with pytest.raises(ValueError, match="mine"):
+        class SecondChild(Parent, typ="mine"):
+            pass
