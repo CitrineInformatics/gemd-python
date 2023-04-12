@@ -4,7 +4,7 @@ from gemd.entity.template import ParameterTemplate
 from typing import Type
 
 
-class Parameter(BaseAttribute):
+class Parameter(BaseAttribute, typ="parameter"):
     """
     Parameter of a process or measurement.
 
@@ -31,8 +31,6 @@ class Parameter(BaseAttribute):
         Links to files associated with the attribute.
 
     """
-
-    typ = "parameter"
 
     @staticmethod
     def _template_type() -> Type:

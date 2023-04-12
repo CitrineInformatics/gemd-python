@@ -3,7 +3,7 @@ from gemd.entity.value.continuous_value import ContinuousValue
 from gemd.entity.bounds import RealBounds
 
 
-class UniformReal(ContinuousValue):
+class UniformReal(ContinuousValue, typ="uniform_real"):
     """
     Uniform continuous distribution, with inclusive lower and upper bounds.
 
@@ -24,8 +24,6 @@ class UniformReal(ContinuousValue):
         An empty string can be used for the units of a dimensionless quantity.
 
     """
-
-    typ = "uniform_real"
 
     def __init__(self, lower_bound=None, upper_bound=None, units=None):
         ContinuousValue.__init__(self, units)

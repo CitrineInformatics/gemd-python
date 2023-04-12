@@ -15,7 +15,9 @@ from gemd.entity.setters import validate_list
 from typing import Optional, Union, Iterable, List, Mapping, Type, Any
 
 
-class IngredientRun(BaseObject, HasQuantities, HasSpec, HasMaterial, HasProcess):
+class IngredientRun(BaseObject,
+                    HasQuantities, HasSpec, HasMaterial, HasProcess,
+                    typ="ingredient_run"):
     """
     An ingredient run.
 
@@ -55,8 +57,6 @@ class IngredientRun(BaseObject, HasQuantities, HasSpec, HasMaterial, HasProcess)
         Links to associated files, with resource paths into the files API.
 
     """
-
-    typ = "ingredient_run"
 
     def __init__(self,
                  *,

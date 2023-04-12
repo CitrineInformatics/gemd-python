@@ -4,7 +4,7 @@ from gemd.entity.template import ConditionTemplate
 from typing import Type
 
 
-class Condition(BaseAttribute):
+class Condition(BaseAttribute, typ="condition"):
     """
     Condition of a property, process, or measurement.
 
@@ -30,8 +30,6 @@ class Condition(BaseAttribute):
         Links to files associated with the attribute.
 
     """
-
-    typ = "condition"
 
     @staticmethod
     def _template_type() -> Type:

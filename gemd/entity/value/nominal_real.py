@@ -3,7 +3,7 @@ from gemd.entity.value.continuous_value import ContinuousValue
 from gemd.entity.bounds import RealBounds
 
 
-class NominalReal(ContinuousValue):
+class NominalReal(ContinuousValue, typ="nominal_real"):
     """
     Nominal real, which does not specify an uncertainty but is not to be assumed exact.
 
@@ -16,8 +16,6 @@ class NominalReal(ContinuousValue):
         An empty string can be used for the units of a dimensionless quantity.
 
     """
-
-    typ = "nominal_real"
 
     def __init__(self, nominal=None, units=None):
         ContinuousValue.__init__(self, units)

@@ -6,7 +6,8 @@ from gemd.entity.template.has_property_templates import HasPropertyTemplates
 
 
 class MeasurementTemplate(BaseTemplate,
-                          HasPropertyTemplates, HasConditionTemplates, HasParameterTemplates):
+                          HasPropertyTemplates, HasConditionTemplates, HasParameterTemplates,
+                          typ="measurement_template"):
     """
     A measurement template.
 
@@ -51,8 +52,6 @@ class MeasurementTemplate(BaseTemplate,
         the limits of the value for this property.
 
     """
-
-    typ = "measurement_template"
 
     def __init__(self, name, *, description=None,
                  properties=None, conditions=None, parameters=None,

@@ -3,7 +3,7 @@ from gemd.entity.value.composition_value import CompositionValue
 from gemd.entity.bounds import CompositionBounds
 
 
-class NominalComposition(CompositionValue):
+class NominalComposition(CompositionValue, typ="nominal_composition"):
     """
     Nominal composition, represented as a map from the component names to the quantities.
 
@@ -21,8 +21,6 @@ class NominalComposition(CompositionValue):
         * dict(acetone=3.5, methanol=10.5)
 
     """
-
-    typ = "nominal_composition"
 
     def __init__(self, quantities=None):
         self._quantities = None

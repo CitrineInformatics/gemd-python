@@ -24,8 +24,6 @@ class BaseEntity(DictSerializable):
 
     """
 
-    typ = "base"
-
     def __init__(self, uids: Mapping[str, str], tags: Iterable[str]):
         self._tags = None
         self.tags = tags

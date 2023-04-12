@@ -1,24 +1,61 @@
-from abc import ABC
+from abc import ABC, ABCMeta
 from logging import getLogger
 
 import json
 import inspect
 import functools
-from typing import Union, Iterable, List, Mapping, Dict, Any
+from typing import TypeVar, Union, Iterable, List, Mapping, Dict, Set, Any
 
 # There are some weird (probably resolvable) errors during object cloning if this is an
 # instance variable of DictSerializable.
 logger = getLogger(__name__)
 
+DictSerializableType = TypeVar("DictSerializableType", bound="DictSerializable")
 
-class DictSerializable(ABC):
+
+class DictSerializableMeta(ABCMeta):
+    """Metaclass for tracking DictSerializable type string to class mappings."""
+
+    _class: Dict[str, type] = {}
+
+    def __new__(mcs, name, bases, *args,
+                typ: str = None, skip: Set[str] = frozenset(),
+                **kwargs):  # noqa: D102
+        return super().__new__(mcs, name, bases, *args, **kwargs)
+
+    def __init__(cls, name, bases, *args, typ: str = None, skip: Set[str] = frozenset(), **kwargs):
+        super().__init__(name, bases, *args, **kwargs)
+        if typ is not None:
+            if typ in cls._class and not issubclass(cls, cls._class.get(typ)):
+                raise ValueError(f"{cls} attempted to take typ {typ} from {cls._class.get(typ)}, "
+                                 f"which is not its ancestor.")
+            cls.typ = typ
+            cls._class[typ] = cls
+        elif not hasattr(cls, "typ"):
+            cls.typ = NotImplementedError
+        cls.skip = {x for b in bases for x in getattr(b, 'skip', {})} | skip
+
+    @property
+    def class_mapping(cls) -> Dict[str, type]:
+        """
+        Return class typ string -> class map for DictSerializable and its descendants.
+
+        Note that is actually returns a copy of the internal dict to avoid accidental breakage.
+
+        Returns
+        -------
+        Dict[str, type]
+            The mapping from typ string to class
+
+        """
+        return cls._class.copy()
+
+
+class DictSerializable(ABC, metaclass=DictSerializableMeta):
     """A base class for objects that can be represented as a dictionary and serialized."""
 
-    typ = NotImplemented
-    skip = set()
-
     @classmethod
-    def from_dict(cls, d: Mapping[str, Any]) -> "DictSerializable":
+    def from_dict(cls, d: Mapping[str, Any]) -> DictSerializableType:
         """
         Reconstitute the object from a dictionary.
 
@@ -111,13 +148,14 @@ class DictSerializable(ABC):
     def __repr__(self) -> str:
         object_dict = self.as_dict()
         # as_dict() skips over keys in `skip`, but they should be in the representation.
-        skipped_keys = {x.lstrip('_') for x in vars(self) if x in self.skip}
+        skipped_keys = {x.lstrip('_') for x in self.skip}
         for key in skipped_keys:
             skipped_field = getattr(self, key, None)
             object_dict[key] = self._name_repr(skipped_field)
         return str(object_dict)
 
-    def _name_repr(self, entity: Union[Iterable["DictSerializable"], "DictSerializable"]) -> str:
+    def _name_repr(self,
+                   entity: Union[Iterable[DictSerializableType], DictSerializableType]) -> str:
         """
         A representation of an object or a list of objects that uses the name and type.
 

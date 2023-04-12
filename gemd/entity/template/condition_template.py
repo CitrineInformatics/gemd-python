@@ -1,7 +1,7 @@
 from gemd.entity.template.attribute_template import AttributeTemplate
 
 
-class ConditionTemplate(AttributeTemplate):
+class ConditionTemplate(AttributeTemplate, typ="condition_template"):
     """A template for a condition attribute.
 
     Parameters
@@ -22,5 +22,3 @@ class ConditionTemplate(AttributeTemplate):
         for filtering and discoverability.
 
     """
-
-    typ = "condition_template"

@@ -1,8 +1,13 @@
 """General tests of entities."""
+from abc import ABC
+import inspect
 import pytest
+from typing import Generic, TypeVar
 
-from gemd.entity.object.ingredient_run import IngredientRun
-from gemd.entity.link_by_uid import LinkByUID
+from gemd import ProcessSpec, IngredientSpec, MaterialSpec, IngredientRun, \
+    LinkByUID, ConditionTemplate, MolecularStructureBounds
+from gemd.entity.dict_serializable import DictSerializable
+from gemd.entity.base_entity import BaseEntity
 
 
 def test_id_case_sensitivity():
@@ -40,9 +45,6 @@ def test_to_link():
 
 def test_equality():
     """Test that __eq__ and _cached_equals behave as expected."""
-    from gemd.entity.object import ProcessSpec, IngredientSpec, MaterialSpec
-    from gemd.entity.link_by_uid import LinkByUID
-
     one = ProcessSpec("Object", tags=["tags!"], uids={"scope": "id"})
     assert one == LinkByUID(scope="scope", id="id"), "Objects equal their links"
     assert one == ("scope", "id"), "Objects equal their equivalent tuples"
@@ -76,3 +78,87 @@ def test_equality():
     two.tags = ["Four", "One", "Three", "Two"]
     assert one == two
     assert two == one
+
+
+@pytest.mark.xfail(reason="Entities fail the isabstract test.")
+def test_meta_behaviors():  # pragma: no cover
+    """Test the DictSerializable metaclass behaviors."""
+    assert inspect.isabstract(BaseEntity)
+    with pytest.raises(TypeError, match="DictSerializable"):
+        BaseEntity(uids={}, tags=[])
+
+    child_typ = "child_entity"
+    child_skip = "field"
+
+    class ChildEntity(BaseEntity, typ=child_typ, skip={child_skip}):
+        pass
+
+    assert not inspect.isabstract(ChildEntity)
+    obj = ChildEntity(uids={}, tags=[])
+
+    assert ChildEntity.typ == child_typ
+    assert obj.typ == child_typ
+    assert BaseEntity.typ != child_typ
+    assert child_skip in ChildEntity.skip
+    assert child_skip in obj.skip
+    assert child_skip not in BaseEntity.skip
+
+
+def test_meta_behaviors_limited():
+    """Test the DictSerializable metaclass behaviors."""
+    child_typ = "child_entity"
+    child_skip = "field"
+
+    class ChildEntity(BaseEntity, typ=child_typ, skip={child_skip}):
+        pass
+
+    obj = ChildEntity(uids={}, tags=[])
+
+    assert ChildEntity.typ == child_typ
+    assert obj.typ == child_typ
+    assert BaseEntity.typ != child_typ
+    assert child_skip in ChildEntity.skip
+    assert child_skip in obj.skip
+    assert child_skip not in BaseEntity.skip
+
+
+def test_mro():
+    """This test mimics a citrine-python class inheritance structure."""
+    SerializableType = TypeVar('SerializableType', bound='Serializable')
+    ResourceType = TypeVar('ResourceType', bound='Resource')
+
+    class Serializable(Generic[SerializableType]):
+        pass
+
+    class Resource(Serializable[ResourceType]):
+        pass
+
+    class DataConcepts(DictSerializable, Serializable['DataConcepts'], ABC):
+        pass
+
+    class TestConditionTemplate(
+        DataConcepts,
+        Resource['TestConditionTemplate'],
+        ConditionTemplate
+    ):
+        pass
+
+    TestConditionTemplate(name="Me", bounds=MolecularStructureBounds())
+
+
+def test_derived_collision():
+    """Test that an exception is thrown when multiple classes claim the same typ."""
+    # One parent
+    class Parent(DictSerializable, typ="mine"):
+        pass
+
+    # First kid is fine
+    class ElderChild(Parent, typ="mine"):
+        pass
+
+    # Mapping transferred
+    assert DictSerializable.class_mapping["mine"] is ElderChild
+
+    with pytest.raises(ValueError, match="mine"):
+        class SecondChild(Parent, typ="mine"):
+            pass

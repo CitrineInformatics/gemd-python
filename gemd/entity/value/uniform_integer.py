@@ -3,7 +3,7 @@ from gemd.entity.value.integer_value import IntegerValue
 from gemd.entity.bounds import IntegerBounds
 
 
-class UniformInteger(IntegerValue):
+class UniformInteger(IntegerValue, typ="uniform_integer"):
     """
     Uniform integer distribution, with inclusive lower and upper bounds.
 
@@ -15,8 +15,6 @@ class UniformInteger(IntegerValue):
         Inclusive upper bound of the distribution.
 
     """
-
-    typ = "uniform_integer"
 
     def __init__(self, lower_bound: int, upper_bound: int):
         self._lower_bound = None

@@ -12,7 +12,9 @@ from gemd.entity.setters import validate_list
 from typing import Optional, Union, Iterable, List, Mapping, Dict, Type, Any
 
 
-class ProcessSpec(BaseObject, HasTemplate, HasParameters, HasConditions):
+class ProcessSpec(BaseObject,
+                  HasTemplate, HasParameters, HasConditions,
+                  typ="process_spec", skip={"_output_material", "_ingredients"}):
     """
     A process specification.
 
@@ -56,10 +58,6 @@ class ProcessSpec(BaseObject, HasTemplate, HasParameters, HasConditions):
         creating each ingredient spec and setting its `process` field to this process spec.
 
     """
-
-    typ = "process_spec"
-
-    skip = {"_output_material", "_ingredients"}
 
     def __init__(self,
                  name: str,

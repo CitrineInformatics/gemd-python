@@ -3,7 +3,7 @@ from gemd.entity.value.integer_value import IntegerValue
 from gemd.entity.bounds import IntegerBounds
 
 
-class NominalInteger(IntegerValue):
+class NominalInteger(IntegerValue, typ="nominal_integer"):
     """
     Nominal integer, which does not specify an uncertainty but is not assumed to be exact.
 
@@ -13,8 +13,6 @@ class NominalInteger(IntegerValue):
         A nominal value--not assumed to be exact.
 
     """
-
-    typ = "nominal_integer"
 
     def __init__(self, nominal):
         self._nominal = None

@@ -11,10 +11,8 @@ from gemd.entity.template.parameter_template import ParameterTemplate
 from gemd.json import dumps, loads
 
 
-class SampleAttributeTemplate(AttributeTemplate):
+class SampleAttributeTemplate(AttributeTemplate, typ="sample_attribute_template"):
     """A class to flex the base attribute template."""
-
-    typ = "sample_attribute_template"
 
 
 cat_bounds = CategoricalBounds(categories={"a", "b", "c"})

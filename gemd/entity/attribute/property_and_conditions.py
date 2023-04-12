@@ -9,7 +9,7 @@ from gemd.entity.setters import validate_list
 from typing import Optional, Union, Iterable, List
 
 
-class PropertyAndConditions(DictSerializable):
+class PropertyAndConditions(DictSerializable, typ="property_and_conditions"):
     """
     A property and the conditions under which that property was determined.
 
@@ -23,8 +23,6 @@ class PropertyAndConditions(DictSerializable):
         An optional list of conditions associated with this property.
 
     """
-
-    typ = "property_and_conditions"
 
     def __init__(self,
                  property: Property = None,

@@ -11,7 +11,7 @@ from gemd.entity.setters import validate_list
 from typing import Optional, Union, Iterable, List, Mapping, Type, Any
 
 
-class MaterialRun(BaseObject, HasSpec, HasProcess):
+class MaterialRun(BaseObject, HasSpec, HasProcess, typ="material_run", skip={"_measurements"}):
     """
     A material run.
 
@@ -49,10 +49,6 @@ class MaterialRun(BaseObject, HasSpec, HasProcess):
         measurement run and settings its `material` field to this material run.
 
     """
-
-    typ = "material_run"
-
-    skip = {"_measurements"}
 
     def __init__(self,
                  name: str,

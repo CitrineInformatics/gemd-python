@@ -14,8 +14,6 @@ class BaseValue(DictSerializable):
     A value may be one of the following types: `RealValue`, `IntegerValue`, `Categorical`.
     """
 
-    typ = "value"
-
     @abstractmethod
     def _to_bounds(self) -> BaseBounds:
         """

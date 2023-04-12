@@ -5,7 +5,9 @@ from gemd.entity.template.has_condition_templates import HasConditionTemplates
 from gemd.entity.template.has_parameter_templates import HasParameterTemplates
 
 
-class ProcessTemplate(BaseTemplate, HasConditionTemplates, HasParameterTemplates):
+class ProcessTemplate(BaseTemplate,
+                      HasConditionTemplates, HasParameterTemplates,
+                      typ="process_template"):
     """
     A process template.
 
@@ -47,8 +49,6 @@ class ProcessTemplate(BaseTemplate, HasConditionTemplates, HasParameterTemplates
         the limits of the value for this parameter.
 
     """
-
-    typ = "process_template"
 
     def __init__(self, name, *, description=None,
                  conditions=None, parameters=None,

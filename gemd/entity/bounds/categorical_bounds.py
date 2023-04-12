@@ -5,7 +5,7 @@ from gemd.entity.util import array_like
 from typing import Union, Set, Optional, Iterable
 
 
-class CategoricalBounds(BaseBounds):
+class CategoricalBounds(BaseBounds, typ="categorical_bounds"):
     """
     Categorical bounds, parameterized by a set of string-valued category labels.
 
@@ -15,8 +15,6 @@ class CategoricalBounds(BaseBounds):
         A collection of the allowed categories
 
     """
-
-    typ = "categorical_bounds"
 
     def __init__(self, categories: Optional[Iterable[str]] = None):
         self._categories = None
