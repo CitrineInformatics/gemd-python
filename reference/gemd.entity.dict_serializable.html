@@ -71,6 +71,12 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gemd.entity.dict_serializable.</span></span><span class="sig-name descname"><span class="pre">DictSerializable</span></span><a class="headerlink" href="#gemd.entity.dict_serializable.DictSerializable" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
 <p>A base class for objects that can be represented as a dictionary and serialized.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gemd.entity.dict_serializable.DictSerializable.typ">
+<span class="sig-name descname"><span class="pre">typ</span></span><a class="headerlink" href="#gemd.entity.dict_serializable.DictSerializable.typ" title="Permalink to this definition"></a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">NotImplementedError</span></code></p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.dict_serializable.DictSerializable.as_dict">
 <span class="sig-name descname"><span class="pre">as_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.entity.dict_serializable.DictSerializable.as_dict" title="Permalink to this definition"></a></dt>
@@ -121,7 +127,7 @@ corresponding to serialized DictSerializable objects.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.dict_serializable.DictSerializable.from_dict">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable"><span class="pre">gemd.entity.dict_serializable.DictSerializable</span></a></span></span><a class="headerlink" href="#gemd.entity.dict_serializable.DictSerializable.from_dict" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">gemd.entity.dict_serializable.DictSerializableType</span></span></span><a class="headerlink" href="#gemd.entity.dict_serializable.DictSerializable.from_dict" title="Permalink to this definition"></a></dt>
 <dd><p>Reconstitute the object from a dictionary.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -141,10 +147,40 @@ corresponding to serialized DictSerializable objects.</p>
 <span class="sig-name descname"><span class="pre">skip</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#gemd.entity.dict_serializable.DictSerializable.skip" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="gemd.entity.dict_serializable.DictSerializable.typ">
-<span class="sig-name descname"><span class="pre">typ</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">NotImplemented</span></em><a class="headerlink" href="#gemd.entity.dict_serializable.DictSerializable.typ" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gemd.entity.dict_serializable.DictSerializableMeta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gemd.entity.dict_serializable.</span></span><span class="sig-name descname"><span class="pre">DictSerializableMeta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bases</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">typ</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">frozenset({})</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.dict_serializable.DictSerializableMeta" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABCMeta</span></code></p>
+<p>Metaclass for tracking DictSerializable type string to class mappings.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="gemd.entity.dict_serializable.DictSerializableMeta.mro">
+<span class="sig-name descname"><span class="pre">mro</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.dict_serializable.DictSerializableMeta.mro" title="Permalink to this definition"></a></dt>
+<dd><p>Return a type’s method resolution order.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gemd.entity.dict_serializable.DictSerializableMeta.register">
+<span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subclass</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.dict_serializable.DictSerializableMeta.register" title="Permalink to this definition"></a></dt>
+<dd><p>Register a virtual subclass of an ABC.</p>
+<p>Returns the subclass, to allow usage as a class decorator.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gemd.entity.dict_serializable.DictSerializableMeta.class_mapping">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">class_mapping</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">type</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gemd.entity.dict_serializable.DictSerializableMeta.class_mapping" title="Permalink to this definition"></a></dt>
+<dd><p>Return class typ string -&gt; class map for DictSerializable and its descendants.</p>
+<p>Note that is actually returns a copy of the internal dict to avoid accidental breakage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The mapping from typ string to class</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dict[str, type]</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
