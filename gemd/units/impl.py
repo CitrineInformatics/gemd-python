@@ -1,13 +1,13 @@
 """Implementation of units."""
 import re
 
-from pint import UnitRegistry, Unit, register_unit_format
+from pint import UnitRegistry, Unit, register_unit_format, Quantity
 from pint.compat import tokenizer
 from tokenize import NAME, NUMBER, OP
 # alias the error that is thrown when units are incompatible
 # this helps to isolate the dependence on pint
 from pint.errors import DimensionalityError as IncompatibleUnitsError  # noqa Import
-from pint.errors import UndefinedUnitError
+from pint.errors import UndefinedUnitError, DefinitionSyntaxError  # noqa Import
 
 import functools
 import pkg_resources
@@ -15,45 +15,52 @@ from typing import Union
 
 # use the default unit registry for now
 DEFAULT_FILE = pkg_resources.resource_filename("gemd.units", "citrine_en.txt")
+_ALLOWED_OPERATORS = {"+", "-", "*", "/", "//", "^", "**", "(", ")"}
 
 
 def _scaling_preprocessor(input_string: str) -> str:
     """Preprocessor that turns scaling factors into non-dimensional units."""
     global _REGISTRY
-    tokens = tokenizer(input_string)
-    exponent = False
-    division = False
-    tight_division = False
+    tokens = list(tokenizer(input_string))
     scales = []
 
-    if next(token for token in tokens).type == NUMBER:
-        return input_string  # The unit can't have a leading number; scaling factors are internal
+    unrecognized = [t for t in tokens if t.type == OP and t.string not in _ALLOWED_OPERATORS]
+    if len(unrecognized) > 0:
+        raise UndefinedUnitError(f"Unrecognized operator(s): {unrecognized}")
 
-    for token in tokens:
-        # Note that while this prevents adding a bunch of numbers to the registry,
-        # no test would break if the `exponent` logic were removed
-        if tight_division:
-            # A unit for a scaling factor is in the denominator if the factor is
-            scales[-1][-1] = token.type == NAME
-            tight_division = False
-        if not exponent and token.type == NUMBER:
-            scales.append([token.string, False])
-            tight_division = division
-        if token.type == OP:
-            if token.string not in {"+", "-", "*", "/", "//", "^", "**", "(", ")"}:
-                raise UndefinedUnitError(f"Unrecognized operator: {token.string}")
-            exponent = token.string in {"^", "**"}
-            division = token.string in {"/", "//"}
-        else:
-            exponent, division = False, False
+    # Ignore leading numbers & operators, since Pint handles those itself
+    start = next((i for i, token in enumerate(tokens) if token.type == NAME), len(tokens))
 
-    for scale, division in scales:
+    for i, token in enumerate(tokens[start:], start=start):
+        if token.type != NUMBER:
+            continue
+
+        # Note we can't run off the front because we started at a NAME
+        first = i
+        while tokens[first - 1].string in {'+', '-'}:
+            first -= 1  # Include unary operations
+
+        if tokens[first - 1].string in {"^", "**"}:
+            continue  # Don't mangle exponents
+
+        # Names couple tightly to their preceding numbers, so is it a denominator?
+        division = tokens[first - 1].string in {"/", "//"}
+        tight = i < len(tokens) - 2 and tokens[i + 1].type == NAME
+
+        # Get the number
+        substr = input_string[tokens[first].start[1]:token.end[1]]
+        value = eval(substr)
+        if value <= 0:
+            raise DefinitionSyntaxError(f"Scaling factors must be positive: {substr}")
+        scales.append([substr, value, division and tight])
+
+    for substr, value, division in scales:
         # There's probably something to be said for stashing these, but this sin
         # should be ameliorated by the LRU cache
-        regex = rf"\b{re.escape(scale)}(?!=[0-9.])"
-        valid = "_" + scale.replace(".", "_").replace("+", "").replace("-", "_")
+        regex = rf"(?<!=[-+0-9.]){re.escape(substr)}(?!=[0-9.])"
+        valid = "_" + substr.replace(".", "_").replace("+", "").replace("-", "_")
         trailing = "/" if division else ""
-        _REGISTRY.define(f"{valid} = {scale} = {scale}")
+        _REGISTRY.define(f"{valid} = {value} = {substr}")
         input_string = re.sub(regex, valid + trailing, input_string)
 
     return input_string
@@ -112,8 +119,8 @@ def parse_units(units: Union[str, Unit, None]) -> Union[str, Unit, None]:
         return 'dimensionless'
     elif isinstance(units, str):
         parsed = _REGISTRY(units)
-        if isinstance(parsed, int) or parsed.magnitude != 1:
-            raise ValueError("Unit expression cannot have a scaling factor.")
+        if not isinstance(parsed, Quantity) or parsed.magnitude != 1:
+            raise ValueError(f"Units cannot start with (or just be) numbers: {units}")
         return f"{parsed.u:clean}"
     elif isinstance(units, Unit):
         return units

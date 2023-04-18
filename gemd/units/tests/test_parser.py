@@ -4,13 +4,17 @@ import pytest
 import pkg_resources
 from contextlib import contextmanager
 from pint import UnitRegistry
-from gemd.units import parse_units, convert_units, change_definitions_file, UndefinedUnitError
+from gemd.units import parse_units, convert_units, change_definitions_file, \
+    UndefinedUnitError, DefinitionSyntaxError
 
 
 def test_parse_expected():
     """Test that we can parse the units that we expect to be able to."""
     # use the default unit registry for now
     reg = UnitRegistry(filename=pkg_resources.resource_filename("gemd.units", "citrine_en.txt"))
+
+    # Pint's parse_units actually gets this wrong
+    assert parse_units("m^-1 * newton / meter") == parse_units("N / m^2")
 
     expected = [
         "degC", "degF", "K",
@@ -24,6 +28,7 @@ def test_parse_expected():
         "Seconds",  # Added support for some title-case units
         "delta_Celsius / hour",  # Added to make sure pint version is right (>0.10)
         "g / 2.5 cm",  # Scaling factors are acceptable
+        "g / -+-25e-1 m"  # Weird but fine
     ]
     for unit in expected:
         parse_units(unit)
@@ -43,14 +48,28 @@ def test_parse_unexpected():
         "cp",  # Removed because of risk of collision with cP
         "chain",  # Survey units eliminated
         "SECONDS",  # Not just case insensitivity
-        "lb : in^3",  # Not just case insensitivity
+        "lb : in^3",  # : is not a valid operator
     ]
     for unit in unexpected:
         with pytest.raises(UndefinedUnitError):
             parse_units(unit)
 
-    for unit in ("3 rpm", "16"):
-        with pytest.raises(ValueError, match="scaling"):
+    scaling = [
+        "3 rpm",  # No leading digits
+        "16",  # No values that are just integers
+        "16.2"  # No values that are just floats
+    ]
+    for unit in scaling:
+        with pytest.raises(ValueError):
+            parse_units(unit)
+
+    definition = [
+        "/gram",  # A leading operator makes no sense
+        "g / 0 m",  # Zero scaling factor
+        "g / -2 m"  # Negative scaling factor
+    ]
+    for unit in definition:
+        with pytest.raises(DefinitionSyntaxError):
             parse_units(unit)
 
 
@@ -64,7 +83,7 @@ def test_format():
     # use the default unit registry for now
     reg = UnitRegistry(filename=pkg_resources.resource_filename("gemd.units", "citrine_en.txt"))
 
-    result = parse_units("K^-2 m^-1 C^0 g^1 s^2")
+    result = parse_units("K^-2.0 m^-1e0 C^0 g^1 s^2")
     assert "-" not in result
     assert "[time]" in reg(result).dimensionality
     assert "[current]" not in reg(result).dimensionality
