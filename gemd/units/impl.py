@@ -26,6 +26,9 @@ def _scaling_preprocessor(input_string: str) -> str:
     tight_division = False
     scales = []
 
+    if next(token for token in tokens).type == NUMBER:
+        return input_string  # The unit can't have a leading number; scaling factors are internal
+
     for token in tokens:
         # Note that while this prevents adding a bunch of numbers to the registry,
         # no test would break if the `exponent` logic were removed
@@ -36,8 +39,13 @@ def _scaling_preprocessor(input_string: str) -> str:
         if not exponent and token.type == NUMBER:
             scales.append([token.string, False])
             tight_division = division
-        exponent = token.type == OP and token.string in {"^", "**"}
-        division = token.type == OP and token.string in {"/", "//"}
+        if token.type == OP:
+            if token.string not in {"+", "-", "*", "/", "//", "^", "**", "(", ")"}:
+                raise UndefinedUnitError(f"Unrecognized operator: {token.string}")
+            exponent = token.string in {"^", "**"}
+            division = token.string in {"/", "//"}
+        else:
+            exponent, division = False, False
 
     for scale, division in scales:
         # There's probably something to be said for stashing these, but this sin
@@ -103,7 +111,10 @@ def parse_units(units: Union[str, Unit, None]) -> Union[str, Unit, None]:
     elif units == '':
         return 'dimensionless'
     elif isinstance(units, str):
-        return f"{_REGISTRY(units).u:clean}"
+        parsed = _REGISTRY(units)
+        if isinstance(parsed, int) or parsed.magnitude != 1:
+            raise ValueError("Unit expression cannot have a scaling factor.")
+        return f"{parsed.u:clean}"
     elif isinstance(units, Unit):
         return units
     else:

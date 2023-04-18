@@ -42,10 +42,15 @@ def test_parse_unexpected():
         5,
         "cp",  # Removed because of risk of collision with cP
         "chain",  # Survey units eliminated
-        "SECONDS"  # Not just case insensitivity
+        "SECONDS",  # Not just case insensitivity
+        "lb : in^3",  # Not just case insensitivity
     ]
     for unit in unexpected:
         with pytest.raises(UndefinedUnitError):
+            parse_units(unit)
+
+    for unit in ("3 rpm", "16"):
+        with pytest.raises(ValueError, match="scaling"):
             parse_units(unit)
 
 
