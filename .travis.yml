@@ -5,6 +5,7 @@ python:
 - '3.8'
 - '3.9'
 - '3.10'
+- '3.11'
 env:
 - PINT_VERSION=0.18
 - PINT_VERSION=0.20
