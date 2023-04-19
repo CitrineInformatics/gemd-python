@@ -1,7 +1,7 @@
 """Implementation of units."""
 import re
 
-from pint import UnitRegistry, Unit, register_unit_format, Quantity
+from pint import UnitRegistry, Unit, register_unit_format
 from pint.compat import tokenizer
 from tokenize import NAME, NUMBER, OP
 # alias the error that is thrown when units are incompatible
@@ -118,10 +118,8 @@ def parse_units(units: Union[str, Unit, None]) -> Union[str, Unit, None]:
     elif units == '':
         return 'dimensionless'
     elif isinstance(units, str):
-        parsed = _REGISTRY(units)
-        if not isinstance(parsed, Quantity) or parsed.magnitude != 1:
-            raise ValueError(f"Units cannot start with (or just be) numbers: {units}")
-        return f"{parsed.u:clean}"
+        parsed = _REGISTRY.parse_units(units)
+        return f"{parsed:clean}"
     elif isinstance(units, Unit):
         return units
     else:

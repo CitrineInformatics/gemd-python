@@ -60,7 +60,7 @@ def test_parse_unexpected():
         "16.2"  # No values that are just floats
     ]
     for unit in scaling:
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match="scaling"):
             parse_units(unit)
 
     definition = [

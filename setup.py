@@ -19,7 +19,7 @@ setup(name='gemd',
       },
       install_requires=[
           "toolz>=0.10.0,<1",
-          "pint>=0.18,<0.21",
+          "pint>=0.19,<0.21",
           "deprecation>=2.0.7,<3"
       ],
       extras_require={
