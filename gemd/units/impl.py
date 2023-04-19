@@ -1,7 +1,7 @@
 """Implementation of units."""
 import re
 
-from pint import UnitRegistry, Unit, register_unit_format
+from pint import UnitRegistry, Unit, register_unit_format, Quantity
 from pint.compat import tokenizer
 from tokenize import NAME, NUMBER, OP
 # alias the error that is thrown when units are incompatible
@@ -118,8 +118,11 @@ def parse_units(units: Union[str, Unit, None]) -> Union[str, Unit, None]:
     elif units == '':
         return 'dimensionless'
     elif isinstance(units, str):
-        parsed = _REGISTRY.parse_units(units)
-        return f"{parsed:clean}"
+        # TODO: parse_units has a bug resolved in 0.19, but 3.7 only supports up to 0.18
+        parsed = _REGISTRY(units)
+        if not isinstance(parsed, Quantity) or parsed.magnitude != 1:
+            raise ValueError(f"Unit expression cannot have a leading scaling factor. {units}")
+        return f"{parsed.u:clean}"
     elif isinstance(units, Unit):
         return units
     else:
