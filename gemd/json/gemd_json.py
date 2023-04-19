@@ -1,5 +1,6 @@
 import inspect
 from deprecation import deprecated
+from typing import Dict, Any, Type
 
 from gemd.entity.dict_serializable import DictSerializable
 from gemd.entity.base_entity import BaseEntity
@@ -21,7 +22,7 @@ class GEMDJson(object):
 
     def __init__(self, scope: str = 'auto'):
         self._scope = scope
-        self._clazz_index = DictSerializable.class_mapping
+        self._clazz_index = dict()
 
     @property
     def scope(self) -> str:
@@ -74,8 +75,15 @@ class GEMDJson(object):
         # Create an index to hold the objects by their uid reference
         # so we can replace links with pointers
         index = {}
+        clazz_index = DictSerializable.class_mapping
+        clazz_index.update(self._clazz_index)
         raw = json_builtin.loads(
-            json_str, object_hook=lambda x: self._load_and_index(x, index, True), **kwargs)
+            json_str,
+            object_hook=lambda x: self._load_and_index(x,
+                                                       index,
+                                                       clazz_index=clazz_index,
+                                                       substitute=True),
+            **kwargs)
         # the return value is in the 2nd position.
         return raw["object"]
 
@@ -196,8 +204,12 @@ class GEMDJson(object):
         # Create an index to hold the objects by their uid reference
         # so we can replace links with pointers
         index = {}
+        clazz_index = DictSerializable.class_mapping
+        clazz_index.update(self._clazz_index)
         return json_builtin.loads(
-            json_str, object_hook=lambda x: self._load_and_index(x, index), **kwargs)
+            json_str,
+            object_hook=lambda x: self._load_and_index(x, index, clazz_index=clazz_index),
+            **kwargs)
 
     @deprecated(deprecated_in="1.13.0", removed_in="2.0.0",
                 details="Classes are now automatically registered when extending BaseEntity")
@@ -229,7 +241,12 @@ class GEMDJson(object):
 
         self._clazz_index.update(classes)
 
-    def _load_and_index(self, d, object_index, substitute=False):
+    @staticmethod
+    def _load_and_index(
+            d: Dict[str, Any],
+            object_index: Dict[str, DictSerializable],
+            clazz_index: Dict[str, Type],
+            substitute: bool = False) -> DictSerializable:
         """
         Load the class based on the type string and index it, if a BaseEntity.
 
@@ -254,10 +271,10 @@ class GEMDJson(object):
             return d
         typ = d.pop("type")
 
-        if typ not in self._clazz_index:
+        if typ not in clazz_index:
             raise TypeError("Unexpected base object type: {}".format(typ))
 
-        clz = self._clazz_index[typ]
+        clz = clazz_index[typ]
         obj = clz.from_dict(d)
 
         if isinstance(obj, BaseEntity):  # Add it to the object index

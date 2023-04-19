@@ -1,6 +1,7 @@
 """Test serialization and deserialization of gemd objects."""
 import json
 from copy import deepcopy
+from uuid import uuid4
 
 import pytest
 
@@ -10,6 +11,7 @@ from gemd.entity.bounds.real_bounds import RealBounds
 from gemd.entity.case_insensitive_dict import CaseInsensitiveDict
 from gemd.entity.attribute.condition import Condition
 from gemd.entity.attribute.parameter import Parameter
+from gemd.entity.dict_serializable import DictSerializable
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.object import MeasurementRun, MaterialRun, ProcessRun
 from gemd.entity.object import MeasurementSpec, MaterialSpec, ProcessSpec
@@ -51,12 +53,25 @@ def test_deserialize():
     """Round-trip serde should leave the object unchanged."""
     condition = Condition(name="A condition", value=NominalReal(7, ''))
     parameter = Parameter(name="A parameter", value=NormalReal(mean=17, std=1, units=''))
-    measurement = MeasurementRun("name", tags="A tag on a measurement", conditions=condition,
+    measurement = MeasurementRun("name",
+                                 tags="A tag on a measurement",
+                                 conditions=condition,
                                  parameters=parameter)
     copy_meas = GEMDJson().copy(measurement)
     assert(copy_meas.conditions[0].value == measurement.conditions[0].value)
     assert(copy_meas.parameters[0].value == measurement.parameters[0].value)
     assert(copy_meas.uids["auto"] == measurement.uids["auto"])
+
+
+def test_uuid_serde():
+    """Any UUIDs in uids & LinkByUIDs shouldn't break stuff."""
+    process = ProcessSpec(name="A process", uids={"uuid": uuid4(), "word": "turnbuckle"})
+    copy_proc = GEMDJson().copy(process)
+    assert all(copy_proc.uids[scope] == str(process.uids.get(scope)) for scope in copy_proc.uids)
+    assert len(copy_proc.uids) == len(process.uids)
+
+    link = LinkByUID(id=uuid4(), scope="mine")
+    assert GEMDJson().copy(link).id == str(link.id)
 
 
 def test_scope_control():
@@ -232,7 +247,12 @@ def test_pure_substitutions():
           ]
        '''
     index = {}
-    original = json.loads(json_str, object_hook=lambda x: GEMDJson()._load_and_index(x, index))
+    clazz_index = DictSerializable.class_mapping
+    original = json.loads(json_str,
+                          object_hook=lambda x: GEMDJson()._load_and_index(x,
+                                                                           index,
+                                                                           clazz_index)
+                          )
     frozen = deepcopy(original)
     loaded = substitute_objects(original, index)
     assert original == frozen
