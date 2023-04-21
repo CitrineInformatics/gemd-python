@@ -138,5 +138,3 @@ def test_punctuation():
     assert parse_units('N.m') == parse_units('N * m')
     with pytest.raises(UndefinedUnitError):
         parse_units('mol : mol')
-        import gemd.units
-        print(gemd.units.impl._ALLOWED_OPERATORS)
