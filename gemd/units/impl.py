@@ -15,7 +15,7 @@ from typing import Union
 
 # use the default unit registry for now
 DEFAULT_FILE = pkg_resources.resource_filename("gemd.units", "citrine_en.txt")
-_ALLOWED_OPERATORS = {"+", "-", "*", "/", "//", "^", "**", "(", ")"}
+_ALLOWED_OPERATORS = {".", "+", "-", "*", "/", "//", "^", "**", "(", ")"}
 
 
 def _scaling_preprocessor(input_string: str) -> str:
