@@ -130,6 +130,8 @@ def test_file_change():
             assert convert_units(1, 'm', 'cm') == 100
         assert convert_units(1, 'usd', 'USD') == 1
     assert convert_units(1, 'm', 'cm') == 100  # And verify we're back to normal
+    with pytest.raises(UndefinedUnitError):
+        parse_units('mol : mol')  # Ensure the preprocessor is still there
 
 
 def test_punctuation():
