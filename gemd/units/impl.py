@@ -52,15 +52,15 @@ def _scaling_preprocessor(input_string: str) -> str:
         value = eval(substr)
         if value <= 0:
             raise DefinitionSyntaxError(f"Scaling factors must be positive: {substr}")
-        scales.append([substr, value, division and tight])
+        scales.append([substr, token.string, division and tight])
 
     for substr, value, division in scales:
         # There's probably something to be said for stashing these, but this sin
         # should be ameliorated by the LRU cache
         regex = rf"(?<!=[-+0-9.]){re.escape(substr)}(?!=[0-9.])"
-        valid = "_" + substr.replace(".", "_").replace("+", "").replace("-", "_")
+        valid = "_" + value.replace(".", "_").replace("+", "").replace("-", "_")
         trailing = "/" if division else ""
-        _REGISTRY.define(f"{valid} = {value} = {substr}")
+        _REGISTRY.define(f"{valid} = {value} = {value}")
         input_string = re.sub(regex, valid + trailing, input_string)
 
     return input_string

@@ -28,7 +28,8 @@ def test_parse_expected():
         "Seconds",  # Added support for some title-case units
         "delta_Celsius / hour",  # Added to make sure pint version is right (>0.10)
         "g / 2.5 cm",  # Scaling factors are acceptable
-        "g / -+-25e-1 m"  # Weird but fine
+        "g / -+-25e-1 m",  # Weird but fine
+        "ug / - -250 mL"  # Spaces between unaries is acceptable
     ]
     for unit in expected:
         parse_units(unit)
@@ -67,6 +68,7 @@ def test_parse_unexpected():
         "/gram",  # A leading operator makes no sense
         "g / 0 m",  # Zero scaling factor
         "g / -2 m"  # Negative scaling factor
+        "m ** - 1"  # Pint parse doesn't accept spaces between negative & numeral / unit
     ]
     for unit in definition:
         with pytest.raises(DefinitionSyntaxError):
