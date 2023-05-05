@@ -81,11 +81,11 @@ def _format_clean(unit, registry, **options):
 
         if p == 1:
             numerator.append(u)
-        elif p > 1:
+        elif p > 0:
             numerator.append(f"{u} ** {p}")
         elif p == -1:
             denominator.append(u)
-        elif p < -1:
+        elif p < 0:
             denominator.append(f"{u} ** {-p}")
 
     if len(numerator) == 0:
