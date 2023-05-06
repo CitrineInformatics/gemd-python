@@ -142,3 +142,12 @@ def test_punctuation():
     assert parse_units('N.m') == parse_units('N * m')
     with pytest.raises(UndefinedUnitError):
         parse_units('mol : mol')
+
+
+def test_exponents():
+    """SPT-874 fractional exponents were being treated as zero."""
+    megapascals = parse_units("MPa")
+    sqrt_megapascals = parse_units('MPa^0.5')
+    assert megapascals in sqrt_megapascals
+    assert sqrt_megapascals == parse_units(f"{megapascals} / {sqrt_megapascals}")
+    assert parse_units('MPa^1.5') == parse_units(f"{megapascals} * {sqrt_megapascals}")
