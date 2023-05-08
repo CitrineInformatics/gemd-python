@@ -126,8 +126,8 @@ def test_file_change():
     assert convert_units(1, 'm', 'cm') == 100
     with pytest.raises(UndefinedUnitError):
         assert convert_units(1, 'usd', 'USD') == 1
-    with _change_units(filename=pkg_resources.resource_filename("gemd.units",
-                                                                "tests/test_units.txt")):
+    with _change_units(filename=pkg_resources.resource_filename("tests.units",
+                                                                "test_units.txt")):
         with pytest.raises(UndefinedUnitError):
             assert convert_units(1, 'm', 'cm') == 100
         assert convert_units(1, 'usd', 'USD') == 1

@@ -8,11 +8,11 @@ python:
 - '3.11'
 env:
 - PINT_VERSION=0.18
-- PINT_VERSION=0.20
+- PINT_VERSION=0.21
 jobs:
   exclude:
     - python: 3.7
-      env: PINT_VERSION=0.20
+      env: PINT_VERSION=0.21
 install:
 - pip install -U -r requirements.txt
 - pip install Pint==$PINT_VERSION
@@ -30,8 +30,8 @@ deploy:
     local_dir: "./docs/_build/html/"
     on:
       tags: true
-      python: '3.7' # only need this to run once
-      env: PINT_VERSION=0.18
+      python: '3.10' # only need this to run once
+      env: PINT_VERSION=0.21
   - provider: pypi
     user: "CitrineInformatics"
     password: "$PYPI_PASSWORD"

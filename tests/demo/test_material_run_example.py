@@ -42,11 +42,11 @@ example = {
 }
 
 
-def test_example():
+def test_example(tmp_path):
     """Test the ingest of a material run and leave evidence for humans."""
     # run the parsing to make sure no exceptions are thrown
     result = ingest_material_run(example)
-    filename = "/tmp/material_run_example.json"
+    filename = tmp_path / "material_run_example.json"
 
     assert len(result.measurements) == len(example["experiments"])
 

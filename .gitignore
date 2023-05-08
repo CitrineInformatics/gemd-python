@@ -49,7 +49,6 @@ coverage.xml
 *.cover
 .hypothesis/
 .pytest_cache/
-flex_measurements.json
 
 # Translations
 *.mo

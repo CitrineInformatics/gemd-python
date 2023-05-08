@@ -12,7 +12,7 @@ data = [
 ]
 
 
-def test_table():
+def test_table(tmp_path):
     """Convert a dictionary to a pandas dataframe and then to a table."""
     material = MaterialRun("name")
     df = pd.DataFrame.from_records(data)
@@ -20,7 +20,7 @@ def test_table():
     assert isinstance(result, MaterialRun)
     assert len(result.measurements) == len(data)
 
-    filename = "/tmp/table_example.json"
+    filename = tmp_path / "table_example.json"
 
     # write to a file (for human inspection)
     with open(filename, "w") as f:
