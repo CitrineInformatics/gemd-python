@@ -49,7 +49,7 @@ class BaseObject(BaseEntity):
         self.file_links = file_links
 
     @classmethod
-    @functools.lru_cache(maxsize=None)
+    @functools.lru_cache(maxsize=1024)
     def _attribute_has_setter(cls, name: str) -> bool:
         """
         Internal method to identify if an attribute has a setter method.
