@@ -18,6 +18,11 @@ DEFAULT_FILE = pkg_resources.resource_filename("gemd.units", "citrine_en.txt")
 _ALLOWED_OPERATORS = {".", "+", "-", "*", "/", "//", "^", "**", "(", ")"}
 
 
+def _space_after_minus_preprocessor(input_string: str) -> str:
+    """A preprocessor that protects against a pint < 0.21 bug."""
+    return re.sub(r"(?<=-)\s+(?=\d)", "", input_string)
+
+
 def _scientific_notation_preprocessor(input_string: str) -> str:
     """Preprocessor that converts x * 10 ** y format to xEy."""
     def _as_scientific(matchobj: re.Match) -> str:
@@ -120,7 +125,8 @@ def _scaling_preprocessor(input_string: str) -> str:
 
 
 _REGISTRY = UnitRegistry(filename=DEFAULT_FILE,
-                         preprocessors=[_scientific_notation_preprocessor,
+                         preprocessors=[_space_after_minus_preprocessor,
+                                        _scientific_notation_preprocessor,
                                         _scaling_preprocessor],
                          autoconvert_offset_to_baseunit=True)
 
@@ -287,6 +293,7 @@ def change_definitions_file(filename: str = None):
         filename = DEFAULT_FILE
     _REGISTRY = UnitRegistry(filename=filename,
                              preprocessors=[
+                                 _space_after_minus_preprocessor,
                                  _scientific_notation_preprocessor,
                                  _scaling_preprocessor
                              ],

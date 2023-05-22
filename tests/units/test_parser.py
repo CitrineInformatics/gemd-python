@@ -29,7 +29,8 @@ def test_parse_expected(return_unit):
         "g / 2.5 cm",  # Scaling factors are acceptable
         "g / -+-25e-1 m",  # Weird but fine
         "ug / - -250 mL",  # Spaces between unaries is acceptable
-        "1 / 10**5 degC"  # Spaces between unaries is acceptable
+        "1 / 10**5 degC",  # Spaces between unaries is acceptable
+        "m ** - 1"  # Pint < 0.21 throws DefinitionSyntaxError
     ]
     for unit in expected:
         parsed = parse_units(unit, return_unit=return_unit)
@@ -75,7 +76,6 @@ def test_parse_unexpected():
 
     definition = [
         "/gram",  # A leading operator makes no sense
-        "m ** - 1"  # Pint parse doesn't accept spaces between negative & numeral / unit
     ]
     for unit in definition:
         with pytest.raises(DefinitionSyntaxError):
