@@ -37,14 +37,15 @@ def test_parse_expected(return_unit):
         assert parsed == parse_units(parsed, return_unit=return_unit)
     assert parse_units("") == 'dimensionless'
     # Scaling factors bind tightly to trailing units
-    assert parse_units("g / 2.5 cm", return_unit=return_unit) == \
-           parse_units("g / (2.5 cm)", return_unit=return_unit)
-    assert parse_units("g / 2.5cm", return_unit=return_unit) == \
-           parse_units("g / (2.5 cm)", return_unit=return_unit)
-    assert parse_units("g / 25.mm", return_unit=return_unit) == \
-           parse_units("g / (25. mm)", return_unit=return_unit)
-    assert parse_units("g / 2.5 * cm", return_unit=return_unit) == \
-           parse_units("g cm / 2.5", return_unit=return_unit)
+    scaling = [
+        ("g / 2.5 cm", "g / (2.5 cm)"),
+        ("g / 2.5cm", "g / (2.5 cm)"),
+        ("g / 25.mm", "g / (25. mm)"),
+        ("g / 2.5 * cm", "g cm / 2.5")
+    ]
+    for left, right in scaling:
+        assert parse_units(left, return_unit=return_unit) == \
+               parse_units(right, return_unit=return_unit)
 
 
 def test_parse_unexpected():

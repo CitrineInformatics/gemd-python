@@ -40,40 +40,53 @@ def _scaling_find_blocks(token_stream: Generator[TokenInfo, Any, None]) -> List[
     multiplicative subunits of the original expression.
 
     """
+    def _handle_operator(token_, exponent_context_, operator_stack_, result_):
+        if token_.string not in _ALLOWED_OPERATORS:
+            raise UndefinedUnitError(f"Unrecognized operator: {token_.string}")
+
+        # Figure out what level to append at
+        if exponent_context_ or token_.string in {"**", "^", ".", "-", "+"}:
+            # Exponents & unaries do not change context
+            result_[-1].append(token_)
+        else:
+            result_.append([])
+
+        # Manage the operator stack
+        if token_.string == '(':
+            operator_stack_.append(token_)
+        elif token_.string == ')':
+            while operator_stack_:  # don't worry about enforcing balance
+                if operator_stack_.pop().string == '(':
+                    break  # We found token's friend
+        elif token_.string in {"**", "^"}:
+            # A spare to pop so next loop is in exponent context
+            operator_stack_.extend([token_] * 2)
+
+    def _handle_name(token_, exponent_context_, operator_stack_, result_):
+        if exponent_context_ or len(result_[-1]) == 0 or result_[-1][-1].type != NAME:
+            result_[-1].append(token_)
+        else:  # Break blocks for two units in a row
+            result_.append([token_])
+
+    def _just_append(token_, exponent_context_, operator_stack_, result_):
+        result_[-1].append(token_)
+
+    def _do_nothing(token_, exponent_context_, operator_stack_, result_):
+        pass
+
+    dispatch = {
+        OP: _handle_operator,
+        NAME: _handle_name,
+        NUMBER: _just_append,
+        ERRORTOKEN: _just_append,
+    }
+
     result = [[]]
     operator_stack = []
     for token in token_stream:
         exponent_context = any(t.string in {"**", "^"} for t in operator_stack)
-        if token.type == OP:
-            if token.string not in _ALLOWED_OPERATORS:
-                raise UndefinedUnitError(f"Unrecognized operator: {token.string}")
-
-            if exponent_context or token.string in {"**", "^", ".", "-", "+"}:
-                # Exponents & unaries do not change context
-                result[-1].append(token)
-            elif token.string not in {}:
-                result.append([])
-
-            if token.string == '(':
-                operator_stack.append(token)
-            elif token.string == ')':
-                while operator_stack:  # don't worry about enforcing balance
-                    if operator_stack.pop().string == '(':
-                        break  # We found token's friend
-            elif token.string in {"**", "^"}:
-                operator_stack.append(token)
-                continue  # Break flow since next token is in exponent context
-        elif token.type == NAME:
-            if exponent_context or len(result[-1]) == 0 or result[-1][-1].type != NAME:
-                result[-1].append(token)
-            else:  # Break blocks for two units in a row
-                result.append([token])
-        elif token.type == NUMBER:
-            result[-1].append(token)
-        elif token.type == ERRORTOKEN:  # Keep non-legal Python symbols like °
-            result[-1].append(token)
-        # Drop other tokens, such as EOF
-
+        method = dispatch.get(token.type, _do_nothing)
+        method(token, exponent_context, operator_stack, result)
         if len(operator_stack) > 0 and operator_stack[-1].string in {"**", "^"}:
             operator_stack.pop()  # Exit context for this exponential
 
