@@ -84,7 +84,7 @@ class DictSerializable(ABC, metaclass=DictSerializableMeta):
         return cls(**kwargs)
 
     @classmethod
-    @functools.lru_cache(maxsize=None)
+    @functools.lru_cache(maxsize=1024)
     def _init_sig(cls) -> List[str]:
         """Internal method for generating the argument names for the class init method."""
         expected_arg_names = inspect.getfullargspec(cls.__init__).args

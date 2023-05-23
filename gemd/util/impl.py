@@ -65,7 +65,7 @@ def cached_isinstance(
 _cached_isinstance = cached_isinstance
 
 
-@functools.lru_cache(maxsize=None)
+@functools.lru_cache(maxsize=1024)
 def _cached_issubclass(
         cls: Type,
         class_or_tuple: Union[Type, Tuple[Union[Type, Tuple[Type]]]]) -> bool:
@@ -210,7 +210,7 @@ def _substitute_inplace(thing: Any,
     return thing
 
 
-@functools.lru_cache(maxsize=None)
+@functools.lru_cache(maxsize=1024)
 def _setter_by_attribute(clazz: type, attribute: str) -> Callable:
     """
     Internal method to get the setter method for an attribute.
