@@ -1,9 +1,9 @@
 """Implementation of units."""
 import re
 
-from pint import UnitRegistry, Unit, register_unit_format, Quantity
+from pint import UnitRegistry, Unit, register_unit_format
 from pint.compat import tokenizer
-from tokenize import NAME, NUMBER, OP, Token, ERRORTOKEN
+from tokenize import NAME, NUMBER, OP, ERRORTOKEN, TokenInfo
 # alias the error that is thrown when units are incompatible
 # this helps to isolate the dependence on pint
 from pint.errors import DimensionalityError as IncompatibleUnitsError  # noqa Import
@@ -11,7 +11,7 @@ from pint.errors import UndefinedUnitError, DefinitionSyntaxError  # noqa Import
 
 import functools
 import pkg_resources
-from typing import Union, List, Tuple
+from typing import Union, List, Tuple, Generator, Any
 
 # use the default unit registry for now
 DEFAULT_FILE = pkg_resources.resource_filename("gemd.units", "citrine_en.txt")
@@ -32,11 +32,17 @@ def _scientific_notation_preprocessor(input_string: str) -> str:
     return re.sub(number, _as_scientific, input_string)
 
 
-def _scaling_preprocessor(input_string: str) -> str:
-    """Preprocessor that turns scaling factors into non-dimensional units."""
-    blocks: List[List[Token]] = [[]]
+def _scaling_find_blocks(token_stream: Generator[TokenInfo, Any, None]) -> List[List[TokenInfo]]:
+    """
+    Supporting routine for _scaling_preprocessor; tokenizer stream -> blocks.
+
+    Takes a stream of tokens, and breaks it into a lists of tokens that represent
+    multiplicative subunits of the original expression.
+
+    """
+    result = [[]]
     operator_stack = []
-    for token in tokenizer(input_string):
+    for token in token_stream:
         exponent_context = any(t.string in {"**", "^"} for t in operator_stack)
         if token.type == OP:
             if token.string not in _ALLOWED_OPERATORS:
@@ -44,9 +50,9 @@ def _scaling_preprocessor(input_string: str) -> str:
 
             if exponent_context or token.string in {"**", "^", ".", "-", "+"}:
                 # Exponents & unaries do not change context
-                blocks[-1].append(token)
+                result[-1].append(token)
             elif token.string not in {}:
-                blocks.append([])
+                result.append([])
 
             if token.string == '(':
                 operator_stack.append(token)
@@ -58,21 +64,35 @@ def _scaling_preprocessor(input_string: str) -> str:
                 operator_stack.append(token)
                 continue  # Break flow since next token is in exponent context
         elif token.type == NAME:
-            if exponent_context or len(blocks[-1]) == 0 or blocks[-1][-1].type != NAME:
-                blocks[-1].append(token)
+            if exponent_context or len(result[-1]) == 0 or result[-1][-1].type != NAME:
+                result[-1].append(token)
             else:  # Break blocks for two units in a row
-                blocks.append([token])
+                result.append([token])
         elif token.type == NUMBER:
-            blocks[-1].append(token)
+            result[-1].append(token)
         elif token.type == ERRORTOKEN:  # Keep non-legal Python symbols like °
-            blocks[-1].append(token)
+            result[-1].append(token)
         # Drop other tokens, such as EOF
 
         if len(operator_stack) > 0 and operator_stack[-1].string in {"**", "^"}:
             operator_stack.pop()  # Exit context for this exponential
 
+    return result
+
+
+def _scaling_identify_factors(
+        input_string: str,
+        blocks: List[List[TokenInfo]]
+) -> List[Tuple[str, str, str]]:
+    """
+    Supporting routine for _scaling_preprocessor; blocks -> scaling terms.
+
+    Takes the input_string and the blocks output by _scaling_find_blocks and
+    returns a tuple of the substrings that contain scaling factors, the scaling
+    factor itself, and the unit string.
+
+    """
     todo = []
-    blocks.pop(0)  # Leading term is not allowed to be a scaling factor
     for block in blocks:
         i_exp = next((i for i, t in enumerate(block) if t.string in {"**", "^"}), len(block))
         i_name = next((i for i, t in enumerate(block) if t.type == NAME), None)
@@ -98,13 +118,23 @@ def _scaling_preprocessor(input_string: str) -> str:
                 f"Replicate scaling factor ({[n[1] for n in numbers]}) in {input_string}"
             )
 
-    global _REGISTRY
+    return todo
+
+
+def _scaling_store_and_mangle(input_string: str, todo: List[Tuple[str, str, str]]) -> str:
+    """
+    Supporting routine for _scaling_preprocessor; scaling terms -> updated input_string.
+
+    Takes the terms to be updated, and actually updates the input_string as well as
+    creating an entry for each in the registry.
+
+    """
     for scaled_term, number_string, unit_string in todo:
         regex = rf"(?<![-+0-9.]){re.escape(scaled_term)}(?![0-9.])"
-        stripped = re.sub(r"--", "", re.sub(r"[+\s]+", "", scaled_term))
+        stripped = re.sub(r"[+\s]+", "", scaled_term).replace("--", "")
 
         if unit_string is not None:
-            stripped_unit = re.sub(r"--", "", re.sub(r"[+\s]+", "", unit_string))
+            stripped_unit = re.sub(r"[+\s]+", "", unit_string).replace("--", "")
             long_unit = f"{_REGISTRY(stripped_unit).u}"
             short_unit = f"{_REGISTRY(stripped_unit).u:~}"
             long = stripped.replace(stripped_unit, "_" + long_unit)
@@ -122,6 +152,16 @@ def _scaling_preprocessor(input_string: str) -> str:
         input_string = re.sub(regex, valid, input_string)
 
     return input_string
+
+
+def _scaling_preprocessor(input_string: str) -> str:
+    """Preprocessor that turns scaling factors into non-dimensional units."""
+    blocks = _scaling_find_blocks(tokenizer(input_string))
+
+    blocks.pop(0)  # Leading term is not allowed to be a scaling factor
+    todo = _scaling_identify_factors(input_string, blocks)
+
+    return _scaling_store_and_mangle(input_string, todo)
 
 
 _REGISTRY = UnitRegistry(filename=DEFAULT_FILE,
@@ -176,12 +216,12 @@ def _parse_units(units: str) -> Unit:
 
     """
     # TODO: parse_units has a bug resolved in 0.19, but 3.7 only supports up to 0.18
-    parsed: Quantity = _REGISTRY(units)
-    if isinstance(parsed, Quantity):
+    parsed = _REGISTRY(units)
+    try:
         magnitude = parsed.magnitude
         result = parsed.units
-    else:
-        magnitude = parsed  # It was non-dimensional
+    except AttributeError:  # It was non-dimensional
+        magnitude = parsed
         result = _REGISTRY("").u
     if magnitude == 0.0:
         raise ValueError(f"Unit expression had a zero scaling factor. {units}")
@@ -250,7 +290,7 @@ def convert_units(value: float, starting_unit: str, final_unit: str) -> float:
     if starting_unit == final_unit:
         return value  # skip computation
     else:
-        resolved_final_unit = _REGISTRY(final_unit)  # `to` bypasses preparser
+        resolved_final_unit = _REGISTRY(final_unit).u  # `to` bypasses preparser
         return _REGISTRY.Quantity(value, starting_unit).to(resolved_final_unit).magnitude
 
 
@@ -271,7 +311,7 @@ def get_base_units(units: Union[str, Unit]) -> Tuple[Unit, float, float]:
 
     """
     if isinstance(units, str):
-        units = _REGISTRY(units)
+        units = _REGISTRY(units).u
     ratio, base_unit = _REGISTRY.get_base_units(units)
     offset = _REGISTRY.Quantity(0, units).to(_REGISTRY.Quantity(0, base_unit)).magnitude
     return base_unit, float(ratio), offset
