@@ -7,17 +7,10 @@ python:
 - '3.10'
 - '3.11'
 env:
-- PINT_VERSION=0.18
-- PINT_VERSION=0.21
-jobs:
-  exclude:
-    - python: 3.7
-      env: PINT_VERSION=0.21
+  - UPGRADES="pint --upgrade pandas --upgrade"
+  - UPGRADES=""
 install:
-- pip install -U -r requirements.txt
-- pip install Pint==$PINT_VERSION
-- pip install -U -r test_requirements.txt
-- pip install --no-deps -e .
+  - pip install --only-binary ':all:' -r requirements.txt -r test_requirements.txt -e . UPGRADES
 script:
 - bash scripts/run_tests.sh
 - cd docs; make html; cd ..;
@@ -31,7 +24,7 @@ deploy:
     on:
       tags: true
       python: '3.10' # only need this to run once
-      env: PINT_VERSION=0.21
+      env: UPGRADES=""
   - provider: pypi
     user: "CitrineInformatics"
     password: "$PYPI_PASSWORD"
