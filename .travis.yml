@@ -7,10 +7,12 @@ python:
 - '3.10'
 - '3.11'
 env:
-  - UPGRADES="pint --upgrade pandas --upgrade"
+  - UPGRADES="-U pint pandas"
   - UPGRADES=""
 install:
-  - pip install --only-binary ':all:' -r requirements.txt -r test_requirements.txt -e . $UPGRADES
+  - pip install --only-binary ':all:' -r requirements.txt
+  - pip install --only-binary ':all:' -r test_requirements.txt
+  - pip install $UPGRADES -e .
 script:
 - bash scripts/run_tests.sh
 - cd docs; make html; cd ..;
