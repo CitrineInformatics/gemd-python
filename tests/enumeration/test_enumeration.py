@@ -13,16 +13,24 @@ def test_values():
         RED = "Red"
         BLUE = "Blue"
 
-    assert GoodClass.get_value("Red") == "Red"
-    assert GoodClass.get_value(GoodClass.BLUE) == "Blue"
-    assert GoodClass.get_value(None) is None
-    assert GoodClass.get_enum("Red") == GoodClass.RED
-    assert GoodClass.get_enum(GoodClass.BLUE) == GoodClass.BLUE
-    assert GoodClass.get_enum(None) is None
-    with pytest.raises(ValueError):
-        GoodClass.get_value("Green")
-    with pytest.raises(ValueError):
-        GoodClass.get_enum("Green")
+    with pytest.deprecated_call():
+        assert GoodClass.get_value("Red") == "Red"
+    with pytest.deprecated_call():
+        assert GoodClass.get_value(GoodClass.BLUE) == "Blue"
+    with pytest.deprecated_call():
+        assert GoodClass.get_value(None) is None
+    with pytest.deprecated_call():
+        assert GoodClass.get_enum("Red") == GoodClass.RED
+    with pytest.deprecated_call():
+        assert GoodClass.get_enum(GoodClass.BLUE) == GoodClass.BLUE
+    with pytest.deprecated_call():
+        assert GoodClass.get_enum(None) is None
+    with pytest.deprecated_call():
+        with pytest.raises(ValueError):
+            GoodClass.get_value("Green")
+    with pytest.deprecated_call():
+        with pytest.raises(ValueError):
+            GoodClass.get_enum("Green")
 
 
 def test_json_serde():

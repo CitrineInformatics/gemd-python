@@ -49,7 +49,7 @@ class BaseAttribute(DictSerializable):
         self._value = None
         self._template = None
         self._origin = None
-        self._file_links = None,
+        self._file_links = None
 
         self.value = value
         self.template = template
@@ -106,7 +106,7 @@ class BaseAttribute(DictSerializable):
         """Get the expected type of template for this object (property of child)."""
 
     @property
-    def origin(self) -> str:
+    def origin(self) -> Origin:
         """Get origin."""
         return self._origin
 
@@ -114,7 +114,7 @@ class BaseAttribute(DictSerializable):
     def origin(self, origin: Union[Origin, str]):
         if origin is None:
             raise ValueError("origin must be specified (but may be `unknown`)")
-        self._origin = Origin.get_value(origin)
+        self._origin = Origin.from_str(origin, exception=True)
 
     @property
     def file_links(self) -> List[FileLink]:

@@ -6,7 +6,7 @@ from typing import Union, Iterable, Optional, Callable, Type, TypeVar
 T = TypeVar('T')
 
 
-def validate_list(obj: Union[Iterable[T], T],
+def validate_list(obj: Optional[Union[Iterable[T], T]],
                   typ: Union[Iterable[Type], Type],
                   *,
                   trigger: Callable[[T], Optional[T]] = None) -> ValidList:
