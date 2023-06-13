@@ -96,13 +96,13 @@ class MaterialRun(BaseObject, HasSpec, HasProcess, typ="material_run", skip={"_m
         return self._measurements
 
     @property
-    def sample_type(self) -> str:
+    def sample_type(self) -> SampleType:
         """Get the sample type."""
         return self._sample_type
 
     @sample_type.setter
     def sample_type(self, sample_type: Union[SampleType, str]):
-        self._sample_type = SampleType.get_value(sample_type)
+        self._sample_type = SampleType.from_str(sample_type, exception=True)
 
     @staticmethod
     def _spec_type() -> Type:

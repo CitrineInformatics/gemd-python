@@ -13,16 +13,24 @@ def test_values():
         RED = "Red"
         BLUE = "Blue"
 
-    assert GoodClass.get_value("Red") == "Red"
-    assert GoodClass.get_value(GoodClass.BLUE) == "Blue"
-    assert GoodClass.get_value(None) is None
-    assert GoodClass.get_enum("Red") == GoodClass.RED
-    assert GoodClass.get_enum(GoodClass.BLUE) == GoodClass.BLUE
-    assert GoodClass.get_enum(None) is None
-    with pytest.raises(ValueError):
-        GoodClass.get_value("Green")
-    with pytest.raises(ValueError):
-        GoodClass.get_enum("Green")
+    with pytest.deprecated_call():
+        assert GoodClass.get_value("Red") == "Red"
+    with pytest.deprecated_call():
+        assert GoodClass.get_value(GoodClass.BLUE) == "Blue"
+    with pytest.deprecated_call():
+        assert GoodClass.get_value(None) is None
+    with pytest.deprecated_call():
+        assert GoodClass.get_enum("Red") == GoodClass.RED
+    with pytest.deprecated_call():
+        assert GoodClass.get_enum(GoodClass.BLUE) == GoodClass.BLUE
+    with pytest.deprecated_call():
+        assert GoodClass.get_enum(None) is None
+    with pytest.deprecated_call():
+        with pytest.raises(ValueError):
+            GoodClass.get_value("Green")
+    with pytest.deprecated_call():
+        with pytest.raises(ValueError):
+            GoodClass.get_enum("Green")
 
 
 def test_json_serde():
@@ -47,3 +55,29 @@ def test_restrictions():
         class BadClass2(BaseEnumeration):
             FIRST = "one"
             SECOND = 2
+
+
+def test_string_enum():
+    """Test that the synonym mechanism works."""
+
+    class TestEnum(BaseEnumeration):
+        ONE = "One", "1"
+        TWO = "Two", "2"
+
+    assert TestEnum.ONE == "One", "Equality failed"
+    assert str(TestEnum.ONE) == "One", "Equality failed, cast"
+    assert TestEnum.ONE != "1", "Equality worked for synonym"
+    assert TestEnum.from_str("One") == TestEnum.ONE, "from_str worked"
+    assert TestEnum.from_str("ONE") == TestEnum.ONE, "from_str, caps worked"
+    assert TestEnum.from_str("one") == TestEnum.ONE, "from_str, lower worked"
+    assert TestEnum.from_str("1") == TestEnum.ONE, "from_str, synonym worked"
+    assert TestEnum.from_str(None) is None, "from_str, bad returned None"
+    assert TestEnum.from_str("1.0") is None, "from_str, bad returned None"
+    with pytest.raises(ValueError, match="valid"):
+        TestEnum.from_str("1.0", exception=True)
+    for key in TestEnum.TWO.synonyms:
+        assert key != TestEnum.TWO, f"Synonym {key} was equal?"
+        assert TestEnum.from_str(key) == TestEnum.TWO, f"from_str didn't resolve {key}"
+        assert (
+                TestEnum.from_str(key.upper()) == TestEnum.TWO
+        ), f"from_str didn't resolve {key.upper()}"

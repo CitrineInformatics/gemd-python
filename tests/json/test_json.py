@@ -112,7 +112,8 @@ def test_enumeration_serde():
     """An enumeration should get serialized as a string."""
     condition = Condition(name="A condition", notes=Origin.UNKNOWN)
     copy_condition = GEMDJson().copy(condition)
-    assert copy_condition.notes == Origin.get_value(condition.notes)
+    assert copy_condition.notes == Origin.UNKNOWN.value
+    assert not isinstance(copy_condition.notes, Origin)
 
 
 def test_attribute_serde():
