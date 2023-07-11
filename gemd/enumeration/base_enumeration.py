@@ -1,7 +1,8 @@
 """Base class for all enumerations."""
 from deprecation import deprecated
 from enum import Enum
-from typing import Optional
+from typing import Optional, Type, Callable
+from warnings import warn
 
 
 class BaseEnumeration(str, Enum):
@@ -56,10 +57,6 @@ class BaseEnumeration(str, Enum):
         BaseEnumeration
             The matching enumerated element, or None
 
-        :param val:
-        :param exception:
-        :return:
-
         """
         if val is None:
             result = None
@@ -102,3 +99,69 @@ class BaseEnumeration(str, Enum):
     def __str__(self):
         """Return the value of the enumeration object."""
         return self.value
+
+    @classmethod
+    def _missing_(cls, value: object) -> Optional["BaseEnumeration"]:
+        """Allow Class(value) to resolve synonyms."""
+        if isinstance(value, str):
+            return cls.from_str(value)
+        else:
+            return None
+
+
+def migrated_enum(*,
+                  old_value: str,
+                  new_value: str,
+                  deprecated_in: str,
+                  removed_in: str) -> Callable[[Type], Type]:
+    """
+    Decorator for registering an enumerated value as migrated to a new symbol.
+
+    Parameters
+    ----------
+    old_value: str
+        A string containing the old symbol name.  Used for display only.
+    new_value: str
+        A string containing the new symbol name or the enumeration value.  Used
+        to resolve the target value.
+    deprecated_in: str
+        The version of the library the enumerated value was migrated.
+    removed_in: str
+        The version of the library the old enumerated value will be removed in.
+
+    """
+    def decorator(cls) -> Type:
+        print("Sear")
+
+        class MixinMeta(type(cls)):
+            """New derived metaclass for holding the deprecated symbol."""
+
+            def __getitem__(cls, name):
+                if name == old_value:
+                    warn(
+                        f"{old_value} is deprecated as of {deprecated_in} "
+                        f"and will be removed in {removed_in}. "
+                        f"{old_value} has been renamed to {cls(new_value).name}.",
+                        DeprecationWarning
+                    )
+                    return cls(new_value)
+                else:
+                    return super().__getitem__(name)
+
+        def accessor(self):
+            """Subroutine that returns the new enumerated value."""
+            return cls(new_value)
+
+        accessor.__name__ = old_value  # So deprecated knows the correct target name
+        deprecator = deprecated(deprecated_in=deprecated_in,
+                                removed_in=removed_in,
+                                details=f"{old_value} has been renamed to {cls(new_value).name}.",
+                                )
+
+        # Add the property to the metaclass, and then update cls' meta
+        setattr(MixinMeta, old_value, property(deprecator(accessor)))
+        cls.__class__ = MixinMeta
+
+        return cls
+
+    return decorator

@@ -1,9 +1,10 @@
 """Tests of the enumeration class."""
 import pytest
+import warnings
 
 from gemd.entity.attribute.property import Property
 from gemd.enumeration import Origin
-from gemd.enumeration.base_enumeration import BaseEnumeration
+from gemd.enumeration.base_enumeration import BaseEnumeration, migrated_enum
 from gemd.json import loads, dumps
 
 
@@ -81,3 +82,41 @@ def test_string_enum():
         assert (
                 TestEnum.from_str(key.upper()) == TestEnum.TWO
         ), f"from_str didn't resolve {key.upper()}"
+
+
+def test_missing():
+    """Test that enumeration is resolved via multiple paths."""
+    class TestEnum(BaseEnumeration):
+        ONE = "One", "1"
+        TWO = "Two", "2"
+
+    assert TestEnum("One") == TestEnum.ONE
+    assert TestEnum("ONE") == TestEnum.ONE
+    assert TestEnum(TestEnum.ONE) == TestEnum.ONE
+    assert TestEnum("1") == TestEnum.ONE
+
+    with pytest.raises(ValueError):
+        TestEnum("Uno")
+
+    with pytest.raises(ValueError):
+        TestEnum(1)
+
+
+def test_migrated():
+    """Verify that migration functions as expected."""
+    @migrated_enum(old_value="UNO", new_value="ONE", deprecated_in="1.9.9", removed_in="2.0.0")
+    class TestEnum(BaseEnumeration):
+        ONE = "One", "1"
+        TWO = "Two", "2"
+
+    assert TestEnum.ONE == "One"
+
+    with pytest.deprecated_call(match=r"ONE"):
+        assert TestEnum.UNO == "One"
+
+    with pytest.deprecated_call(match=r"ONE"):
+        assert TestEnum["UNO"] == "One"
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        assert TestEnum["ONE"] == "One"
