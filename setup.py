@@ -4,7 +4,7 @@ packages = find_packages()
 packages.append("")
 
 setup(name='gemd',
-      version='1.16.0',
+      version='1.16.1',
       python_requires='>=3.7',
       url='http://github.com/CitrineInformatics/gemd-python',
       description="Python binding for Citrine's GEMD data model",
@@ -23,7 +23,7 @@ setup(name='gemd',
           'tests.units': ['test_units.txt']
       },
       install_requires=[
-          "toolz>=0.11.0,<1",
+          "toolz>=0.12.0,<1",
           "pint>=0.18,<1",
           "deprecation>=2.1.0,<3"
       ],

@@ -15,8 +15,8 @@ install:
   - pip install $UPGRADES -e .
 script:
 - bash scripts/run_tests.sh
-- cd docs; make html; cd ..;
-- touch ./docs/_build/html/.nojekyll
+after_success:
+- test $UPGRADES = "" && $TRAVIS_PYTHON_VERSION = "3.10" && bash scripts/build_docs.sh
 deploy:
   - provider: pages
     skip_cleanup: true
