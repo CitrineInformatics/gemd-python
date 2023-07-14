@@ -100,13 +100,10 @@ Case is ignored.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><em>BaseEnumeration</em> – The matching enumerated element, or None</p></li>
-<li><p><em>param val:</em></p></li>
-<li><p><em>param exception:</em></p></li>
-<li><p><em>return:</em></p></li>
-</ul>
-</p>
+<dd class="field-even"><p>The matching enumerated element, or None</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#gemd.enumeration.base_enumeration.BaseEnumeration" title="gemd.enumeration.base_enumeration.BaseEnumeration">BaseEnumeration</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -133,6 +130,23 @@ associated with an enum member, then return the relevant value.</p>
 </div>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gemd.enumeration.base_enumeration.migrated_enum">
+<span class="sig-prename descclassname"><span class="pre">gemd.enumeration.base_enumeration.</span></span><span class="sig-name descname"><span class="pre">migrated_enum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deprecated_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">removed_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.enumeration.base_enumeration.migrated_enum" title="Permalink to this definition"></a></dt>
+<dd><p>Decorator for registering an enumerated value as migrated to a new symbol.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>old_value</strong> (<em>str</em>) – A string containing the old symbol name.  Used for display only.</p></li>
+<li><p><strong>new_value</strong> (<em>str</em>) – A string containing the new symbol name or the enumeration value.  Used
+to resolve the target value.</p></li>
+<li><p><strong>deprecated_in</strong> (<em>str</em>) – The version of the library the enumerated value was migrated.</p></li>
+<li><p><strong>removed_in</strong> (<em>str</em>) – The version of the library the old enumerated value will be removed in.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
