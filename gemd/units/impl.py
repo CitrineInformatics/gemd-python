@@ -243,13 +243,14 @@ def change_definitions_file(filename: str = None):
         # TODO: Handle case where user provides a units file but no constants file
         target = Path(filename).expanduser().resolve(strict=True)
 
-    _REGISTRY = UnitRegistry(filename=target,
-                             preprocessors=[
-                                 _space_after_minus_preprocessor,
-                                 _scientific_notation_preprocessor,
-                                 _scaling_preprocessor
-                             ],
-                             autoconvert_offset_to_baseunit=True)
+    # TODO: Pint 0.18 doesn't accept paths; must stringify
+    _REGISTRY = UnitRegistry(filename=str(target),
+                             preprocessors=[_space_after_minus_preprocessor,
+                                            _scientific_notation_preprocessor,
+                                            _scaling_preprocessor
+                                            ],
+                             autoconvert_offset_to_baseunit=True
+                             )
 
 
 change_definitions_file()  # initialize to default
