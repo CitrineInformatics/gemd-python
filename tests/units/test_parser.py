@@ -1,11 +1,12 @@
-import re
-
-import pytest
-import pkg_resources
 from contextlib import contextmanager
+from importlib.resources import read_binary
+import re
 from pint import UnitRegistry
+import pytest
+
 from gemd.units import parse_units, convert_units, get_base_units, change_definitions_file, \
     UndefinedUnitError, DefinitionSyntaxError
+from gemd.units.impl import DEFAULT_FILE
 
 
 @pytest.mark.parametrize("return_unit", [True, False])
@@ -111,7 +112,7 @@ def test_parse_units_as_units():
 def test_format():
     """Test that custom formatting behaves as we hope."""
     # use the default unit registry for now
-    reg = UnitRegistry(filename=pkg_resources.resource_filename("gemd.units", "citrine_en.txt"))
+    reg = UnitRegistry(filename=DEFAULT_FILE)
 
     result = parse_units("K^-2.0 m^-1e0 C^0 g^1 s^2")
     assert "-" not in result
@@ -162,13 +163,15 @@ def _change_units(filename):
         change_definitions_file()
 
 
-def test_file_change():
+def test_file_change(tmpdir):
     """Test that swapping units files works."""
     assert convert_units(1, 'm', 'cm') == 100
     with pytest.raises(UndefinedUnitError):
         assert convert_units(1, 'usd', 'USD') == 1
-    with _change_units(filename=pkg_resources.resource_filename("tests.units",
-                                                                "test_units.txt")):
+
+    test_file = tmpdir / "test_units.txt"
+    test_file.write_binary(read_binary("tests.units", "test_units.txt"))
+    with _change_units(filename=test_file):
         with pytest.raises(UndefinedUnitError):
             assert convert_units(1, 'm', 'cm') == 100
         assert convert_units(1, 'usd', 'USD') == 1

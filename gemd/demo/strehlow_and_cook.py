@@ -40,13 +40,9 @@ SMALL_TABLE = "strehlow_and_cook_small.pif"
 
 def import_table(filename=SMALL_TABLE):
     """Return the deserialized JSON table."""
-    import pkg_resources
+    from importlib.resources import read_text
     import json
-    resource = pkg_resources.resource_stream("gemd.demo", filename)
-    content = bytearray()
-    for line in resource:
-        content += line
-    table = json.loads(content.decode())
+    table = json.loads(read_text("gemd.demo", filename))
 
     return table
 

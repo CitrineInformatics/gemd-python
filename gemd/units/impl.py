@@ -1,5 +1,10 @@
 """Implementation of units."""
+import functools
+from importlib.resources import read_text
+from pathlib import Path
 import re
+from tempfile import TemporaryDirectory
+from typing import Union, List, Tuple, Generator, Any
 
 from pint import UnitRegistry, Unit, register_unit_format
 from pint.compat import tokenizer
@@ -9,12 +14,25 @@ from tokenize import NAME, NUMBER, OP, ERRORTOKEN, TokenInfo
 from pint.errors import DimensionalityError as IncompatibleUnitsError  # noqa Import
 from pint.errors import UndefinedUnitError, DefinitionSyntaxError  # noqa Import
 
-import functools
-import pkg_resources
-from typing import Union, List, Tuple, Generator, Any
+# Store directories so they don't get auto-cleaned until exit
+_TEMP_DIRECTORIES = []
 
-# use the default unit registry for now
-DEFAULT_FILE = pkg_resources.resource_filename("gemd.units", "citrine_en.txt")
+
+def _deploy_default_files() -> str:
+    """Copy the units & constants file into a temporary directory."""
+    default_dir = TemporaryDirectory()
+    _TEMP_DIRECTORIES.append(default_dir)
+
+    units_path = Path(default_dir.name) / "citrine_en.txt"
+    units_path.write_text(read_text("gemd.units", "citrine_en.txt"))
+
+    constants_path = Path(default_dir.name) / "constants_en.txt"
+    constants_path.write_text(read_text("gemd.units", "constants_en.txt"))
+
+    return str(units_path)
+
+
+DEFAULT_FILE = _deploy_default_files()
 _ALLOWED_OPERATORS = {".", "+", "-", "*", "/", "//", "^", "**", "(", ")"}
 
 
@@ -177,11 +195,64 @@ def _scaling_preprocessor(input_string: str) -> str:
     return _scaling_store_and_mangle(input_string, todo)
 
 
-_REGISTRY = UnitRegistry(filename=DEFAULT_FILE,
-                         preprocessors=[_space_after_minus_preprocessor,
-                                        _scientific_notation_preprocessor,
-                                        _scaling_preprocessor],
-                         autoconvert_offset_to_baseunit=True)
+_REGISTRY: UnitRegistry = None  # global requires it be defined in this scope
+
+
+@functools.lru_cache(maxsize=1024 * 1024)
+def convert_units(value: float, starting_unit: str, final_unit: str) -> float:
+    """
+    Convert the value from the starting_unit to the final_unit.
+
+    Parameters
+    ----------
+    value: float
+        magnitude to convert
+    starting_unit: str
+        unit that the magnitude is currently in
+    final_unit: str
+        unit that the magnitude should be returned in
+
+    Returns
+    -------
+    [float]
+        The converted number
+
+    """
+    if starting_unit == final_unit:
+        return value  # skip computation
+    else:
+        resolved_final_unit = _REGISTRY(final_unit).u  # `to` bypasses preparser
+        return _REGISTRY.Quantity(value, starting_unit).to(resolved_final_unit).magnitude
+
+
+def change_definitions_file(filename: str = None):
+    """
+    Change which file is used for units definition.
+
+    Parameters
+    ----------
+    filename: str
+        The file to use
+
+    """
+    global _REGISTRY
+    convert_units.cache_clear()  # Units will change
+    if filename is None:
+        target = DEFAULT_FILE
+    else:
+        # TODO: Handle case where user provides a units file but no constants file
+        target = Path(filename).expanduser().resolve(strict=True)
+
+    _REGISTRY = UnitRegistry(filename=target,
+                             preprocessors=[
+                                 _space_after_minus_preprocessor,
+                                 _scientific_notation_preprocessor,
+                                 _scaling_preprocessor
+                             ],
+                             autoconvert_offset_to_baseunit=True)
+
+
+change_definitions_file()  # initialize to default
 
 
 @register_unit_format("clean")
@@ -280,33 +351,6 @@ def parse_units(units: Union[str, Unit, None],
         raise UndefinedUnitError("Units must be given as a recognized unit string or Units object")
 
 
-@functools.lru_cache(maxsize=1024 * 1024)
-def convert_units(value: float, starting_unit: str, final_unit: str) -> float:
-    """
-    Convert the value from the starting_unit to the final_unit.
-
-    Parameters
-    ----------
-    value: float
-        magnitude to convert
-    starting_unit: str
-        unit that the magnitude is currently in
-    final_unit: str
-        unit that the magnitude should be returned in
-
-    Returns
-    -------
-    [float]
-        The converted number
-
-    """
-    if starting_unit == final_unit:
-        return value  # skip computation
-    else:
-        resolved_final_unit = _REGISTRY(final_unit).u  # `to` bypasses preparser
-        return _REGISTRY.Quantity(value, starting_unit).to(resolved_final_unit).magnitude
-
-
 @functools.lru_cache(maxsize=1024)
 def get_base_units(units: Union[str, Unit]) -> Tuple[Unit, float, float]:
     """
@@ -328,26 +372,3 @@ def get_base_units(units: Union[str, Unit]) -> Tuple[Unit, float, float]:
     ratio, base_unit = _REGISTRY.get_base_units(units)
     offset = _REGISTRY.Quantity(0, units).to(_REGISTRY.Quantity(0, base_unit)).magnitude
     return base_unit, float(ratio), offset
-
-
-def change_definitions_file(filename: str = None):
-    """
-    Change which file is used for units definition.
-
-    Parameters
-    ----------
-    filename: str
-        The file to use
-
-    """
-    global _REGISTRY
-    convert_units.cache_clear()  # Units will change
-    if filename is None:
-        filename = DEFAULT_FILE
-    _REGISTRY = UnitRegistry(filename=filename,
-                             preprocessors=[
-                                 _space_after_minus_preprocessor,
-                                 _scientific_notation_preprocessor,
-                                 _scaling_preprocessor
-                             ],
-                             autoconvert_offset_to_baseunit=True)
