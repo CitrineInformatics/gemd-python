@@ -1,6 +1,6 @@
 """Bake a cake."""
+from io import BytesIO
 import json
-
 import random
 
 from gemd.entity.attribute import Condition, Parameter, Property, PropertyAndConditions
@@ -62,12 +62,12 @@ def get_template_scope():
     return TEMPLATE_SCOPE
 
 
-def import_toothpick_picture():
+def import_toothpick_picture() -> BytesIO:
     """Return the stream of the toothpick picture."""
-    import pkg_resources
-    resource = pkg_resources.resource_stream("gemd.demo", "toothpick.jpg")
+    from importlib.resources import read_binary
+    resource = read_binary("gemd.demo", "toothpick.jpg")
 
-    return resource
+    return BytesIO(resource)
 
 
 def make_cake_templates():
