@@ -166,8 +166,8 @@ def _scaling_store_and_mangle(input_string: str, todo: List[Tuple[str, str, str]
 
         if unit_string is not None:
             stripped_unit = re.sub(r"[+\s]+", "", unit_string).replace("--", "")
-            long_unit = f"{_REGISTRY(stripped_unit).u}"
-            short_unit = f"{_REGISTRY(stripped_unit).u:~}"
+            long_unit = f"{_REGISTRY.parse_units(stripped_unit)}"
+            short_unit = f"{_REGISTRY.parse_units(stripped_unit):~}"
             long = stripped.replace(stripped_unit, "_" + long_unit)
             short = stripped.replace(stripped_unit, " " + short_unit)
         else:
@@ -221,7 +221,7 @@ def convert_units(value: float, starting_unit: str, final_unit: str) -> float:
     if starting_unit == final_unit:
         return value  # skip computation
     else:
-        resolved_final_unit = _REGISTRY(final_unit).u  # `to` bypasses preparser
+        resolved_final_unit = _REGISTRY.parse_units(final_unit)  # `to` bypasses preparser
         return _REGISTRY.Quantity(value, starting_unit).to(resolved_final_unit).magnitude
 
 
@@ -243,8 +243,7 @@ def change_definitions_file(filename: str = None):
         # TODO: Handle case where user provides a units file but no constants file
         target = Path(filename).expanduser().resolve(strict=True)
 
-    # TODO: Pint 0.18 doesn't accept paths; must stringify
-    _REGISTRY = UnitRegistry(filename=str(target),
+    _REGISTRY = UnitRegistry(filename=target,
                              preprocessors=[_space_after_minus_preprocessor,
                                             _scientific_notation_preprocessor,
                                             _scaling_preprocessor
@@ -285,36 +284,6 @@ def _format_clean(unit, registry, **options):
 
 
 @functools.lru_cache(maxsize=1024)
-def _parse_units(units: str) -> Unit:
-    """
-    Parse a string or Unit into a standard string representation of the unit.
-
-    Parameters
-    ----------
-    units: Union[str, Unit, None]
-        The string or Unit representation of the object we wish to display
-
-    Returns
-    -------
-    [Union[str, Unit, None]]
-        The representation; note that the same type that was passed is returned
-
-    """
-    # TODO: parse_units has a bug resolved in 0.19, but 3.7 only supports up to 0.18
-    parsed = _REGISTRY(units)
-    try:
-        magnitude = parsed.magnitude
-        result = parsed.units
-    except AttributeError:  # It was non-dimensional
-        magnitude = parsed
-        result = _REGISTRY("").u
-    if magnitude == 0.0:
-        raise ValueError(f"Unit expression had a zero scaling factor. {units}")
-    if magnitude != 1:
-        raise ValueError(f"Unit expression cannot have a leading scaling factor. {units}")
-    return result
-
-
 def parse_units(units: Union[str, Unit, None],
                 *,
                 return_unit: bool = False
@@ -337,11 +306,11 @@ def parse_units(units: Union[str, Unit, None],
     """
     if units is None:
         if return_unit:
-            return _REGISTRY("").u
+            return _REGISTRY.parse_units("")
         else:
             return None
     elif isinstance(units, str):
-        parsed = _parse_units(units)
+        parsed = _REGISTRY.parse_units(units)
         if return_unit:
             return parsed
         else:
@@ -369,7 +338,7 @@ def get_base_units(units: Union[str, Unit]) -> Tuple[Unit, float, float]:
 
     """
     if isinstance(units, str):
-        units = _REGISTRY(units).u
+        units = _REGISTRY.parse_units(units)
     ratio, base_unit = _REGISTRY.get_base_units(units)
     offset = _REGISTRY.Quantity(0, units).to(_REGISTRY.Quantity(0, base_unit)).magnitude
     return base_unit, float(ratio), offset
