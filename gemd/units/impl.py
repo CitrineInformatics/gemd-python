@@ -1,6 +1,7 @@
 """Implementation of units."""
 import functools
 from importlib.resources import read_text
+import os
 from pathlib import Path
 import re
 from tempfile import TemporaryDirectory
@@ -15,18 +16,15 @@ from pint.errors import DimensionalityError as IncompatibleUnitsError  # noqa Im
 from pint.errors import UndefinedUnitError, DefinitionSyntaxError  # noqa Import
 
 # Store directories so they don't get auto-cleaned until exit
-_TEMP_DIRECTORIES = []
+_TEMP_DIRECTORY = TemporaryDirectory()
 
 
 def _deploy_default_files() -> str:
     """Copy the units & constants file into a temporary directory."""
-    default_dir = TemporaryDirectory()
-    _TEMP_DIRECTORIES.append(default_dir)
-
-    units_path = Path(default_dir.name) / "citrine_en.txt"
+    units_path = Path(_TEMP_DIRECTORY.name) / "citrine_en.txt"
     units_path.write_text(read_text("gemd.units", "citrine_en.txt"))
 
-    constants_path = Path(default_dir.name) / "constants_en.txt"
+    constants_path = Path(_TEMP_DIRECTORY.name) / "constants_en.txt"
     constants_path.write_text(read_text("gemd.units", "constants_en.txt"))
 
     return str(units_path)
@@ -225,36 +223,6 @@ def convert_units(value: float, starting_unit: str, final_unit: str) -> float:
         return _REGISTRY.Quantity(value, starting_unit).to(resolved_final_unit).magnitude
 
 
-def change_definitions_file(filename: str = None):
-    """
-    Change which file is used for units definition.
-
-    Parameters
-    ----------
-    filename: str
-        The file to use
-
-    """
-    global _REGISTRY
-    convert_units.cache_clear()  # Units will change
-    if filename is None:
-        target = DEFAULT_FILE
-    else:
-        # TODO: Handle case where user provides a units file but no constants file
-        target = Path(filename).expanduser().resolve(strict=True)
-
-    _REGISTRY = UnitRegistry(filename=target,
-                             preprocessors=[_space_after_minus_preprocessor,
-                                            _scientific_notation_preprocessor,
-                                            _scaling_preprocessor
-                                            ],
-                             autoconvert_offset_to_baseunit=True
-                             )
-
-
-change_definitions_file()  # initialize to default
-
-
 @register_unit_format("clean")
 def _format_clean(unit, registry, **options):
     """Formatter that turns scaling-factor-units into numbers again."""
@@ -342,3 +310,42 @@ def get_base_units(units: Union[str, Unit]) -> Tuple[Unit, float, float]:
     ratio, base_unit = _REGISTRY.get_base_units(units)
     offset = _REGISTRY.Quantity(0, units).to(_REGISTRY.Quantity(0, base_unit)).magnitude
     return base_unit, float(ratio), offset
+
+
+def change_definitions_file(filename: str = None):
+    """
+    Change which file is used for units definition.
+
+    Parameters
+    ----------
+    filename: str
+        The file to use
+
+    """
+    global _REGISTRY
+    convert_units.cache_clear()  # Units will change
+    parse_units.cache_clear()
+    get_base_units.cache_clear()
+    if filename is None:
+        target = DEFAULT_FILE
+    else:
+        # TODO: Handle case where user provides a units file but no constants file
+        target = Path(filename).expanduser().resolve(strict=True)
+
+    current_dir = Path.cwd()
+    try:
+        path = Path(target)
+        os.chdir(path.parent)
+        # Need to re-verify path because of some slippiness around tmp on MacOS
+        _REGISTRY = UnitRegistry(filename=Path.cwd() / path.name,
+                                 preprocessors=[_space_after_minus_preprocessor,
+                                                _scientific_notation_preprocessor,
+                                                _scaling_preprocessor
+                                                ],
+                                 autoconvert_offset_to_baseunit=True
+                                 )
+    finally:
+        os.chdir(current_dir)
+
+
+change_definitions_file()  # initialize to default
