@@ -9,8 +9,6 @@ from gemd.entity.base_entity import BaseEntity
 from gemd.entity.dict_serializable import DictSerializable
 from gemd.entity.link_by_uid import LinkByUID
 
-from toolz import concatv
-
 
 def set_uuids(obj, scope):
     """
@@ -441,8 +439,8 @@ def recursive_foreach(obj: Union[Iterable, BaseEntity, DictSerializable],
             func(this)
 
         if cached_isinstance(this, Mapping):
-            for x in concatv(this.keys(), this.values()):
-                queue.append(x)
+            queue.extend(this.keys())
+            queue.extend(this.values())
         elif cached_isinstance(this, DictSerializable):
             for k, x in this.__dict__.items():
                 queue.append(x)
@@ -496,7 +494,8 @@ def recursive_flatmap(obj: Union[Iterable, BaseEntity, DictSerializable],
             res.extend(func(this))
 
         if cached_isinstance(this, Mapping):
-            queue.extend(concatv(this.keys(), this.values()))
+            queue.extend(this.keys())
+            queue.extend(this.values())
         elif cached_isinstance(this, DictSerializable):
             for k, x in sorted(this.__dict__.items()):
                 if unidirectional and cached_isinstance(this, BaseEntity) and k in this.skip:

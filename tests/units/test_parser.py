@@ -112,18 +112,18 @@ def test_parse_units_as_units():
 def test_format():
     """Test that custom formatting behaves as we hope."""
     # use the default unit registry for now
-    reg = UnitRegistry(filename=DEFAULT_FILE)
+    reg = UnitRegistry()
 
     result = parse_units("K^-2.0 m^-1e0 C^0 g^1 s^2")
     assert "-" not in result
-    assert "[time]" in reg(result).dimensionality
-    assert "[current]" not in reg(result).dimensionality
+    assert "[time]" in str(reg(result).dimensionality)
+    assert "[current]" not in str(reg(result).dimensionality)
     kelvin = str(reg("K").units)
     gram = str(reg("g").units)
     second = str(reg("s").units)
-    assert kelvin in result
-    assert gram in result
-    assert second in result
+    assert kelvin in str(result)
+    assert gram in str(result)
+    assert second in str(result)
     assert result.index(gram) < result.index(kelvin)
     assert result.index(gram) < result.index(second)
 

@@ -1,6 +1,4 @@
 """Discrete distribution across several categories."""
-from toolz import keymap
-
 from gemd.entity.setters import validate_str
 from gemd.entity.value.categorical_value import CategoricalValue
 from gemd.entity.bounds import CategoricalBounds
@@ -41,7 +39,7 @@ class DiscreteCategorical(CategoricalValue, typ="discrete_categorical"):
         elif isinstance(probabilities, dict):
             if abs(sum(probabilities.values()) - 1.0) > 1.0e-9:
                 raise ValueError("probabilities must sum to 1.0")
-            self._probabilities = keymap(validate_str, probabilities)
+            self._probabilities = {validate_str(k): v for k, v in probabilities.items()}
         else:
             raise TypeError("probabilities must be dict or single value")
 
