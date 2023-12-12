@@ -15,10 +15,6 @@ install:
 script:
 - bash scripts/run_tests.sh
 - test "$UPGRADES" != "" || test $TRAVIS_PYTHON_VERSION != "3.10" || bash scripts/build_docs.sh
-branches:
-  only:
-  - main
-  - gh-pages
 deploy:
   - provider: pages
     skip_cleanup: true
