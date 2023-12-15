@@ -10,7 +10,7 @@ from typing import Union, List, Tuple, Generator, Any
 from pint import UnitRegistry, Unit, register_unit_format
 try:  # Pint 0.23 migrated the location of this method, and augmented it
     from pint.pint_eval import tokenizer
-except ImportError:
+except ImportError:  # pragma: no cover
     from pint.compat import tokenizer
 from tokenize import NAME, NUMBER, OP, ERRORTOKEN, TokenInfo
 # alias the error that is thrown when units are incompatible
