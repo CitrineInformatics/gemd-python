@@ -15,6 +15,10 @@ install:
 script:
 - bash scripts/run_tests.sh
 - test "$UPGRADES" != "" || test $TRAVIS_PYTHON_VERSION != "3.10" || bash scripts/build_docs.sh
+branches:
+  only:
+  - main
+  - /^v[\.0-9]+$/
 deploy:
   - provider: pages
     skip_cleanup: true
