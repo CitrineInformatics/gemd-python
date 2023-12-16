@@ -8,7 +8,10 @@ from tempfile import TemporaryDirectory
 from typing import Union, List, Tuple, Generator, Any
 
 from pint import UnitRegistry, Unit, register_unit_format
-from pint.compat import tokenizer
+try:  # Pint 0.23 migrated the location of this method, and augmented it
+    from pint.pint_eval import tokenizer
+except ImportError:  # pragma: no cover
+    from pint.compat import tokenizer
 from tokenize import NAME, NUMBER, OP, ERRORTOKEN, TokenInfo
 # alias the error that is thrown when units are incompatible
 # this helps to isolate the dependence on pint
