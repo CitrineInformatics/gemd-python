@@ -51,6 +51,6 @@ class HasSpec(HasDependencies):
         else:
             return None
 
-    def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:
+    def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:  # noqa: F821
         """Return a set of all immediate dependencies (no recursion)."""
         return {self.spec} if self.spec is not None else set()

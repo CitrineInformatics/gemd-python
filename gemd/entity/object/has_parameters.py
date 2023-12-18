@@ -34,6 +34,6 @@ class HasParameters(HasTemplateCheckGenerator, HasDependencies, ABC):
         checker = self._generate_template_check(HasParameterTemplates.validate_parameter)
         self._parameters = validate_list(parameters, Parameter, trigger=checker)
 
-    def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:
+    def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:  # noqa: F821
         """Return a set of all immediate dependencies (no recursion)."""
         return {param.template for param in self.parameters if param.template is not None}

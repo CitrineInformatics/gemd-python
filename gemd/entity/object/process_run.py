@@ -86,12 +86,12 @@ class ProcessRun(BaseObject,
         self._output_material = None
 
     @property
-    def output_material(self) -> Optional["MaterialRun"]:
+    def output_material(self) -> Optional["MaterialRun"]:  # noqa: F821
         """Get the output material run."""
         return self._output_material
 
     @property
-    def ingredients(self) -> List["IngredientRun"]:
+    def ingredients(self) -> List["IngredientRun"]:  # noqa: F821
         """Get the input ingredient runs."""
         return self._ingredients
 

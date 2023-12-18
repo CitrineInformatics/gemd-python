@@ -30,7 +30,7 @@ class IntegerBounds(BaseBounds, typ="integer_bounds"):
         if self.upper_bound < self.lower_bound:
             raise ValueError("Upper bound must be greater than or equal to lower bound")
 
-    def contains(self, bounds: Union[BaseBounds, "BaseValue"]) -> bool:
+    def contains(self, bounds: Union[BaseBounds, "BaseValue"]) -> bool:  # noqa: F821
         """
         Check if another bounds or value object is a subset of this range.
 
@@ -59,7 +59,9 @@ class IntegerBounds(BaseBounds, typ="integer_bounds"):
 
         return bounds.lower_bound >= self.lower_bound and bounds.upper_bound <= self.upper_bound
 
-    def union(self, *others: Union["IntegerBounds", "IntegerValue"]) -> "IntegerBounds":
+    def union(self,
+              *others: Union["IntegerBounds", "IntegerValue"]  # noqa: F821
+              ) -> "IntegerBounds":  # noqa: F821
         """
         Return the union of this bounds and other bounds.
 
@@ -94,7 +96,7 @@ class IntegerBounds(BaseBounds, typ="integer_bounds"):
                 upper = bounds.upper_bound
         return IntegerBounds(lower_bound=lower, upper_bound=upper)
 
-    def update(self, *others: Union["IntegerBounds", "IntegerValue"]):
+    def update(self, *others: Union["IntegerBounds", "IntegerValue"]):  # noqa: F821
         """
         Update this bounds to include other bounds.
 

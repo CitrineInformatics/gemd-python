@@ -100,7 +100,7 @@ class BaseEntity(DictSerializable):
 
         return LinkByUID(scope=scope, id=uid)
 
-    def all_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:
+    def all_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:  # noqa: F821
         """Return a set of all immediate dependencies (no recursion)."""
         result = set()
         queue = [type(self)]

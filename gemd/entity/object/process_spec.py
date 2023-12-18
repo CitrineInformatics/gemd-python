@@ -90,7 +90,7 @@ class ProcessSpec(BaseObject,
         return ProcessTemplate
 
     @property
-    def ingredients(self) -> List["IngredientSpec"]:
+    def ingredients(self) -> List["IngredientSpec"]:  # noqa: F821
         """Get the list of input ingredient specs."""
         return self._ingredients
 

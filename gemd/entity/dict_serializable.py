@@ -18,9 +18,9 @@ class DictSerializableMeta(ABCMeta):
 
     _class: Dict[str, type] = {}
 
-    def __new__(mcs, name, bases, *args,
+    def __new__(mcs, name, bases, *args,  # noqa: D102
                 typ: str = None, skip: Set[str] = frozenset(),
-                **kwargs):  # noqa: D102
+                **kwargs):
         return super().__new__(mcs, name, bases, *args, **kwargs)
 
     def __init__(cls, name, bases, *args, typ: str = None, skip: Set[str] = frozenset(), **kwargs):

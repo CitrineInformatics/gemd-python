@@ -49,7 +49,7 @@ class RealBounds(BaseBounds, typ="real_bounds"):
                              "Use an empty string for a dimensionless quantity.")
         self._default_units = units.parse_units(default_units)
 
-    def contains(self, bounds: Union[BaseBounds, "BaseValue"]) -> bool:
+    def contains(self, bounds: Union[BaseBounds, "BaseValue"]) -> bool:  # noqa: F821
         """
         Check if another bounds or value object is a subset of this range.
 
@@ -84,7 +84,7 @@ class RealBounds(BaseBounds, typ="real_bounds"):
 
         return bounds.lower_bound >= lower and bounds.upper_bound <= upper
 
-    def union(self, *others: Union["RealBounds", "ContinuousValue"]) -> "RealBounds":
+    def union(self, *others: Union["RealBounds", "ContinuousValue"]) -> "RealBounds":  # noqa: F821
         """
         Return the union of this bounds and other bounds.
 
@@ -123,7 +123,7 @@ class RealBounds(BaseBounds, typ="real_bounds"):
                 upper = bnd_hi
         return RealBounds(lower_bound=lower, upper_bound=upper, default_units=unit_)
 
-    def update(self, *others: Union["RealBounds", "ContinuousValue"]):
+    def update(self, *others: Union["RealBounds", "ContinuousValue"]):  # noqa: F821
         """
         Update this bounds to include other bounds.
 

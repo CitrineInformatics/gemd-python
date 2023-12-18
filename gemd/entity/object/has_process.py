@@ -20,6 +20,6 @@ class HasProcess(HasDependencies):
     def process(self, process: Union[BaseObject, LinkByUID]):
         """Set the process."""
 
-    def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:
+    def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:  # noqa: F821
         """Return a set of all immediate dependencies (no recursion)."""
         return {self.process} if self.process is not None else set()

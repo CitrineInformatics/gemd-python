@@ -91,7 +91,7 @@ class MaterialRun(BaseObject, HasSpec, HasProcess, typ="material_run", skip={"_m
             raise TypeError("process must be a ProcessRun or LinkByUID: {}".format(process))
 
     @property
-    def measurements(self) -> List["MeasurementRun"]:
+    def measurements(self) -> List["MeasurementRun"]:  # noqa: F821
         """Get a read-only list of the measurement runs."""
         return self._measurements
 

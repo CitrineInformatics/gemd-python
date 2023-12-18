@@ -9,7 +9,7 @@ class BaseBounds(DictSerializable):
     """Base class for bounds, including RealBounds and CategoricalBounds."""
 
     @abstractmethod
-    def contains(self, bounds: Union["BaseBounds", "BaseValue"]):
+    def contains(self, bounds: Union["BaseBounds", "BaseValue"]):  # noqa: F821
         """
         Check if another bounds is contained within this bounds.
 
@@ -36,7 +36,7 @@ class BaseBounds(DictSerializable):
         raise TypeError('{} is not a Bounds object'.format(bounds))
 
     @abstractmethod
-    def union(self, *others: Union["BaseBounds", "BaseValue"]) -> "BaseBounds":
+    def union(self, *others: Union["BaseBounds", "BaseValue"]) -> "BaseBounds":  # noqa: F821
         """
         Return the union of this bounds and other bounds.
 
@@ -56,7 +56,7 @@ class BaseBounds(DictSerializable):
         pass  # pragma: no cover
 
     @abstractmethod
-    def update(self, *others: Union["BaseBounds", "BaseValue"]):
+    def update(self, *others: Union["BaseBounds", "BaseValue"]):  # noqa: F821
         """
         Update this bounds to include other bounds.
 

@@ -39,7 +39,7 @@ class CategoricalBounds(BaseBounds, typ="categorical_bounds"):
         if not all(isinstance(x, str) for x in self.categories):
             raise ValueError("All the categories must be strings")
 
-    def contains(self, bounds: Union[BaseBounds, "BaseValue"]) -> bool:
+    def contains(self, bounds: Union[BaseBounds, "BaseValue"]) -> bool:  # noqa: F821
         """
         Check if another bounds object or value objects is contained by this bounds.
 
@@ -69,8 +69,8 @@ class CategoricalBounds(BaseBounds, typ="categorical_bounds"):
         return bounds.categories.issubset(self.categories)
 
     def union(self,
-              *others: Union["CategoricalBounds", "CategoricalValue"]
-              ) -> "CategoricalBounds":
+              *others: Union["CategoricalBounds", "CategoricalValue"]  # noqa: F821
+              ) -> "CategoricalBounds":  # noqa: F821
         """
         Return the union of this bounds and other bounds.
 
@@ -102,7 +102,7 @@ class CategoricalBounds(BaseBounds, typ="categorical_bounds"):
             result.update(bounds.categories)
         return CategoricalBounds(result)
 
-    def update(self, *others: Union["CategoricalBounds", "CategoricalValue"]):
+    def update(self, *others: Union["CategoricalBounds", "CategoricalValue"]):  # noqa: F821
         """
         Update this bounds to include other bounds.
 
