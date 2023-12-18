@@ -9,10 +9,15 @@ python:
 env:
   - UPGRADES="-U pint pandas"
   - UPGRADES=""
+jobs:
+  exclude:
+    - python: '3.12'
+      env: UPGRADES=""
 install:
   - pip install --only-binary ':all:' -r requirements.txt
+  - test $TRAVIS_PYTHON_VERSION == "3.12" || perl -pi -E 's/^.*pandas.*$//' test_requirements.txt
   - pip install --only-binary ':all:' -r test_requirements.txt
-  - pip install $UPGRADES -e .
+  - pip install $UPGRADES -e .d
 script:
 - bash scripts/run_tests.sh
 - test "$UPGRADES" != "" || test $TRAVIS_PYTHON_VERSION != "3.10" || bash scripts/build_docs.sh
