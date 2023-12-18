@@ -11,7 +11,7 @@ from typing import Union
 class MolecularStructureBounds(BaseBounds, typ="molecular_structure_bounds"):
     """Molecular bounds, with no component or substructural restrictions (yet)."""
 
-    def contains(self, bounds: Union[BaseBounds, "BaseValue"]) -> bool:
+    def contains(self, bounds: Union[BaseBounds, "BaseValue"]) -> bool:  # noqa: F821
         """
         Check if another bounds or value object is contained by this bounds.
 
@@ -41,8 +41,8 @@ class MolecularStructureBounds(BaseBounds, typ="molecular_structure_bounds"):
         return True
 
     def union(self,
-              *others: Union["MolecularStructureBounds", "MolecularValue"]
-              ) -> "MolecularStructureBounds":
+              *others: Union["MolecularStructureBounds", "MolecularValue"]  # noqa: F821
+              ) -> "MolecularStructureBounds":  # noqa: F821
         """
         Return the union of this bounds and other bounds.
 
@@ -69,7 +69,7 @@ class MolecularStructureBounds(BaseBounds, typ="molecular_structure_bounds"):
                             f"expected molecular structure, found {misses}")
         return MolecularStructureBounds()
 
-    def update(self, *others: Union["MolecularStructureBounds", "MolecularValue"]):
+    def update(self, *others: Union["MolecularStructureBounds", "MolecularValue"]):  # noqa: F821
         """
         Update this bounds to include other bounds.
 

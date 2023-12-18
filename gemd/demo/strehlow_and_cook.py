@@ -289,7 +289,7 @@ def make_strehlow_objects(table: Iterable = None, template_scope: str = DEMO_TEM
                         template = tmpl[name_map[attr['name']]]
 
                 # Move into GEMD structure
-                if type(template) == PropertyTemplate:
+                if isinstance(template, PropertyTemplate):
                     msr.properties.append(
                         Property(name=template.name,
                                  template=template,
@@ -297,7 +297,7 @@ def make_strehlow_objects(table: Iterable = None, template_scope: str = DEMO_TEM
                                  origin=origin,
                                  notes=method
                                  ))
-                elif type(template) == ConditionTemplate:
+                elif isinstance(template, ConditionTemplate):
                     msr.conditions.append(
                         Condition(name=template.name,
                                   template=template,

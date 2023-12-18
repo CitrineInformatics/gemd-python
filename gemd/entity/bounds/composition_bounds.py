@@ -39,7 +39,7 @@ class CompositionBounds(BaseBounds, typ="composition_bounds"):
         if not all(isinstance(x, str) for x in self.components):
             raise ValueError("All the components must be strings")
 
-    def contains(self, bounds: Union[BaseBounds, "BaseValue"]) -> bool:
+    def contains(self, bounds: Union[BaseBounds, "BaseValue"]) -> bool:  # noqa: F821
         """
         Check if another bounds or value object is contained by this bounds.
 
@@ -69,8 +69,8 @@ class CompositionBounds(BaseBounds, typ="composition_bounds"):
         return bounds.components.issubset(self.components)
 
     def union(self,
-              *others: Union["CompositionBounds", "CompositionValue"]
-              ) -> "CompositionBounds":
+              *others: Union["CompositionBounds", "CompositionValue"]  # noqa: F821
+              ) -> "CompositionBounds":  # noqa: F821
         """
         Return the union of this bounds and other bounds.
 
@@ -102,7 +102,7 @@ class CompositionBounds(BaseBounds, typ="composition_bounds"):
             result.update(bounds.components)
         return CompositionBounds(result)
 
-    def update(self, *others: Union["CompositionBounds", "CompositionValue"]):
+    def update(self, *others: Union["CompositionBounds", "CompositionValue"]):  # noqa: F821
         """
         Update this bounds to include other bounds.
 

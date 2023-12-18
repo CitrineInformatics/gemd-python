@@ -338,7 +338,7 @@ def substitute_objects(obj,
         method = _substitute
 
     return method(obj,
-                  sub=lambda l: index.get(l, l),
+                  sub=lambda link: index.get(link, link),
                   applies=lambda o: cached_isinstance(o, LinkByUID))
 
 

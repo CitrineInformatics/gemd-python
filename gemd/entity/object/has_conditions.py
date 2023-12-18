@@ -34,6 +34,6 @@ class HasConditions(HasTemplateCheckGenerator, HasDependencies, ABC):
         checker = self._generate_template_check(HasConditionTemplates.validate_condition)
         self._conditions = validate_list(conditions, Condition, trigger=checker)
 
-    def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:
+    def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:  # noqa: F821
         """Return a set of all immediate dependencies (no recursion)."""
         return {cond.template for cond in self.conditions if cond.template is not None}
