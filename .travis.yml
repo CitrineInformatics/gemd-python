@@ -7,7 +7,7 @@ python:
 - '3.11'
 - '3.12'
 env:
-  - UPGRADES="-U '--only-binary=pint,pandas' pint pandas"
+  - UPGRADES="-U '--only-binary==pint,pandas' pint pandas"
   - UPGRADES=""
 jobs:
   exclude:
