@@ -647,7 +647,7 @@ def make_cake_spec(tmpl=None):
         material=eggs,
         labels=['wet'],
         process=wetmix.process,
-        absolute_quantity=NominalReal(nominal=4, units='')
+        absolute_quantity=NominalReal(nominal=4, units='count')
     )
 
     vanilla = _make_material(

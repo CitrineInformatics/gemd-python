@@ -1,4 +1,6 @@
 """For entities that hve quantities."""
+from sys import float_info
+
 from gemd.entity.bounds.real_bounds import RealBounds
 from gemd.entity.value.continuous_value import ContinuousValue
 from gemd.entity.value.base_value import BaseValue
@@ -50,7 +52,7 @@ class HasQuantities(object):
         level = get_validation_level()
         accept = level == WarningLevel.IGNORE or fraction_bounds.contains(value)
         if not accept:
-            message = f"Value {value} is not between 0 and 1."
+            message = f"Value {value} is not a dimensionless value between 0 and 1."
             if level == WarningLevel.WARNING:
                 logger.warning(message)
             else:
@@ -110,7 +112,29 @@ class HasQuantities(object):
     def absolute_quantity(self, absolute_quantity: ContinuousValue):
         if absolute_quantity is None:
             self._absolute_quantity = None
-        elif isinstance(absolute_quantity, ContinuousValue):
-            self._absolute_quantity = absolute_quantity
-        else:
+        elif not isinstance(absolute_quantity, ContinuousValue):
             raise TypeError("absolute_quantity was not given as a continuous value")
+        else:
+            max_bounds = RealBounds(
+                lower_bound=0.0,
+                upper_bound=float_info.max,
+                default_units=absolute_quantity.units
+            )
+            dimensionless = RealBounds(
+                lower_bound=0.0,
+                upper_bound=float_info.max,
+                default_units=''
+            )
+            level = get_validation_level()
+            if level != WarningLevel.IGNORE:
+                messages = []
+                if not max_bounds.contains(absolute_quantity):
+                    messages.append(f"Value {absolute_quantity} is less than 0.0.")
+                if dimensionless.contains(absolute_quantity):
+                    messages.append(f"Value {absolute_quantity} is dimensionless.")
+                if level == WarningLevel.WARNING:
+                    for message in messages:
+                        logger.warning(message)
+                else:
+                    raise ValueError("; ".join(messages))
+            self._absolute_quantity = absolute_quantity

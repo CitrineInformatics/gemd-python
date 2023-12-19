@@ -33,13 +33,30 @@ def test_ingredient_reassignment():
     assert set(frying.ingredients) == {oil, potatoes}
 
 
+VALID_FRACTIONS = [
+    NominalReal(1.0, ''),
+    UniformReal(0.5, 0.6, ''),
+    NormalReal(0.2, 0.3, '')
+]
+
+INVALID_FRACTIONS = [
+    NominalReal(1.0, 'm'),
+    UniformReal(0.7, 1.1, ''),
+    NormalReal(-0.2, 0.3, '')
+]
+
 VALID_QUANTITIES = [
-    NominalReal(14.0, ''),
-    UniformReal(0.5, 0.6, 'm'),
-    NormalReal(-0.3, 0.6, "kg")
+    NominalReal(14.0, 'g'),
+    UniformReal(0.5, 0.6, 'mol'),
+    NormalReal(0.3, 0.6, 'cc')
 ]
 
 INVALID_QUANTITIES = [
+    NominalReal(14.0, ''),
+    UniformReal(-0.1, 0.3, 'mol'),
+]
+
+INVALID_TYPES = [
     NominalCategorical("blue"),
     NominalInteger(5),
     EmpiricalFormula("CH4"),
@@ -48,55 +65,79 @@ INVALID_QUANTITIES = [
 ]
 
 
+@pytest.mark.parametrize("valid_fraction", VALID_FRACTIONS)
+def test_valid_fractions(valid_fraction, caplog):
+    """
+    Check that all fractional quantities must be continuous values.
+    """
+    with validation_level(WarningLevel.WARNING):
+        ingred = IngredientSpec(name="name", mass_fraction=valid_fraction)
+        assert ingred.mass_fraction == valid_fraction
+        ingred = IngredientSpec(name="name", volume_fraction=valid_fraction)
+        assert ingred.volume_fraction == valid_fraction
+        ingred = IngredientSpec(name="name", number_fraction=valid_fraction)
+        assert ingred.number_fraction == valid_fraction
+        assert ingred.absolute_quantity is None
+    assert len(caplog.records) == 0, "Warned on valid values with WARNING."
+
+
 @pytest.mark.parametrize("valid_quantity", VALID_QUANTITIES)
 def test_valid_quantities(valid_quantity, caplog):
     """
     Check that all quantities must be continuous values.
-
-    There are no restrictions on the value or the units. Although a volume fraction of -5 kg
-    does not make physical sense, it will not throw an error.
     """
-    with validation_level(WarningLevel.IGNORE):
-        ingred = IngredientSpec(name="name", mass_fraction=valid_quantity)
-        assert ingred.mass_fraction == valid_quantity
-        ingred = IngredientSpec(name="name", volume_fraction=valid_quantity)
-        assert ingred.volume_fraction == valid_quantity
-        ingred = IngredientSpec(name="name", number_fraction=valid_quantity)
-        assert ingred.number_fraction == valid_quantity
+    with validation_level(WarningLevel.WARNING):
         ingred = IngredientSpec(name="name", absolute_quantity=valid_quantity)
         assert ingred.absolute_quantity == valid_quantity
-    assert len(caplog.records) == 0, "Warned when validation set to IGNORE."
+        assert ingred.mass_fraction is None
+        assert ingred.number_fraction is None
+        assert ingred.volume_fraction is None
+    assert len(caplog.records) == 0, "Warned on valid values with WARNING."
 
 
-def test_validation_control(caplog):
-    """Verify that when validation is requested, limits are enforced."""
+@pytest.mark.parametrize("invalid_fraction", INVALID_FRACTIONS)
+def test_invalid_fractions(invalid_fraction, caplog):
+    """
+    Verify that when validation is requested, limits are enforced for fractions.
+    """
+    with validation_level(WarningLevel.IGNORE):
+        IngredientSpec(name="name", mass_fraction=invalid_fraction)
+    assert len(caplog.records) == 0, f"Warned on invalid values with IGNORE: {invalid_fraction}"
     with validation_level(WarningLevel.WARNING):
-        IngredientSpec(name="name", mass_fraction=NominalReal(0.5, ''))
-        assert len(caplog.records) == 0, "Warned on valid values with WARNING."
-        IngredientSpec(name="name", mass_fraction=NominalReal(5, ''))
-        assert len(caplog.records) == 1, "Didn't warn on invalid values with WARNING."
-        IngredientSpec(name="name", mass_fraction=NominalReal(0.5, 'm'))
-        assert len(caplog.records) == 2, "Didn't warn on invalid units with WARNING."
+        IngredientSpec(name="name", mass_fraction=invalid_fraction)
+    assert len(caplog.records) == 1, f"Didn't warn on invalid values with IGNORE: {invalid_fraction}"
     with validation_level(WarningLevel.FATAL):
-        # The following should not raise an exception
-        IngredientSpec(name="name", mass_fraction=NominalReal(0.5, ''))
         with pytest.raises(ValueError):
-            IngredientSpec(name="name", mass_fraction=NominalReal(5, ''))
-        with pytest.raises(ValueError):
-            IngredientSpec(name="name", mass_fraction=NominalReal(0.5, 'm'))
+            IngredientSpec(name="name", mass_fraction=invalid_fraction)
 
 
 @pytest.mark.parametrize("invalid_quantity", INVALID_QUANTITIES)
-def test_invalid_quantities(invalid_quantity):
+def test_invalid_quantities(invalid_quantity, caplog):
+    """
+    Verify that when validation is requested, limits are enforced for fractions.
+    """
+    with validation_level(WarningLevel.IGNORE):
+        IngredientSpec(name="name", absolute_quantity=invalid_quantity)
+    assert len(caplog.records) == 0, f"Warned on invalid values with IGNORE: {invalid_quantity}"
+    with validation_level(WarningLevel.WARNING):
+        IngredientSpec(name="name", absolute_quantity=invalid_quantity)
+    assert len(caplog.records) == 1, f"Didn't warn on invalid values with IGNORE: {invalid_quantity}"
+    with validation_level(WarningLevel.FATAL):
+        with pytest.raises(ValueError):
+            IngredientSpec(name="name", absolute_quantity=invalid_quantity)
+
+
+@pytest.mark.parametrize("invalid_type", INVALID_TYPES)
+def test_invalid_types(invalid_type):
     """Check that any non-continuous value for a quantity throws a TypeError."""
     with pytest.raises(TypeError):
-        IngredientSpec(name="name", mass_fraction=invalid_quantity)
+        IngredientSpec(name="name", mass_fraction=invalid_type)
     with pytest.raises(TypeError):
-        IngredientSpec(name="name", volume_fraction=invalid_quantity)
+        IngredientSpec(name="name", volume_fraction=invalid_type)
     with pytest.raises(TypeError):
-        IngredientSpec(name="name", number_fraction=invalid_quantity)
+        IngredientSpec(name="name", number_fraction=invalid_type)
     with pytest.raises(TypeError):
-        IngredientSpec(name="name", absolute_quantity=invalid_quantity)
+        IngredientSpec(name="name", absolute_quantity=invalid_type)
 
 
 def test_invalid_assignment():
