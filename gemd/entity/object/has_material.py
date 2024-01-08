@@ -6,6 +6,8 @@ from gemd.entity.link_by_uid import LinkByUID
 from abc import ABC, abstractmethod
 from typing import Union, Set
 
+__all__ = ["HasMaterial"]
+
 
 class HasMaterial(HasDependencies, ABC):
     """Mix-in trait for objects that can be assigned materials."""

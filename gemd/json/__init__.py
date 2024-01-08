@@ -19,6 +19,11 @@ JSON support provided here to those tools.
 from .gemd_encoder import GEMDEncoder  # noqa: F401
 from .gemd_json import GEMDJson
 
+__all__ = [
+    "GEMDEncoder", "GEMDJson",
+    "loads", "dumps", "load", "dump"
+]
+
 __default = GEMDJson()
 
 

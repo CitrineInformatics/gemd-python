@@ -13,6 +13,8 @@ from gemd.entity.setters import validate_list
 
 from typing import Optional, Union, Iterable, List, Mapping, Dict, Type, Any
 
+__all__ = ["ProcessRun"]
+
 
 class ProcessRun(BaseObject,
                  HasSpec, HasConditions, HasParameters, HasSource,

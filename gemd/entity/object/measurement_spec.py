@@ -10,6 +10,8 @@ from gemd.entity.link_by_uid import LinkByUID
 
 from typing import Optional, Union, Iterable, Mapping, Type
 
+__all__ = ["MeasurementSpec"]
+
 
 class MeasurementSpec(BaseObject,
                       HasTemplate, HasParameters, HasConditions,

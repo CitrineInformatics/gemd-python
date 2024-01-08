@@ -8,6 +8,8 @@ from gemd.entity.setters import validate_list
 from typing import Union, Iterable, List, Set
 from abc import ABC
 
+__all__ = ["HasParameters"]
+
 
 class HasParameters(HasTemplateCheckGenerator, HasDependencies, ABC):
     """Mixin-trait for entities that include parameters.

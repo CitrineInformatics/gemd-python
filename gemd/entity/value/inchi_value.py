@@ -2,6 +2,8 @@
 from gemd.entity.value.molecular_value import MolecularValue
 from gemd.entity.bounds import MolecularStructureBounds
 
+__all__ = ["InChI"]
+
 
 class InChI(MolecularValue, typ="inchi"):
     """

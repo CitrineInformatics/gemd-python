@@ -4,6 +4,8 @@ from gemd.entity.util import array_like
 
 from typing import Union
 
+__all__ = ["CompositionBounds"]
+
 
 class CompositionBounds(BaseBounds, typ="composition_bounds"):
     """

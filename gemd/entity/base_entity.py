@@ -6,6 +6,8 @@ from gemd.entity.has_dependencies import HasDependencies
 from gemd.entity.case_insensitive_dict import CaseInsensitiveDict
 from gemd.entity.setters import validate_list
 
+__all__ = ["BaseEntity"]
+
 
 class BaseEntity(DictSerializable):
     """

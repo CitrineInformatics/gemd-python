@@ -1,5 +1,7 @@
 from gemd.entity.template.attribute_template import AttributeTemplate
 
+__all__ = ["PropertyTemplate"]
+
 
 class PropertyTemplate(AttributeTemplate, typ="property_template"):
     """A template for the property attribute.

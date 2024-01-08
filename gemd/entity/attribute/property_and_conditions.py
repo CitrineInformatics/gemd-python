@@ -8,6 +8,8 @@ from gemd.entity.setters import validate_list
 
 from typing import Optional, Union, Iterable, List
 
+__all__ = ["PropertyAndConditions"]
+
 
 class PropertyAndConditions(DictSerializable, typ="property_and_conditions"):
     """

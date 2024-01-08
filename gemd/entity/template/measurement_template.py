@@ -4,6 +4,8 @@ from gemd.entity.template.has_condition_templates import HasConditionTemplates
 from gemd.entity.template.has_parameter_templates import HasParameterTemplates
 from gemd.entity.template.has_property_templates import HasPropertyTemplates
 
+__all__ = ["MeasurementTemplate"]
+
 
 class MeasurementTemplate(BaseTemplate,
                           HasPropertyTemplates, HasConditionTemplates, HasParameterTemplates,

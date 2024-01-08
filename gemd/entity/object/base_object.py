@@ -6,6 +6,8 @@ from gemd.entity.setters import validate_list, validate_str
 
 from typing import Optional, Union, Iterable, List, Mapping
 
+__all__ = ["BaseObject"]
+
 
 class BaseObject(BaseEntity):
     """

@@ -13,6 +13,8 @@ from gemd.entity.setters import validate_list
 
 from typing import Optional, Union, Iterable, List, Set, Mapping, Type
 
+__all__ = ["MaterialSpec"]
+
 
 class MaterialSpec(BaseObject, HasTemplate, HasProcess, HasProperties, typ="material_spec"):
     """

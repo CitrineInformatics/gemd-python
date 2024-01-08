@@ -16,6 +16,8 @@ from gemd.entity.link_by_uid import LinkByUID
 
 from typing import Optional, Union, Iterable, Mapping, Type
 
+__all__ = ["MeasurementRun"]
+
 
 class MeasurementRun(BaseObject, HasMaterial, HasSpec, HasConditions, HasProperties,
                      HasParameters, HasSource, typ="measurement_run"):

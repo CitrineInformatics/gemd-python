@@ -2,6 +2,8 @@
 from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.template.has_property_templates import HasPropertyTemplates
 
+__all__ = ["MaterialTemplate"]
+
 
 class MaterialTemplate(BaseTemplate, HasPropertyTemplates, typ="material_template"):
     """

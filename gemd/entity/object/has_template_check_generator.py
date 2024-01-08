@@ -8,6 +8,8 @@ from abc import ABC, abstractmethod
 from inspect import getmodule, getmembers, isclass, signature
 from typing import Union, Callable, TypeVar
 
+__all__ = ["HasTemplateCheckGenerator"]
+
 T = TypeVar('T')
 
 

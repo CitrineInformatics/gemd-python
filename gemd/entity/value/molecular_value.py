@@ -4,6 +4,8 @@ from gemd.entity.bounds import MolecularStructureBounds
 
 from abc import abstractmethod
 
+__all__ = ["MolecularValue"]
+
 
 class MolecularValue(BaseValue):
     """Base class for molecular structure values."""

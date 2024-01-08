@@ -8,6 +8,8 @@ from gemd.entity.bounds.base_bounds import BaseBounds
 
 from typing import Optional, Union, Iterable, List, Set, Tuple
 
+__all__ = ["HasPropertyTemplates"]
+
 
 class HasPropertyTemplates(HasDependencies):
     """

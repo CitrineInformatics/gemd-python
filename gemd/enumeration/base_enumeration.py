@@ -4,26 +4,25 @@ from enum import Enum
 from typing import Optional, Type, Callable
 from warnings import warn
 
+__all__ = ["BaseEnumeration"]
+
 
 class BaseEnumeration(str, Enum):
-    """
-    Enumeration class that can convert between enumerations and associated values.
+    """Enumeration class that can convert between enumerations and associated values.
 
     BaseEnumeration is a powerful support class for string enumerations.  It inherits
     from both str and Enum to enable a class with str capabilities but still a
     restricted data space.  All constructors are case-insensitive on input and a given
     enumeration can recognize multiple synonyms for input, though only one value will
-    correspond to the value itsself.  For example:
+    correspond to the value itself.  For example:
 
-    ```
-    Fruits(BaseEnumeration):
-        APPLE = "Apple"
-        AVOCADO = "Avocado", "Alligator Pear"
-    ```
+        >>> class Fruits(BaseEnumeration):
+        ...     APPLE = "Apple"
+        ...     AVOCADO = "Avocado", "Alligator Pear"
 
-    will recognize "apple", "APPLE" and "  aPpLe  " as referring to Fruits.APPLE,
-    and "avocado" and "alligator pear" as referring to Fruits.AVOCADO.  However,
-    since str(Fruits.AVOCADO) is "Avocado", Fruits.AVOCADO != "Alligator Pear".
+    will recognize ``"apple"``, ``"APPLE"`` and ``"  aPpLe  "`` as referring to Fruits.APPLE,
+    and ``"avocado"`` and ``"alligator pear"`` as referring to Fruits.AVOCADO.  However,
+    since str(Fruits.AVOCADO) is ``"Avocado"``, Fruits.AVOCADO != ``"Alligator Pear"``.
 
     """
 
@@ -84,7 +83,7 @@ class BaseEnumeration(str, Enum):
     @classmethod
     @deprecated(deprecated_in="1.15.0",
                 removed_in="2.0.0",
-                details="Use from_str for retreiving the correct Enum object.")
+                details="Use from_str for retrieving the correct Enum object.")
     def get_enum(cls, name: str) -> "BaseEnumeration":
         """
         Return the enumeration associated with name.

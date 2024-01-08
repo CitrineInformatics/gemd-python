@@ -5,6 +5,8 @@ from gemd.entity.bounds import RealBounds
 
 from abc import abstractmethod
 
+__all__ = ["ContinuousValue"]
+
 
 class ContinuousValue(BaseValue):
     """

@@ -2,6 +2,8 @@
 from gemd.entity.value.continuous_value import ContinuousValue
 from gemd.entity.bounds import RealBounds
 
+__all__ = ["NormalReal"]
+
 
 class NormalReal(ContinuousValue, typ="normal_real"):
     """

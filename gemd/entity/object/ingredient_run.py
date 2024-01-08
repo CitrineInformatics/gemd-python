@@ -14,6 +14,8 @@ from gemd.entity.setters import validate_list
 
 from typing import Optional, Union, Iterable, List, Mapping, Type, Any
 
+__all__ = ["IngredientRun"]
+
 
 class IngredientRun(BaseObject,
                     HasQuantities, HasSpec, HasMaterial, HasProcess,

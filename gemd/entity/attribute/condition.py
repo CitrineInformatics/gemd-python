@@ -3,6 +3,8 @@ from gemd.entity.template import ConditionTemplate
 
 from typing import Type
 
+__all__ = ["Condition"]
+
 
 class Condition(BaseAttribute, typ="condition"):
     """

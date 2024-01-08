@@ -18,6 +18,10 @@ from gemd.entity.value.base_value import BaseValue
 
 from typing import Union, List
 
+__all__ = [
+    "make_node", "add_edge", "add_measurement", "add_attribute", "make_attribute", "make_value"
+]
+
 
 def make_node(name: str,
               *,

@@ -2,6 +2,8 @@
 from gemd.entity.value.integer_value import IntegerValue
 from gemd.entity.bounds import IntegerBounds
 
+__all__ = ["UniformInteger"]
+
 
 class UniformInteger(IntegerValue, typ="uniform_integer"):
     """

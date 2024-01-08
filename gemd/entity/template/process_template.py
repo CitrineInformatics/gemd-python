@@ -4,6 +4,8 @@ from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.template.has_condition_templates import HasConditionTemplates
 from gemd.entity.template.has_parameter_templates import HasParameterTemplates
 
+__all__ = ["ProcessTemplate"]
+
 
 class ProcessTemplate(BaseTemplate,
                       HasConditionTemplates, HasParameterTemplates,

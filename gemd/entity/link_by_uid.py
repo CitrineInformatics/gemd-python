@@ -4,6 +4,8 @@ from warnings import warn
 
 from gemd.entity.dict_serializable import DictSerializable
 
+__all__ = ["LinkByUID"]
+
 
 class LinkByUID(DictSerializable, typ="link_by_uid"):
     """

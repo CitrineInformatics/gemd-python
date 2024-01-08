@@ -3,6 +3,8 @@ from gemd.entity.template import PropertyTemplate
 
 from typing import Type
 
+__all__ = ["Property"]
+
 
 class Property(BaseAttribute, typ="property"):
     """

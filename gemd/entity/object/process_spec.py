@@ -11,6 +11,8 @@ from gemd.entity.setters import validate_list
 
 from typing import Optional, Union, Iterable, List, Mapping, Dict, Type, Any
 
+__all__ = ["ProcessSpec"]
+
 
 class ProcessSpec(BaseObject,
                   HasTemplate, HasParameters, HasConditions,

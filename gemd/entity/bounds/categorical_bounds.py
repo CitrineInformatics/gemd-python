@@ -4,6 +4,8 @@ from gemd.entity.util import array_like
 
 from typing import Union, Set, Optional, Iterable
 
+__all__ = ["CategoricalBounds"]
+
 
 class CategoricalBounds(BaseBounds, typ="categorical_bounds"):
     """

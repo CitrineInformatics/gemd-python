@@ -2,6 +2,8 @@
 from gemd.entity.value.composition_value import CompositionValue
 from gemd.entity.bounds import CompositionBounds
 
+__all__ = ["NominalComposition"]
+
 
 class NominalComposition(CompositionValue, typ="nominal_composition"):
     """

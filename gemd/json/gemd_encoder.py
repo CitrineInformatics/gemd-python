@@ -3,6 +3,8 @@ from uuid import UUID
 
 from gemd.entity.dict_serializable import DictSerializable
 
+__all__ = ["GEMDEncoder"]
+
 
 class GEMDEncoder(JSONEncoder):
     """Rules for encoding gemd objects as json strings."""

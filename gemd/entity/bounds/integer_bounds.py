@@ -3,6 +3,8 @@ from gemd.entity.bounds.base_bounds import BaseBounds
 
 from typing import Union
 
+__all__ = ["IntegerBounds"]
+
 
 class IntegerBounds(BaseBounds, typ="integer_bounds"):
     """

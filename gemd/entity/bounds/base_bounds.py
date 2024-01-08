@@ -4,6 +4,8 @@ from typing import Union
 
 from gemd.entity.dict_serializable import DictSerializable
 
+__all__ = ["BaseBounds"]
+
 
 class BaseBounds(DictSerializable):
     """Base class for bounds, including RealBounds and CategoricalBounds."""

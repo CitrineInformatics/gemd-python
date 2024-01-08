@@ -7,6 +7,8 @@ from gemd.entity.link_by_uid import LinkByUID
 from abc import abstractmethod
 from typing import Optional, Union, Set, Type
 
+__all__ = ["HasSpec"]
+
 
 class HasSpec(HasDependencies):
     """Mix-in trait for objects that can be assigned specs.

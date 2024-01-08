@@ -4,6 +4,8 @@ from gemd.entity.bounds.base_bounds import BaseBounds
 
 from abc import abstractmethod
 
+__all__ = ["BaseValue"]
+
 
 class BaseValue(DictSerializable):
     """

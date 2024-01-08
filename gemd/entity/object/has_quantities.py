@@ -7,6 +7,8 @@ from gemd.entity.value.base_value import BaseValue
 from gemd.entity.bounds_validation import get_validation_level, WarningLevel
 from gemd.entity.dict_serializable import logger
 
+__all__ = ["HasQuantities"]
+
 
 class HasQuantities(object):
     """Mixin-trait that includes the mass, volume, number fraction, and absolute quantity.

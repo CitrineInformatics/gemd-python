@@ -4,6 +4,8 @@ from gemd.entity.bounds import CompositionBounds
 
 from abc import abstractmethod
 
+__all__ = ["CompositionValue"]
+
 
 class CompositionValue(BaseValue):
     """Base class for composition values."""

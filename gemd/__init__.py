@@ -1,5 +1,5 @@
 """Data concepts library."""
-# flake8: noqa
+from .__version__ import __version__  # noqa: F401
 from .entity import Condition, Parameter, Property, PropertyAndConditions, \
     CategoricalBounds, CompositionBounds, IntegerBounds, \
     MolecularStructureBounds, RealBounds, \
@@ -12,7 +12,7 @@ from .entity import Condition, Parameter, Property, PropertyAndConditions, \
     UniformInteger, DiscreteCategorical, NominalCategorical, \
     EmpiricalFormula, NominalComposition, InChI, Smiles, \
     LinkByUID, \
-    FileLink
+    FileLink  # noqa: F401
 
 __all__ = ["Condition", "Parameter", "Property", "PropertyAndConditions",
            "CategoricalBounds", "CompositionBounds", "IntegerBounds",

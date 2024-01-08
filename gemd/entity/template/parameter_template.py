@@ -1,10 +1,12 @@
 from gemd.entity.template.attribute_template import AttributeTemplate
 
+__all__ = ["ParameterTemplate"]
+
 
 class ParameterTemplate(AttributeTemplate, typ="parameter_template"):
     """A template for the parameter attribute.
 
-        Parameters
+    Parameters
     ----------
     name: str, required
         The name of the parameter template.

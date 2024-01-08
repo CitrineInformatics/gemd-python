@@ -1,10 +1,16 @@
 from setuptools import setup, find_packages
+from os import path
 
 packages = find_packages()
-packages.append("")
+
+this_directory = path.abspath(path.dirname(__file__))
+about = {}
+with open(path.join(this_directory, 'gemd', '__version__.py'), 'r') as f:
+    exec(f.read(), about)
 
 setup(name='gemd',
-      version='1.17.0',
+      # Update this in gemd/__version__.py
+      version=about['__version__'],
       python_requires='>=3.8',
       url='http://github.com/CitrineInformatics/gemd-python',
       description="Python binding for Citrine's GEMD data model",

@@ -4,6 +4,8 @@ from gemd.entity.bounds import CategoricalBounds
 
 from abc import abstractmethod
 
+__all__ = ["CategoricalValue"]
+
 
 class CategoricalValue(BaseValue):
     """

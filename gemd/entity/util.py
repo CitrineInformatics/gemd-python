@@ -3,6 +3,8 @@ from gemd.util import recursive_foreach
 
 from typing import List, Dict, Any
 
+__all__ = ["make_instance", "array_like", "complete_material_history"]
+
 
 def make_instance(base_spec):
     """

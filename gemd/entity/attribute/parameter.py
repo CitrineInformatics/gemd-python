@@ -3,6 +3,8 @@ from gemd.entity.template import ParameterTemplate
 
 from typing import Type
 
+__all__ = ["Parameter"]
+
 
 class Parameter(BaseAttribute, typ="parameter"):
     """

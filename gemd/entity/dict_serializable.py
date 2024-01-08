@@ -6,6 +6,8 @@ import inspect
 import functools
 from typing import TypeVar, Union, Iterable, List, Mapping, Dict, Set, Any
 
+__all__ = ["DictSerializable"]
+
 # There are some weird (probably resolvable) errors during object cloning if this is an
 # instance variable of DictSerializable.
 logger = getLogger(__name__)

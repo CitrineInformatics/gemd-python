@@ -7,6 +7,8 @@ from gemd.entity.bounds.base_bounds import BaseBounds
 
 from typing import Union
 
+__all__ = ["MolecularStructureBounds"]
+
 
 class MolecularStructureBounds(BaseBounds, typ="molecular_structure_bounds"):
     """Molecular bounds, with no component or substructural restrictions (yet)."""
