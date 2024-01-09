@@ -18,15 +18,15 @@ Installation
 
 The latest release can be installed via `pip`:
 
-.. code::
+.. code:: bash
 
   pip install gemd
 
 or a specific version can be installed, for example:
 
-.. code::
+.. code:: bash
 
-  pip install gemd==1.0.0
+  pip install gemd==1.17.1
 
 Table of Contents
 -----------------

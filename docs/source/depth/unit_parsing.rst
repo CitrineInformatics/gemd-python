@@ -14,6 +14,6 @@ as originally reported, thus creating a potential source of error during the inp
 
 Requests for support of additional units can be made by opening an issue in the `gemd-python repository`_ on github.
 
-.. _Pint: https://pint.readthedocs.io/en/stable/
+.. _Pint: https://pint.readthedocs.io/en/0.20/
 .. _citrine_en.txt: https://github.com/CitrineInformatics/gemd-python/blob/main/gemd/units/citrine_en.txt
 .. _GEMD-python repository: https://github.com/CitrineInformatics/gemd-python
