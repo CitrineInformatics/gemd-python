@@ -88,15 +88,5 @@ html_theme_options = {
 }
 
 suppress_warnings = [
-    # 'app',
-    # 'autosectionlabel',
-    # 'download',
-    # 'epub',
-    # 'i18n',
-    # 'index',
-    # 'image',
-    # 'ref',
-    'ref.python'
-    # 'misc',
-    # 'toc'
+   'ref.python'
 ]
