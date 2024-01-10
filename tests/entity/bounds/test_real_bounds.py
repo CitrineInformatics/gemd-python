@@ -76,6 +76,10 @@ def test_constructor_error():
         bnd = RealBounds(lower_bound=0, upper_bound=10, default_units="m")
         bnd.lower_bound = 100
 
+    bnd = RealBounds(0, 1, "m")
+    assert bnd.lower_bound == 0.0
+    assert bnd.upper_bound == 1.0
+
 
 def test_type_mismatch():
     """Test that incompatible types cannot be matched against RealBounds."""

@@ -7,22 +7,9 @@ import gemd.units as units
 
 
 class RealBounds(BaseBounds, typ="real_bounds"):
-    """
-    Bounded subset of the real numbers, parameterized by a lower and upper bound.
+    """Bounded subset of the real numbers, parameterized by a lower and upper bound."""
 
-    Parameters
-    ----------
-    lower_bound: float
-        Lower endpoint.
-    upper_bound: float
-        Upper endpoint.
-    default_units: str
-        A string describing the units. Units must be present and parseable by Pint.
-        An empty string can be used for the units of a dimensionless quantity.
-
-    """
-
-    def __init__(self, lower_bound, upper_bound, default_units):
+    def __init__(self, lower_bound: float, upper_bound: float, default_units: str):
         self._default_units = None
         self._lower_bound = None
         self._upper_bound = None
@@ -41,7 +28,7 @@ class RealBounds(BaseBounds, typ="real_bounds"):
         """Set the lower endpoint of the permitted range."""
         if value is None or not isfinite(value):
             raise ValueError(f"Lower bound must be given and finite: {value}")
-        if self.upper_bound is not None and value > self.upper_bound:  # Set first
+        if self.upper_bound is not None and value > self.upper_bound:
             raise ValueError(f"Upper bound ({self.upper_bound}) must be "
                              f"greater than or equal to lower bound ({value})")
         self._lower_bound = float(value)
@@ -56,22 +43,28 @@ class RealBounds(BaseBounds, typ="real_bounds"):
         """Set the upper endpoint of the permitted range."""
         if value is None or not isfinite(value):
             raise ValueError(f"Upper bound must be given and finite: {value}")
-        if value < self.lower_bound:
+        if self.lower_bound is not None and value < self.lower_bound:
             raise ValueError(f"Upper bound ({value}) must be "
                              f"greater than or equal to lower bound ({self.lower_bound})")
         self._upper_bound = float(value)
 
     @property
-    def default_units(self):
-        """Get default units."""
+    def default_units(self) -> str:
+        """
+        A string describing the units.
+
+        Units must be present and parseable by Pint.
+        An empty string can be used for the units of a dimensionless quantity.
+        """
         return self._default_units
 
     @default_units.setter
-    def default_units(self, default_units):
+    def default_units(self, default_units: str):
+        """Set the string describing the units."""
         if default_units is None:
             raise ValueError("Real bounds must have units. "
                              "Use an empty string for a dimensionless quantity.")
-        self._default_units = units.parse_units(default_units)
+        self._default_units = units.parse_units(default_units, return_unit=False)
 
     def contains(self, bounds: Union[BaseBounds, "BaseValue"]) -> bool:  # noqa: F821
         """

@@ -10,7 +10,7 @@ __all__ = ["IntegerBounds"]
 class IntegerBounds(BaseBounds, typ="integer_bounds"):
     """Bounded subset of the integers, parameterized by a lower and upper bound."""
 
-    def __init__(self, lower_bound, upper_bound):
+    def __init__(self, lower_bound: int, upper_bound: int):
         self._lower_bound = None
         self._upper_bound = None
 
@@ -25,9 +25,9 @@ class IntegerBounds(BaseBounds, typ="integer_bounds"):
     @lower_bound.setter
     def lower_bound(self, value: int):
         """Set the lower endpoint of the permitted range."""
-        if value is None or not isfinite(value):
-            raise ValueError(f"Lower bound must be given and finite: {value}")
-        if self.upper_bound is not None and value > self.upper_bound:  # Set first
+        if value is None or not isfinite(value) or int(value) != float(value):
+            raise ValueError(f"Lower bound must be given, integer and finite: {value}")
+        if self.upper_bound is not None and value > self.upper_bound:
             raise ValueError(f"Upper bound ({self.upper_bound}) must be "
                              f"greater than or equal to lower bound ({value})")
         self._lower_bound = int(value)
@@ -40,9 +40,9 @@ class IntegerBounds(BaseBounds, typ="integer_bounds"):
     @upper_bound.setter
     def upper_bound(self, value: int):
         """Set the upper endpoint of the permitted range."""
-        if value is None or not isfinite(value):
-            raise ValueError(f"Upper bound must be given and finite: {value}")
-        if value < self.lower_bound:
+        if value is None or not isfinite(value) or int(value) != float(value):
+            raise ValueError(f"Upper bound must be given, integer and finite: {value}")
+        if self.lower_bound is not None and value < self.lower_bound:
             raise ValueError(f"Upper bound ({value}) must be "
                              f"greater than or equal to lower bound ({self.lower_bound})")
         self._upper_bound = int(value)
