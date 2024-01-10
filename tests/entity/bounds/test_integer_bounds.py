@@ -8,14 +8,21 @@ from gemd.entity.value.nominal_integer import NominalInteger
 
 def test_errors():
     """Make sure invalid bounds raise value errors."""
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         IntegerBounds()
+
+    with pytest.raises(ValueError):
+        IntegerBounds(float("-inf"), 0)
 
     with pytest.raises(ValueError):
         IntegerBounds(0, float("inf"))
 
     with pytest.raises(ValueError):
         IntegerBounds(10, 1)
+
+    with pytest.raises(ValueError):
+        bnd = IntegerBounds(0, 1)
+        bnd.lower_bound = 10
 
 
 def test_incompatible_types():

@@ -1,8 +1,9 @@
 """Bound a real number to be between two values."""
+from math import isfinite
+from typing import Union
+
 from gemd.entity.bounds.base_bounds import BaseBounds
 import gemd.units as units
-
-from typing import Union
 
 
 class RealBounds(BaseBounds, typ="real_bounds"):
@@ -21,21 +22,44 @@ class RealBounds(BaseBounds, typ="real_bounds"):
 
     """
 
-    def __init__(self, lower_bound=None, upper_bound=None, default_units=None):
+    def __init__(self, lower_bound, upper_bound, default_units):
+        self._default_units = None
+        self._lower_bound = None
+        self._upper_bound = None
+
+        self.default_units = default_units
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
 
-        self._default_units = None
-        self.default_units = default_units
+    @property
+    def lower_bound(self) -> float:
+        """The lower endpoint of the permitted range."""
+        return self._lower_bound
 
-        if self.lower_bound is None or abs(self.lower_bound) >= float("inf"):
-            raise ValueError("Lower bound must be given and finite: {}".format(self.lower_bound))
+    @lower_bound.setter
+    def lower_bound(self, value: float):
+        """Set the lower endpoint of the permitted range."""
+        if value is None or not isfinite(value):
+            raise ValueError(f"Lower bound must be given and finite: {value}")
+        if self.upper_bound is not None and value > self.upper_bound:  # Set first
+            raise ValueError(f"Upper bound ({self.upper_bound}) must be "
+                             f"greater than or equal to lower bound ({value})")
+        self._lower_bound = float(value)
 
-        if self.upper_bound is None or abs(self.upper_bound) >= float("inf"):
-            raise ValueError("Upper bound must be given and finite")
+    @property
+    def upper_bound(self) -> float:
+        """The upper endpoint of the permitted range."""
+        return self._upper_bound
 
-        if self.upper_bound < self.lower_bound:
-            raise ValueError("Upper bound must be greater than or equal to lower bound")
+    @upper_bound.setter
+    def upper_bound(self, value: float):
+        """Set the upper endpoint of the permitted range."""
+        if value is None or not isfinite(value):
+            raise ValueError(f"Upper bound must be given and finite: {value}")
+        if value < self.lower_bound:
+            raise ValueError(f"Upper bound ({value}) must be "
+                             f"greater than or equal to lower bound ({self.lower_bound})")
+        self._upper_bound = float(value)
 
     @property
     def default_units(self):

@@ -57,20 +57,24 @@ def test_contains_incompatible_units():
 
 def test_constructor_error():
     """Test that invalid real bounds cannot be constructed."""
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         RealBounds()
 
     with pytest.raises(ValueError):
-        RealBounds(0, float("inf"), "meter")
+        RealBounds(lower_bound=0, upper_bound=float("inf"), default_units="meter")
 
     with pytest.raises(ValueError):
-        RealBounds(None, 10, '')
+        RealBounds(lower_bound=None, upper_bound=10, default_units='')
 
     with pytest.raises(ValueError):
-        RealBounds(0, 100)
+        RealBounds(lower_bound=0, upper_bound=100, default_units=None)
 
     with pytest.raises(ValueError):
-        RealBounds(100, 0, "m")
+        RealBounds(lower_bound=100, upper_bound=0, default_units="m")
+
+    with pytest.raises(ValueError):
+        bnd = RealBounds(lower_bound=0, upper_bound=10, default_units="m")
+        bnd.lower_bound = 100
 
 
 def test_type_mismatch():
