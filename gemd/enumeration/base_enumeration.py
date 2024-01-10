@@ -66,36 +66,6 @@ class BaseEnumeration(str, Enum):
             raise ValueError(f"{val} is not a valid {cls}; valid choices are {[x for x in cls]}")
         return result
 
-    @classmethod
-    @deprecated(deprecated_in="1.15.0",
-                removed_in="2.0.0",
-                details="Enumerations autocast to values now.")
-    def get_value(cls, name: str) -> str:
-        """
-        Return a valid value associated with name.
-
-        If name is equal to one of the enum members, or to the value
-        associated with an enum member, then return the relevant value.
-        """
-        if name is None:
-            return None
-        return cls.from_str(name, exception=True).value
-
-    @classmethod
-    @deprecated(deprecated_in="1.15.0",
-                removed_in="2.0.0",
-                details="Use from_str for retreiving the correct Enum object.")
-    def get_enum(cls, name: str) -> "BaseEnumeration":
-        """
-        Return the enumeration associated with name.
-
-        If name is equal to one of the enum members, or to the value
-        associated with an enum member, then return the relevant enumeration.
-        """
-        if name is None:
-            return None
-        return cls.from_str(name, exception=True)
-
     def __str__(self):
         """Return the value of the enumeration object."""
         return self.value

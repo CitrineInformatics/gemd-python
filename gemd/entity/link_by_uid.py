@@ -1,6 +1,5 @@
 """A unique id that stands in for a data object."""
 import uuid
-from warnings import warn
 
 from gemd.entity.dict_serializable import DictSerializable
 
@@ -27,7 +26,7 @@ class LinkByUID(DictSerializable, typ="link_by_uid"):
         return str({"scope": self.scope, "id": self.id})
 
     @classmethod
-    def from_entity(cls, entity, name=None, *, scope=None):
+    def from_entity(cls, entity, *, scope=None):
         """
         Create LinkByUID from in-memory object.
 
@@ -41,8 +40,6 @@ class LinkByUID(DictSerializable, typ="link_by_uid"):
         ----------
         entity: BaseEntity
             The entity to substitute with a LinkByUID
-        name: str, optional (Deprecated)
-            The desired scope of the id.
         scope: str, optional
             The desired scope of the id.
 
@@ -52,16 +49,8 @@ class LinkByUID(DictSerializable, typ="link_by_uid"):
             A link object that references `entity` through its scope and id.
 
         """
-        if name is None and scope is None:
+        if scope is None:
             scope = "auto"  # set default
-        elif name is None and scope is not None:  # The rest of these conditions to be deleted
-            pass  # Normal workflow
-        elif name is not None and scope is None:
-            warn("The positional argument 'name' is deprecated.  When selecting a default scope, "
-                 "use the 'scope' keyword argument.", DeprecationWarning)
-            scope = name
-        elif name is not None and scope is not None:
-            raise ValueError("Specify the 'name' parameter or 'scope' parameter, not both.")
 
         if scope in entity.uids:
             uid = entity.uids[scope]

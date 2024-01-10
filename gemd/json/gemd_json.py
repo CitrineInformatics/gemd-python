@@ -1,5 +1,4 @@
-import inspect
-from deprecation import deprecated
+import json as json_builtin
 from typing import Dict, Any, Type
 
 from gemd.entity.dict_serializable import DictSerializable
@@ -7,7 +6,6 @@ from gemd.entity.base_entity import BaseEntity
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.json import GEMDEncoder
 from gemd.util import flatten, substitute_links, set_uuids
-import json as json_builtin
 
 
 class GEMDJson(object):
@@ -210,36 +208,6 @@ class GEMDJson(object):
             json_str,
             object_hook=lambda x: self._load_and_index(x, index, clazz_index=clazz_index),
             **kwargs)
-
-    @deprecated(deprecated_in="1.13.0", removed_in="2.0.0",
-                details="Classes are now automatically registered when extending BaseEntity")
-    def register_classes(self, classes):
-        """
-        Register additional classes to the custom deserialization object hook.
-
-        This allows for additional DictSerializable subclasses to be registered to the class index
-        that is used to decode the type strings.  Existing keys are overwritten, allowing classes
-        in the gemd package to be subclassed and overridden in the class index by their
-        subclass.
-
-        Parameters
-        ----------
-        classes: Dict[str, type]
-            a dict mapping the type string to the class
-
-        """
-        if not isinstance(classes, dict):
-            raise ValueError("Must be given a dict from str -> class")
-        non_string_keys = [x for x in classes.keys() if not isinstance(x, str)]
-        if len(non_string_keys) > 0:
-            raise ValueError(
-                "The keys must be strings, but got {} as keys".format(non_string_keys))
-        non_class_values = [x for x in classes.values() if not inspect.isclass(x)]
-        if len(non_class_values) > 0:
-            raise ValueError(
-                "The values must be classes, but got {} as values".format(non_class_values))
-
-        self._clazz_index.update(classes)
 
     @staticmethod
     def _load_and_index(

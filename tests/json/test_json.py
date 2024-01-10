@@ -1,5 +1,5 @@
 """Test serialization and deserialization of gemd objects."""
-import json
+import json as json_builtin
 from copy import deepcopy
 from uuid import uuid4
 
@@ -37,13 +37,13 @@ def test_serialize():
                                  parameters=parameter, material=material)
 
     # serialize the root of the tree
-    native_object = json.loads(dumps(measurement))
+    native_object = json_builtin.loads(dumps(measurement))
     # ingredients don't get serialized on the process
     assert(len(native_object["context"]) == 5)
     assert(native_object["object"]["type"] == LinkByUID.typ)
 
-    # serialize all of the nodes
-    native_batch = json.loads(dumps([material, process, measurement, ingredient]))
+    # serialize all the nodes
+    native_batch = json_builtin.loads(dumps([material, process, measurement, ingredient]))
     assert(len(native_batch["context"]) == 5)
     assert(len(native_batch["object"]) == 4)
     assert(all(x["type"] == LinkByUID.typ for x in native_batch["object"]))
@@ -138,7 +138,7 @@ def test_thin_dumps():
     meas_spec = MeasurementSpec("measurement", uids={'my_scope': '324324'})
     meas = MeasurementRun("The measurement", spec=meas_spec, material=mat)
 
-    thin_copy = MeasurementRun.build(json.loads(GEMDJson().thin_dumps(meas)))
+    thin_copy = MeasurementRun.build(json_builtin.loads(GEMDJson().thin_dumps(meas)))
     assert isinstance(thin_copy, MeasurementRun)
     assert isinstance(thin_copy.material, LinkByUID)
     assert isinstance(thin_copy.spec, LinkByUID)
@@ -188,8 +188,6 @@ def test_register_classes_override():
 
     normal = GEMDJson()
     custom = GEMDJson()
-    with pytest.warns(DeprecationWarning, match="register_classes"):
-        custom.register_classes({MyProcessSpec.typ: MyProcessSpec})
 
     obj = ProcessSpec(name="foo")
     assert not isinstance(normal.copy(obj), MyProcessSpec),\
@@ -197,23 +195,6 @@ def test_register_classes_override():
 
     assert isinstance(custom.copy(obj), ProcessSpec),\
         "Custom GEMDJson didn't deserialize as MyProcessSpec"
-
-
-def test_register_argument_validation():
-    """Test that register_classes argument is type checked."""
-    orig = GEMDJson()
-
-    with pytest.raises(ValueError):
-        with pytest.warns(DeprecationWarning, match="register_classes"):
-            orig.register_classes("foo")
-
-    with pytest.raises(ValueError):
-        with pytest.warns(DeprecationWarning, match="register_classes"):
-            orig.register_classes({"foo": orig})
-
-    with pytest.raises(ValueError):
-        with pytest.warns(DeprecationWarning, match="register_classes"):
-            orig.register_classes({ProcessSpec: ProcessSpec})
 
 
 def test_pure_substitutions():
@@ -249,11 +230,7 @@ def test_pure_substitutions():
        '''
     index = {}
     clazz_index = DictSerializable.class_mapping
-    original = json.loads(json_str,
-                          object_hook=lambda x: GEMDJson()._load_and_index(x,
-                                                                           index,
-                                                                           clazz_index)
-                          )
+    original = json_builtin.loads(json_str, object_hook=lambda x: GEMDJson()._load_and_index(x, index, clazz_index))
     frozen = deepcopy(original)
     loaded = substitute_objects(original, index)
     assert original == frozen

@@ -8,32 +8,6 @@ from gemd.enumeration.base_enumeration import BaseEnumeration, migrated_enum
 from gemd.json import loads, dumps
 
 
-def test_values():
-    """Test that values can be validated and pulled from an enumeration."""
-    class GoodClass(BaseEnumeration):
-        RED = "Red"
-        BLUE = "Blue"
-
-    with pytest.deprecated_call():
-        assert GoodClass.get_value("Red") == "Red"
-    with pytest.deprecated_call():
-        assert GoodClass.get_value(GoodClass.BLUE) == "Blue"
-    with pytest.deprecated_call():
-        assert GoodClass.get_value(None) is None
-    with pytest.deprecated_call():
-        assert GoodClass.get_enum("Red") == GoodClass.RED
-    with pytest.deprecated_call():
-        assert GoodClass.get_enum(GoodClass.BLUE) == GoodClass.BLUE
-    with pytest.deprecated_call():
-        assert GoodClass.get_enum(None) is None
-    with pytest.deprecated_call():
-        with pytest.raises(ValueError):
-            GoodClass.get_value("Green")
-    with pytest.deprecated_call():
-        with pytest.raises(ValueError):
-            GoodClass.get_enum("Green")
-
-
 def test_json_serde():
     """Test that values can be ser/de using our custom json loads/dumps."""
     # Enums are only used in the context of another class --
