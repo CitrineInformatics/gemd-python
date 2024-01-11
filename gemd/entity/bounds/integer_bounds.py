@@ -1,34 +1,51 @@
 """Bounds an integer to be between two values."""
+from math import isfinite
+from typing import Union
+
 from gemd.entity.bounds.base_bounds import BaseBounds
 
-from typing import Union
+__all__ = ["IntegerBounds"]
 
 
 class IntegerBounds(BaseBounds, typ="integer_bounds"):
-    """
-    Bounded subset of the integers, parameterized by a lower and upper bound.
+    """Bounded subset of the integers, parameterized by a lower and upper bound."""
 
-    Parameters
-    ----------
-    lower_bound: int
-        Lower endpoint.
-    upper_bound: int
-        Upper endpoint.
+    def __init__(self, lower_bound: int, upper_bound: int):
+        self._lower_bound = None
+        self._upper_bound = None
 
-    """
-
-    def __init__(self, lower_bound=None, upper_bound=None):
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
 
-        if self.lower_bound is None or abs(self.lower_bound) >= float("inf"):
-            raise ValueError("Lower bound must be given and finite: {}".format(self.lower_bound))
+    @property
+    def lower_bound(self) -> int:
+        """The lower endpoint of the permitted range."""
+        return self._lower_bound
 
-        if self.upper_bound is None or abs(self.upper_bound) >= float("inf"):
-            raise ValueError("Upper bound must be given and finite")
+    @lower_bound.setter
+    def lower_bound(self, value: int):
+        """Set the lower endpoint of the permitted range."""
+        if value is None or not isfinite(value) or int(value) != float(value):
+            raise ValueError(f"Lower bound must be given, integer and finite: {value}")
+        if self.upper_bound is not None and value > self.upper_bound:
+            raise ValueError(f"Upper bound ({self.upper_bound}) must be "
+                             f"greater than or equal to lower bound ({value})")
+        self._lower_bound = int(value)
 
-        if self.upper_bound < self.lower_bound:
-            raise ValueError("Upper bound must be greater than or equal to lower bound")
+    @property
+    def upper_bound(self) -> int:
+        """The upper endpoint of the permitted range."""
+        return self._upper_bound
+
+    @upper_bound.setter
+    def upper_bound(self, value: int):
+        """Set the upper endpoint of the permitted range."""
+        if value is None or not isfinite(value) or int(value) != float(value):
+            raise ValueError(f"Upper bound must be given, integer and finite: {value}")
+        if self.lower_bound is not None and value < self.lower_bound:
+            raise ValueError(f"Upper bound ({value}) must be "
+                             f"greater than or equal to lower bound ({self.lower_bound})")
+        self._upper_bound = int(value)
 
     def contains(self, bounds: Union[BaseBounds, "BaseValue"]) -> bool:  # noqa: F821
         """
