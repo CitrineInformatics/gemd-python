@@ -32,9 +32,9 @@ class HasTemplateCheckGenerator(ABC):
         with `self` (provided that object template is defined, attribute templates are defined,
         etc.).
         The returned function is intended to work as a `trigger` for a
-        :py:class `~gemd.entity.valid_list.ValidList`.
+        :class:`~gemd.entity.valid_list.ValidList`.
         The behavior following this check -- ignore, warn or raise exception -- is controlled
-        by the :py:class `~gemd.entity.bounds_validation.WarningLevel` as returned by the
+        by the :class:`~gemd.entity.bounds_validation.WarningLevel` as returned by the
         :py:func `~gemd.entity.bounds_validation.get_validation_level`.
 
         Parameters

@@ -27,10 +27,9 @@ class MaterialTemplate(BaseTemplate, HasPropertyTemplates, typ="material_templat
         `Tags <https://citrineinformatics.github.io/gemd-documentation/specification/tags/>`_
         are hierarchical strings that store information about an entity. They can be used
         for filtering and discoverability.
-    properties: List[:class:`PropertyTemplate \
-    <gemd.entity.template.property_template.PropertyTemplate>`] or \
-    List[:class:`PropertyTemplate <gemd.entity.template.property_template.PropertyTemplate>`,\
-     :py:class:`BaseBounds <gemd.entity.bounds.base_bounds.BaseBounds>`], optional
+    properties: ~gemd.entity.template.property_template.PropertyTemplate or \
+    List[~gemd.entity.template.property_template.PropertyTemplate, \
+    ~gemd.entity.bounds.base_bounds.BaseBounds], optional
         Templates for associated properties. Each template can be provided by itself, or as a list
         with the second entry being a separate, *more restrictive* Bounds object that defines
         the limits of the value for this property.

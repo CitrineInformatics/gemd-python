@@ -6,11 +6,18 @@ from gemd.entity.bounds.base_bounds import BaseBounds
 
 __all__ = ["IntegerBounds"]
 
-__all__ = ["IntegerBounds"]
-
 
 class IntegerBounds(BaseBounds, typ="integer_bounds"):
-    """Bounded subset of the integers, parameterized by a lower and upper bound."""
+    """
+    Bounded subset of the integers, parameterized by a lower and upper bound.
+
+    Parameters
+    ----------
+    lower_bound: int
+        The lower endpoint (inclusive) of the permitted range.
+    upper_bound: int
+        The upper endpoint (inclusive) of the permitted range.
+    """
 
     def __init__(self, lower_bound: int, upper_bound: int):
         self._lower_bound = None
@@ -88,7 +95,7 @@ class IntegerBounds(BaseBounds, typ="integer_bounds"):
 
         Parameters
         ----------
-        others: Union[IntegerBounds, IntegerValue]
+        others: Union[IntegerBounds, ~gemd.entity.value.integer_value.IntegerValue]
             Other bounds or value objects to include.
 
         Returns
@@ -119,11 +126,11 @@ class IntegerBounds(BaseBounds, typ="integer_bounds"):
         """
         Update this bounds to include other bounds.
 
-        The others list must also be Categorical Bounds or Values.
+        The others list must also be Integer Bounds or Values.
 
         Parameters
         ----------
-        others: Union[IntegerBounds, IntegerValue]
+        others: Union[IntegerBounds, ~gemd.entity.value.integer_value.IntegerValue]
             Other bounds or value objects to include.
 
         """

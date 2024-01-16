@@ -52,7 +52,7 @@ class NominalComposition(CompositionValue, typ="nominal_composition"):
         -------
         BaseBounds
             The minimally consistent
-            :class:`bounds <gemd.entity.bounds.categorical_bounds.CategoricalBounds>`.
+            :class:`~gemd.entity.bounds.categorical_bounds.CategoricalBounds`.
 
         """
         return CompositionBounds(components=set(self.quantities))

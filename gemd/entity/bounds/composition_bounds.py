@@ -24,11 +24,12 @@ class CompositionBounds(BaseBounds, typ="composition_bounds"):
 
     @property
     def components(self):
-        """Get the allowed components."""
+        """Get the collection of the components that are allowed in the composition."""
         return self._components
 
     @components.setter
     def components(self, value):
+        """Set collection of the components that are allowed in the composition."""
         if value is None:
             self._components = set()
         elif isinstance(value, array_like()):
@@ -80,12 +81,12 @@ class CompositionBounds(BaseBounds, typ="composition_bounds"):
 
         Parameters
         ----------
-        others: Union[CompositionBounds, CompositionValue]
+        others: Union[CompositionBounds, , ~gemd.entity.value.compositional_value.CompositionValue]
             Other bounds or value objects to include.
 
         Returns
         -------
-        CategoricalBounds
+        CompositionBounds
             The union of this bounds and the passed bounds
 
         """
@@ -108,11 +109,11 @@ class CompositionBounds(BaseBounds, typ="composition_bounds"):
         """
         Update this bounds to include other bounds.
 
-        The others list must also be Categorical Bounds or Values.
+        The others list must also be Composition Bounds or Values.
 
         Parameters
         ----------
-        others: Union[CategoricalBounds, CategoricalValue]
+        others: Union[CompositionBounds, ~gemd.entity.value.compositional_value.CompositionValue]
             Other bounds or value objects to include.
 
         """

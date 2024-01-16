@@ -63,7 +63,7 @@ class EmpiricalFormula(CompositionValue, typ="empirical_formula"):
         -------
         BaseBounds
             The minimally consistent
-            :class:`bounds <gemd.entity.bounds.categorical_bounds.CategoricalBounds>`.
+            :class:`~gemd.entity.bounds.categorical_bounds.CategoricalBounds`.
 
         """
         return CompositionBounds(components=EmpiricalFormula._elements(self.formula))

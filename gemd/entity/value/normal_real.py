@@ -34,7 +34,7 @@ class NormalReal(ContinuousValue, typ="normal_real"):
         -------
         RealBounds
             The minimally consistent
-            :class:`bounds <gemd.entity.bounds.real_bounds.RealBounds>`.
+            :class:`~gemd.entity.bounds.real_bounds.RealBounds`.
 
         """
         return RealBounds(lower_bound=self.mean,

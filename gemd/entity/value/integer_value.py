@@ -19,6 +19,6 @@ class IntegerValue(BaseValue):
         -------
         IntegerBounds
             The minimally consistent
-            :class:`bounds <gemd.entity.bounds.integer_bounds.IntegerBounds>`.
+            :class:`~gemd.entity.bounds.integer_bounds.IntegerBounds`.
 
         """

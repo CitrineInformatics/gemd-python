@@ -17,7 +17,7 @@ class HasPropertyTemplates(HasDependencies):
 
     Parameters
     ----------
-    properties: List[(PropertyTemplate, BaseBounds)]
+    properties: List[(~gemd.entity.template.property_template.PropertyTemplate, BaseBounds)]
         A list of tuples containing this entity's property templates as well
         as any restrictions on those templates' bounds.
 
@@ -37,7 +37,7 @@ class HasPropertyTemplates(HasDependencies):
 
         Returns
         -------
-        List[(PropertyTemplate, bounds)]
+        List[(~gemd.entity.template.property_template.PropertyTemplate, BaseBounds)]
             List of this entity's property template/bounds pairs
 
         """
@@ -48,11 +48,11 @@ class HasPropertyTemplates(HasDependencies):
                                                     Tuple[Union[PropertyTemplate, LinkByUID],
                                                           Optional[BaseBounds]]]]):
         """
-        Set the list of parameter templates.
+        Set the list of property templates.
 
         Parameters
         ----------
-        properties: List[(PropertyTemplate, bounds)]
+        properties: List[(~gemd.entity.template.property_template.PropertyTemplate, BaseBounds)]
             A list of tuples containing this entity's property templates as well
             as any restrictions on those templates' bounds.
 

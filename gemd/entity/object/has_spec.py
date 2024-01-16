@@ -11,14 +11,7 @@ __all__ = ["HasSpec"]
 
 
 class HasSpec(HasDependencies):
-    """Mix-in trait for objects that can be assigned specs.
-
-    Parameters
-    ----------
-    spec: :class:`Has_Template <gemd.entity.object.has_template.Has_Template>`
-        A spec, which expresses the anticipated or aspirational behavior of this object.
-
-    """
+    """Mix-in trait for objects that can be assigned specs."""
 
     def __init__(self, spec: Union[HasTemplate, LinkByUID] = None):
         self._spec = None
@@ -26,7 +19,7 @@ class HasSpec(HasDependencies):
 
     @property
     def spec(self) -> Union[HasTemplate, LinkByUID]:
-        """Get the spec."""
+        """A spec, which expresses the anticipated or aspirational behavior of this object."""
         return self._spec
 
     @spec.setter

@@ -9,7 +9,16 @@ __all__ = ["RealBounds"]
 
 
 class RealBounds(BaseBounds, typ="real_bounds"):
-    """Bounded subset of the real numbers, parameterized by a lower and upper bound."""
+    """
+    Bounded subset of the real numbers, parameterized by a lower and upper bound.
+
+    Parameters
+    ----------
+    lower_bound: float
+        The lower endpoint (inclusive) of the permitted range.
+    upper_bound: float
+        The upper endpoint (inclusive) of the permitted range.
+    """
 
     def __init__(self, lower_bound: float, upper_bound: float, default_units: str):
         self._default_units = None

@@ -13,7 +13,7 @@ class AttributeTemplate(BaseEntity):
     ----------
     name: str, required
         The name of the attribute template.
-    bounds: :py:class:`BaseBounds <gemd.entity.bounds.base_bounds.BaseBounds>`
+    bounds: ~gemd.entity.bounds.base_bounds.BaseBounds
         Bounds circumscribe the values that are valid according to this attribute template.
     description: str, optional
         A long-form description of the attribute template.
@@ -41,15 +41,16 @@ class AttributeTemplate(BaseEntity):
 
     @property
     def bounds(self):
-        """Get the bounds."""
+        """Bounds circumscribe the values that are valid according to this attribute template."""
         return self._bounds
 
     @bounds.setter
     def bounds(self, bounds):
+        """Set the bounds."""
         if bounds is None:
-            raise ValueError("Bounds are required on AttributeTemplate")
+            raise ValueError(f"Bounds are required on {type(self).__name__}s")
         if not isinstance(bounds, BaseBounds):
-            raise TypeError("Bounds must be an instance of BaseBounds: {}".format(bounds))
+            raise TypeError(f"Bounds must be an instance of BaseBounds: {bounds}")
         self._bounds = bounds
 
     def all_dependencies(self):

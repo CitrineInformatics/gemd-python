@@ -12,14 +12,7 @@ __all__ = ["HasProperties"]
 
 
 class HasProperties(HasTemplateCheckGenerator, HasDependencies, ABC):
-    """Mixin-trait for entities that include properties.
-
-    Parameters
-    ----------
-    properties: List[:class:`Property <gemd.entity.attribute.property.Property>`]
-        A list of properties associated with this entity
-
-    """
+    """Mixin-trait for entities that include properties."""
 
     def __init__(self, properties: Union[Property, Iterable[Property]]):
         self._properties = None
@@ -27,7 +20,7 @@ class HasProperties(HasTemplateCheckGenerator, HasDependencies, ABC):
 
     @property
     def properties(self) -> List[Property]:
-        """Get a list of the properties."""
+        """A list of properties associated with this entity."""
         return self._properties
 
     @properties.setter

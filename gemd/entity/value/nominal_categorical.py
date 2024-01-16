@@ -41,7 +41,7 @@ class NominalCategorical(CategoricalValue, typ="nominal_categorical"):
         -------
         BaseBounds
             The minimally consistent
-            :class:`bounds <gemd.entity.bounds.categorical_bounds.CategoricalBounds>`.
+            :class:`~gemd.entity.bounds.categorical_bounds.CategoricalBounds`.
 
         """
         return CategoricalBounds(categories={self.category})

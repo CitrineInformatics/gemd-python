@@ -36,15 +36,14 @@ class MeasurementSpec(BaseObject,
         for filtering and discoverability.
     notes: str, optional
         Long-form notes about the measurement spec.
-    conditions: List[:class:`Condition <gemd.entity.attribute.condition.Condition>`], optional
+    conditions: List[~gemd.entity.attribute.condition.Condition], optional
         Conditions under which this measurement spec occurs.
-    parameters: List[:class:`Parameter <gemd.entity.attribute.parameter.Parameter>`], optional
+    parameters: List[~gemd.entity.attribute.parameter.Parameter], optional
         Parameters of this measurement spec.
-    template: :class:`MeasurementTemplate\
-    <gemd.entity.object.measurement_template.MeasurementTemplate>`
+    template: ~gemd.entity.object.measurement_template.MeasurementTemplate
         A template bounding the valid values for the measurement's properties, parameters,
         and conditions.
-    file_links: List[:class:`FileLink <gemd.entity.file_link.FileLink>`], optional
+    file_links: List[~gemd.entity.file_link.FileLink], optional
         Links to associated files, with resource paths into the files API.
 
     """

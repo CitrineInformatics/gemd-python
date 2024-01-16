@@ -11,24 +11,7 @@ __all__ = ["HasQuantities"]
 
 
 class HasQuantities(object):
-    """Mixin-trait that includes the mass, volume, number fraction, and absolute quantity.
-
-    Parameters
-    ----------
-    mass_fraction: :class:`ContinuousValue \
-    <gemd.entity.value.continuous_value.ContinuousValue>`, optional
-        The mass fraction of the quantity.
-    volume_fraction: :class:`ContinuousValue \
-    <gemd.entity.value.continuous_value.ContinuousValue>`, optional
-        The volume fraction of the quantity.
-    number_fraction: :class:`ContinuousValue \
-    <gemd.entity.value.continuous_value.ContinuousValue>`, optional
-        The number fraction of the quantity.
-    absolute_quantity: :class:`ContinuousValue \
-    <gemd.entity.value.continuous_value.ContinuousValue>`, optional
-        The absolute quantity of the quantity.
-
-    """
+    """Mixin-trait that includes the mass, volume, number fraction, and absolute quantity."""
 
     def __init__(self, *,
                  mass_fraction: ContinuousValue = None,
@@ -62,7 +45,7 @@ class HasQuantities(object):
 
     @property
     def mass_fraction(self) -> ContinuousValue:
-        """Get mass fraction."""
+        """The mass fraction of the material."""
         return self._mass_fraction
 
     @mass_fraction.setter
@@ -77,7 +60,7 @@ class HasQuantities(object):
 
     @property
     def volume_fraction(self) -> ContinuousValue:
-        """Get volume fraction."""
+        """The volume fraction of the material."""
         return self._volume_fraction
 
     @volume_fraction.setter
@@ -92,7 +75,7 @@ class HasQuantities(object):
 
     @property
     def number_fraction(self) -> ContinuousValue:
-        """Get number fraction."""
+        """The number fraction (commonly called mole fraction) of the material."""
         return self._number_fraction
 
     @number_fraction.setter
@@ -107,7 +90,7 @@ class HasQuantities(object):
 
     @property
     def absolute_quantity(self) -> ContinuousValue:
-        """Get absolute quantity."""
+        """The absolute quantity of the material."""
         return self._absolute_quantity
 
     @absolute_quantity.setter

@@ -19,6 +19,6 @@ class CompositionValue(BaseValue):
         -------
         CompositionBounds
             The minimally consistent
-            :class:`bounds <gemd.entity.bounds.composition_bounds.CompositionBounds>`.
+            :class:`~gemd.entity.bounds.composition_bounds.CompositionBounds`.
 
         """

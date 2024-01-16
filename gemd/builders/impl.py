@@ -34,19 +34,22 @@ def make_node(name: str,
     Parameters
     ----------
     name: str
-        Name of the MaterialRun and MaterialSpec.
+        Name of the :class:`~gemd.entity.object.material_run.MaterialRun`
+        and :class:`~gemd.entity.object.material_spec.MaterialSpec`.
     process_name: str
-        Name of the ProcessRun and ProcessSpec.  Defaults to
-        `process_template.name` if `process_template` is defined, else `name`.
-    process_template: ProcessTemplate
-        ProcessTemplate for the quadruple.
-    material_template: MaterialTemplate
-        MaterialTemplate for the quadruple.
+        Name of the :class:`~gemd.entity.object.process_run.ProcessRun`
+        and :class:`~gemd.entity.object.process_spec.ProcessSpec`.  Defaults to
+        :attr:`process_template.name` if `process_template` is defined, else `name`.
+    process_template: ~gemd.entity.template.process_template.ProcessTemplate
+        :class:`~gemd.entity.template.process_template.ProcessTemplate` for the quadruple.
+    material_template: ~gemd.entity.template.material_template.MaterialTemplate
+        :class:`~gemd.entity.template.material_template.MaterialTemplate` for the quadruple.
 
     Returns
     --------
-    MaterialRun
-        A MaterialRun with linked processes, specs and templates
+    ~gemd.entity.object.material_run.MaterialRun
+        A :class:`~gemd.entity.object.material_run.MaterialRun` with linked processes,
+        specs and templates
 
     """
     if process_name is None:
@@ -94,28 +97,45 @@ def add_edge(input_material: MaterialRun,
 
     Parameters
     ----------
-    input_material: MaterialRun
-        The `material` for the returned IngredientRun
-    output_material: MaterialRun
-        The `process` for the returned IngredientRun will be
-        `output_material.process`
+    input_material: ~gemd.entity.object.material_run.MaterialRun
+        The :attr:`~gemd.entity.object.ingredient_run.IngredientRun.material`
+        for the returned
+        :class:`~gemd.entity.object.ingredient_run.IngredientRun`
+    output_material: ~gemd.entity.object.material_run.MaterialRun
+        The :attr:`~gemd.entity.object.ingredient_run.IngredientRun.process`
+        for the returned
+        :class:`~gemd.entity.object.ingredient_run.IngredientRun`
+        will be `output_material.process`
     name: str
         The ingredient name.  Defaults to `input_material.name`.
-    mass_fraction: float or ContinuousValue
-        The mass fraction of the Ingredient Run.  0 <= x <= 1
-    number_fraction: float or ContinuousValue
-        The number fraction of the Ingredient Run.  0 <= x <= 1
-    volume_fraction: float or ContinuousValue
-        The volume fraction of the Ingredient Run.  0 <= x <= 1
-    absolute_quantity: float or ContinuousValue
-        The absolute quantity.  0 <= x
+    mass_fraction: float or ~gemd.entity.value.continuous_value.ContinuousValue
+        The :attr:`~gemd.entity.object.ingredient_run.IngredientRun.mass_fraction`
+        of the returned
+        :class:`~gemd.entity.object.ingredient_run.IngredientRun`.`
+        0 <= x <= 1
+    number_fraction: float or ~gemd.entity.value.continuous_value.ContinuousValue
+        The :attr:`~gemd.entity.object.ingredient_run.IngredientRun.number_fraction`
+        of the returned
+        :class:`~gemd.entity.object.ingredient_run.IngredientRun`.
+        0 <= x <= 1
+    volume_fraction: float or ~gemd.entity.value.continuous_value.ContinuousValue
+        The :attr:`~gemd.entity.object.ingredient_run.IngredientRun.volume_fraction`
+        of the returned
+        :class:`~gemd.entity.object.ingredient_run.IngredientRun`.
+        0 <= x <= 1
+    absolute_quantity: float or ~gemd.entity.value.continuous_value.ContinuousValue
+        The :attr:`~gemd.entity.object.ingredient_run.IngredientRun.absolute_quantity`
+        of the returned
+        :class:`~gemd.entity.object.ingredient_run.IngredientRun`.
+        0 <= x
     absolute_units: str
         The absolute units.  Required if absolute_quantity is provided as a float
 
     Returns
     --------
-    IngredientRun
-        A IngredientRun with linked processes, specs and materials
+    ~gemd.entity.object.ingredient_run.IngredientRun
+        A :class:`~gemd.entity.object.ingredient_run.IngredientRun`
+        with linked processes, specs and materials
 
     """
     output_spec = output_material.spec
@@ -175,24 +195,33 @@ def add_measurement(material: MaterialRun,
                     attributes: List[BaseAttribute] = None,
                     ) -> MeasurementRun:
     """
-    Add a measurement run-spec set to a MaterialRun.
+    Add a measurement run-spec set to a :class:`~gemd.entity.object.material_run.MaterialRun`.
 
     Parameters
     ----------
-    material: MaterialRun
-        The `material` for the returned MeasurementRun
+    material: ~gemd.entity.object.material_run.MaterialRun
+        The :attr:`~gemd.entity.object.measurement_run.MeasurementRun.material`
+        for the returned
+        :class:`~gemd.entity.object.measurement_run.MeasurementRun`
     name: str
-        The name of the measurement.  Defaults to
-        `template.name` if `template` is defined.
-    template: MeasurementTemplate
-        The MeasurementTemplate.
+        The :attr:`~gemd.entity.object.measurement_run.MeasurementRun.name`
+        of the measurement.  Defaults to `template.name` if `template` is defined.
+    template: ~gemd.entity.template.measurement_template.MeasurementTemplate
+        The :attr:`~gemd.entity.object.measurement_run.MeasurementRun.template`
+        for the returned
+        :class:`~gemd.entity.object.measurement_run.MeasurementRun`
     attributes: List[BaseAttribute]
-        Attributes you want associated with this MeasurementRun.
+        Attributes you want associated with this
+        :class:`~gemd.entity.object.measurement_run.MeasurementRun`.  These can be
+        :class:`Conditions <gemd.entity.attribute.condition.Condition>`,
+        :class:`Parameters <gemd.entity.attribute.parameter.Parameter>`,
+        and/or :class:`Properties <gemd.entity.attribute.property.Property>`.
 
     Returns
     --------
-    MeasurementRun
-        A MeasurementRun with linked material, spec and template
+    ~gemd.entity.object.measurement_run.MeasurementRun
+        A :class:`~gemd.entity.object.measurement_run.MeasurementRun`
+        with linked material, spec and template
 
     """
     if name is None:
@@ -230,10 +259,10 @@ def add_attribute(target: Union[HasProperties, HasConditions, HasParameters],
     target: BaseObject
         The object to attach the attribute to
     template: AttributeTemplate
-        The AttributeTemplate for the attribute.
+        The :attr:`~BaseAttribute.template` for the attribute.
     value: Union[BaseValue, str, float, int]
-        The value for the attribute.  Accepts any GEMD Value type, or will
-        attempt to generate an appropriate Value given a str, float or int.
+        The :attr:`~BaseAttribute.value` for the attribute.  Accepts any GEMD Value type, or will
+        attempt to generate an appropriate :class:`BaseValue` subclass given a str, float or int.
 
     Returns
     --------
@@ -276,9 +305,9 @@ def make_attribute(template: Union[PropertyTemplate, ConditionTemplate, Paramete
     Parameters
     ----------
     template: AttributeTemplate
-        The AttributeTemplate for the attribute.
+        The :attr:`~BaseAttribute.template` for the attribute.
     value: Union[BaseValue, str, float, int]
-        The value for the attribute.  Accepts any GEMD Value type, or will
+        The :attr:`~BaseAttribute.value` for the attribute.  Accepts any GEMD Value type, or will
         attempt to generate an appropriate Value given a str, float or int.
 
     Returns

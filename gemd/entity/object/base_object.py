@@ -29,7 +29,7 @@ class BaseObject(BaseEntity):
         for filtering and discoverability.
     notes: str, optional
         Long-form notes about the object.
-    file_links: List[:class:`FileLink <gemd.entity.file_link.FileLink>`], optional
+    file_links: List[~gemd.entity.file_link.FileLink], optional
         Links to associated files, with resource paths into the files API.
 
     """
@@ -63,16 +63,17 @@ class BaseObject(BaseEntity):
 
     @property
     def name(self) -> str:
-        """Get name."""
+        """Name of the object."""
         return self._name
 
     @name.setter
     def name(self, name: str):
+        """Set the name."""
         self._name = validate_str(name)
 
     @property
     def file_links(self) -> List[FileLink]:
-        """Get file links."""
+        """Links to associated files, with resource paths into the files API."""
         return self._file_links
 
     @file_links.setter

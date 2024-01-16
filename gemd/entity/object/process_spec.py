@@ -38,26 +38,14 @@ class ProcessSpec(BaseObject,
         for filtering and discoverability.
     notes: str, optional
         Long-form notes about the process spec.
-    conditions: List[:class:`Condition <gemd.entity.attribute.condition.Condition>`], optional
+    conditions: List[~gemd.entity.attribute.condition.Condition], optional
         Conditions under which this process spec occurs.
-    parameters: List[:class:`Parameter <gemd.entity.attribute.parameter.Parameter>`], optional
+    parameters: List[~gemd.entity.attribute.parameter.Parameter], optional
         Parameters of this process spec.
-    template: :class:`ProcessTemplate\
-    <gemd.entity.template.process_template.ProcessTemplate>`, optional
+    template: ~gemd.entity.template.process_template.ProcessTemplate, optional
         A template bounding the valid values for this process's parameters and conditions.
-    file_links: List[:class:`FileLink <gemd.entity.file_link.FileLink>`], optional
+    file_links: List[~gemd.entity.file_link.FileLink], optional
         Links to associated files, with resource paths into the files API.
-
-    Attributes
-    ----------
-    output_material: :class:`MaterialSpec <gemd.entity.object.material_spec.MaterialSpec>`
-        The material spec that this process spec produces. The link is established by creating
-        the material spec and settings its `process` field to this process spec.
-
-    ingredients: List[:class:`IngredientSpec\
-    <gemd.entity.object.ingredient_spec.IngredientSpec>`], optional
-        Ingredient specs that act as inputs to this process spec. The link is established by
-        creating each ingredient spec and setting its `process` field to this process spec.
 
     """
 
@@ -93,12 +81,22 @@ class ProcessSpec(BaseObject,
 
     @property
     def ingredients(self) -> List["IngredientSpec"]:  # noqa: F821
-        """Get the list of input ingredient specs."""
+        """Ingredient specs that act as inputs to this process spec.
+
+        The link is established by creating each ingredient spec and setting its
+        `process` field to this process spec.
+
+        """
         return self._ingredients
 
     @property
     def output_material(self) -> Optional["MaterialSpec"]:  # noqa: F821
-        """Get the output material spec."""
+        """The material spec that this process spec produces.
+
+        The link is established by creating the material spec and settings its
+        `process` field to this process spec.
+
+        """
         return self._output_material
 
     def _dict_for_compare(self) -> Dict[str, Any]:

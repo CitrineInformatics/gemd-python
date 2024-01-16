@@ -106,7 +106,7 @@ def complete_material_history(mat) -> List[Dict[str, Any]]:
 
     Parameters
     ---------
-    mat: MaterialRun
+    mat: ~gemd.entity.object.material_run.MaterialRun
         root material run
     Returns
     -------

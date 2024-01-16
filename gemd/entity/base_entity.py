@@ -10,21 +10,7 @@ __all__ = ["BaseEntity"]
 
 
 class BaseEntity(DictSerializable):
-    """
-    Base class for any entity, which includes objects and templates.
-
-    Parameters
-    ----------
-    uids: Map[str, str]
-        A collection of
-        `unique IDs <https://citrineinformatics.github.io/gemd-documentation/
-        specification/unique-identifiers/>`_.
-    tags: List[str]
-        `Tags <https://citrineinformatics.github.io/gemd-documentation/specification/tags/>`_
-        are hierarchical strings that store information about an entity. They can be used
-        for filtering and discoverability.
-
-    """
+    """Base class for any entity, which includes objects and templates."""
 
     def __init__(self, uids: Mapping[str, str], tags: Iterable[str]):
         self._tags = None
@@ -35,20 +21,34 @@ class BaseEntity(DictSerializable):
 
     @property
     def tags(self) -> List[str]:
-        """Get the tags."""
+        """A collection of structured labels.
+
+        `Tags <https://citrineinformatics.github.io/gemd-documentation/specification/tags/>`_
+        are hierarchical strings that store information about an entity. They can be used
+        for filtering and discoverability.
+        """
         return self._tags
 
     @tags.setter
     def tags(self, tags: Iterable[str]):
+        """Set the tags."""
         self._tags = validate_list(tags, str)
 
     @property
     def uids(self) -> Mapping[str, str]:
-        """Get the uids."""
+        """
+        A collection of unique IDs.
+
+        Requirements for and the value of unique IDs are discussed
+        `here <https://citrineinformatics.github.io/gemd-documentation/
+        specification/unique-identifiers/>`_.
+
+        """
         return self._uids
 
     @uids.setter
     def uids(self, uids: Mapping[str, str]):
+        """Set the uids."""
         if uids is None:
             self._uids = CaseInsensitiveDict()
         elif isinstance(uids, Mapping):
@@ -75,7 +75,7 @@ class BaseEntity(DictSerializable):
                 *,
                 allow_fallback: bool = False) -> 'LinkByUID':  # noqa: F821
         """
-        Generate a LinkByUID for this object.
+        Generate a ~gemd.entity.link_by_uid.LinkByUID for this object.
 
         Parameters
         ----------
@@ -86,7 +86,7 @@ class BaseEntity(DictSerializable):
 
         Returns
         -------
-        LinkByUID
+        ~gemd.entity.link_by_uid.LinkByUID
 
         """
         from gemd.entity.link_by_uid import LinkByUID

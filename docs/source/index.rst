@@ -38,9 +38,14 @@ Table of Contents
    depth/unit_parsing
    depth/serialization
 
-Indices and tables
+Indices
 ------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+.. toctree::
+   :maxdepth: 1
+
+   reference/gemd

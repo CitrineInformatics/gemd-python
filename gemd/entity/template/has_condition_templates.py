@@ -17,7 +17,7 @@ class HasConditionTemplates(HasDependencies):
 
     Parameters
     ----------
-    conditions: List[(ConditionTemplate, BaseBounds)]
+    conditions: List[(~gemd.entity.template.condition_template.ConditionTemplate, BaseBounds)]
         A list of tuples containing this entity's condition templates as well
         as any restrictions on those templates' bounds.
 
@@ -36,7 +36,7 @@ class HasConditionTemplates(HasDependencies):
 
         Returns
         -------
-        List[(ConditionTemplate, bounds)]
+        List[(~gemd.entity.template.condition_template.ConditionTemplate, BaseBounds)]
             List of this entity's condition template/bounds pairs
 
         """
@@ -51,13 +51,13 @@ class HasConditionTemplates(HasDependencies):
 
         Parameters
         ----------
-        conditions: List[(ConditionTemplate, bounds)]
+        conditions: List[(~gemd.entity.template.condition_template.ConditionTemplate, BaseBounds)]
             A list of tuples containing this entity's condition templates as well
             as any restrictions on those templates' bounds.
 
         Returns
         -------
-        List[(ConditionTemplate, bounds)]
+        List[(~gemd.entity.template.condition_template.ConditionTemplate, BaseBounds)]
             List of this entity's condition template/bounds pairs
 
         """

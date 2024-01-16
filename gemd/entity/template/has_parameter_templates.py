@@ -17,7 +17,7 @@ class HasParameterTemplates(HasDependencies):
 
     Parameters
     ----------
-    parameters: List[(ParameterTemplate, BaseBounds)]
+    parameters: List[(~gemd.entity.template.parameter_template.ParameterTemplate, BaseBounds)]
         A list of tuples containing this entity's parameter templates as well
         as any restrictions on those templates' bounds.
 
@@ -36,7 +36,7 @@ class HasParameterTemplates(HasDependencies):
 
         Returns
         -------
-        List[(ParameterTemplate, bounds)]
+        List[(~gemd.entity.template.parameter_template.ParameterTemplate, BaseBounds)]
             List of this entity's parameter template/bounds pairs
 
         """
@@ -51,13 +51,13 @@ class HasParameterTemplates(HasDependencies):
 
         Parameters
         ----------
-        parameters: List[(ParameterTemplate, bounds)]
+        parameters: List[(~gemd.entity.template.parameter_template.ParameterTemplate, BaseBounds)]
             A list of tuples containing this entity's parameter templates as well
             as any restrictions on those templates' bounds.
 
         Returns
         -------
-        List[(ParameterTemplate, bounds)]
+        List[(~gemd.entity.template.parameter_template.ParameterTemplate, BaseBounds)]
             List of this entity's parameter template/bounds pairs
 
         """

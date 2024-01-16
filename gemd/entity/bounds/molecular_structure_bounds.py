@@ -52,12 +52,12 @@ class MolecularStructureBounds(BaseBounds, typ="molecular_structure_bounds"):
 
         Parameters
         ----------
-        others: Union[MolecularStructureBounds, MolecularValue]
+        others: Union[MolecularStructureBounds, ~gemd.entity.value.molecular_value.MolecularValue]
             Other bounds or value objects to include.
 
         Returns
         -------
-        CategoricalBounds
+        MolecularStructureBounds
             The union of this bounds and the passed bounds
 
         """
@@ -79,7 +79,7 @@ class MolecularStructureBounds(BaseBounds, typ="molecular_structure_bounds"):
 
         Parameters
         ----------
-        others: Union[MolecularStructureBounds, MolecularValue]
+        others: Union[MolecularStructureBounds, ~gemd.entity.value.molecular_value.MolecularValue]
             Other bounds or value objects to include.
 
         """

@@ -10,14 +10,7 @@ __all__ = ["HasTemplate"]
 
 
 class HasTemplate(HasDependencies):
-    """Mix-in trait for objects that can be assigned templates.
-
-    Parameters
-    ----------
-    template: :class:`BaseTemplate <gemd.entity.template.base_template.BaseTemplate>`
-        A template that defines the allowed values.
-
-    """
+    """Mix-in trait for objects that can be assigned templates."""
 
     def __init__(self, template: Optional[Union[BaseTemplate, LinkByUID]] = None):
         self._template = None
@@ -30,7 +23,7 @@ class HasTemplate(HasDependencies):
 
     @property
     def template(self) -> Optional[Union[BaseTemplate, LinkByUID]]:
-        """Get the template."""
+        """A template that defines the allowed values."""
         return self._template
 
     @template.setter

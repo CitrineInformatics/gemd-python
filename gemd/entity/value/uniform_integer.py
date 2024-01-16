@@ -70,7 +70,7 @@ class UniformInteger(IntegerValue, typ="uniform_integer"):
         -------
         IntegerBounds
             The minimally consistent
-            :class:`bounds <gemd.entity.bounds.integer_bounds.IntegerBounds>`.
+            :class:`~gemd.entity.bounds.integer_bounds.IntegerBounds`.
 
         """
         return IntegerBounds(lower_bound=self.lower_bound, upper_bound=self.upper_bound)

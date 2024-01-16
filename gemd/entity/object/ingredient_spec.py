@@ -37,25 +37,21 @@ class IngredientSpec(BaseObject,
         for filtering and discoverability.
     notes: str, optional
         Long-form notes about the ingredient spec.
-    material: :class:`MaterialSpec <gemd.entity.object.material_spec.MaterialSpec>`
+    material: :class:`~gemd.entity.object.material_spec.MaterialSpec`
         Material that this ingredient is.
-    process: :class:`ProcessSpec <gemd.entity.object.process_spec.ProcessSpec>`
+    process: ~gemd.entity.object.process_spec.ProcessSpec
         Process that this ingredient is used in.
-    mass_fraction: :py:class:`ContinuousValue \
-    <gemd.entity.value.continuous_value.ContinuousValue>`, optional
+    mass_fraction: ~gemd.entity.value.continuous_value.ContinuousValue, optional
         The mass fraction of the ingredient in the process.
-    volume_fraction: :class:`ContinuousValue \
-    <gemd.entity.value.continuous_value.ContinuousValue>`, optional
+    volume_fraction: ~gemd.entity.value.continuous_value.ContinuousValue, optional
         The volume fraction of the ingredient in the process.
-    number_fraction: :class:`ContinuousValue \
-    <gemd.entity.value.continuous_value.ContinuousValue>`, optional
+    number_fraction: ~gemd.entity.value.continuous_value.ContinuousValue, optional
         The number fraction of the ingredient in the process.
-    absolute_quantity: :class:`ContinuousValue \
-    <gemd.entity.value.continuous_value.ContinuousValue>`, optional
+    absolute_quantity: ~gemd.entity.value.continuous_value.ContinuousValue, optional
         The absolute quantity of the ingredient in the process.
     labels: List[str], optional
         Additional labels on the ingredient that must be unique.
-    file_links: List[:class:`FileLink <gemd.entity.file_link.FileLink>`], optional
+    file_links: List[~gemd.entity.file_link.FileLink], optional
         Links to associated files, with resource paths into the files API.
 
     """

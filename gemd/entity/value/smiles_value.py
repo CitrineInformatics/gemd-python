@@ -43,8 +43,7 @@ class Smiles(MolecularValue, typ="smiles"):
         -------
         MolecularStructureBounds
             The minimally consistent
-            :class:`bounds
-            <gemd.entity.bounds.molecular_structure_bounds.MolecularStructureBounds>`.
+            :class:`~gemd.entity.bounds.molecular_structure_bounds.MolecularStructureBounds`.
 
         """
         return MolecularStructureBounds()

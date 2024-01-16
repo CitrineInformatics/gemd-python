@@ -49,8 +49,7 @@ class InChI(MolecularValue, typ="inchi"):
         -------
         MolecularStructureBounds
             The minimally consistent
-            :class:`bounds
-            <gemd.entity.bounds.molecular_structure_bounds.MolecularStructureBounds>`.
+            :class:`~gemd.entity.bounds.molecular_structure_bounds.MolecularStructureBounds`.
 
         """
         return MolecularStructureBounds()

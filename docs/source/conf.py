@@ -47,7 +47,7 @@ extensions = [
 apidoc_module_dir = '../../gemd'
 apidoc_output_dir = 'reference'
 apidoc_excluded_paths = ['tests']
-apidoc_separate_modules = False
+apidoc_separate_modules = True
 apidoc_toc_file = False
 
 # Add any paths that contain templates here, relative to this directory.
@@ -86,7 +86,3 @@ html_theme_options = {
     'sticky_navigation': False,
     'logo_only': True
 }
-
-suppress_warnings = [
-   'ref.python'
-]

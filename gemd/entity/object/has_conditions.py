@@ -12,14 +12,7 @@ __all__ = ["HasConditions"]
 
 
 class HasConditions(HasTemplateCheckGenerator, HasDependencies, ABC):
-    """Mixin-trait for entities that include conditions.
-
-    Parameters
-    ----------
-    conditions: List[:class:`Condition <gemd.entity.attribute.condition.Condition>`]
-        A list of conditions associated with this entity.
-
-    """
+    """Mixin-trait for entities that include conditions."""
 
     def __init__(self, conditions: Union[Condition, Iterable[Condition]]):
         self._conditions = None
@@ -27,7 +20,7 @@ class HasConditions(HasTemplateCheckGenerator, HasDependencies, ABC):
 
     @property
     def conditions(self) -> List[Condition]:
-        """Get a list of the conditions."""
+        """A list of conditions associated with this entity."""
         return self._conditions
 
     @conditions.setter

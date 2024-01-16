@@ -1,4 +1,3 @@
-"""A restricted set of categories."""
 from gemd.entity.bounds.base_bounds import BaseBounds
 from gemd.entity.util import array_like
 
@@ -24,7 +23,7 @@ class CategoricalBounds(BaseBounds, typ="categorical_bounds"):
 
     @property
     def categories(self) -> Set[str]:
-        """Get the set of categories."""
+        """The collection of allowed categories."""
         return self._categories
 
     @categories.setter
@@ -80,7 +79,7 @@ class CategoricalBounds(BaseBounds, typ="categorical_bounds"):
 
         Parameters
         ----------
-        others: Union[CategoricalBounds, CategoricalValue]
+        others: Union[CategoricalBounds, ~gemd.value.categorical_value.CategoricalValue]
             Other bounds or value objects to include.
 
         Returns
@@ -112,7 +111,7 @@ class CategoricalBounds(BaseBounds, typ="categorical_bounds"):
 
         Parameters
         ----------
-        others: Union[CategoricalBounds, CategoricalValue]
+        others: Union[CategoricalBounds, ~gemd.entity.value.categorical_value.CategoricalValue]
             Other bounds or value objects to include.
 
         """
