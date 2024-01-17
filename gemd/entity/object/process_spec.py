@@ -80,7 +80,9 @@ class ProcessSpec(BaseObject,
         return ProcessTemplate
 
     @property
-    def ingredients(self) -> List["IngredientSpec"]:  # noqa: F821
+    def ingredients(
+            self
+    ) -> List["gemd.entity.object.ingredient_spec.IngredientSpec"]:  # noqa: F821
         """Ingredient specs that act as inputs to this process spec.
 
         The link is established by creating each ingredient spec and setting its
@@ -90,7 +92,9 @@ class ProcessSpec(BaseObject,
         return self._ingredients
 
     @property
-    def output_material(self) -> Optional["MaterialSpec"]:  # noqa: F821
+    def output_material(
+            self
+    ) -> Optional["gemd.entity.object.material_spec.MaterialSpec"]:  # noqa: F821
         """The material spec that this process spec produces.
 
         The link is established by creating the material spec and settings its

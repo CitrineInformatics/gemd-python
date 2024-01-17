@@ -86,7 +86,9 @@ class MaterialRun(BaseObject, HasSpec, HasProcess, typ="material_run", skip={"_m
             raise TypeError("process must be a ProcessRun or LinkByUID: {}".format(process))
 
     @property
-    def measurements(self) -> List["MeasurementRun"]:  # noqa: F821
+    def measurements(
+            self
+    ) -> List["gemd.entity.object.measurement_run.MeasurementRun"]:  # noqa: F821
         """Measurements performed on this material.
 
         The link is established by creating the measurement run and settings its

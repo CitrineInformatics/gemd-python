@@ -77,7 +77,9 @@ class ProcessRun(BaseObject,
         self._output_material = None
 
     @property
-    def output_material(self) -> Optional["MaterialRun"]:  # noqa: F821
+    def output_material(
+            self
+    ) -> Optional["gemd.entity.object.material_run.MaterialRun"]:  # noqa: F821
         """The material run that this process run produces.
 
         The link is established by creating the material run and settings its
@@ -87,7 +89,9 @@ class ProcessRun(BaseObject,
         return self._output_material
 
     @property
-    def ingredients(self) -> List["IngredientRun"]:  # noqa: F821
+    def ingredients(
+            self
+    ) -> List["gemd.entity.object.ingredient_run.IngredientRun"]:  # noqa: F821
         """Ingredient runs that act as inputs to this process run.
 
         The link is established by creating each ingredient run and setting its

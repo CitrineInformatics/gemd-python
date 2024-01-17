@@ -65,9 +65,13 @@ class HasPropertyTemplates(HasDependencies):
                                          trigger=BaseTemplate._homogenize_ranges
                                          )
 
-    def validate_property(self,
-                          prop: Union["Property", "PropertyAndConditions"]  # noqa: F821
-                          ) -> bool:  # noqa: F821
+    def validate_property(
+            self,
+            prop: Union[
+                "gemd.entity.attribute.property.Property",  # noqa: F821
+                "gemd.entity.attribute.property_and_conditions.PropertyAndConditions"  # noqa: F821
+            ]
+    ) -> bool:
         """Check if the property is consistent w/ this template."""
         from gemd.entity.attribute import PropertyAndConditions
         if isinstance(prop, PropertyAndConditions):
@@ -87,6 +91,9 @@ class HasPropertyTemplates(HasDependencies):
         else:
             return True  # Nothing to check against
 
-    def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:  # noqa: F821
+    def _local_dependencies(
+            self
+    ) -> Set[Union["gemd.entity.base_entity.BaseEntity",  # noqa: F821
+                   "gemd.entity.link_by_uid.LinkByUID"]]:  # noqa: F821
         """Return a set of all immediate dependencies (no recursion)."""
         return {attr[0] for attr in self.properties}

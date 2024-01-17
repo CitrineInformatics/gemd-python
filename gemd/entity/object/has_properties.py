@@ -29,6 +29,9 @@ class HasProperties(HasTemplateCheckGenerator, HasDependencies, ABC):
         checker = self._generate_template_check(HasPropertyTemplates.validate_property)
         self._properties = validate_list(properties, Property, trigger=checker)
 
-    def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:  # noqa: F821
+    def _local_dependencies(
+            self
+    ) -> Set[Union["gemd.entity.base_entity.BaseEntity",  # noqa: F821
+                   "gemd.entity.link_by_uid.LinkByUID"]]:  # noqa: F821
         """Return a set of all immediate dependencies (no recursion)."""
         return {prop.template for prop in self.properties if prop.template is not None}

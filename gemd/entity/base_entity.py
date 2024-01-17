@@ -1,5 +1,5 @@
 """Base class for all entities."""
-from typing import Optional, Union, Iterable, List, Set, FrozenSet, Mapping, Dict
+from typing import Optional, Union, Iterable, List, Set, FrozenSet, MutableMapping, Dict
 
 from gemd.entity.dict_serializable import DictSerializable
 from gemd.entity.has_dependencies import HasDependencies
@@ -12,7 +12,7 @@ __all__ = ["BaseEntity"]
 class BaseEntity(DictSerializable):
     """Base class for any entity, which includes objects and templates."""
 
-    def __init__(self, uids: Mapping[str, str], tags: Iterable[str]):
+    def __init__(self, uids: MutableMapping[str, str], tags: Iterable[str]):
         self._tags = None
         self.tags = tags
 
@@ -35,7 +35,7 @@ class BaseEntity(DictSerializable):
         self._tags = validate_list(tags, str)
 
     @property
-    def uids(self) -> Mapping[str, str]:
+    def uids(self) -> MutableMapping[str, str]:
         """
         A collection of unique IDs.
 
@@ -47,11 +47,11 @@ class BaseEntity(DictSerializable):
         return self._uids
 
     @uids.setter
-    def uids(self, uids: Mapping[str, str]):
+    def uids(self, uids: MutableMapping[str, str]):
         """Set the uids."""
         if uids is None:
             self._uids = CaseInsensitiveDict()
-        elif isinstance(uids, Mapping):
+        elif isinstance(uids, MutableMapping):
             self._uids = CaseInsensitiveDict(**uids)
         else:
             self._uids = CaseInsensitiveDict(**{uids[0]: uids[1]})
@@ -73,7 +73,8 @@ class BaseEntity(DictSerializable):
     def to_link(self,
                 scope: Optional[str] = None,
                 *,
-                allow_fallback: bool = False) -> 'LinkByUID':  # noqa: F821
+                allow_fallback: bool = False
+                ) -> "gemd.entity.link_by_uid.LinkByUID":  # noqa: F821
         """
         Generate a ~gemd.entity.link_by_uid.LinkByUID for this object.
 
@@ -102,7 +103,10 @@ class BaseEntity(DictSerializable):
 
         return LinkByUID(scope=scope, id=uid)
 
-    def all_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:  # noqa: F821
+    def all_dependencies(
+            self
+    ) -> Set[Union["gemd.entity.base_entity.BaseEntity",  # noqa: F821
+                   "gemd.entity.link_by_uid.LinkByUID"]]:  # noqa: F821
         """Return a set of all immediate dependencies (no recursion)."""
         result = set()
         queue = [type(self)]
@@ -115,8 +119,8 @@ class BaseEntity(DictSerializable):
         return result
 
     @staticmethod
-    def _cached_equals(this: 'BaseEntity',
-                       that: 'BaseEntity',
+    def _cached_equals(this: "BaseEntity",
+                       that: "BaseEntity",
                        *,
                        cache: Dict[FrozenSet, Optional[bool]] = None) -> Optional[bool]:
         """

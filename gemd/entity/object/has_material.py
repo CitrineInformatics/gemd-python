@@ -22,6 +22,9 @@ class HasMaterial(HasDependencies, ABC):
     def material(self, spec: Union[BaseObject, LinkByUID]):
         """Set the material."""
 
-    def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:  # noqa: F821
+    def _local_dependencies(
+            self
+    ) -> Set[Union["gemd.entity.base_entity.BaseEntity",  # noqa: F821
+                   "gemd.entity.link_by_uid.LinkByUID"]]:  # noqa: F821
         """Return a set of all immediate dependencies (no recursion)."""
         return {self.material} if self.material is not None else set()
