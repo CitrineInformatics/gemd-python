@@ -1,16 +1,23 @@
 from setuptools import setup, find_packages
 from os import path
+from packaging.version import Version
+import re
 
 packages = find_packages()
 
 this_directory = path.abspath(path.dirname(__file__))
-about = {}
-with open(path.join(this_directory, 'gemd', '__version__.py'), 'r') as f:
-    exec(f.read(), about)
+version_file = path.join(this_directory, 'gemd', '__version__.py')
+version_re = r'''^__version__\s*=\s*(['"])([\w\.]+)\1$'''
+with open(version_file, 'r') as f:
+    mo = re.search(version_re, f.read(), re.M)
+    if mo:
+        version = Version(mo.group(2))
+    else:
+        raise RuntimeError(f"Unable to find version string in {version_file}")
 
 setup(name='gemd',
       # Update this in gemd/__version__.py
-      version=about['__version__'],
+      version=str(version),
       python_requires='>=3.8',
       url='http://github.com/CitrineInformatics/gemd-python',
       description="Python binding for Citrine's GEMD data model",
