@@ -9,9 +9,11 @@ from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.setters import validate_list
 
-from typing import Optional, Union, Iterable, List, Mapping, Dict, Type, Any
+from typing import TypeVar, Optional, Union, Iterable, List, Mapping, Dict, Type, Any
 
 __all__ = ["ProcessSpec"]
+IngredientSpecType = TypeVar("IngredientSpecType", bound="IngredientSpec")  # noqa: F821
+MaterialSpecType = TypeVar("MaterialSpecType", bound="MaterialSpec")  # noqa: F821
 
 
 class ProcessSpec(BaseObject,
@@ -80,9 +82,7 @@ class ProcessSpec(BaseObject,
         return ProcessTemplate
 
     @property
-    def ingredients(
-            self
-    ) -> List["gemd.entity.object.ingredient_spec.IngredientSpec"]:  # noqa: F821
+    def ingredients(self) -> List[IngredientSpecType]:
         """Ingredient specs that act as inputs to this process spec.
 
         The link is established by creating each ingredient spec and setting its
@@ -92,9 +92,7 @@ class ProcessSpec(BaseObject,
         return self._ingredients
 
     @property
-    def output_material(
-            self
-    ) -> Optional["gemd.entity.object.material_spec.MaterialSpec"]:  # noqa: F821
+    def output_material(self) -> Optional[MaterialSpecType]:
         """The material spec that this process spec produces.
 
         The link is established by creating the material spec and settings its

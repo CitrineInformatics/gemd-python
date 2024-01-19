@@ -1,7 +1,8 @@
 """For entities that have specs."""
+from gemd.entity.base_entity import BaseEntity
 from gemd.entity.has_dependencies import HasDependencies
-from gemd.entity.object.base_object import BaseObject
 from gemd.entity.link_by_uid import LinkByUID
+from gemd.entity.object.base_object import BaseObject
 
 from abc import ABC, abstractmethod
 from typing import Union, Set
@@ -22,9 +23,6 @@ class HasMaterial(HasDependencies, ABC):
     def material(self, spec: Union[BaseObject, LinkByUID]):
         """Set the material."""
 
-    def _local_dependencies(
-            self
-    ) -> Set[Union["gemd.entity.base_entity.BaseEntity",  # noqa: F821
-                   "gemd.entity.link_by_uid.LinkByUID"]]:  # noqa: F821
+    def _local_dependencies(self) -> Set[Union[BaseEntity, LinkByUID]]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {self.material} if self.material is not None else set()

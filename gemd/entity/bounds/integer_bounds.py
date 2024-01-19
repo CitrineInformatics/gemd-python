@@ -1,10 +1,13 @@
 """Bounds an integer to be between two values."""
 from math import isfinite
-from typing import Union
+from typing import TypeVar, Union
 
 from gemd.entity.bounds.base_bounds import BaseBounds
 
 __all__ = ["IntegerBounds"]
+IntegerBoundsType = TypeVar("IntegerBoundsType", bound="IntegerBounds")
+BaseValueType = TypeVar("BaseValueType", bound="BaseValue")  # noqa: F821
+IntegerValueType = TypeVar("IntegerValueType", bound="IntegerValue")  # noqa: F821
 
 
 class IntegerBounds(BaseBounds, typ="integer_bounds"):
@@ -56,7 +59,7 @@ class IntegerBounds(BaseBounds, typ="integer_bounds"):
                              f"greater than or equal to lower bound ({self.lower_bound})")
         self._upper_bound = int(value)
 
-    def contains(self, bounds: Union[BaseBounds, "BaseValue"]) -> bool:  # noqa: F821
+    def contains(self, bounds: Union[BaseBounds, BaseValueType]) -> bool:
         """
         Check if another bounds or value object is a subset of this range.
 
@@ -86,8 +89,8 @@ class IntegerBounds(BaseBounds, typ="integer_bounds"):
         return bounds.lower_bound >= self.lower_bound and bounds.upper_bound <= self.upper_bound
 
     def union(self,
-              *others: Union["IntegerBounds", "IntegerValue"]  # noqa: F821
-              ) -> "IntegerBounds":  # noqa: F821
+              *others: Union[IntegerBoundsType, IntegerValueType]
+              ) -> IntegerBoundsType:
         """
         Return the union of this bounds and other bounds.
 
@@ -122,7 +125,7 @@ class IntegerBounds(BaseBounds, typ="integer_bounds"):
                 upper = bounds.upper_bound
         return IntegerBounds(lower_bound=lower, upper_bound=upper)
 
-    def update(self, *others: Union["IntegerBounds", "IntegerValue"]):  # noqa: F821
+    def update(self, *others: Union[IntegerBoundsType, IntegerValueType]):
         """
         Update this bounds to include other bounds.
 

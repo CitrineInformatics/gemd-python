@@ -6,9 +6,11 @@ from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.template.condition_template import ConditionTemplate
 from gemd.entity.bounds.base_bounds import BaseBounds
 
-from typing import Optional, Union, Iterable, List, Tuple, Set
+from typing import TypeVar, Optional, Union, Iterable, List, Tuple, Set
 
 __all__ = ["HasConditionTemplates"]
+BaseEntityType = TypeVar("BaseEntityType", bound="BaseEntity")  # noqa: F821
+ConditionType = TypeVar("ConditionType", bound="Condition")  # noqa: F821
 
 
 class HasConditionTemplates(HasDependencies):
@@ -69,9 +71,7 @@ class HasConditionTemplates(HasDependencies):
                                          trigger=BaseTemplate._homogenize_ranges
                                          )
 
-    def validate_condition(self,
-                           condition: "gemd.entity.attribute.condition.Condition"  # noqa: F821
-                           ) -> bool:
+    def validate_condition(self, condition: ConditionType) -> bool:
         """Check if the condition is consistent w/ this template."""
         if condition.template is not None:
             attr, bnd = next((x for x in self.conditions if condition.template == x[0]),
@@ -87,8 +87,6 @@ class HasConditionTemplates(HasDependencies):
         else:
             return True  # Nothing to check against
 
-    def _local_dependencies(self)\
-            -> Set[Union["gemd.entity.base_entity.BaseEntity",  # noqa: F821
-                         "gemd.entity.link_by_uid.LinkByUID"]]:  # noqa: F821
+    def _local_dependencies(self) -> Set[Union[BaseEntityType, LinkByUID]]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {attr[0] for attr in self.conditions}

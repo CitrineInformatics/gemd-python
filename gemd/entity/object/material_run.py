@@ -8,9 +8,10 @@ from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.setters import validate_list
 
-from typing import Optional, Union, Iterable, List, Mapping, Type, Any
+from typing import TypeVar, Optional, Union, Iterable, List, Mapping, Type, Any
 
 __all__ = ["MaterialRun"]
+MeasurementRunType = TypeVar("MeasurementRunType", bound="MeasurementRun")  # noqa: F821
 
 
 class MaterialRun(BaseObject, HasSpec, HasProcess, typ="material_run", skip={"_measurements"}):
@@ -33,7 +34,7 @@ class MaterialRun(BaseObject, HasSpec, HasProcess, typ="material_run", skip={"_m
         for filtering and discoverability.
     notes: str, optional
         Long-form notes about the material run.
-    process: :class:`~gemd.entity.object.process_run.ProcessRun`
+    process: ~gemd.entity.object.process_run.ProcessRun
         Process that produces this material.
     sample_type: str, optional
         The form of this sample. Optionals are "experimental", "virtual", "production", or
@@ -86,9 +87,7 @@ class MaterialRun(BaseObject, HasSpec, HasProcess, typ="material_run", skip={"_m
             raise TypeError("process must be a ProcessRun or LinkByUID: {}".format(process))
 
     @property
-    def measurements(
-            self
-    ) -> List["gemd.entity.object.measurement_run.MeasurementRun"]:  # noqa: F821
+    def measurements(self) -> List[MeasurementRunType]:
         """Measurements performed on this material.
 
         The link is established by creating the measurement run and settings its

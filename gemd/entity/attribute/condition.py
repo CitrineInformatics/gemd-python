@@ -19,9 +19,9 @@ class Condition(BaseAttribute, typ="condition"):
         Required name of the attribute. Each attribute within an object must have a unique name.
     notes: str
         Optional free-form notes about the attribute.
-    value: :class:`~gemd.entity.value.base_value.BaseValue`
+    value: ~gemd.entity.value.base_value.BaseValue
         The value of the attribute.
-    template: :class:`~gemd.entity.template.attribute_template.AttributeTemplate`
+    template: ~gemd.entity.template.attribute_template.AttributeTemplate
         Attribute template that defines the allowed bounds of this attribute. If a template
         and value are both present then the value must be within the template bounds.
     origin: str

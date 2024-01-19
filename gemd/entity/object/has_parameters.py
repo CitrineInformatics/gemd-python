@@ -1,5 +1,7 @@
 """For entities that have parameters."""
+from gemd.entity.base_entity import BaseEntity
 from gemd.entity.has_dependencies import HasDependencies
+from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.object.has_template_check_generator import HasTemplateCheckGenerator
 from gemd.entity.template.has_parameter_templates import HasParameterTemplates
 from gemd.entity.attribute.parameter import Parameter
@@ -29,9 +31,6 @@ class HasParameters(HasTemplateCheckGenerator, HasDependencies, ABC):
         checker = self._generate_template_check(HasParameterTemplates.validate_parameter)
         self._parameters = validate_list(parameters, Parameter, trigger=checker)
 
-    def _local_dependencies(
-            self
-    ) -> Set[Union["gemd.entity.base_entity.BaseEntity",  # noqa: F821
-                   "gemd.entity.link_by_uid.LinkByUID"]]:  # noqa: F821
+    def _local_dependencies(self) -> Set[Union[BaseEntity, LinkByUID]]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {param.template for param in self.parameters if param.template is not None}

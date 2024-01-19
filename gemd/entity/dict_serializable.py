@@ -125,7 +125,7 @@ class DictSerializable(ABC, metaclass=DictSerializableMeta):
         return json.loads(encoder.raw_dumps(self))
 
     @staticmethod
-    def build(d: Mapping[str, Any]) -> "DictSerializable":
+    def build(d: Mapping[str, Any]) -> DictSerializableType:
         """
         Build an object from a JSON dictionary.
 

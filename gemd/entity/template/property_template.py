@@ -10,7 +10,7 @@ class PropertyTemplate(AttributeTemplate, typ="property_template"):
     ----------
     name: str, required
         The name of the property template.
-    bounds: :class:`~gemd.entity.bounds.base_bounds.BaseBounds`
+    bounds: ~gemd.entity.bounds.base_bounds.BaseBounds
         Bounds circumscribe the values that are valid according to this property template.
     description: str, optional
         A long-form description of the attribute template.

@@ -19,9 +19,9 @@ class PropertyAndConditions(DictSerializable, typ="property_and_conditions"):
 
     Parameters
     ----------
-    property: :class:`~gemd.entity.attribute.property.Property`
+    property: ~gemd.entity.attribute.property.Property
         A property attribute
-    conditions: List[:class:`~gemd.entity.attribute.condition.Condition`]
+    conditions: List[~gemd.entity.attribute.condition.Condition]
         An optional list of conditions associated with this property.
 
     """

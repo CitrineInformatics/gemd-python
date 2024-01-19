@@ -1,5 +1,5 @@
 """Base class for all entities."""
-from typing import Optional, Union, Iterable, List, Set, FrozenSet, MutableMapping, Dict
+from typing import TypeVar, Optional, Union, Iterable, List, Set, FrozenSet, MutableMapping, Dict
 
 from gemd.entity.dict_serializable import DictSerializable
 from gemd.entity.has_dependencies import HasDependencies
@@ -7,6 +7,8 @@ from gemd.entity.case_insensitive_dict import CaseInsensitiveDict
 from gemd.entity.setters import validate_list
 
 __all__ = ["BaseEntity"]
+BaseEntityType = TypeVar("BaseEntityType", bound="BaseEntity")
+LinkByUIDType = TypeVar("LinkByUIDType", bound="LinkByUID")  # noqa: F821
 
 
 class BaseEntity(DictSerializable):
@@ -35,7 +37,7 @@ class BaseEntity(DictSerializable):
         self._tags = validate_list(tags, str)
 
     @property
-    def uids(self) -> MutableMapping[str, str]:
+    def uids(self) -> Dict[str, str]:
         """
         A collection of unique IDs.
 
@@ -74,7 +76,7 @@ class BaseEntity(DictSerializable):
                 scope: Optional[str] = None,
                 *,
                 allow_fallback: bool = False
-                ) -> "gemd.entity.link_by_uid.LinkByUID":  # noqa: F821
+                ) -> LinkByUIDType:
         """
         Generate a ~gemd.entity.link_by_uid.LinkByUID for this object.
 
@@ -103,10 +105,7 @@ class BaseEntity(DictSerializable):
 
         return LinkByUID(scope=scope, id=uid)
 
-    def all_dependencies(
-            self
-    ) -> Set[Union["gemd.entity.base_entity.BaseEntity",  # noqa: F821
-                   "gemd.entity.link_by_uid.LinkByUID"]]:  # noqa: F821
+    def all_dependencies(self) -> Set[Union[BaseEntityType, LinkByUIDType]]:
         """Return a set of all immediate dependencies (no recursion)."""
         result = set()
         queue = [type(self)]
@@ -122,7 +121,8 @@ class BaseEntity(DictSerializable):
     def _cached_equals(this: "BaseEntity",
                        that: "BaseEntity",
                        *,
-                       cache: Dict[FrozenSet, Optional[bool]] = None) -> Optional[bool]:
+                       cache: Dict[FrozenSet, Optional[bool]] = None
+                       ) -> Optional[bool]:
         """
         Compute and stash whether two Base Entities are equal in a recursive sense.
 

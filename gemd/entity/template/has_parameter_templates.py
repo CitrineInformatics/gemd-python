@@ -6,9 +6,11 @@ from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.template.parameter_template import ParameterTemplate
 from gemd.entity.bounds.base_bounds import BaseBounds
 
-from typing import Optional, Union, Iterable, List, Tuple, Set
+from typing import TypeVar, Optional, Union, Iterable, List, Tuple, Set
 
 __all__ = ["HasParameterTemplates"]
+ParameterType = TypeVar("ParameterType", bound="Parameter")  # noqa: F821
+BaseEntityType = TypeVar("BaseEntityType", bound="BaseEntity")  # noqa: F821
 
 
 class HasParameterTemplates(HasDependencies):
@@ -69,9 +71,7 @@ class HasParameterTemplates(HasDependencies):
                                          trigger=BaseTemplate._homogenize_ranges
                                          )
 
-    def validate_parameter(self,
-                           parameter: "gemd.entity.attribute.parameter.Parameter"  # noqa: F821
-                           ) -> bool:
+    def validate_parameter(self, parameter: ParameterType) -> bool:
         """Check if the parameter is consistent w/ this template."""
         if parameter.template is not None:
             attr, bnd = next((x for x in self.parameters if parameter.template == x[0]),
@@ -87,9 +87,6 @@ class HasParameterTemplates(HasDependencies):
         else:
             return True  # Nothing to check against
 
-    def _local_dependencies(
-            self
-    ) -> Set[Union["gemd.entity.base_entity.BaseEntity",  # noqa: F821
-                   "gemd.entity.link_by_uid.LinkByUID"]]:  # noqa: F821
+    def _local_dependencies(self) -> Set[Union[BaseEntityType, LinkByUID]]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {attr[0] for attr in self.parameters}

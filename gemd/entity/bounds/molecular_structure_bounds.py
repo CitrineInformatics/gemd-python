@@ -5,15 +5,18 @@ In the future, this may include substructural restrictions.
 """
 from gemd.entity.bounds.base_bounds import BaseBounds
 
-from typing import Union
+from typing import TypeVar, Union
 
 __all__ = ["MolecularStructureBounds"]
+MolecularBoundsType = TypeVar("MolecularBoundsType", bound="MolecularStructureBounds")
+BaseValueType = TypeVar("BaseValueType", bound="BaseValue")  # noqa: F821
+MolecularValueType = TypeVar("MolecularValueType", bound="MolecularValue")  # noqa: F821
 
 
 class MolecularStructureBounds(BaseBounds, typ="molecular_structure_bounds"):
     """Molecular bounds, with no component or substructural restrictions (yet)."""
 
-    def contains(self, bounds: Union[BaseBounds, "BaseValue"]) -> bool:  # noqa: F821
+    def contains(self, bounds: Union[BaseBounds, BaseValueType]) -> bool:
         """
         Check if another bounds or value object is contained by this bounds.
 
@@ -43,8 +46,8 @@ class MolecularStructureBounds(BaseBounds, typ="molecular_structure_bounds"):
         return True
 
     def union(self,
-              *others: Union["MolecularStructureBounds", "MolecularValue"]  # noqa: F821
-              ) -> "MolecularStructureBounds":  # noqa: F821
+              *others: Union[MolecularBoundsType, MolecularValueType]
+              ) -> MolecularBoundsType:
         """
         Return the union of this bounds and other bounds.
 
@@ -71,7 +74,7 @@ class MolecularStructureBounds(BaseBounds, typ="molecular_structure_bounds"):
                             f"expected molecular structure, found {misses}")
         return MolecularStructureBounds()
 
-    def update(self, *others: Union["MolecularStructureBounds", "MolecularValue"]):  # noqa: F821
+    def update(self, *others: Union[MolecularBoundsType, MolecularValueType]):
         """
         Update this bounds to include other bounds.
 

@@ -37,7 +37,7 @@ class IngredientSpec(BaseObject,
         for filtering and discoverability.
     notes: str, optional
         Long-form notes about the ingredient spec.
-    material: :class:`~gemd.entity.object.material_spec.MaterialSpec`
+    material: ~gemd.entity.object.material_spec.MaterialSpec
         Material that this ingredient is.
     process: ~gemd.entity.object.process_spec.ProcessSpec
         Process that this ingredient is used in.

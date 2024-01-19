@@ -1,17 +1,19 @@
 """Base class for all bounds."""
 from abc import abstractmethod
-from typing import Union
+from typing import TypeVar, Union
 
 from gemd.entity.dict_serializable import DictSerializable
 
 __all__ = ["BaseBounds"]
+BaseBoundsType = TypeVar("BaseBoundsType", bound="BaseBounds")
+BaseValueType = TypeVar("BaseValueType", bound="BaseValue")  # noqa: F821
 
 
 class BaseBounds(DictSerializable):
     """Base class for bounds, including RealBounds and CategoricalBounds."""
 
     @abstractmethod
-    def contains(self, bounds: Union["BaseBounds", "BaseValue"]):  # noqa: F821
+    def contains(self, bounds: Union[BaseBoundsType, BaseValueType]):
         """
         Check if another bounds is contained within this bounds.
 
@@ -38,7 +40,7 @@ class BaseBounds(DictSerializable):
         raise TypeError('{} is not a Bounds object'.format(bounds))
 
     @abstractmethod
-    def union(self, *others: Union["BaseBounds", "BaseValue"]) -> "BaseBounds":  # noqa: F821
+    def union(self, *others: Union[BaseBoundsType, BaseValueType]) -> BaseBoundsType:
         """
         Return the union of this bounds and other bounds.
 
@@ -55,10 +57,9 @@ class BaseBounds(DictSerializable):
             The union of this bounds and the passed bounds
 
         """
-        pass  # pragma: no cover
 
     @abstractmethod
-    def update(self, *others: Union["BaseBounds", "BaseValue"]):  # noqa: F821
+    def update(self, *others: Union[BaseBoundsType, BaseValueType]):
         """
         Update this bounds to include other bounds.
 
