@@ -2,7 +2,7 @@
 from gemd.entity.bounds.base_bounds import BaseBounds
 from gemd.entity.util import array_like
 
-from typing import TypeVar, Union
+from typing import TypeVar, Union, Set, Iterable
 
 __all__ = ["CompositionBounds"]
 CompositionBoundsType = TypeVar("CompositionBoundsType", bound="CompositionBounds")
@@ -26,12 +26,12 @@ class CompositionBounds(BaseBounds, typ="composition_bounds"):
         self.components = components
 
     @property
-    def components(self):
+    def components(self) -> Set[str]:
         """Get the collection of the components that are allowed in the composition."""
         return self._components
 
     @components.setter
-    def components(self, value):
+    def components(self, value: Iterable[str]):
         """Set collection of the components that are allowed in the composition."""
         if value is None:
             self._components = set()
@@ -54,8 +54,10 @@ class CompositionBounds(BaseBounds, typ="composition_bounds"):
 
         Parameters
         ----------
-        bounds: Union[BaseBounds, BaseValue]
-            Other object to check.
+        bounds: BaseBounds or BaseValue
+            Other object to check.  If it's a Value object, check against
+            the smallest compatible bounds, as returned by the Value's
+            :func:`~gemd.entity.base_bounds.BaseBounds._to_bounds` method.
 
         Returns
         -------
@@ -84,8 +86,10 @@ class CompositionBounds(BaseBounds, typ="composition_bounds"):
 
         Parameters
         ----------
-        others: Union[CompositionBounds, , ~gemd.entity.value.compositional_value.CompositionValue]
-            Other bounds or value objects to include.
+        others: CompositionBounds or ~gemd.entity.value.compositional_value.CompositionValue
+            Other bounds or value objects to include.  If they're Value objects,
+            increase by the smallest compatible bounds, as returned by the value's
+            :func:`~gemd.entity.base_bounds.BaseBounds._to_bounds` method.
 
         Returns
         -------
@@ -116,8 +120,10 @@ class CompositionBounds(BaseBounds, typ="composition_bounds"):
 
         Parameters
         ----------
-        others: Union[CompositionBounds, ~gemd.entity.value.compositional_value.CompositionValue]
-            Other bounds or value objects to include.
+        others: CompositionBounds or ~gemd.entity.value.compositional_value.CompositionValue
+            Other bounds or value objects to include.  If they're Value objects,
+            increase by the smallest compatible bounds, as returned by the value's
+            :func:`~gemd.entity.base_bounds.BaseBounds._to_bounds` method.
 
         """
         self.components = self.union(*others).components

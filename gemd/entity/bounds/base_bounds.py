@@ -19,14 +19,15 @@ class BaseBounds(DictSerializable):
 
         Parameters
         ----------
-        bounds: Union[BaseBounds, BaseValue]
+        bounds: BaseBounds or BaseValue
             Other bounds object to check.  If it's a Value object, check against
-            the smallest compatible bounds, as returned by the
+            the smallest compatible bounds, as returned by the Value's
+            :func:`~gemd.entity.base_bounds.BaseBounds._to_bounds` method.
 
         Returns
         -------
         bool
-            True if any value that validates true for bounds also validates true for this
+            True if all values valid for `bounds` are also valid for this object
 
         """
         from gemd.entity.value.base_value import BaseValue
@@ -48,8 +49,10 @@ class BaseBounds(DictSerializable):
 
         Parameters
         ----------
-        others: Union[BaseBounds, BaseValue]
-            Other bounds or value objects to include.
+        others: BaseBounds or BaseValue
+            Other bounds or value objects to include.  If they're Value objects,
+            increase by the smallest compatible bounds, as returned by the value's
+            :func:`~gemd.entity.base_bounds.BaseBounds._to_bounds` method.
 
         Returns
         -------
@@ -67,8 +70,9 @@ class BaseBounds(DictSerializable):
 
         Parameters
         ----------
-        others: Union[BaseBounds, BaseValue]
-            Other bounds or value objects to include.
+        others: BaseBounds or BaseValue
+            Other bounds or value objects to include.  If they're Value objects,
+            increase by the smallest compatible bounds, as returned by the value's
+            :func:`~gemd.entity.base_bounds.BaseBounds._to_bounds` method.
 
         """
-        pass  # pragma: no cover

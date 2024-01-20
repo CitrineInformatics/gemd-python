@@ -21,10 +21,10 @@ from pint.errors import UndefinedUnitError, DefinitionSyntaxError  # noqa Import
 # Store directories so they don't get auto-cleaned until exit
 _TEMP_DIRECTORY = TemporaryDirectory()
 
-# __all__ = [
-#     "parse_units", "convert_units", "get_base_units", "change_definitions_file",
-#     "UndefinedUnitError", "IncompatibleUnitsError", "DefinitionSyntaxError"
-# ]
+__all__ = [
+    "parse_units", "convert_units", "get_base_units", "change_definitions_file",
+    "UndefinedUnitError", "IncompatibleUnitsError", "DefinitionSyntaxError"
+]
 
 
 def _deploy_default_files() -> str:
@@ -269,15 +269,15 @@ def parse_units(units: Union[str, Unit, None],
 
     Parameters
     ----------
-    units: Union[str, Unit, None]
+    units: str, Unit, or None
         The string or Unit representation of the object we wish to display
     return_unit: boolean
-        Whether to return a Unit object, vs. whatever was initially passed
+        Whether to return a pint Unit object, vs. whatever was initially passed
 
     Returns
     -------
-    [Union[str, Unit, None]]
-        The representation; note that the same type that was passed is returned
+    str, Unit, or None
+        The representation; note that `return_unit` controls the return type
 
     """
     if units is None:
@@ -304,13 +304,14 @@ def get_base_units(units: Union[str, Unit]) -> Tuple[Unit, float, float]:
 
     Parameters
     ----------
-    units: Union[str, Unit, None]
-        The string or Unit representation of the object we wish to display
+    units: str, Unit, or None
+        The representation of the object we wish to display
 
     Returns
     -------
-    Tuple[Unit, Number, float]
-        The base unit, its
+    Tuple[Unit, float, float]
+        A tuple of the base unit, its multiplicative conversion factor, and its
+        additive offset, in that order.
 
     """
     if isinstance(units, str):

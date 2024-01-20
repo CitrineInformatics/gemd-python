@@ -260,7 +260,7 @@ def add_attribute(target: Union[HasProperties, HasConditions, HasParameters],
         The object to attach the attribute to
     template: AttributeTemplate
         The :attr:`~BaseAttribute.template` for the attribute.
-    value: Union[BaseValue, str, float, int]
+    value: BaseValue, str, float,  or int
         The :attr:`~BaseAttribute.value` for the attribute.  Accepts any GEMD Value type, or will
         attempt to generate an appropriate :class:`BaseValue` subclass given a str, float or int.
 
@@ -306,7 +306,7 @@ def make_attribute(template: Union[PropertyTemplate, ConditionTemplate, Paramete
     ----------
     template: AttributeTemplate
         The :attr:`~BaseAttribute.template` for the attribute.
-    value: Union[BaseValue, str, float, int]
+    value: BaseValue, str, float, or int
         The :attr:`~BaseAttribute.value` for the attribute.  Accepts any GEMD Value type, or will
         attempt to generate an appropriate Value given a str, float or int.
 
@@ -340,7 +340,7 @@ def make_value(value: Union[str, float, int],
 
     Parameters
     ----------
-    value: Union[str, float, int]
+    value: str, float, or int
         The primitive type to wrap in a Value
     bounds: BaseBounds
         The bounds type to determine which value type we want to coerce the value into

@@ -45,15 +45,18 @@ class CategoricalBounds(BaseBounds, typ="categorical_bounds"):
 
     def contains(self, bounds: Union[BaseBounds, BaseValueType]) -> bool:
         """
-        Check if another bounds object or value objects is contained by this bounds.
+        Check if another bounds object or value object is contained by this bounds.
 
         The other object must also be Categorical and its allowed categories must be a
         subset of this bounds's allowed categories.
 
         Parameters
         ----------
-        bounds: Union[BaseBounds, BaseValue]
-            Other bounds or value object to check.
+        bounds: BaseBounds or BaseValue
+            Other bounds or value object to check.  If it's a Value object, check against
+            the smallest compatible bounds, as returned by the Value's
+            :func:`~gemd.entity.base_bounds.BaseBounds._to_bounds` method.
+
 
         Returns
         -------
@@ -82,8 +85,10 @@ class CategoricalBounds(BaseBounds, typ="categorical_bounds"):
 
         Parameters
         ----------
-        others: Union[CategoricalBounds, ~gemd.value.categorical_value.CategoricalValue]
-            Other bounds or value objects to include.
+        others: CategoricalBounds or ~gemd.value.categorical_value.CategoricalValue
+            Other bounds or value objects to include.  If they're Value objects,
+            increase by the smallest compatible bounds, as returned by the value's
+            :func:`~gemd.entity.base_bounds.BaseBounds._to_bounds` method.
 
         Returns
         -------
@@ -114,8 +119,10 @@ class CategoricalBounds(BaseBounds, typ="categorical_bounds"):
 
         Parameters
         ----------
-        others: Union[CategoricalBounds, ~gemd.entity.value.categorical_value.CategoricalValue]
-            Other bounds or value objects to include.
+        others: CategoricalBounds or ~gemd.entity.value.categorical_value.CategoricalValue
+            Other bounds or value objects to include.  If they're Value objects,
+            increase by the smallest compatible bounds, as returned by the value's
+            :func:`~gemd.entity.base_bounds.BaseBounds._to_bounds` method.
 
         """
         self.categories = self.union(*others).categories

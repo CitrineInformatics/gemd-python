@@ -68,8 +68,10 @@ class IntegerBounds(BaseBounds, typ="integer_bounds"):
 
         Parameters
         ----------
-        bounds: Union[BaseBounds, BaseValue]
-            Other bounds or value object to check.
+        bounds: BaseBounds or BaseValue
+            Other bounds or value object to check.  If it's a Value object, check against
+            the smallest compatible bounds, as returned by the Value's
+            :func:`~gemd.entity.base_bounds.BaseBounds._to_bounds` method.
 
         Returns
         -------
@@ -98,8 +100,10 @@ class IntegerBounds(BaseBounds, typ="integer_bounds"):
 
         Parameters
         ----------
-        others: Union[IntegerBounds, ~gemd.entity.value.integer_value.IntegerValue]
-            Other bounds or value objects to include.
+        others: IntegerBounds or ~gemd.entity.value.integer_value.IntegerValue
+            Other bounds or value objects to include.  If they're Value objects,
+            increase by the smallest compatible bounds, as returned by the value's
+            :func:`~gemd.entity.base_bounds.BaseBounds._to_bounds` method.
 
         Returns
         -------
@@ -133,8 +137,10 @@ class IntegerBounds(BaseBounds, typ="integer_bounds"):
 
         Parameters
         ----------
-        others: Union[IntegerBounds, ~gemd.entity.value.integer_value.IntegerValue]
-            Other bounds or value objects to include.
+        others: IntegerBounds or ~gemd.entity.value.integer_value.IntegerValue
+            Other bounds or value objects to include.  If they're Value objects,
+            increase by the smallest compatible bounds, as returned by the value's
+            :func:`~gemd.entity.base_bounds.BaseBounds._to_bounds` method.
 
         """
         result = self.union(*others)

@@ -25,8 +25,10 @@ class MolecularStructureBounds(BaseBounds, typ="molecular_structure_bounds"):
 
         Parameters
         ----------
-        bounds: Union[BaseBounds, BaseValue]
-            Other bounds or value object to check.
+        bounds: BaseBounds or BaseValue
+            Other bounds or value object to check.  If it's a Value object, check against
+            the smallest compatible bounds, as returned by the Value's
+            :func:`~gemd.entity.base_bounds.BaseBounds._to_bounds` method.
 
         Returns
         -------
@@ -55,13 +57,15 @@ class MolecularStructureBounds(BaseBounds, typ="molecular_structure_bounds"):
 
         Parameters
         ----------
-        others: Union[MolecularStructureBounds, ~gemd.entity.value.molecular_value.MolecularValue]
+        others: MolecularStructureBounds or ~gemd.entity.value.molecular_value.MolecularValue
             Other bounds or value objects to include.
 
         Returns
         -------
         MolecularStructureBounds
-            The union of this bounds and the passed bounds
+            The union of this bounds and the passed bounds.  If they're Value objects,
+            increase by the smallest compatible bounds, as returned by the value's
+            :func:`~gemd.entity.base_bounds.BaseBounds._to_bounds` method.
 
         """
         from gemd.entity.value.molecular_value import MolecularValue
@@ -82,8 +86,10 @@ class MolecularStructureBounds(BaseBounds, typ="molecular_structure_bounds"):
 
         Parameters
         ----------
-        others: Union[MolecularStructureBounds, ~gemd.entity.value.molecular_value.MolecularValue]
-            Other bounds or value objects to include.
+        others: MolecularStructureBounds or ~gemd.entity.value.molecular_value.MolecularValue
+            Other bounds or value objects to include.  If they're Value objects,
+            increase by the smallest compatible bounds, as returned by the value's
+            :func:`~gemd.entity.base_bounds.BaseBounds._to_bounds` method.
 
         """
         pass  # This is a no-op for Molecular structure

@@ -46,7 +46,7 @@ extensions = [
 # See: https://github.com/sphinx-contrib/apidoc
 apidoc_module_dir = '../../gemd'
 apidoc_output_dir = 'reference'
-apidoc_excluded_paths = ['tests']
+apidoc_excluded_paths = ['tests', '*impl*']
 apidoc_separate_modules = True
 apidoc_toc_file = False
 
