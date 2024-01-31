@@ -13,6 +13,8 @@ from gemd.entity.setters import validate_list
 
 from typing import Optional, Union, Iterable, List, Set, Mapping, Type
 
+__all__ = ["MaterialSpec"]
+
 
 class MaterialSpec(BaseObject, HasTemplate, HasProcess, HasProperties, typ="material_spec"):
     """
@@ -34,16 +36,15 @@ class MaterialSpec(BaseObject, HasTemplate, HasProcess, HasProperties, typ="mate
         for filtering and discoverability.
     notes: str, optional
         Long-form notes about the material spec.
-    process: :class:`ProcessSpec <gemd.entity.object.process_spec.ProcessSpec>`
+    process: ~gemd.entity.object.process_spec.ProcessSpec
         Process that produces this material.
-    properties: List[:class:`PropertyAndConditions\
-    <gemd.entity.attribute.property_and_conditions.PropertyAndConditions>`], optional
+    properties: List[~gemd.entity.attribute.property_and_conditions.PropertyAndConditions], \
+      optional
         Properties of the material, along with an optional list of conditions under which
         those properties are measured.
-    template: :class:`MaterialTemplate\
-    <gemd.entity.template.material_template.MaterialTemplate>`, optional
+    template: ~gemd.entity.template.material_template.MaterialTemplate, optional
         A template bounding the valid values for this material's properties.
-    file_links: List[:class:`FileLink <gemd.entity.file_link.FileLink>`], optional
+    file_links: List[~gemd.entity.file_link.FileLink], optional
         Links to associated files, with resource paths into the files API.
 
     """

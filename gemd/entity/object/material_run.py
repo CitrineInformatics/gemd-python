@@ -8,7 +8,10 @@ from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.setters import validate_list
 
-from typing import Optional, Union, Iterable, List, Mapping, Type, Any
+from typing import TypeVar, Optional, Union, Iterable, List, Mapping, Type, Any
+
+__all__ = ["MaterialRun"]
+MeasurementRunType = TypeVar("MeasurementRunType", bound="MeasurementRun")  # noqa: F821
 
 
 class MaterialRun(BaseObject, HasSpec, HasProcess, typ="material_run", skip={"_measurements"}):
@@ -31,22 +34,15 @@ class MaterialRun(BaseObject, HasSpec, HasProcess, typ="material_run", skip={"_m
         for filtering and discoverability.
     notes: str, optional
         Long-form notes about the material run.
-    process: :class:`ProcessRun <gemd.entity.object.process_run.ProcessRun>`
+    process: ~gemd.entity.object.process_run.ProcessRun
         Process that produces this material.
     sample_type: str, optional
         The form of this sample. Optionals are "experimental", "virtual", "production", or
         "unknown." Default is "unknown."
-    spec: :class:`MaterialSpec <gemd.entity.object.material_spec.MaterialSpec>`
+    spec: :class:`~gemd.entity.object.material_spec.MaterialSpec`
         The material specification of which this is an instance.
-    file_links: List[:class:`FileLink <gemd.entity.file_link.FileLink>`], optional
+    file_links: List[~gemd.entity.file_link.FileLink], optional
         Links to associated files, with resource paths into the files API.
-
-    Attributes
-    ----------
-    measurements: List[:class:`MeasurementRun\
-    <gemd.entity.object.measurement_run.MeasurementRun>`], optional
-        Measurements performed on this material. The link is established by creating the
-        measurement run and settings its `material` field to this material run.
 
     """
 
@@ -91,8 +87,13 @@ class MaterialRun(BaseObject, HasSpec, HasProcess, typ="material_run", skip={"_m
             raise TypeError("process must be a ProcessRun or LinkByUID: {}".format(process))
 
     @property
-    def measurements(self) -> List["MeasurementRun"]:  # noqa: F821
-        """Get a read-only list of the measurement runs."""
+    def measurements(self) -> List[MeasurementRunType]:
+        """Measurements performed on this material.
+
+        The link is established by creating the measurement run and settings its
+        `material` field to this material run.
+
+        """
         return self._measurements
 
     @property

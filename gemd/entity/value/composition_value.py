@@ -4,6 +4,8 @@ from gemd.entity.bounds import CompositionBounds
 
 from abc import abstractmethod
 
+__all__ = ["CompositionValue"]
+
 
 class CompositionValue(BaseValue):
     """Base class for composition values."""
@@ -17,6 +19,6 @@ class CompositionValue(BaseValue):
         -------
         CompositionBounds
             The minimally consistent
-            :class:`bounds <gemd.entity.bounds.composition_bounds.CompositionBounds>`.
+            :class:`~gemd.entity.bounds.composition_bounds.CompositionBounds`.
 
         """

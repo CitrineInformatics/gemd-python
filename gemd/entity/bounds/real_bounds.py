@@ -1,13 +1,27 @@
 """Bound a real number to be between two values."""
 from math import isfinite
-from typing import Union
+from typing import TypeVar, Union
 
 from gemd.entity.bounds.base_bounds import BaseBounds
 import gemd.units as units
 
+__all__ = ["RealBounds"]
+RealBoundsType = TypeVar("RealBoundsType", bound="RealBounds")
+BaseValueType = TypeVar("BaseValueType", bound="BaseValue")  # noqa: F821
+ContinuousValueType = TypeVar("ContinuousValueType", bound="ContinuousValue")  # noqa: F821
+
 
 class RealBounds(BaseBounds, typ="real_bounds"):
-    """Bounded subset of the real numbers, parameterized by a lower and upper bound."""
+    """
+    Bounded subset of the real numbers, parameterized by a lower and upper bound.
+
+    Parameters
+    ----------
+    lower_bound: float
+        The lower endpoint (inclusive) of the permitted range.
+    upper_bound: float
+        The upper endpoint (inclusive) of the permitted range.
+    """
 
     def __init__(self, lower_bound: float, upper_bound: float, default_units: str):
         self._default_units = None
@@ -66,7 +80,7 @@ class RealBounds(BaseBounds, typ="real_bounds"):
                              "Use an empty string for a dimensionless quantity.")
         self._default_units = units.parse_units(default_units, return_unit=False)
 
-    def contains(self, bounds: Union[BaseBounds, "BaseValue"]) -> bool:  # noqa: F821
+    def contains(self, bounds: Union[BaseBounds, BaseValueType]) -> bool:
         """
         Check if another bounds or value object is a subset of this range.
 
@@ -77,8 +91,10 @@ class RealBounds(BaseBounds, typ="real_bounds"):
 
         Parameters
         ----------
-        bounds: Union[BaseBounds, BaseValue]
-            Other bounds or value object to check.
+        bounds: BaseBounds or BaseValue
+            Other bounds or value object to check.  If it's a Value object, check against
+            the smallest compatible bounds, as returned by the Value's
+            :func:`~gemd.entity.base_bounds.BaseBounds._to_bounds` method.
 
         Returns
         -------
@@ -101,7 +117,9 @@ class RealBounds(BaseBounds, typ="real_bounds"):
 
         return bounds.lower_bound >= lower and bounds.upper_bound <= upper
 
-    def union(self, *others: Union["RealBounds", "ContinuousValue"]) -> "RealBounds":  # noqa: F821
+    def union(self,
+              *others: Union[RealBoundsType, ContinuousValueType]
+              ) -> RealBoundsType:
         """
         Return the union of this bounds and other bounds.
 
@@ -109,8 +127,10 @@ class RealBounds(BaseBounds, typ="real_bounds"):
 
         Parameters
         ----------
-        others: Union[RealBounds, ContinuousValue]
-            Other bounds or value objects to include.
+        others: RealBounds or ContinuousValue
+            Other bounds or value objects to include.  If they're Value objects,
+            increase by the smallest compatible bounds, as returned by the value's
+            :func:`~gemd.entity.base_bounds.BaseBounds._to_bounds` method.
 
         Returns
         -------
@@ -140,7 +160,7 @@ class RealBounds(BaseBounds, typ="real_bounds"):
                 upper = bnd_hi
         return RealBounds(lower_bound=lower, upper_bound=upper, default_units=unit_)
 
-    def update(self, *others: Union["RealBounds", "ContinuousValue"]):  # noqa: F821
+    def update(self, *others: Union[RealBoundsType, ContinuousValueType]):
         """
         Update this bounds to include other bounds.
 
@@ -148,8 +168,10 @@ class RealBounds(BaseBounds, typ="real_bounds"):
 
         Parameters
         ----------
-        others: Union[RealBounds, ContinuousValue]
-            Other bounds or value objects to include.
+        others: RealBounds or ContinuousValue
+            Other bounds or value objects to include.  If they're Value objects,
+            increase by the smallest compatible bounds, as returned by the value's
+            :func:`~gemd.entity.base_bounds.BaseBounds._to_bounds` method.
 
         """
         result = self.union(*others)

@@ -1,5 +1,6 @@
 import inspect
 from deprecation import deprecated
+import json as json_builtin
 from typing import Dict, Any, Type
 
 from gemd.entity.dict_serializable import DictSerializable
@@ -7,7 +8,8 @@ from gemd.entity.base_entity import BaseEntity
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.json import GEMDEncoder
 from gemd.util import flatten, substitute_links, set_uuids
-import json as json_builtin
+
+__all__ = ["GEMDJson"]
 
 
 class GEMDJson(object):

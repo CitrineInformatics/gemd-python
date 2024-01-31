@@ -2,6 +2,8 @@
 from gemd.entity.value.composition_value import CompositionValue
 from gemd.entity.bounds import CompositionBounds
 
+__all__ = ["EmpiricalFormula"]
+
 
 _all_elements = {
     'Tb', 'Be', 'Sb', 'Re', 'Sr', 'Ac', 'Ho', 'Ir', 'Cr', 'Os', 'S', 'Pt', 'Si', 'C', 'V', 'Bi',
@@ -61,7 +63,7 @@ class EmpiricalFormula(CompositionValue, typ="empirical_formula"):
         -------
         BaseBounds
             The minimally consistent
-            :class:`bounds <gemd.entity.bounds.categorical_bounds.CategoricalBounds>`.
+            :class:`~gemd.entity.bounds.categorical_bounds.CategoricalBounds`.
 
         """
         return CompositionBounds(components=EmpiricalFormula._elements(self.formula))

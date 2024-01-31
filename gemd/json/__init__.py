@@ -10,14 +10,19 @@ This module provides the four main python json methods:
 These methods should provide drop-in support for serialization and deserialization of
 gemd-containing data structures by replacing imports of ``json`` with those of ``gemd.json``.
 
-It also provides convenience imports of :class:`~gemd_encoder.GEMDEncoder`
-and :class:`~gemd_json.GEMDJson`.
+It also provides convenience imports of :class:`~gemd.json.gemd_encoder.GEMDEncoder`
+and :class:`~gemd.json.gemd_json.GEMDJson`.
 These classes can be used by developers to integrate gemd with other tools by extending the
 JSON support provided here to those tools.
 """
 
 from .gemd_encoder import GEMDEncoder  # noqa: F401
 from .gemd_json import GEMDJson
+
+__all__ = [
+    "GEMDEncoder", "GEMDJson",
+    "loads", "dumps", "load", "dump"
+]
 
 __default = GEMDJson()
 

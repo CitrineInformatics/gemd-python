@@ -10,9 +10,10 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+import gemd
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../gemd'))
+sys.path.insert(0, os.path.abspath('../..'))
 
 
 # -- Project information -----------------------------------------------------
@@ -21,8 +22,10 @@ project = 'GEMD-python'
 copyright = '2020, Citrine Informatics'
 author = 'Citrine Informatics'
 
-# The full version, including alpha/beta/rc tags
-release = '0.0.0'
+# The short X.Y version.
+version = gemd.__version__
+# The full version, including alpha/beta/rc tags.
+release = gemd.__version__
 
 
 # -- General configuration ---------------------------------------------------
@@ -43,8 +46,9 @@ extensions = [
 # See: https://github.com/sphinx-contrib/apidoc
 apidoc_module_dir = '../../gemd'
 apidoc_output_dir = 'reference'
-apidoc_excluded_paths = ['tests']
+apidoc_excluded_paths = ['tests', '*impl*']
 apidoc_separate_modules = True
+apidoc_toc_file = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -76,6 +80,9 @@ autodoc_member_order = 'groupwise'
 # autodoc_mock_imports allows Sphinx to ignore any external modules listed in the array
 autodoc_mock_imports = []
 
+html_favicon = '_static/favicon.png'
+html_logo = '_static/logo.png'
 html_theme_options = {
-    "sticky_navigation": False
+    'sticky_navigation': False,
+    'logo_only': True
 }

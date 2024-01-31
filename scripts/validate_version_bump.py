@@ -9,7 +9,7 @@ from typing import TextIO
 
 def main():
     repo_dir = popen("git rev-parse --show-toplevel", mode="r").read().rstrip()
-    version_path = relpath(f'{repo_dir}/setup.py', getcwd())
+    version_path = relpath(f'{repo_dir}/gemd/__version__.py', getcwd())
 
     try:
         with open(version_path, "r") as fh:

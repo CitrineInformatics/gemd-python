@@ -1,5 +1,7 @@
 from gemd.entity.dict_serializable import DictSerializable
 
+__all__ = ["PerformedSource"]
+
 
 class PerformedSource(DictSerializable, typ="performed_source"):
     """

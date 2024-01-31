@@ -4,6 +4,8 @@ from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.template.has_condition_templates import HasConditionTemplates
 from gemd.entity.template.has_parameter_templates import HasParameterTemplates
 
+__all__ = ["ProcessTemplate"]
+
 
 class ProcessTemplate(BaseTemplate,
                       HasConditionTemplates, HasParameterTemplates,
@@ -33,17 +35,15 @@ class ProcessTemplate(BaseTemplate,
         The set of names that a process' ingredients are allowed to use in their name field.
     allowed_labels: List[str], optional
         The set of labels that a process' ingredients are allowed to use in their labels field.
-    conditions: List[:class:`ConditionTemplate \
-    <gemd.entity.template.condition_template.ConditionTemplate>`] or \
-    List[:class:`ConditionTemplate <gemd.entity.template.condition_template.ConditionTemplate>`,\
-     :py:class:`BaseBounds <gemd.entity.bounds.base_bounds.BaseBounds>`], optional
+    conditions: List[~gemd.entity.template.condition_template.ConditionTemplate] or \
+    List[~gemd.entity.template.condition_template.ConditionTemplate,\
+     ~gemd.entity.bounds.base_bounds.BaseBounds], optional
         Templates for associated conditions. Each template can be provided by itself, or as a list
         with the second entry being a separate, *more restrictive* Bounds object that defines
         the limits of the value for this condition.
-    parameters: List[:class:`ParameterTemplate \
-    <gemd.entity.template.parameter_template.ParameterTemplate>`] or \
-    List[:class:`ParameterTemplate <gemd.entity.template.parameter_template.ParameterTemplate>`,\
-     :py:class:`BaseBounds <gemd.entity.bounds.base_bounds.BaseBounds>`], optional
+    parameters: List[~gemd.entity.template.parameter_template.ParameterTemplate] or \
+    List[~gemd.entity.template.parameter_template.ParameterTemplate,\
+     ~gemd.entity.bounds.base_bounds.BaseBounds], optional
         Templates for associated parameters. Each template can be provided by itself, or as a list
         with the second entry being a separate, *more restrictive* Bounds object that defines
         the limits of the value for this parameter.

@@ -1,14 +1,26 @@
 """Bounds an integer to be between two values."""
 from math import isfinite
-from typing import Union
+from typing import TypeVar, Union
 
 from gemd.entity.bounds.base_bounds import BaseBounds
 
 __all__ = ["IntegerBounds"]
+IntegerBoundsType = TypeVar("IntegerBoundsType", bound="IntegerBounds")
+BaseValueType = TypeVar("BaseValueType", bound="BaseValue")  # noqa: F821
+IntegerValueType = TypeVar("IntegerValueType", bound="IntegerValue")  # noqa: F821
 
 
 class IntegerBounds(BaseBounds, typ="integer_bounds"):
-    """Bounded subset of the integers, parameterized by a lower and upper bound."""
+    """
+    Bounded subset of the integers, parameterized by a lower and upper bound.
+
+    Parameters
+    ----------
+    lower_bound: int
+        The lower endpoint (inclusive) of the permitted range.
+    upper_bound: int
+        The upper endpoint (inclusive) of the permitted range.
+    """
 
     def __init__(self, lower_bound: int, upper_bound: int):
         self._lower_bound = None
@@ -47,7 +59,7 @@ class IntegerBounds(BaseBounds, typ="integer_bounds"):
                              f"greater than or equal to lower bound ({self.lower_bound})")
         self._upper_bound = int(value)
 
-    def contains(self, bounds: Union[BaseBounds, "BaseValue"]) -> bool:  # noqa: F821
+    def contains(self, bounds: Union[BaseBounds, BaseValueType]) -> bool:
         """
         Check if another bounds or value object is a subset of this range.
 
@@ -56,8 +68,10 @@ class IntegerBounds(BaseBounds, typ="integer_bounds"):
 
         Parameters
         ----------
-        bounds: Union[BaseBounds, BaseValue]
-            Other bounds or value object to check.
+        bounds: BaseBounds or BaseValue
+            Other bounds or value object to check.  If it's a Value object, check against
+            the smallest compatible bounds, as returned by the Value's
+            :func:`~gemd.entity.base_bounds.BaseBounds._to_bounds` method.
 
         Returns
         -------
@@ -77,8 +91,8 @@ class IntegerBounds(BaseBounds, typ="integer_bounds"):
         return bounds.lower_bound >= self.lower_bound and bounds.upper_bound <= self.upper_bound
 
     def union(self,
-              *others: Union["IntegerBounds", "IntegerValue"]  # noqa: F821
-              ) -> "IntegerBounds":  # noqa: F821
+              *others: Union[IntegerBoundsType, IntegerValueType]
+              ) -> IntegerBoundsType:
         """
         Return the union of this bounds and other bounds.
 
@@ -86,8 +100,10 @@ class IntegerBounds(BaseBounds, typ="integer_bounds"):
 
         Parameters
         ----------
-        others: Union[IntegerBounds, IntegerValue]
-            Other bounds or value objects to include.
+        others: IntegerBounds or ~gemd.entity.value.integer_value.IntegerValue
+            Other bounds or value objects to include.  If they're Value objects,
+            increase by the smallest compatible bounds, as returned by the value's
+            :func:`~gemd.entity.base_bounds.BaseBounds._to_bounds` method.
 
         Returns
         -------
@@ -113,16 +129,18 @@ class IntegerBounds(BaseBounds, typ="integer_bounds"):
                 upper = bounds.upper_bound
         return IntegerBounds(lower_bound=lower, upper_bound=upper)
 
-    def update(self, *others: Union["IntegerBounds", "IntegerValue"]):  # noqa: F821
+    def update(self, *others: Union[IntegerBoundsType, IntegerValueType]):
         """
         Update this bounds to include other bounds.
 
-        The others list must also be Categorical Bounds or Values.
+        The others list must also be Integer Bounds or Values.
 
         Parameters
         ----------
-        others: Union[IntegerBounds, IntegerValue]
-            Other bounds or value objects to include.
+        others: IntegerBounds or ~gemd.entity.value.integer_value.IntegerValue
+            Other bounds or value objects to include.  If they're Value objects,
+            increase by the smallest compatible bounds, as returned by the value's
+            :func:`~gemd.entity.base_bounds.BaseBounds._to_bounds` method.
 
         """
         result = self.union(*others)

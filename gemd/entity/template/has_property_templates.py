@@ -6,7 +6,13 @@ from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.template.property_template import PropertyTemplate
 from gemd.entity.bounds.base_bounds import BaseBounds
 
-from typing import Optional, Union, Iterable, List, Set, Tuple
+from typing import TypeVar, Optional, Union, Iterable, List, Set, Tuple
+
+__all__ = ["HasPropertyTemplates"]
+BaseEntityType = TypeVar("BaseEntityType", bound="BaseEntity")  # noqa: F821
+PropertyType = TypeVar("PropertyType", bound="Property")  # noqa: F821
+PropertyAndConditionsType = TypeVar("PropertyAndConditionsType",
+                                    bound="PropertyAndConditions")  # noqa: F821
 
 
 class HasPropertyTemplates(HasDependencies):
@@ -15,7 +21,7 @@ class HasPropertyTemplates(HasDependencies):
 
     Parameters
     ----------
-    properties: List[(PropertyTemplate, BaseBounds)]
+    properties: List[(~gemd.entity.template.property_template.PropertyTemplate, BaseBounds)]
         A list of tuples containing this entity's property templates as well
         as any restrictions on those templates' bounds.
 
@@ -35,7 +41,7 @@ class HasPropertyTemplates(HasDependencies):
 
         Returns
         -------
-        List[(PropertyTemplate, bounds)]
+        List[(~gemd.entity.template.property_template.PropertyTemplate, BaseBounds)]
             List of this entity's property template/bounds pairs
 
         """
@@ -46,11 +52,11 @@ class HasPropertyTemplates(HasDependencies):
                                                     Tuple[Union[PropertyTemplate, LinkByUID],
                                                           Optional[BaseBounds]]]]):
         """
-        Set the list of parameter templates.
+        Set the list of property templates.
 
         Parameters
         ----------
-        properties: List[(PropertyTemplate, bounds)]
+        properties: List[(~gemd.entity.template.property_template.PropertyTemplate, BaseBounds)]
             A list of tuples containing this entity's property templates as well
             as any restrictions on those templates' bounds.
 
@@ -63,9 +69,7 @@ class HasPropertyTemplates(HasDependencies):
                                          trigger=BaseTemplate._homogenize_ranges
                                          )
 
-    def validate_property(self,
-                          prop: Union["Property", "PropertyAndConditions"]  # noqa: F821
-                          ) -> bool:  # noqa: F821
+    def validate_property(self, prop: Union[PropertyType, PropertyAndConditionsType]) -> bool:
         """Check if the property is consistent w/ this template."""
         from gemd.entity.attribute import PropertyAndConditions
         if isinstance(prop, PropertyAndConditions):
@@ -85,6 +89,6 @@ class HasPropertyTemplates(HasDependencies):
         else:
             return True  # Nothing to check against
 
-    def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:  # noqa: F821
+    def _local_dependencies(self) -> Set[Union[BaseEntityType, LinkByUID]]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {attr[0] for attr in self.properties}

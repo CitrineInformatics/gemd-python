@@ -2,6 +2,8 @@
 from gemd.entity.value.continuous_value import ContinuousValue
 from gemd.entity.bounds import RealBounds
 
+__all__ = ["NominalReal"]
+
 
 class NominalReal(ContinuousValue, typ="nominal_real"):
     """
@@ -31,7 +33,7 @@ class NominalReal(ContinuousValue, typ="nominal_real"):
         -------
         RealBounds
             The minimally consistent
-            :class:`bounds <gemd.entity.bounds.real_bounds.RealBounds>`.
+            :class:`~gemd.entity.bounds.real_bounds.RealBounds`.
 
         """
         return RealBounds(lower_bound=self.nominal,

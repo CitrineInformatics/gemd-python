@@ -1,6 +1,8 @@
 """A list that can validate its contents."""
 from typing import Optional, Union, Iterable, Callable, Type, TypeVar
 
+__all__ = ["ValidList"]
+
 T = TypeVar('T')
 
 

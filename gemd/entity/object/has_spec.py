@@ -1,22 +1,18 @@
 """For entities that have specs."""
+from gemd.entity.base_entity import BaseEntity
 from gemd.entity.has_dependencies import HasDependencies
+from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.object.has_template import HasTemplate
 from gemd.entity.template.base_template import BaseTemplate
-from gemd.entity.link_by_uid import LinkByUID
 
 from abc import abstractmethod
 from typing import Optional, Union, Set, Type
 
+__all__ = ["HasSpec"]
+
 
 class HasSpec(HasDependencies):
-    """Mix-in trait for objects that can be assigned specs.
-
-    Parameters
-    ----------
-    spec: :class:`Has_Template <gemd.entity.object.has_template.Has_Template>`
-        A spec, which expresses the anticipated or aspirational behavior of this object.
-
-    """
+    """Mix-in trait for objects that can be assigned specs."""
 
     def __init__(self, spec: Union[HasTemplate, LinkByUID] = None):
         self._spec = None
@@ -24,7 +20,7 @@ class HasSpec(HasDependencies):
 
     @property
     def spec(self) -> Union[HasTemplate, LinkByUID]:
-        """Get the spec."""
+        """A spec, which expresses the anticipated or aspirational behavior of this object."""
         return self._spec
 
     @spec.setter
@@ -51,6 +47,6 @@ class HasSpec(HasDependencies):
         else:
             return None
 
-    def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:  # noqa: F821
+    def _local_dependencies(self) -> Set[Union[BaseEntity, LinkByUID]]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {self.spec} if self.spec is not None else set()

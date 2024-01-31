@@ -25,6 +25,10 @@ from gemd.json import GEMDJson
 
 from gemd.util.impl import recursive_foreach
 
+__all__ = [
+    "change_scope", "get_demo_scope", "get_template_scope", "import_toothpick_picture",
+    "make_cake_templates", "make_cake_spec", "make_cake"
+]
 
 # For now, module constant, though likely this should get promoted to a package level
 DEMO_SCOPE = 'citrine-demo'

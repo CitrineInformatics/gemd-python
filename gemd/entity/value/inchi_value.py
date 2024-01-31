@@ -2,6 +2,8 @@
 from gemd.entity.value.molecular_value import MolecularValue
 from gemd.entity.bounds import MolecularStructureBounds
 
+__all__ = ["InChI"]
+
 
 class InChI(MolecularValue, typ="inchi"):
     """
@@ -47,8 +49,7 @@ class InChI(MolecularValue, typ="inchi"):
         -------
         MolecularStructureBounds
             The minimally consistent
-            :class:`bounds
-            <gemd.entity.bounds.molecular_structure_bounds.MolecularStructureBounds>`.
+            :class:`~gemd.entity.bounds.molecular_structure_bounds.MolecularStructureBounds`.
 
         """
         return MolecularStructureBounds()

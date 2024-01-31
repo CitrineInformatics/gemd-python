@@ -6,7 +6,11 @@ from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.template.condition_template import ConditionTemplate
 from gemd.entity.bounds.base_bounds import BaseBounds
 
-from typing import Optional, Union, Iterable, List, Tuple, Set
+from typing import TypeVar, Optional, Union, Iterable, List, Tuple, Set
+
+__all__ = ["HasConditionTemplates"]
+BaseEntityType = TypeVar("BaseEntityType", bound="BaseEntity")  # noqa: F821
+ConditionType = TypeVar("ConditionType", bound="Condition")  # noqa: F821
 
 
 class HasConditionTemplates(HasDependencies):
@@ -15,7 +19,7 @@ class HasConditionTemplates(HasDependencies):
 
     Parameters
     ----------
-    conditions: List[(ConditionTemplate, BaseBounds)]
+    conditions: List[(~gemd.entity.template.condition_template.ConditionTemplate, BaseBounds)]
         A list of tuples containing this entity's condition templates as well
         as any restrictions on those templates' bounds.
 
@@ -34,7 +38,7 @@ class HasConditionTemplates(HasDependencies):
 
         Returns
         -------
-        List[(ConditionTemplate, bounds)]
+        List[(~gemd.entity.template.condition_template.ConditionTemplate, BaseBounds)]
             List of this entity's condition template/bounds pairs
 
         """
@@ -49,13 +53,13 @@ class HasConditionTemplates(HasDependencies):
 
         Parameters
         ----------
-        conditions: List[(ConditionTemplate, bounds)]
+        conditions: List[(~gemd.entity.template.condition_template.ConditionTemplate, BaseBounds)]
             A list of tuples containing this entity's condition templates as well
             as any restrictions on those templates' bounds.
 
         Returns
         -------
-        List[(ConditionTemplate, bounds)]
+        List[(~gemd.entity.template.condition_template.ConditionTemplate, BaseBounds)]
             List of this entity's condition template/bounds pairs
 
         """
@@ -67,7 +71,7 @@ class HasConditionTemplates(HasDependencies):
                                          trigger=BaseTemplate._homogenize_ranges
                                          )
 
-    def validate_condition(self, condition: "Condition") -> bool:  # noqa: F821
+    def validate_condition(self, condition: ConditionType) -> bool:
         """Check if the condition is consistent w/ this template."""
         if condition.template is not None:
             attr, bnd = next((x for x in self.conditions if condition.template == x[0]),
@@ -83,6 +87,6 @@ class HasConditionTemplates(HasDependencies):
         else:
             return True  # Nothing to check against
 
-    def _local_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:  # noqa: F821
+    def _local_dependencies(self) -> Set[Union[BaseEntityType, LinkByUID]]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {attr[0] for attr in self.conditions}

@@ -1,5 +1,7 @@
 from typing import Tuple, Sequence, Any, Mapping, Optional
 
+__all__ = ["CaseInsensitiveDict"]
+
 _RaiseKeyError = object()  # singleton for no-default behavior
 
 

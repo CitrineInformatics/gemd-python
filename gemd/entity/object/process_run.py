@@ -11,7 +11,11 @@ from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.setters import validate_list
 
-from typing import Optional, Union, Iterable, List, Mapping, Dict, Type, Any
+from typing import TypeVar, Optional, Union, Iterable, List, Mapping, Dict, Type, Any
+
+__all__ = ["ProcessRun"]
+MaterialRunType = TypeVar("MaterialRunType", bound="MaterialRun")  # noqa: F821
+IngredientRunType = TypeVar("IngredientRunType", bound="IngredientRun")  # noqa: F821
 
 
 class ProcessRun(BaseObject,
@@ -38,27 +42,16 @@ class ProcessRun(BaseObject,
         for filtering and discoverability.
     notes: str, optional
         Long-form notes about the process run.
-    conditions: List[:class:`Condition <gemd.entity.attribute.condition.Condition>`], optional
+    conditions: List[~gemd.entity.attribute.condition.Condition], optional
         Conditions under which this process run occurs.
-    parameters: List[:class:`Parameter <gemd.entity.attribute.parameter.Parameter>`], optional
+    parameters: List[~gemd.entity.attribute.parameter.Parameter], optional
         Parameters of this process run.
-    spec: :class:`ProcessSpec <gemd.entity.object.process_spec.ProcessSpec>`
+    spec: ~gemd.entity.object.process_spec.ProcessSpec
         Spec for this process run.
-    file_links: List[:class:`FileLink <gemd.entity.file_link.FileLink>`], optional
+    file_links: List[~gemd.entity.file_link.FileLink], optional
         Links to associated files, with resource paths into the files API.
-    source: :class:`PerformedSource\
-    <gemd.entity.source.performed_source.PerformedSource>`, optional
+    source: ~gemd.entity.source.performed_source.PerformedSource, optional
         Information about the person who performed the run and when.
-
-    Attributes
-    ----------
-    output_material: :class:`MaterialRun <gemd.entity.object.material_run.MaterialRun>`
-        The material run that this process run produces. The link is established by creating
-        the material run and settings its `process` field to this process run.
-
-    ingredients: List[:class:`IngredientRun <gemd.entity.object.ingredient_run.IngredientRun>`]
-        Ingredient runs that act as inputs to this process run. The link is established by
-        creating each ingredient run and setting its `process` field to this process run.
 
     """
 
@@ -86,13 +79,23 @@ class ProcessRun(BaseObject,
         self._output_material = None
 
     @property
-    def output_material(self) -> Optional["MaterialRun"]:  # noqa: F821
-        """Get the output material run."""
+    def output_material(self) -> Optional[MaterialRunType]:
+        """The material run that this process run produces.
+
+        The link is established by creating the material run and settings its
+        `process` field to this process run.
+
+        """
         return self._output_material
 
     @property
-    def ingredients(self) -> List["IngredientRun"]:  # noqa: F821
-        """Get the input ingredient runs."""
+    def ingredients(self) -> List[IngredientRunType]:
+        """Ingredient runs that act as inputs to this process run.
+
+        The link is established by creating each ingredient run and setting its
+        `process` field to this process run.
+
+        """
         return self._ingredients
 
     @staticmethod

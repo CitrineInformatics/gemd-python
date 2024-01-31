@@ -6,10 +6,27 @@
 Welcome to the GEMD-Python Documentation!
 ===================================================
 
-``gemd`` is the Python implementation of the Citrine data model, the full documentation of which
-can be found `here <https://citrineinformatics.github.io/gemd-docs/>`_.
+This site documents the Python implementation of the Graphical Expression of Materials Data (GEMD) model.
+GEMD is an open source data format developed by `Citrine Informatics <https://citrine.io/>`_ for representing
+data in materials in a `FAIR <https://www.go-fair.org/fair-principles/>`_ and transformable manner.
+Documentation of the underlying data model can be found `here <https://citrineinformatics.github.io/gemd-docs/>`_.
 
 To learn about the details of specific classes, please see the module index.
+
+Installation
+------------
+
+The latest release can be installed via `pip`:
+
+.. code:: bash
+
+  pip install gemd
+
+or a specific version can be installed, for example:
+
+.. code:: bash
+
+  pip install gemd==1.17.1
 
 Table of Contents
 -----------------
@@ -18,11 +35,17 @@ Table of Contents
    :maxdepth: 2
    :numbered: 4
 
-   depth/index
+   depth/unit_parsing
+   depth/serialization
 
-Indices and tables
+Indices
 ------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+.. toctree::
+   :maxdepth: 1
+
+   reference/gemd

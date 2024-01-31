@@ -6,6 +6,8 @@ from gemd.entity.template.attribute_template import AttributeTemplate
 
 from typing import Union, Iterable, Mapping
 
+__all__ = ["BaseTemplate"]
+
 
 class BaseTemplate(BaseEntity):
     """
