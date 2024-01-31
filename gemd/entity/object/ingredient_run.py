@@ -14,6 +14,8 @@ from gemd.entity.setters import validate_list
 
 from typing import Optional, Union, Iterable, List, Mapping, Type, Any
 
+__all__ = ["IngredientRun"]
+
 
 class IngredientRun(BaseObject,
                     HasQuantities, HasSpec, HasMaterial, HasProcess,
@@ -35,25 +37,21 @@ class IngredientRun(BaseObject,
         for filtering and discoverability.
     notes: str, optional
         Long-form notes about the ingredient run.
-    material: :class:`MaterialRun <gemd.entity.object.material_run.MaterialRun>`
+    material: ~gemd.entity.object.material_run.MaterialRun
         Material that this ingredient is.
-    process: :class:`ProcessRun <gemd.entity.object.process_run.ProcessRun>`
+    process: ~gemd.entity.object.process_run.ProcessRun
         Process that this ingredient is used in.
-    mass_fraction: :py:class:`ContinuousValue \
-    <gemd.entity.value.continuous_value.ContinuousValue>`, optional
+    mass_fraction: ~gemd.entity.value.continuous_value.ContinuousValue, optional
         The mass fraction of the ingredient in the process.
-    volume_fraction: :py:class:`ContinuousValue \
-    <gemd.entity.value.continuous_value.ContinuousValue>`, optional
+    volume_fraction: ~gemd.entity.value.continuous_value.ContinuousValue, optional
         The volume fraction of the ingredient in the process.
-    number_fraction: :py:class:`ContinuousValue \
-    <gemd.entity.value.continuous_value.ContinuousValue>`, optional
+    number_fraction: ~gemd.entity.value.continuous_value.ContinuousValue, optional
         The number fraction of the ingredient in the process.
-    absolute_quantity: :py:class:`ContinuousValue \
-    <gemd.entity.value.continuous_value.ContinuousValue>`, optional
+    absolute_quantity: ~gemd.entity.value.continuous_value.ContinuousValue, optional
         The absolute quantity of the ingredient in the process.
-    spec: IngredientSpec
+    spec: ~gemd.entity.object.ingredient_spec.IngredientSpec
         The specification of which this ingredient is a realization.
-    file_links: List[:class:`FileLink <gemd.entity.file_link.FileLink>`], optional
+    file_links: List[~gemd.entity.file_link.FileLink], optional
         Links to associated files, with resource paths into the files API.
 
     """

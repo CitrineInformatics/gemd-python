@@ -37,7 +37,7 @@ def set_uuids(obj, scope):
 
 def cached_isinstance(
         obj: object,
-        class_or_tuple: Union[Type, Tuple[Union[Type, Tuple[Type]]]]) -> bool:
+        class_or_tuple: Union[Type, Tuple[Type]]) -> bool:
     """
     Emulate isinstance builtin to take advantage of functools caching.
 
@@ -45,7 +45,7 @@ def cached_isinstance(
     ----------
     obj: object
 
-    class_or_tuple: Union[Type, Tuple[Union[Type, Tuple[Type]]]]
+    class_or_tuple: Type or Tuple[Type]
         A single type, a tuple of types (potentially nested)
 
     Returns
@@ -65,7 +65,7 @@ _cached_isinstance = cached_isinstance
 @functools.lru_cache(maxsize=1024)
 def _cached_issubclass(
         cls: Type,
-        class_or_tuple: Union[Type, Tuple[Union[Type, Tuple[Type]]]]) -> bool:
+        class_or_tuple: Union[Type, Tuple[Type]]) -> bool:
     """
     Emulate issubclass builtin to take advantage of functools caching.
 
@@ -73,7 +73,7 @@ def _cached_issubclass(
     ----------
     cls: type
         The class to evaluate
-    class_or_tuple: Union[Type, Tuple[Union[Type, Tuple[Type]]]]
+    class_or_tuple: Type or Tuple[Type]
         A single type, a tuple of types (potentially nested)
 
     Returns
@@ -253,7 +253,7 @@ def make_index(obj: Union[Iterable, BaseEntity, DictSerializable]):
 
     Parameters
     ----------
-    obj: Union[Iterable, Mapping, BaseEntity, DictSerializable]
+    obj: BaseEntity or Iterable[BaseEntity]
         target container (dict, list, ...) from which to create an index of GEMD objects
 
     """
@@ -388,23 +388,23 @@ def flatten(obj, scope=None) -> List[BaseEntity]:
     return sorted([substitute_links(x) for x in res], key=lambda x: writable_sort_order(x))
 
 
-def recursive_foreach(obj: Union[Iterable, BaseEntity, DictSerializable],
+def recursive_foreach(obj: Union[Iterable, DictSerializable],
                       func: Callable[[BaseEntity], None],
                       *,
                       apply_first=False):
     """
     Apply a function recursively to each BaseEntity object.
 
-    Only objects of type BaseEntity will have the function applied, but the recursion will walk
+    Only :class:`BaseEntity` objects will have the function applied, but the recursion will walk
     through all objects.  For example, BaseEntity -> list -> BaseEntity will have func applied
     to both base entities.
 
     Parameters
     ----------
-    obj: Union[Iterable, Mapping, BaseEntity, DictSerializable]
+    obj: DictSerializable or Iterable[DictSerializable], or Iterable[...]
         target of the operation
     func: Callable[[BaseEntity], None]
-        to apply to each contained BaseEntity
+        function to apply to :class:`BaseEntity` elements
     apply_first: bool
         whether to apply the func before applying it to members (default: false)
 
@@ -444,19 +444,23 @@ def recursive_foreach(obj: Union[Iterable, BaseEntity, DictSerializable],
     return
 
 
-def recursive_flatmap(obj: Union[Iterable, BaseEntity, DictSerializable],
+def recursive_flatmap(obj: Union[Iterable, DictSerializable],
                       func: Callable[[BaseEntity], Iterable],
                       *,
                       unidirectional=True) -> List:
     """
     Recursively apply and accumulate a list-valued function to BaseEntity members.
 
+    Only :class:`BaseEntity` objects will have the function applied, but the recursion will walk
+    through all objects.  For example, BaseEntity -> list -> BaseEntity will have func applied
+    to both base entities.
+
     Parameters
     ----------
-    obj: Union[Iterable, Mapping, BaseEntity, DictSerializable]
+    obj: DictSerializable or Iterable[DictSerializable], or Iterable[...]
         target of the operation
-    func: Callable[[BaseEntity], Iterable]
-        function to apply; must be list-valued
+    func: Callable[[BaseEntity], Iterable[Any]]
+        function to apply to :class:`BaseEntity` elements; must be list-valued
     unidirectional: bool
         only recurse through the writeable direction of bidirectional links
 

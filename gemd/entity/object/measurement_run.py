@@ -16,6 +16,8 @@ from gemd.entity.link_by_uid import LinkByUID
 
 from typing import Optional, Union, Iterable, Mapping, Type
 
+__all__ = ["MeasurementRun"]
+
 
 class MeasurementRun(BaseObject, HasMaterial, HasSpec, HasConditions, HasProperties,
                      HasParameters, HasSource, typ="measurement_run"):
@@ -39,22 +41,21 @@ class MeasurementRun(BaseObject, HasMaterial, HasSpec, HasConditions, HasPropert
         for filtering and discoverability.
     notes: str, optional
         Long-form notes about the measurement run.
-    conditions: List[:class:`Condition <gemd.entity.attribute.condition.Condition>`], optional
+    conditions: List[~gemd.entity.attribute.condition.Condition], optional
         Conditions under which this measurement run occurs.
-    parameters: List[:class:`Parameter <gemd.entity.attribute.parameter.Parameter>`], optional
+    parameters: List[~gemd.entity.attribute.parameter.Parameter], optional
         Parameters of this measurement run.
-    properties: List[:class:`Property <gemd.entity.attribute.property.Property>`], optional
+    properties: List[~gemd.entity.attribute.property.Property], optional
         Properties that are measured during this measurement run.
-    spec: :class:`MeasurementSpec <gemd.entity.object.measurement_spec.MeasurementSpec>`
+    spec: ~gemd.entity.object.measurement_spec.MeasurementSpec`
         The measurement specification of which this is an instance.
-    material: :class:`MaterialRun <gemd.entity.object.material_run.MaterialRun>`
+    material: ~gemd.entity.object.material_run.MaterialRun`
         The material run being measured.
-    spec: :class:`MaterialSpec <gemd.entity.object.material_spec.MaterialSpec>`
+    spec: ~gemd.entity.object.material_spec.MaterialSpec`
         The material specification of which this is an instance.
-    file_links: List[:class:`FileLink <gemd.entity.file_link.FileLink>`], optional
+    file_links: List[~gemd.entity.file_link.FileLink], optional
         Links to associated files, with resource paths into the files API.
-    source: :class:`PerformedSource\
-    <gemd.entity.source.performed_source.PerformedSource>`, optional
+    source: ~gemd.entity.source.performed_source.PerformedSource, optional
         Information about the person who performed the run and when.
 
     """

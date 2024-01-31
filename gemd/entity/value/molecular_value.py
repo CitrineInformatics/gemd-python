@@ -4,6 +4,8 @@ from gemd.entity.bounds import MolecularStructureBounds
 
 from abc import abstractmethod
 
+__all__ = ["MolecularValue"]
+
 
 class MolecularValue(BaseValue):
     """Base class for molecular structure values."""
@@ -17,7 +19,6 @@ class MolecularValue(BaseValue):
         -------
         MolecularStructureBounds
             The minimally consistent
-            :class:`bounds
-            <gemd.entity.bounds.molecular_structure_bounds.MolecularStructureBounds>`.
+            :class:`~gemd.entity.bounds.molecular_structure_bounds.MolecularStructureBounds`.
 
         """

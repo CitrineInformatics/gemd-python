@@ -2,6 +2,8 @@
 from gemd.entity.value.integer_value import IntegerValue
 from gemd.entity.bounds import IntegerBounds
 
+__all__ = ["NominalInteger"]
+
 
 class NominalInteger(IntegerValue, typ="nominal_integer"):
     """
@@ -40,7 +42,7 @@ class NominalInteger(IntegerValue, typ="nominal_integer"):
         -------
         IntegerBounds
             The minimally consistent
-            :class:`bounds <gemd.entity.bounds.integer_bounds.IntegerBounds>`.
+            :class:`~gemd.entity.bounds.integer_bounds.IntegerBounds`.
 
         """
         return IntegerBounds(lower_bound=self.nominal, upper_bound=self.nominal)

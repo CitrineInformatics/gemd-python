@@ -4,6 +4,8 @@ from gemd.entity.bounds import CategoricalBounds
 
 from abc import abstractmethod
 
+__all__ = ["CategoricalValue"]
+
 
 class CategoricalValue(BaseValue):
     """
@@ -21,6 +23,6 @@ class CategoricalValue(BaseValue):
         -------
         CategoricalBounds
             The minimally consistent
-            :class:`bounds <gemd.entity.bounds.categorical_bounds.CategoricalBounds>`.
+            :class:`gemd.entity.bounds.categorical_bounds.CategoricalBounds`.
 
         """

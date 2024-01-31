@@ -4,6 +4,8 @@ from gemd.entity.bounds import IntegerBounds
 
 from abc import abstractmethod
 
+__all__ = ["IntegerValue"]
+
 
 class IntegerValue(BaseValue):
     """A base class for values that correspond to a distribution over the integers."""
@@ -17,6 +19,6 @@ class IntegerValue(BaseValue):
         -------
         IntegerBounds
             The minimally consistent
-            :class:`bounds <gemd.entity.bounds.integer_bounds.IntegerBounds>`.
+            :class:`~gemd.entity.bounds.integer_bounds.IntegerBounds`.
 
         """

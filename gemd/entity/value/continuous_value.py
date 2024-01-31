@@ -5,6 +5,8 @@ from gemd.entity.bounds import RealBounds
 
 from abc import abstractmethod
 
+__all__ = ["ContinuousValue"]
+
 
 class ContinuousValue(BaseValue):
     """
@@ -47,7 +49,6 @@ class ContinuousValue(BaseValue):
         Returns
         -------
         RealBounds
-            The minimally consistent
-            :class:`bounds <gemd.entity.bounds.real_bounds.RealBounds>`.
+            The minimally consistent :class:`~gemd.entity.bounds.real_bounds.RealBounds`.
 
         """

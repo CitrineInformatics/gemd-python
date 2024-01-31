@@ -4,6 +4,8 @@ from gemd.entity.bounds.base_bounds import BaseBounds
 
 from abc import abstractmethod
 
+__all__ = ["BaseValue"]
+
 
 class BaseValue(DictSerializable):
     """
@@ -11,7 +13,6 @@ class BaseValue(DictSerializable):
 
     "Value" is a generic term for the information contained in an
     :class:`attribute <gemd.entity.attribute.base_attribute.BaseAttribute>`.
-    A value may be one of the following types: `RealValue`, `IntegerValue`, `Categorical`.
     """
 
     @abstractmethod
@@ -22,7 +23,6 @@ class BaseValue(DictSerializable):
         Returns
         -------
         BaseBounds
-            The minimally consistent
-            :class:`bounds <gemd.entity.bounds.base_bounds.BaseBounds>`.
+            The minimally consistent :class:`bounds <gemd.entity.bounds.base_bounds.BaseBounds>`.
 
         """

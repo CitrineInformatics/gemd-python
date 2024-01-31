@@ -1,7 +1,11 @@
 """A unique id that stands in for a data object."""
+from typing import TypeVar
 import uuid
 
 from gemd.entity.dict_serializable import DictSerializable
+
+__all__ = ["LinkByUID"]
+BaseEntityType = TypeVar("BaseEntityType", bound="BaseEntity")  # noqa: F821
 
 
 class LinkByUID(DictSerializable, typ="link_by_uid"):
@@ -26,7 +30,7 @@ class LinkByUID(DictSerializable, typ="link_by_uid"):
         return str({"scope": self.scope, "id": self.id})
 
     @classmethod
-    def from_entity(cls, entity, *, scope=None):
+    def from_entity(cls, entity: BaseEntityType, *, scope=None):
         """
         Create LinkByUID from in-memory object.
 

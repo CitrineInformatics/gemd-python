@@ -8,6 +8,8 @@ from gemd.entity.setters import validate_list
 
 from typing import Optional, Union, Iterable, List
 
+__all__ = ["PropertyAndConditions"]
+
 
 class PropertyAndConditions(DictSerializable, typ="property_and_conditions"):
     """
@@ -17,9 +19,9 @@ class PropertyAndConditions(DictSerializable, typ="property_and_conditions"):
 
     Parameters
     ----------
-    property: :class:`Property <gemd.entity.attribute.property.Property>`
+    property: ~gemd.entity.attribute.property.Property
         A property attribute
-    conditions: List[:class:`Condition <gemd.entity.attribute.condition.Condition>`]
+    conditions: List[~gemd.entity.attribute.condition.Condition]
         An optional list of conditions associated with this property.
 
     """

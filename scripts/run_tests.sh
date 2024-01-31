@@ -36,7 +36,11 @@ then python $REPO_DIR/scripts/validate_version_bump.py                        ||
 fi
 
 flake8 $REPO_DIR/gemd                                                         || exit 1;
+<<<<<<< HEAD
 derp $REPO_DIR/gemd $REPO_DIR/setup.py                                        || exit 1;
+=======
+derp $REPO_DIR $REPO_DIR/gemd/__version__.py                                  || exit 1;
+>>>>>>> main
 pytest $QUIET $EXITFIRST --cov=$REPO_DIR/gemd                                \
        --cov-report term-missing:skip-covered                                \
        --cov-config=$REPO_DIR/tox.ini --no-cov-on-fail --cov-fail-under=100  \

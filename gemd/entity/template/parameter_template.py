@@ -1,14 +1,16 @@
 from gemd.entity.template.attribute_template import AttributeTemplate
 
+__all__ = ["ParameterTemplate"]
+
 
 class ParameterTemplate(AttributeTemplate, typ="parameter_template"):
     """A template for the parameter attribute.
 
-        Parameters
+    Parameters
     ----------
     name: str, required
         The name of the parameter template.
-    bounds: :py:class:`BaseBounds <gemd.entity.bounds.base_bounds.BaseBounds>`
+    bounds: ~gemd.entity.bounds.base_bounds.BaseBounds
         Bounds circumscribe the values that are valid according to this parameter template.
     description: str, optional
         A long-form description of the attribute template.

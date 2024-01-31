@@ -1,7 +1,7 @@
 from gemd.entity.dict_serializable import DictSerializable, logger
 from gemd.entity.template.attribute_template import AttributeTemplate
 from gemd.entity.value.base_value import BaseValue
-from gemd.enumeration import Origin
+from gemd.enumeration.origin import Origin
 from gemd.entity.setters import validate_list
 from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
@@ -21,16 +21,15 @@ class BaseAttribute(DictSerializable):
         Required name of the attribute. Each attribute within an object must have a unique name.
     notes: str
         Optional free-form notes about the attribute.
-    value: :py:class:`BaseValue <gemd.entity.value.base_value.BaseValue>`
+    value: BaseValue
         The value of the attribute.
-    template: :class:`AttributeTemplate \
-    <gemd.entity.template.attribute_template.AttributeTemplate>`
+    template: AttributeTemplate
         Attribute template that defines the allowed bounds of this attribute. If a template
         and value are both present then the value must be within the template bounds.
-    origin: str
+    origin: str or ~gemd.enumeration.origin.Origin
         The origin of the attribute. Must be one of "measured", "predicted", "summary",
         "specified", "computed", or "unknown." Default is "unknown."
-    file_links: List[FileLink]
+    file_links: List[~gemd.entity.file_link.FileLink]
         Links to files associated with the attribute.
 
     """
@@ -69,11 +68,12 @@ class BaseAttribute(DictSerializable):
 
     @property
     def value(self) -> BaseValue:
-        """Get value."""
+        """Get the value."""
         return self._value
 
     @value.setter
     def value(self, value: BaseValue):
+        """Set the value."""
         if value is None:
             self._value = None
         elif isinstance(value, BaseValue):
@@ -85,11 +85,12 @@ class BaseAttribute(DictSerializable):
 
     @property
     def template(self) -> Optional[Union[AttributeTemplate, LinkByUID]]:
-        """Get template."""
+        """Get the template."""
         return self._template
 
     @template.setter
     def template(self, template: Optional[Union[AttributeTemplate, LinkByUID]]):
+        """Set the template."""
         if template is None:
             self._template = None
         elif isinstance(template, (self._template_type(), LinkByUID)):
@@ -107,20 +108,22 @@ class BaseAttribute(DictSerializable):
 
     @property
     def origin(self) -> Origin:
-        """Get origin."""
+        """Get the origin."""
         return self._origin
 
     @origin.setter
     def origin(self, origin: Union[Origin, str]):
+        """Set the origin."""
         if origin is None:
             raise ValueError("origin must be specified (but may be `unknown`)")
         self._origin = Origin.from_str(origin, exception=True)
 
     @property
     def file_links(self) -> List[FileLink]:
-        """Get file links."""
+        """Get the file links."""
         return self._file_links
 
     @file_links.setter
     def file_links(self, file_links: Optional[Union[Iterable[FileLink], FileLink]]):
+        """Set the file links."""
         self._file_links = validate_list(file_links, FileLink)

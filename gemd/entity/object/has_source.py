@@ -1,17 +1,11 @@
 """For entities that have parameters."""
 from gemd.entity.source.performed_source import PerformedSource
 
+__all__ = ["HasSource"]
+
 
 class HasSource(object):
-    """Mixin-trait for entities that include sources (data provenance).
-
-    Parameters
-    ----------
-    source: :class:`PerformedSource\
-    <gemd.entity.source.performed_source.PerformedSource>`, optional
-        Information about the person who performed the run and when.
-
-    """
+    """Mixin-trait for entities that include sources (data provenance)."""
 
     def __init__(self, source: PerformedSource):
         self._source = None
@@ -19,7 +13,7 @@ class HasSource(object):
 
     @property
     def source(self) -> PerformedSource:
-        """Get the list of parameters."""
+        """Information about the person who performed the run and when."""
         return self._source
 
     @source.setter

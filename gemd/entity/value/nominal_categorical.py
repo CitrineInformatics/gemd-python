@@ -3,6 +3,8 @@ from gemd.entity.setters import validate_str
 from gemd.entity.value.categorical_value import CategoricalValue
 from gemd.entity.bounds import CategoricalBounds
 
+__all__ = ["NominalCategorical"]
+
 
 class NominalCategorical(CategoricalValue, typ="nominal_categorical"):
     """
@@ -39,7 +41,7 @@ class NominalCategorical(CategoricalValue, typ="nominal_categorical"):
         -------
         BaseBounds
             The minimally consistent
-            :class:`bounds <gemd.entity.bounds.categorical_bounds.CategoricalBounds>`.
+            :class:`~gemd.entity.bounds.categorical_bounds.CategoricalBounds`.
 
         """
         return CategoricalBounds(categories={self.category})

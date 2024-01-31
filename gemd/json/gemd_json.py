@@ -7,6 +7,8 @@ from gemd.entity.link_by_uid import LinkByUID
 from gemd.json import GEMDEncoder
 from gemd.util import flatten, substitute_links, set_uuids
 
+__all__ = ["GEMDJson"]
+
 
 class GEMDJson(object):
     """

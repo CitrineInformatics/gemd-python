@@ -1,30 +1,20 @@
 """Base class for all entities."""
-from typing import Optional, Union, Iterable, List, Set, FrozenSet, Mapping, Dict
+from typing import TypeVar, Optional, Union, Iterable, List, Set, FrozenSet, MutableMapping, Dict
 
 from gemd.entity.dict_serializable import DictSerializable
 from gemd.entity.has_dependencies import HasDependencies
 from gemd.entity.case_insensitive_dict import CaseInsensitiveDict
 from gemd.entity.setters import validate_list
 
+__all__ = ["BaseEntity"]
+BaseEntityType = TypeVar("BaseEntityType", bound="BaseEntity")
+LinkByUIDType = TypeVar("LinkByUIDType", bound="LinkByUID")  # noqa: F821
+
 
 class BaseEntity(DictSerializable):
-    """
-    Base class for any entity, which includes objects and templates.
+    """Base class for any entity, which includes objects and templates."""
 
-    Parameters
-    ----------
-    uids: Map[str, str]
-        A collection of
-        `unique IDs <https://citrineinformatics.github.io/gemd-documentation/
-        specification/unique-identifiers/>`_.
-    tags: List[str]
-        `Tags <https://citrineinformatics.github.io/gemd-documentation/specification/tags/>`_
-        are hierarchical strings that store information about an entity. They can be used
-        for filtering and discoverability.
-
-    """
-
-    def __init__(self, uids: Mapping[str, str], tags: Iterable[str]):
+    def __init__(self, uids: MutableMapping[str, str], tags: Iterable[str]):
         self._tags = None
         self.tags = tags
 
@@ -33,23 +23,37 @@ class BaseEntity(DictSerializable):
 
     @property
     def tags(self) -> List[str]:
-        """Get the tags."""
+        """A collection of structured labels.
+
+        `Tags <https://citrineinformatics.github.io/gemd-documentation/specification/tags/>`_
+        are hierarchical strings that store information about an entity. They can be used
+        for filtering and discoverability.
+        """
         return self._tags
 
     @tags.setter
     def tags(self, tags: Iterable[str]):
+        """Set the tags."""
         self._tags = validate_list(tags, str)
 
     @property
-    def uids(self) -> Mapping[str, str]:
-        """Get the uids."""
+    def uids(self) -> Dict[str, str]:
+        """
+        A collection of unique IDs.
+
+        Requirements for and the value of unique IDs are discussed
+        `here <https://citrineinformatics.github.io/gemd-documentation/
+        specification/unique-identifiers/>`_.
+
+        """
         return self._uids
 
     @uids.setter
-    def uids(self, uids: Mapping[str, str]):
+    def uids(self, uids: MutableMapping[str, str]):
+        """Set the uids."""
         if uids is None:
             self._uids = CaseInsensitiveDict()
-        elif isinstance(uids, Mapping):
+        elif isinstance(uids, MutableMapping):
             self._uids = CaseInsensitiveDict(**uids)
         else:
             self._uids = CaseInsensitiveDict(**{uids[0]: uids[1]})
@@ -71,9 +75,10 @@ class BaseEntity(DictSerializable):
     def to_link(self,
                 scope: Optional[str] = None,
                 *,
-                allow_fallback: bool = False) -> 'LinkByUID':  # noqa: F821
+                allow_fallback: bool = False
+                ) -> LinkByUIDType:
         """
-        Generate a LinkByUID for this object.
+        Generate a ~gemd.entity.link_by_uid.LinkByUID for this object.
 
         Parameters
         ----------
@@ -84,7 +89,7 @@ class BaseEntity(DictSerializable):
 
         Returns
         -------
-        LinkByUID
+        ~gemd.entity.link_by_uid.LinkByUID
 
         """
         from gemd.entity.link_by_uid import LinkByUID
@@ -100,7 +105,7 @@ class BaseEntity(DictSerializable):
 
         return LinkByUID(scope=scope, id=uid)
 
-    def all_dependencies(self) -> Set[Union["BaseEntity", "LinkByUID"]]:  # noqa: F821
+    def all_dependencies(self) -> Set[Union[BaseEntityType, LinkByUIDType]]:
         """Return a set of all immediate dependencies (no recursion)."""
         result = set()
         queue = [type(self)]
@@ -113,10 +118,11 @@ class BaseEntity(DictSerializable):
         return result
 
     @staticmethod
-    def _cached_equals(this: 'BaseEntity',
-                       that: 'BaseEntity',
+    def _cached_equals(this: "BaseEntity",
+                       that: "BaseEntity",
                        *,
-                       cache: Dict[FrozenSet, Optional[bool]] = None) -> Optional[bool]:
+                       cache: Dict[FrozenSet, Optional[bool]] = None
+                       ) -> Optional[bool]:
         """
         Compute and stash whether two Base Entities are equal in a recursive sense.
 

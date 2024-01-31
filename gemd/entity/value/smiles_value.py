@@ -2,6 +2,8 @@
 from gemd.entity.value.molecular_value import MolecularValue
 from gemd.entity.bounds import MolecularStructureBounds
 
+__all__ = ["Smiles"]
+
 
 class Smiles(MolecularValue, typ="smiles"):
     """
@@ -41,8 +43,7 @@ class Smiles(MolecularValue, typ="smiles"):
         -------
         MolecularStructureBounds
             The minimally consistent
-            :class:`bounds
-            <gemd.entity.bounds.molecular_structure_bounds.MolecularStructureBounds>`.
+            :class:`~gemd.entity.bounds.molecular_structure_bounds.MolecularStructureBounds`.
 
         """
         return MolecularStructureBounds()

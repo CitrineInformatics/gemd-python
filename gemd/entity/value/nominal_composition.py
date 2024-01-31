@@ -2,6 +2,8 @@
 from gemd.entity.value.composition_value import CompositionValue
 from gemd.entity.bounds import CompositionBounds
 
+__all__ = ["NominalComposition"]
+
 
 class NominalComposition(CompositionValue, typ="nominal_composition"):
     """
@@ -50,7 +52,7 @@ class NominalComposition(CompositionValue, typ="nominal_composition"):
         -------
         BaseBounds
             The minimally consistent
-            :class:`bounds <gemd.entity.bounds.categorical_bounds.CategoricalBounds>`.
+            :class:`~gemd.entity.bounds.categorical_bounds.CategoricalBounds`.
 
         """
         return CompositionBounds(components=set(self.quantities))
