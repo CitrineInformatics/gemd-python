@@ -1,5 +1,5 @@
 """Test of a complicated set of interlocking data objects."""
-import json
+import json as json_builtin
 
 from gemd.entity.object.ingredient_run import IngredientRun
 from toolz import keymap, merge, keyfilter
@@ -167,4 +167,4 @@ def test_access_data():
 
     # check that the serialization results in the correct number of objects in the preface
     # (note that neither measurements nor ingredients are serialized)
-    assert(len(json.loads(dumps(island))["context"]) == 26)
+    assert(len(json_builtin.loads(dumps(island))["context"]) == 26)

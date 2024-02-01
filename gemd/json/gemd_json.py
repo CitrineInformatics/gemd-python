@@ -1,4 +1,4 @@
-import json
+import json as json_builtin
 from typing import Dict, Any, Type
 
 from gemd.entity.dict_serializable import DictSerializable
@@ -52,7 +52,7 @@ class GEMDJson(object):
         additional = flatten(res, self.scope)
         res = substitute_links(res)
         res["context"] = additional
-        return json.dumps(res, cls=GEMDEncoder, sort_keys=True, **kwargs)
+        return json_builtin.dumps(res, cls=GEMDEncoder, sort_keys=True, **kwargs)
 
     def loads(self, json_str: str, **kwargs):
         """
@@ -77,7 +77,7 @@ class GEMDJson(object):
         index = {}
         clazz_index = DictSerializable.class_mapping
         clazz_index.update(self._clazz_index)
-        raw = json.loads(
+        raw = json_builtin.loads(
             json_str,
             object_hook=lambda x: self._load_and_index(x,
                                                        index,
@@ -161,7 +161,7 @@ class GEMDJson(object):
             A serialized string of `obj`, which could be nested
 
         """
-        return json.dumps(obj, cls=GEMDEncoder, sort_keys=True, **kwargs)
+        return json_builtin.dumps(obj, cls=GEMDEncoder, sort_keys=True, **kwargs)
 
     def thin_dumps(self, obj, **kwargs):
         """
@@ -182,7 +182,7 @@ class GEMDJson(object):
         """
         set_uuids(obj, self.scope)
         res = substitute_links(obj)
-        return json.dumps(res, cls=GEMDEncoder, sort_keys=True, **kwargs)
+        return json_builtin.dumps(res, cls=GEMDEncoder, sort_keys=True, **kwargs)
 
     def raw_loads(self, json_str, **kwargs):
         """
@@ -206,7 +206,7 @@ class GEMDJson(object):
         index = {}
         clazz_index = DictSerializable.class_mapping
         clazz_index.update(self._clazz_index)
-        return json.loads(
+        return json_builtin.loads(
             json_str,
             object_hook=lambda x: self._load_and_index(x, index, clazz_index=clazz_index),
             **kwargs)

@@ -1,8 +1,8 @@
 """Test Strehlow & Cook demo."""
 from gemd.demo.strehlow_and_cook import make_strehlow_table, make_strehlow_objects, \
     minimal_subset, import_table
-import gemd.json as je
-import json
+import gemd.json as gemd_json
+import json as json_builtin
 
 
 def test_sac():
@@ -12,7 +12,7 @@ def test_sac():
 
     # Check that all shapes of records serialize and deserialize
     for comp in sac:
-        assert je.loads(je.dumps(comp)) == comp
+        assert gemd_json.loads(gemd_json.dumps(comp)) == comp
 
     # Verify that specs are shared when compounds match
     for comp1 in sac:
@@ -27,7 +27,7 @@ def test_sac():
 
     # Make sure there's no migration with repeated serialization
     for row in sac_tbl:
-        assert je.dumps(je.loads(je.dumps(row))) == je.dumps(row)
+        assert gemd_json.dumps(gemd_json.loads(gemd_json.dumps(row))) == gemd_json.dumps(row)
 
     # Verify that the serialization trick for mocking a structured table works
-    json.dumps(json.loads(je.dumps(sac_tbl))["object"], indent=2)
+    json_builtin.dumps(json_builtin.loads(gemd_json.dumps(sac_tbl))["object"], indent=2)
