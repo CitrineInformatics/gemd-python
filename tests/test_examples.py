@@ -1,16 +1,13 @@
 """Test of a complicated set of interlocking data objects."""
 import json
 
-from gemd.entity.object.ingredient_run import IngredientRun
-from toolz import keymap, merge, keyfilter
-
 from gemd.json import dumps
 from gemd.entity.attribute.condition import Condition
 from gemd.entity.attribute.parameter import Parameter
 from gemd.entity.attribute.property import Property
 from gemd.entity.bounds.real_bounds import RealBounds
 from gemd.entity.object import MeasurementRun, MaterialRun, ProcessRun, ProcessSpec,\
-    MeasurementSpec, MaterialSpec
+    MeasurementSpec, MaterialSpec, IngredientRun
 from gemd.entity.template.condition_template import ConditionTemplate
 from gemd.entity.template.material_template import MaterialTemplate
 from gemd.entity.template.measurement_template import MeasurementTemplate
@@ -45,13 +42,13 @@ material_template = MaterialTemplate(
 
 def make_data_island(density, bulk_modulus, firing_temperature, binders, powders, tag=None):
     """Helper function to create a relatively involved data island."""
-    binder_specs = keymap(lambda x: MaterialSpec(name=x), binders)
-    powder_specs = keymap(lambda x: MaterialSpec(name=x), powders)
+    binder_specs = {MaterialSpec(name=k): v for k, v in binders.items()}
+    powder_specs = {MaterialSpec(name=k): v for k, v in powders.items()}
 
-    binder_runs = keymap(lambda x: MaterialRun(name=x.name, spec=x), binder_specs)
-    powder_runs = keymap(lambda x: MaterialRun(name=x.name, spec=x), powder_specs)
+    binder_runs = {MaterialRun(name=k.name, spec=k): v for k, v in binder_specs.items()}
+    powder_runs = {MaterialRun(name=k.name, spec=k): v for k, v in powder_specs.items()}
 
-    all_input_materials = keymap(lambda x: x.spec.name, merge(binder_runs, powder_runs))
+    all_input_materials = {k.spec.name: v for k, v in binder_runs.items() | powder_runs.items()}
     mixing_composition = Condition(
         name="composition",
         value=NominalComposition(all_input_materials)
@@ -161,9 +158,7 @@ def test_access_data():
 
     # read the quantity of alumina
     quantities = island.process.ingredients[0].material.process.conditions[0].value.quantities
-    assert(list(
-        keyfilter(lambda x: x == "Al2O3", quantities).values()
-    )[0] == 0.96)
+    assert quantities.get("Al2O3") == 0.96
 
     # check that the serialization results in the correct number of objects in the preface
     # (note that neither measurements nor ingredients are serialized)

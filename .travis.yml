@@ -9,13 +9,8 @@ python:
 env:
   - UPGRADES="-U --only-binary 'pint,pandas' pint pandas"
   - UPGRADES=""
-jobs:
-  exclude:
-    - python: '3.12'
-      env: UPGRADES=""
 install:
   - pip install --only-binary ':all:' -r requirements.txt
-  - test $TRAVIS_PYTHON_VERSION != "3.12" || perl -pi -E 's/^.*(?:pandas|flake8-docstrings).*$//' test_requirements.txt
   - pip install --only-binary ':all:' -r test_requirements.txt
   - pip install $UPGRADES -e .
 script:

@@ -41,13 +41,14 @@ setup(name='gemd',
       ],
       extras_require={
           "tests": [
-              "pytest>=7.3.1,<8"
+              "pytest>=8.0.0,<9"
           ],
           "tests.demo": [
-              "pandas>=1.3.5,<3"
+              "pandas>=2.0.3,<3"
           ],
           "tests.entity.bounds": [
-              "numpy"
+              "numpy>=1.24.4,<2",
+              "pandas>=2.0.3,<3"
           ]
       },
       classifiers=[

@@ -70,7 +70,7 @@ def test_numpy():
         np_copy = loads(dumps(np_bounds))
         assert np_copy == np_bounds
 
-    if len(array_like()) > 3:  # Test numpy
+    if len(array_like()) > 3:  # Test pandas
         import pandas as pd
         pd_bounds = CategoricalBounds(pd.Series(["spam", "eggs"]))
         pd_copy = loads(dumps(pd_bounds))
