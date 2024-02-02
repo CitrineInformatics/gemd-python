@@ -227,8 +227,20 @@ def convert_units(value: float, starting_unit: str, final_unit: str) -> float:
     if starting_unit == final_unit:
         return value  # skip computation
     else:
-        resolved_final_unit = _REGISTRY.parse_units(final_unit)  # `to` bypasses preparser
-        return _REGISTRY.Quantity(value, starting_unit).to(resolved_final_unit).magnitude
+        resolved_value = _REGISTRY.Quantity(value, starting_unit)
+        resolved_final_unit = _REGISTRY.parse_units(final_unit)
+        # Make sure count, radian, bit, and non-dimensional don't accidentally interconvert
+        # https://pint.readthedocs.io/en/0.23/user/angular_frequency.html
+        root1 = _REGISTRY.get_root_units(resolved_value)[1]
+        root2 = _REGISTRY.get_root_units(resolved_final_unit)[1]
+        if root1 != root2:
+            raise IncompatibleUnitsError(
+                units1=resolved_value.units,
+                dim1=_REGISTRY.get_dimensionality(resolved_final_unit),
+                units2=final_unit,
+                dim2=_REGISTRY.get_dimensionality(resolved_final_unit)
+            )
+        return resolved_value.to(resolved_final_unit).magnitude
 
 
 @register_unit_format("clean")
