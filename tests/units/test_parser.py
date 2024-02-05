@@ -5,8 +5,7 @@ from pint import UnitRegistry
 import pytest
 
 from gemd.units import parse_units, convert_units, get_base_units, change_definitions_file, \
-    UndefinedUnitError, DefinitionSyntaxError
-from gemd.units.impl import DEFAULT_FILE
+    UndefinedUnitError, DefinitionSyntaxError, IncompatibleUnitsError
 
 
 @pytest.mark.parametrize("return_unit", [True, False])
@@ -143,6 +142,13 @@ def test_conversion():
     # Verify that convert_units respects scaling factors
     assert -1e-8 < convert_units(100, 'g / 100 mL', 'g/cc') - 1 < 1e-8
     assert -1e-8 < convert_units(1, "g / 2.5 cm", "g / 25 mm") - 1 < 1e-8
+
+    # Verify that convert_units throws exceptions
+    with pytest.raises(IncompatibleUnitsError):
+        convert_units(1, 'mL', 'g')
+    with pytest.raises(IncompatibleUnitsError):
+        # https://pint.readthedocs.io/en/0.23/user/angular_frequency.html
+        convert_units(1, 'Hz', 'rpm')
 
 
 def test_get_base_units():
