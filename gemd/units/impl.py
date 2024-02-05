@@ -30,10 +30,10 @@ __all__ = [
 def _deploy_default_files() -> str:
     """Copy the units & constants file into a temporary directory."""
     units_path = Path(_TEMP_DIRECTORY.name) / "citrine_en.txt"
-    units_path.write_text(read_text("gemd.units", "citrine_en.txt"))
+    units_path.write_text(read_text("gemd.units", "citrine_en.txt"), encoding="utf-8")
 
     constants_path = Path(_TEMP_DIRECTORY.name) / "constants_en.txt"
-    constants_path.write_text(read_text("gemd.units", "constants_en.txt"))
+    constants_path.write_text(read_text("gemd.units", "constants_en.txt"), encoding="utf-8")
 
     return str(units_path)
 
