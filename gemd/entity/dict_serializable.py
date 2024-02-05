@@ -1,7 +1,6 @@
 from abc import ABC, ABCMeta
 from logging import getLogger
 
-import json as json_builtin
 import inspect
 import functools
 from typing import TypeVar, Union, Iterable, List, Mapping, Dict, Set, Any
@@ -121,8 +120,10 @@ class DictSerializable(ABC, metaclass=DictSerializableMeta):
 
         """
         from gemd.json import GEMDJson
+        import json
+
         encoder = GEMDJson()
-        return json_builtin.loads(encoder.raw_dumps(self))
+        return json.loads(encoder.raw_dumps(self))
 
     @staticmethod
     def build(d: Mapping[str, Any]) -> DictSerializableType:

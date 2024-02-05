@@ -1,6 +1,5 @@
 """Bake a cake."""
 from io import BytesIO
-import json as json_builtin
 import random
 
 from gemd.entity.attribute import Condition, Parameter, Property, PropertyAndConditions
@@ -1059,12 +1058,14 @@ def make_cake(seed=None, tmpl=None, cake_spec=None, toothpick_img=None):
 
 
 if __name__ == "__main__":
+    import json
+
     encoder = GEMDJson()
     cake = make_cake(seed=42)
 
     with open("example_gemd_material_history.json", "w") as f:
         context_list = complete_material_history(cake)
-        f.write(json_builtin.dumps(context_list, indent=2))
+        f.write(json.dumps(context_list, indent=2))
 
     with open("example_gemd_material_template.json", "w") as f:
         f.write(encoder.thin_dumps(cake.template, indent=2))

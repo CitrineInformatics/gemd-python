@@ -46,8 +46,8 @@ __all__ = [
 def import_table(filename=SMALL_TABLE):
     """Return the deserialized JSON table."""
     from importlib.resources import read_text
-    import json as json_builtin
-    table = json_builtin.loads(read_text("gemd.demo", filename))
+    import json
+    table = json.loads(read_text("gemd.demo", filename))
 
     return table
 
@@ -462,6 +462,7 @@ if __name__ == "__main__":
     """
     import os.path
     import json as json_builtin
+    import gemd.json as gemd_json
     import sys
 
     args = sys.argv[1:]
@@ -489,8 +490,7 @@ if __name__ == "__main__":
         json_builtin.dump(reduced_list, f, indent=2)
 
     print("\n\nJSON -- Training table")
-    import gemd.json as je
-    print(json_builtin.dumps(json_builtin.loads(je.dumps(full_table))["object"], indent=2))
+    print(json_builtin.dumps(json_builtin.loads(gemd_json.dumps(full_table))["object"], indent=2))
 
     print("\n\nCSV -- Display table")
     display = make_display_table(full_table)

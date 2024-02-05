@@ -1,7 +1,7 @@
 """Test of a complicated set of interlocking data objects."""
 import json as json_builtin
+import gemd.json as gemd_json
 
-from gemd.json import dumps
 from gemd.entity.attribute.condition import Condition
 from gemd.entity.attribute.parameter import Parameter
 from gemd.entity.attribute.property import Property
@@ -162,4 +162,4 @@ def test_access_data():
 
     # check that the serialization results in the correct number of objects in the preface
     # (note that neither measurements nor ingredients are serialized)
-    assert(len(json_builtin.loads(dumps(island))["context"]) == 26)
+    assert(len(json_builtin.loads(gemd_json.dumps(island))["context"]) == 26)

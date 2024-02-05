@@ -117,14 +117,14 @@ def complete_material_history(mat) -> List[Dict[str, Any]]:
     """
     from gemd.entity.base_entity import BaseEntity
     import json as json_builtin
-    from gemd.json import dumps, loads
+    import gemd.json as gemd_json
     from gemd.util.impl import substitute_links
 
     result = []
 
     def body(obj: BaseEntity):
-        copy = substitute_links(loads(dumps(obj)))
-        result.append(json_builtin.loads(dumps(copy))["context"][0])
+        copy = substitute_links(gemd_json.loads(gemd_json.dumps(obj)))
+        result.append(json_builtin.loads(gemd_json.dumps(copy))["context"][0])
 
     recursive_foreach(mat, body, apply_first=False)
 

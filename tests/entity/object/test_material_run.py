@@ -4,7 +4,7 @@ import json as json_builtin
 from uuid import uuid4
 from copy import deepcopy
 
-from gemd.json import loads, dumps
+import gemd.json as gemd_json
 from gemd.entity.attribute import PropertyAndConditions, Property
 from gemd.entity.object import MaterialRun, ProcessSpec, ProcessRun, MaterialSpec, MeasurementRun
 from gemd.entity.template import MaterialTemplate
@@ -33,7 +33,7 @@ def test_material_run():
     )
 
     # Make sure that when property is serialized, origin (an enumeration) is serialized as a string
-    copy_prop = json_builtin.loads(dumps(mat_spec))
+    copy_prop = json_builtin.loads(gemd_json.dumps(mat_spec))
     copy_origin = copy_prop["context"][0]["properties"][0]['property']['origin']
     assert isinstance(copy_origin, str)
 
@@ -43,8 +43,8 @@ def test_material_run():
     mat = MaterialRun("name", spec=mat_spec, sample_type="virtual")
 
     # ensure that serialization does not change the MaterialRun
-    copy = loads(dumps(mat))
-    assert dumps(copy) == dumps(mat), \
+    copy = gemd_json.loads(gemd_json.dumps(mat))
+    assert gemd_json.dumps(copy) == gemd_json.dumps(mat), \
         "Material run is modified by serialization or deserialization"
 
 
@@ -57,8 +57,8 @@ def test_process_run():
     assert material_run.process == process_run
     assert process_run.output_material == material_run
 
-    copy_material = loads(dumps(material_run))
-    assert dumps(copy_material) == dumps(material_run)
+    copy_material = gemd_json.loads(gemd_json.dumps(material_run))
+    assert gemd_json.dumps(copy_material) == gemd_json.dumps(material_run)
 
     assert 'output_material' in repr(process_run)
     assert 'process' in repr(material_run)
@@ -69,8 +69,8 @@ def test_process_id_link():
     uid = str(uuid4())
     proc_link = LinkByUID(scope='id', id=uid)
     mat_run = MaterialRun("Another cake", process=proc_link)
-    copy_material = loads(dumps(mat_run))
-    assert dumps(copy_material) == dumps(mat_run)
+    copy_material = gemd_json.loads(gemd_json.dumps(mat_run))
+    assert gemd_json.dumps(copy_material) == gemd_json.dumps(mat_run)
 
 
 def test_process_reassignment():
