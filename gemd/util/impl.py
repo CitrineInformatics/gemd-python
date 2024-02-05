@@ -3,7 +3,6 @@ import uuid
 import functools
 from typing import Optional, Union, Type, Iterable, MutableSequence, List, Tuple, Mapping, \
     Callable, Any, Reversible, ByteString
-from warnings import warn
 
 from gemd.entity.base_entity import BaseEntity
 from gemd.entity.dict_serializable import DictSerializable
@@ -271,7 +270,6 @@ def make_index(obj: Union[Iterable, BaseEntity, DictSerializable]):
 def substitute_links(obj: Any,
                      scope: Optional[str] = None,
                      *,
-                     native_uid: str = None,
                      allow_fallback: bool = True,
                      inplace: bool = False
                      ):
@@ -287,21 +285,12 @@ def substitute_links(obj: Any,
         target of the operation
     scope: Optional[str], optional
         preferred scope to use for creating LinkByUID objects (Default: None)
-    native_uid: str, optional
-        DEPRECATED; former name for scope argument
     allow_fallback: bool, optional
         whether to grab another scope/id if chosen scope is missing (Default: True).
     inplace: bool, optional
         whether to replace objects in place, as opposed to returning a copy (Default: False).
 
     """
-    if native_uid is not None:
-        warn("The keyword argument 'native_uid' is deprecated.  When selecting a default scope, "
-             "use the 'scope' keyword argument.", DeprecationWarning)
-        if scope is not None:
-            raise ValueError("Both 'scope' and 'native_uid' keywords passed.")
-        scope = native_uid
-
     if inplace:
         method = _substitute_inplace
     else:

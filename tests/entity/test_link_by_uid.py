@@ -36,15 +36,6 @@ def test_from_entity():
     link1 = LinkByUID.from_entity(run, scope='foo')
     assert (link1.scope, link1.id) == ('foo', 'bar')
 
-    with pytest.deprecated_call():
-        assert LinkByUID.from_entity(run, 'foo').scope == 'foo'
-
-    with pytest.deprecated_call():
-        assert LinkByUID.from_entity(run, name='foo').scope == 'foo'
-
-    with pytest.raises(ValueError):
-        LinkByUID.from_entity(run, name='scope1', scope='scope2')
-
 
 def test_equality():
     """Test that the __eq__ method performs as expected."""

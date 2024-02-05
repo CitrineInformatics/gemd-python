@@ -79,24 +79,15 @@ def test_signature():
     """Exercise various permutations of the substitute_links sig."""
     spec = ProcessSpec("A process spec", uids={'my': 'spec'})
 
-    with pytest.warns(DeprecationWarning):
-        run1 = ProcessRun("First process run", uids={'my': 'run1'}, spec=spec)
-        assert isinstance(substitute_links(run1, native_uid='my').spec, LinkByUID)
+    run1 = ProcessRun("First process run", uids={'my': 'run1'}, spec=spec)
+    assert isinstance(substitute_links(run1, scope='my').spec, LinkByUID)
 
     run2 = ProcessRun("Second process run", uids={'my': 'run2'}, spec=spec)
-    assert isinstance(substitute_links(run2, scope='my').spec, LinkByUID)
+    assert isinstance(substitute_links(run2, 'my').spec, LinkByUID)
 
-    run3 = ProcessRun("Third process run", uids={'my': 'run3'}, spec=spec)
-    assert isinstance(substitute_links(run3, 'my').spec, LinkByUID)
-
-    with pytest.raises(ValueError):  # Test deprecated auto-population
-        run4 = ProcessRun("Fourth process run", uids={'my': 'run4'}, spec=spec)
-        assert isinstance(substitute_links(run4, 'other', allow_fallback=False).spec, LinkByUID)
-
-    with pytest.warns(DeprecationWarning):
-        with pytest.raises(ValueError):  # Test deprecated auto-population
-            run5 = ProcessRun("Fifth process run", uids={'my': 'run4'}, spec=spec)
-            assert isinstance(substitute_links(run5, scope="my", native_uid="my").spec, LinkByUID)
+    with pytest.raises(ValueError):
+        run3 = ProcessRun("Third process run", uids={'my': 'run3'}, spec=spec)
+        assert isinstance(substitute_links(run3, 'other', allow_fallback=False).spec, LinkByUID)
 
 
 def test_inplace_v_not():

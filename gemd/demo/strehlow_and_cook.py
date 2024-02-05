@@ -461,7 +461,8 @@ if __name__ == "__main__":
     Defaults to DEMO_TEMPLATE_SCOPE if none provided.
     """
     import os.path
-    import json
+    import json as json_builtin
+    import gemd.json as gemd_json
     import sys
 
     args = sys.argv[1:]
@@ -486,11 +487,10 @@ if __name__ == "__main__":
                 break
 
     with open(os.path.join(os.path.dirname(__file__), SMALL_TABLE), 'w') as f:
-        json.dump(reduced_list, f, indent=2)
+        json_builtin.dump(reduced_list, f, indent=2)
 
     print("\n\nJSON -- Training table")
-    import gemd.json as je
-    print(json.dumps(json.loads(je.dumps(full_table))["object"], indent=2))
+    print(json_builtin.dumps(json_builtin.loads(gemd_json.dumps(full_table))["object"], indent=2))
 
     print("\n\nCSV -- Display table")
     display = make_display_table(full_table)

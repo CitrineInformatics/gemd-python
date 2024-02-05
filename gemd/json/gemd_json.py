@@ -1,6 +1,4 @@
-import inspect
-from deprecation import deprecated
-import json as json_builtin
+import json
 from typing import Dict, Any, Type
 
 from gemd.entity.dict_serializable import DictSerializable
@@ -54,7 +52,7 @@ class GEMDJson(object):
         additional = flatten(res, self.scope)
         res = substitute_links(res)
         res["context"] = additional
-        return json_builtin.dumps(res, cls=GEMDEncoder, sort_keys=True, **kwargs)
+        return json.dumps(res, cls=GEMDEncoder, sort_keys=True, **kwargs)
 
     def loads(self, json_str: str, **kwargs):
         """
@@ -79,7 +77,7 @@ class GEMDJson(object):
         index = {}
         clazz_index = DictSerializable.class_mapping
         clazz_index.update(self._clazz_index)
-        raw = json_builtin.loads(
+        raw = json.loads(
             json_str,
             object_hook=lambda x: self._load_and_index(x,
                                                        index,
@@ -163,7 +161,7 @@ class GEMDJson(object):
             A serialized string of `obj`, which could be nested
 
         """
-        return json_builtin.dumps(obj, cls=GEMDEncoder, sort_keys=True, **kwargs)
+        return json.dumps(obj, cls=GEMDEncoder, sort_keys=True, **kwargs)
 
     def thin_dumps(self, obj, **kwargs):
         """
@@ -184,7 +182,7 @@ class GEMDJson(object):
         """
         set_uuids(obj, self.scope)
         res = substitute_links(obj)
-        return json_builtin.dumps(res, cls=GEMDEncoder, sort_keys=True, **kwargs)
+        return json.dumps(res, cls=GEMDEncoder, sort_keys=True, **kwargs)
 
     def raw_loads(self, json_str, **kwargs):
         """
@@ -208,40 +206,10 @@ class GEMDJson(object):
         index = {}
         clazz_index = DictSerializable.class_mapping
         clazz_index.update(self._clazz_index)
-        return json_builtin.loads(
+        return json.loads(
             json_str,
             object_hook=lambda x: self._load_and_index(x, index, clazz_index=clazz_index),
             **kwargs)
-
-    @deprecated(deprecated_in="1.13.0", removed_in="2.0.0",
-                details="Classes are now automatically registered when extending BaseEntity")
-    def register_classes(self, classes):
-        """
-        Register additional classes to the custom deserialization object hook.
-
-        This allows for additional DictSerializable subclasses to be registered to the class index
-        that is used to decode the type strings.  Existing keys are overwritten, allowing classes
-        in the gemd package to be subclassed and overridden in the class index by their
-        subclass.
-
-        Parameters
-        ----------
-        classes: Dict[str, type]
-            a dict mapping the type string to the class
-
-        """
-        if not isinstance(classes, dict):
-            raise ValueError("Must be given a dict from str -> class")
-        non_string_keys = [x for x in classes.keys() if not isinstance(x, str)]
-        if len(non_string_keys) > 0:
-            raise ValueError(
-                "The keys must be strings, but got {} as keys".format(non_string_keys))
-        non_class_values = [x for x in classes.values() if not inspect.isclass(x)]
-        if len(non_class_values) > 0:
-            raise ValueError(
-                "The values must be classes, but got {} as values".format(non_class_values))
-
-        self._clazz_index.update(classes)
 
     @staticmethod
     def _load_and_index(

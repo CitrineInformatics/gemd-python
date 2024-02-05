@@ -1,6 +1,5 @@
 """Bake a cake."""
 from io import BytesIO
-import json
 import random
 
 from gemd.entity.attribute import Condition, Parameter, Property, PropertyAndConditions
@@ -1059,6 +1058,8 @@ def make_cake(seed=None, tmpl=None, cake_spec=None, toothpick_img=None):
 
 
 if __name__ == "__main__":
+    import json
+
     encoder = GEMDJson()
     cake = make_cake(seed=42)
 
