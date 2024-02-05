@@ -4,10 +4,11 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gemd.entity.object.process_run module &mdash; GEMD-python 0.0.0 documentation</title>
+  <title>gemd.entity.object.process_run module &mdash; GEMD-python 1.18.5 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -15,10 +16,13 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="gemd.entity.object.process_spec module" href="gemd.entity.object.process_spec.html" />
+    <link rel="prev" title="gemd.entity.object.measurement_spec module" href="gemd.entity.object.measurement_spec.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -26,8 +30,12 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> GEMD-python
+            <a href="../index.html">
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
+              <div class="version">
+                1.18.5
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -37,7 +45,29 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../depth/index.html">1. In depth documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../depth/unit_parsing.html">1. Unit Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../depth/serialization.html">2. Serialization (with Graphs!)</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="gemd.html">gemd package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="gemd.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="gemd.builders.html">gemd.builders package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.demo.html">gemd.demo package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="gemd.entity.html">gemd.entity package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="gemd.entity.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gemd.entity.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gemd.entity.html#module-gemd.entity">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.enumeration.html">gemd.enumeration package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.json.html">gemd.json package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.units.html">gemd.units package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.util.html">gemd.util package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gemd.html#module-gemd">Module contents</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -54,6 +84,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="gemd.html">gemd package</a> &raquo;</li>
+          <li><a href="gemd.entity.html">gemd.entity package</a> &raquo;</li>
+          <li><a href="gemd.entity.object.html">gemd.entity.object package</a> &raquo;</li>
       <li>gemd.entity.object.process_run module</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/reference/gemd.entity.object.process_run.rst.txt" rel="nofollow"> View page source</a>
@@ -65,11 +98,11 @@
            <div itemprop="articleBody">
              
   <section id="module-gemd.entity.object.process_run">
-<span id="gemd-entity-object-process-run-module"></span><h1>gemd.entity.object.process_run module<a class="headerlink" href="#module-gemd.entity.object.process_run" title="Permalink to this headline"></a></h1>
+<span id="gemd-entity-object-process-run-module"></span><h1>gemd.entity.object.process_run module<a class="headerlink" href="#module-gemd.entity.object.process_run" title="Permalink to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="gemd.entity.object.process_run.ProcessRun">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gemd.entity.object.process_run.</span></span><span class="sig-name descname"><span class="pre">ProcessRun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.object.process_spec.html#gemd.entity.object.process_spec.ProcessSpec" title="gemd.entity.object.process_spec.ProcessSpec"><span class="pre">gemd.entity.object.process_spec.ProcessSpec</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.link_by_uid.html#gemd.entity.link_by_uid.LinkByUID" title="gemd.entity.link_by_uid.LinkByUID"><span class="pre">gemd.entity.link_by_uid.LinkByUID</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conditions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.attribute.condition.html#gemd.entity.attribute.condition.Condition" title="gemd.entity.attribute.condition.Condition"><span class="pre">gemd.entity.attribute.condition.Condition</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.attribute.condition.html#gemd.entity.attribute.condition.Condition" title="gemd.entity.attribute.condition.Condition"><span class="pre">gemd.entity.attribute.condition.Condition</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.attribute.parameter.html#gemd.entity.attribute.parameter.Parameter" title="gemd.entity.attribute.parameter.Parameter"><span class="pre">gemd.entity.attribute.parameter.Parameter</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.attribute.parameter.html#gemd.entity.attribute.parameter.Parameter" title="gemd.entity.attribute.parameter.Parameter"><span class="pre">gemd.entity.attribute.parameter.Parameter</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_links</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.file_link.html#gemd.entity.file_link.FileLink" title="gemd.entity.file_link.FileLink"><span class="pre">gemd.entity.file_link.FileLink</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.file_link.html#gemd.entity.file_link.FileLink" title="gemd.entity.file_link.FileLink"><span class="pre">gemd.entity.file_link.FileLink</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.source.performed_source.html#gemd.entity.source.performed_source.PerformedSource" title="gemd.entity.source.performed_source.PerformedSource"><span class="pre">gemd.entity.source.performed_source.PerformedSource</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="gemd.entity.object.base_object.html#gemd.entity.object.base_object.BaseObject" title="gemd.entity.object.base_object.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemd.entity.object.base_object.BaseObject</span></code></a>, <a class="reference internal" href="gemd.entity.object.has_spec.html#gemd.entity.object.has_spec.HasSpec" title="gemd.entity.object.has_spec.HasSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemd.entity.object.has_spec.HasSpec</span></code></a>, <a class="reference internal" href="gemd.entity.object.has_conditions.html#gemd.entity.object.has_conditions.HasConditions" title="gemd.entity.object.has_conditions.HasConditions"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemd.entity.object.has_conditions.HasConditions</span></code></a>, <a class="reference internal" href="gemd.entity.object.has_parameters.html#gemd.entity.object.has_parameters.HasParameters" title="gemd.entity.object.has_parameters.HasParameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemd.entity.object.has_parameters.HasParameters</span></code></a>, <a class="reference internal" href="gemd.entity.object.has_source.html#gemd.entity.object.has_source.HasSource" title="gemd.entity.object.has_source.HasSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemd.entity.object.has_source.HasSource</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gemd.entity.object.process_run.</span></span><span class="sig-name descname"><span class="pre">ProcessRun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.object.process_spec.html#gemd.entity.object.process_spec.ProcessSpec" title="gemd.entity.object.process_spec.ProcessSpec"><span class="pre">ProcessSpec</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.link_by_uid.html#gemd.entity.link_by_uid.LinkByUID" title="gemd.entity.link_by_uid.LinkByUID"><span class="pre">LinkByUID</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conditions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.attribute.condition.html#gemd.entity.attribute.condition.Condition" title="gemd.entity.attribute.condition.Condition"><span class="pre">Condition</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.attribute.condition.html#gemd.entity.attribute.condition.Condition" title="gemd.entity.attribute.condition.Condition"><span class="pre">Condition</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.attribute.parameter.html#gemd.entity.attribute.parameter.Parameter" title="gemd.entity.attribute.parameter.Parameter"><span class="pre">Parameter</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.attribute.parameter.html#gemd.entity.attribute.parameter.Parameter" title="gemd.entity.attribute.parameter.Parameter"><span class="pre">Parameter</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_links</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.file_link.html#gemd.entity.file_link.FileLink" title="gemd.entity.file_link.FileLink"><span class="pre">FileLink</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.file_link.html#gemd.entity.file_link.FileLink" title="gemd.entity.file_link.FileLink"><span class="pre">FileLink</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.source.performed_source.html#gemd.entity.source.performed_source.PerformedSource" title="gemd.entity.source.performed_source.PerformedSource"><span class="pre">PerformedSource</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemd.entity.object.base_object.html#gemd.entity.object.base_object.BaseObject" title="gemd.entity.object.base_object.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseObject</span></code></a>, <a class="reference internal" href="gemd.entity.object.has_spec.html#gemd.entity.object.has_spec.HasSpec" title="gemd.entity.object.has_spec.HasSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">HasSpec</span></code></a>, <a class="reference internal" href="gemd.entity.object.has_conditions.html#gemd.entity.object.has_conditions.HasConditions" title="gemd.entity.object.has_conditions.HasConditions"><code class="xref py py-class docutils literal notranslate"><span class="pre">HasConditions</span></code></a>, <a class="reference internal" href="gemd.entity.object.has_parameters.html#gemd.entity.object.has_parameters.HasParameters" title="gemd.entity.object.has_parameters.HasParameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">HasParameters</span></code></a>, <a class="reference internal" href="gemd.entity.object.has_source.html#gemd.entity.object.has_source.HasSource" title="gemd.entity.object.has_source.HasSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">HasSource</span></code></a></p>
 <p>A process run.</p>
 <p>Processes transform zero or more input materials into exactly one output material.
 This includes links to conditions and parameters under which the process was performed,
@@ -84,38 +117,14 @@ as well as soft links to the output material and each of the input ingredients.<
 are hierarchical strings that store information about an entity. They can be used
 for filtering and discoverability.</p></li>
 <li><p><strong>notes</strong> (<em>str</em><em>, </em><em>optional</em>) – Long-form notes about the process run.</p></li>
-<li><p><strong>conditions</strong> (List[<a class="reference internal" href="gemd.entity.attribute.condition.html#gemd.entity.attribute.condition.Condition" title="gemd.entity.attribute.condition.Condition"><code class="xref py py-class docutils literal notranslate"><span class="pre">Condition</span></code></a>], optional) – Conditions under which this process run occurs.</p></li>
-<li><p><strong>parameters</strong> (List[<a class="reference internal" href="gemd.entity.attribute.parameter.html#gemd.entity.attribute.parameter.Parameter" title="gemd.entity.attribute.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a>], optional) – Parameters of this process run.</p></li>
-<li><p><strong>spec</strong> (<a class="reference internal" href="gemd.entity.object.process_spec.html#gemd.entity.object.process_spec.ProcessSpec" title="gemd.entity.object.process_spec.ProcessSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessSpec</span></code></a>) – Spec for this process run.</p></li>
-<li><p><strong>file_links</strong> (List[<a class="reference internal" href="gemd.entity.file_link.html#gemd.entity.file_link.FileLink" title="gemd.entity.file_link.FileLink"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileLink</span></code></a>], optional) – Links to associated files, with resource paths into the files API.</p></li>
-<li><p><strong>source</strong> (<a class="reference internal" href="gemd.entity.source.performed_source.html#gemd.entity.source.performed_source.PerformedSource" title="gemd.entity.source.performed_source.PerformedSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">PerformedSource</span></code></a>, optional) – Information about the person who performed the run and when.</p></li>
+<li><p><strong>conditions</strong> (<em>List</em><em>[</em><a class="reference internal" href="gemd.entity.attribute.condition.html#gemd.entity.attribute.condition.Condition" title="gemd.entity.attribute.condition.Condition"><em>Condition</em></a><em>]</em><em>, </em><em>optional</em>) – Conditions under which this process run occurs.</p></li>
+<li><p><strong>parameters</strong> (<em>List</em><em>[</em><a class="reference internal" href="gemd.entity.attribute.parameter.html#gemd.entity.attribute.parameter.Parameter" title="gemd.entity.attribute.parameter.Parameter"><em>Parameter</em></a><em>]</em><em>, </em><em>optional</em>) – Parameters of this process run.</p></li>
+<li><p><strong>spec</strong> (<a class="reference internal" href="gemd.entity.object.process_spec.html#gemd.entity.object.process_spec.ProcessSpec" title="gemd.entity.object.process_spec.ProcessSpec"><em>ProcessSpec</em></a>) – Spec for this process run.</p></li>
+<li><p><strong>file_links</strong> (<em>List</em><em>[</em><a class="reference internal" href="gemd.entity.file_link.html#gemd.entity.file_link.FileLink" title="gemd.entity.file_link.FileLink"><em>FileLink</em></a><em>]</em><em>, </em><em>optional</em>) – Links to associated files, with resource paths into the files API.</p></li>
+<li><p><strong>source</strong> (<a class="reference internal" href="gemd.entity.source.performed_source.html#gemd.entity.source.performed_source.PerformedSource" title="gemd.entity.source.performed_source.PerformedSource"><em>PerformedSource</em></a><em>, </em><em>optional</em>) – Information about the person who performed the run and when.</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="gemd.entity.object.process_run.ProcessRun.output_material">
-<span class="sig-name descname"><span class="pre">output_material</span></span><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.output_material" title="Permalink to this definition"></a></dt>
-<dd><p>The material run that this process run produces. The link is established by creating
-the material run and settings its <cite>process</cite> field to this process run.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="gemd.entity.object.material_run.html#gemd.entity.object.material_run.MaterialRun" title="gemd.entity.object.material_run.MaterialRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">MaterialRun</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="gemd.entity.object.process_run.ProcessRun.ingredients">
-<span class="sig-name descname"><span class="pre">ingredients</span></span><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.ingredients" title="Permalink to this definition"></a></dt>
-<dd><p>Ingredient runs that act as inputs to this process run. The link is established by
-creating each ingredient run and setting its <cite>process</cite> field to this process run.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>List[<a class="reference internal" href="gemd.entity.object.ingredient_run.html#gemd.entity.object.ingredient_run.IngredientRun" title="gemd.entity.object.ingredient_run.IngredientRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">IngredientRun</span></code></a>]</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.object.process_run.ProcessRun.add_uid">
 <span class="sig-name descname"><span class="pre">add_uid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.add_uid" title="Permalink to this definition"></a></dt>
@@ -132,7 +141,7 @@ creating each ingredient run and setting its <cite>process</cite> field to this 
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.object.process_run.ProcessRun.all_dependencies">
-<span class="sig-name descname"><span class="pre">all_dependencies</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">BaseEntity</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">LinkByUID</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.all_dependencies" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">all_dependencies</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">BaseEntityType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">LinkByUIDType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.all_dependencies" title="Permalink to this definition"></a></dt>
 <dd><p>Return a set of all immediate dependencies (no recursion).</p>
 </dd></dl>
 
@@ -152,7 +161,7 @@ creating each ingredient run and setting its <cite>process</cite> field to this 
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.object.process_run.ProcessRun.build">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable"><span class="pre">gemd.entity.dict_serializable.DictSerializable</span></a></span></span><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.build" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DictSerializableType</span></span></span><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.build" title="Permalink to this definition"></a></dt>
 <dd><p>Build an object from a JSON dictionary.</p>
 <p>This differs from <cite>from_dict</cite> in that the values themselves may <em>also</em> be dictionaries
 corresponding to serialized DictSerializable objects.</p>
@@ -186,7 +195,7 @@ corresponding to serialized DictSerializable objects.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.object.process_run.ProcessRun.from_dict">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">gemd.entity.dict_serializable.DictSerializableType</span></span></span><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.from_dict" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DictSerializableType</span></span></span><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.from_dict" title="Permalink to this definition"></a></dt>
 <dd><p>Reconstitute the object from a dictionary.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -203,8 +212,8 @@ corresponding to serialized DictSerializable objects.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.object.process_run.ProcessRun.to_link">
-<span class="sig-name descname"><span class="pre">to_link</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_fallback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">LinkByUID</span></span></span><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.to_link" title="Permalink to this definition"></a></dt>
-<dd><p>Generate a LinkByUID for this object.</p>
+<span class="sig-name descname"><span class="pre">to_link</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_fallback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">LinkByUIDType</span></span></span><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.to_link" title="Permalink to this definition"></a></dt>
+<dd><p>Generate a ~gemd.entity.link_by_uid.LinkByUID for this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -212,49 +221,50 @@ corresponding to serialized DictSerializable objects.</p>
 <li><p><strong>allow_fallback</strong> (<em>bool</em>) – whether to grab another scope/id if chosen scope is missing (Default: False).</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="gemd.html#gemd.LinkByUID" title="gemd.LinkByUID">LinkByUID</a></p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="gemd.entity.link_by_uid.html#gemd.entity.link_by_uid.LinkByUID" title="gemd.entity.link_by_uid.LinkByUID"><em>LinkByUID</em></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gemd.entity.object.process_run.ProcessRun.conditions">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">conditions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.attribute.condition.html#gemd.entity.attribute.condition.Condition" title="gemd.entity.attribute.condition.Condition"><span class="pre">gemd.entity.attribute.condition.Condition</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.conditions" title="Permalink to this definition"></a></dt>
-<dd><p>Get a list of the conditions.</p>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">conditions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.attribute.condition.html#gemd.entity.attribute.condition.Condition" title="gemd.entity.attribute.condition.Condition"><span class="pre">Condition</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.conditions" title="Permalink to this definition"></a></dt>
+<dd><p>A list of conditions associated with this entity.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gemd.entity.object.process_run.ProcessRun.file_links">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">file_links</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.file_link.html#gemd.entity.file_link.FileLink" title="gemd.entity.file_link.FileLink"><span class="pre">gemd.entity.file_link.FileLink</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.file_links" title="Permalink to this definition"></a></dt>
-<dd><p>Get file links.</p>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">file_links</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.file_link.html#gemd.entity.file_link.FileLink" title="gemd.entity.file_link.FileLink"><span class="pre">FileLink</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.file_links" title="Permalink to this definition"></a></dt>
+<dd><p>Links to associated files, with resource paths into the files API.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id0">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ingredients</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">IngredientRun</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
-<dd><p>Get the input ingredient runs.</p>
+<dt class="sig sig-object py" id="gemd.entity.object.process_run.ProcessRun.ingredients">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ingredients</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">IngredientRunType</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.ingredients" title="Permalink to this definition"></a></dt>
+<dd><p>Ingredient runs that act as inputs to this process run.</p>
+<p>The link is established by creating each ingredient run and setting its
+<cite>process</cite> field to this process run.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gemd.entity.object.process_run.ProcessRun.name">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.name" title="Permalink to this definition"></a></dt>
-<dd><p>Get name.</p>
+<dd><p>Name of the object.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id1">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">output_material</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">MaterialRun</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id1" title="Permalink to this definition"></a></dt>
-<dd><p>Get the output material run.</p>
+<dt class="sig sig-object py" id="gemd.entity.object.process_run.ProcessRun.output_material">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">output_material</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">MaterialRunType</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.output_material" title="Permalink to this definition"></a></dt>
+<dd><p>The material run that this process run produces.</p>
+<p>The link is established by creating the material run and settings its
+<cite>process</cite> field to this process run.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gemd.entity.object.process_run.ProcessRun.parameters">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.attribute.parameter.html#gemd.entity.attribute.parameter.Parameter" title="gemd.entity.attribute.parameter.Parameter"><span class="pre">gemd.entity.attribute.parameter.Parameter</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.parameters" title="Permalink to this definition"></a></dt>
-<dd><p>Get the list of parameters.</p>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.attribute.parameter.html#gemd.entity.attribute.parameter.Parameter" title="gemd.entity.attribute.parameter.Parameter"><span class="pre">Parameter</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.parameters" title="Permalink to this definition"></a></dt>
+<dd><p>A list of parameters associated with this entity.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -264,25 +274,28 @@ corresponding to serialized DictSerializable objects.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gemd.entity.object.process_run.ProcessRun.source">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">source</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.source.performed_source.html#gemd.entity.source.performed_source.PerformedSource" title="gemd.entity.source.performed_source.PerformedSource"><span class="pre">gemd.entity.source.performed_source.PerformedSource</span></a></em><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.source" title="Permalink to this definition"></a></dt>
-<dd><p>Get the list of parameters.</p>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">source</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.source.performed_source.html#gemd.entity.source.performed_source.PerformedSource" title="gemd.entity.source.performed_source.PerformedSource"><span class="pre">PerformedSource</span></a></em><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.source" title="Permalink to this definition"></a></dt>
+<dd><p>Information about the person who performed the run and when.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gemd.entity.object.process_run.ProcessRun.spec">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">spec</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.object.has_template.html#gemd.entity.object.has_template.HasTemplate" title="gemd.entity.object.has_template.HasTemplate"><span class="pre">gemd.entity.object.has_template.HasTemplate</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.link_by_uid.html#gemd.entity.link_by_uid.LinkByUID" title="gemd.entity.link_by_uid.LinkByUID"><span class="pre">gemd.entity.link_by_uid.LinkByUID</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.spec" title="Permalink to this definition"></a></dt>
-<dd><p>Get the spec.</p>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">spec</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.object.has_template.html#gemd.entity.object.has_template.HasTemplate" title="gemd.entity.object.has_template.HasTemplate"><span class="pre">HasTemplate</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.link_by_uid.html#gemd.entity.link_by_uid.LinkByUID" title="gemd.entity.link_by_uid.LinkByUID"><span class="pre">LinkByUID</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.spec" title="Permalink to this definition"></a></dt>
+<dd><p>A spec, which expresses the anticipated or aspirational behavior of this object.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gemd.entity.object.process_run.ProcessRun.tags">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tags</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.tags" title="Permalink to this definition"></a></dt>
-<dd><p>Get the tags.</p>
+<dd><p>A collection of structured labels.</p>
+<p><a class="reference external" href="https://citrineinformatics.github.io/gemd-documentation/specification/tags/">Tags</a>
+are hierarchical strings that store information about an entity. They can be used
+for filtering and discoverability.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gemd.entity.object.process_run.ProcessRun.template">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">template</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.template.base_template.html#gemd.entity.template.base_template.BaseTemplate" title="gemd.entity.template.base_template.BaseTemplate"><span class="pre">gemd.entity.template.base_template.BaseTemplate</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.link_by_uid.html#gemd.entity.link_by_uid.LinkByUID" title="gemd.entity.link_by_uid.LinkByUID"><span class="pre">gemd.entity.link_by_uid.LinkByUID</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.template" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">template</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.template.base_template.html#gemd.entity.template.base_template.BaseTemplate" title="gemd.entity.template.base_template.BaseTemplate"><span class="pre">BaseTemplate</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.link_by_uid.html#gemd.entity.link_by_uid.LinkByUID" title="gemd.entity.link_by_uid.LinkByUID"><span class="pre">LinkByUID</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.template" title="Permalink to this definition"></a></dt>
 <dd><p>Get the template associated with the spec.</p>
 </dd></dl>
 
@@ -293,8 +306,10 @@ corresponding to serialized DictSerializable objects.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gemd.entity.object.process_run.ProcessRun.uids">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">uids</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.uids" title="Permalink to this definition"></a></dt>
-<dd><p>Get the uids.</p>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">uids</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#gemd.entity.object.process_run.ProcessRun.uids" title="Permalink to this definition"></a></dt>
+<dd><p>A collection of unique IDs.</p>
+<p>Requirements for and the value of unique IDs are discussed
+<a class="reference external" href="https://citrineinformatics.github.io/gemd-documentation/specification/unique-identifiers/">here</a>.</p>
 </dd></dl>
 
 </dd></dl>
@@ -304,7 +319,10 @@ corresponding to serialized DictSerializable objects.</p>
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="gemd.entity.object.measurement_spec.html" class="btn btn-neutral float-left" title="gemd.entity.object.measurement_spec module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gemd.entity.object.process_spec.html" class="btn btn-neutral float-right" title="gemd.entity.object.process_spec module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

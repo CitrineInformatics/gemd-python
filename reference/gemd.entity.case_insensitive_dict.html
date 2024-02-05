@@ -4,10 +4,11 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gemd.entity.case_insensitive_dict module &mdash; GEMD-python 0.0.0 documentation</title>
+  <title>gemd.entity.case_insensitive_dict module &mdash; GEMD-python 1.18.5 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -15,10 +16,13 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="gemd.entity.dict_serializable module" href="gemd.entity.dict_serializable.html" />
+    <link rel="prev" title="gemd.entity.bounds_validation module" href="gemd.entity.bounds_validation.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -26,8 +30,12 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> GEMD-python
+            <a href="../index.html">
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
+              <div class="version">
+                1.18.5
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -37,7 +45,29 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../depth/index.html">1. In depth documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../depth/unit_parsing.html">1. Unit Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../depth/serialization.html">2. Serialization (with Graphs!)</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="gemd.html">gemd package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="gemd.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="gemd.builders.html">gemd.builders package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.demo.html">gemd.demo package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="gemd.entity.html">gemd.entity package</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="gemd.entity.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="gemd.entity.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gemd.entity.html#module-gemd.entity">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.enumeration.html">gemd.enumeration package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.json.html">gemd.json package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.units.html">gemd.units package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.util.html">gemd.util package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gemd.html#module-gemd">Module contents</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -54,6 +84,8 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="gemd.html">gemd package</a> &raquo;</li>
+          <li><a href="gemd.entity.html">gemd.entity package</a> &raquo;</li>
       <li>gemd.entity.case_insensitive_dict module</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/reference/gemd.entity.case_insensitive_dict.rst.txt" rel="nofollow"> View page source</a>
@@ -65,7 +97,7 @@
            <div itemprop="articleBody">
              
   <section id="module-gemd.entity.case_insensitive_dict">
-<span id="gemd-entity-case-insensitive-dict-module"></span><h1>gemd.entity.case_insensitive_dict module<a class="headerlink" href="#module-gemd.entity.case_insensitive_dict" title="Permalink to this headline"></a></h1>
+<span id="gemd-entity-case-insensitive-dict-module"></span><h1>gemd.entity.case_insensitive_dict module<a class="headerlink" href="#module-gemd.entity.case_insensitive_dict" title="Permalink to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="gemd.entity.case_insensitive_dict.CaseInsensitiveDict">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gemd.entity.case_insensitive_dict.</span></span><span class="sig-name descname"><span class="pre">CaseInsensitiveDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.entity.case_insensitive_dict.CaseInsensitiveDict" title="Permalink to this definition"></a></dt>
@@ -92,7 +124,7 @@ Example: CaseInsensitiveDict(one=1, two=”two”).</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.case_insensitive_dict.CaseInsensitiveDict.copy">
-<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gemd.entity.case_insensitive_dict.CaseInsensitiveDict" title="gemd.entity.case_insensitive_dict.CaseInsensitiveDict"><span class="pre">gemd.entity.case_insensitive_dict.CaseInsensitiveDict</span></a></span></span><a class="headerlink" href="#gemd.entity.case_insensitive_dict.CaseInsensitiveDict.copy" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gemd.entity.case_insensitive_dict.CaseInsensitiveDict" title="gemd.entity.case_insensitive_dict.CaseInsensitiveDict"><span class="pre">CaseInsensitiveDict</span></a></span></span><a class="headerlink" href="#gemd.entity.case_insensitive_dict.CaseInsensitiveDict.copy" title="Permalink to this definition"></a></dt>
 <dd><p>Return a shallow copy of the dictionary.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -220,7 +252,10 @@ key/value pairs: d.update(red=1, blue=2).</p>
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="gemd.entity.bounds_validation.html" class="btn btn-neutral float-left" title="gemd.entity.bounds_validation module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gemd.entity.dict_serializable.html" class="btn btn-neutral float-right" title="gemd.entity.dict_serializable module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

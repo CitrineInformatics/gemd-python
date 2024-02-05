@@ -1,14 +1,6 @@
 gemd.units package
 ==================
 
-Submodules
-----------
-
-.. toctree::
-   :maxdepth: 4
-
-   gemd.units.impl
-
 Module contents
 ---------------
 

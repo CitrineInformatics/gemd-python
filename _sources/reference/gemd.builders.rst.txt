@@ -1,14 +1,6 @@
 gemd.builders package
 =====================
 
-Submodules
-----------
-
-.. toctree::
-   :maxdepth: 4
-
-   gemd.builders.impl
-
 Module contents
 ---------------
 

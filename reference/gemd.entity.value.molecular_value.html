@@ -4,10 +4,11 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gemd.entity.value.molecular_value module &mdash; GEMD-python 0.0.0 documentation</title>
+  <title>gemd.entity.value.molecular_value module &mdash; GEMD-python 1.18.5 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -15,10 +16,13 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="gemd.entity.value.nominal_categorical module" href="gemd.entity.value.nominal_categorical.html" />
+    <link rel="prev" title="gemd.entity.value.integer_value module" href="gemd.entity.value.integer_value.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -26,8 +30,12 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> GEMD-python
+            <a href="../index.html">
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
+              <div class="version">
+                1.18.5
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -37,7 +45,29 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../depth/index.html">1. In depth documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../depth/unit_parsing.html">1. Unit Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../depth/serialization.html">2. Serialization (with Graphs!)</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="gemd.html">gemd package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="gemd.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="gemd.builders.html">gemd.builders package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.demo.html">gemd.demo package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="gemd.entity.html">gemd.entity package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="gemd.entity.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gemd.entity.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gemd.entity.html#module-gemd.entity">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.enumeration.html">gemd.enumeration package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.json.html">gemd.json package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.units.html">gemd.units package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.util.html">gemd.util package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gemd.html#module-gemd">Module contents</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -54,6 +84,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="gemd.html">gemd package</a> &raquo;</li>
+          <li><a href="gemd.entity.html">gemd.entity package</a> &raquo;</li>
+          <li><a href="gemd.entity.value.html">gemd.entity.value package</a> &raquo;</li>
       <li>gemd.entity.value.molecular_value module</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/reference/gemd.entity.value.molecular_value.rst.txt" rel="nofollow"> View page source</a>
@@ -65,12 +98,12 @@
            <div itemprop="articleBody">
              
   <section id="module-gemd.entity.value.molecular_value">
-<span id="gemd-entity-value-molecular-value-module"></span><h1>gemd.entity.value.molecular_value module<a class="headerlink" href="#module-gemd.entity.value.molecular_value" title="Permalink to this headline"></a></h1>
+<span id="gemd-entity-value-molecular-value-module"></span><h1>gemd.entity.value.molecular_value module<a class="headerlink" href="#module-gemd.entity.value.molecular_value" title="Permalink to this heading"></a></h1>
 <p>Composition of a material.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="gemd.entity.value.molecular_value.MolecularValue">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gemd.entity.value.molecular_value.</span></span><span class="sig-name descname"><span class="pre">MolecularValue</span></span><a class="headerlink" href="#gemd.entity.value.molecular_value.MolecularValue" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="gemd.entity.value.base_value.html#gemd.entity.value.base_value.BaseValue" title="gemd.entity.value.base_value.BaseValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemd.entity.value.base_value.BaseValue</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="gemd.entity.value.base_value.html#gemd.entity.value.base_value.BaseValue" title="gemd.entity.value.base_value.BaseValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseValue</span></code></a></p>
 <p>Base class for molecular structure values.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="gemd.entity.value.molecular_value.MolecularValue.typ">
@@ -94,7 +127,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.value.molecular_value.MolecularValue.build">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable"><span class="pre">gemd.entity.dict_serializable.DictSerializable</span></a></span></span><a class="headerlink" href="#gemd.entity.value.molecular_value.MolecularValue.build" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DictSerializableType</span></span></span><a class="headerlink" href="#gemd.entity.value.molecular_value.MolecularValue.build" title="Permalink to this definition"></a></dt>
 <dd><p>Build an object from a JSON dictionary.</p>
 <p>This differs from <cite>from_dict</cite> in that the values themselves may <em>also</em> be dictionaries
 corresponding to serialized DictSerializable objects.</p>
@@ -128,7 +161,7 @@ corresponding to serialized DictSerializable objects.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.entity.value.molecular_value.MolecularValue.from_dict">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">gemd.entity.dict_serializable.DictSerializableType</span></span></span><a class="headerlink" href="#gemd.entity.value.molecular_value.MolecularValue.from_dict" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DictSerializableType</span></span></span><a class="headerlink" href="#gemd.entity.value.molecular_value.MolecularValue.from_dict" title="Permalink to this definition"></a></dt>
 <dd><p>Reconstitute the object from a dictionary.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -155,7 +188,10 @@ corresponding to serialized DictSerializable objects.</p>
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="gemd.entity.value.integer_value.html" class="btn btn-neutral float-left" title="gemd.entity.value.integer_value module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gemd.entity.value.nominal_categorical.html" class="btn btn-neutral float-right" title="gemd.entity.value.nominal_categorical module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

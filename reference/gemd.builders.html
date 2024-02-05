@@ -4,10 +4,11 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gemd.builders package &mdash; GEMD-python 0.0.0 documentation</title>
+  <title>gemd.builders package &mdash; GEMD-python 1.18.5 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -15,10 +16,13 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="gemd.demo package" href="gemd.demo.html" />
+    <link rel="prev" title="gemd package" href="gemd.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -26,8 +30,12 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> GEMD-python
+            <a href="../index.html">
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
+              <div class="version">
+                1.18.5
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -37,7 +45,27 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../depth/index.html">1. In depth documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../depth/unit_parsing.html">1. Unit Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../depth/serialization.html">2. Serialization (with Graphs!)</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="gemd.html">gemd package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="gemd.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">gemd.builders package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemd.builders">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.demo.html">gemd.demo package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.entity.html">gemd.entity package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.enumeration.html">gemd.enumeration package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.json.html">gemd.json package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.units.html">gemd.units package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.util.html">gemd.util package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gemd.html#module-gemd">Module contents</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -54,6 +82,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="gemd.html">gemd package</a> &raquo;</li>
       <li>gemd.builders package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/reference/gemd.builders.rst.txt" rel="nofollow"> View page source</a>
@@ -65,24 +94,184 @@
            <div itemprop="articleBody">
              
   <section id="gemd-builders-package">
-<h1>gemd.builders package<a class="headerlink" href="#gemd-builders-package" title="Permalink to this headline"></a></h1>
-<section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="gemd.builders.impl.html">gemd.builders.impl module</a></li>
-</ul>
-</div>
-</section>
+<h1>gemd.builders package<a class="headerlink" href="#gemd-builders-package" title="Permalink to this heading"></a></h1>
 <section id="module-gemd.builders">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-gemd.builders" title="Permalink to this headline"></a></h2>
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-gemd.builders" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="gemd.builders.add_attribute">
+<span class="sig-prename descclassname"><span class="pre">gemd.builders.</span></span><span class="sig-name descname"><span class="pre">add_attribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.object.has_properties.html#gemd.entity.object.has_properties.HasProperties" title="gemd.entity.object.has_properties.HasProperties"><span class="pre">HasProperties</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.object.has_conditions.html#gemd.entity.object.has_conditions.HasConditions" title="gemd.entity.object.has_conditions.HasConditions"><span class="pre">HasConditions</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.object.has_parameters.html#gemd.entity.object.has_parameters.HasParameters" title="gemd.entity.object.has_parameters.HasParameters"><span class="pre">HasParameters</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.template.property_template.html#gemd.entity.template.property_template.PropertyTemplate" title="gemd.entity.template.property_template.PropertyTemplate"><span class="pre">PropertyTemplate</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.template.condition_template.html#gemd.entity.template.condition_template.ConditionTemplate" title="gemd.entity.template.condition_template.ConditionTemplate"><span class="pre">ConditionTemplate</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.template.parameter_template.html#gemd.entity.template.parameter_template.ParameterTemplate" title="gemd.entity.template.parameter_template.ParameterTemplate"><span class="pre">ParameterTemplate</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.value.base_value.html#gemd.entity.value.base_value.BaseValue" title="gemd.entity.value.base_value.BaseValue"><span class="pre">BaseValue</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.attribute.property.html#gemd.entity.attribute.property.Property" title="gemd.entity.attribute.property.Property"><span class="pre">Property</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.attribute.condition.html#gemd.entity.attribute.condition.Condition" title="gemd.entity.attribute.condition.Condition"><span class="pre">Condition</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.attribute.parameter.html#gemd.entity.attribute.parameter.Parameter" title="gemd.entity.attribute.parameter.Parameter"><span class="pre">Parameter</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.builders.add_attribute" title="Permalink to this definition"></a></dt>
+<dd><p>Generate an attribute, and then add it attribute to a GEMD object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> (<a class="reference internal" href="gemd.entity.object.base_object.html#gemd.entity.object.base_object.BaseObject" title="gemd.entity.object.base_object.BaseObject"><em>BaseObject</em></a>) – The object to attach the attribute to</p></li>
+<li><p><strong>template</strong> (<a class="reference internal" href="gemd.entity.template.attribute_template.html#gemd.entity.template.attribute_template.AttributeTemplate" title="gemd.entity.template.attribute_template.AttributeTemplate"><em>AttributeTemplate</em></a>) – The <code class="xref py py-attr docutils literal notranslate"><span class="pre">template</span></code> for the attribute.</p></li>
+<li><p><strong>value</strong> (<a class="reference internal" href="gemd.entity.value.base_value.html#gemd.entity.value.base_value.BaseValue" title="gemd.entity.value.base_value.BaseValue"><em>BaseValue</em></a><em>, </em><em>str</em><em>, </em><em>float</em><em>,  or </em><em>int</em>) – The <code class="xref py py-attr docutils literal notranslate"><span class="pre">value</span></code> for the attribute.  Accepts any GEMD Value type, or will
+attempt to generate an appropriate <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseValue</span></code> subclass given a str, float or int.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The generated attribute</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="gemd.entity.attribute.base_attribute.html#gemd.entity.attribute.base_attribute.BaseAttribute" title="gemd.entity.attribute.base_attribute.BaseAttribute">BaseAttribute</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gemd.builders.add_edge">
+<span class="sig-prename descclassname"><span class="pre">gemd.builders.</span></span><span class="sig-name descname"><span class="pre">add_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_material</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gemd.entity.object.material_run.html#gemd.entity.object.material_run.MaterialRun" title="gemd.entity.object.material_run.MaterialRun"><span class="pre">MaterialRun</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_material</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gemd.entity.object.material_run.html#gemd.entity.object.material_run.MaterialRun" title="gemd.entity.object.material_run.MaterialRun"><span class="pre">MaterialRun</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mass_fraction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.value.continuous_value.html#gemd.entity.value.continuous_value.ContinuousValue" title="gemd.entity.value.continuous_value.ContinuousValue"><span class="pre">ContinuousValue</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_fraction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.value.continuous_value.html#gemd.entity.value.continuous_value.ContinuousValue" title="gemd.entity.value.continuous_value.ContinuousValue"><span class="pre">ContinuousValue</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume_fraction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.value.continuous_value.html#gemd.entity.value.continuous_value.ContinuousValue" title="gemd.entity.value.continuous_value.ContinuousValue"><span class="pre">ContinuousValue</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">absolute_quantity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.value.continuous_value.html#gemd.entity.value.continuous_value.ContinuousValue" title="gemd.entity.value.continuous_value.ContinuousValue"><span class="pre">ContinuousValue</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">absolute_units</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="gemd.entity.object.ingredient_run.html#gemd.entity.object.ingredient_run.IngredientRun" title="gemd.entity.object.ingredient_run.IngredientRun"><span class="pre">IngredientRun</span></a></span></span><a class="headerlink" href="#gemd.builders.add_edge" title="Permalink to this definition"></a></dt>
+<dd><p>Connect two material-process spec-run quadruples with ingredients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_material</strong> (<a class="reference internal" href="gemd.entity.object.material_run.html#gemd.entity.object.material_run.MaterialRun" title="gemd.entity.object.material_run.MaterialRun"><em>MaterialRun</em></a>) – The <a class="reference internal" href="gemd.entity.object.ingredient_run.html#gemd.entity.object.ingredient_run.IngredientRun.material" title="gemd.entity.object.ingredient_run.IngredientRun.material"><code class="xref py py-attr docutils literal notranslate"><span class="pre">material</span></code></a>
+for the returned
+<a class="reference internal" href="gemd.entity.object.ingredient_run.html#gemd.entity.object.ingredient_run.IngredientRun" title="gemd.entity.object.ingredient_run.IngredientRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">IngredientRun</span></code></a></p></li>
+<li><p><strong>output_material</strong> (<a class="reference internal" href="gemd.entity.object.material_run.html#gemd.entity.object.material_run.MaterialRun" title="gemd.entity.object.material_run.MaterialRun"><em>MaterialRun</em></a>) – The <a class="reference internal" href="gemd.entity.object.ingredient_run.html#gemd.entity.object.ingredient_run.IngredientRun.process" title="gemd.entity.object.ingredient_run.IngredientRun.process"><code class="xref py py-attr docutils literal notranslate"><span class="pre">process</span></code></a>
+for the returned
+<a class="reference internal" href="gemd.entity.object.ingredient_run.html#gemd.entity.object.ingredient_run.IngredientRun" title="gemd.entity.object.ingredient_run.IngredientRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">IngredientRun</span></code></a>
+will be <cite>output_material.process</cite></p></li>
+<li><p><strong>name</strong> (<em>str</em>) – The ingredient name.  Defaults to <cite>input_material.name</cite>.</p></li>
+<li><p><strong>mass_fraction</strong> (<em>float</em><em> or </em><a class="reference internal" href="gemd.entity.value.continuous_value.html#gemd.entity.value.continuous_value.ContinuousValue" title="gemd.entity.value.continuous_value.ContinuousValue"><em>ContinuousValue</em></a>) – The <a class="reference internal" href="gemd.entity.object.ingredient_run.html#gemd.entity.object.ingredient_run.IngredientRun.mass_fraction" title="gemd.entity.object.ingredient_run.IngredientRun.mass_fraction"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mass_fraction</span></code></a>
+of the returned
+<a class="reference internal" href="gemd.entity.object.ingredient_run.html#gemd.entity.object.ingredient_run.IngredientRun" title="gemd.entity.object.ingredient_run.IngredientRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">IngredientRun</span></code></a>.`
+0 &lt;= x &lt;= 1</p></li>
+<li><p><strong>number_fraction</strong> (<em>float</em><em> or </em><a class="reference internal" href="gemd.entity.value.continuous_value.html#gemd.entity.value.continuous_value.ContinuousValue" title="gemd.entity.value.continuous_value.ContinuousValue"><em>ContinuousValue</em></a>) – The <a class="reference internal" href="gemd.entity.object.ingredient_run.html#gemd.entity.object.ingredient_run.IngredientRun.number_fraction" title="gemd.entity.object.ingredient_run.IngredientRun.number_fraction"><code class="xref py py-attr docutils literal notranslate"><span class="pre">number_fraction</span></code></a>
+of the returned
+<a class="reference internal" href="gemd.entity.object.ingredient_run.html#gemd.entity.object.ingredient_run.IngredientRun" title="gemd.entity.object.ingredient_run.IngredientRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">IngredientRun</span></code></a>.
+0 &lt;= x &lt;= 1</p></li>
+<li><p><strong>volume_fraction</strong> (<em>float</em><em> or </em><a class="reference internal" href="gemd.entity.value.continuous_value.html#gemd.entity.value.continuous_value.ContinuousValue" title="gemd.entity.value.continuous_value.ContinuousValue"><em>ContinuousValue</em></a>) – The <a class="reference internal" href="gemd.entity.object.ingredient_run.html#gemd.entity.object.ingredient_run.IngredientRun.volume_fraction" title="gemd.entity.object.ingredient_run.IngredientRun.volume_fraction"><code class="xref py py-attr docutils literal notranslate"><span class="pre">volume_fraction</span></code></a>
+of the returned
+<a class="reference internal" href="gemd.entity.object.ingredient_run.html#gemd.entity.object.ingredient_run.IngredientRun" title="gemd.entity.object.ingredient_run.IngredientRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">IngredientRun</span></code></a>.
+0 &lt;= x &lt;= 1</p></li>
+<li><p><strong>absolute_quantity</strong> (<em>float</em><em> or </em><a class="reference internal" href="gemd.entity.value.continuous_value.html#gemd.entity.value.continuous_value.ContinuousValue" title="gemd.entity.value.continuous_value.ContinuousValue"><em>ContinuousValue</em></a>) – The <a class="reference internal" href="gemd.entity.object.ingredient_run.html#gemd.entity.object.ingredient_run.IngredientRun.absolute_quantity" title="gemd.entity.object.ingredient_run.IngredientRun.absolute_quantity"><code class="xref py py-attr docutils literal notranslate"><span class="pre">absolute_quantity</span></code></a>
+of the returned
+<a class="reference internal" href="gemd.entity.object.ingredient_run.html#gemd.entity.object.ingredient_run.IngredientRun" title="gemd.entity.object.ingredient_run.IngredientRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">IngredientRun</span></code></a>.
+0 &lt;= x</p></li>
+<li><p><strong>absolute_units</strong> (<em>str</em>) – The absolute units.  Required if absolute_quantity is provided as a float</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A <a class="reference internal" href="gemd.entity.object.ingredient_run.html#gemd.entity.object.ingredient_run.IngredientRun" title="gemd.entity.object.ingredient_run.IngredientRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">IngredientRun</span></code></a>
+with linked processes, specs and materials</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="gemd.entity.object.ingredient_run.html#gemd.entity.object.ingredient_run.IngredientRun" title="gemd.entity.object.ingredient_run.IngredientRun"><em>IngredientRun</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gemd.builders.add_measurement">
+<span class="sig-prename descclassname"><span class="pre">gemd.builders.</span></span><span class="sig-name descname"><span class="pre">add_measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">material</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gemd.entity.object.material_run.html#gemd.entity.object.material_run.MaterialRun" title="gemd.entity.object.material_run.MaterialRun"><span class="pre">MaterialRun</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.template.measurement_template.html#gemd.entity.template.measurement_template.MeasurementTemplate" title="gemd.entity.template.measurement_template.MeasurementTemplate"><span class="pre">MeasurementTemplate</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.attribute.base_attribute.html#gemd.entity.attribute.base_attribute.BaseAttribute" title="gemd.entity.attribute.base_attribute.BaseAttribute"><span class="pre">BaseAttribute</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="gemd.entity.object.measurement_run.html#gemd.entity.object.measurement_run.MeasurementRun" title="gemd.entity.object.measurement_run.MeasurementRun"><span class="pre">MeasurementRun</span></a></span></span><a class="headerlink" href="#gemd.builders.add_measurement" title="Permalink to this definition"></a></dt>
+<dd><p>Add a measurement run-spec set to a <a class="reference internal" href="gemd.entity.object.material_run.html#gemd.entity.object.material_run.MaterialRun" title="gemd.entity.object.material_run.MaterialRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">MaterialRun</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>material</strong> (<a class="reference internal" href="gemd.entity.object.material_run.html#gemd.entity.object.material_run.MaterialRun" title="gemd.entity.object.material_run.MaterialRun"><em>MaterialRun</em></a>) – The <a class="reference internal" href="gemd.entity.object.measurement_run.html#gemd.entity.object.measurement_run.MeasurementRun.material" title="gemd.entity.object.measurement_run.MeasurementRun.material"><code class="xref py py-attr docutils literal notranslate"><span class="pre">material</span></code></a>
+for the returned
+<a class="reference internal" href="gemd.entity.object.measurement_run.html#gemd.entity.object.measurement_run.MeasurementRun" title="gemd.entity.object.measurement_run.MeasurementRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeasurementRun</span></code></a></p></li>
+<li><p><strong>name</strong> (<em>str</em>) – The <a class="reference internal" href="gemd.entity.object.measurement_run.html#gemd.entity.object.measurement_run.MeasurementRun.name" title="gemd.entity.object.measurement_run.MeasurementRun.name"><code class="xref py py-attr docutils literal notranslate"><span class="pre">name</span></code></a>
+of the measurement.  Defaults to <cite>template.name</cite> if <cite>template</cite> is defined.</p></li>
+<li><p><strong>template</strong> (<a class="reference internal" href="gemd.entity.template.measurement_template.html#gemd.entity.template.measurement_template.MeasurementTemplate" title="gemd.entity.template.measurement_template.MeasurementTemplate"><em>MeasurementTemplate</em></a>) – The <a class="reference internal" href="gemd.entity.object.measurement_run.html#gemd.entity.object.measurement_run.MeasurementRun.template" title="gemd.entity.object.measurement_run.MeasurementRun.template"><code class="xref py py-attr docutils literal notranslate"><span class="pre">template</span></code></a>
+for the returned
+<a class="reference internal" href="gemd.entity.object.measurement_run.html#gemd.entity.object.measurement_run.MeasurementRun" title="gemd.entity.object.measurement_run.MeasurementRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeasurementRun</span></code></a></p></li>
+<li><p><strong>attributes</strong> (<em>List</em><em>[</em><a class="reference internal" href="gemd.entity.attribute.base_attribute.html#gemd.entity.attribute.base_attribute.BaseAttribute" title="gemd.entity.attribute.base_attribute.BaseAttribute"><em>BaseAttribute</em></a><em>]</em>) – Attributes you want associated with this
+<a class="reference internal" href="gemd.entity.object.measurement_run.html#gemd.entity.object.measurement_run.MeasurementRun" title="gemd.entity.object.measurement_run.MeasurementRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeasurementRun</span></code></a>.  These can be
+<a class="reference internal" href="gemd.entity.attribute.condition.html#gemd.entity.attribute.condition.Condition" title="gemd.entity.attribute.condition.Condition"><code class="xref py py-class docutils literal notranslate"><span class="pre">Conditions</span></code></a>,
+<a class="reference internal" href="gemd.entity.attribute.parameter.html#gemd.entity.attribute.parameter.Parameter" title="gemd.entity.attribute.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a>,
+and/or <a class="reference internal" href="gemd.entity.attribute.property.html#gemd.entity.attribute.property.Property" title="gemd.entity.attribute.property.Property"><code class="xref py py-class docutils literal notranslate"><span class="pre">Properties</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A <a class="reference internal" href="gemd.entity.object.measurement_run.html#gemd.entity.object.measurement_run.MeasurementRun" title="gemd.entity.object.measurement_run.MeasurementRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeasurementRun</span></code></a>
+with linked material, spec and template</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="gemd.entity.object.measurement_run.html#gemd.entity.object.measurement_run.MeasurementRun" title="gemd.entity.object.measurement_run.MeasurementRun"><em>MeasurementRun</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gemd.builders.make_attribute">
+<span class="sig-prename descclassname"><span class="pre">gemd.builders.</span></span><span class="sig-name descname"><span class="pre">make_attribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.template.property_template.html#gemd.entity.template.property_template.PropertyTemplate" title="gemd.entity.template.property_template.PropertyTemplate"><span class="pre">PropertyTemplate</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.template.condition_template.html#gemd.entity.template.condition_template.ConditionTemplate" title="gemd.entity.template.condition_template.ConditionTemplate"><span class="pre">ConditionTemplate</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.template.parameter_template.html#gemd.entity.template.parameter_template.ParameterTemplate" title="gemd.entity.template.parameter_template.ParameterTemplate"><span class="pre">ParameterTemplate</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.value.base_value.html#gemd.entity.value.base_value.BaseValue" title="gemd.entity.value.base_value.BaseValue"><span class="pre">BaseValue</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.attribute.property.html#gemd.entity.attribute.property.Property" title="gemd.entity.attribute.property.Property"><span class="pre">Property</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.attribute.condition.html#gemd.entity.attribute.condition.Condition" title="gemd.entity.attribute.condition.Condition"><span class="pre">Condition</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.attribute.parameter.html#gemd.entity.attribute.parameter.Parameter" title="gemd.entity.attribute.parameter.Parameter"><span class="pre">Parameter</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.builders.make_attribute" title="Permalink to this definition"></a></dt>
+<dd><p>Generate an Attribute and the contained Value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>template</strong> (<a class="reference internal" href="gemd.entity.template.attribute_template.html#gemd.entity.template.attribute_template.AttributeTemplate" title="gemd.entity.template.attribute_template.AttributeTemplate"><em>AttributeTemplate</em></a>) – The <code class="xref py py-attr docutils literal notranslate"><span class="pre">template</span></code> for the attribute.</p></li>
+<li><p><strong>value</strong> (<a class="reference internal" href="gemd.entity.value.base_value.html#gemd.entity.value.base_value.BaseValue" title="gemd.entity.value.base_value.BaseValue"><em>BaseValue</em></a><em>, </em><em>str</em><em>, </em><em>float</em><em>, or </em><em>int</em>) – The <code class="xref py py-attr docutils literal notranslate"><span class="pre">value</span></code> for the attribute.  Accepts any GEMD Value type, or will
+attempt to generate an appropriate Value given a str, float or int.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The generated attribute</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="gemd.entity.attribute.base_attribute.html#gemd.entity.attribute.base_attribute.BaseAttribute" title="gemd.entity.attribute.base_attribute.BaseAttribute">BaseAttribute</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gemd.builders.make_node">
+<span class="sig-prename descclassname"><span class="pre">gemd.builders.</span></span><span class="sig-name descname"><span class="pre">make_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_template</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.template.process_template.html#gemd.entity.template.process_template.ProcessTemplate" title="gemd.entity.template.process_template.ProcessTemplate"><span class="pre">ProcessTemplate</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">material_template</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.template.material_template.html#gemd.entity.template.material_template.MaterialTemplate" title="gemd.entity.template.material_template.MaterialTemplate"><span class="pre">MaterialTemplate</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="gemd.entity.object.material_run.html#gemd.entity.object.material_run.MaterialRun" title="gemd.entity.object.material_run.MaterialRun"><span class="pre">MaterialRun</span></a></span></span><a class="headerlink" href="#gemd.builders.make_node" title="Permalink to this definition"></a></dt>
+<dd><p>Generate a material-process spec-run quadruple.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Name of the <a class="reference internal" href="gemd.entity.object.material_run.html#gemd.entity.object.material_run.MaterialRun" title="gemd.entity.object.material_run.MaterialRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">MaterialRun</span></code></a>
+and <a class="reference internal" href="gemd.entity.object.material_spec.html#gemd.entity.object.material_spec.MaterialSpec" title="gemd.entity.object.material_spec.MaterialSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">MaterialSpec</span></code></a>.</p></li>
+<li><p><strong>process_name</strong> (<em>str</em>) – Name of the <a class="reference internal" href="gemd.entity.object.process_run.html#gemd.entity.object.process_run.ProcessRun" title="gemd.entity.object.process_run.ProcessRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessRun</span></code></a>
+and <a class="reference internal" href="gemd.entity.object.process_spec.html#gemd.entity.object.process_spec.ProcessSpec" title="gemd.entity.object.process_spec.ProcessSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessSpec</span></code></a>.  Defaults to
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">process_template.name</span></code> if <cite>process_template</cite> is defined, else <cite>name</cite>.</p></li>
+<li><p><strong>process_template</strong> (<a class="reference internal" href="gemd.entity.template.process_template.html#gemd.entity.template.process_template.ProcessTemplate" title="gemd.entity.template.process_template.ProcessTemplate"><em>ProcessTemplate</em></a>) – <a class="reference internal" href="gemd.entity.template.process_template.html#gemd.entity.template.process_template.ProcessTemplate" title="gemd.entity.template.process_template.ProcessTemplate"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessTemplate</span></code></a> for the quadruple.</p></li>
+<li><p><strong>material_template</strong> (<a class="reference internal" href="gemd.entity.template.material_template.html#gemd.entity.template.material_template.MaterialTemplate" title="gemd.entity.template.material_template.MaterialTemplate"><em>MaterialTemplate</em></a>) – <a class="reference internal" href="gemd.entity.template.material_template.html#gemd.entity.template.material_template.MaterialTemplate" title="gemd.entity.template.material_template.MaterialTemplate"><code class="xref py py-class docutils literal notranslate"><span class="pre">MaterialTemplate</span></code></a> for the quadruple.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A <a class="reference internal" href="gemd.entity.object.material_run.html#gemd.entity.object.material_run.MaterialRun" title="gemd.entity.object.material_run.MaterialRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">MaterialRun</span></code></a> with linked processes,
+specs and templates</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="gemd.entity.object.material_run.html#gemd.entity.object.material_run.MaterialRun" title="gemd.entity.object.material_run.MaterialRun"><em>MaterialRun</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gemd.builders.make_value">
+<span class="sig-prename descclassname"><span class="pre">gemd.builders.</span></span><span class="sig-name descname"><span class="pre">make_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gemd.entity.bounds.base_bounds.html#gemd.entity.bounds.base_bounds.BaseBounds" title="gemd.entity.bounds.base_bounds.BaseBounds"><span class="pre">BaseBounds</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="gemd.entity.value.base_value.html#gemd.entity.value.base_value.BaseValue" title="gemd.entity.value.base_value.BaseValue"><span class="pre">BaseValue</span></a></span></span><a class="headerlink" href="#gemd.builders.make_value" title="Permalink to this definition"></a></dt>
+<dd><p>Generate a Value object based upon a number or string and a particular bounds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>str</em><em>, </em><em>float</em><em>, or </em><em>int</em>) – The primitive type to wrap in a Value</p></li>
+<li><p><strong>bounds</strong> (<a class="reference internal" href="gemd.entity.bounds.base_bounds.html#gemd.entity.bounds.base_bounds.BaseBounds" title="gemd.entity.bounds.base_bounds.BaseBounds"><em>BaseBounds</em></a>) – The bounds type to determine which value type we want to coerce the value into</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The generated value</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="gemd.entity.value.base_value.html#gemd.entity.value.base_value.BaseValue" title="gemd.entity.value.base_value.BaseValue">BaseValue</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 </section>
 
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="gemd.html" class="btn btn-neutral float-left" title="gemd package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gemd.demo.html" class="btn btn-neutral float-right" title="gemd.demo package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

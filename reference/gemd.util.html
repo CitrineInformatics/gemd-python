@@ -4,10 +4,11 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gemd.util package &mdash; GEMD-python 0.0.0 documentation</title>
+  <title>gemd.util package &mdash; GEMD-python 1.18.5 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -15,10 +16,12 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="gemd.units package" href="gemd.units.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -26,8 +29,12 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> GEMD-python
+            <a href="../index.html">
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
+              <div class="version">
+                1.18.5
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -37,7 +44,27 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../depth/index.html">1. In depth documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../depth/unit_parsing.html">1. Unit Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../depth/serialization.html">2. Serialization (with Graphs!)</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="gemd.html">gemd package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="gemd.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="gemd.builders.html">gemd.builders package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.demo.html">gemd.demo package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.entity.html">gemd.entity package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.enumeration.html">gemd.enumeration package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.json.html">gemd.json package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.units.html">gemd.units package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">gemd.util package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemd.util">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gemd.html#module-gemd">Module contents</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -54,6 +81,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="gemd.html">gemd package</a> &raquo;</li>
       <li>gemd.util package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/reference/gemd.util.rst.txt" rel="nofollow"> View page source</a>
@@ -65,26 +93,18 @@
            <div itemprop="articleBody">
              
   <section id="gemd-util-package">
-<h1>gemd.util package<a class="headerlink" href="#gemd-util-package" title="Permalink to this headline"></a></h1>
-<section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="gemd.util.impl.html">gemd.util.impl module</a></li>
-</ul>
-</div>
-</section>
+<h1>gemd.util package<a class="headerlink" href="#gemd-util-package" title="Permalink to this heading"></a></h1>
 <section id="module-gemd.util">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-gemd.util" title="Permalink to this headline"></a></h2>
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-gemd.util" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="gemd.util.cached_isinstance">
-<span class="sig-prename descclassname"><span class="pre">gemd.util.</span></span><span class="sig-name descname"><span class="pre">cached_isinstance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_or_tuple</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#gemd.util.cached_isinstance" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">gemd.util.</span></span><span class="sig-name descname"><span class="pre">cached_isinstance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_or_tuple</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#gemd.util.cached_isinstance" title="Permalink to this definition"></a></dt>
 <dd><p>Emulate isinstance builtin to take advantage of functools caching.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>obj</strong> (<em>object</em>) – </p></li>
-<li><p><strong>class_or_tuple</strong> (<em>Union</em><em>[</em><em>Type</em><em>, </em><em>Tuple</em><em>[</em><em>Union</em><em>[</em><em>Type</em><em>, </em><em>Tuple</em><em>[</em><em>Type</em><em>]</em><em>]</em><em>]</em><em>]</em>) – A single type, a tuple of types (potentially nested)</p></li>
+<li><p><strong>class_or_tuple</strong> (<em>Type</em><em> or </em><em>Tuple</em><em>[</em><em>Type</em><em>]</em>) – A single type, a tuple of types (potentially nested)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -98,7 +118,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="gemd.util.flatten">
-<span class="sig-prename descclassname"><span class="pre">gemd.util.</span></span><span class="sig-name descname"><span class="pre">flatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><span class="pre">gemd.entity.base_entity.BaseEntity</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.util.flatten" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">gemd.util.</span></span><span class="sig-name descname"><span class="pre">flatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><span class="pre">BaseEntity</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.util.flatten" title="Permalink to this definition"></a></dt>
 <dd><p>Flatten a BaseEntity (or array of them) into a list of objects connected by LinkByUID objects.</p>
 <dl class="simple">
 <dt>This is a composite operation the amounts to:</dt><dd><ul class="simple">
@@ -131,27 +151,30 @@ If omitted, encountering a BaseEntity without an UIDs is fatal.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="gemd.util.make_index">
-<span class="sig-prename descclassname"><span class="pre">gemd.util.</span></span><span class="sig-name descname"><span class="pre">make_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><span class="pre">gemd.entity.base_entity.BaseEntity</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable"><span class="pre">gemd.entity.dict_serializable.DictSerializable</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.util.make_index" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">gemd.util.</span></span><span class="sig-name descname"><span class="pre">make_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><span class="pre">BaseEntity</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable"><span class="pre">DictSerializable</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.util.make_index" title="Permalink to this definition"></a></dt>
 <dd><p>Generates an index that can be used for the substitute_objects method.</p>
 <p>This method builds a dictionary of GEMD objects found by recursively crawling the passed
 object, indexed by all scope:id tuples found in any of the objects.  The passed object can
 be a list, tuple, dictionary or GEMD object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>obj</strong> (<em>Union</em><em>[</em><em>Iterable</em><em>, </em><em>Mapping</em><em>, </em><a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><em>BaseEntity</em></a><em>, </em><a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable"><em>DictSerializable</em></a><em>]</em>) – target container (dict, list, …) from which to create an index of GEMD objects</p>
+<dd class="field-odd"><p><strong>obj</strong> (<a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><em>BaseEntity</em></a><em> or </em><em>Iterable</em><em>[</em><a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><em>BaseEntity</em></a><em>]</em>) – target container (dict, list, …) from which to create an index of GEMD objects</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="gemd.util.recursive_flatmap">
-<span class="sig-prename descclassname"><span class="pre">gemd.util.</span></span><span class="sig-name descname"><span class="pre">recursive_flatmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><span class="pre">gemd.entity.base_entity.BaseEntity</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable"><span class="pre">gemd.entity.dict_serializable.DictSerializable</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><span class="pre">gemd.entity.base_entity.BaseEntity</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unidirectional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="headerlink" href="#gemd.util.recursive_flatmap" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">gemd.util.</span></span><span class="sig-name descname"><span class="pre">recursive_flatmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable"><span class="pre">DictSerializable</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><span class="pre">BaseEntity</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unidirectional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="headerlink" href="#gemd.util.recursive_flatmap" title="Permalink to this definition"></a></dt>
 <dd><p>Recursively apply and accumulate a list-valued function to BaseEntity members.</p>
+<p>Only <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEntity</span></code> objects will have the function applied, but the recursion will walk
+through all objects.  For example, BaseEntity -&gt; list -&gt; BaseEntity will have func applied
+to both base entities.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>obj</strong> (<em>Union</em><em>[</em><em>Iterable</em><em>, </em><em>Mapping</em><em>, </em><a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><em>BaseEntity</em></a><em>, </em><a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable"><em>DictSerializable</em></a><em>]</em>) – target of the operation</p></li>
-<li><p><strong>func</strong> (<em>Callable</em><em>[</em><em>[</em><a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><em>BaseEntity</em></a><em>]</em><em>, </em><em>Iterable</em><em>]</em>) – function to apply; must be list-valued</p></li>
+<li><p><strong>obj</strong> (<a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable"><em>DictSerializable</em></a><em> or </em><em>Iterable</em><em>[</em><a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable"><em>DictSerializable</em></a><em>]</em><em>, or </em><em>Iterable</em><em>[</em><em>...</em><em>]</em>) – target of the operation</p></li>
+<li><p><strong>func</strong> (<em>Callable</em><em>[</em><em>[</em><a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><em>BaseEntity</em></a><em>]</em><em>, </em><em>Iterable</em><em>[</em><em>Any</em><em>]</em><em>]</em>) – function to apply to <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEntity</span></code> elements; must be list-valued</p></li>
 <li><p><strong>unidirectional</strong> (<em>bool</em>) – only recurse through the writeable direction of bidirectional links</p></li>
 </ul>
 </dd>
@@ -166,24 +189,21 @@ be a list, tuple, dictionary or GEMD object.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="gemd.util.recursive_foreach">
-<span class="sig-prename descclassname"><span class="pre">gemd.util.</span></span><span class="sig-name descname"><span class="pre">recursive_foreach</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><span class="pre">gemd.entity.base_entity.BaseEntity</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable"><span class="pre">gemd.entity.dict_serializable.DictSerializable</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><span class="pre">gemd.entity.base_entity.BaseEntity</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply_first</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.util.recursive_foreach" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">gemd.util.</span></span><span class="sig-name descname"><span class="pre">recursive_foreach</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable"><span class="pre">DictSerializable</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><span class="pre">BaseEntity</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply_first</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.util.recursive_foreach" title="Permalink to this definition"></a></dt>
 <dd><p>Apply a function recursively to each BaseEntity object.</p>
-<p>Only objects of type BaseEntity will have the function applied, but the recursion will walk
+<p>Only <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEntity</span></code> objects will have the function applied, but the recursion will walk
 through all objects.  For example, BaseEntity -&gt; list -&gt; BaseEntity will have func applied
 to both base entities.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>obj</strong> (<em>Union</em><em>[</em><em>Iterable</em><em>, </em><em>Mapping</em><em>, </em><a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><em>BaseEntity</em></a><em>, </em><a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable"><em>DictSerializable</em></a><em>]</em>) – target of the operation</p></li>
-<li><p><strong>func</strong> (<em>Callable</em><em>[</em><em>[</em><a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><em>BaseEntity</em></a><em>]</em><em>, </em><em>None</em><em>]</em>) – to apply to each contained BaseEntity</p></li>
+<li><p><strong>obj</strong> (<a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable"><em>DictSerializable</em></a><em> or </em><em>Iterable</em><em>[</em><a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable"><em>DictSerializable</em></a><em>]</em><em>, or </em><em>Iterable</em><em>[</em><em>...</em><em>]</em>) – target of the operation</p></li>
+<li><p><strong>func</strong> (<em>Callable</em><em>[</em><em>[</em><a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><em>BaseEntity</em></a><em>]</em><em>, </em><em>None</em><em>]</em>) – function to apply to <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEntity</span></code> elements</p></li>
 <li><p><strong>apply_first</strong> (<em>bool</em>) – whether to apply the func before applying it to members (default: false)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>None</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -200,11 +220,8 @@ to both base entities.</p>
 <li><p><strong>scope</strong> (<em>str</em>) – scope of the uuid to assign</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>None</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -247,7 +264,7 @@ It is the inverse of substitute_links.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="gemd.util.writable_sort_order">
-<span class="sig-prename descclassname"><span class="pre">gemd.util.</span></span><span class="sig-name descname"><span class="pre">writable_sort_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><span class="pre">gemd.entity.base_entity.BaseEntity</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#gemd.util.writable_sort_order" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">gemd.util.</span></span><span class="sig-name descname"><span class="pre">writable_sort_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gemd.entity.base_entity.html#gemd.entity.base_entity.BaseEntity" title="gemd.entity.base_entity.BaseEntity"><span class="pre">BaseEntity</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#gemd.util.writable_sort_order" title="Permalink to this definition"></a></dt>
 <dd><p>Sort order for flattening such that the objects can be read back and re-nested.</p>
 </dd></dl>
 
@@ -257,7 +274,9 @@ It is the inverse of substitute_links.</p>
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="gemd.units.html" class="btn btn-neutral float-left" title="gemd.units package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
 
   <hr/>
 

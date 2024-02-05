@@ -1,8 +1,0 @@
-gemd.units.impl module
-======================
-
-.. automodule:: gemd.units.impl
-   :members:
-   :undoc-members:
-   :inherited-members:
-   :show-inheritance:

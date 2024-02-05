@@ -1,7 +1,0 @@
-gemd
-====
-
-.. toctree::
-   :maxdepth: 4
-
-   gemd

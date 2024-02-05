@@ -4,10 +4,11 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to the GEMD-Python Documentation! &mdash; GEMD-python 0.0.0 documentation</title>
+  <title>Welcome to the GEMD-Python Documentation! &mdash; GEMD-python 1.18.5 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.png"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -15,11 +16,12 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="1. In depth documentation" href="depth/index.html" /> 
+    <link rel="next" title="1. Unit Parsing" href="depth/unit_parsing.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -27,8 +29,12 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="#" class="icon icon-home"> GEMD-python
+            <a href="#">
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
           </a>
+              <div class="version">
+                1.18.5
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -38,7 +44,11 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="depth/index.html">1. In depth documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="depth/unit_parsing.html">1. Unit Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="depth/serialization.html">2. Serialization (with Graphs!)</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference/gemd.html">gemd package</a></li>
 </ul>
 
         </div>
@@ -66,29 +76,44 @@
            <div itemprop="articleBody">
              
   <section id="welcome-to-the-gemd-python-documentation">
-<h1>Welcome to the GEMD-Python Documentation!<a class="headerlink" href="#welcome-to-the-gemd-python-documentation" title="Permalink to this headline"></a></h1>
-<p><code class="docutils literal notranslate"><span class="pre">gemd</span></code> is the Python implementation of the Citrine data model, the full documentation of which
-can be found <a class="reference external" href="https://citrineinformatics.github.io/gemd-docs/">here</a>.</p>
+<h1>Welcome to the GEMD-Python Documentation!<a class="headerlink" href="#welcome-to-the-gemd-python-documentation" title="Permalink to this heading"></a></h1>
+<p>This site documents the Python implementation of the Graphical Expression of Materials Data (GEMD) model.
+GEMD is an open source data format developed by <a class="reference external" href="https://citrine.io/">Citrine Informatics</a> for representing
+data in materials in a <a class="reference external" href="https://www.go-fair.org/fair-principles/">FAIR</a> and transformable manner.
+Documentation of the underlying data model can be found <a class="reference external" href="https://citrineinformatics.github.io/gemd-docs/">here</a>.</p>
 <p>To learn about the details of specific classes, please see the module index.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
+<p>The latest release can be installed via <cite>pip</cite>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>gemd
+</pre></div>
+</div>
+<p>or a specific version can be installed, for example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">gemd</span><span class="o">==</span><span class="m">1</span>.17.1
+</pre></div>
+</div>
+</section>
 <section id="table-of-contents">
-<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline"></a></h2>
+<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="depth/index.html">1. In depth documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="depth/unit_parsing.html">1.1. Unit Parsing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="depth/serialization.html">1.2. Serialization (with Graphs!)</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="depth/unit_parsing.html">1. Unit Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="depth/serialization.html">2. Serialization (with Graphs!)</a></li>
 </ul>
 </div>
 </section>
-<section id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline"></a></h2>
+<section id="indices">
+<h2>Indices<a class="headerlink" href="#indices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference/gemd.html">gemd package</a></li>
+</ul>
+</div>
 </section>
 </section>
 
@@ -96,7 +121,7 @@ can be found <a class="reference external" href="https://citrineinformatics.gith
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="depth/index.html" class="btn btn-neutral float-right" title="1. In depth documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="depth/unit_parsing.html" class="btn btn-neutral float-right" title="1. Unit Parsing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -1,14 +1,6 @@
 gemd.util package
 =================
 
-Submodules
-----------
-
-.. toctree::
-   :maxdepth: 4
-
-   gemd.util.impl
-
 Module contents
 ---------------
 

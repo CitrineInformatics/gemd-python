@@ -3,10 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; GEMD-python 0.0.0 documentation</title>
+  <title>Index &mdash; GEMD-python 1.18.5 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.png"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -14,6 +15,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="#" />
@@ -25,8 +27,12 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> GEMD-python
+            <a href="index.html">
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
           </a>
+              <div class="version">
+                1.18.5
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -36,7 +42,11 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="depth/index.html">1. In depth documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="depth/unit_parsing.html">1. Unit Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="depth/serialization.html">2. Serialization (with Graphs!)</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference/gemd.html">gemd package</a></li>
 </ul>
 
         </div>
@@ -113,11 +123,11 @@
         <li><a href="reference/gemd.html#gemd.IngredientSpec.absolute_quantity">(gemd.IngredientSpec property)</a>
 </li>
       </ul></li>
-      <li><a href="reference/gemd.builders.impl.html#gemd.builders.impl.add_attribute">add_attribute() (in module gemd.builders.impl)</a>
+      <li><a href="reference/gemd.builders.html#gemd.builders.add_attribute">add_attribute() (in module gemd.builders)</a>
 </li>
-      <li><a href="reference/gemd.builders.impl.html#gemd.builders.impl.add_edge">add_edge() (in module gemd.builders.impl)</a>
+      <li><a href="reference/gemd.builders.html#gemd.builders.add_edge">add_edge() (in module gemd.builders)</a>
 </li>
-      <li><a href="reference/gemd.builders.impl.html#gemd.builders.impl.add_measurement">add_measurement() (in module gemd.builders.impl)</a>
+      <li><a href="reference/gemd.builders.html#gemd.builders.add_measurement">add_measurement() (in module gemd.builders)</a>
 </li>
       <li><a href="reference/gemd.html#gemd.ConditionTemplate.add_uid">add_uid() (gemd.ConditionTemplate method)</a>
 
@@ -395,6 +405,12 @@
       </ul></li>
       <li><a href="reference/gemd.entity.valid_list.html#gemd.entity.valid_list.ValidList.append">append() (gemd.entity.valid_list.ValidList method)</a>
 </li>
+      <li><a href="reference/gemd.units.html#gemd.units.DefinitionSyntaxError.args">args (gemd.units.DefinitionSyntaxError attribute)</a>
+
+      <ul>
+        <li><a href="reference/gemd.units.html#gemd.units.UndefinedUnitError.args">(gemd.units.UndefinedUnitError attribute)</a>
+</li>
+      </ul></li>
       <li><a href="reference/gemd.entity.util.html#gemd.entity.util.array_like">array_like() (in module gemd.entity.util)</a>
 </li>
       <li><a href="reference/gemd.html#gemd.CategoricalBounds.as_dict">as_dict() (gemd.CategoricalBounds method)</a>
@@ -1096,11 +1112,7 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/gemd.util.html#gemd.util.cached_isinstance">cached_isinstance() (in module gemd.util)</a>
-
-      <ul>
-        <li><a href="reference/gemd.util.impl.html#gemd.util.impl.cached_isinstance">(in module gemd.util.impl)</a>
 </li>
-      </ul></li>
       <li><a href="reference/gemd.entity.case_insensitive_dict.html#gemd.entity.case_insensitive_dict.CaseInsensitiveDict">CaseInsensitiveDict (class in gemd.entity.case_insensitive_dict)</a>
 </li>
       <li><a href="reference/gemd.html#gemd.CategoricalBounds">CategoricalBounds (class in gemd)</a>
@@ -1135,11 +1147,9 @@
         <li><a href="reference/gemd.html#gemd.NominalCategorical.category">(gemd.NominalCategorical property)</a>
 </li>
       </ul></li>
-      <li><a href="reference/gemd.units.impl.html#gemd.units.impl.change_definitions_file">change_definitions_file() (in module gemd.units.impl)</a>
+      <li><a href="reference/gemd.units.html#gemd.units.change_definitions_file">change_definitions_file() (in module gemd.units)</a>
 </li>
       <li><a href="reference/gemd.demo.cake.html#gemd.demo.cake.change_scope">change_scope() (in module gemd.demo.cake)</a>
-</li>
-      <li><a href="reference/gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializableMeta.class_mapping">class_mapping (gemd.entity.dict_serializable.DictSerializableMeta property)</a>
 </li>
       <li><a href="reference/gemd.entity.case_insensitive_dict.html#gemd.entity.case_insensitive_dict.CaseInsensitiveDict.clear">clear() (gemd.entity.case_insensitive_dict.CaseInsensitiveDict method)</a>
 
@@ -1171,8 +1181,12 @@
       </ul></li>
       <li><a href="reference/gemd.entity.value.composition_value.html#gemd.entity.value.composition_value.CompositionValue">CompositionValue (class in gemd.entity.value.composition_value)</a>
 </li>
-      <li><a href="reference/gemd.enumeration.origin.html#gemd.enumeration.origin.Origin.COMPUTED">COMPUTED (gemd.enumeration.origin.Origin attribute)</a>
+      <li><a href="reference/gemd.enumeration.html#gemd.enumeration.Origin.COMPUTED">COMPUTED (gemd.enumeration.Origin attribute)</a>
+
+      <ul>
+        <li><a href="reference/gemd.enumeration.origin.html#gemd.enumeration.origin.Origin.COMPUTED">(gemd.enumeration.origin.Origin attribute)</a>
 </li>
+      </ul></li>
       <li><a href="reference/gemd.html#gemd.Condition">Condition (class in gemd)</a>
 
       <ul>
@@ -1303,7 +1317,7 @@
       </ul></li>
       <li><a href="reference/gemd.entity.value.continuous_value.html#gemd.entity.value.continuous_value.ContinuousValue">ContinuousValue (class in gemd.entity.value.continuous_value)</a>
 </li>
-      <li><a href="reference/gemd.units.impl.html#gemd.units.impl.convert_units">convert_units() (in module gemd.units.impl)</a>
+      <li><a href="reference/gemd.units.html#gemd.units.convert_units">convert_units() (in module gemd.units)</a>
 </li>
       <li><a href="reference/gemd.entity.case_insensitive_dict.html#gemd.entity.case_insensitive_dict.CaseInsensitiveDict.copy">copy() (gemd.entity.case_insensitive_dict.CaseInsensitiveDict method)</a>
 
@@ -1311,6 +1325,8 @@
         <li><a href="reference/gemd.entity.valid_list.html#gemd.entity.valid_list.ValidList.copy">(gemd.entity.valid_list.ValidList method)</a>
 </li>
         <li><a href="reference/gemd.json.gemd_json.html#gemd.json.gemd_json.GEMDJson.copy">(gemd.json.gemd_json.GEMDJson method)</a>
+</li>
+        <li><a href="reference/gemd.json.html#gemd.json.GEMDJson.copy">(gemd.json.GEMDJson method)</a>
 </li>
       </ul></li>
       <li><a href="reference/gemd.entity.valid_list.html#gemd.entity.valid_list.ValidList.count">count() (gemd.entity.valid_list.ValidList method)</a>
@@ -1322,7 +1338,11 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/gemd.json.gemd_encoder.html#gemd.json.gemd_encoder.GEMDEncoder.default">default() (gemd.json.gemd_encoder.GEMDEncoder method)</a>
+
+      <ul>
+        <li><a href="reference/gemd.json.html#gemd.json.GEMDEncoder.default">(gemd.json.GEMDEncoder method)</a>
 </li>
+      </ul></li>
       <li><a href="reference/gemd.entity.bounds.real_bounds.html#gemd.entity.bounds.real_bounds.RealBounds.default_units">default_units (gemd.entity.bounds.real_bounds.RealBounds property)</a>
 
       <ul>
@@ -1333,9 +1353,9 @@
         <li><a href="reference/gemd.html#gemd.RealBounds.default_units">(gemd.RealBounds property)</a>
 </li>
       </ul></li>
-      <li><a href="reference/gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable">DictSerializable (class in gemd.entity.dict_serializable)</a>
+      <li><a href="reference/gemd.units.html#gemd.units.DefinitionSyntaxError">DefinitionSyntaxError</a>
 </li>
-      <li><a href="reference/gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializableMeta">DictSerializableMeta (class in gemd.entity.dict_serializable)</a>
+      <li><a href="reference/gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable">DictSerializable (class in gemd.entity.dict_serializable)</a>
 </li>
       <li><a href="reference/gemd.html#gemd.DiscreteCategorical">DiscreteCategorical (class in gemd)</a>
 
@@ -1616,6 +1636,8 @@
 </li>
         <li><a href="reference/gemd.json.gemd_json.html#gemd.json.gemd_json.GEMDJson.dump">(gemd.json.gemd_json.GEMDJson method)</a>
 </li>
+        <li><a href="reference/gemd.json.html#gemd.json.GEMDJson.dump">(gemd.json.GEMDJson method)</a>
+</li>
         <li><a href="reference/gemd.html#gemd.LinkByUID.dump">(gemd.LinkByUID method)</a>
 </li>
         <li><a href="reference/gemd.html#gemd.MaterialRun.dump">(gemd.MaterialRun method)</a>
@@ -1676,6 +1698,8 @@
       <li><a href="reference/gemd.json.gemd_json.html#gemd.json.gemd_json.GEMDJson.dumps">dumps() (gemd.json.gemd_json.GEMDJson method)</a>
 
       <ul>
+        <li><a href="reference/gemd.json.html#gemd.json.GEMDJson.dumps">(gemd.json.GEMDJson method)</a>
+</li>
         <li><a href="reference/gemd.json.html#gemd.json.dumps">(in module gemd.json)</a>
 </li>
       </ul></li>
@@ -1698,9 +1722,17 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/gemd.json.gemd_encoder.html#gemd.json.gemd_encoder.GEMDEncoder.encode">encode() (gemd.json.gemd_encoder.GEMDEncoder method)</a>
+
+      <ul>
+        <li><a href="reference/gemd.json.html#gemd.json.GEMDEncoder.encode">(gemd.json.GEMDEncoder method)</a>
 </li>
+      </ul></li>
       <li><a href="reference/gemd.enumeration.sample_type.html#gemd.enumeration.sample_type.SampleType.EXPERIMENTAL">EXPERIMENTAL (gemd.enumeration.sample_type.SampleType attribute)</a>
+
+      <ul>
+        <li><a href="reference/gemd.enumeration.html#gemd.enumeration.SampleType.EXPERIMENTAL">(gemd.enumeration.SampleType attribute)</a>
 </li>
+      </ul></li>
       <li><a href="reference/gemd.entity.valid_list.html#gemd.entity.valid_list.ValidList.extend">extend() (gemd.entity.valid_list.ValidList method)</a>
 </li>
   </ul></td>
@@ -1814,11 +1846,7 @@
 </li>
       </ul></li>
       <li><a href="reference/gemd.util.html#gemd.util.flatten">flatten() (in module gemd.util)</a>
-
-      <ul>
-        <li><a href="reference/gemd.util.impl.html#gemd.util.impl.flatten">(in module gemd.util.impl)</a>
 </li>
-      </ul></li>
       <li><a href="reference/gemd.html#gemd.EmpiricalFormula.formula">formula (gemd.EmpiricalFormula property)</a>
 
       <ul>
@@ -1829,10 +1857,6 @@
         <li><a href="reference/gemd.entity.value.html#gemd.entity.value.EmpiricalFormula.formula">(gemd.entity.value.EmpiricalFormula property)</a>
 </li>
       </ul></li>
-      <li><a href="reference/gemd.demo.strehlow_and_cook.html#gemd.demo.strehlow_and_cook.formula_clean">formula_clean() (in module gemd.demo.strehlow_and_cook)</a>
-</li>
-      <li><a href="reference/gemd.demo.strehlow_and_cook.html#gemd.demo.strehlow_and_cook.formula_latex">formula_latex() (in module gemd.demo.strehlow_and_cook)</a>
-</li>
       <li><a href="reference/gemd.html#gemd.CategoricalBounds.from_dict">from_dict() (gemd.CategoricalBounds class method)</a>
 
       <ul>
@@ -2185,13 +2209,6 @@
 
       <ul>
         <li><a href="reference/gemd.builders.html#module-gemd.builders">module</a>
-</li>
-      </ul></li>
-      <li>
-    gemd.builders.impl
-
-      <ul>
-        <li><a href="reference/gemd.builders.impl.html#module-gemd.builders.impl">module</a>
 </li>
       </ul></li>
       <li>
@@ -2827,33 +2844,27 @@
 </li>
       </ul></li>
       <li>
-    gemd.units.impl
-
-      <ul>
-        <li><a href="reference/gemd.units.impl.html#module-gemd.units.impl">module</a>
-</li>
-      </ul></li>
-      <li>
     gemd.util
 
       <ul>
         <li><a href="reference/gemd.util.html#module-gemd.util">module</a>
 </li>
       </ul></li>
-      <li>
-    gemd.util.impl
+      <li><a href="reference/gemd.json.html#gemd.json.GEMDEncoder">GEMDEncoder (class in gemd.json)</a>
 
       <ul>
-        <li><a href="reference/gemd.util.impl.html#module-gemd.util.impl">module</a>
+        <li><a href="reference/gemd.json.gemd_encoder.html#gemd.json.gemd_encoder.GEMDEncoder">(class in gemd.json.gemd_encoder)</a>
 </li>
       </ul></li>
-      <li><a href="reference/gemd.json.gemd_encoder.html#gemd.json.gemd_encoder.GEMDEncoder">GEMDEncoder (class in gemd.json.gemd_encoder)</a>
+      <li><a href="reference/gemd.json.html#gemd.json.GEMDJson">GEMDJson (class in gemd.json)</a>
+
+      <ul>
+        <li><a href="reference/gemd.json.gemd_json.html#gemd.json.gemd_json.GEMDJson">(class in gemd.json.gemd_json)</a>
 </li>
-      <li><a href="reference/gemd.json.gemd_json.html#gemd.json.gemd_json.GEMDJson">GEMDJson (class in gemd.json.gemd_json)</a>
-</li>
+      </ul></li>
       <li><a href="reference/gemd.entity.case_insensitive_dict.html#gemd.entity.case_insensitive_dict.CaseInsensitiveDict.get">get() (gemd.entity.case_insensitive_dict.CaseInsensitiveDict method)</a>
 </li>
-      <li><a href="reference/gemd.units.impl.html#gemd.units.impl.get_base_units">get_base_units() (in module gemd.units.impl)</a>
+      <li><a href="reference/gemd.units.html#gemd.units.get_base_units">get_base_units() (in module gemd.units)</a>
 </li>
       <li><a href="reference/gemd.demo.cake.html#gemd.demo.cake.get_demo_scope">get_demo_scope() (in module gemd.demo.cake)</a>
 </li>
@@ -2933,6 +2944,8 @@
         <li><a href="reference/gemd.html#gemd.InChI.inchi">(gemd.InChI property)</a>
 </li>
       </ul></li>
+      <li><a href="reference/gemd.units.html#gemd.units.IncompatibleUnitsError">IncompatibleUnitsError (in module gemd.units)</a>
+</li>
       <li><a href="reference/gemd.entity.valid_list.html#gemd.entity.valid_list.ValidList.index">index() (gemd.entity.valid_list.ValidList method)</a>
 </li>
       <li><a href="reference/gemd.demo.material_run_example.html#gemd.demo.material_run_example.ingest_material_run">ingest_material_run() (in module gemd.demo.material_run_example)</a>
@@ -2949,38 +2962,22 @@
         <li><a href="reference/gemd.entity.object.ingredient_run.html#gemd.entity.object.ingredient_run.IngredientRun">(class in gemd.entity.object.ingredient_run)</a>
 </li>
       </ul></li>
-      <li><a href="reference/gemd.entity.object.process_run.html#gemd.entity.object.process_run.ProcessRun.ingredients">ingredients (gemd.entity.object.process_run.ProcessRun attribute)</a>
+      <li><a href="reference/gemd.entity.object.process_run.html#gemd.entity.object.process_run.ProcessRun.ingredients">ingredients (gemd.entity.object.process_run.ProcessRun property)</a>
 
       <ul>
-        <li><a href="reference/gemd.entity.object.process_run.html#id0">(gemd.entity.object.process_run.ProcessRun property)</a>
+        <li><a href="reference/gemd.entity.object.process_spec.html#gemd.entity.object.process_spec.ProcessSpec.ingredients">(gemd.entity.object.process_spec.ProcessSpec property)</a>
 </li>
-        <li><a href="reference/gemd.entity.object.process_spec.html#gemd.entity.object.process_spec.ProcessSpec.ingredients">(gemd.entity.object.process_spec.ProcessSpec attribute)</a>
+        <li><a href="reference/gemd.entity.object.html#gemd.entity.object.ProcessRun.ingredients">(gemd.entity.object.ProcessRun property)</a>
 </li>
-        <li><a href="reference/gemd.entity.object.process_spec.html#id0">(gemd.entity.object.process_spec.ProcessSpec property)</a>
+        <li><a href="reference/gemd.entity.object.html#gemd.entity.object.ProcessSpec.ingredients">(gemd.entity.object.ProcessSpec property)</a>
 </li>
-        <li><a href="reference/gemd.entity.object.html#gemd.entity.object.ProcessRun.ingredients">(gemd.entity.object.ProcessRun attribute)</a>
+        <li><a href="reference/gemd.entity.html#gemd.entity.ProcessRun.ingredients">(gemd.entity.ProcessRun property)</a>
 </li>
-        <li><a href="reference/gemd.entity.object.html#id13">(gemd.entity.object.ProcessRun property)</a>
+        <li><a href="reference/gemd.entity.html#gemd.entity.ProcessSpec.ingredients">(gemd.entity.ProcessSpec property)</a>
 </li>
-        <li><a href="reference/gemd.entity.object.html#gemd.entity.object.ProcessSpec.ingredients">(gemd.entity.object.ProcessSpec attribute)</a>
+        <li><a href="reference/gemd.html#gemd.ProcessRun.ingredients">(gemd.ProcessRun property)</a>
 </li>
-        <li><a href="reference/gemd.entity.object.html#id17">(gemd.entity.object.ProcessSpec property)</a>
-</li>
-        <li><a href="reference/gemd.entity.html#gemd.entity.ProcessRun.ingredients">(gemd.entity.ProcessRun attribute)</a>
-</li>
-        <li><a href="reference/gemd.entity.html#id21">(gemd.entity.ProcessRun property)</a>
-</li>
-        <li><a href="reference/gemd.entity.html#gemd.entity.ProcessSpec.ingredients">(gemd.entity.ProcessSpec attribute)</a>
-</li>
-        <li><a href="reference/gemd.entity.html#id25">(gemd.entity.ProcessSpec property)</a>
-</li>
-        <li><a href="reference/gemd.html#gemd.ProcessRun.ingredients">(gemd.ProcessRun attribute)</a>
-</li>
-        <li><a href="reference/gemd.html#id21">(gemd.ProcessRun property)</a>
-</li>
-        <li><a href="reference/gemd.html#gemd.ProcessSpec.ingredients">(gemd.ProcessSpec attribute)</a>
-</li>
-        <li><a href="reference/gemd.html#id25">(gemd.ProcessSpec property)</a>
+        <li><a href="reference/gemd.html#gemd.ProcessSpec.ingredients">(gemd.ProcessSpec property)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -3010,11 +3007,19 @@
       <li><a href="reference/gemd.entity.value.integer_value.html#gemd.entity.value.integer_value.IntegerValue">IntegerValue (class in gemd.entity.value.integer_value)</a>
 </li>
       <li><a href="reference/gemd.json.gemd_encoder.html#gemd.json.gemd_encoder.GEMDEncoder.item_separator">item_separator (gemd.json.gemd_encoder.GEMDEncoder attribute)</a>
+
+      <ul>
+        <li><a href="reference/gemd.json.html#gemd.json.GEMDEncoder.item_separator">(gemd.json.GEMDEncoder attribute)</a>
 </li>
+      </ul></li>
       <li><a href="reference/gemd.entity.case_insensitive_dict.html#gemd.entity.case_insensitive_dict.CaseInsensitiveDict.items">items() (gemd.entity.case_insensitive_dict.CaseInsensitiveDict method)</a>
 </li>
       <li><a href="reference/gemd.json.gemd_encoder.html#gemd.json.gemd_encoder.GEMDEncoder.iterencode">iterencode() (gemd.json.gemd_encoder.GEMDEncoder method)</a>
+
+      <ul>
+        <li><a href="reference/gemd.json.html#gemd.json.GEMDEncoder.iterencode">(gemd.json.GEMDEncoder method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -3022,7 +3027,11 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/gemd.json.gemd_encoder.html#gemd.json.gemd_encoder.GEMDEncoder.key_separator">key_separator (gemd.json.gemd_encoder.GEMDEncoder attribute)</a>
+
+      <ul>
+        <li><a href="reference/gemd.json.html#gemd.json.GEMDEncoder.key_separator">(gemd.json.GEMDEncoder attribute)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/gemd.entity.case_insensitive_dict.html#gemd.entity.case_insensitive_dict.CaseInsensitiveDict.keys">keys() (gemd.entity.case_insensitive_dict.CaseInsensitiveDict method)</a>
@@ -3059,26 +3068,46 @@
         <li><a href="reference/gemd.entity.link_by_uid.html#gemd.entity.link_by_uid.LinkByUID">(class in gemd.entity.link_by_uid)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/gemd.json.gemd_json.html#gemd.json.gemd_json.GEMDJson.load">load() (gemd.json.gemd_json.GEMDJson method)</a>
 
       <ul>
+        <li><a href="reference/gemd.json.html#gemd.json.GEMDJson.load">(gemd.json.GEMDJson method)</a>
+</li>
         <li><a href="reference/gemd.json.html#gemd.json.load">(in module gemd.json)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/gemd.json.gemd_json.html#gemd.json.gemd_json.GEMDJson.loads">loads() (gemd.json.gemd_json.GEMDJson method)</a>
 
       <ul>
+        <li><a href="reference/gemd.json.html#gemd.json.GEMDJson.loads">(gemd.json.GEMDJson method)</a>
+</li>
         <li><a href="reference/gemd.json.html#gemd.json.loads">(in module gemd.json)</a>
 </li>
       </ul></li>
-      <li><a href="reference/gemd.entity.html#gemd.entity.UniformInteger.lower_bound">lower_bound (gemd.entity.UniformInteger property)</a>
+      <li><a href="reference/gemd.entity.bounds.integer_bounds.html#gemd.entity.bounds.integer_bounds.IntegerBounds.lower_bound">lower_bound (gemd.entity.bounds.integer_bounds.IntegerBounds property)</a>
 
       <ul>
+        <li><a href="reference/gemd.entity.bounds.html#gemd.entity.bounds.IntegerBounds.lower_bound">(gemd.entity.bounds.IntegerBounds property)</a>
+</li>
+        <li><a href="reference/gemd.entity.bounds.real_bounds.html#gemd.entity.bounds.real_bounds.RealBounds.lower_bound">(gemd.entity.bounds.real_bounds.RealBounds property)</a>
+</li>
+        <li><a href="reference/gemd.entity.bounds.html#gemd.entity.bounds.RealBounds.lower_bound">(gemd.entity.bounds.RealBounds property)</a>
+</li>
+        <li><a href="reference/gemd.entity.html#gemd.entity.IntegerBounds.lower_bound">(gemd.entity.IntegerBounds property)</a>
+</li>
+        <li><a href="reference/gemd.entity.html#gemd.entity.RealBounds.lower_bound">(gemd.entity.RealBounds property)</a>
+</li>
+        <li><a href="reference/gemd.entity.html#gemd.entity.UniformInteger.lower_bound">(gemd.entity.UniformInteger property)</a>
+</li>
         <li><a href="reference/gemd.entity.value.uniform_integer.html#gemd.entity.value.uniform_integer.UniformInteger.lower_bound">(gemd.entity.value.uniform_integer.UniformInteger property)</a>
 </li>
         <li><a href="reference/gemd.entity.value.html#gemd.entity.value.UniformInteger.lower_bound">(gemd.entity.value.UniformInteger property)</a>
+</li>
+        <li><a href="reference/gemd.html#gemd.IntegerBounds.lower_bound">(gemd.IntegerBounds property)</a>
+</li>
+        <li><a href="reference/gemd.html#gemd.RealBounds.lower_bound">(gemd.RealBounds property)</a>
 </li>
         <li><a href="reference/gemd.html#gemd.UniformInteger.lower_bound">(gemd.UniformInteger property)</a>
 </li>
@@ -3089,7 +3118,7 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="reference/gemd.builders.impl.html#gemd.builders.impl.make_attribute">make_attribute() (in module gemd.builders.impl)</a>
+      <li><a href="reference/gemd.builders.html#gemd.builders.make_attribute">make_attribute() (in module gemd.builders)</a>
 </li>
       <li><a href="reference/gemd.demo.cake.html#gemd.demo.cake.make_cake">make_cake() (in module gemd.demo.cake)</a>
 </li>
@@ -3104,14 +3133,10 @@
       <li><a href="reference/gemd.demo.measurement_example.html#gemd.demo.measurement_example.make_flexural_test_measurement">make_flexural_test_measurement() (in module gemd.demo.measurement_example)</a>
 </li>
       <li><a href="reference/gemd.util.html#gemd.util.make_index">make_index() (in module gemd.util)</a>
-
-      <ul>
-        <li><a href="reference/gemd.util.impl.html#gemd.util.impl.make_index">(in module gemd.util.impl)</a>
 </li>
-      </ul></li>
       <li><a href="reference/gemd.entity.util.html#gemd.entity.util.make_instance">make_instance() (in module gemd.entity.util)</a>
 </li>
-      <li><a href="reference/gemd.builders.impl.html#gemd.builders.impl.make_node">make_node() (in module gemd.builders.impl)</a>
+      <li><a href="reference/gemd.builders.html#gemd.builders.make_node">make_node() (in module gemd.builders)</a>
 </li>
       <li><a href="reference/gemd.demo.strehlow_and_cook.html#gemd.demo.strehlow_and_cook.make_strehlow_objects">make_strehlow_objects() (in module gemd.demo.strehlow_and_cook)</a>
 </li>
@@ -3119,7 +3144,7 @@
 </li>
       <li><a href="reference/gemd.demo.strehlow_and_cook.html#gemd.demo.strehlow_and_cook.make_templates">make_templates() (in module gemd.demo.strehlow_and_cook)</a>
 </li>
-      <li><a href="reference/gemd.builders.impl.html#gemd.builders.impl.make_value">make_value() (in module gemd.builders.impl)</a>
+      <li><a href="reference/gemd.builders.html#gemd.builders.make_value">make_value() (in module gemd.builders)</a>
 </li>
       <li><a href="reference/gemd.entity.html#gemd.entity.IngredientRun.mass_fraction">mass_fraction (gemd.entity.IngredientRun property)</a>
 
@@ -3199,8 +3224,12 @@
         <li><a href="reference/gemd.entity.template.material_template.html#gemd.entity.template.material_template.MaterialTemplate">(class in gemd.entity.template.material_template)</a>
 </li>
       </ul></li>
-      <li><a href="reference/gemd.enumeration.origin.html#gemd.enumeration.origin.Origin.MEASURED">MEASURED (gemd.enumeration.origin.Origin attribute)</a>
+      <li><a href="reference/gemd.enumeration.html#gemd.enumeration.Origin.MEASURED">MEASURED (gemd.enumeration.Origin attribute)</a>
+
+      <ul>
+        <li><a href="reference/gemd.enumeration.origin.html#gemd.enumeration.origin.Origin.MEASURED">(gemd.enumeration.origin.Origin attribute)</a>
 </li>
+      </ul></li>
       <li><a href="reference/gemd.html#gemd.MeasurementRun">MeasurementRun (class in gemd)</a>
 
       <ul>
@@ -3211,22 +3240,14 @@
         <li><a href="reference/gemd.entity.object.measurement_run.html#gemd.entity.object.measurement_run.MeasurementRun">(class in gemd.entity.object.measurement_run)</a>
 </li>
       </ul></li>
-      <li><a href="reference/gemd.entity.html#gemd.entity.MaterialRun.measurements">measurements (gemd.entity.MaterialRun attribute)</a>
+      <li><a href="reference/gemd.entity.html#gemd.entity.MaterialRun.measurements">measurements (gemd.entity.MaterialRun property)</a>
 
       <ul>
-        <li><a href="reference/gemd.entity.html#id0">(gemd.entity.MaterialRun property)</a>
+        <li><a href="reference/gemd.entity.object.material_run.html#gemd.entity.object.material_run.MaterialRun.measurements">(gemd.entity.object.material_run.MaterialRun property)</a>
 </li>
-        <li><a href="reference/gemd.entity.object.material_run.html#gemd.entity.object.material_run.MaterialRun.measurements">(gemd.entity.object.material_run.MaterialRun attribute)</a>
+        <li><a href="reference/gemd.entity.object.html#gemd.entity.object.MaterialRun.measurements">(gemd.entity.object.MaterialRun property)</a>
 </li>
-        <li><a href="reference/gemd.entity.object.material_run.html#id0">(gemd.entity.object.material_run.MaterialRun property)</a>
-</li>
-        <li><a href="reference/gemd.entity.object.html#gemd.entity.object.MaterialRun.measurements">(gemd.entity.object.MaterialRun attribute)</a>
-</li>
-        <li><a href="reference/gemd.entity.object.html#id0">(gemd.entity.object.MaterialRun property)</a>
-</li>
-        <li><a href="reference/gemd.html#gemd.MaterialRun.measurements">(gemd.MaterialRun attribute)</a>
-</li>
-        <li><a href="reference/gemd.html#id0">(gemd.MaterialRun property)</a>
+        <li><a href="reference/gemd.html#gemd.MaterialRun.measurements">(gemd.MaterialRun property)</a>
 </li>
       </ul></li>
       <li><a href="reference/gemd.html#gemd.MeasurementSpec">MeasurementSpec (class in gemd)</a>
@@ -3249,8 +3270,6 @@
         <li><a href="reference/gemd.entity.template.measurement_template.html#gemd.entity.template.measurement_template.MeasurementTemplate">(class in gemd.entity.template.measurement_template)</a>
 </li>
       </ul></li>
-      <li><a href="reference/gemd.enumeration.base_enumeration.html#gemd.enumeration.base_enumeration.migrated_enum">migrated_enum() (in module gemd.enumeration.base_enumeration)</a>
-</li>
       <li><a href="reference/gemd.demo.strehlow_and_cook.html#gemd.demo.strehlow_and_cook.minimal_subset">minimal_subset() (in module gemd.demo.strehlow_and_cook)</a>
 </li>
       <li>
@@ -3260,8 +3279,6 @@
         <li><a href="reference/gemd.html#module-gemd">gemd</a>
 </li>
         <li><a href="reference/gemd.builders.html#module-gemd.builders">gemd.builders</a>
-</li>
-        <li><a href="reference/gemd.builders.impl.html#module-gemd.builders.impl">gemd.builders.impl</a>
 </li>
         <li><a href="reference/gemd.demo.html#module-gemd.demo">gemd.demo</a>
 </li>
@@ -3443,11 +3460,7 @@
 </li>
         <li><a href="reference/gemd.units.html#module-gemd.units">gemd.units</a>
 </li>
-        <li><a href="reference/gemd.units.impl.html#module-gemd.units.impl">gemd.units.impl</a>
-</li>
         <li><a href="reference/gemd.util.html#module-gemd.util">gemd.util</a>
-</li>
-        <li><a href="reference/gemd.util.impl.html#module-gemd.util.impl">gemd.util.impl</a>
 </li>
       </ul></li>
   </ul></td>
@@ -3464,7 +3477,7 @@
       </ul></li>
       <li><a href="reference/gemd.entity.value.molecular_value.html#gemd.entity.value.molecular_value.MolecularValue">MolecularValue (class in gemd.entity.value.molecular_value)</a>
 </li>
-      <li><a href="reference/gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializableMeta.mro">mro() (gemd.entity.dict_serializable.DictSerializableMeta method)</a>
+      <li><a href="reference/gemd.units.html#gemd.units.DefinitionSyntaxError.msg">msg (gemd.units.DefinitionSyntaxError attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -3546,6 +3559,8 @@
         <li><a href="reference/gemd.html#gemd.ProcessSpec.name">(gemd.ProcessSpec property)</a>
 </li>
         <li><a href="reference/gemd.html#gemd.PropertyAndConditions.name">(gemd.PropertyAndConditions property)</a>
+</li>
+        <li><a href="reference/gemd.units.html#gemd.units.UndefinedUnitError.name">(gemd.units.UndefinedUnitError attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -3636,8 +3651,14 @@
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="reference/gemd.enumeration.origin.html#gemd.enumeration.origin.Origin">Origin (class in gemd.enumeration.origin)</a>
+      <li><a href="reference/gemd.units.html#gemd.units.UndefinedUnitError.obj">obj (gemd.units.UndefinedUnitError attribute)</a>
 </li>
+      <li><a href="reference/gemd.enumeration.html#gemd.enumeration.Origin">Origin (class in gemd.enumeration)</a>
+
+      <ul>
+        <li><a href="reference/gemd.enumeration.origin.html#gemd.enumeration.origin.Origin">(class in gemd.enumeration.origin)</a>
+</li>
+      </ul></li>
       <li><a href="reference/gemd.html#gemd.Condition.origin">origin (gemd.Condition property)</a>
 
       <ul>
@@ -3676,38 +3697,22 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="reference/gemd.entity.object.process_run.html#gemd.entity.object.process_run.ProcessRun.output_material">output_material (gemd.entity.object.process_run.ProcessRun attribute)</a>
+      <li><a href="reference/gemd.entity.object.process_run.html#gemd.entity.object.process_run.ProcessRun.output_material">output_material (gemd.entity.object.process_run.ProcessRun property)</a>
 
       <ul>
-        <li><a href="reference/gemd.entity.object.process_run.html#id1">(gemd.entity.object.process_run.ProcessRun property)</a>
+        <li><a href="reference/gemd.entity.object.process_spec.html#gemd.entity.object.process_spec.ProcessSpec.output_material">(gemd.entity.object.process_spec.ProcessSpec property)</a>
 </li>
-        <li><a href="reference/gemd.entity.object.process_spec.html#gemd.entity.object.process_spec.ProcessSpec.output_material">(gemd.entity.object.process_spec.ProcessSpec attribute)</a>
+        <li><a href="reference/gemd.entity.object.html#gemd.entity.object.ProcessRun.output_material">(gemd.entity.object.ProcessRun property)</a>
 </li>
-        <li><a href="reference/gemd.entity.object.process_spec.html#id1">(gemd.entity.object.process_spec.ProcessSpec property)</a>
+        <li><a href="reference/gemd.entity.object.html#gemd.entity.object.ProcessSpec.output_material">(gemd.entity.object.ProcessSpec property)</a>
 </li>
-        <li><a href="reference/gemd.entity.object.html#gemd.entity.object.ProcessRun.output_material">(gemd.entity.object.ProcessRun attribute)</a>
+        <li><a href="reference/gemd.entity.html#gemd.entity.ProcessRun.output_material">(gemd.entity.ProcessRun property)</a>
 </li>
-        <li><a href="reference/gemd.entity.object.html#id14">(gemd.entity.object.ProcessRun property)</a>
+        <li><a href="reference/gemd.entity.html#gemd.entity.ProcessSpec.output_material">(gemd.entity.ProcessSpec property)</a>
 </li>
-        <li><a href="reference/gemd.entity.object.html#gemd.entity.object.ProcessSpec.output_material">(gemd.entity.object.ProcessSpec attribute)</a>
+        <li><a href="reference/gemd.html#gemd.ProcessRun.output_material">(gemd.ProcessRun property)</a>
 </li>
-        <li><a href="reference/gemd.entity.object.html#id18">(gemd.entity.object.ProcessSpec property)</a>
-</li>
-        <li><a href="reference/gemd.entity.html#gemd.entity.ProcessRun.output_material">(gemd.entity.ProcessRun attribute)</a>
-</li>
-        <li><a href="reference/gemd.entity.html#id22">(gemd.entity.ProcessRun property)</a>
-</li>
-        <li><a href="reference/gemd.entity.html#gemd.entity.ProcessSpec.output_material">(gemd.entity.ProcessSpec attribute)</a>
-</li>
-        <li><a href="reference/gemd.entity.html#id26">(gemd.entity.ProcessSpec property)</a>
-</li>
-        <li><a href="reference/gemd.html#gemd.ProcessRun.output_material">(gemd.ProcessRun attribute)</a>
-</li>
-        <li><a href="reference/gemd.html#id22">(gemd.ProcessRun property)</a>
-</li>
-        <li><a href="reference/gemd.html#gemd.ProcessSpec.output_material">(gemd.ProcessSpec attribute)</a>
-</li>
-        <li><a href="reference/gemd.html#id26">(gemd.ProcessSpec property)</a>
+        <li><a href="reference/gemd.html#gemd.ProcessSpec.output_material">(gemd.ProcessSpec property)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -3790,7 +3795,7 @@
         <li><a href="reference/gemd.entity.template.parameter_template.html#gemd.entity.template.parameter_template.ParameterTemplate">(class in gemd.entity.template.parameter_template)</a>
 </li>
       </ul></li>
-      <li><a href="reference/gemd.units.impl.html#gemd.units.impl.parse_units">parse_units() (in module gemd.units.impl)</a>
+      <li><a href="reference/gemd.units.html#gemd.units.parse_units">parse_units() (in module gemd.units)</a>
 </li>
       <li><a href="reference/gemd.entity.html#gemd.entity.PerformedSource.performed_by">performed_by (gemd.entity.PerformedSource property)</a>
 
@@ -3830,8 +3835,12 @@
       </ul></li>
       <li><a href="reference/gemd.entity.case_insensitive_dict.html#gemd.entity.case_insensitive_dict.CaseInsensitiveDict.popitem">popitem() (gemd.entity.case_insensitive_dict.CaseInsensitiveDict method)</a>
 </li>
-      <li><a href="reference/gemd.enumeration.origin.html#gemd.enumeration.origin.Origin.PREDICTED">PREDICTED (gemd.enumeration.origin.Origin attribute)</a>
+      <li><a href="reference/gemd.enumeration.html#gemd.enumeration.Origin.PREDICTED">PREDICTED (gemd.enumeration.Origin attribute)</a>
+
+      <ul>
+        <li><a href="reference/gemd.enumeration.origin.html#gemd.enumeration.origin.Origin.PREDICTED">(gemd.enumeration.origin.Origin attribute)</a>
 </li>
+      </ul></li>
       <li><a href="reference/gemd.html#gemd.DiscreteCategorical.probabilities">probabilities (gemd.DiscreteCategorical property)</a>
 
       <ul>
@@ -3911,7 +3920,11 @@
 </li>
       </ul></li>
       <li><a href="reference/gemd.enumeration.sample_type.html#gemd.enumeration.sample_type.SampleType.PRODUCTION">PRODUCTION (gemd.enumeration.sample_type.SampleType attribute)</a>
+
+      <ul>
+        <li><a href="reference/gemd.enumeration.html#gemd.enumeration.SampleType.PRODUCTION">(gemd.enumeration.SampleType attribute)</a>
 </li>
+      </ul></li>
       <li><a href="reference/gemd.entity.html#gemd.entity.MaterialSpec.properties">properties (gemd.entity.MaterialSpec property)</a>
 
       <ul>
@@ -4013,9 +4026,17 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/gemd.json.gemd_json.html#gemd.json.gemd_json.GEMDJson.raw_dumps">raw_dumps() (gemd.json.gemd_json.GEMDJson method)</a>
+
+      <ul>
+        <li><a href="reference/gemd.json.html#gemd.json.GEMDJson.raw_dumps">(gemd.json.GEMDJson method)</a>
 </li>
+      </ul></li>
       <li><a href="reference/gemd.json.gemd_json.html#gemd.json.gemd_json.GEMDJson.raw_loads">raw_loads() (gemd.json.gemd_json.GEMDJson method)</a>
+
+      <ul>
+        <li><a href="reference/gemd.json.html#gemd.json.GEMDJson.raw_loads">(gemd.json.GEMDJson method)</a>
 </li>
+      </ul></li>
       <li><a href="reference/gemd.html#gemd.RealBounds">RealBounds (class in gemd)</a>
 
       <ul>
@@ -4026,24 +4047,18 @@
         <li><a href="reference/gemd.entity.bounds.real_bounds.html#gemd.entity.bounds.real_bounds.RealBounds">(class in gemd.entity.bounds.real_bounds)</a>
 </li>
       </ul></li>
-      <li><a href="reference/gemd.util.html#gemd.util.recursive_flatmap">recursive_flatmap() (in module gemd.util)</a>
-
-      <ul>
-        <li><a href="reference/gemd.util.impl.html#gemd.util.impl.recursive_flatmap">(in module gemd.util.impl)</a>
-</li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="reference/gemd.util.html#gemd.util.recursive_foreach">recursive_foreach() (in module gemd.util)</a>
-
-      <ul>
-        <li><a href="reference/gemd.util.impl.html#gemd.util.impl.recursive_foreach">(in module gemd.util.impl)</a>
+      <li><a href="reference/gemd.util.html#gemd.util.recursive_flatmap">recursive_flatmap() (in module gemd.util)</a>
 </li>
-      </ul></li>
-      <li><a href="reference/gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializableMeta.register">register() (gemd.entity.dict_serializable.DictSerializableMeta method)</a>
+      <li><a href="reference/gemd.util.html#gemd.util.recursive_foreach">recursive_foreach() (in module gemd.util)</a>
 </li>
       <li><a href="reference/gemd.json.gemd_json.html#gemd.json.gemd_json.GEMDJson.register_classes">register_classes() (gemd.json.gemd_json.GEMDJson method)</a>
+
+      <ul>
+        <li><a href="reference/gemd.json.html#gemd.json.GEMDJson.register_classes">(gemd.json.GEMDJson method)</a>
 </li>
+      </ul></li>
       <li><a href="reference/gemd.entity.valid_list.html#gemd.entity.valid_list.ValidList.remove">remove() (gemd.entity.valid_list.ValidList method)</a>
 </li>
       <li><a href="reference/gemd.entity.valid_list.html#gemd.entity.valid_list.ValidList.reverse">reverse() (gemd.entity.valid_list.ValidList method)</a>
@@ -4064,16 +4079,20 @@
         <li><a href="reference/gemd.html#gemd.MaterialRun.sample_type">(gemd.MaterialRun property)</a>
 </li>
       </ul></li>
-      <li><a href="reference/gemd.enumeration.sample_type.html#gemd.enumeration.sample_type.SampleType">SampleType (class in gemd.enumeration.sample_type)</a>
-</li>
-      <li><a href="reference/gemd.json.gemd_json.html#gemd.json.gemd_json.GEMDJson.scope">scope (gemd.json.gemd_json.GEMDJson property)</a>
-</li>
-      <li><a href="reference/gemd.util.html#gemd.util.set_uuids">set_uuids() (in module gemd.util)</a>
+      <li><a href="reference/gemd.enumeration.html#gemd.enumeration.SampleType">SampleType (class in gemd.enumeration)</a>
 
       <ul>
-        <li><a href="reference/gemd.util.impl.html#gemd.util.impl.set_uuids">(in module gemd.util.impl)</a>
+        <li><a href="reference/gemd.enumeration.sample_type.html#gemd.enumeration.sample_type.SampleType">(class in gemd.enumeration.sample_type)</a>
 </li>
       </ul></li>
+      <li><a href="reference/gemd.json.gemd_json.html#gemd.json.gemd_json.GEMDJson.scope">scope (gemd.json.gemd_json.GEMDJson property)</a>
+
+      <ul>
+        <li><a href="reference/gemd.json.html#gemd.json.GEMDJson.scope">(gemd.json.GEMDJson property)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/gemd.util.html#gemd.util.set_uuids">set_uuids() (in module gemd.util)</a>
+</li>
       <li><a href="reference/gemd.entity.bounds_validation.html#gemd.entity.bounds_validation.set_validation_level">set_validation_level() (in module gemd.entity.bounds_validation)</a>
 </li>
       <li><a href="reference/gemd.entity.case_insensitive_dict.html#gemd.entity.case_insensitive_dict.CaseInsensitiveDict.setdefault">setdefault() (gemd.entity.case_insensitive_dict.CaseInsensitiveDict method)</a>
@@ -4478,22 +4497,22 @@
         <li><a href="reference/gemd.html#gemd.ProcessRun.spec">(gemd.ProcessRun property)</a>
 </li>
       </ul></li>
-      <li><a href="reference/gemd.enumeration.origin.html#gemd.enumeration.origin.Origin.SPECIFIED">SPECIFIED (gemd.enumeration.origin.Origin attribute)</a>
+      <li><a href="reference/gemd.enumeration.html#gemd.enumeration.Origin.SPECIFIED">SPECIFIED (gemd.enumeration.Origin attribute)</a>
+
+      <ul>
+        <li><a href="reference/gemd.enumeration.origin.html#gemd.enumeration.origin.Origin.SPECIFIED">(gemd.enumeration.origin.Origin attribute)</a>
 </li>
+      </ul></li>
       <li><a href="reference/gemd.util.html#gemd.util.substitute_links">substitute_links() (in module gemd.util)</a>
-
-      <ul>
-        <li><a href="reference/gemd.util.impl.html#gemd.util.impl.substitute_links">(in module gemd.util.impl)</a>
 </li>
-      </ul></li>
       <li><a href="reference/gemd.util.html#gemd.util.substitute_objects">substitute_objects() (in module gemd.util)</a>
+</li>
+      <li><a href="reference/gemd.enumeration.html#gemd.enumeration.Origin.SUMMARY">SUMMARY (gemd.enumeration.Origin attribute)</a>
 
       <ul>
-        <li><a href="reference/gemd.util.impl.html#gemd.util.impl.substitute_objects">(in module gemd.util.impl)</a>
+        <li><a href="reference/gemd.enumeration.origin.html#gemd.enumeration.origin.Origin.SUMMARY">(gemd.enumeration.origin.Origin attribute)</a>
 </li>
       </ul></li>
-      <li><a href="reference/gemd.enumeration.origin.html#gemd.enumeration.origin.Origin.SUMMARY">SUMMARY (gemd.enumeration.origin.Origin attribute)</a>
-</li>
   </ul></td>
 </tr></table>
 
@@ -4735,7 +4754,11 @@
 </li>
       </ul></li>
       <li><a href="reference/gemd.json.gemd_json.html#gemd.json.gemd_json.GEMDJson.thin_dumps">thin_dumps() (gemd.json.gemd_json.GEMDJson method)</a>
+
+      <ul>
+        <li><a href="reference/gemd.json.html#gemd.json.GEMDJson.thin_dumps">(gemd.json.GEMDJson method)</a>
 </li>
+      </ul></li>
       <li><a href="reference/gemd.html#gemd.ConditionTemplate.to_link">to_link() (gemd.ConditionTemplate method)</a>
 
       <ul>
@@ -5308,6 +5331,8 @@
         <li><a href="reference/gemd.html#gemd.PropertyTemplate.uids">(gemd.PropertyTemplate property)</a>
 </li>
       </ul></li>
+      <li><a href="reference/gemd.units.html#gemd.units.UndefinedUnitError">UndefinedUnitError</a>
+</li>
       <li><a href="reference/gemd.html#gemd.UniformInteger">UniformInteger (class in gemd)</a>
 
       <ul>
@@ -5328,8 +5353,6 @@
         <li><a href="reference/gemd.entity.value.uniform_real.html#gemd.entity.value.uniform_real.UniformReal">(class in gemd.entity.value.uniform_real)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/gemd.html#gemd.CategoricalBounds.union">union() (gemd.CategoricalBounds method)</a>
 
       <ul>
@@ -5374,6 +5397,10 @@
         <li><a href="reference/gemd.html#gemd.RealBounds.union">(gemd.RealBounds method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/gemd.units.html#gemd.units.UndefinedUnitError.unit_names">unit_names (gemd.units.UndefinedUnitError attribute)</a>
+</li>
       <li><a href="reference/gemd.entity.html#gemd.entity.NominalReal.units">units (gemd.entity.NominalReal property)</a>
 
       <ul>
@@ -5402,10 +5429,14 @@
         <li><a href="reference/gemd.html#gemd.UniformReal.units">(gemd.UniformReal property)</a>
 </li>
       </ul></li>
-      <li><a href="reference/gemd.enumeration.origin.html#gemd.enumeration.origin.Origin.UNKNOWN">UNKNOWN (gemd.enumeration.origin.Origin attribute)</a>
+      <li><a href="reference/gemd.enumeration.html#gemd.enumeration.Origin.UNKNOWN">UNKNOWN (gemd.enumeration.Origin attribute)</a>
 
       <ul>
+        <li><a href="reference/gemd.enumeration.origin.html#gemd.enumeration.origin.Origin.UNKNOWN">(gemd.enumeration.origin.Origin attribute)</a>
+</li>
         <li><a href="reference/gemd.enumeration.sample_type.html#gemd.enumeration.sample_type.SampleType.UNKNOWN">(gemd.enumeration.sample_type.SampleType attribute)</a>
+</li>
+        <li><a href="reference/gemd.enumeration.html#gemd.enumeration.SampleType.UNKNOWN">(gemd.enumeration.SampleType attribute)</a>
 </li>
       </ul></li>
       <li><a href="reference/gemd.html#gemd.CategoricalBounds.update">update() (gemd.CategoricalBounds method)</a>
@@ -5454,12 +5485,28 @@
         <li><a href="reference/gemd.html#gemd.RealBounds.update">(gemd.RealBounds method)</a>
 </li>
       </ul></li>
-      <li><a href="reference/gemd.entity.html#gemd.entity.UniformInteger.upper_bound">upper_bound (gemd.entity.UniformInteger property)</a>
+      <li><a href="reference/gemd.entity.bounds.integer_bounds.html#gemd.entity.bounds.integer_bounds.IntegerBounds.upper_bound">upper_bound (gemd.entity.bounds.integer_bounds.IntegerBounds property)</a>
 
       <ul>
+        <li><a href="reference/gemd.entity.bounds.html#gemd.entity.bounds.IntegerBounds.upper_bound">(gemd.entity.bounds.IntegerBounds property)</a>
+</li>
+        <li><a href="reference/gemd.entity.bounds.real_bounds.html#gemd.entity.bounds.real_bounds.RealBounds.upper_bound">(gemd.entity.bounds.real_bounds.RealBounds property)</a>
+</li>
+        <li><a href="reference/gemd.entity.bounds.html#gemd.entity.bounds.RealBounds.upper_bound">(gemd.entity.bounds.RealBounds property)</a>
+</li>
+        <li><a href="reference/gemd.entity.html#gemd.entity.IntegerBounds.upper_bound">(gemd.entity.IntegerBounds property)</a>
+</li>
+        <li><a href="reference/gemd.entity.html#gemd.entity.RealBounds.upper_bound">(gemd.entity.RealBounds property)</a>
+</li>
+        <li><a href="reference/gemd.entity.html#gemd.entity.UniformInteger.upper_bound">(gemd.entity.UniformInteger property)</a>
+</li>
         <li><a href="reference/gemd.entity.value.uniform_integer.html#gemd.entity.value.uniform_integer.UniformInteger.upper_bound">(gemd.entity.value.uniform_integer.UniformInteger property)</a>
 </li>
         <li><a href="reference/gemd.entity.value.html#gemd.entity.value.UniformInteger.upper_bound">(gemd.entity.value.UniformInteger property)</a>
+</li>
+        <li><a href="reference/gemd.html#gemd.IntegerBounds.upper_bound">(gemd.IntegerBounds property)</a>
+</li>
+        <li><a href="reference/gemd.html#gemd.RealBounds.upper_bound">(gemd.RealBounds property)</a>
 </li>
         <li><a href="reference/gemd.html#gemd.UniformInteger.upper_bound">(gemd.UniformInteger property)</a>
 </li>
@@ -5534,10 +5581,10 @@
       </ul></li>
       <li><a href="reference/gemd.entity.setters.html#gemd.entity.setters.validate_str">validate_str() (in module gemd.entity.setters)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/gemd.entity.bounds_validation.html#gemd.entity.bounds_validation.validation_level">validation_level() (in module gemd.entity.bounds_validation)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/gemd.entity.valid_list.html#gemd.entity.valid_list.ValidList">ValidList (class in gemd.entity.valid_list)</a>
 </li>
       <li><a href="reference/gemd.html#gemd.Condition.value">value (gemd.Condition property)</a>
@@ -5579,7 +5626,11 @@
       <li><a href="reference/gemd.entity.case_insensitive_dict.html#gemd.entity.case_insensitive_dict.CaseInsensitiveDict.values">values() (gemd.entity.case_insensitive_dict.CaseInsensitiveDict method)</a>
 </li>
       <li><a href="reference/gemd.enumeration.sample_type.html#gemd.enumeration.sample_type.SampleType.VIRTUAL">VIRTUAL (gemd.enumeration.sample_type.SampleType attribute)</a>
+
+      <ul>
+        <li><a href="reference/gemd.enumeration.html#gemd.enumeration.SampleType.VIRTUAL">(gemd.enumeration.SampleType attribute)</a>
 </li>
+      </ul></li>
       <li><a href="reference/gemd.entity.html#gemd.entity.IngredientRun.volume_fraction">volume_fraction (gemd.entity.IngredientRun property)</a>
 
       <ul>
@@ -5612,12 +5663,14 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="reference/gemd.util.html#gemd.util.writable_sort_order">writable_sort_order() (in module gemd.util)</a>
+      <li><a href="reference/gemd.units.html#gemd.units.DefinitionSyntaxError.with_traceback">with_traceback() (gemd.units.DefinitionSyntaxError method)</a>
 
       <ul>
-        <li><a href="reference/gemd.util.impl.html#gemd.util.impl.writable_sort_order">(in module gemd.util.impl)</a>
+        <li><a href="reference/gemd.units.html#gemd.units.UndefinedUnitError.with_traceback">(gemd.units.UndefinedUnitError method)</a>
 </li>
       </ul></li>
+      <li><a href="reference/gemd.util.html#gemd.util.writable_sort_order">writable_sort_order() (in module gemd.util)</a>
+</li>
   </ul></td>
 </tr></table>
 

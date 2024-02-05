@@ -4,10 +4,11 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gemd.enumeration.base_enumeration module &mdash; GEMD-python 0.0.0 documentation</title>
+  <title>gemd.enumeration.base_enumeration module &mdash; GEMD-python 1.18.5 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -15,10 +16,13 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="gemd.enumeration.origin module" href="gemd.enumeration.origin.html" />
+    <link rel="prev" title="gemd.enumeration package" href="gemd.enumeration.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -26,8 +30,12 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> GEMD-python
+            <a href="../index.html">
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
+              <div class="version">
+                1.18.5
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -37,7 +45,28 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../depth/index.html">1. In depth documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../depth/unit_parsing.html">1. Unit Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../depth/serialization.html">2. Serialization (with Graphs!)</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="gemd.html">gemd package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="gemd.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="gemd.builders.html">gemd.builders package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.demo.html">gemd.demo package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.entity.html">gemd.entity package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="gemd.enumeration.html">gemd.enumeration package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="gemd.enumeration.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gemd.enumeration.html#module-gemd.enumeration">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.json.html">gemd.json package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.units.html">gemd.units package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemd.util.html">gemd.util package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gemd.html#module-gemd">Module contents</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -54,6 +83,8 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="gemd.html">gemd package</a> &raquo;</li>
+          <li><a href="gemd.enumeration.html">gemd.enumeration package</a> &raquo;</li>
       <li>gemd.enumeration.base_enumeration module</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/reference/gemd.enumeration.base_enumeration.rst.txt" rel="nofollow"> View page source</a>
@@ -65,31 +96,29 @@
            <div itemprop="articleBody">
              
   <section id="module-gemd.enumeration.base_enumeration">
-<span id="gemd-enumeration-base-enumeration-module"></span><h1>gemd.enumeration.base_enumeration module<a class="headerlink" href="#module-gemd.enumeration.base_enumeration" title="Permalink to this headline"></a></h1>
+<span id="gemd-enumeration-base-enumeration-module"></span><h1>gemd.enumeration.base_enumeration module<a class="headerlink" href="#module-gemd.enumeration.base_enumeration" title="Permalink to this heading"></a></h1>
 <p>Base class for all enumerations.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="gemd.enumeration.base_enumeration.BaseEnumeration">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gemd.enumeration.base_enumeration.</span></span><span class="sig-name descname"><span class="pre">BaseEnumeration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.enumeration.base_enumeration.BaseEnumeration" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
 <p>Enumeration class that can convert between enumerations and associated values.</p>
 <p>BaseEnumeration is a powerful support class for string enumerations.  It inherits
 from both str and Enum to enable a class with str capabilities but still a
 restricted data space.  All constructors are case-insensitive on input and a given
 enumeration can recognize multiple synonyms for input, though only one value will
-correspond to the value itsself.  For example:</p>
-<p><a href="#id1"><span class="problematic" id="id2">``</span></a>`
-Fruits(BaseEnumeration):</p>
-<blockquote>
-<div><p>APPLE = “Apple”
-AVOCADO = “Avocado”, “Alligator Pear”</p>
-</div></blockquote>
-<p><a href="#id3"><span class="problematic" id="id4">``</span></a><a href="#id5"><span class="problematic" id="id6">`</span></a></p>
-<p>will recognize “apple”, “APPLE” and ”  aPpLe  ” as referring to Fruits.APPLE,
-and “avocado” and “alligator pear” as referring to Fruits.AVOCADO.  However,
-since str(Fruits.AVOCADO) is “Avocado”, Fruits.AVOCADO != “Alligator Pear”.</p>
+correspond to the value itself.  For example:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Fruits</span><span class="p">(</span><span class="n">BaseEnumeration</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">APPLE</span> <span class="o">=</span> <span class="s2">&quot;Apple&quot;</span>
+<span class="gp">... </span>    <span class="n">AVOCADO</span> <span class="o">=</span> <span class="s2">&quot;Avocado&quot;</span><span class="p">,</span> <span class="s2">&quot;Alligator Pear&quot;</span>
+</pre></div>
+</div>
+<p>will recognize <code class="docutils literal notranslate"><span class="pre">&quot;apple&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;APPLE&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;</span>&#160; <span class="pre">aPpLe</span>&#160; <span class="pre">&quot;</span></code> as referring to Fruits.APPLE,
+and <code class="docutils literal notranslate"><span class="pre">&quot;avocado&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;alligator</span> <span class="pre">pear&quot;</span></code> as referring to Fruits.AVOCADO.  However,
+since str(Fruits.AVOCADO) is <code class="docutils literal notranslate"><span class="pre">&quot;Avocado&quot;</span></code>, Fruits.AVOCADO != <code class="docutils literal notranslate"><span class="pre">&quot;Alligator</span> <span class="pre">Pear&quot;</span></code>.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.enumeration.base_enumeration.BaseEnumeration.from_str">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#gemd.enumeration.base_enumeration.BaseEnumeration" title="gemd.enumeration.base_enumeration.BaseEnumeration"><span class="pre">gemd.enumeration.base_enumeration.BaseEnumeration</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.enumeration.base_enumeration.BaseEnumeration.from_str" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#gemd.enumeration.base_enumeration.BaseEnumeration" title="gemd.enumeration.base_enumeration.BaseEnumeration"><span class="pre">BaseEnumeration</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.enumeration.base_enumeration.BaseEnumeration.from_str" title="Permalink to this definition"></a></dt>
 <dd><p>Given a string value, return the Enumeration object that matches.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -110,12 +139,12 @@ Case is ignored.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gemd.enumeration.base_enumeration.BaseEnumeration.get_enum">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_enum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gemd.enumeration.base_enumeration.BaseEnumeration" title="gemd.enumeration.base_enumeration.BaseEnumeration"><span class="pre">gemd.enumeration.base_enumeration.BaseEnumeration</span></a></span></span><a class="headerlink" href="#gemd.enumeration.base_enumeration.BaseEnumeration.get_enum" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_enum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gemd.enumeration.base_enumeration.BaseEnumeration" title="gemd.enumeration.base_enumeration.BaseEnumeration"><span class="pre">BaseEnumeration</span></a></span></span><a class="headerlink" href="#gemd.enumeration.base_enumeration.BaseEnumeration.get_enum" title="Permalink to this definition"></a></dt>
 <dd><p>Return the enumeration associated with name.</p>
 <p>If name is equal to one of the enum members, or to the value
 associated with an enum member, then return the relevant enumeration.</p>
 <div class="deprecated">
-<p><span class="versionmodified deprecated">Deprecated since version 1.15.0: </span>This will be removed in 2.0.0. Use from_str for retreiving the correct Enum object.</p>
+<p><span class="versionmodified deprecated">Deprecated since version 1.15.0: </span>This will be removed in 2.0.0. Use from_str for retrieving the correct Enum object.</p>
 </div>
 </dd></dl>
 
@@ -132,29 +161,15 @@ associated with an enum member, then return the relevant value.</p>
 
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="gemd.enumeration.base_enumeration.migrated_enum">
-<span class="sig-prename descclassname"><span class="pre">gemd.enumeration.base_enumeration.</span></span><span class="sig-name descname"><span class="pre">migrated_enum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deprecated_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">removed_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gemd.enumeration.base_enumeration.migrated_enum" title="Permalink to this definition"></a></dt>
-<dd><p>Decorator for registering an enumerated value as migrated to a new symbol.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>old_value</strong> (<em>str</em>) – A string containing the old symbol name.  Used for display only.</p></li>
-<li><p><strong>new_value</strong> (<em>str</em>) – A string containing the new symbol name or the enumeration value.  Used
-to resolve the target value.</p></li>
-<li><p><strong>deprecated_in</strong> (<em>str</em>) – The version of the library the enumerated value was migrated.</p></li>
-<li><p><strong>removed_in</strong> (<em>str</em>) – The version of the library the old enumerated value will be removed in.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="gemd.enumeration.html" class="btn btn-neutral float-left" title="gemd.enumeration package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gemd.enumeration.origin.html" class="btn btn-neutral float-right" title="gemd.enumeration.origin module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
