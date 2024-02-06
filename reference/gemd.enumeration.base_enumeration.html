@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gemd.enumeration.base_enumeration module &mdash; GEMD-python 1.18.5 documentation</title>
+  <title>gemd.enumeration.base_enumeration module &mdash; GEMD-python 2.0.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
@@ -34,7 +34,7 @@
             <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.18.5
+                2.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -135,28 +135,6 @@ Case is ignored.</p></li>
 <dd class="field-odd"><p><a class="reference internal" href="#gemd.enumeration.base_enumeration.BaseEnumeration" title="gemd.enumeration.base_enumeration.BaseEnumeration">BaseEnumeration</a></p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gemd.enumeration.base_enumeration.BaseEnumeration.get_enum">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_enum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gemd.enumeration.base_enumeration.BaseEnumeration" title="gemd.enumeration.base_enumeration.BaseEnumeration"><span class="pre">BaseEnumeration</span></a></span></span><a class="headerlink" href="#gemd.enumeration.base_enumeration.BaseEnumeration.get_enum" title="Permalink to this definition"></a></dt>
-<dd><p>Return the enumeration associated with name.</p>
-<p>If name is equal to one of the enum members, or to the value
-associated with an enum member, then return the relevant enumeration.</p>
-<div class="deprecated">
-<p><span class="versionmodified deprecated">Deprecated since version 1.15.0: </span>This will be removed in 2.0.0. Use from_str for retrieving the correct Enum object.</p>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gemd.enumeration.base_enumeration.BaseEnumeration.get_value">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#gemd.enumeration.base_enumeration.BaseEnumeration.get_value" title="Permalink to this definition"></a></dt>
-<dd><p>Return a valid value associated with name.</p>
-<p>If name is equal to one of the enum members, or to the value
-associated with an enum member, then return the relevant value.</p>
-<div class="deprecated">
-<p><span class="versionmodified deprecated">Deprecated since version 1.15.0: </span>This will be removed in 2.0.0. Enumerations autocast to values now.</p>
-</div>
 </dd></dl>
 
 </dd></dl>

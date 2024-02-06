@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gemd.json.gemd_json module &mdash; GEMD-python 1.18.5 documentation</title>
+  <title>gemd.json.gemd_json module &mdash; GEMD-python 2.0.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
@@ -34,7 +34,7 @@
             <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.18.5
+                2.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -239,24 +239,6 @@ back into pointers.</p>
 <dd class="field-odd"><p><a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable">DictSerializable</a> or List[<a class="reference internal" href="gemd.entity.dict_serializable.html#gemd.entity.dict_serializable.DictSerializable" title="gemd.entity.dict_serializable.DictSerializable">DictSerializable</a>]</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gemd.json.gemd_json.GEMDJson.register_classes">
-<span class="sig-name descname"><span class="pre">register_classes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">classes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemd.json.gemd_json.GEMDJson.register_classes" title="Permalink to this definition"></a></dt>
-<dd><p>Register additional classes to the custom deserialization object hook.</p>
-<p>This allows for additional DictSerializable subclasses to be registered to the class index
-that is used to decode the type strings.  Existing keys are overwritten, allowing classes
-in the gemd package to be subclassed and overridden in the class index by their
-subclass.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>classes</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>type</em><em>]</em>) – a dict mapping the type string to the class</p>
-</dd>
-</dl>
-<div class="deprecated">
-<p><span class="versionmodified deprecated">Deprecated since version 1.13.0: </span>This will be removed in 2.0.0. Classes are now automatically registered when extending BaseEntity</p>
-</div>
 </dd></dl>
 
 <dl class="py method">
