@@ -1,2 +1,3 @@
 pint==0.20
 deprecation==2.1.0
+typing-extensions==4.8.0

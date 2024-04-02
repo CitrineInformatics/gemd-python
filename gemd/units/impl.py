@@ -1,4 +1,5 @@
 """Implementation of units."""
+from deprecation import deprecated
 import functools
 from importlib.resources import read_text
 import os
@@ -7,7 +8,7 @@ import re
 from tempfile import TemporaryDirectory
 from typing import Union, List, Tuple, Generator, Any
 
-from pint import UnitRegistry, Unit, register_unit_format
+from pint import UnitRegistry, register_unit_format
 try:  # Pint 0.23 migrated the location of this method, and augmented it
     from pint.pint_eval import tokenizer
 except ImportError:  # pragma: no cover
@@ -131,6 +132,7 @@ def _scaling_identify_factors(
     """
     todo = []
     for block in blocks:
+        # Note: while Python does not recognize ^ as exponentiation, pint does
         i_exp = next((i for i, t in enumerate(block) if t.string in {"**", "^"}), len(block))
         i_name = next((i for i, t in enumerate(block) if t.type == NAME), None)
         numbers = [(i, t.string) for i, t in enumerate(block) if t.type == NUMBER and i < i_exp]
@@ -168,10 +170,14 @@ def _scaling_store_and_mangle(input_string: str, todo: List[Tuple[str, str, str]
     """
     for scaled_term, number_string, unit_string in todo:
         regex = rf"(?<![-+0-9.]){re.escape(scaled_term)}(?![0-9.])"
-        stripped = re.sub(r"[+\s]+", "", scaled_term).replace("--", "")
+        stripped = re.sub(
+            r"(?<=\d)_(?=\d)", "", re.sub(r"[+\s]+", "", scaled_term).replace("--", "")
+        )
 
         if unit_string is not None:
-            stripped_unit = re.sub(r"[+\s]+", "", unit_string).replace("--", "")
+            stripped_unit = re.sub(
+                r"(?<!0)(?=\.)", "0", re.sub(r"[+\s]+", "", unit_string)
+            ).replace("--", "")
             long_unit = f"{_REGISTRY.parse_units(stripped_unit)}"
             short_unit = f"{_REGISTRY.parse_units(stripped_unit):~}"
             long = stripped.replace(stripped_unit, "_" + long_unit)
@@ -201,7 +207,58 @@ def _scaling_preprocessor(input_string: str) -> str:
     return _scaling_store_and_mangle(input_string, todo)
 
 
-_REGISTRY: UnitRegistry = None  # global requires it be defined in this scope
+def _unmangle_scaling(input_string: str) -> str:
+    """Convert mangled scaling values into a pint-compatible expression."""
+    number_re = r'\b_(_)?(\d+)(_\d+)?([eE]_?\d+)?(_(?=[a-zA-Z]))?'
+    while match := re.search(number_re, input_string):
+        replacement = '' if match.group(1) is None else '-'
+        replacement += match.group(2)
+        replacement += '' if match.group(3) is None else match.group(3).replace('_', '.')
+        replacement += '' if match.group(4) is None else match.group(4).replace('_', '-')
+        replacement += '' if match.group(5) is None else match.group(5).replace('_', ' ')
+        input_string = input_string.replace(match.group(0), replacement)
+    return input_string
+
+
+try:  # pragma: no cover
+    # Pint 0.23 modified the preferred way to derive a custom class
+    # https://pint.readthedocs.io/en/0.23/advanced/custom-registry-class.html
+    from pint.registry import GenericUnitRegistry
+    from typing_extensions import TypeAlias
+
+    class _ScaleFactorUnit(UnitRegistry.Unit):
+        """Child class of Units for generating units w/ clean scaling factors."""
+
+        def __format__(self, format_spec):
+            result = super().__format__(format_spec)
+            return _unmangle_scaling(result)
+
+    class _ScaleFactorQuantity(UnitRegistry.Quantity):
+        """Child class of Quantity for generating units w/ clean scaling factors."""
+
+        pass
+
+    class _ScaleFactorRegistry(GenericUnitRegistry[_ScaleFactorQuantity, _ScaleFactorUnit]):
+        """UnitRegistry class that uses _GemdUnits."""
+
+        Quantity: TypeAlias = _ScaleFactorQuantity
+        Unit: TypeAlias = _ScaleFactorUnit
+
+except ImportError:  # pragma: no cover
+    # https://pint.readthedocs.io/en/0.21/advanced/custom-registry-class.html
+    class _ScaleFactorUnit(UnitRegistry.Unit):
+        """Child class of Units for generating units w/ clean scaling factors."""
+
+        def __format__(self, format_spec):
+            result = super().__format__(format_spec)
+            return _unmangle_scaling(result)
+
+    class _ScaleFactorRegistry(UnitRegistry):
+        """UnitRegistry class that uses _GemdUnits."""
+
+        _unit_class = _ScaleFactorUnit
+
+_REGISTRY: _ScaleFactorRegistry = None  # global requires it be defined in this scope
 
 
 @functools.lru_cache(maxsize=1024 * 1024)
@@ -244,38 +301,23 @@ def convert_units(value: float, starting_unit: str, final_unit: str) -> float:
 
 
 @register_unit_format("clean")
+@deprecated(deprecated_in="2.1.0", removed_in="3.0.0", details="Scaling factor clean-up ")
 def _format_clean(unit, registry, **options):
-    """Formatter that turns scaling-factor-units into numbers again."""
-    numerator = []
-    denominator = []
-    for u, p in unit.items():
-        if re.match(r"_[\d_]+", u):
-            # Munged scaling factor; grab symbol, which is the prettier
-            u = registry.get_symbol(u)
+    """
+    DEPRECATED Formatter that turns scaling-factor-units into numbers again.
 
-        if p == 1:
-            numerator.append(u)
-        elif p > 0:
-            numerator.append(f"{u} ** {p}")
-        elif p == -1:
-            denominator.append(u)
-        elif p < 0:
-            denominator.append(f"{u} ** {-p}")
+    Responsibility for this piece of clean-up has been shifted to a custom class.
 
-    if len(numerator) == 0:
-        numerator = ["1"]
-
-    if len(denominator) > 0:
-        return " / ".join((" * ".join(numerator), " / ".join(denominator)))
-    else:
-        return " * ".join(numerator)
+    """
+    from pint.formatting import _FORMATTERS
+    return _FORMATTERS["D"](unit, registry, **options)
 
 
 @functools.lru_cache(maxsize=1024)
-def parse_units(units: Union[str, Unit, None],
+def parse_units(units: Union[str, UnitRegistry.Unit, None],
                 *,
                 return_unit: bool = False
-                ) -> Union[str, Unit, None]:
+                ) -> Union[str, UnitRegistry.Unit, None]:
     """
     Parse a string or Unit into a standard string representation of the unit.
 
@@ -298,19 +340,20 @@ def parse_units(units: Union[str, Unit, None],
         else:
             return None
     elif isinstance(units, str):
-        parsed = _REGISTRY.parse_units(units)
+        # SPT-1311 Protect against leaked mangled strings
+        parsed = _REGISTRY.parse_units(_unmangle_scaling(units))
         if return_unit:
             return parsed
         else:
-            return f"{parsed:clean}"
-    elif isinstance(units, Unit):
+            return f"{parsed}"
+    elif isinstance(units, UnitRegistry.Unit):
         return units
     else:
         raise UndefinedUnitError("Units must be given as a recognized unit string or Units object")
 
 
 @functools.lru_cache(maxsize=1024)
-def get_base_units(units: Union[str, Unit]) -> Tuple[Unit, float, float]:
+def get_base_units(units: Union[str, UnitRegistry.Unit]) -> Tuple[UnitRegistry.Unit, float, float]:
     """
     Get the base units and conversion factors for the given unit.
 
@@ -358,13 +401,13 @@ def change_definitions_file(filename: str = None):
         path = Path(target)
         os.chdir(path.parent)
         # Need to re-verify path because of some slippiness around tmp on MacOS
-        _REGISTRY = UnitRegistry(filename=Path.cwd() / path.name,
-                                 preprocessors=[_space_after_minus_preprocessor,
-                                                _scientific_notation_preprocessor,
-                                                _scaling_preprocessor
-                                                ],
-                                 autoconvert_offset_to_baseunit=True
-                                 )
+        _REGISTRY = _ScaleFactorRegistry(filename=Path.cwd() / path.name,
+                                         preprocessors=[_space_after_minus_preprocessor,
+                                                        _scientific_notation_preprocessor,
+                                                        _scaling_preprocessor
+                                                        ],
+                                         autoconvert_offset_to_baseunit=True
+                                         )
     finally:
         os.chdir(current_dir)
 

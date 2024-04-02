@@ -1,4 +1,5 @@
 from contextlib import contextmanager
+from deprecation import DeprecatedWarning
 from importlib.resources import read_binary
 import re
 from pint import UnitRegistry
@@ -30,7 +31,10 @@ def test_parse_expected(return_unit):
         "g / -+-25e-1 m",  # Weird but fine
         "ug / - -250 mL",  # Spaces between unaries is acceptable
         "1 / 10**5 degC",  # Spaces between unaries is acceptable
-        "m ** - 1"  # Pint < 0.21 throws DefinitionSyntaxError
+        "1 / 10_000 degC",  # Spaces between unaries is acceptable
+        "m ** - 1",  # Pint < 0.21 throws DefinitionSyntaxError
+        "gram / _10_minute",  # Stringified Unit object SPT-1311
+        "gram / __1_2e_3minute",  # Stringified Unit object SPT-1311
     ]
     for unit in expected:
         parsed = parse_units(unit, return_unit=return_unit)
@@ -205,8 +209,17 @@ def test_exponents():
 
 def test__scientific_notation_preprocessor():
     """Verify that numbers are converted into scientific notation."""
-    assert "1e2 kg" in parse_units("F* 10 ** 2 kg")
+    assert "1e2 kilogram" in parse_units("F* 10 ** 2 kg")
+    assert "1e2 kg" in f'{parse_units("F* 10 ** 2 kg", return_unit=True):~}'
     assert "1e-5" in parse_units("F* mm*10**-5")
     assert "1e" not in parse_units("F* kg * 10 cm")
     assert "-3.07e2" in parse_units("F* -3.07 * 10 ** 2")
     assert "11e2" in parse_units("F* 11*10^2")
+
+
+def test_deprecation():
+    """Make sure deprecated things warn correctly."""
+    megapascals = parse_units("MPa", return_unit=True)
+    with pytest.warns(DeprecatedWarning):
+        stringified = f"{megapascals:clean}"
+    assert megapascals == parse_units(stringified, return_unit=True)

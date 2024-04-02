@@ -37,7 +37,8 @@ setup(name='gemd',
       },
       install_requires=[
           "pint>=0.20,<0.24",
-          "deprecation>=2.1.0,<3"
+          "deprecation>=2.1.0,<3",
+          "typing_extensions>=4.8,<5"
       ],
       extras_require={
           "tests": [
