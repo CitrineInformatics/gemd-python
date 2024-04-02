@@ -314,10 +314,10 @@ def _format_clean(unit, registry, **options):
 
 
 @functools.lru_cache(maxsize=1024)
-def parse_units(units: Union[str, _ScaleFactorUnit, None],
+def parse_units(units: Union[str, UnitRegistry.Unit, None],
                 *,
                 return_unit: bool = False
-                ) -> Union[str, _ScaleFactorUnit, None]:
+                ) -> Union[str, UnitRegistry.Unit, None]:
     """
     Parse a string or Unit into a standard string representation of the unit.
 
@@ -346,14 +346,14 @@ def parse_units(units: Union[str, _ScaleFactorUnit, None],
             return parsed
         else:
             return f"{parsed}"
-    elif isinstance(units, _ScaleFactorUnit):
+    elif isinstance(units, UnitRegistry.Unit):
         return units
     else:
         raise UndefinedUnitError("Units must be given as a recognized unit string or Units object")
 
 
 @functools.lru_cache(maxsize=1024)
-def get_base_units(units: Union[str, _ScaleFactorUnit]) -> Tuple[_ScaleFactorUnit, float, float]:
+def get_base_units(units: Union[str, UnitRegistry.Unit]) -> Tuple[UnitRegistry.Unit, float, float]:
     """
     Get the base units and conversion factors for the given unit.
 
