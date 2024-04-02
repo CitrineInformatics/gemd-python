@@ -271,6 +271,16 @@ def _format_clean(unit, registry, **options):
         return " * ".join(numerator)
 
 
+"""
+We can make "clean" the default formatting option by monkey-patching the
+__format__ method of the Unit class
+"""
+_super_format_unit = UnitRegistry.Unit.__format__
+def _format_unit(self, spec) -> str:
+    return _super_format_unit(self, spec or 'clean')
+UnitRegistry.Unit.__format__ = _format_unit
+
+
 @functools.lru_cache(maxsize=1024)
 def parse_units(units: Union[str, Unit, None],
                 *,
