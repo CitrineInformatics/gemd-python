@@ -1,6 +1,6 @@
 from contextlib import contextmanager
 from deprecation import DeprecatedWarning
-from importlib.resources import read_binary
+from importlib_resources import files
 import re
 from pint import UnitRegistry
 import pytest
@@ -180,7 +180,7 @@ def test_file_change(tmpdir):
         assert convert_units(1, 'usd', 'USD') == 1
 
     test_file = tmpdir / "test_units.txt"
-    test_file.write_binary(read_binary("tests.units", "test_units.txt"))
+    test_file.write_binary(files("tests.units").joinpath("test_units.txt").read_bytes())
     with _change_units(filename=test_file):
         with pytest.raises(UndefinedUnitError):
             assert convert_units(1, 'm', 'cm') == 100

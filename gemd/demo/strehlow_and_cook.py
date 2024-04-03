@@ -45,11 +45,10 @@ __all__ = [
 
 def import_table(filename=SMALL_TABLE):
     """Return the deserialized JSON table."""
-    from importlib.resources import read_text
+    from importlib_resources import files
     import json
-    table = json.loads(read_text("gemd.demo", filename))
 
-    return table
+    return json.loads(files("gemd.demo").joinpath(filename).read_text())
 
 
 def _fingerprint(row):

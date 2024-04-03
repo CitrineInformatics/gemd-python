@@ -1,4 +1,5 @@
 """Bake a cake."""
+from importlib_resources import files
 from io import BytesIO
 import random
 
@@ -67,10 +68,7 @@ def get_template_scope():
 
 def import_toothpick_picture() -> BytesIO:
     """Return the stream of the toothpick picture."""
-    from importlib.resources import read_binary
-    resource = read_binary("gemd.demo", "toothpick.jpg")
-
-    return BytesIO(resource)
+    return files("gemd.demo").joinpath("toothpick.jpg").open("rb")
 
 
 def make_cake_templates():
