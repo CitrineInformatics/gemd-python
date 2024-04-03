@@ -1,7 +1,7 @@
 """Implementation of units."""
 from deprecation import deprecated
 import functools
-from importlib.resources import read_text
+from importlib_resources import files
 import os
 from pathlib import Path
 import re
@@ -28,18 +28,19 @@ __all__ = [
 ]
 
 
-def _deploy_default_files() -> str:
+def _deploy_default_files() -> Tuple[Path, Path]:
     """Copy the units & constants file into a temporary directory."""
-    units_path = Path(_TEMP_DIRECTORY.name) / "citrine_en.txt"
-    units_path.write_text(read_text("gemd.units", "citrine_en.txt"), encoding="utf-8")
+    resources = files("gemd.units")
+    target_dir = Path(_TEMP_DIRECTORY.name)
+    target_paths = tuple(target_dir / f for f in ("citrine_en.txt", "constants_en.txt"))
+    for target in target_paths:
+        source = resources.joinpath(target.name)
+        target.write_text(source.read_text(), encoding="utf-8")
 
-    constants_path = Path(_TEMP_DIRECTORY.name) / "constants_en.txt"
-    constants_path.write_text(read_text("gemd.units", "constants_en.txt"), encoding="utf-8")
-
-    return str(units_path)
+    return target_paths
 
 
-DEFAULT_FILE = _deploy_default_files()
+DEFAULT_FILE, DEFAULT_CONSTANTS = _deploy_default_files()
 _ALLOWED_OPERATORS = {".", "+", "-", "*", "/", "//", "^", "**", "(", ")"}
 
 
@@ -393,15 +394,14 @@ def change_definitions_file(filename: str = None):
     if filename is None:
         target = DEFAULT_FILE
     else:
-        # TODO: Handle case where user provides a units file but no constants file
         target = Path(filename).expanduser().resolve(strict=True)
 
     current_dir = Path.cwd()
     try:
-        path = Path(target)
-        os.chdir(path.parent)
-        # Need to re-verify path because of some slippiness around tmp on MacOS
-        _REGISTRY = _ScaleFactorRegistry(filename=Path.cwd() / path.name,
+        os.chdir(target.parent)
+        # Need to re-verify path because of some slippiness around tmp on macOS
+        updated = (Path.cwd() / target.name).resolve(strict=True)
+        _REGISTRY = _ScaleFactorRegistry(filename=updated,
                                          preprocessors=[_space_after_minus_preprocessor,
                                                         _scientific_notation_preprocessor,
                                                         _scaling_preprocessor
