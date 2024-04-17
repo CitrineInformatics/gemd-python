@@ -1,5 +1,5 @@
 #!python
-from os import getcwd, popen
+from os import getcwd, popen, system
 from os.path import relpath
 from packaging.version import Version
 import re
@@ -16,7 +16,8 @@ def main():
         raise ValueError(f"Couldn't extract version from working directory") from e
 
     try:
-        with popen("git show main:gemd/__version__.py", mode="r") as fh:
+        system("git fetch origin main")
+        with popen("git show origin/main:gemd/__version__.py", mode="r") as fh:
             old_version = extract_version(fh.read())
     except Exception as e:
         raise ValueError(f"Couldn't extract version from main branch") from e

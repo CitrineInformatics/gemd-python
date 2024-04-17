@@ -23,7 +23,7 @@ jobs:
       - name: Initialize the environment
         uses: ./.github/actions/initialize
       - name: Execute unit tests
-        run: pytest --cov=src --cov-report term-missing:skip-covered --cov-config=tox.ini --no-cov-on-fail --cov-fail-under=100  tests/
+        run: pytest --cov=gemd --cov-report term-missing:skip-covered --cov-config=tox.ini --no-cov-on-fail --cov-fail-under=100  tests/
   run-tests-against-latest:
     # These runs are intended to confirm the latest minor version of our dependencies we claim to
     # support don't break with our latest changes. Since they're not the versions we directly state
