@@ -4,22 +4,20 @@ from os.path import relpath
 from packaging.version import Version
 import re
 import sys
-from typing import TextIO
 
 
 def main():
-    repo_dir = popen("git rev-parse --show-toplevel", mode="r").read().rstrip()
-    version_path = relpath(f'{repo_dir}/gemd/__version__.py', getcwd())
-
     try:
+        repo_dir = popen("git rev-parse --show-toplevel", mode="r").read().rstrip()
+        version_path = relpath(f'{repo_dir}/gemd/__version__.py', getcwd())
         with open(version_path, "r") as fh:
-            new_version = extract_version(fh)
+            new_version = extract_version(fh.read())
     except Exception as e:
-        raise ValueError(f"Couldn't extract version from {version_path}") from e
+        raise ValueError(f"Couldn't extract version from working directory") from e
 
     try:
-        with popen(f"git show main:gemd/__version__.py", mode="r") as fh:
-            old_version = extract_version(fh)
+        with popen("git show main:gemd/__version__.py", mode="r") as fh:
+            old_version = extract_version(fh.read())
     except Exception as e:
         raise ValueError(f"Couldn't extract version from main branch") from e
 
@@ -47,12 +45,10 @@ def main():
         return 4
 
 
-def extract_version(handle: TextIO) -> Version:
-    text = handle.read()
-    if not re.search(r"\S", text):
-        raise ValueError(f"No content")
-    match = re.search(r"""^\s*_*version_*\s*=\s*(['"])(\S+)\1""", text, re.MULTILINE)
-    if match:
+def extract_version(text: str) -> Version:
+    version_re = r'''^\s*__version__\s*=\s*(['"])([\w\.]+)\1$'''
+
+    if match := re.search(version_re, text, re.MULTILINE):
         return Version(match.group(2))
     else:
         raise ValueError(f"No version found\n{text}")
