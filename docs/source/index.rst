@@ -26,7 +26,7 @@ or a specific version can be installed, for example:
 
 .. code:: bash
 
-  pip install gemd==1.17.1
+  pip install gemd==2.1.1
 
 Table of Contents
 -----------------
@@ -37,6 +37,7 @@ Table of Contents
 
    depth/unit_parsing
    depth/serialization
+   API Reference <reference/modules>
 
 Indices
 ------------------
@@ -44,8 +45,3 @@ Indices
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
-.. toctree::
-   :maxdepth: 1
-
-   reference/gemd
