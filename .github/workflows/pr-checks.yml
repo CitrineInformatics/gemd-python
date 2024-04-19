@@ -37,7 +37,6 @@ jobs:
   check-docs:
     name: Check docs for warnings
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - name: Initialize the environment
@@ -45,4 +44,5 @@ jobs:
         with:
           documentation: 'true'
       - name: Build Docs
+        continue-on-error: true
         run: make -C docs/ html SPHINXOPTS='-W --keep-going'

@@ -79,6 +79,9 @@ html_css_files = [
 autodoc_member_order = 'groupwise'
 # autodoc_mock_imports allows Sphinx to ignore any external modules listed in the array
 autodoc_mock_imports = []
+autodoc_default_options = {
+    'ignore-module-all': True
+}
 
 html_favicon = '_static/favicon.png'
 html_logo = '_static/logo.png'

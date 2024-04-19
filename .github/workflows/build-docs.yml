@@ -29,7 +29,9 @@ jobs:
         with:
           documentation: 'true'
       - name: Build Docs
-        run: bash scripts/build_docs.sh
+        run: |
+            make -C docs/ html
+            touch docs/_build/html/.nojekyll
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

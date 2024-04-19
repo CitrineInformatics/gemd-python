@@ -10,8 +10,8 @@ jobs:
   run-tests:
     name: Execute unit tests
     runs-on: ubuntu-latest
-    continue-on-error: true
     strategy:
+      fail-fast: false
       matrix:
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
     steps:
@@ -27,7 +27,7 @@ jobs:
   run-tests-against-latest:
     # These runs are intended to confirm the latest minor version of our dependencies we claim to
     # support don't break with our latest changes. Since they're not the versions we directly state
-    # you should use (i.e. in requirements.txt), they argubly aren't critical, hence not blocking.
+    # you should use (i.e. in requirements.txt), they arguably aren't critical, hence not blocking.
     name: Non-blocking - Execute unit tests against latest version of dependencies
     runs-on: ubuntu-latest
     continue-on-error: true
