@@ -13,7 +13,7 @@
 import gemd
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../..'))
+sys.path.insert(0, os.path.abspath('../../gemd'))
 
 
 # -- Project information -----------------------------------------------------
@@ -36,7 +36,8 @@ release = gemd.__version__
 extensions = [
     'sphinxcontrib.apidoc',
     'sphinx.ext.napoleon',
-    'sphinx.ext.intersphinx'
+    'sphinx.ext.intersphinx',
+    'sphinx_rtd_theme'
 ]
 
 # Use the sphinxcontrib.apidoc extension to wire in the sphinx-apidoc invocation
@@ -48,7 +49,6 @@ apidoc_module_dir = '../../gemd'
 apidoc_output_dir = 'reference'
 apidoc_excluded_paths = ['tests', '*impl*']
 apidoc_separate_modules = True
-apidoc_toc_file = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -79,6 +79,9 @@ html_css_files = [
 autodoc_member_order = 'groupwise'
 # autodoc_mock_imports allows Sphinx to ignore any external modules listed in the array
 autodoc_mock_imports = []
+autodoc_default_options = {
+    'ignore-module-all': True
+}
 
 html_favicon = '_static/favicon.png'
 html_logo = '_static/logo.png'

@@ -1,5 +1,5 @@
 # GEMD-python 
-Python binding for Citrine's nextgen data model, GEMD. 
+Python binding for Citrine's data model, GEMD. 
 
 This package provides a framework for storing information about the processes that create materials, the materials themselves, and measurements performed on those materials. 
 

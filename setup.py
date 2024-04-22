@@ -1,23 +1,20 @@
 from setuptools import setup, find_packages
-from os import path
-from packaging.version import Version
+from pathlib import Path
 import re
 
 packages = find_packages()
 
-this_directory = path.abspath(path.dirname(__file__))
-version_file = path.join(this_directory, 'gemd', '__version__.py')
-version_re = r'''^__version__\s*=\s*(['"])([\w\.]+)\1$'''
-with open(version_file, 'r') as f:
-    mo = re.search(version_re, f.read(), re.M)
-    if mo:
-        version = Version(mo.group(2))
-    else:
-        raise RuntimeError(f"Unable to find version string in {version_file}")
+this_directory = Path(__file__).parent.absolute()
+version_file = this_directory / 'gemd' / '__version__.py'
+version_re = r'''^\s*__version__\s*=\s*(['"])([\w\.]+)\1$'''
+if mo := re.search(version_re, version_file.read_text(), re.M):
+    version = mo.group(2)
+else:
+    raise RuntimeError(f"Unable to find version string in {version_file}")
 
 setup(name='gemd',
       # Update this in gemd/__version__.py
-      version=str(version),
+      version=version,
       python_requires='>=3.8',
       url='http://github.com/CitrineInformatics/gemd-python',
       description="Python binding for Citrine's GEMD data model",
@@ -42,6 +39,12 @@ setup(name='gemd',
           "importlib-resources>=5.3,<7"
       ],
       extras_require={
+          "scripts": [
+              "packaging"
+              "sphinx==5.0.0",
+              "sphinx-rtd-theme==1.0.0",
+              "sphinxcontrib-apidoc==0.3.0",
+          ],
           "tests": [
               "pytest>=8.0.0,<9"
           ],
