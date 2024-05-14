@@ -48,7 +48,7 @@ def import_table(filename=SMALL_TABLE):
     from importlib_resources import files
     import json
 
-    return json.loads(files("gemd.demo").joinpath(filename).read_text())
+    return json.loads(files("gemd.demo").joinpath(filename).read_text(encoding='utf-8'))
 
 
 def _fingerprint(row):

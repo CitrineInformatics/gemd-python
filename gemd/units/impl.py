@@ -35,7 +35,7 @@ def _deploy_default_files() -> Tuple[Path, Path]:
     target_paths = tuple(target_dir / f for f in ("citrine_en.txt", "constants_en.txt"))
     for target in target_paths:
         source = resources.joinpath(target.name)
-        target.write_text(source.read_text(), encoding="utf-8")
+        target.write_bytes(source.read_bytes())
 
     return target_paths
 
