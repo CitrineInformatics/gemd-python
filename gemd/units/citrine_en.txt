@@ -156,6 +156,7 @@ kelvin = [temperature]; offset: 0 = K = Kelvin = degK = °K = degree_Kelvin = de
 radian = [] = rad = Radian
 bit = [] = _ = Bit
 count = [] = _ = Count
+mooney = [mooney] = Mooney  # https://en.wikipedia.org/wiki/Mooney_viscometer
 
 
 #### CONSTANTS ####
