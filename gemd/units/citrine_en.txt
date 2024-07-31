@@ -1,6 +1,6 @@
 # Citrine customized units input file for Pint, based explicitly on the Pint defaults as
-# included release 0.20 (https://github.com/hgrecco/pint/releases/tag/0.20).  The Pint Authors hold
-# copyright and are documented in https://github.com/hgrecco/pint/blob/0.20/AUTHORS.
+# included release 0.23 (https://github.com/hgrecco/pint/releases/tag/0.23).  The Pint Authors hold
+# copyright and are documented in https://github.com/hgrecco/pint/blob/0.23/AUTHORS.
 #
 # The original copyright statement for the constants file reads:
 #
@@ -106,6 +106,8 @@
 #### PREFIXES ####
 
 # decimal prefixes
+quecto- = 1e-30 = q-
+ronto- = 1e-27 = r-
 yocto- = 1e-24 = y-
 zepto- = 1e-21 = z-
 atto- =  1e-18 = a-
@@ -128,6 +130,8 @@ peta- =  1e15  = P-
 exa- =   1e18  = E-
 zetta- = 1e21  = Z-
 yotta- = 1e24  = Y-
+ronna- = 1e27 = R-
+quetta- = 1e30 = Q-
 
 # binary_prefixes
 kibi- = 2**10 = Ki-
@@ -189,9 +193,14 @@ byte = 8 * bit = B = octet = Byte = Octet
 # byte = 8 * bit = _ = octet
 ## NOTE: B (byte) symbol can conflict with Bell
 
+# Ratios
+percent = 0.01 = % = pct
+permille = 0.001 = ‰ = per_thousand
+ppm = 1e-6 = per_million
+
 # Length
 angstrom = 1e-10 * meter = Å = ångström = Angstrom = Ångstrom = Å
-micron = micrometer = µ = Micron
+micron = micrometer = µ = μ = Micron
 fermi = femtometer = fm = Fermi
 light_year = speed_of_light * julian_year = ly = lightyear = Light_Year = Lightyear
 astronomical_unit = 149597870700 * meter = au = Astronomical_Unit  # since Aug 2012
@@ -468,6 +477,10 @@ atomic_unit_of_electric_field = e * k_C / a_0 ** 2 = a_u_electric_field
 # Electric displacement field
 [electric_displacement_field] = [charge] / [area]
 
+# Reduced electric field
+[reduced_electric_field] = [electric_field] * [area]
+townsend =  1e-21 * V * m^2 = Td = Townsend
+
 # Resistance
 [resistance] = [electric_potential] / [current]
 ohm = volt / ampere = Ω = Ohm
@@ -707,10 +720,10 @@ neper = 1 ; logbase: 2.71828182845904523536028747135266249775724709369995; logfa
 # @group Textile
 #     tex = gram / kilometer = Tt
 #     dtex = decitex
-#     denier = gram / (9 * kilometer) = den = Td
+#     denier = gram / (9 * kilometer) = den
 #     jute = pound / (14400 * yard) = Tj
 #     aberdeen = jute = Ta
-#     RKM = kgf * 1000 / tex
+#     RKM  = gf / tex
 #
 #     number_english = 840 * yard / pound = Ne = NeC = ECC
 #     number_meter = kilometer / kilogram = Nm

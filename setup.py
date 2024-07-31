@@ -33,7 +33,7 @@ setup(name='gemd',
           'tests.units': ['test_units.txt']
       },
       install_requires=[
-          "pint>=0.20,<0.24",
+          "pint>=0.21,<0.24",
           "deprecation>=2.1.0,<3",
           "typing_extensions>=4.8,<5",
           "importlib-resources>=5.3,<7"
