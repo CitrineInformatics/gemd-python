@@ -44,11 +44,6 @@ DEFAULT_FILE, DEFAULT_CONSTANTS = _deploy_default_files()
 _ALLOWED_OPERATORS = {".", "+", "-", "*", "/", "//", "^", "**", "(", ")"}
 
 
-def _space_after_minus_preprocessor(input_string: str) -> str:
-    """A preprocessor that protects against a pint < 0.21 bug."""
-    return re.sub(r"(?<=-)\s+(?=\d)", "", input_string)
-
-
 def _scientific_notation_preprocessor(input_string: str) -> str:
     """Preprocessor that converts x * 10 ** y format to xEy."""
     def _as_scientific(matchobj: re.Match) -> str:
@@ -402,8 +397,7 @@ def change_definitions_file(filename: str = None):
         # Need to re-verify path because of some slippiness around tmp on macOS
         updated = (Path.cwd() / target.name).resolve(strict=True)
         _REGISTRY = _ScaleFactorRegistry(filename=updated,
-                                         preprocessors=[_space_after_minus_preprocessor,
-                                                        _scientific_notation_preprocessor,
+                                         preprocessors=[_scientific_notation_preprocessor,
                                                         _scaling_preprocessor
                                                         ],
                                          autoconvert_offset_to_baseunit=True
