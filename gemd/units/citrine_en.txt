@@ -194,9 +194,11 @@ byte = 8 * bit = B = octet = Byte = Octet
 ## NOTE: B (byte) symbol can conflict with Bell
 
 # Ratios
-percent = 0.01 = % = pct
-permille = 0.001 = ‰ = per_thousand
-ppm = 1e-6 = per_million
+percent = 0.01 = % = pct = pecentage
+permille = 0.001 = ‰ = per_thousand = parts_per_thousand
+parts_per_million = 1e-6 = ppm = per_million
+# Skipping ppb / parts per billion b/c 'billion' means trillion in some languages
+parts_per_trillion = 1e-12 = per_trillion
 
 # Length
 angstrom = 1e-10 * meter = Å = ångström = Angstrom = Ångstrom = Å
