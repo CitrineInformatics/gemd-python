@@ -222,4 +222,12 @@ def test_deprecation():
     megapascals = parse_units("MPa", return_unit=True)
     with pytest.warns(DeprecatedWarning):
         stringified = f"{megapascals:clean}"
-    assert megapascals == parse_units(stringified, return_unit=True)
+    assert megapascals == parse_units(stringified, return_unit=False)
+
+    from pint import Quantity
+    with pytest.warns(DeprecatedWarning):
+        assert f"{Quantity('5 MPa'):clean}" == f"5 {stringified}"
+
+    from pint import Unit
+    with pytest.warns(DeprecatedWarning):
+        assert f"{Unit('MPa'):clean}" == stringified

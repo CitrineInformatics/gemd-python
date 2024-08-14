@@ -1,6 +1,6 @@
 # Citrine customized units input file for Pint, based explicitly on the Pint defaults as
-# included release 0.23 (https://github.com/hgrecco/pint/releases/tag/0.23).  The Pint Authors hold
-# copyright and are documented in https://github.com/hgrecco/pint/blob/0.23/AUTHORS.
+# included release 0.24.3 (https://github.com/hgrecco/pint/releases/tag/0.24.3).  The Pint Authors hold
+# copyright and are documented in https://github.com/hgrecco/pint/blob/0.24.3/AUTHORS.
 #
 # The original copyright statement for the constants file reads:
 #
@@ -116,7 +116,7 @@ pico- =  1e-12 = p-
 nano- =  1e-9  = n-
 # The micro (U+00B5) and Greek mu (U+03BC) are both valid prefixes,
 # and they often use the same glyph.
-micro- = 1e-6  = µ- = μ- = u-
+micro- = 1e-6  = µ- = μ- = u- = mu- = mc-
 milli- = 1e-3  = m-
 centi- = 1e-2  = c-
 deci- =  1e-1  = d-
@@ -269,7 +269,7 @@ hectare = 100 * are = ha = Hectare
 
 # Volume
 [volume] = [length] ** 3
-liter = decimeter ** 3 = l = L = litre = Liter = Litre
+liter = decimeter ** 3 = l = L = ℓ = litre = Liter = Litre
 cubic_centimeter = centimeter ** 3 = cc = Cubic_Centimeter
 lambda = microliter = λ = Lambda
 stere = meter ** 3 = _ = Stere
@@ -543,12 +543,17 @@ buckingham = debye * angstrom = Buckingham
 bohr_magneton = e * hbar / (2 * m_e) = µ_B = mu_B
 nuclear_magneton = e * hbar / (2 * m_p) = µ_N = mu_N
 
+# Refractive index
+[refractive_index] = []
+refractive_index_unit = [] = RIU
+
 # Logaritmic Unit Definition
 #  Unit = scale; logbase; logfactor
 #  x_dB = [logfactor] * log( x_lin / [scale] ) / log( [logbase] )
 
 # Logaritmic Units of dimensionless quantity: [ https://en.wikipedia.org/wiki/Level_(logarithmic_quantity) ]
 
+decibelwatt = watt; logbase: 10; logfactor: 10 = dBW
 decibelmilliwatt = 1e-3 watt; logbase: 10; logfactor: 10 = dBm
 decibelmicrowatt = 1e-6 watt; logbase: 10; logfactor: 10 = dBu
 

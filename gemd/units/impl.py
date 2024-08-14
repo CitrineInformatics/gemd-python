@@ -305,8 +305,24 @@ def _format_clean(unit, registry, **options):
     Responsibility for this piece of clean-up has been shifted to a custom class.
 
     """
-    from pint.formatting import _FORMATTERS
-    return _FORMATTERS["D"](unit, registry, **options)
+    try:  # Informal route changed in 0.22
+        from pint.formatting import _FORMATTERS
+        formatter = _FORMATTERS["D"]
+    except ImportError:  # pragma: no cover
+        from pint import Unit
+        formatter_obj = registry.formatter._formatters["D"]
+
+        def _surrogate_formatter(unit, registry, **options):
+            try:
+                parsed = Unit(unit)
+                return formatter_obj.format_unit(parsed)
+            except ValueError:
+                parsed = Unit(unit)
+                return formatter_obj.format_quantity(unit)
+
+        formatter = _surrogate_formatter
+
+    return formatter(unit, registry, **options)
 
 
 @functools.lru_cache(maxsize=1024)
