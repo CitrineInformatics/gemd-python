@@ -2,5 +2,5 @@ flake8==7.0.0
 flake8-docstrings==1.7.0
 pytest==8.0.0
 pytest-cov==4.1.0
-pandas>=2.0.3,<2.2.0
+pandas>=2.0.3,<2.2.0  # includes a compatible version of numpy
 derp==0.1.1
