@@ -1,19 +1,25 @@
 """An empirical chemical formula."""
+import re
+
 from gemd.entity.value.composition_value import CompositionValue
 from gemd.entity.bounds import CompositionBounds
 
 __all__ = ["EmpiricalFormula"]
 
 
-_all_elements = {
-    'Tb', 'Be', 'Sb', 'Re', 'Sr', 'Ac', 'Ho', 'Ir', 'Cr', 'Os', 'S', 'Pt', 'Si', 'C', 'V', 'Bi',
-    'U', 'Pr', 'B', 'O', 'Zn', 'Xe', 'N', 'Ni', 'No', 'Ti', 'Pa', 'Am', 'Cu', 'I', 'Al', 'Ba',
-    'Pu', 'Ca', 'Bk', 'Ge', 'In', 'H', 'Es', 'Se', 'Cs', 'Te', 'Rn', 'Hf', 'Cm', 'Kr', 'Y',
-    'Cf', 'Li', 'F', 'Hg', 'Sm', 'Nd', 'Br', 'Er', 'K', 'Zr', 'Pd', 'Au', 'Eu', 'Md', 'Ga', 'As',
-    'Mn', 'Ag', 'Nb', 'Gd', 'Ru', 'Po', 'W', 'Na', 'Cl', 'Mo', 'Rh', 'Pm', 'Rb', 'Np', 'Lr',
-    'Ce', 'Ra', 'Tm', 'Dy', 'Fr', 'Sc', 'Lu', 'Fe', 'Fm', 'Cd', 'Ar', 'Mg', 'P', 'Th', 'Co',
-    'Tc', 'Pb', 'Ta', 'Tl', 'At', 'He', 'Yb', 'La', 'Sn', 'Ne'
-}
+_periodic_table = """
+H   D   T                                                           He
+Li  Be                                          B   C   N   O   F   Ne
+Na  Mg                                          Al  Si  P   S   Cl  Ar
+K   Ca  Sc  Ti  V   Cr  Mn  Fe  Co  Ni  Cu  Zn  Ga  Ge  As  Se  Br  Kr
+Rb  Sr  Y   Zr  Nb  Mo  Tc  Ru  Rh  Pd  Ag  Cd  In  Sn  Sb  Te  I   Xe
+Cs  Ba      Hf  Ta  W   Re  Os  Ir  Pt  Au  Hg  Tl  Pb  Bi  Po  At  Rn
+Fr  Ra      Rf  Db  Sg  Bh  Hs  Mt  Ds  Rg  Cn  Nh  Fl  Mc  Lv  Ts  Og
+
+La  Ce  Pr  Nd  Pm  Sm  Eu  Gd  Tb  Dy  Ho  Er  Tm  Yb  Lu
+Ac  Th  Pa  U   Np  Pu  Am  Cm  Bk  Cf  Es  Fm  Md  No  Lr
+"""
+_all_elements = re.split(r"\s+", _periodic_table.strip())
 
 
 class EmpiricalFormula(CompositionValue, typ="empirical_formula"):
