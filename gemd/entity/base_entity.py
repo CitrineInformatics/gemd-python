@@ -209,7 +209,9 @@ class BaseEntity(DictSerializable):
         from gemd.entity.link_by_uid import LinkByUID
         from gemd.util import cached_isinstance
 
-        if cached_isinstance(other, LinkByUID):
+        if id(self) == id(other):
+            return True
+        elif cached_isinstance(other, LinkByUID):
             return self.uids.get(other.scope) == other.id
         elif cached_isinstance(other, tuple):
             return len(other) == 2 and other[0] in self.uids and self.uids[other[0]] == other[1]
