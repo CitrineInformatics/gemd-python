@@ -47,3 +47,4 @@ def test_equality():
     assert link == ("foo", "bar")
     assert link != ("foo", "bar", "baz")
     assert link != ("foo", "rab")
+    assert link != "foo: rab"

@@ -207,11 +207,15 @@ class BaseEntity(DictSerializable):
     # Note that this could violate transitivity -- Link(scope1) == obj == Link(scope2)
     def __eq__(self, other):
         from gemd.entity.link_by_uid import LinkByUID
-        if isinstance(other, LinkByUID):
+        from gemd.util import cached_isinstance
+
+        if id(self) == id(other):
+            return True
+        elif cached_isinstance(other, LinkByUID):
             return self.uids.get(other.scope) == other.id
-        elif isinstance(other, tuple):
+        elif cached_isinstance(other, tuple):
             return len(other) == 2 and other[0] in self.uids and self.uids[other[0]] == other[1]
-        elif isinstance(other, BaseEntity):
+        elif cached_isinstance(other, BaseEntity):
             # We have to be a little clever for efficiency and to avoid infinite recursion
             return BaseEntity._cached_equals(self, other)
         else:

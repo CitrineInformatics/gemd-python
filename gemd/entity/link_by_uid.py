@@ -67,12 +67,16 @@ class LinkByUID(DictSerializable, typ="link_by_uid"):
     # Note that this could violate transitivity
     def __eq__(self, other):
         from gemd.entity.base_entity import BaseEntity
-        if isinstance(other, BaseEntity):
+        from gemd.util import cached_isinstance
+
+        if cached_isinstance(other, LinkByUID):
+            return self.scope == other.scope and self.id == other.id
+        elif cached_isinstance(other, BaseEntity):
             if self.scope in other.uids:
                 return other.uids[self.scope] == self.id
             else:
                 return False
-        elif isinstance(other, tuple):  # Make them interchangeable in a dict
+        elif cached_isinstance(other, tuple):  # Make them interchangeable in a dict
             return len(other) == 2 and (self.scope, self.id) == other
         else:
             return super().__eq__(other)
