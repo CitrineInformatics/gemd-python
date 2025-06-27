@@ -8,7 +8,7 @@ on:
 
 jobs:
   pr-tests:
-    uses: CitrineInformatics/common-gh-actions/.github/workflows/run-tests.yml@v2
+    uses: CitrineInformatics/common-gh-actions/.github/workflows/run-tests.yml@e16d57218b145a013c779b813ac37d652ccdf39b
     with:
       src: gemd
       skip_38: true
