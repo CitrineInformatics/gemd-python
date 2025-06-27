@@ -8,7 +8,7 @@ on:
 
 jobs:
   pr-tests:
-    uses: CitrineInformatics/common-gh-actions/.github/workflows/run-tests.yml@853f78b2396396a837765bcd4163a6c196c77779
+    uses: CitrineInformatics/common-gh-actions/.github/workflows/run-tests.yml@maintain/add-python-version-flags
     with:
       src: gemd
       skip_38: true
