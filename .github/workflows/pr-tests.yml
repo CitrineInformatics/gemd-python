@@ -11,3 +11,5 @@ jobs:
     uses: CitrineInformatics/common-gh-actions/.github/workflows/run-tests.yml@v1
     with:
       src: gemd
+      skip_38: true
+      include_313: true
