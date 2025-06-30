@@ -307,7 +307,7 @@ def _format_clean(unit, registry, **options):
     """
     try:  # Informal route changed in 0.22
         from pint.formatting import _FORMATTERS
-        formatter = _FORMATTERS["D"]
+        formatter = _FORMATTERS["D"]  # pragma: no cover
     except ImportError:  # pragma: no cover
         from pint import Unit
         formatter_obj = registry.formatter._formatters["D"]
@@ -317,7 +317,6 @@ def _format_clean(unit, registry, **options):
                 parsed = Unit(unit)
                 return formatter_obj.format_unit(parsed)
             except ValueError:
-                parsed = Unit(unit)
                 return formatter_obj.format_quantity(unit)
 
         formatter = _surrogate_formatter

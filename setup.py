@@ -15,7 +15,7 @@ else:
 setup(name='gemd',
       # Update this in gemd/__version__.py
       version=version,
-      python_requires='>=3.8',
+      python_requires='>=3.9',
       url='http://github.com/CitrineInformatics/gemd-python',
       description="Python binding for Citrine's GEMD data model",
       author='Citrine Informatics',
@@ -33,14 +33,14 @@ setup(name='gemd',
           'tests.units': ['test_units.txt']
       },
       install_requires=[
-          "pint>=0.21,<0.25,!=0.22,!=0.23",  # pint 0.22,0.23 have a bad interaction w/ numpy >= 2
+          "pint>=0.24.4,<0.25",
           "deprecation>=2.1.0,<3",
           "typing_extensions>=4.8,<5",
           "importlib-resources>=5.3,<7"
       ],
       extras_require={
           "scripts": [
-              "packaging"
+              "packaging",
               "sphinx==5.0.0",
               "sphinx-rtd-theme==1.0.0",
               "sphinxcontrib-apidoc==0.3.0",
@@ -52,16 +52,16 @@ setup(name='gemd',
               "pandas>=2.0.3,<3"
           ],
           "tests.entity.bounds": [
-              "numpy>=1.24.4,<3",
+              "numpy>=1.24.4,<2; python_version<='3.10'",
               "pandas>=2.0.3,<3"
           ]
       },
       classifiers=[
           'Programming Language :: Python :: 3',
-          'Programming Language :: Python :: 3.8',
           'Programming Language :: Python :: 3.9',
           'Programming Language :: Python :: 3.10',
           'Programming Language :: Python :: 3.11',
           'Programming Language :: Python :: 3.12',
+          'Programming Language :: Python :: 3.13',
       ],
       )

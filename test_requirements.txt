@@ -1,6 +1,9 @@
 flake8==7.0.0
 flake8-docstrings==1.7.0
+numpy==1.24.4; python_version<'3.10'
+pandas==2.0.3; python_version<'3.10'
+numpy>=2.0.2,<=2.1.0; python_version>='3.10'
+pandas==2.3.0; python_version>='3.10'
 pytest==8.0.0
 pytest-cov==4.1.0
-pandas>=2.0.3,<2.2.0  # includes a compatible version of numpy
 derp==0.1.1
