@@ -8,7 +8,7 @@ import re
 from tempfile import TemporaryDirectory
 from typing import Union, List, Tuple, Generator, Any
 try:
-    from typing import TypeAlias # Python 3.10+
+    from typing import TypeAlias  # Python 3.10+
 except ImportError:  # pragma nocover
     from typing_extensions import TypeAlias  # Python 3.9
 
