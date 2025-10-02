@@ -45,7 +45,7 @@ __all__ = [
 
 def import_table(filename=SMALL_TABLE):
     """Return the deserialized JSON table."""
-    from importlib_resources import files
+    from importlib.resources import files
     import json
 
     return json.loads(files("gemd.demo").joinpath(filename).read_text(encoding='utf-8'))

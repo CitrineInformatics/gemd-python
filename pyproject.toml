@@ -1,0 +1,73 @@
+[project]
+name = "gemd"
+dynamic = ["version"]
+dependencies = [
+    "pint>=0.24.4,<0.25",
+    "deprecation>=2.1.0,<3",
+    "typing_extensions>=4.8,<5; python_version<'3.10'",
+]
+requires-python = ">=3.9"
+authors = [
+    {name = "Citrine Informatics"}
+]
+description = "Python binding for Citrine's GEMD data model"
+readme = "README.md"
+license-files = ["LICENSE"]
+classifiers = [
+          "Programming Language :: Python :: 3",
+          "Programming Language :: Python :: 3.9",
+          "Programming Language :: Python :: 3.10",
+          "Programming Language :: Python :: 3.11",
+          "Programming Language :: Python :: 3.12",
+          "Programming Language :: Python :: 3.13",
+]
+
+[project.urls]
+Homepage = "http://github.com/CitrineInformatics/gemd-python"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = {attr = "gemd.__version__.__version__"}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["gemd"]
+exclude = ["docs", "tests"]
+
+[tool.setuptools.package-data]
+"gemd.demo" = ["strehlow_and_cook.pif", "strehlow_and_cook_small.pif", "toothpick.jpg"]
+"gemd.units" = ["citrine_en.txt", "constants_en.txt"]
+"tests.units" = ["test_units.txt"]
+
+
+[dependency-groups]
+dev = [
+    "flake8==7.0.0",
+    "flake8-docstrings==1.7.0",
+    "numpy==1.24.4; python_version<'3.10'",
+    "pandas==2.0.3; python_version<'3.10'",
+    "numpy>=2.0.2,<=2.1.0; python_version>='3.10'",
+    "pandas==2.3.0; python_version>='3.10'",
+    "pytest==8.0.0",
+    "pytest-cov==4.1.0",
+    "derp==0.1.1",
+    "tomli>=2.2.1",
+]
+docs = [
+    "sphinx==5.0.0",
+    "sphinx-rtd-theme==1.0.0",
+    "sphinxcontrib-apidoc==0.3.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+]
+
+[tool.coverage.run]
+omit = [
+    "gemd/demo/*",
+]
