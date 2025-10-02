@@ -1,6 +1,6 @@
 from contextlib import contextmanager
 from deprecation import DeprecatedWarning
-from importlib_resources import files
+from importlib.resources import files
 import re
 from pint import UnitRegistry
 import pytest

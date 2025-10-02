@@ -1,23 +1,25 @@
 """Implementation of units."""
 from deprecation import deprecated
 import functools
-from importlib_resources import files
+from importlib.resources import files
 import os
 from pathlib import Path
 import re
 from tempfile import TemporaryDirectory
 from typing import Union, List, Tuple, Generator, Any
+try:
+    from typing import TypeAlias  # Python 3.10+
+except ImportError:  # pragma nocover
+    from typing_extensions import TypeAlias  # Python 3.9
 
 from pint import UnitRegistry, register_unit_format
-try:  # Pint 0.23 migrated the location of this method, and augmented it
-    from pint.pint_eval import tokenizer
-except ImportError:  # pragma: no cover
-    from pint.compat import tokenizer
+from pint.pint_eval import tokenizer
 from tokenize import NAME, NUMBER, OP, ERRORTOKEN, TokenInfo
 # alias the error that is thrown when units are incompatible
 # this helps to isolate the dependence on pint
-from pint.errors import DimensionalityError as IncompatibleUnitsError  # noqa Import
-from pint.errors import UndefinedUnitError, DefinitionSyntaxError  # noqa Import
+from pint.errors import DimensionalityError as IncompatibleUnitsError
+from pint.errors import UndefinedUnitError, DefinitionSyntaxError
+from pint.registry import GenericUnitRegistry
 
 # Store directories so they don't get auto-cleaned until exit
 _TEMP_DIRECTORY = TemporaryDirectory()
@@ -216,43 +218,29 @@ def _unmangle_scaling(input_string: str) -> str:
     return input_string
 
 
-try:  # pragma: no cover
-    # Pint 0.23 modified the preferred way to derive a custom class
-    # https://pint.readthedocs.io/en/0.23/advanced/custom-registry-class.html
-    from pint.registry import GenericUnitRegistry
-    from typing_extensions import TypeAlias
+# Standard approach to creating a custom registry class:
+# https://pint.readthedocs.io/en/0.23/advanced/custom-registry-class.html
 
-    class _ScaleFactorUnit(UnitRegistry.Unit):
-        """Child class of Units for generating units w/ clean scaling factors."""
+class _ScaleFactorUnit(UnitRegistry.Unit):
+    """Child class of Units for generating units w/ clean scaling factors."""
 
-        def __format__(self, format_spec):
-            result = super().__format__(format_spec)
-            return _unmangle_scaling(result)
+    def __format__(self, format_spec):
+        result = super().__format__(format_spec)
+        return _unmangle_scaling(result)
 
-    class _ScaleFactorQuantity(UnitRegistry.Quantity):
-        """Child class of Quantity for generating units w/ clean scaling factors."""
 
-        pass
+class _ScaleFactorQuantity(UnitRegistry.Quantity):
+    """Child class of Quantity for generating units w/ clean scaling factors."""
 
-    class _ScaleFactorRegistry(GenericUnitRegistry[_ScaleFactorQuantity, _ScaleFactorUnit]):
-        """UnitRegistry class that uses _GemdUnits."""
+    pass
 
-        Quantity: TypeAlias = _ScaleFactorQuantity
-        Unit: TypeAlias = _ScaleFactorUnit
 
-except ImportError:  # pragma: no cover
-    # https://pint.readthedocs.io/en/0.21/advanced/custom-registry-class.html
-    class _ScaleFactorUnit(UnitRegistry.Unit):
-        """Child class of Units for generating units w/ clean scaling factors."""
+class _ScaleFactorRegistry(GenericUnitRegistry[_ScaleFactorQuantity, _ScaleFactorUnit]):
+    """UnitRegistry class that uses _GemdUnits."""
 
-        def __format__(self, format_spec):
-            result = super().__format__(format_spec)
-            return _unmangle_scaling(result)
+    Quantity: TypeAlias = _ScaleFactorQuantity
+    Unit: TypeAlias = _ScaleFactorUnit
 
-    class _ScaleFactorRegistry(UnitRegistry):
-        """UnitRegistry class that uses _GemdUnits."""
-
-        _unit_class = _ScaleFactorUnit
 
 _REGISTRY: _ScaleFactorRegistry = None  # global requires it be defined in this scope
 
