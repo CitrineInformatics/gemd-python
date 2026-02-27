@@ -63,7 +63,7 @@ def test_json():
 
 def test_numpy():
     """Test that ndarrays, Series work as well."""
-    assert len(array_like()) < 5  # In case we extend at some point
+    assert len(array_like()) < 6  # In case we extend at some point
 
     if len(array_like()) > 2:  # Test numpy
         import numpy as np

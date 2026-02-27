@@ -62,7 +62,7 @@ def test_json():
 
 def test_numpy():
     """Test that ndarrays, Series work as well."""
-    assert len(array_like()) < 5  # In case we extend at some point
+    assert len(array_like()) < 6  # In case we extend at some point
 
     if len(array_like()) > 2:  # Test numpy
         import numpy as np
@@ -75,3 +75,6 @@ def test_numpy():
         pd_bounds = CategoricalBounds(pd.Series(["spam", "eggs"]))
         pd_copy = loads(dumps(pd_bounds))
         assert pd_copy == pd_bounds
+
+        pd_unique = CategoricalBounds(pd.Series(["spam", "eggs"]).unique())
+        assert pd_copy == pd_unique
