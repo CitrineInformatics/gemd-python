@@ -88,7 +88,9 @@ def array_like():
         import numpy as np
         try:
             import pandas as pd
-            _array_like = (list, tuple, np.ndarray, pd.core.base.PandasObject)
+            _array_like = (list, tuple, np.ndarray,
+                           pd.core.base.PandasObject,
+                           pd.api.extensions.ExtensionArray)
         except ImportError:  # pragma: no cover
             _array_like = (list, tuple, np.ndarray)  # pragma: no cover
     except ImportError:  # pragma: no cover
