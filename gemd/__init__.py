@@ -13,6 +13,9 @@ from .entity import Condition, Parameter, Property, PropertyAndConditions, \
     EmpiricalFormula, NominalComposition, InChI, Smiles, \
     LinkByUID, \
     FileLink  # noqa: F401
+from .exceptions import GemdError, GemdValueError, GemdTypeError, \
+    GemdBoundsError, GemdValidationError, GemdEnumerationError, \
+    GemdSerializationError  # noqa: F401
 
 __all__ = ["Condition", "Parameter", "Property", "PropertyAndConditions",
            "CategoricalBounds", "CompositionBounds", "IntegerBounds",
@@ -26,5 +29,8 @@ __all__ = ["Condition", "Parameter", "Property", "PropertyAndConditions",
            "UniformInteger", "DiscreteCategorical", "NominalCategorical",
            "EmpiricalFormula", "NominalComposition", "InChI", "Smiles",
            "LinkByUID",
-           "FileLink"
+           "FileLink",
+           "GemdError", "GemdValueError", "GemdTypeError",
+           "GemdBoundsError", "GemdValidationError",
+           "GemdEnumerationError", "GemdSerializationError",
            ]
