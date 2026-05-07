@@ -375,6 +375,24 @@ def get_base_units(units: Union[str, UnitRegistry.Unit]) -> Tuple[UnitRegistry.U
     return base_unit, float(ratio), offset
 
 
+def get_compatible_units(units: Union[str, UnitRegistry.Unit]) -> List[str]:
+    """
+    Get all compatible units that match the dimensionality of the provided units
+
+    Parameters
+    ----------
+    units: str, Unit
+        The representation of the object we wish to compare
+
+    Returns
+    -------
+    List[str]
+        A list of the compatible units.
+
+    """
+    return [f"{u}" for u in _REGISTRY.get_compatible_units(units)]
+
+
 def change_definitions_file(filename: str = None):
     """
     Change which file is used for units definition.
