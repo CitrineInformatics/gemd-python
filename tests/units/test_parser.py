@@ -69,7 +69,7 @@ def test_parse_unexpected():
     scaling = [
         "3 rpm",  # No leading digits
         "16",  # No values that are just integers
-        "16.2"  # No values that are just floats
+        "16.2",  # No values that are just floats
         "g * 0/ m",  # Zero scaling factor
         "F * 1.1 3.5",  # numeric syntax error
         "F m 1.1",  # scale follows unit
