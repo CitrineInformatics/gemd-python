@@ -45,6 +45,7 @@ exclude = ["docs", "tests"]
 
 [dependency-groups]
 dev = [
+    "ruff==0.16.6",
     "flake8==7.0.0",
     "flake8-docstrings==1.7.0",
     "numpy>=1.24.4; python_version<'3.10'",
@@ -71,3 +72,34 @@ testpaths = [
 omit = [
     "gemd/demo/*",
 ]
+
+
+[tool.ruff]
+line-length = 99
+target-version = "py39"
+
+[tool.ruff.lint]
+# Mirror the flake8 configuration in tox.ini so both linters agree.
+preview = true
+explicit-preview-rules = true
+select = [
+    "E",     # pycodestyle errors
+    "W",     # pycodestyle warnings
+    "F",     # pyflakes
+    "D",     # pydocstyle (flake8-docstrings)
+    "I",     # isort
+    "E231",  # missing whitespace after ',' (preview-only in ruff)
+    "E275",  # missing whitespace after keyword (preview-only in ruff)
+]
+# D100: Docstring at top of module is often redundant
+# D104: Docstring in package is often redundant
+# D105: Magic methods (e.g. __str__) are self explanatory
+# D107: __init__ is self explanatory
+# D203: Blank line before class docstrings; conflicts with D211
+# D213: A multiline summary begins on the first line; conflicts with D212
+# D301: backslash is used in making docstrings for sphinx to parse
+# D401: Imperative mood requirement basically gets in the way
+ignore = ["D100", "D104", "D105", "D107", "D203", "D213", "D301", "D401"]
+
+[tool.ruff.lint.pycodestyle]
+max-doc-length = 119

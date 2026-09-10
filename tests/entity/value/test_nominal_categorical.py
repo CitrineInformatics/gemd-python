@@ -1,6 +1,7 @@
 """Tests of the NominalCategorical class."""
-from gemd.entity.value.nominal_categorical import NominalCategorical
+
 from gemd.entity.bounds import CategoricalBounds
+from gemd.entity.value.nominal_categorical import NominalCategorical
 
 
 def test_category_setter():

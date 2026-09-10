@@ -1,13 +1,15 @@
 """Tests of the process run object."""
-import pytest
-from uuid import uuid4
-from copy import deepcopy
 
-from gemd.json import dumps, loads
+from copy import deepcopy
+from uuid import uuid4
+
+import pytest
+
 from gemd.entity.attribute import Condition
-from gemd.entity.object import ProcessRun, ProcessSpec, IngredientRun, MaterialRun
-from gemd.entity.template import ProcessTemplate
 from gemd.entity.link_by_uid import LinkByUID
+from gemd.entity.object import IngredientRun, MaterialRun, ProcessRun, ProcessSpec
+from gemd.entity.template import ProcessTemplate
+from gemd.json import dumps, loads
 from gemd.util import flatten
 
 
@@ -22,23 +24,24 @@ def test_process_spec():
     process = ProcessRun("Run", conditions=condition2, spec=spec)
 
     copy_process = loads(dumps(process))
-    assert dumps(copy_process.spec) == dumps(spec), \
+    assert dumps(copy_process.spec) == dumps(spec), (
         "Process spec should be preserved through serialization"
+    )
 
 
 def test_ingredient_run():
     """Tests that a process can house an ingredient, and that pairing survives serialization."""
     # Create a ProcessSpec
     proc_run = ProcessRun(name="a process spec", tags=["tag1", "tag2"])
-    ingred_run = IngredientRun(material=MaterialRun(name='Raw'), process=proc_run)
+    ingred_run = IngredientRun(material=MaterialRun(name="Raw"), process=proc_run)
 
     # Make copies of both specs
     proc_run_copy = loads(dumps(proc_run))
 
     assert proc_run_copy == proc_run, "Full structure wasn't preserved across serialization"
 
-    assert 'process' in repr(ingred_run)
-    assert 'ingredients' in repr(proc_run)
+    assert "process" in repr(ingred_run)
+    assert "ingredients" in repr(proc_run)
 
 
 def test_invalid_assignment():
@@ -51,9 +54,9 @@ def test_invalid_assignment():
 
 def test_template_access():
     """A process run's template should be equal to its spec's template."""
-    template = ProcessTemplate("process template", uids={'id': str(uuid4())})
-    spec = ProcessSpec("A spec", uids={'id': str(uuid4())}, template=template)
-    proc = ProcessRun("A run", uids={'id': str(uuid4())}, spec=spec)
+    template = ProcessTemplate("process template", uids={"id": str(uuid4())})
+    spec = ProcessSpec("A spec", uids={"id": str(uuid4())}, template=template)
+    proc = ProcessRun("A run", uids={"id": str(uuid4())}, spec=spec)
     assert proc.template == template
 
     proc.spec = LinkByUID.from_entity(spec)
@@ -72,8 +75,8 @@ def test_equality():
 
     run3 = deepcopy(run2)
     assert run3 == run2, "Copy somehow failed"
-    run3.ingredients[0].tags.append('A tag')
+    run3.ingredients[0].tags.append("A tag")
     assert run3 != run2
 
-    run4 = next(x for x in flatten(run3, 'test-scope') if isinstance(x, ProcessRun))
+    run4 = next(x for x in flatten(run3, "test-scope") if isinstance(x, ProcessRun))
     assert run4 == run3, "Flattening removes measurement references, but that's okay"

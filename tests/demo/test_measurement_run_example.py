@@ -1,6 +1,7 @@
 """Test measurement demo."""
-from gemd.json import dumps, load
+
 from gemd.demo.measurement_example import make_demo_measurements
+from gemd.json import dumps, load
 
 
 def test_measurement_example(tmp_path):

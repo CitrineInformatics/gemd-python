@@ -1,22 +1,21 @@
-from gemd.entity.object.material_spec import MaterialSpec
-from gemd.entity.object.process_run import ProcessRun
+from typing import Any, Iterable, List, Mapping, Optional, Type, TypeVar, Union
+
+from gemd.entity.file_link import FileLink
+from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.object.base_object import BaseObject
 from gemd.entity.object.has_process import HasProcess
 from gemd.entity.object.has_spec import HasSpec
-from gemd.enumeration import SampleType
-from gemd.entity.file_link import FileLink
-from gemd.entity.link_by_uid import LinkByUID
+from gemd.entity.object.material_spec import MaterialSpec
+from gemd.entity.object.process_run import ProcessRun
 from gemd.entity.setters import validate_list
-
-from typing import TypeVar, Optional, Union, Iterable, List, Mapping, Type, Any
+from gemd.enumeration import SampleType
 
 __all__ = ["MaterialRun"]
 MeasurementRunType = TypeVar("MeasurementRunType", bound="MeasurementRun")  # noqa: F821
 
 
 class MaterialRun(BaseObject, HasSpec, HasProcess, typ="material_run", skip={"_measurements"}):
-    """
-    A material run.
+    """A material run.
 
     This includes a link to the originating process and soft links to measurements.
 
@@ -46,19 +45,23 @@ class MaterialRun(BaseObject, HasSpec, HasProcess, typ="material_run", skip={"_m
 
     """
 
-    def __init__(self,
-                 name: str,
-                 *,
-                 spec: Union[MaterialSpec, LinkByUID] = None,
-                 process: Union[ProcessRun, LinkByUID] = None,
-                 sample_type: Union[SampleType, str] = "unknown",
-                 uids: Mapping[str, str] = None,
-                 tags: Iterable[str] = None,
-                 notes: str = None,
-                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
+    def __init__(
+        self,
+        name: str,
+        *,
+        spec: Union[MaterialSpec, LinkByUID] = None,
+        process: Union[ProcessRun, LinkByUID] = None,
+        sample_type: Union[SampleType, str] = "unknown",
+        uids: Mapping[str, str] = None,
+        tags: Iterable[str] = None,
+        notes: str = None,
+        file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
+    ):
         from gemd.entity.object.measurement_run import MeasurementRun
-        BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
-                            file_links=file_links)
+
+        BaseObject.__init__(
+            self, name=name, uids=uids, tags=tags, notes=notes, file_links=file_links
+        )
         HasSpec.__init__(self, spec=spec)
         self._process = None
         self._measurements = validate_list(None, [MeasurementRun, LinkByUID])
@@ -113,5 +116,5 @@ class MaterialRun(BaseObject, HasSpec, HasProcess, typ="material_run", skip={"_m
     def _dict_for_compare(self) -> Mapping[str, Any]:
         """Support for recursive equals."""
         base = super()._dict_for_compare()
-        base['measurements'] = self.measurements
+        base["measurements"] = self.measurements
         return base

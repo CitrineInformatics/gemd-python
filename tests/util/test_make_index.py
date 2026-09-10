@@ -1,5 +1,5 @@
-from gemd.entity.object import ProcessSpec, ProcessRun, MaterialSpec, MaterialRun
 from gemd.entity.link_by_uid import LinkByUID
+from gemd.entity.object import MaterialRun, MaterialSpec, ProcessRun, ProcessSpec
 from gemd.util.impl import make_index, substitute_objects
 
 
@@ -9,9 +9,7 @@ def test_make_index():
     pr1 = ProcessRun(
         name="world",
         spec=LinkByUID(scope="test_scope", id="test_value"),
-        uids={"test_scope": "another_test_value",
-              "other_test": "also_valid"
-              },
+        uids={"test_scope": "another_test_value", "other_test": "also_valid"},
     )
     ms1 = MaterialSpec(
         name="material",

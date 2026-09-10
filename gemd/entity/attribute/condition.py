@@ -1,14 +1,13 @@
+from typing import Type
+
 from gemd.entity.attribute.base_attribute import BaseAttribute
 from gemd.entity.template import ConditionTemplate
-
-from typing import Type
 
 __all__ = ["Condition"]
 
 
 class Condition(BaseAttribute, typ="condition"):
-    """
-    Condition of a property, process, or measurement.
+    """Condition of a property, process, or measurement.
 
     Conditions are environmental variables (typically measured) that may affect a process
     or measurement: e.g., temperature, pressure.

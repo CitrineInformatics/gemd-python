@@ -1,13 +1,13 @@
 """An empirical chemical formula."""
-from gemd.entity.value.molecular_value import MolecularValue
+
 from gemd.entity.bounds import MolecularStructureBounds
+from gemd.entity.value.molecular_value import MolecularValue
 
 __all__ = ["Smiles"]
 
 
 class Smiles(MolecularValue, typ="smiles"):
-    """
-    A molecular structure encoded according to SMILES.
+    """A molecular structure encoded according to SMILES.
 
     Parameters
     ----------
@@ -36,8 +36,7 @@ class Smiles(MolecularValue, typ="smiles"):
             raise TypeError("SMILES must be given as a string; got {}".format(type(value)))
 
     def _to_bounds(self) -> MolecularStructureBounds:
-        """
-        Return the smallest bounds object that is consistent with the Value.
+        """Return the smallest bounds object that is consistent with the Value.
 
         Returns
         -------

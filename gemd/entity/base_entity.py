@@ -1,14 +1,20 @@
 """Base class for all entities."""
-from typing import TypeVar, Optional, Union, Iterable, List, Set, FrozenSet, MutableMapping, Dict
 
+from typing import Dict, FrozenSet, Iterable, List, MutableMapping, Optional, Set, TypeVar, Union
+
+from gemd.entity.case_insensitive_dict import CaseInsensitiveDict
 from gemd.entity.dict_serializable import DictSerializable
 from gemd.entity.has_dependencies import HasDependencies
-from gemd.entity.case_insensitive_dict import CaseInsensitiveDict
 from gemd.entity.setters import validate_list
 
 __all__ = ["BaseEntity"]
 BaseEntityType = TypeVar("BaseEntityType", bound="BaseEntity")
 LinkByUIDType = TypeVar("LinkByUIDType", bound="LinkByUID")  # noqa: F821
+
+
+def _is_non_str_iterable(value) -> bool:
+    """Check whether a value is an iterable that is not a string."""
+    return isinstance(value, Iterable) and not isinstance(value, str)
 
 
 class BaseEntity(DictSerializable):
@@ -38,8 +44,7 @@ class BaseEntity(DictSerializable):
 
     @property
     def uids(self) -> Dict[str, str]:
-        """
-        A collection of unique IDs.
+        """A collection of unique IDs.
 
         Requirements for and the value of unique IDs are discussed
         `here <https://citrineinformatics.github.io/gemd-documentation/
@@ -59,8 +64,7 @@ class BaseEntity(DictSerializable):
             self._uids = CaseInsensitiveDict(**{uids[0]: uids[1]})
 
     def add_uid(self, scope: str, uid: str):
-        """
-        Add a uid.
+        """Add a uid.
 
         Parameters
         ----------
@@ -72,13 +76,10 @@ class BaseEntity(DictSerializable):
         """
         self.uids[scope] = uid
 
-    def to_link(self,
-                scope: Optional[str] = None,
-                *,
-                allow_fallback: bool = False
-                ) -> LinkByUIDType:
-        """
-        Generate a ~gemd.entity.link_by_uid.LinkByUID for this object.
+    def to_link(
+        self, scope: Optional[str] = None, *, allow_fallback: bool = False
+    ) -> LinkByUIDType:
+        """Generate a ~gemd.entity.link_by_uid.LinkByUID for this object.
 
         Parameters
         ----------
@@ -93,6 +94,7 @@ class BaseEntity(DictSerializable):
 
         """
         from gemd.entity.link_by_uid import LinkByUID
+
         if len(self.uids) == 0:
             raise ValueError(f"{type(self)} {self.name} does not have any uids.")
 
@@ -111,20 +113,17 @@ class BaseEntity(DictSerializable):
         queue = [type(self)]
         while queue:
             cls = queue.pop()
-            if issubclass(cls, HasDependencies) and \
-                    "_local_dependencies" not in cls.__abstractmethods__:
-                result |= cls._local_dependencies(self)
-                queue.extend(cls.__bases__)
+            if issubclass(cls, HasDependencies):
+                if "_local_dependencies" not in cls.__abstractmethods__:
+                    result |= cls._local_dependencies(self)
+                    queue.extend(cls.__bases__)
         return result
 
     @staticmethod
-    def _cached_equals(this: "BaseEntity",
-                       that: "BaseEntity",
-                       *,
-                       cache: Dict[FrozenSet, Optional[bool]] = None
-                       ) -> Optional[bool]:
-        """
-        Compute and stash whether two Base Entities are equal in a recursive sense.
+    def _cached_equals(
+        this: "BaseEntity", that: "BaseEntity", *, cache: Dict[FrozenSet, Optional[bool]] = None
+    ) -> Optional[bool]:
+        """Compute and stash whether two Base Entities are equal in a recursive sense.
 
         The cache uses ternary logic to communicate state.  True or False indicate a completed
         evaluation.  If the cache contains None, this indicates that we have not yet completed
@@ -158,8 +157,7 @@ class BaseEntity(DictSerializable):
                 if BaseEntity._cached_equals(this_value, that_value, cache=cache) is False:
                     cache[cache_key] = False  # Mark as failed
                     return False
-            elif isinstance(this_value, Iterable) and isinstance(that_value, Iterable) \
-                    and not isinstance(this_value, str) and not isinstance(that_value, str):
+            elif _is_non_str_iterable(this_value) and _is_non_str_iterable(that_value):
                 # Necessary to maintain context for recursive parts of the structure
                 this_list = list(this_value)
                 that_list = list(that_value)

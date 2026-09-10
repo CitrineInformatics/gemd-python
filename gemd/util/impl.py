@@ -1,8 +1,21 @@
 """Utility functions."""
-import uuid
+
 import functools
-from typing import Optional, Union, Type, Iterable, MutableSequence, List, Tuple, Mapping, \
-    Callable, Any, Reversible, ByteString
+import uuid
+from typing import (
+    Any,
+    ByteString,
+    Callable,
+    Iterable,
+    List,
+    Mapping,
+    MutableSequence,
+    Optional,
+    Reversible,
+    Tuple,
+    Type,
+    Union,
+)
 
 from gemd.entity.base_entity import BaseEntity
 from gemd.entity.dict_serializable import DictSerializable
@@ -10,8 +23,7 @@ from gemd.entity.link_by_uid import LinkByUID
 
 
 def set_uuids(obj, scope):
-    """
-    Recursively assign a uuid to every BaseEntity that doesn't already contain a uuid.
+    """Recursively assign a uuid to every BaseEntity that doesn't already contain a uuid.
 
     This ensures that all of the pointers in the object can be replaced with LinkByUID objects
 
@@ -27,24 +39,23 @@ def set_uuids(obj, scope):
     None
 
     """
+
     def func(base_obj):
         if len(base_obj.uids) == 0:
             base_obj.add_uid(scope, str(uuid.uuid4()))
         return
+
     recursive_foreach(obj, func)
     return
 
 
-def cached_isinstance(
-        obj: object,
-        class_or_tuple: Union[Type, Tuple[Type]]) -> bool:
-    """
-    Emulate isinstance builtin to take advantage of functools caching.
+def cached_isinstance(obj: object, class_or_tuple: Union[Type, Tuple[Type]]) -> bool:
+    """Emulate isinstance builtin to take advantage of functools caching.
 
     Parameters
     ----------
     obj: object
-
+        The object to check.
     class_or_tuple: Type or Tuple[Type]
         A single type, a tuple of types (potentially nested)
 
@@ -63,11 +74,8 @@ _cached_isinstance = cached_isinstance
 
 
 @functools.lru_cache(maxsize=1024)
-def _cached_issubclass(
-        cls: Type,
-        class_or_tuple: Union[Type, Tuple[Type]]) -> bool:
-    """
-    Emulate issubclass builtin to take advantage of functools caching.
+def _cached_issubclass(cls: Type, class_or_tuple: Union[Type, Tuple[Type]]) -> bool:
+    """Emulate issubclass builtin to take advantage of functools caching.
 
     Parameters
     ----------
@@ -85,12 +93,13 @@ def _cached_issubclass(
     return issubclass(cls, class_or_tuple)
 
 
-def _substitute(thing: Any,
-                sub: Callable[[object], object],
-                applies: Callable[[object], bool],
-                visited: Mapping[object, object] = None) -> object:
-    """
-    Generic recursive substitute function.
+def _substitute(
+    thing: Any,
+    sub: Callable[[object], object],
+    applies: Callable[[object], bool],
+    visited: Mapping[object, object] = None,
+) -> object:
+    """Generic recursive substitute function.
 
     Generates a new instance of thing by traversing its contents recursively, substituting
     values for which the sub function applies.
@@ -103,6 +112,8 @@ def _substitute(thing: Any,
         Function which provides substitute for value; should not have side effects.
     applies: Callable[[object], bool]
         Function which defines the domain for the sub function to be invoked.
+    visited: Mapping[object, object], optional
+        Maps each object already substituted to its replacement.
 
     """
     if visited is None:
@@ -122,11 +133,15 @@ def _substitute(thing: Any,
     elif cached_isinstance(replacement, Tuple):
         new = tuple(_substitute(x, sub, applies, visited) for x in replacement)
     elif cached_isinstance(replacement, Mapping):
-        new = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
-               for k, v in replacement.items()}
+        new = {
+            _substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
+            for k, v in replacement.items()
+        }
     elif cached_isinstance(replacement, DictSerializable):
-        new_attrs = {_substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
-                     for k, v in replacement.as_dict().items()}
+        new_attrs = {
+            _substitute(k, sub, applies, visited): _substitute(v, sub, applies, visited)
+            for k, v in replacement.as_dict().items()
+        }
         new = replacement.build(new_attrs)
     else:
         new = replacement
@@ -137,12 +152,13 @@ def _substitute(thing: Any,
     return new
 
 
-def _substitute_inplace(thing: Any,
-                        sub: Callable[[object], object],
-                        applies: Callable[[object], bool],
-                        visited: Mapping[object, object] = None) -> object:
-    """
-    Generic recursive in-place substitute function.
+def _substitute_inplace(
+    thing: Any,
+    sub: Callable[[object], object],
+    applies: Callable[[object], bool],
+    visited: Mapping[object, object] = None,
+) -> object:
+    """Generic recursive in-place substitute function.
 
     Iteratively crawls the passed structure, substituting elements with sub(element) when
     applies(element) is true and the element is mutable.
@@ -155,8 +171,11 @@ def _substitute_inplace(thing: Any,
         Function which provides substitute for value; should not have side effects.
     applies: Callable[[object], bool]
         Function which defines the domain for the sub function to be invoked.
+    visited: Mapping[object, object], optional
+        Maps each object already substituted to its replacement.
 
     """
+
     def _key(obj):
         if cached_isinstance(obj, (float, int, str)):
             return None
@@ -209,8 +228,7 @@ def _substitute_inplace(thing: Any,
 
 @functools.lru_cache(maxsize=1024)
 def _setter_by_attribute(clazz: type, attribute: str) -> Callable:
-    """
-    Internal method to get the setter method for an attribute.
+    """Internal method to get the setter method for an attribute.
 
     Note that if the attribute in question is a @property (read-only attribute),
     it assumes that the correct choice is just setting the field name with a
@@ -229,6 +247,7 @@ def _setter_by_attribute(clazz: type, attribute: str) -> Callable:
         The attribute's setter method, callable w/ setter(object, value).
 
     """
+
     def _emulator(inner_name: str) -> Callable:
         return lambda self, value: setattr(self, inner_name, value)
 
@@ -244,8 +263,7 @@ def _setter_by_attribute(clazz: type, attribute: str) -> Callable:
 
 
 def make_index(obj: Union[Iterable, BaseEntity, DictSerializable]):
-    """
-    Generates an index that can be used for the substitute_objects method.
+    """Generates an index that can be used for the substitute_objects method.
 
     This method builds a dictionary of GEMD objects found by recursively crawling the passed
     object, indexed by all scope:id tuples found in any of the objects.  The passed object can
@@ -257,6 +275,7 @@ def make_index(obj: Union[Iterable, BaseEntity, DictSerializable]):
         target container (dict, list, ...) from which to create an index of GEMD objects
 
     """
+
     def _make_index(_obj: BaseEntity):
         return ((LinkByUID(scope=scope, id=_obj.uids[scope]), _obj) for scope in _obj.uids)
 
@@ -267,14 +286,10 @@ def make_index(obj: Union[Iterable, BaseEntity, DictSerializable]):
     return idx
 
 
-def substitute_links(obj: Any,
-                     scope: Optional[str] = None,
-                     *,
-                     allow_fallback: bool = True,
-                     inplace: bool = False
-                     ):
-    """
-    Recursively replace pointers to BaseEntity with LinkByUID objects.
+def substitute_links(
+    obj: Any, scope: Optional[str] = None, *, allow_fallback: bool = True, inplace: bool = False
+):
+    """Recursively replace pointers to BaseEntity with LinkByUID objects.
 
     This prepares the object to be serialized or written to the API.
     It is the inverse of substitute_objects.
@@ -296,17 +311,15 @@ def substitute_links(obj: Any,
     else:
         method = _substitute
 
-    return method(obj,
-                  sub=lambda o: o.to_link(scope=scope, allow_fallback=allow_fallback),
-                  applies=lambda o: o is not obj and cached_isinstance(o, BaseEntity))
+    return method(
+        obj,
+        sub=lambda o: o.to_link(scope=scope, allow_fallback=allow_fallback),
+        applies=lambda o: o is not obj and cached_isinstance(o, BaseEntity),
+    )
 
 
-def substitute_objects(obj,
-                       index,
-                       *,
-                       inplace: bool = False):
-    """
-    Recursively replace LinkByUID objects with pointers to the objects with that UID in the index.
+def substitute_objects(obj, index, *, inplace: bool = False):
+    """Recursively replace each LinkByUID with the indexed object that carries that UID.
 
     This prepares the object to be used after being deserialized.
     It is the inverse of substitute_links.
@@ -326,14 +339,15 @@ def substitute_objects(obj,
     else:
         method = _substitute
 
-    return method(obj,
-                  sub=lambda link: index.get(link, link),
-                  applies=lambda o: cached_isinstance(o, LinkByUID))
+    return method(
+        obj,
+        sub=lambda link: index.get(link, link),
+        applies=lambda o: cached_isinstance(o, LinkByUID),
+    )
 
 
 def flatten(obj, scope=None) -> List[BaseEntity]:
-    """
-    Flatten a BaseEntity (or array of them) into a list of objects connected by LinkByUID objects.
+    """Flatten a BaseEntity (or array of them) into objects connected by LinkByUID.
 
     This is a composite operation the amounts to:
       - Making sure at least one uid is set in each BaseEntity in scope
@@ -388,12 +402,13 @@ def flatten(obj, scope=None) -> List[BaseEntity]:
     return sorted([substitute_links(x) for x in res], key=lambda x: writable_sort_order(x))
 
 
-def recursive_foreach(obj: Union[Iterable, DictSerializable],
-                      func: Callable[[BaseEntity], None],
-                      *,
-                      apply_first=False):
-    """
-    Apply a function recursively to each BaseEntity object.
+def recursive_foreach(
+    obj: Union[Iterable, DictSerializable],
+    func: Callable[[BaseEntity], None],
+    *,
+    apply_first=False,
+):
+    """Apply a function recursively to each BaseEntity object.
 
     Only :class:`BaseEntity` objects will have the function applied, but the recursion will walk
     through all objects.  For example, BaseEntity -> list -> BaseEntity will have func applied
@@ -433,8 +448,7 @@ def recursive_foreach(obj: Union[Iterable, DictSerializable],
         elif cached_isinstance(this, DictSerializable):
             for k, x in this.__dict__.items():
                 queue.append(x)
-        elif cached_isinstance(this, Iterable) \
-                and not cached_isinstance(this, (str, ByteString)):
+        elif cached_isinstance(this, Iterable) and not cached_isinstance(this, (str, ByteString)):
             for x in this:
                 queue.append(x)
 
@@ -444,12 +458,13 @@ def recursive_foreach(obj: Union[Iterable, DictSerializable],
     return
 
 
-def recursive_flatmap(obj: Union[Iterable, DictSerializable],
-                      func: Callable[[BaseEntity], Iterable],
-                      *,
-                      unidirectional=True) -> List:
-    """
-    Recursively apply and accumulate a list-valued function to BaseEntity members.
+def recursive_flatmap(
+    obj: Union[Iterable, DictSerializable],
+    func: Callable[[BaseEntity], Iterable],
+    *,
+    unidirectional=True,
+) -> List:
+    """Recursively apply and accumulate a list-valued function to BaseEntity members.
 
     Only :class:`BaseEntity` objects will have the function applied, but the recursion will walk
     through all objects.  For example, BaseEntity -> list -> BaseEntity will have func applied
@@ -465,7 +480,7 @@ def recursive_flatmap(obj: Union[Iterable, DictSerializable],
         only recurse through the writeable direction of bidirectional links
 
     Returns
-    --------
+    -------
     List[Any]
         a list of accumulated return values
 
@@ -496,8 +511,7 @@ def recursive_flatmap(obj: Union[Iterable, DictSerializable],
                 queue.append(x)
         elif cached_isinstance(this, Reversible):
             queue.extend(reversed(this))  # Preserve order of the list/tuple
-        elif cached_isinstance(this, Iterable) \
-                and not cached_isinstance(this, (str, ByteString)):
+        elif cached_isinstance(this, Iterable) and not cached_isinstance(this, (str, ByteString)):
             queue.extend(this)  # No control over order
 
     return res
@@ -505,10 +519,24 @@ def recursive_flatmap(obj: Union[Iterable, DictSerializable],
 
 def writable_sort_order(key: Union[BaseEntity, str]) -> int:
     """Sort order for flattening such that the objects can be read back and re-nested."""
-    from gemd.entity.object import MeasurementSpec, ProcessSpec, MaterialSpec, IngredientSpec, \
-        MeasurementRun, IngredientRun, MaterialRun, ProcessRun
-    from gemd.entity.template import ConditionTemplate, MaterialTemplate, MeasurementTemplate, \
-        ParameterTemplate, ProcessTemplate, PropertyTemplate
+    from gemd.entity.object import (
+        IngredientRun,
+        IngredientSpec,
+        MaterialRun,
+        MaterialSpec,
+        MeasurementRun,
+        MeasurementSpec,
+        ProcessRun,
+        ProcessSpec,
+    )
+    from gemd.entity.template import (
+        ConditionTemplate,
+        MaterialTemplate,
+        MeasurementTemplate,
+        ParameterTemplate,
+        ProcessTemplate,
+        PropertyTemplate,
+    )
 
     if cached_isinstance(key, BaseEntity):
         typ = key.typ

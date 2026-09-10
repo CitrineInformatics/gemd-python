@@ -1,12 +1,12 @@
 """Represents a link to an external file."""
+
 from gemd.entity.dict_serializable import DictSerializable
 
 __all__ = ["FileLink"]
 
 
 class FileLink(DictSerializable, typ="file_link"):
-    """
-    FileLink stores a name and link to an external resource.
+    """FileLink stores a name and link to an external resource.
 
     More information can be found in the
     `data model documentation \

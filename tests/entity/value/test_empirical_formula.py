@@ -1,9 +1,10 @@
 """Test parsing and serde of empirical chemical formulae."""
+
 import pytest
 
-from gemd.json import dumps, loads
-from gemd.entity.value.empirical_formula import EmpiricalFormula
 from gemd.entity.bounds import CompositionBounds
+from gemd.entity.value.empirical_formula import EmpiricalFormula
+from gemd.json import dumps, loads
 
 
 def test_all_elements():
@@ -17,7 +18,7 @@ def test_json():
     """Check that we can json ser/de round-robin."""
     empirical = EmpiricalFormula("Al94.5Si5.5")
     copy = loads(dumps(empirical))
-    assert(copy == empirical)
+    assert copy == empirical
 
 
 def test_formula_setter():
@@ -40,5 +41,5 @@ def test_invalid_formula():
 def test_contains():
     """Test that bounds know if a Value is contained within it."""
     bounds = CompositionBounds({"C", "H", "O", "N"})
-    assert bounds.contains(EmpiricalFormula('C2H5OH')._to_bounds())
-    assert not bounds.contains(EmpiricalFormula('NaCl')._to_bounds())
+    assert bounds.contains(EmpiricalFormula("C2H5OH")._to_bounds())
+    assert not bounds.contains(EmpiricalFormula("NaCl")._to_bounds())

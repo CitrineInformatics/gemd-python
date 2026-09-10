@@ -1,14 +1,14 @@
 """A list that can validate its contents."""
-from typing import Optional, Union, Iterable, Callable, Type, TypeVar
+
+from typing import Callable, Iterable, Optional, Type, TypeVar, Union
 
 __all__ = ["ValidList"]
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class ValidList(list):
-    """
-    A list-like class that verifies that its content conforms to specified types.
+    """A list-like class that verifies that its content conforms to specified types.
 
     Parameters
     ----------
@@ -26,22 +26,24 @@ class ValidList(list):
 
     _content_type = tuple([])
 
-    def __init__(self,
-                 _list: Iterable,
-                 content_type: Optional[Union[Iterable[Type], Type]] = None,
-                 trigger: Callable[[T], Optional[T]] = None):
+    def __init__(
+        self,
+        _list: Iterable,
+        content_type: Optional[Union[Iterable[Type], Type]] = None,
+        trigger: Callable[[T], Optional[T]] = None,
+    ):
         if content_type is None:
             content_type = tuple()
 
         if isinstance(content_type, dict):
-            raise TypeError('A dict is not an acceptable container for content filters')
+            raise TypeError("A dict is not an acceptable container for content filters")
         elif isinstance(content_type, Iterable):
             self._content_type = tuple(content_type)
         else:
             self._content_type = tuple([content_type])
         for elem in self._content_type:
             if not isinstance(elem, type):
-                raise TypeError('Content filters must be types')
+                raise TypeError("Content filters must be types")
         for value in _list:
             self._validate(value)
 
@@ -49,7 +51,7 @@ class ValidList(list):
         cache = list(_list)
         if trigger is not None:
             if not callable(trigger):
-                raise TypeError('Triggers must be callable')
+                raise TypeError("Triggers must be callable")
             self._trigger = trigger
             for i, value in enumerate(_list):
                 result = self._trigger(value)
@@ -59,8 +61,7 @@ class ValidList(list):
         list.__init__(self, cache)
 
     def _validate(self, value):
-        """
-        Validate a value against the allowed types.
+        """Validate a value against the allowed types.
 
         Parameters
         ----------
@@ -79,11 +80,11 @@ class ValidList(list):
         """
         if not isinstance(value, self._content_type):
             raise TypeError(
-                'Value is not of an accepted type: {} =/= {}'.format(value, self._content_type))
+                "Value is not of an accepted type: {} =/= {}".format(value, self._content_type)
+            )
 
     def __setitem__(self, index, value):
-        """
-        Called to implement assignment to self[index].
+        """Called to implement assignment to self[index].
 
         Validates that `value` is one of the allowed types.
 
@@ -108,8 +109,7 @@ class ValidList(list):
         super().__setitem__(index, value)
 
     def append(self, value):
-        """
-        Add an item to the end of the list; equivalent to a[len(a):] = [x].
+        """Add an item to the end of the list; equivalent to a[len(a):] = [x].
 
         Validates that `value` is one of the allowed types.
 
@@ -132,8 +132,7 @@ class ValidList(list):
         super().append(value)
 
     def extend(self, list_):
-        """
-        Extend the list by appending all the items in the given list; equivalent to a[len(a):] = L.
+        """Extend the list by appending all the items in the given list; same as a[len(a):] = L.
 
         Validates that `value` is one of the allowed types.
 
@@ -164,8 +163,7 @@ class ValidList(list):
         super().extend(cache)
 
     def insert(self, i, value):
-        """
-        Insert a value at a given position, if it is one of the allowed types.
+        """Insert a value at a given position, if it is one of the allowed types.
 
         a.insert(0, x) inserts at the front of the list, and a.insert(len(a), x)
         is equivalent to a.append(x).

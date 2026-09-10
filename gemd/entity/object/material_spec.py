@@ -1,24 +1,22 @@
+from typing import Iterable, List, Mapping, Optional, Set, Type, Union
+
 from gemd.entity.attribute.property_and_conditions import PropertyAndConditions
-from gemd.entity.object.process_spec import ProcessSpec
-from gemd.entity.object.base_object import BaseEntity
-from gemd.entity.object.base_object import BaseObject
+from gemd.entity.file_link import FileLink
+from gemd.entity.link_by_uid import LinkByUID
+from gemd.entity.object.base_object import BaseEntity, BaseObject
 from gemd.entity.object.has_process import HasProcess
 from gemd.entity.object.has_properties import HasProperties
 from gemd.entity.object.has_template import HasTemplate
+from gemd.entity.object.process_spec import ProcessSpec
+from gemd.entity.setters import validate_list
 from gemd.entity.template.has_property_templates import HasPropertyTemplates
 from gemd.entity.template.material_template import MaterialTemplate
-from gemd.entity.file_link import FileLink
-from gemd.entity.link_by_uid import LinkByUID
-from gemd.entity.setters import validate_list
-
-from typing import Optional, Union, Iterable, List, Set, Mapping, Type
 
 __all__ = ["MaterialSpec"]
 
 
 class MaterialSpec(BaseObject, HasTemplate, HasProcess, HasProperties, typ="material_spec"):
-    """
-    A material specification.
+    """A material specification.
 
     This includes a link to the originating process and specified properties with conditions.
 
@@ -49,18 +47,21 @@ class MaterialSpec(BaseObject, HasTemplate, HasProcess, HasProperties, typ="mate
 
     """
 
-    def __init__(self,
-                 name: str,
-                 *,
-                 template: Optional[Union[MaterialTemplate, LinkByUID]] = None,
-                 process: Union[ProcessSpec, LinkByUID] = None,
-                 properties: Union[Iterable[PropertyAndConditions], PropertyAndConditions] = None,
-                 uids: Mapping[str, str] = None,
-                 tags: Iterable[str] = None,
-                 notes: str = None,
-                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
-        BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
-                            file_links=file_links)
+    def __init__(
+        self,
+        name: str,
+        *,
+        template: Optional[Union[MaterialTemplate, LinkByUID]] = None,
+        process: Union[ProcessSpec, LinkByUID] = None,
+        properties: Union[Iterable[PropertyAndConditions], PropertyAndConditions] = None,
+        uids: Mapping[str, str] = None,
+        tags: Iterable[str] = None,
+        notes: str = None,
+        file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
+    ):
+        BaseObject.__init__(
+            self, name=name, uids=uids, tags=tags, notes=notes, file_links=file_links
+        )
         HasTemplate.__init__(self, template)
         self._properties = None
         self.properties = properties
@@ -73,8 +74,9 @@ class MaterialSpec(BaseObject, HasTemplate, HasProcess, HasProperties, typ="mate
         return self._properties
 
     @properties.setter
-    def properties(self,
-                   properties: Union[Iterable[PropertyAndConditions], PropertyAndConditions]):
+    def properties(
+        self, properties: Union[Iterable[PropertyAndConditions], PropertyAndConditions]
+    ):
         """Set the list of property-and-conditions."""
         checker = self._generate_template_check(HasPropertyTemplates.validate_property)
         self._properties = validate_list(properties, PropertyAndConditions, trigger=checker)
@@ -86,15 +88,15 @@ class MaterialSpec(BaseObject, HasTemplate, HasProcess, HasProperties, typ="mate
 
     @process.setter
     def process(self, process: Union[ProcessSpec, LinkByUID]):
-        """
-        Link to the ProcessSpec that creates this MaterialSpec.
+        """Link to the ProcessSpec that creates this MaterialSpec.
 
         If the input, process, is not an instance of ProcessSpec, raise an error.
         Otherwise, make a bidirectional link: this MaterialSpec is linked to
         process, and process has its output_material field linked to this MaterialSpec
         """
-        from gemd.entity.object.process_spec import ProcessSpec
         from gemd.entity.link_by_uid import LinkByUID
+        from gemd.entity.object.process_spec import ProcessSpec
+
         if self.process is not None and isinstance(self.process, ProcessSpec):
             self.process._output_material = None
         if process is None:
@@ -105,8 +107,10 @@ class MaterialSpec(BaseObject, HasTemplate, HasProcess, HasProperties, typ="mate
             process._output_material = self
             self._process = process
         else:
-            raise TypeError(f"process must be an instance of ProcessSpec or LinkByUID; "
-                            f"instead received type {type(process)}: {process}")
+            raise TypeError(
+                f"process must be an instance of ProcessSpec or LinkByUID; "
+                f"instead received type {type(process)}: {process}"
+            )
 
     @staticmethod
     def _template_type() -> Type:

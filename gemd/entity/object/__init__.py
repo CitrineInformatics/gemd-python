@@ -1,4 +1,5 @@
 """Run and Spec Objects"""
+
 # flake8: noqa
 from .material_run import MaterialRun
 from .measurement_run import MeasurementRun
@@ -9,5 +10,13 @@ from .process_spec import ProcessSpec
 from .ingredient_run import IngredientRun
 from .ingredient_spec import IngredientSpec
 
-__all__ = ["ProcessSpec", "MaterialSpec", "IngredientSpec", "MeasurementSpec",
-           "ProcessRun", "MaterialRun", "IngredientRun", "MeasurementRun"]
+__all__ = [
+    "ProcessSpec",
+    "MaterialSpec",
+    "IngredientSpec",
+    "MeasurementSpec",
+    "ProcessRun",
+    "MaterialRun",
+    "IngredientRun",
+    "MeasurementRun",
+]

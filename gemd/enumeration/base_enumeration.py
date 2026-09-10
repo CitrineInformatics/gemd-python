@@ -1,8 +1,10 @@
 """Base class for all enumerations."""
-from deprecation import deprecated
+
 from enum import Enum
-from typing import Optional, Type, Callable
+from typing import Callable, Optional, Type
 from warnings import warn
+
+from deprecation import deprecated
 
 __all__ = ["BaseEnumeration"]
 
@@ -40,8 +42,7 @@ class BaseEnumeration(str, Enum):
 
     @classmethod
     def from_str(cls, val: str, *, exception: bool = False) -> Optional["BaseEnumeration"]:
-        """
-        Given a string value, return the Enumeration object that matches.
+        """Given a string value, return the Enumeration object that matches.
 
         Parameters
         ----------
@@ -78,13 +79,10 @@ class BaseEnumeration(str, Enum):
             return None
 
 
-def migrated_enum(*,
-                  old_value: str,
-                  new_value: str,
-                  deprecated_in: str,
-                  removed_in: str) -> Callable[[Type], Type]:
-    """
-    Decorator for registering an enumerated value as migrated to a new symbol.
+def migrated_enum(
+    *, old_value: str, new_value: str, deprecated_in: str, removed_in: str
+) -> Callable[[Type], Type]:
+    """Decorator for registering an enumerated value as migrated to a new symbol.
 
     Parameters
     ----------
@@ -99,6 +97,7 @@ def migrated_enum(*,
         The version of the library the old enumerated value will be removed in.
 
     """
+
     def decorator(cls) -> Type:
         print("Sear")
 
@@ -111,7 +110,7 @@ def migrated_enum(*,
                         f"{old_value} is deprecated as of {deprecated_in} "
                         f"and will be removed in {removed_in}. "
                         f"{old_value} has been renamed to {cls(new_value).name}.",
-                        DeprecationWarning
+                        DeprecationWarning,
                     )
                     return cls(new_value)
                 else:
@@ -122,10 +121,11 @@ def migrated_enum(*,
             return cls(new_value)
 
         accessor.__name__ = old_value  # So deprecated knows the correct target name
-        deprecator = deprecated(deprecated_in=deprecated_in,
-                                removed_in=removed_in,
-                                details=f"{old_value} has been renamed to {cls(new_value).name}.",
-                                )
+        deprecator = deprecated(
+            deprecated_in=deprecated_in,
+            removed_in=removed_in,
+            details=f"{old_value} has been renamed to {cls(new_value).name}.",
+        )
 
         # Add the property to the metaclass, and then update cls' meta
         setattr(MixinMeta, old_value, property(deprecator(accessor)))

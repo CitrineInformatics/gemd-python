@@ -1,29 +1,54 @@
-from contextlib import contextmanager
-from deprecation import DeprecatedWarning
-from importlib.resources import files
 import re
-from pint import UnitRegistry
-import pytest
+from contextlib import contextmanager
+from importlib.resources import files
 
-from gemd.units import parse_units, convert_units, get_base_units, change_definitions_file, \
-    UndefinedUnitError, DefinitionSyntaxError, IncompatibleUnitsError
+import pytest
+from deprecation import DeprecatedWarning
+from pint import UnitRegistry
+
+from gemd.units import (
+    DefinitionSyntaxError,
+    IncompatibleUnitsError,
+    UndefinedUnitError,
+    change_definitions_file,
+    convert_units,
+    get_base_units,
+    parse_units,
+)
 
 
 @pytest.mark.parametrize("return_unit", [True, False])
 def test_parse_expected(return_unit):
     """Test that we can parse the units that we expect to be able to."""
     # Pint's parse_units actually gets this wrong
-    assert parse_units("m^-1 * newton / meter", return_unit=return_unit) == \
-           parse_units("N / m^2", return_unit=return_unit)
+    assert parse_units("m^-1 * newton / meter", return_unit=return_unit) == parse_units(
+        "N / m^2", return_unit=return_unit
+    )
 
     expected = [
-        "degC", "degF", "K",
-        "g", "kg", "mg", "ton",
-        "L", "mL",
-        "inch", "ft", "mm", "um",
-        "second", "ms", "hour", "minute", "ns",
-        "g/cm^3", "g/mL", "kg/cm^3",
-        "", "1",
+        "degC",
+        "degF",
+        "K",
+        "g",
+        "kg",
+        "mg",
+        "ton",
+        "L",
+        "mL",
+        "inch",
+        "ft",
+        "mm",
+        "um",
+        "second",
+        "ms",
+        "hour",
+        "minute",
+        "ns",
+        "g/cm^3",
+        "g/mL",
+        "kg/cm^3",
+        "",
+        "1",
         "amu",  # A line that was edited
         "Seconds",  # Added support for some title-case units
         "delta_Celsius / hour",  # Added to make sure pint version is right (>0.10)
@@ -39,17 +64,18 @@ def test_parse_expected(return_unit):
     for unit in expected:
         parsed = parse_units(unit, return_unit=return_unit)
         assert parsed == parse_units(parsed, return_unit=return_unit)
-    assert parse_units("") == 'dimensionless'
+    assert parse_units("") == "dimensionless"
     # Scaling factors bind tightly to trailing units
     scaling = [
         ("g / 2.5 cm", "g / (2.5 cm)"),
         ("g / 2.5cm", "g / (2.5 cm)"),
         ("g / 25.mm", "g / (25. mm)"),
-        ("g / 2.5 * cm", "g cm / 2.5")
+        ("g / 2.5 * cm", "g cm / 2.5"),
     ]
     for left, right in scaling:
-        assert parse_units(left, return_unit=return_unit) == \
-               parse_units(right, return_unit=return_unit)
+        assert parse_units(left, return_unit=return_unit) == parse_units(
+            right, return_unit=return_unit
+        )
 
 
 def test_parse_unexpected():
@@ -144,20 +170,21 @@ def test_conversion():
         assert convert_units(convert_units(1, source, dest), dest, source) == 1
 
     # Verify that convert_units respects scaling factors
-    assert -1e-8 < convert_units(100, 'g / 100 mL', 'g/cc') - 1 < 1e-8
+    assert -1e-8 < convert_units(100, "g / 100 mL", "g/cc") - 1 < 1e-8
     assert -1e-8 < convert_units(1, "g / 2.5 cm", "g / 25 mm") - 1 < 1e-8
 
     # Verify that convert_units throws exceptions
     with pytest.raises(IncompatibleUnitsError):
-        convert_units(1, 'mL', 'g')
+        convert_units(1, "mL", "g")
     with pytest.raises(IncompatibleUnitsError):
         # https://pint.readthedocs.io/en/0.23/user/angular_frequency.html
-        convert_units(1, 'Hz', 'rpm')
+        convert_units(1, "Hz", "rpm")
 
 
 def test_get_base_units():
     """Test that base units & conversions make sense."""
     from gemd.units.impl import _REGISTRY
+
     assert get_base_units("degC") == (_REGISTRY("kelvin"), 1, 273.15)
     assert get_base_units("degC") == get_base_units(_REGISTRY("degC"))
     assert get_base_units("km") == (_REGISTRY("meter"), 1000, 0)
@@ -175,42 +202,42 @@ def _change_units(filename):
 
 def test_file_change(tmpdir):
     """Test that swapping units files works."""
-    assert convert_units(1, 'm', 'cm') == 100
+    assert convert_units(1, "m", "cm") == 100
     with pytest.raises(UndefinedUnitError):
-        assert convert_units(1, 'usd', 'USD') == 1
+        assert convert_units(1, "usd", "USD") == 1
 
     test_file = tmpdir / "test_units.txt"
     test_file.write_binary(files("tests.units").joinpath("test_units.txt").read_bytes())
     with _change_units(filename=test_file):
         with pytest.raises(UndefinedUnitError):
-            assert convert_units(1, 'm', 'cm') == 100
-        assert convert_units(1, 'usd', 'USD') == 1
-    assert convert_units(1, 'm', 'cm') == 100  # And verify we're back to normal
+            assert convert_units(1, "m", "cm") == 100
+        assert convert_units(1, "usd", "USD") == 1
+    assert convert_units(1, "m", "cm") == 100  # And verify we're back to normal
     with pytest.raises(UndefinedUnitError):
-        parse_units('mol : mol')  # Ensure the preprocessor is still there
+        parse_units("mol : mol")  # Ensure the preprocessor is still there
 
 
 def test_punctuation():
     """Test that punctuation parses reasonably."""
-    assert parse_units('mol.') == parse_units('moles')
-    assert parse_units('N.m') == parse_units('N * m')
+    assert parse_units("mol.") == parse_units("moles")
+    assert parse_units("N.m") == parse_units("N * m")
     with pytest.raises(UndefinedUnitError):
-        parse_units('mol : mol')
+        parse_units("mol : mol")
 
 
 def test_exponents():
     """SPT-874 fractional exponents were being treated as zero."""
     megapascals = parse_units("MPa")
-    sqrt_megapascals = parse_units('MPa^0.5')
+    sqrt_megapascals = parse_units("MPa^0.5")
     assert megapascals in sqrt_megapascals
     assert sqrt_megapascals == parse_units(f"{megapascals} / {sqrt_megapascals}")
-    assert parse_units('MPa^1.5') == parse_units(f"{megapascals} * {sqrt_megapascals}")
+    assert parse_units("MPa^1.5") == parse_units(f"{megapascals} * {sqrt_megapascals}")
 
 
 def test__scientific_notation_preprocessor():
     """Verify that numbers are converted into scientific notation."""
     assert "1e2 kilogram" in parse_units("F* 10 ** 2 kg")
-    assert "1e2 kg" in f'{parse_units("F* 10 ** 2 kg", return_unit=True):~}'
+    assert "1e2 kg" in f"{parse_units('F* 10 ** 2 kg', return_unit=True):~}"
     assert "1e-5" in parse_units("F* mm*10**-5")
     assert "1e" not in parse_units("F* kg * 10 cm")
     assert "-3.07e2" in parse_units("F* -3.07 * 10 ** 2")
@@ -225,9 +252,11 @@ def test_deprecation():
     assert megapascals == parse_units(stringified, return_unit=False)
 
     from pint import Quantity
+
     with pytest.warns(DeprecatedWarning):
         assert f"{Quantity('5 MPa'):clean}" == f"5 {stringified}"
 
     from pint import Unit
+
     with pytest.warns(DeprecatedWarning):
         assert f"{Unit('MPa'):clean}" == stringified

@@ -1,17 +1,17 @@
 """Utility methods."""
-from gemd.util import recursive_foreach
 
-from typing import List, Dict, Any
+from typing import Any, Dict, List
+
+from gemd.util import recursive_foreach
 
 __all__ = ["make_instance", "array_like", "complete_material_history"]
 
 
 def make_instance(base_spec):
-    """
-    Create a set of Run objects that mimic the connectivity of the passed Spec object.
+    """Create a set of Run objects that mimic the connectivity of the passed Spec object.
 
     Parameters
-    ---------
+    ----------
     base_spec: BaseObject
         A spec instance that may point to other specs.
 
@@ -24,41 +24,32 @@ def make_instance(base_spec):
     seen = dict()
 
     def crawler(spec):
-        from gemd.entity.object.measurement_spec import MeasurementSpec
-        from gemd.entity.object.measurement_run import MeasurementRun
-        from gemd.entity.object.material_spec import MaterialSpec
-        from gemd.entity.object.material_run import MaterialRun
-        from gemd.entity.object.ingredient_spec import IngredientSpec
         from gemd.entity.object.ingredient_run import IngredientRun
-        from gemd.entity.object.process_spec import ProcessSpec
+        from gemd.entity.object.ingredient_spec import IngredientSpec
+        from gemd.entity.object.material_run import MaterialRun
+        from gemd.entity.object.material_spec import MaterialSpec
+        from gemd.entity.object.measurement_run import MeasurementRun
+        from gemd.entity.object.measurement_spec import MeasurementSpec
         from gemd.entity.object.process_run import ProcessRun
+        from gemd.entity.object.process_spec import ProcessSpec
 
         if id(spec) in seen:
             return seen[id(spec)]
 
         if isinstance(spec, MeasurementSpec):
-            seen[id(spec)] = MeasurementRun(
-                name=spec.name,
-                spec=spec
-            )
+            seen[id(spec)] = MeasurementRun(name=spec.name, spec=spec)
         elif isinstance(spec, MaterialSpec):
-            seen[id(spec)] = MaterialRun(
-                name=spec.name,
-                spec=spec
-            )
+            seen[id(spec)] = MaterialRun(name=spec.name, spec=spec)
             seen[id(spec)].process = crawler(spec.process) if spec.process else None
         elif isinstance(spec, IngredientSpec):
             seen[id(spec)] = IngredientRun(spec=spec)
             seen[id(spec)].material = crawler(spec.material) if spec.material else None
         elif isinstance(spec, ProcessSpec):
-            seen[id(spec)] = ProcessRun(
-                name=spec.name,
-                spec=spec
-            )
+            seen[id(spec)] = ProcessRun(name=spec.name, spec=spec)
             for x in spec.ingredients:
                 crawler(x).process = seen[id(spec)]
         else:
-            raise TypeError('Passed object is not a spec-like object({})'.format(type(spec)))
+            raise TypeError("Passed object is not a spec-like object({})".format(type(spec)))
 
         # Should we assume that the same MaterialSpec in different parts of the tree
         # yields the same MaterialRun?
@@ -72,8 +63,7 @@ _array_like = None
 
 
 def array_like():
-    """
-    Figure out what kinds of list-like things we should be supporting for list type-checks.
+    """Figure out what kinds of list-like things we should be supporting for list type-checks.
 
     Returns
     -------
@@ -86,11 +76,17 @@ def array_like():
         return _array_like
     try:
         import numpy as np
+
         try:
             import pandas as pd
-            _array_like = (list, tuple, np.ndarray,
-                           pd.core.base.PandasObject,
-                           pd.api.extensions.ExtensionArray)
+
+            _array_like = (
+                list,
+                tuple,
+                np.ndarray,
+                pd.core.base.PandasObject,
+                pd.api.extensions.ExtensionArray,
+            )
         except ImportError:  # pragma: no cover
             _array_like = (list, tuple, np.ndarray)  # pragma: no cover
     except ImportError:  # pragma: no cover
@@ -100,16 +96,16 @@ def array_like():
 
 
 def complete_material_history(mat) -> List[Dict[str, Any]]:
-    """
-    Get a list of every single object in the material history, all as dictionaries.
+    """Get a list of every single object in the material history, all as dictionaries.
 
     This is useful for testing, if we want the context list that can be used to rehydrate
     an entire material history.
 
     Parameters
-    ---------
+    ----------
     mat: ~gemd.entity.object.material_run.MaterialRun
         root material run
+
     Returns
     -------
     list
@@ -117,9 +113,10 @@ def complete_material_history(mat) -> List[Dict[str, Any]]:
         all links substituted.
 
     """
-    from gemd.entity.base_entity import BaseEntity
     import json as json_builtin
+
     import gemd.json as gemd_json
+    from gemd.entity.base_entity import BaseEntity
     from gemd.util.impl import substitute_links
 
     result = []

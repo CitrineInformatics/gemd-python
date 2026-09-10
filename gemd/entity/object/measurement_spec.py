@@ -1,23 +1,22 @@
-from gemd.entity.object.base_object import BaseObject
-from gemd.entity.object.has_parameters import HasParameters
-from gemd.entity.object.has_conditions import HasConditions
-from gemd.entity.object.has_template import HasTemplate
-from gemd.entity.template.measurement_template import MeasurementTemplate
+from typing import Iterable, Mapping, Optional, Type, Union
+
 from gemd.entity.attribute.condition import Condition
 from gemd.entity.attribute.parameter import Parameter
 from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
-
-from typing import Optional, Union, Iterable, Mapping, Type
+from gemd.entity.object.base_object import BaseObject
+from gemd.entity.object.has_conditions import HasConditions
+from gemd.entity.object.has_parameters import HasParameters
+from gemd.entity.object.has_template import HasTemplate
+from gemd.entity.template.measurement_template import MeasurementTemplate
 
 __all__ = ["MeasurementSpec"]
 
 
-class MeasurementSpec(BaseObject,
-                      HasTemplate, HasParameters, HasConditions,
-                      typ="measurement_spec"):
-    """
-    A measurement specification.
+class MeasurementSpec(
+    BaseObject, HasTemplate, HasParameters, HasConditions, typ="measurement_spec"
+):
+    """A measurement specification.
 
     This includes links to the conditions and parameters under which the measurement is
     expected to be performed.
@@ -48,18 +47,21 @@ class MeasurementSpec(BaseObject,
 
     """
 
-    def __init__(self,
-                 name: str,
-                 *,
-                 template: Optional[Union[MeasurementTemplate, LinkByUID]] = None,
-                 conditions: Union[Condition, Iterable[Condition]] = None,
-                 parameters: Union[Parameter, Iterable[Parameter]] = None,
-                 uids: Mapping[str, str] = None,
-                 tags: Iterable[str] = None,
-                 notes: str = None,
-                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
-        BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
-                            file_links=file_links)
+    def __init__(
+        self,
+        name: str,
+        *,
+        template: Optional[Union[MeasurementTemplate, LinkByUID]] = None,
+        conditions: Union[Condition, Iterable[Condition]] = None,
+        parameters: Union[Parameter, Iterable[Parameter]] = None,
+        uids: Mapping[str, str] = None,
+        tags: Iterable[str] = None,
+        notes: str = None,
+        file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
+    ):
+        BaseObject.__init__(
+            self, name=name, uids=uids, tags=tags, notes=notes, file_links=file_links
+        )
         HasTemplate.__init__(self, template=template)
         HasParameters.__init__(self, parameters=parameters)
         HasConditions.__init__(self, conditions=conditions)

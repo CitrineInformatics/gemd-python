@@ -1,9 +1,8 @@
+import functools
+import inspect
 from abc import ABC, ABCMeta
 from logging import getLogger
-
-import inspect
-import functools
-from typing import TypeVar, Union, Iterable, List, Mapping, Dict, Set, Any
+from typing import Any, Dict, Iterable, List, Mapping, Set, TypeVar, Union
 
 __all__ = ["DictSerializable"]
 
@@ -19,27 +18,34 @@ class DictSerializableMeta(ABCMeta):
 
     _class: Dict[str, type] = {}
 
-    def __new__(mcs, name, bases, *args,  # noqa: D102
-                typ: str = None, skip: Set[str] = frozenset(),
-                **kwargs):
+    def __new__(
+        mcs,
+        name,
+        bases,
+        *args,  # noqa: D102
+        typ: str = None,
+        skip: Set[str] = frozenset(),
+        **kwargs,
+    ):
         return super().__new__(mcs, name, bases, *args, **kwargs)
 
     def __init__(cls, name, bases, *args, typ: str = None, skip: Set[str] = frozenset(), **kwargs):
         super().__init__(name, bases, *args, **kwargs)
         if typ is not None:
             if typ in cls._class and not issubclass(cls, cls._class.get(typ)):
-                raise ValueError(f"{cls} attempted to take typ {typ} from {cls._class.get(typ)}, "
-                                 f"which is not its ancestor.")
+                raise ValueError(
+                    f"{cls} attempted to take typ {typ} from {cls._class.get(typ)}, "
+                    f"which is not its ancestor."
+                )
             cls.typ = typ
             cls._class[typ] = cls
         elif not hasattr(cls, "typ"):
             cls.typ = NotImplementedError
-        cls.skip = {x for b in bases for x in getattr(b, 'skip', {})} | skip
+        cls.skip = {x for b in bases for x in getattr(b, "skip", {})} | skip
 
     @property
     def class_mapping(cls) -> Dict[str, type]:
-        """
-        Return class typ string -> class map for DictSerializable and its descendants.
+        """Return class typ string -> class map for DictSerializable and its descendants.
 
         Note that is actually returns a copy of the internal dict to avoid accidental breakage.
 
@@ -57,8 +63,7 @@ class DictSerializable(ABC, metaclass=DictSerializableMeta):
 
     @classmethod
     def from_dict(cls, d: Mapping[str, Any]) -> DictSerializableType:
-        """
-        Reconstitute the object from a dictionary.
+        """Reconstitute the object from a dictionary.
 
         Parameters
         ----------
@@ -76,9 +81,10 @@ class DictSerializable(ABC, metaclass=DictSerializableMeta):
         for name, arg in d.items():
             if name in expected_arg_names:
                 kwargs[name] = arg
-            elif name != 'type':
-                logger.warning('Ignoring unexpected keyword argument in {}: {}'.format(
-                    cls.__name__, name))
+            elif name != "type":
+                logger.warning(
+                    "Ignoring unexpected keyword argument in {}: {}".format(cls.__name__, name)
+                )
         # noinspection PyArgumentList
         # DictSerializable's constructor is not intended for use,
         # but all of its children will use from_dict like this.
@@ -93,8 +99,7 @@ class DictSerializable(ABC, metaclass=DictSerializableMeta):
         return expected_arg_names
 
     def as_dict(self) -> Dict[str, Any]:
-        """
-        Convert the object to a dictionary.
+        """Convert the object to a dictionary.
 
         Returns
         -------
@@ -102,14 +107,13 @@ class DictSerializable(ABC, metaclass=DictSerializableMeta):
             A dictionary representation of the object, where the keys are its fields.
 
         """
-        keys = {x.lstrip('_') for x in vars(self) if x not in self.skip}
+        keys = {x.lstrip("_") for x in vars(self) if x not in self.skip}
         attributes = {k: self.__getattribute__(k) for k in keys}
         attributes["type"] = self.typ
         return attributes
 
     def dump(self) -> Dict[str, Any]:
-        """
-        Convert the object to a JSON dictionary, so that every entry is serialized.
+        """Convert the object to a JSON dictionary, so that every entry is serialized.
 
         Uses the json encoder client, so objects with uids are converted to LinkByUID dictionaries.
 
@@ -119,16 +123,16 @@ class DictSerializable(ABC, metaclass=DictSerializableMeta):
             A string representation of the object as a dictionary.
 
         """
-        from gemd.json import GEMDJson
         import json
+
+        from gemd.json import GEMDJson
 
         encoder = GEMDJson()
         return json.loads(encoder.raw_dumps(self))
 
     @staticmethod
     def build(d: Mapping[str, Any]) -> DictSerializableType:
-        """
-        Build an object from a JSON dictionary.
+        """Build an object from a JSON dictionary.
 
         This differs from `from_dict` in that the values themselves may *also* be dictionaries
         corresponding to serialized DictSerializable objects.
@@ -145,22 +149,23 @@ class DictSerializable(ABC, metaclass=DictSerializableMeta):
 
         """
         from gemd.json import GEMDJson
+
         encoder = GEMDJson()
         return encoder.raw_loads(encoder.raw_dumps(d))
 
     def __repr__(self) -> str:
         object_dict = self.as_dict()
         # as_dict() skips over keys in `skip`, but they should be in the representation.
-        skipped_keys = {x.lstrip('_') for x in self.skip}
+        skipped_keys = {x.lstrip("_") for x in self.skip}
         for key in skipped_keys:
             skipped_field = getattr(self, key, None)
             object_dict[key] = self._name_repr(skipped_field)
         return str(object_dict)
 
-    def _name_repr(self,
-                   entity: Union[Iterable[DictSerializableType], DictSerializableType]) -> str:
-        """
-        A representation of an object or a list of objects that uses the name and type.
+    def _name_repr(
+        self, entity: Union[Iterable[DictSerializableType], DictSerializableType]
+    ) -> str:
+        """A representation of an object or a list of objects that uses the name and type.
 
         This is used to represent soft-linked objects without inundating the user with
         repetitive information.
@@ -182,7 +187,7 @@ class DictSerializable(ABC, metaclass=DictSerializableMeta):
         elif entity is None:
             return None
         else:
-            name = getattr(entity, 'name', '<unknown name>')
+            name = getattr(entity, "name", "<unknown name>")
             return f"<{type(entity).__name__} '{name}'>"
 
     def _dict_for_compare(self) -> Dict[str, Any]:

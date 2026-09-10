@@ -1,12 +1,13 @@
 """Test CompositionBounds."""
+
 import pytest
 
-from gemd.json import dumps, loads
 from gemd.entity.bounds.composition_bounds import CompositionBounds
 from gemd.entity.bounds.real_bounds import RealBounds
 from gemd.entity.util import array_like
 from gemd.entity.value.empirical_formula import EmpiricalFormula
 from gemd.entity.value.nominal_composition import NominalComposition
+from gemd.json import dumps, loads
 
 
 def test_components():
@@ -30,7 +31,7 @@ def test_contains():
     bounds = CompositionBounds(components={"spam", "eggs"})
     assert bounds.contains(CompositionBounds(components={"spam"}))
     assert not bounds.contains(CompositionBounds(components={"foo"}))
-    assert not bounds.contains(RealBounds(0.0, 2.0, ''))
+    assert not bounds.contains(RealBounds(0.0, 2.0, ""))
     assert not bounds.contains(None)
     with pytest.raises(TypeError):
         bounds.contains({"spam"})

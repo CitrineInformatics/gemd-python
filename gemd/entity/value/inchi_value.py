@@ -1,13 +1,13 @@
 """An empirical chemical formula."""
-from gemd.entity.value.molecular_value import MolecularValue
+
 from gemd.entity.bounds import MolecularStructureBounds
+from gemd.entity.value.molecular_value import MolecularValue
 
 __all__ = ["InChI"]
 
 
 class InChI(MolecularValue, typ="inchi"):
-    """
-    A molecular structure encoded according to the IUPAC International Chemical Identifier (InChI).
+    """A molecular structure in IUPAC International Chemical Identifier (InChI) format.
 
     Parameters
     ----------
@@ -31,19 +31,18 @@ class InChI(MolecularValue, typ="inchi"):
         if value is None:
             self._inchi = None
         elif isinstance(value, str):
-            if value.lower().startswith('1s/'):
-                value = value.replace(value[:2], 'InChI=1S')
-            elif not value.lower().startswith('inchi'):
+            if value.lower().startswith("1s/"):
+                value = value.replace(value[:2], "InChI=1S")
+            elif not value.lower().startswith("inchi"):
                 value = f"InChI=1S/{value}"
-            elif not value.startswith('InChI'):
-                value = value.replace(value[:5], 'InChI')
+            elif not value.startswith("InChI"):
+                value = value.replace(value[:5], "InChI")
             self._inchi = value
         else:
             raise TypeError("InChI must be given as a string; got {}".format(type(value)))
 
     def _to_bounds(self) -> MolecularStructureBounds:
-        """
-        Return the smallest bounds object that is consistent with the Value.
+        """Return the smallest bounds object that is consistent with the Value.
 
         Returns
         -------

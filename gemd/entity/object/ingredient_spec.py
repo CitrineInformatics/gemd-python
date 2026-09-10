@@ -1,25 +1,24 @@
-from gemd.entity.object.material_spec import MaterialSpec
-from gemd.entity.object.process_spec import ProcessSpec
+from typing import Iterable, List, Mapping, Optional, Type, Union
+
+from gemd.entity.file_link import FileLink
+from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.object.base_object import BaseObject
 from gemd.entity.object.has_material import HasMaterial
 from gemd.entity.object.has_process import HasProcess
 from gemd.entity.object.has_quantities import HasQuantities
 from gemd.entity.object.has_template import HasTemplate
-from gemd.entity.value.continuous_value import ContinuousValue
-from gemd.entity.file_link import FileLink
-from gemd.entity.link_by_uid import LinkByUID
+from gemd.entity.object.material_spec import MaterialSpec
+from gemd.entity.object.process_spec import ProcessSpec
 from gemd.entity.setters import validate_list
-
-from typing import Optional, Union, Iterable, List, Mapping, Type
+from gemd.entity.value.continuous_value import ContinuousValue
 
 __all__ = ["IngredientSpec"]
 
 
-class IngredientSpec(BaseObject,
-                     HasQuantities, HasTemplate, HasMaterial, HasProcess,
-                     typ="ingredient_spec"):
-    """
-    An ingredient specification.
+class IngredientSpec(
+    BaseObject, HasQuantities, HasTemplate, HasMaterial, HasProcess, typ="ingredient_spec"
+):
+    """An ingredient specification.
 
     Ingredients annotate a material with information about its usage in a process.
 
@@ -56,26 +55,33 @@ class IngredientSpec(BaseObject,
 
     """
 
-    def __init__(self,
-                 name: str,
-                 *,
-                 material: Union[MaterialSpec, LinkByUID] = None,
-                 process: Union[ProcessSpec, LinkByUID] = None,
-                 labels: Iterable[str] = None,
-                 mass_fraction: ContinuousValue = None,
-                 volume_fraction: ContinuousValue = None,
-                 number_fraction: ContinuousValue = None,
-                 absolute_quantity: ContinuousValue = None,
-                 uids: Mapping[str, str] = None,
-                 tags: Iterable[str] = None,
-                 notes: str = None,
-                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
+    def __init__(
+        self,
+        name: str,
+        *,
+        material: Union[MaterialSpec, LinkByUID] = None,
+        process: Union[ProcessSpec, LinkByUID] = None,
+        labels: Iterable[str] = None,
+        mass_fraction: ContinuousValue = None,
+        volume_fraction: ContinuousValue = None,
+        number_fraction: ContinuousValue = None,
+        absolute_quantity: ContinuousValue = None,
+        uids: Mapping[str, str] = None,
+        tags: Iterable[str] = None,
+        notes: str = None,
+        file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
+    ):
 
-        BaseObject.__init__(self, name=name,
-                            uids=uids, tags=tags, notes=notes, file_links=file_links)
-        HasQuantities.__init__(self, mass_fraction=mass_fraction, volume_fraction=volume_fraction,
-                               number_fraction=number_fraction, absolute_quantity=absolute_quantity
-                               )
+        BaseObject.__init__(
+            self, name=name, uids=uids, tags=tags, notes=notes, file_links=file_links
+        )
+        HasQuantities.__init__(
+            self,
+            mass_fraction=mass_fraction,
+            volume_fraction=volume_fraction,
+            number_fraction=number_fraction,
+            absolute_quantity=absolute_quantity,
+        )
 
         self._material = None
         self._process = None
@@ -126,8 +132,9 @@ class IngredientSpec(BaseObject,
             if isinstance(process, ProcessSpec):
                 process.ingredients.append(self)
         else:
-            raise TypeError("IngredientSpec.process must be a ProcessSpec or "
-                            "LinkByUID: {}".format(process))
+            raise TypeError(
+                "IngredientSpec.process must be a ProcessSpec or LinkByUID: {}".format(process)
+            )
 
     @property
     def template(self):

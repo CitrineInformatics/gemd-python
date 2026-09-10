@@ -1,27 +1,26 @@
-from gemd.entity.object.ingredient_spec import IngredientSpec
-from gemd.entity.object.material_run import MaterialRun
-from gemd.entity.object.process_run import ProcessRun
+from typing import Any, Iterable, List, Mapping, Optional, Type, Union
+
+from gemd.entity.dict_serializable import DictSerializable
+from gemd.entity.file_link import FileLink
+from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.object.base_object import BaseObject
 from gemd.entity.object.has_material import HasMaterial
 from gemd.entity.object.has_process import HasProcess
 from gemd.entity.object.has_quantities import HasQuantities
 from gemd.entity.object.has_spec import HasSpec
-from gemd.entity.value.continuous_value import ContinuousValue
-from gemd.entity.dict_serializable import DictSerializable
-from gemd.entity.file_link import FileLink
-from gemd.entity.link_by_uid import LinkByUID
+from gemd.entity.object.ingredient_spec import IngredientSpec
+from gemd.entity.object.material_run import MaterialRun
+from gemd.entity.object.process_run import ProcessRun
 from gemd.entity.setters import validate_list
-
-from typing import Optional, Union, Iterable, List, Mapping, Type, Any
+from gemd.entity.value.continuous_value import ContinuousValue
 
 __all__ = ["IngredientRun"]
 
 
-class IngredientRun(BaseObject,
-                    HasQuantities, HasSpec, HasMaterial, HasProcess,
-                    typ="ingredient_run"):
-    """
-    An ingredient run.
+class IngredientRun(
+    BaseObject, HasQuantities, HasSpec, HasMaterial, HasProcess, typ="ingredient_run"
+):
+    """An ingredient run.
 
     Ingredients annotate a material with information about its usage in a process.
 
@@ -56,27 +55,34 @@ class IngredientRun(BaseObject,
 
     """
 
-    def __init__(self,
-                 *,
-                 material: Union[MaterialRun, LinkByUID] = None,
-                 process: Union[ProcessRun, LinkByUID] = None,
-                 mass_fraction: ContinuousValue = None,
-                 volume_fraction: ContinuousValue = None,
-                 number_fraction: ContinuousValue = None,
-                 absolute_quantity: ContinuousValue = None,
-                 spec: Union[IngredientSpec, LinkByUID] = None,
-                 uids: Mapping[str, str] = None,
-                 tags: Iterable[str] = None,
-                 notes: str = None,
-                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
-        BaseObject.__init__(self, name=None, uids=uids, tags=tags,
-                            notes=notes, file_links=file_links)
+    def __init__(
+        self,
+        *,
+        material: Union[MaterialRun, LinkByUID] = None,
+        process: Union[ProcessRun, LinkByUID] = None,
+        mass_fraction: ContinuousValue = None,
+        volume_fraction: ContinuousValue = None,
+        number_fraction: ContinuousValue = None,
+        absolute_quantity: ContinuousValue = None,
+        spec: Union[IngredientSpec, LinkByUID] = None,
+        uids: Mapping[str, str] = None,
+        tags: Iterable[str] = None,
+        notes: str = None,
+        file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
+    ):
+        BaseObject.__init__(
+            self, name=None, uids=uids, tags=tags, notes=notes, file_links=file_links
+        )
         self._labels = None
         HasSpec.__init__(self, spec)  # this will overwrite name/labels if/when they are set
 
-        HasQuantities.__init__(self, mass_fraction=mass_fraction, volume_fraction=volume_fraction,
-                               number_fraction=number_fraction, absolute_quantity=absolute_quantity
-                               )
+        HasQuantities.__init__(
+            self,
+            mass_fraction=mass_fraction,
+            volume_fraction=volume_fraction,
+            number_fraction=number_fraction,
+            absolute_quantity=absolute_quantity,
+        )
         self._material = None
         self._process = None
 
@@ -87,6 +93,7 @@ class IngredientRun(BaseObject,
     def name(self) -> str:
         """Get name."""
         from gemd.entity.object.ingredient_spec import IngredientSpec
+
         if isinstance(self.spec, IngredientSpec):
             return self.spec.name
         else:
@@ -96,6 +103,7 @@ class IngredientRun(BaseObject,
     def labels(self) -> List[str]:
         """Get labels."""
         from gemd.entity.object.ingredient_spec import IngredientSpec
+
         if isinstance(self.spec, IngredientSpec):
             return self.spec.labels
         else:
@@ -113,8 +121,9 @@ class IngredientRun(BaseObject,
         elif isinstance(material, (MaterialRun, LinkByUID)):
             self._material = material
         else:
-            raise TypeError("IngredientRun.material must be a MaterialRun or "
-                            "LinkByUID: {}".format(material))
+            raise TypeError(
+                "IngredientRun.material must be a MaterialRun or LinkByUID: {}".format(material)
+            )
 
     @property
     def process(self) -> Union[ProcessRun, LinkByUID]:
@@ -132,8 +141,9 @@ class IngredientRun(BaseObject,
             if isinstance(process, ProcessRun):
                 process.ingredients.append(self)
         else:
-            raise TypeError("IngredientRun.process must be a ProcessRun or "
-                            "LinkByUID: {}".format(process))
+            raise TypeError(
+                "IngredientRun.process must be a ProcessRun or LinkByUID: {}".format(process)
+            )
 
     @staticmethod
     def _spec_type() -> Type:
@@ -156,8 +166,7 @@ class IngredientRun(BaseObject,
 
     @classmethod
     def from_dict(cls, d: Mapping[str, Any]) -> DictSerializable:
-        """
-        Overloaded method from DictSerializable to intercept `name` and `labels` fields.
+        """Overloaded method from DictSerializable to intercept `name` and `labels` fields.
 
         Parameters
         ----------

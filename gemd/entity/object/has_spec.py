@@ -1,12 +1,13 @@
 """For entities that have specs."""
+
+from abc import abstractmethod
+from typing import Optional, Set, Type, Union
+
 from gemd.entity.base_entity import BaseEntity
 from gemd.entity.has_dependencies import HasDependencies
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.object.has_template import HasTemplate
 from gemd.entity.template.base_template import BaseTemplate
-
-from abc import abstractmethod
-from typing import Optional, Union, Set, Type
 
 __all__ = ["HasSpec"]
 
@@ -31,8 +32,9 @@ class HasSpec(HasDependencies):
         elif isinstance(spec, (self._spec_type(), LinkByUID)):
             self._spec = spec
         else:
-            raise TypeError(f"Template must be a {self._spec_type()} or LinkByUID, "
-                            f"not {type(spec)}")
+            raise TypeError(
+                f"Template must be a {self._spec_type()} or LinkByUID, not {type(spec)}"
+            )
 
     @staticmethod
     @abstractmethod

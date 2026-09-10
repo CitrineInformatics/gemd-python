@@ -1,19 +1,21 @@
 """Methods for setting and validating."""
-from gemd.entity.valid_list import ValidList
 
-from typing import Union, Iterable, Optional, Callable, Type, TypeVar
+from typing import Callable, Iterable, Optional, Type, TypeVar, Union
+
+from gemd.entity.valid_list import ValidList
 
 __all__ = ["validate_list", "validate_str"]
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
-def validate_list(obj: Optional[Union[Iterable[T], T]],
-                  typ: Union[Iterable[Type], Type],
-                  *,
-                  trigger: Callable[[T], Optional[T]] = None) -> ValidList:
-    """
-    Attempts to return obj as a list, each element of which has type typ.
+def validate_list(
+    obj: Optional[Union[Iterable[T], T]],
+    typ: Union[Iterable[Type], Type],
+    *,
+    trigger: Callable[[T], Optional[T]] = None,
+) -> ValidList:
+    """Attempts to return obj as a list, each element of which has type typ.
 
     Parameters
     ----------
@@ -40,8 +42,7 @@ def validate_list(obj: Optional[Union[Iterable[T], T]],
 
 
 def validate_str(obj) -> str:
-    """
-    Check that obj is a string and then convert it to unicode.
+    """Check that obj is a string and then convert it to unicode.
 
     Parameters
     ----------
@@ -54,7 +55,7 @@ def validate_str(obj) -> str:
         `obj` as a string.
 
     Raises
-    -------
+    ------
     ValueError
         If `obj` is not a string.
 

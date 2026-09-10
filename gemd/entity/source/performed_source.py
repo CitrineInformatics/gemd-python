@@ -4,8 +4,7 @@ __all__ = ["PerformedSource"]
 
 
 class PerformedSource(DictSerializable, typ="performed_source"):
-    """
-    Information about an activity that was performed.
+    """Information about an activity that was performed.
 
     Parameters
     ----------

@@ -1,30 +1,82 @@
 """Data concepts library."""
-from .__version__ import __version__  # noqa: F401
-from .entity import Condition, Parameter, Property, PropertyAndConditions, \
-    CategoricalBounds, CompositionBounds, IntegerBounds, \
-    MolecularStructureBounds, RealBounds, \
-    MaterialRun, MeasurementRun, ProcessRun, IngredientRun, \
-    MaterialSpec, MeasurementSpec, ProcessSpec, IngredientSpec, \
-    PerformedSource, \
-    PropertyTemplate, ConditionTemplate, ParameterTemplate, \
-    MaterialTemplate, MeasurementTemplate, ProcessTemplate, \
-    NominalReal, NormalReal, UniformReal, NominalInteger, \
-    UniformInteger, DiscreteCategorical, NominalCategorical, \
-    EmpiricalFormula, NominalComposition, InChI, Smiles, \
-    LinkByUID, \
-    FileLink  # noqa: F401
 
-__all__ = ["Condition", "Parameter", "Property", "PropertyAndConditions",
-           "CategoricalBounds", "CompositionBounds", "IntegerBounds",
-           "MolecularStructureBounds", "RealBounds",
-           "MaterialRun", "MeasurementRun", "ProcessRun", "IngredientRun",
-           "MaterialSpec", "MeasurementSpec", "ProcessSpec", "IngredientSpec",
-           "PerformedSource",
-           "PropertyTemplate", "ConditionTemplate", "ParameterTemplate",
-           "MaterialTemplate", "MeasurementTemplate", "ProcessTemplate",
-           "NominalReal", "NormalReal", "UniformReal", "NominalInteger",
-           "UniformInteger", "DiscreteCategorical", "NominalCategorical",
-           "EmpiricalFormula", "NominalComposition", "InChI", "Smiles",
-           "LinkByUID",
-           "FileLink"
-           ]
+from .__version__ import __version__  # noqa: F401
+from .entity import (
+    CategoricalBounds,
+    CompositionBounds,
+    Condition,
+    ConditionTemplate,
+    DiscreteCategorical,
+    EmpiricalFormula,
+    FileLink,  # noqa: F401
+    InChI,
+    IngredientRun,
+    IngredientSpec,
+    IntegerBounds,
+    LinkByUID,
+    MaterialRun,
+    MaterialSpec,
+    MaterialTemplate,
+    MeasurementRun,
+    MeasurementSpec,
+    MeasurementTemplate,
+    MolecularStructureBounds,
+    NominalCategorical,
+    NominalComposition,
+    NominalInteger,
+    NominalReal,
+    NormalReal,
+    Parameter,
+    ParameterTemplate,
+    PerformedSource,
+    ProcessRun,
+    ProcessSpec,
+    ProcessTemplate,
+    Property,
+    PropertyAndConditions,
+    PropertyTemplate,
+    RealBounds,
+    Smiles,
+    UniformInteger,
+    UniformReal,
+)
+
+__all__ = [
+    "Condition",
+    "Parameter",
+    "Property",
+    "PropertyAndConditions",
+    "CategoricalBounds",
+    "CompositionBounds",
+    "IntegerBounds",
+    "MolecularStructureBounds",
+    "RealBounds",
+    "MaterialRun",
+    "MeasurementRun",
+    "ProcessRun",
+    "IngredientRun",
+    "MaterialSpec",
+    "MeasurementSpec",
+    "ProcessSpec",
+    "IngredientSpec",
+    "PerformedSource",
+    "PropertyTemplate",
+    "ConditionTemplate",
+    "ParameterTemplate",
+    "MaterialTemplate",
+    "MeasurementTemplate",
+    "ProcessTemplate",
+    "NominalReal",
+    "NormalReal",
+    "UniformReal",
+    "NominalInteger",
+    "UniformInteger",
+    "DiscreteCategorical",
+    "NominalCategorical",
+    "EmpiricalFormula",
+    "NominalComposition",
+    "InChI",
+    "Smiles",
+    "LinkByUID",
+    "FileLink",
+]
