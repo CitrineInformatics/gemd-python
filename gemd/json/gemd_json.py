@@ -236,7 +236,7 @@ class GEMDJson(object):
         typ = d.pop("type")
 
         if typ not in clazz_index:
-            raise TypeError("Unexpected base object type: {}".format(typ))
+            raise TypeError(f"Unexpected base object type: {typ}")
 
         clz = clazz_index[typ]
         obj = clz.from_dict(d)

@@ -543,7 +543,7 @@ def writable_sort_order(key: Union[BaseEntity, str]) -> int:
     elif cached_isinstance(key, str):
         typ = key
     else:
-        raise ValueError("Can ony sort BaseEntities and type strings, not {}".format(key))
+        raise ValueError(f"Can ony sort BaseEntities and type strings, not {key}")
 
     if typ in [ConditionTemplate.typ, ParameterTemplate.typ, PropertyTemplate.typ]:
         return 0
@@ -558,4 +558,4 @@ def writable_sort_order(key: Union[BaseEntity, str]) -> int:
     if typ in [IngredientRun.typ, MeasurementRun.typ]:
         return 5
 
-    raise ValueError("Unrecognized type string: {}".format(typ))
+    raise ValueError(f"Unrecognized type string: {typ}")

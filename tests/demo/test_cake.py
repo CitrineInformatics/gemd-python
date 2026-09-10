@@ -42,9 +42,9 @@ def test_cake():
     def _check_ids(obj):
         nonlocal uid_seen
         for scope in obj.uids:
-            lbl = "{}::{}".format(scope, obj.uids[scope].lower())
+            lbl = f"{scope}::{obj.uids[scope].lower()}"
             if lbl in uid_seen:
-                assert uid_seen[lbl] == id(obj), "'{}' seen twice".format(lbl)
+                assert uid_seen[lbl] == id(obj), f"'{lbl}' seen twice"
             uid_seen[lbl] = id(obj)
 
     recursive_foreach(cake, _check_ids)

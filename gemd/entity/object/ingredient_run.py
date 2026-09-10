@@ -122,7 +122,7 @@ class IngredientRun(
             self._material = material
         else:
             raise TypeError(
-                "IngredientRun.material must be a MaterialRun or LinkByUID: {}".format(material)
+                f"IngredientRun.material must be a MaterialRun or LinkByUID: {material}"
             )
 
     @property
@@ -141,9 +141,7 @@ class IngredientRun(
             if isinstance(process, ProcessRun):
                 process.ingredients.append(self)
         else:
-            raise TypeError(
-                "IngredientRun.process must be a ProcessRun or LinkByUID: {}".format(process)
-            )
+            raise TypeError(f"IngredientRun.process must be a ProcessRun or LinkByUID: {process}")
 
     @staticmethod
     def _spec_type() -> Type:

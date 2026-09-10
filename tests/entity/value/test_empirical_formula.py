@@ -10,7 +10,7 @@ from gemd.json import dumps, loads
 def test_all_elements():
     """Check that list of all elements exists and has some select examples."""
     for el in ["H", "He", "C", "Si", "Mg", "Al", "Co", "Ce"]:
-        assert el in EmpiricalFormula.all_elements(), "Couldn't find {} in all_elements".format(el)
+        assert el in EmpiricalFormula.all_elements(), f"Couldn't find {el} in all_elements"
     assert len(EmpiricalFormula.all_elements()) == 120, "Expected 120 elements"
 
 

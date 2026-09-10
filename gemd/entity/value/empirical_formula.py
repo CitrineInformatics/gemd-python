@@ -56,12 +56,10 @@ class EmpiricalFormula(CompositionValue, typ="empirical_formula"):
         elif isinstance(value, str):
             if not EmpiricalFormula._elements(value).issubset(_all_elements):
                 unknown = sorted(EmpiricalFormula._elements(value).difference(_all_elements))
-                raise ValueError(
-                    "Formula {} contains unknown elements: {}".format(value, " ".join(unknown))
-                )
+                raise ValueError(f"Formula {value} contains unknown elements: {' '.join(unknown)}")
             self._formula = value
         else:
-            raise TypeError("Formula must be given as a string; got {}".format(type(value)))
+            raise TypeError(f"Formula must be given as a string; got {type(value)}")
 
     def _to_bounds(self) -> CompositionBounds:
         """Return the smallest bounds object that is consistent with the Value.

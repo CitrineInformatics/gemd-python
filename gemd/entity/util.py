@@ -49,7 +49,7 @@ def make_instance(base_spec):
             for x in spec.ingredients:
                 crawler(x).process = seen[id(spec)]
         else:
-            raise TypeError("Passed object is not a spec-like object({})".format(type(spec)))
+            raise TypeError(f"Passed object is not a spec-like object({type(spec)})")
 
         # Should we assume that the same MaterialSpec in different parts of the tree
         # yields the same MaterialRun?

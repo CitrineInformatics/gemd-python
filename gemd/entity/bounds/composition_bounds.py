@@ -40,7 +40,7 @@ class CompositionBounds(BaseBounds, typ="composition_bounds"):
         elif isinstance(value, set):
             self._components = value
         else:
-            raise ValueError("Components must be a list, tuple, or set: {}".format(value))
+            raise ValueError(f"Components must be a list, tuple, or set: {value}")
 
         if not all(isinstance(x, str) for x in self.components):
             raise ValueError("All the components must be strings")

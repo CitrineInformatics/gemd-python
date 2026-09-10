@@ -110,7 +110,7 @@ class MeasurementRun(
             if isinstance(value, MaterialRun):
                 value.measurements.append(self)
         else:
-            raise TypeError("material must be a MaterialRun or LinkByUID: {}".format(value))
+            raise TypeError(f"material must be a MaterialRun or LinkByUID: {value}")
 
     @staticmethod
     def _spec_type() -> Type:

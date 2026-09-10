@@ -87,7 +87,7 @@ class MaterialRun(BaseObject, HasSpec, HasProcess, typ="material_run", skip={"_m
             process._output_material = self
             self._process = process
         else:
-            raise TypeError("process must be a ProcessRun or LinkByUID: {}".format(process))
+            raise TypeError(f"process must be a ProcessRun or LinkByUID: {process}")
 
     @property
     def measurements(self) -> List[MeasurementRunType]:

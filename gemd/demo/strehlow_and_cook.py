@@ -472,7 +472,7 @@ def make_display_table(structured):
     """
     table = [[]]
     header_map = {
-        RealBounds: lambda bnd: "Mean({})".format(bnd.default_units),
+        RealBounds: lambda bnd: f"Mean({bnd.default_units})",
         CategoricalBounds: lambda bnd: "Category",
         CompositionBounds: lambda bnd: "Formula",
         type(None): lambda bnd: "Label",
@@ -487,7 +487,7 @@ def make_display_table(structured):
     column = structured["headers"][i_bandgap]
     table[0].insert(
         i_bandgap + 1,
-        "~".join(column["name"] + ["Std Deviation({})".format(column["bounds"].default_units)]),
+        "~".join(column["name"] + [f"Std Deviation({column['bounds'].default_units})"]),
     )
 
     content_map = {
@@ -540,7 +540,7 @@ if __name__ == "__main__":
     full_table = make_strehlow_table(full_compounds)
     small_table = minimal_subset(full_table["content"])
     todo = set(_fingerprint(x) for x in small_table)
-    print("Total number of prototypes: {}".format(len(small_table)))
+    print(f"Total number of prototypes: {len(small_table)}")
 
     reduced_list = []
     for raw, clean in zip(imported_table, full_table["content"]):

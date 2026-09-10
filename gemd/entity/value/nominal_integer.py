@@ -30,7 +30,7 @@ class NominalInteger(IntegerValue, typ="nominal_integer"):
         """A proscribed integer value without uncertainty."""
         # This check/cast is necessary to handle JSON serialization behavior under 3.6
         if not isinstance(nominal, (int, float)) or int(nominal) != nominal:
-            raise TypeError("nominal must be an int; got an {}({})".format(type(nominal), nominal))
+            raise TypeError(f"nominal must be an int; got an {type(nominal)}({nominal})")
 
         self._nominal = int(nominal)
 

@@ -308,10 +308,10 @@ def test_many_ingredients():
     proc = ProcessRun("foo", spec=ProcessSpec("sfoo"))
     expected = []
     for i in range(10):
-        mat = MaterialRun(name=str(i), spec=MaterialSpec("s{}".format(i)))
-        i_spec = IngredientSpec(name="i{}".format(i), material=mat.spec, process=proc.spec)
+        mat = MaterialRun(name=str(i), spec=MaterialSpec(f"s{i}"))
+        i_spec = IngredientSpec(name=f"i{i}", material=mat.spec, process=proc.spec)
         IngredientRun(process=proc, material=mat, spec=i_spec)
-        expected.append("i{}".format(i))
+        expected.append(f"i{i}")
 
     reloaded = gemd_json.loads(gemd_json.dumps(proc))
     assert len(list(reloaded.ingredients)) == 10

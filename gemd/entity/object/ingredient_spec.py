@@ -133,7 +133,7 @@ class IngredientSpec(
                 process.ingredients.append(self)
         else:
             raise TypeError(
-                "IngredientSpec.process must be a ProcessSpec or LinkByUID: {}".format(process)
+                f"IngredientSpec.process must be a ProcessSpec or LinkByUID: {process}"
             )
 
     @property

@@ -61,5 +61,5 @@ def validate_str(obj) -> str:
 
     """
     if not isinstance(obj, str):
-        raise TypeError("Expected a string but got {} instead".format(type(obj)))
+        raise TypeError(f"Expected a string but got {type(obj)} instead")
     return obj

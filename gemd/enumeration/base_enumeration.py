@@ -31,9 +31,9 @@ class BaseEnumeration(str, Enum):
     def __new__(cls, value: str, *args):
         """Overloaded to allow for synonyms."""
         if any(not isinstance(x, str) for x in (value,) + args):
-            raise ValueError("All values of enum {} must be strings".format(cls))
+            raise ValueError(f"All values of enum {cls} must be strings")
         if cls.from_str(value, exception=False) is not None:
-            raise ValueError("Duplicates not allowed in enumerated set of values {}".format(cls))
+            raise ValueError(f"Duplicates not allowed in enumerated set of values {cls}")
         obj = str.__new__(cls, value)
         obj._value_ = value
         obj.synonyms = frozenset(args)

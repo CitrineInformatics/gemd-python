@@ -79,9 +79,7 @@ class ValidList(list):
 
         """
         if not isinstance(value, self._content_type):
-            raise TypeError(
-                "Value is not of an accepted type: {} =/= {}".format(value, self._content_type)
-            )
+            raise TypeError(f"Value is not of an accepted type: {value} =/= {self._content_type}")
 
     def __setitem__(self, index, value):
         """Called to implement assignment to self[index].
@@ -151,7 +149,7 @@ class ValidList(list):
             for value in list_:
                 self._validate(value)
         else:
-            raise TypeError("'{}' object is not iterable".format(type(list_)))
+            raise TypeError(f"'{type(list_)}' object is not iterable")
 
         cache = list(list_)  # So that we don't edit a passed reference
         if self._trigger is not None:

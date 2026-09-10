@@ -38,7 +38,7 @@ class BaseBounds(DictSerializable):
             bounds = bounds._to_bounds()
         if isinstance(bounds, BaseBounds):
             return True
-        raise TypeError("{} is not a Bounds object".format(bounds))
+        raise TypeError(f"{bounds} is not a Bounds object")
 
     @abstractmethod
     def union(self, *others: Union[BaseBoundsType, BaseValueType]) -> BaseBoundsType:

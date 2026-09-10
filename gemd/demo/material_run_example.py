@@ -52,7 +52,7 @@ def _parse_value(val):
         try:
             unit = units.parse_units(toks[-1])
         except (ValueError, units.UndefinedUnitError):
-            print("Couldn't find {}".format(toks[-1]))
+            print(f"Couldn't find {toks[-1]}")
             unit = ""
 
         if std >= 0:
@@ -70,7 +70,7 @@ def _parse_value(val):
         except ValueError:
             return DiscreteCategorical(val)
     else:
-        raise ValueError("Couldn't parse {}".format(val))
+        raise ValueError(f"Couldn't parse {val}")
 
 
 def ingest_material_run(data, material_spec=None, process_run=None):
@@ -79,7 +79,7 @@ def ingest_material_run(data, material_spec=None, process_run=None):
         return [ingest_material_run(x, material_spec) for x in data]
 
     if not isinstance(data, dict):
-        raise ValueError("This ingester operates on dict, but got {}".format(type(data)))
+        raise ValueError(f"This ingester operates on dict, but got {type(data)}")
 
     material = MaterialRun("Material Run")
 

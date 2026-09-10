@@ -39,7 +39,7 @@ class InChI(MolecularValue, typ="inchi"):
                 value = value.replace(value[:5], "InChI")
             self._inchi = value
         else:
-            raise TypeError("InChI must be given as a string; got {}".format(type(value)))
+            raise TypeError(f"InChI must be given as a string; got {type(value)}")
 
     def _to_bounds(self) -> MolecularStructureBounds:
         """Return the smallest bounds object that is consistent with the Value.

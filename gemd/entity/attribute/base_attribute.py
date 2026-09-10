@@ -99,9 +99,7 @@ class BaseAttribute(DictSerializable):
                 self._check(template, self.value)
             self._template = template
         else:
-            raise TypeError(
-                "template must be a BaseAttributeTemplate or LinkByUID: {}".format(template)
-            )
+            raise TypeError(f"template must be a BaseAttributeTemplate or LinkByUID: {template}")
 
     @staticmethod
     @abstractmethod

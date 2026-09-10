@@ -33,7 +33,7 @@ class Smiles(MolecularValue, typ="smiles"):
         elif isinstance(value, str):
             self._smiles = value
         else:
-            raise TypeError("SMILES must be given as a string; got {}".format(type(value)))
+            raise TypeError(f"SMILES must be given as a string; got {type(value)}")
 
     def _to_bounds(self) -> MolecularStructureBounds:
         """Return the smallest bounds object that is consistent with the Value.

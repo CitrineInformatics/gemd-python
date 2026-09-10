@@ -161,9 +161,7 @@ class CaseInsensitiveDict(dict):
                 prev = self.lowercase_dict[key.lower()]
                 if prev != key:
                     raise ValueError(
-                        "Key '{}' already exists in dict with different case: '{}'".format(
-                            key, prev
-                        )
+                        f"Key '{key}' already exists in dict with different case: '{prev}'"
                     )
         if no_mapping:
             super().update(**kwargs)
@@ -185,7 +183,5 @@ class CaseInsensitiveDict(dict):
         """
         prev = self.lowercase_dict.get(key.lower())
         if prev is not None and prev != key:
-            raise ValueError(
-                "Key '{}' already exists in dict with different case: '{}'".format(key, prev)
-            )
+            raise ValueError(f"Key '{key}' already exists in dict with different case: '{prev}'")
         self.lowercase_dict[key.lower()] = key

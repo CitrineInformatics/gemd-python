@@ -279,9 +279,7 @@ def make_cake_spec(tmpl=None):
             tags=list(material.tags),
             material=material,
             process=process,
-            uids={
-                DEMO_SCOPE: "{}--{}".format(material.uids[DEMO_SCOPE], process.uids[DEMO_SCOPE])
-            },
+            uids={DEMO_SCOPE: f"{material.uids[DEMO_SCOPE]}--{process.uids[DEMO_SCOPE]}"},
             **kwargs,
         )
 
@@ -289,7 +287,7 @@ def make_cake_spec(tmpl=None):
         *, material_name, template, process_tmpl_name, process_kwargs, **material_kwargs
     ):
         """Convenience method to reuse material name in creating a material's arguments."""
-        process_name = "{} {}".format(process_tmpl_name, material_name)
+        process_name = f"{process_tmpl_name} {material_name}"
         return MaterialSpec(
             name=material_name,
             uids={DEMO_SCOPE: material_name.lower().replace(" ", "-")},
@@ -725,22 +723,22 @@ def make_cake(seed=None, tmpl=None, cake_spec=None, toothpick_img=None):
         if not isinstance(item, (MaterialRun, ProcessRun, IngredientRun)):
             return
 
-        item.add_uid(DEMO_SCOPE, "{}-{}".format(item.spec.uids[DEMO_SCOPE], run_key))
+        item.add_uid(DEMO_SCOPE, f"{item.spec.uids[DEMO_SCOPE]}-{run_key}")
         if item.spec.tags is not None:
             item.tags = list(item.spec.tags)
         if item.spec.notes:  # Neither None nor empty string
-            item.notes = 'The spec says "{}"'.format(item.spec.notes)
+            item.notes = f'The spec says "{item.spec.notes}"'
         if isinstance(item, MaterialRun):
             if "raw material" in item.tags:
                 if "produce" in item.tags:
                     supplier = random.choice(producers)
                 else:
                     supplier = random.choice(drygoods)
-                item.name = "{} {}".format(supplier, item.spec.name)
+                item.name = f"{supplier} {item.spec.name}"
         if isinstance(item, ProcessRun):
             if item.template.name == "Procuring":
                 item.source = PerformedSource(performed_by="hamilton", performed_date="2015-02-17")
-                item.name = "{} {}".format(item.template.name, item.output_material.name)
+                item.name = f"{item.template.name} {item.output_material.name}"
             else:
                 item.source = cake_obj.process.source
         if isinstance(item, IngredientRun):
@@ -831,9 +829,7 @@ def make_cake(seed=None, tmpl=None, cake_spec=None, toothpick_img=None):
         msr.spec.add_uid(DEMO_SCOPE, msr.spec.name.lower())
         msr.add_uid(
             DEMO_SCOPE,
-            "{}--{}-{}".format(
-                msr.spec.uids[DEMO_SCOPE], msr.material.spec.uids[DEMO_SCOPE], run_key
-            ),
+            f"{msr.spec.uids[DEMO_SCOPE]}--{msr.material.spec.uids[DEMO_SCOPE]}-{run_key}",
         )
 
     ######################################################################
