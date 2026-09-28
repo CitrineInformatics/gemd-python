@@ -16,6 +16,10 @@ PropertyAndConditionsType = TypeVar(
     "PropertyAndConditionsType",
     bound="PropertyAndConditions",  # noqa: F821
 )
+_PropertyTemplateType = Union[PropertyTemplate, LinkByUID]
+_PropertyPairType = Tuple[_PropertyTemplateType, Optional[BaseBounds]]
+_PropertyListPairType = List[Optional[Union[_PropertyTemplateType, BaseBounds]]]
+_PropertyInputType = Union[_PropertyTemplateType, _PropertyPairType, _PropertyListPairType]
 
 
 class HasPropertyTemplates(HasDependencies):
@@ -31,18 +35,13 @@ class HasPropertyTemplates(HasDependencies):
 
     def __init__(
         self,
-        properties: Iterable[
-            Union[
-                Union[PropertyTemplate, LinkByUID],
-                Tuple[Union[PropertyTemplate, LinkByUID], Optional[BaseBounds]],
-            ]
-        ],
+        properties: Iterable[_PropertyInputType],
     ):
         self._properties = None
         self.properties = properties
 
     @property
-    def properties(self) -> List[Tuple[Union[PropertyTemplate, LinkByUID], Optional[BaseBounds]]]:
+    def properties(self) -> List[_PropertyPairType]:
         """Get the list of property template/bounds tuples.
 
         Returns
@@ -56,12 +55,7 @@ class HasPropertyTemplates(HasDependencies):
     @properties.setter
     def properties(
         self,
-        properties: Iterable[
-            Union[
-                Union[PropertyTemplate, LinkByUID],
-                Tuple[Union[PropertyTemplate, LinkByUID], Optional[BaseBounds]],
-            ]
-        ],
+        properties: Iterable[_PropertyInputType],
     ):
         """Set the list of property templates.
 
