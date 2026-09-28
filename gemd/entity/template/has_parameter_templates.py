@@ -12,6 +12,10 @@ from gemd.entity.template.parameter_template import ParameterTemplate
 __all__ = ["HasParameterTemplates"]
 ParameterType = TypeVar("ParameterType", bound="Parameter")  # noqa: F821
 BaseEntityType = TypeVar("BaseEntityType", bound="BaseEntity")  # noqa: F821
+_ParameterTemplateType = Union[ParameterTemplate, LinkByUID]
+_ParameterPairType = Tuple[_ParameterTemplateType, Optional[BaseBounds]]
+_ParameterListPairType = List[Optional[Union[_ParameterTemplateType, BaseBounds]]]
+_ParameterInputType = Union[_ParameterTemplateType, _ParameterPairType, _ParameterListPairType]
 
 
 class HasParameterTemplates(HasDependencies):
@@ -27,18 +31,13 @@ class HasParameterTemplates(HasDependencies):
 
     def __init__(
         self,
-        parameters: Iterable[
-            Union[
-                Union[ParameterTemplate, LinkByUID],
-                Tuple[Union[ParameterTemplate, LinkByUID], Optional[BaseBounds]],
-            ]
-        ],
+        parameters: Iterable[_ParameterInputType],
     ):
         self._parameters = None
         self.parameters = parameters
 
     @property
-    def parameters(self) -> List[Union[ParameterTemplate, LinkByUID]]:
+    def parameters(self) -> List[_ParameterPairType]:
         """Get the list of parameter template/bounds tuples.
 
         Returns
@@ -52,12 +51,7 @@ class HasParameterTemplates(HasDependencies):
     @parameters.setter
     def parameters(
         self,
-        parameters: Iterable[
-            Union[
-                Union[ParameterTemplate, LinkByUID],
-                Tuple[Union[ParameterTemplate, LinkByUID], Optional[BaseBounds]],
-            ]
-        ],
+        parameters: Iterable[_ParameterInputType],
     ):
         """Set the list of parameter templates.
 
