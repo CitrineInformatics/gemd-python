@@ -1,6 +1,7 @@
 """A unique id that stands in for a data object."""
-from typing import TypeVar
+
 import uuid
+from typing import TypeVar
 
 from gemd.entity.dict_serializable import DictSerializable
 
@@ -9,8 +10,7 @@ BaseEntityType = TypeVar("BaseEntityType", bound="BaseEntity")  # noqa: F821
 
 
 class LinkByUID(DictSerializable, typ="link_by_uid"):
-    """
-    Link object, which replaces pointers to other entities before serialization and writing.
+    """Link object, which replaces pointers to other entities before serialization and writing.
 
     Parameters
     ----------
@@ -31,8 +31,7 @@ class LinkByUID(DictSerializable, typ="link_by_uid"):
 
     @classmethod
     def from_entity(cls, entity: BaseEntityType, *, scope=None):
-        """
-        Create LinkByUID from in-memory object.
+        """Create LinkByUID from in-memory object.
 
         - If there exists an id with scope (default 'auto'), the LinkByUID object will be built
           with that scope.

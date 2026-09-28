@@ -1,8 +1,9 @@
 """Tests of the UniformInteger class."""
+
 import pytest
 
-from gemd.entity.value.uniform_integer import UniformInteger
 from gemd.entity.bounds import IntegerBounds
+from gemd.entity.value.uniform_integer import UniformInteger
 
 
 def test_bounds_order():

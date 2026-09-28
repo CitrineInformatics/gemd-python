@@ -1,12 +1,11 @@
-from enum import IntEnum
 from contextlib import contextmanager
+from enum import IntEnum
 
 __all__ = ["WarningLevel", "get_validation_level", "set_validation_level", "validation_level"]
 
 
 class WarningLevel(IntEnum):
-    """
-    Control the behavior for warnings/errors around template validations.
+    """Control the behavior for warnings/errors around template validations.
 
     IGNORE: Do not check if values are consistent with bounds.
     WARNING: Accept bad values and issue a warning saying as much.

@@ -1,28 +1,35 @@
-from gemd.entity.object.measurement_spec import MeasurementSpec
-from gemd.entity.object.material_run import MaterialRun
-from gemd.entity.object.base_object import BaseObject
-from gemd.entity.object.has_material import HasMaterial
-from gemd.entity.object.has_spec import HasSpec
-from gemd.entity.object.has_conditions import HasConditions
-from gemd.entity.object.has_properties import HasProperties
-from gemd.entity.object.has_parameters import HasParameters
-from gemd.entity.object.has_source import HasSource
+from typing import Iterable, Mapping, Optional, Type, Union
+
 from gemd.entity.attribute.condition import Condition
 from gemd.entity.attribute.parameter import Parameter
 from gemd.entity.attribute.property import Property
-from gemd.entity.source.performed_source import PerformedSource
 from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
-
-from typing import Optional, Union, Iterable, Mapping, Type
+from gemd.entity.object.base_object import BaseObject
+from gemd.entity.object.has_conditions import HasConditions
+from gemd.entity.object.has_material import HasMaterial
+from gemd.entity.object.has_parameters import HasParameters
+from gemd.entity.object.has_properties import HasProperties
+from gemd.entity.object.has_source import HasSource
+from gemd.entity.object.has_spec import HasSpec
+from gemd.entity.object.material_run import MaterialRun
+from gemd.entity.object.measurement_spec import MeasurementSpec
+from gemd.entity.source.performed_source import PerformedSource
 
 __all__ = ["MeasurementRun"]
 
 
-class MeasurementRun(BaseObject, HasMaterial, HasSpec, HasConditions, HasProperties,
-                     HasParameters, HasSource, typ="measurement_run"):
-    """
-    A measurement run.
+class MeasurementRun(
+    BaseObject,
+    HasMaterial,
+    HasSpec,
+    HasConditions,
+    HasProperties,
+    HasParameters,
+    HasSource,
+    typ="measurement_run",
+):
+    """A measurement run.
 
     This contains a link to the material the measurement is performed on, as well as links to
     any properties, conditions, and parameters.
@@ -60,21 +67,24 @@ class MeasurementRun(BaseObject, HasMaterial, HasSpec, HasConditions, HasPropert
 
     """
 
-    def __init__(self,
-                 name: str,
-                 *,
-                 spec: Union[MeasurementSpec, LinkByUID] = None,
-                 material: Union[MaterialRun, LinkByUID] = None,
-                 properties: Union[Property, Iterable[Property]] = None,
-                 conditions: Union[Condition, Iterable[Condition]] = None,
-                 parameters: Union[Parameter, Iterable[Parameter]] = None,
-                 uids: Mapping[str, str] = None,
-                 tags: Iterable[str] = None,
-                 notes: str = None,
-                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
-                 source: PerformedSource = None):
-        BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
-                            file_links=file_links)
+    def __init__(
+        self,
+        name: str,
+        *,
+        spec: Union[MeasurementSpec, LinkByUID] = None,
+        material: Union[MaterialRun, LinkByUID] = None,
+        properties: Union[Property, Iterable[Property]] = None,
+        conditions: Union[Condition, Iterable[Condition]] = None,
+        parameters: Union[Parameter, Iterable[Parameter]] = None,
+        uids: Mapping[str, str] = None,
+        tags: Iterable[str] = None,
+        notes: str = None,
+        file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
+        source: PerformedSource = None,
+    ):
+        BaseObject.__init__(
+            self, name=name, uids=uids, tags=tags, notes=notes, file_links=file_links
+        )
         HasSpec.__init__(self, spec=spec)
         HasProperties.__init__(self, properties)
         HasConditions.__init__(self, conditions)
@@ -100,7 +110,7 @@ class MeasurementRun(BaseObject, HasMaterial, HasSpec, HasConditions, HasPropert
             if isinstance(value, MaterialRun):
                 value.measurements.append(self)
         else:
-            raise TypeError("material must be a MaterialRun or LinkByUID: {}".format(value))
+            raise TypeError(f"material must be a MaterialRun or LinkByUID: {value}")
 
     @staticmethod
     def _spec_type() -> Type:

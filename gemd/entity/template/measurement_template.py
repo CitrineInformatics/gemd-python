@@ -1,4 +1,5 @@
 """A measurement template."""
+
 from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.template.has_condition_templates import HasConditionTemplates
 from gemd.entity.template.has_parameter_templates import HasParameterTemplates
@@ -7,11 +8,14 @@ from gemd.entity.template.has_property_templates import HasPropertyTemplates
 __all__ = ["MeasurementTemplate"]
 
 
-class MeasurementTemplate(BaseTemplate,
-                          HasPropertyTemplates, HasConditionTemplates, HasParameterTemplates,
-                          typ="measurement_template"):
-    """
-    A measurement template.
+class MeasurementTemplate(
+    BaseTemplate,
+    HasPropertyTemplates,
+    HasConditionTemplates,
+    HasParameterTemplates,
+    typ="measurement_template",
+):
+    """A measurement template.
 
     Measurement templates are collections of condition, parameter and property templates that
     constrain the values of a measurement's condition, parameter and property attributes, and
@@ -52,11 +56,18 @@ class MeasurementTemplate(BaseTemplate,
 
     """
 
-    def __init__(self, name, *, description=None,
-                 properties=None, conditions=None, parameters=None,
-                 uids=None, tags=None):
-        BaseTemplate.__init__(self, name=name, description=description,
-                              uids=uids, tags=tags)
+    def __init__(
+        self,
+        name,
+        *,
+        description=None,
+        properties=None,
+        conditions=None,
+        parameters=None,
+        uids=None,
+        tags=None,
+    ):
+        BaseTemplate.__init__(self, name=name, description=description, uids=uids, tags=tags)
         HasPropertyTemplates.__init__(self, properties)
         HasConditionTemplates.__init__(self, conditions)
         HasParameterTemplates.__init__(self, parameters)

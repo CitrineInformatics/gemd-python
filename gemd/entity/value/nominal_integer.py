@@ -1,13 +1,13 @@
 """A nominal integer value."""
-from gemd.entity.value.integer_value import IntegerValue
+
 from gemd.entity.bounds import IntegerBounds
+from gemd.entity.value.integer_value import IntegerValue
 
 __all__ = ["NominalInteger"]
 
 
 class NominalInteger(IntegerValue, typ="nominal_integer"):
-    """
-    Nominal integer, which does not specify an uncertainty but is not assumed to be exact.
+    """Nominal integer, which does not specify an uncertainty but is not assumed to be exact.
 
     Parameters
     ----------
@@ -30,13 +30,12 @@ class NominalInteger(IntegerValue, typ="nominal_integer"):
         """A proscribed integer value without uncertainty."""
         # This check/cast is necessary to handle JSON serialization behavior under 3.6
         if not isinstance(nominal, (int, float)) or int(nominal) != nominal:
-            raise TypeError("nominal must be an int; got an {}({})".format(type(nominal), nominal))
+            raise TypeError(f"nominal must be an int; got an {type(nominal)}({nominal})")
 
         self._nominal = int(nominal)
 
     def _to_bounds(self) -> IntegerBounds:
-        """
-        Return the smallest bounds object that is consistent with the Value.
+        """Return the smallest bounds object that is consistent with the Value.
 
         Returns
         -------

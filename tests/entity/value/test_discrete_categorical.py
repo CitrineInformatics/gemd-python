@@ -1,8 +1,9 @@
 """Tests of the DiscreteCategorical class."""
+
 import pytest
 
-from gemd.entity.value.discrete_categorical import DiscreteCategorical
 from gemd.entity.bounds import CategoricalBounds
+from gemd.entity.value.discrete_categorical import DiscreteCategorical
 
 
 def test_probabilities_setter():

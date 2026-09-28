@@ -1,13 +1,13 @@
 """A nominal composition value."""
-from gemd.entity.value.composition_value import CompositionValue
+
 from gemd.entity.bounds import CompositionBounds
+from gemd.entity.value.composition_value import CompositionValue
 
 __all__ = ["NominalComposition"]
 
 
 class NominalComposition(CompositionValue, typ="nominal_composition"):
-    """
-    Nominal composition, represented as a map from the component names to the quantities.
+    """Nominal composition, represented as a map from the component names to the quantities.
 
     The quantities do not express an uncertainty but also do not imply that there is absolute
     certainty to their values.
@@ -45,8 +45,7 @@ class NominalComposition(CompositionValue, typ="nominal_composition"):
             raise TypeError("quantities must be dict or List of two-item lists or None")
 
     def _to_bounds(self) -> CompositionBounds:
-        """
-        Return the smallest bounds object that is consistent with the Value.
+        """Return the smallest bounds object that is consistent with the Value.
 
         Returns
         -------

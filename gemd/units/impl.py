@@ -1,32 +1,42 @@
 """Implementation of units."""
-from deprecation import deprecated
+
 import functools
-from importlib.resources import files
 import os
-from pathlib import Path
 import re
+from importlib.resources import files
+from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Union, List, Tuple, Generator, Any
+from typing import Any, Generator, List, Tuple, Union
+
+from deprecation import deprecated
+
 try:
     from typing import TypeAlias  # Python 3.10+
 except ImportError:  # pragma nocover
     from typing_extensions import TypeAlias  # Python 3.9
 
+from tokenize import ERRORTOKEN, NAME, NUMBER, OP, TokenInfo
+
 from pint import UnitRegistry, register_unit_format
-from pint.pint_eval import tokenizer
-from tokenize import NAME, NUMBER, OP, ERRORTOKEN, TokenInfo
+from pint.errors import DefinitionSyntaxError, UndefinedUnitError
+
 # alias the error that is thrown when units are incompatible
 # this helps to isolate the dependence on pint
 from pint.errors import DimensionalityError as IncompatibleUnitsError
-from pint.errors import UndefinedUnitError, DefinitionSyntaxError
+from pint.pint_eval import tokenizer
 from pint.registry import GenericUnitRegistry
 
 # Store directories so they don't get auto-cleaned until exit
 _TEMP_DIRECTORY = TemporaryDirectory()
 
 __all__ = [
-    "parse_units", "convert_units", "get_base_units", "change_definitions_file",
-    "UndefinedUnitError", "IncompatibleUnitsError", "DefinitionSyntaxError"
+    "parse_units",
+    "convert_units",
+    "get_base_units",
+    "change_definitions_file",
+    "UndefinedUnitError",
+    "IncompatibleUnitsError",
+    "DefinitionSyntaxError",
 ]
 
 
@@ -48,21 +58,22 @@ _ALLOWED_OPERATORS = {".", "+", "-", "*", "/", "//", "^", "**", "(", ")"}
 
 def _scientific_notation_preprocessor(input_string: str) -> str:
     """Preprocessor that converts x * 10 ** y format to xEy."""
+
     def _as_scientific(matchobj: re.Match) -> str:
         return f"{matchobj.group(1) or '1'}e{matchobj.group(2)}"
 
-    number = r'\b(?:(\d+\.?\d*|\.\d+)\s*\*\s*)?10\s*(?:\*{2}|\^)\s*\+?(-?\d+\b)'
+    number = r"\b(?:(\d+\.?\d*|\.\d+)\s*\*\s*)?10\s*(?:\*{2}|\^)\s*\+?(-?\d+\b)"
     return re.sub(number, _as_scientific, input_string)
 
 
 def _scaling_find_blocks(token_stream: Generator[TokenInfo, Any, None]) -> List[List[TokenInfo]]:
-    """
-    Supporting routine for _scaling_preprocessor; tokenizer stream -> blocks.
+    """Supporting routine for _scaling_preprocessor; tokenizer stream -> blocks.
 
     Takes a stream of tokens, and breaks it into a lists of tokens that represent
     multiplicative subunits of the original expression.
 
     """
+
     def _handle_operator(token_, exponent_context_, operator_stack_, result_):
         if token_.string not in _ALLOWED_OPERATORS:
             raise UndefinedUnitError(f"Unrecognized operator: {token_.string}")
@@ -75,11 +86,11 @@ def _scaling_find_blocks(token_stream: Generator[TokenInfo, Any, None]) -> List[
             result_.append([])
 
         # Manage the operator stack
-        if token_.string == '(':
+        if token_.string == "(":
             operator_stack_.append(token_)
-        elif token_.string == ')':
+        elif token_.string == ")":
             while operator_stack_:  # don't worry about enforcing balance
-                if operator_stack_.pop().string == '(':
+                if operator_stack_.pop().string == "(":
                     break  # We found token's friend
         elif token_.string in {"**", "^"}:
             # A spare to pop so next loop is in exponent context
@@ -117,11 +128,9 @@ def _scaling_find_blocks(token_stream: Generator[TokenInfo, Any, None]) -> List[
 
 
 def _scaling_identify_factors(
-        input_string: str,
-        blocks: List[List[TokenInfo]]
+    input_string: str, blocks: List[List[TokenInfo]]
 ) -> List[Tuple[str, str, str]]:
-    """
-    Supporting routine for _scaling_preprocessor; blocks -> scaling terms.
+    """Supporting routine for _scaling_preprocessor; blocks -> scaling terms.
 
     Takes the input_string and the blocks output by _scaling_find_blocks and
     returns a tuple of the substrings that contain scaling factors, the scaling
@@ -144,11 +153,15 @@ def _scaling_identify_factors(
             if i_name is not None and i_name < position:
                 raise ValueError(f"Scaling factor ({value}) follows unit in {input_string}")
             if float(value) != 1.0 and float(value) != 0.0:  # Don't create definitions for 0 or 1
-                block_string = input_string[block[0].start[1]:block[-1].end[1]]
+                block_start = block[0].start[1]
+                block_end = block[-1].end[1]
+                block_string = input_string[block_start:block_end]
                 if i_name is None:
                     unit_string = None
                 else:
-                    unit_string = input_string[block[position + 1].start[1]:block[i_name].end[1]]
+                    unit_start = block[position + 1].start[1]
+                    unit_end = block[i_name].end[1]
+                    unit_string = input_string[unit_start:unit_end]
                 todo.append((block_string, value, unit_string))
         elif len(numbers) > 1:
             raise ValueError(
@@ -159,8 +172,7 @@ def _scaling_identify_factors(
 
 
 def _scaling_store_and_mangle(input_string: str, todo: List[Tuple[str, str, str]]) -> str:
-    """
-    Supporting routine for _scaling_preprocessor; scaling terms -> updated input_string.
+    """Supporting routine for _scaling_preprocessor; scaling terms -> updated input_string.
 
     Takes the terms to be updated, and actually updates the input_string as well as
     creating an entry for each in the registry.
@@ -207,19 +219,20 @@ def _scaling_preprocessor(input_string: str) -> str:
 
 def _unmangle_scaling(input_string: str) -> str:
     """Convert mangled scaling values into a pint-compatible expression."""
-    number_re = r'\b_(_)?(\d+)(_\d+)?([eE]_?\d+)?(_(?=[a-zA-Z]))?'
+    number_re = r"\b_(_)?(\d+)(_\d+)?([eE]_?\d+)?(_(?=[a-zA-Z]))?"
     while match := re.search(number_re, input_string):
-        replacement = '' if match.group(1) is None else '-'
+        replacement = "" if match.group(1) is None else "-"
         replacement += match.group(2)
-        replacement += '' if match.group(3) is None else match.group(3).replace('_', '.')
-        replacement += '' if match.group(4) is None else match.group(4).replace('_', '-')
-        replacement += '' if match.group(5) is None else match.group(5).replace('_', ' ')
+        replacement += "" if match.group(3) is None else match.group(3).replace("_", ".")
+        replacement += "" if match.group(4) is None else match.group(4).replace("_", "-")
+        replacement += "" if match.group(5) is None else match.group(5).replace("_", " ")
         input_string = input_string.replace(match.group(0), replacement)
     return input_string
 
 
 # Standard approach to creating a custom registry class:
 # https://pint.readthedocs.io/en/0.23/advanced/custom-registry-class.html
+
 
 class _ScaleFactorUnit(UnitRegistry.Unit):
     """Child class of Units for generating units w/ clean scaling factors."""
@@ -247,8 +260,7 @@ _REGISTRY: _ScaleFactorRegistry = None  # global requires it be defined in this 
 
 @functools.lru_cache(maxsize=1024 * 1024)
 def convert_units(value: float, starting_unit: str, final_unit: str) -> float:
-    """
-    Convert the value from the starting_unit to the final_unit.
+    """Convert the value from the starting_unit to the final_unit.
 
     Parameters
     ----------
@@ -279,7 +291,7 @@ def convert_units(value: float, starting_unit: str, final_unit: str) -> float:
                 units1=resolved_value.units,
                 dim1=_REGISTRY.get_dimensionality(resolved_final_unit),
                 units2=final_unit,
-                dim2=_REGISTRY.get_dimensionality(resolved_final_unit)
+                dim2=_REGISTRY.get_dimensionality(resolved_final_unit),
             )
         return resolved_value.to(resolved_final_unit).magnitude
 
@@ -287,17 +299,18 @@ def convert_units(value: float, starting_unit: str, final_unit: str) -> float:
 @register_unit_format("clean")
 @deprecated(deprecated_in="2.1.0", removed_in="3.0.0", details="Scaling factor clean-up ")
 def _format_clean(unit, registry, **options):
-    """
-    DEPRECATED Formatter that turns scaling-factor-units into numbers again.
+    """DEPRECATED Formatter that turns scaling-factor-units into numbers again.
 
     Responsibility for this piece of clean-up has been shifted to a custom class.
 
     """
     try:  # Informal route changed in 0.22
         from pint.formatting import _FORMATTERS
+
         formatter = _FORMATTERS["D"]  # pragma: no cover
     except ImportError:  # pragma: no cover
         from pint import Unit
+
         formatter_obj = registry.formatter._formatters["D"]
 
         def _surrogate_formatter(unit, registry, **options):
@@ -313,12 +326,10 @@ def _format_clean(unit, registry, **options):
 
 
 @functools.lru_cache(maxsize=1024)
-def parse_units(units: Union[str, UnitRegistry.Unit, None],
-                *,
-                return_unit: bool = False
-                ) -> Union[str, UnitRegistry.Unit, None]:
-    """
-    Parse a string or Unit into a standard string representation of the unit.
+def parse_units(
+    units: Union[str, UnitRegistry.Unit, None], *, return_unit: bool = False
+) -> Union[str, UnitRegistry.Unit, None]:
+    """Parse a string or Unit into a standard string representation of the unit.
 
     Parameters
     ----------
@@ -353,8 +364,7 @@ def parse_units(units: Union[str, UnitRegistry.Unit, None],
 
 @functools.lru_cache(maxsize=1024)
 def get_base_units(units: Union[str, UnitRegistry.Unit]) -> Tuple[UnitRegistry.Unit, float, float]:
-    """
-    Get the base units and conversion factors for the given unit.
+    """Get the base units and conversion factors for the given unit.
 
     Parameters
     ----------
@@ -376,8 +386,7 @@ def get_base_units(units: Union[str, UnitRegistry.Unit]) -> Tuple[UnitRegistry.U
 
 
 def change_definitions_file(filename: str = None):
-    """
-    Change which file is used for units definition.
+    """Change which file is used for units definition.
 
     Parameters
     ----------
@@ -399,12 +408,11 @@ def change_definitions_file(filename: str = None):
         os.chdir(target.parent)
         # Need to re-verify path because of some slippiness around tmp on macOS
         updated = (Path.cwd() / target.name).resolve(strict=True)
-        _REGISTRY = _ScaleFactorRegistry(filename=updated,
-                                         preprocessors=[_scientific_notation_preprocessor,
-                                                        _scaling_preprocessor
-                                                        ],
-                                         autoconvert_offset_to_baseunit=True
-                                         )
+        _REGISTRY = _ScaleFactorRegistry(
+            filename=updated,
+            preprocessors=[_scientific_notation_preprocessor, _scaling_preprocessor],
+            autoconvert_offset_to_baseunit=True,
+        )
     finally:
         os.chdir(current_dir)
 

@@ -1,14 +1,15 @@
 """For entities that have conditions."""
+
+from abc import ABC
+from typing import Iterable, List, Set, Union
+
+from gemd.entity.attribute.condition import Condition
 from gemd.entity.base_entity import BaseEntity
 from gemd.entity.has_dependencies import HasDependencies
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.object.has_template_check_generator import HasTemplateCheckGenerator
-from gemd.entity.template.has_condition_templates import HasConditionTemplates
-from gemd.entity.attribute.condition import Condition
 from gemd.entity.setters import validate_list
-
-from typing import Union, Iterable, List, Set
-from abc import ABC
+from gemd.entity.template.has_condition_templates import HasConditionTemplates
 
 __all__ = ["HasConditions"]
 

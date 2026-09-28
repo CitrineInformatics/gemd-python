@@ -1,19 +1,18 @@
+from abc import abstractmethod
+from typing import Iterable, List, Optional, Type, Union
+
+from gemd.entity.bounds_validation import WarningLevel, get_validation_level
 from gemd.entity.dict_serializable import DictSerializable, logger
+from gemd.entity.file_link import FileLink
+from gemd.entity.link_by_uid import LinkByUID
+from gemd.entity.setters import validate_list
 from gemd.entity.template.attribute_template import AttributeTemplate
 from gemd.entity.value.base_value import BaseValue
 from gemd.enumeration.origin import Origin
-from gemd.entity.setters import validate_list
-from gemd.entity.file_link import FileLink
-from gemd.entity.link_by_uid import LinkByUID
-from gemd.entity.bounds_validation import get_validation_level, WarningLevel
-
-from typing import Optional, Union, Iterable, List, Type
-from abc import abstractmethod
 
 
 class BaseAttribute(DictSerializable):
-    """
-    Base class for all attributes, which include property, condition, parameter, and metadata.
+    """Base class for all attributes, which include property, condition, parameter, and metadata.
 
     Parameters
     ----------
@@ -34,14 +33,16 @@ class BaseAttribute(DictSerializable):
 
     """
 
-    def __init__(self,
-                 name: str,
-                 *,
-                 template: Union[AttributeTemplate, LinkByUID, None] = None,
-                 origin: Union[Origin, str] = Origin.UNKNOWN,
-                 value: BaseValue = None,
-                 notes: str = None,
-                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
+    def __init__(
+        self,
+        name: str,
+        *,
+        template: Union[AttributeTemplate, LinkByUID, None] = None,
+        origin: Union[Origin, str] = Origin.UNKNOWN,
+        value: BaseValue = None,
+        notes: str = None,
+        file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
+    ):
         self.name = name
         self.notes = notes
 
@@ -98,8 +99,7 @@ class BaseAttribute(DictSerializable):
                 self._check(template, self.value)
             self._template = template
         else:
-            raise TypeError("template must be a BaseAttributeTemplate or "
-                            "LinkByUID: {}".format(template))
+            raise TypeError(f"template must be a BaseAttributeTemplate or LinkByUID: {template}")
 
     @staticmethod
     @abstractmethod

@@ -1,14 +1,15 @@
-"""
-Test the subbed = substitute_links method.
+"""Test the subbed = substitute_links method.
 
 Focuses in particular on the edge cases that the client doesn't test.
 """
-import pytest
+
 from uuid import uuid4
 
-from gemd.util.impl import substitute_links
+import pytest
+
 from gemd.entity.link_by_uid import LinkByUID
-from gemd.entity.object import MeasurementRun, MaterialRun, ProcessRun, ProcessSpec
+from gemd.entity.object import MaterialRun, MeasurementRun, ProcessRun, ProcessSpec
+from gemd.util.impl import substitute_links
 
 
 def test_substitution_without_id():
@@ -19,31 +20,44 @@ def test_substitution_without_id():
         substitute_links(meas), "subbed = substitute_links should fail if objects don't have uids"
 
     with pytest.raises(ValueError):
-        substitute_links([meas, mat]), \
-            "subbed = substitute_links should fail if objects don't have uids"
+        (
+            substitute_links([meas, mat]),
+            "subbed = substitute_links should fail if objects don't have uids",
+        )
 
     with pytest.raises(ValueError):
-        substitute_links(meas.as_dict()), \
-            "subbed = substitute_links should fail if objects don't have uids"
+        (
+            substitute_links(meas.as_dict()),
+            "subbed = substitute_links should fail if objects don't have uids",
+        )
 
     # Create a dictionary in which either the key or value is missing a uid
-    meas.add_uid('id', str(uuid4()))
+    meas.add_uid("id", str(uuid4()))
     with pytest.raises(ValueError):
-        substitute_links({mat: meas}), \
-            "subbed = substitute_links should fail if objects don't have uids"
+        (
+            substitute_links({mat: meas}),
+            "subbed = substitute_links should fail if objects don't have uids",
+        )
     with pytest.raises(ValueError):
-        substitute_links({meas: mat}), \
-            "subbed = substitute_links should fail if objects don't have uids"
+        (
+            substitute_links({meas: mat}),
+            "subbed = substitute_links should fail if objects don't have uids",
+        )
 
 
 def test_scope_substitution():
     """Test that the native id gets serialized, when specified."""
-    native_id = 'id1'
+    native_id = "id1"
     # Create measurement and material with two ids
-    mat = MaterialRun("A material", uids={
-        native_id: str(uuid4()), "an_id": str(uuid4()), "another_id": str(uuid4())})
-    meas = MeasurementRun("A measurement", material=mat, uids={
-        "some_id": str(uuid4()), native_id: str(uuid4()), "an_id": str(uuid4())})
+    mat = MaterialRun(
+        "A material",
+        uids={native_id: str(uuid4()), "an_id": str(uuid4()), "another_id": str(uuid4())},
+    )
+    meas = MeasurementRun(
+        "A measurement",
+        material=mat,
+        uids={"some_id": str(uuid4()), native_id: str(uuid4()), "an_id": str(uuid4())},
+    )
 
     # Turn the material pointer into a LinkByUID using native_id
     subbed = substitute_links(meas, scope=native_id)
@@ -57,44 +71,44 @@ def test_scope_substitution():
 
 def test_object_key_substitution():
     """Test that client can copy a dictionary in which keys are BaseEntity objects."""
-    spec = ProcessSpec("A process spec", uids={'id': str(uuid4()), 'auto': str(uuid4())})
-    run1 = ProcessRun("A process run", spec=spec, uids={'id': str(uuid4()), 'auto': str(uuid4())})
-    run2 = ProcessRun("Another process run", spec=spec, uids={'id': str(uuid4())})
+    spec = ProcessSpec("A process spec", uids={"id": str(uuid4()), "auto": str(uuid4())})
+    run1 = ProcessRun("A process run", spec=spec, uids={"id": str(uuid4()), "auto": str(uuid4())})
+    run2 = ProcessRun("Another process run", spec=spec, uids={"id": str(uuid4())})
     process_dict = {spec: [run1, run2]}
 
-    subbed = substitute_links(process_dict, scope='auto')
+    subbed = substitute_links(process_dict, scope="auto")
     for key, value in subbed.items():
-        assert key == LinkByUID.from_entity(spec, scope='auto')
-        assert LinkByUID.from_entity(run1, scope='auto') in value
+        assert key == LinkByUID.from_entity(spec, scope="auto")
+        assert LinkByUID.from_entity(run1, scope="auto") in value
         assert LinkByUID.from_entity(run2) in value
 
     reverse_process_dict = {run2: spec}
-    subbed = substitute_links(reverse_process_dict, scope='auto')
+    subbed = substitute_links(reverse_process_dict, scope="auto")
     for key, value in subbed.items():
         assert key == LinkByUID.from_entity(run2)
-        assert value == LinkByUID.from_entity(spec, scope='auto')
+        assert value == LinkByUID.from_entity(spec, scope="auto")
 
 
 def test_signature():
     """Exercise various permutations of the substitute_links sig."""
-    spec = ProcessSpec("A process spec", uids={'my': 'spec'})
+    spec = ProcessSpec("A process spec", uids={"my": "spec"})
 
-    run1 = ProcessRun("First process run", uids={'my': 'run1'}, spec=spec)
-    assert isinstance(substitute_links(run1, scope='my').spec, LinkByUID)
+    run1 = ProcessRun("First process run", uids={"my": "run1"}, spec=spec)
+    assert isinstance(substitute_links(run1, scope="my").spec, LinkByUID)
 
-    run2 = ProcessRun("Second process run", uids={'my': 'run2'}, spec=spec)
-    assert isinstance(substitute_links(run2, 'my').spec, LinkByUID)
+    run2 = ProcessRun("Second process run", uids={"my": "run2"}, spec=spec)
+    assert isinstance(substitute_links(run2, "my").spec, LinkByUID)
 
     with pytest.raises(ValueError):
-        run3 = ProcessRun("Third process run", uids={'my': 'run3'}, spec=spec)
-        assert isinstance(substitute_links(run3, 'other', allow_fallback=False).spec, LinkByUID)
+        run3 = ProcessRun("Third process run", uids={"my": "run3"}, spec=spec)
+        assert isinstance(substitute_links(run3, "other", allow_fallback=False).spec, LinkByUID)
 
 
 def test_inplace_v_not():
     """Test that client can copy a dictionary in which keys are BaseEntity objects."""
-    spec = ProcessSpec("A process spec", uids={'id': str(uuid4()), 'auto': str(uuid4())})
-    run1 = ProcessRun("A process run", spec=spec, uids={'id': str(uuid4()), 'auto': str(uuid4())})
-    run2 = ProcessRun("Another process run", spec=spec, uids={'id': str(uuid4())})
+    spec = ProcessSpec("A process spec", uids={"id": str(uuid4()), "auto": str(uuid4())})
+    run1 = ProcessRun("A process run", spec=spec, uids={"id": str(uuid4()), "auto": str(uuid4())})
+    run2 = ProcessRun("Another process run", spec=spec, uids={"id": str(uuid4())})
     process_dict = {spec: [run1, run2]}
 
     subbed = substitute_links(process_dict)

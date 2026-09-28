@@ -1,8 +1,9 @@
 """Tests of the UniformInteger class."""
+
 import pytest
 
-from gemd.entity.value.nominal_integer import NominalInteger
 from gemd.entity.bounds import IntegerBounds
+from gemd.entity.value.nominal_integer import NominalInteger
 
 
 def test_bounds_are_integers():

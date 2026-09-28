@@ -8,7 +8,7 @@ class ImportTestObj:
     @property
     def test_property(self):
         """A property to validate decorator functionality."""
-        Property(name='Trial')  # noqa: F405
+        Property(name="Trial")  # noqa: F405
         return True
 
 

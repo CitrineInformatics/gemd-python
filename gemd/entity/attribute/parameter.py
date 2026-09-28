@@ -1,14 +1,13 @@
+from typing import Type
+
 from gemd.entity.attribute.base_attribute import BaseAttribute
 from gemd.entity.template import ParameterTemplate
-
-from typing import Type
 
 __all__ = ["Parameter"]
 
 
 class Parameter(BaseAttribute, typ="parameter"):
-    """
-    Parameter of a process or measurement.
+    """Parameter of a process or measurement.
 
     Parameters are the non-environmental variables (typically specified and controlled) that may
     affect a process or measurement: e.g. oven dial temperature for a kiln firing, magnification

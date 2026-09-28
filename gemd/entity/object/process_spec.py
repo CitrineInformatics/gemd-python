@@ -1,26 +1,30 @@
-from gemd.entity.object.base_object import BaseObject
-from gemd.entity.object.has_parameters import HasParameters
-from gemd.entity.object.has_conditions import HasConditions
-from gemd.entity.object.has_template import HasTemplate
-from gemd.entity.template.process_template import ProcessTemplate
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Type, TypeVar, Union
+
 from gemd.entity.attribute.condition import Condition
 from gemd.entity.attribute.parameter import Parameter
 from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
+from gemd.entity.object.base_object import BaseObject
+from gemd.entity.object.has_conditions import HasConditions
+from gemd.entity.object.has_parameters import HasParameters
+from gemd.entity.object.has_template import HasTemplate
 from gemd.entity.setters import validate_list
-
-from typing import TypeVar, Optional, Union, Iterable, List, Mapping, Dict, Type, Any
+from gemd.entity.template.process_template import ProcessTemplate
 
 __all__ = ["ProcessSpec"]
 IngredientSpecType = TypeVar("IngredientSpecType", bound="IngredientSpec")  # noqa: F821
 MaterialSpecType = TypeVar("MaterialSpecType", bound="MaterialSpec")  # noqa: F821
 
 
-class ProcessSpec(BaseObject,
-                  HasTemplate, HasParameters, HasConditions,
-                  typ="process_spec", skip={"_output_material", "_ingredients"}):
-    """
-    A process specification.
+class ProcessSpec(
+    BaseObject,
+    HasTemplate,
+    HasParameters,
+    HasConditions,
+    typ="process_spec",
+    skip={"_output_material", "_ingredients"},
+):
+    """A process specification.
 
     Processes transform zero or more input materials into exactly one output material.
     This includes links to the parameters and conditions under which the process is expected
@@ -51,21 +55,24 @@ class ProcessSpec(BaseObject,
 
     """
 
-    def __init__(self,
-                 name: str,
-                 *,
-                 template: Optional[Union[ProcessTemplate, LinkByUID]] = None,
-                 conditions: Union[Condition, Iterable[Condition]] = None,
-                 parameters: Union[Parameter, Iterable[Parameter]] = None,
-                 uids: Mapping[str, str] = None,
-                 tags: Iterable[str] = None,
-                 notes: str = None,
-                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
-        from gemd.entity.object.ingredient_spec import IngredientSpec
+    def __init__(
+        self,
+        name: str,
+        *,
+        template: Optional[Union[ProcessTemplate, LinkByUID]] = None,
+        conditions: Union[Condition, Iterable[Condition]] = None,
+        parameters: Union[Parameter, Iterable[Parameter]] = None,
+        uids: Mapping[str, str] = None,
+        tags: Iterable[str] = None,
+        notes: str = None,
+        file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
+    ):
         from gemd.entity.link_by_uid import LinkByUID
+        from gemd.entity.object.ingredient_spec import IngredientSpec
 
-        BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
-                            file_links=file_links)
+        BaseObject.__init__(
+            self, name=name, uids=uids, tags=tags, notes=notes, file_links=file_links
+        )
         HasTemplate.__init__(self, template=template)
         HasParameters.__init__(self, parameters=parameters)
         HasConditions.__init__(self, conditions=conditions)
@@ -104,5 +111,5 @@ class ProcessSpec(BaseObject,
     def _dict_for_compare(self) -> Dict[str, Any]:
         """Support for recursive equals."""
         base = super()._dict_for_compare()
-        base['ingredients'] = self.ingredients
+        base["ingredients"] = self.ingredients
         return base

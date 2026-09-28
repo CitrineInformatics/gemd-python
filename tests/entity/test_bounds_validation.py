@@ -1,5 +1,9 @@
-from gemd.entity.bounds_validation import WarningLevel, set_validation_level, \
-    get_validation_level, validation_level
+from gemd.entity.bounds_validation import (
+    WarningLevel,
+    get_validation_level,
+    set_validation_level,
+    validation_level,
+)
 
 
 def test_bounds_validation():

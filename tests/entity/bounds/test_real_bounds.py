@@ -1,4 +1,5 @@
 """Test RealBounds."""
+
 import pytest
 
 from gemd.entity.bounds.integer_bounds import IntegerBounds
@@ -13,16 +14,16 @@ def test_contains():
     dim2 = RealBounds(lower_bound=33, upper_bound=200, default_units="degF")
     assert dim.contains(dim2)
 
-    assert dim.contains(NominalReal(5, 'degC'))
-    assert not dim.contains(NominalReal(5, 'K'))
+    assert dim.contains(NominalReal(5, "degC"))
+    assert not dim.contains(NominalReal(5, "K"))
 
 
 def test_union():
     """Test basic union & update logic."""
-    bounds = RealBounds(lower_bound=1, upper_bound=5, default_units='mm')
-    low = RealBounds(lower_bound=1, upper_bound=5, default_units='um')
-    high = NominalReal(1, 'cm')
-    bad = NominalReal(1, 'kg')
+    bounds = RealBounds(lower_bound=1, upper_bound=5, default_units="mm")
+    low = RealBounds(lower_bound=1, upper_bound=5, default_units="um")
+    high = NominalReal(1, "cm")
+    bad = NominalReal(1, "kg")
     assert bounds.union(low).contains(low), "Bounds didn't get low value"
     assert bounds.union(high).contains(high), "Bounds didn't get high value"
     assert bounds.union(low, high).contains(bounds), "Bounds didn't keep old values"
@@ -50,7 +51,7 @@ def test_contains_incompatible_units():
     """Make sure contains returns false when the units don't match."""
     dim = RealBounds(lower_bound=0, upper_bound=100, default_units="m")
     dim2 = RealBounds(lower_bound=0, upper_bound=100, default_units="kJ")
-    dim3 = RealBounds(lower_bound=0, upper_bound=100, default_units='')
+    dim3 = RealBounds(lower_bound=0, upper_bound=100, default_units="")
     assert not dim.contains(dim2)
     assert not dim.contains(dim3)
 
@@ -64,7 +65,7 @@ def test_constructor_error():
         RealBounds(lower_bound=0, upper_bound=float("inf"), default_units="meter")
 
     with pytest.raises(ValueError):
-        RealBounds(lower_bound=None, upper_bound=10, default_units='')
+        RealBounds(lower_bound=None, upper_bound=10, default_units="")
 
     with pytest.raises(ValueError):
         RealBounds(lower_bound=0, upper_bound=100, default_units=None)
@@ -87,4 +88,4 @@ def test_type_mismatch():
     assert not bounds.contains(IntegerBounds(0, 1))
     assert not bounds.contains(None)
     with pytest.raises(TypeError):
-        bounds.contains([.33, .66])
+        bounds.contains([0.33, 0.66])
