@@ -121,3 +121,23 @@ def test_more_iterable_types():
     res = recursive_flatmap(dct.values(), lambda x: [x.tags.pop(0)])
     assert "3" in res
     assert "3" not in obj.tags
+
+
+def test_flatten_run_template_without_spec():
+    """A run that carries a template and no spec flattens with the template first."""
+    from gemd.util import writable_sort_order
+
+    bounds = CategoricalBounds(categories=["foo", "bar"])
+    cond_template = ConditionTemplate(name="eggs", bounds=bounds)
+    template = ProcessTemplate("spam", conditions=[(cond_template, bounds)])
+    run = ProcessRun(name="run", template=template)
+
+    flat = flatten(run, "test-scope")
+    # 3 objects: 1 Process Template, 1 Condition Template and 1 Process Run
+    assert len(flat) == 3, "Expected 3 flattened objects"
+    assert [type(x) for x in flat] == [ConditionTemplate, ProcessTemplate, ProcessRun]
+    assert [writable_sort_order(x) for x in flat] == sorted(writable_sort_order(x) for x in flat)
+
+    flat_run = next(x for x in flat if isinstance(x, ProcessRun))
+    assert flat_run.template == template.to_link("test-scope")
+    assert flat_run.spec is None

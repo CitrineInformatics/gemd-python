@@ -12,9 +12,11 @@ from gemd.entity.object.has_parameters import HasParameters
 from gemd.entity.object.has_properties import HasProperties
 from gemd.entity.object.has_source import HasSource
 from gemd.entity.object.has_spec import HasSpec
+from gemd.entity.object.has_template import HasTemplate
 from gemd.entity.object.material_run import MaterialRun
 from gemd.entity.object.measurement_spec import MeasurementSpec
 from gemd.entity.source.performed_source import PerformedSource
+from gemd.entity.template.measurement_template import MeasurementTemplate
 
 __all__ = ["MeasurementRun"]
 
@@ -23,6 +25,7 @@ class MeasurementRun(
     BaseObject,
     HasMaterial,
     HasSpec,
+    HasTemplate,
     HasConditions,
     HasProperties,
     HasParameters,
@@ -56,6 +59,9 @@ class MeasurementRun(
         Properties that are measured during this measurement run.
     spec: ~gemd.entity.object.measurement_spec.MeasurementSpec`
         The measurement specification of which this is an instance.
+    template: ~gemd.entity.template.measurement_template.MeasurementTemplate, optional
+        A template bounding the valid values for this run's attributes.
+        When unset, the template of the spec applies.
     material: ~gemd.entity.object.material_run.MaterialRun`
         The material run being measured.
     spec: ~gemd.entity.object.material_spec.MaterialSpec`
@@ -72,6 +78,7 @@ class MeasurementRun(
         name: str,
         *,
         spec: Union[MeasurementSpec, LinkByUID] = None,
+        template: Optional[Union[MeasurementTemplate, LinkByUID]] = None,
         material: Union[MaterialRun, LinkByUID] = None,
         properties: Union[Property, Iterable[Property]] = None,
         conditions: Union[Condition, Iterable[Condition]] = None,
@@ -86,6 +93,7 @@ class MeasurementRun(
             self, name=name, uids=uids, tags=tags, notes=notes, file_links=file_links
         )
         HasSpec.__init__(self, spec=spec)
+        HasTemplate.__init__(self, template)
         HasProperties.__init__(self, properties)
         HasConditions.__init__(self, conditions)
         HasParameters.__init__(self, parameters)
@@ -116,3 +124,8 @@ class MeasurementRun(
     def _spec_type() -> Type:
         """Required method to satisfy HasTemplates mix-in."""
         return MeasurementSpec
+
+    @staticmethod
+    def _template_type() -> Type:
+        """Communicate expected template type to parent class."""
+        return MeasurementTemplate

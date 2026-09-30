@@ -9,9 +9,11 @@ from gemd.entity.object.has_conditions import HasConditions
 from gemd.entity.object.has_parameters import HasParameters
 from gemd.entity.object.has_source import HasSource
 from gemd.entity.object.has_spec import HasSpec
+from gemd.entity.object.has_template import HasTemplate
 from gemd.entity.object.process_spec import ProcessSpec
 from gemd.entity.setters import validate_list
 from gemd.entity.source.performed_source import PerformedSource
+from gemd.entity.template.process_template import ProcessTemplate
 
 __all__ = ["ProcessRun"]
 MaterialRunType = TypeVar("MaterialRunType", bound="MaterialRun")  # noqa: F821
@@ -21,6 +23,7 @@ IngredientRunType = TypeVar("IngredientRunType", bound="IngredientRun")  # noqa:
 class ProcessRun(
     BaseObject,
     HasSpec,
+    HasTemplate,
     HasConditions,
     HasParameters,
     HasSource,
@@ -53,6 +56,9 @@ class ProcessRun(
         Parameters of this process run.
     spec: ~gemd.entity.object.process_spec.ProcessSpec
         Spec for this process run.
+    template: ~gemd.entity.template.process_template.ProcessTemplate, optional
+        A template bounding the valid values for this run's attributes.
+        When unset, the template of the spec applies.
     file_links: List[~gemd.entity.file_link.FileLink], optional
         Links to associated files, with resource paths into the files API.
     source: ~gemd.entity.source.performed_source.PerformedSource, optional
@@ -65,6 +71,7 @@ class ProcessRun(
         name: str,
         *,
         spec: Union[ProcessSpec, LinkByUID] = None,
+        template: Optional[Union[ProcessTemplate, LinkByUID]] = None,
         conditions: Union[Condition, Iterable[Condition]] = None,
         parameters: Union[Parameter, Iterable[Parameter]] = None,
         uids: Mapping[str, str] = None,
@@ -79,6 +86,7 @@ class ProcessRun(
             self, name=name, uids=uids, tags=tags, notes=notes, file_links=file_links
         )
         HasSpec.__init__(self, spec=spec)
+        HasTemplate.__init__(self, template)
         HasConditions.__init__(self, conditions)
         HasParameters.__init__(self, parameters)
         HasSource.__init__(self, source)
@@ -110,6 +118,11 @@ class ProcessRun(
     def _spec_type() -> Type:
         """Required method to satisfy HasTemplates mix-in."""
         return ProcessSpec
+
+    @staticmethod
+    def _template_type() -> Type:
+        """Communicate expected template type to parent class."""
+        return ProcessTemplate
 
     def _dict_for_compare(self) -> Dict[str, Any]:
         """Support for recursive equals."""

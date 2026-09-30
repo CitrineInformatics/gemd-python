@@ -1,6 +1,5 @@
-from typing import Any, Iterable, List, Mapping, Optional, Type, Union
+from typing import Iterable, List, Mapping, Optional, Type, Union
 
-from gemd.entity.dict_serializable import DictSerializable
 from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.object.base_object import BaseObject
@@ -11,7 +10,7 @@ from gemd.entity.object.has_spec import HasSpec
 from gemd.entity.object.ingredient_spec import IngredientSpec
 from gemd.entity.object.material_run import MaterialRun
 from gemd.entity.object.process_run import ProcessRun
-from gemd.entity.setters import validate_list
+from gemd.entity.setters import validate_list, validate_str
 from gemd.entity.value.continuous_value import ContinuousValue
 
 __all__ = ["IngredientRun"]
@@ -26,6 +25,12 @@ class IngredientRun(
 
     Parameters
     ----------
+    name: str, optional
+        Name of the ingredient run.
+        When unset, the name of the spec applies.
+    labels: List[str], optional
+        Additional labels on the ingredient that must be unique.
+        When empty, the labels of the spec apply.
     uids: Map[str, str], optional
         A collection of
         `unique IDs <https://citrineinformatics.github.io/gemd-documentation/
@@ -58,6 +63,8 @@ class IngredientRun(
     def __init__(
         self,
         *,
+        name: str = None,
+        labels: Iterable[str] = None,
         material: Union[MaterialRun, LinkByUID] = None,
         process: Union[ProcessRun, LinkByUID] = None,
         mass_fraction: ContinuousValue = None,
@@ -71,10 +78,11 @@ class IngredientRun(
         file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
     ):
         BaseObject.__init__(
-            self, name=None, uids=uids, tags=tags, notes=notes, file_links=file_links
+            self, name=name, uids=uids, tags=tags, notes=notes, file_links=file_links
         )
         self._labels = None
-        HasSpec.__init__(self, spec)  # this will overwrite name/labels if/when they are set
+        self.labels = labels
+        HasSpec.__init__(self, spec)
 
         HasQuantities.__init__(
             self,
@@ -91,23 +99,33 @@ class IngredientRun(
 
     @property
     def name(self) -> str:
-        """Get name."""
-        from gemd.entity.object.ingredient_spec import IngredientSpec
-
-        if isinstance(self.spec, IngredientSpec):
+        """The run's own name when it has one, otherwise the name of its spec."""
+        if self._name is not None:
+            return self._name
+        elif isinstance(self.spec, IngredientSpec):
             return self.spec.name
         else:
-            return super().name
+            return None
+
+    @name.setter
+    def name(self, name: str):
+        """Set the run's own name."""
+        self._name = None if name is None else validate_str(name)
 
     @property
     def labels(self) -> List[str]:
-        """Get labels."""
-        from gemd.entity.object.ingredient_spec import IngredientSpec
-
-        if isinstance(self.spec, IngredientSpec):
+        """The run's own labels when it has any, otherwise the labels of its spec."""
+        if len(self._labels) > 0:
+            return self._labels
+        elif isinstance(self.spec, IngredientSpec):
             return self.spec.labels
         else:
             return self._labels
+
+    @labels.setter
+    def labels(self, labels: Iterable[str]):
+        """Set the run's own labels."""
+        self._labels = validate_list(labels, str)
 
     @property
     def material(self) -> Union[MaterialRun, LinkByUID]:
@@ -156,33 +174,10 @@ class IngredientRun(
     @spec.setter
     def spec(self, spec: Union[IngredientSpec, LinkByUID]):
         """Set the spec."""
-        if isinstance(self.spec, IngredientSpec):  # Store values if you had them
-            self._name = self.spec.name
-            self._labels = validate_list(self.spec.labels, str)
+        if isinstance(self.spec, IngredientSpec):  # Keep the old spec's values if you have none
+            if self._name is None:
+                self._name = self.spec.name
+            if len(self._labels) == 0:
+                self._labels = validate_list(self.spec.labels, str)
         # Note that the super() mechanism does not work properly for overloaded setters
         getattr(HasSpec, "spec").fset(self, spec)
-
-    @classmethod
-    def from_dict(cls, d: Mapping[str, Any]) -> DictSerializable:
-        """Overloaded method from DictSerializable to intercept `name` and `labels` fields.
-
-        Parameters
-        ----------
-        d: dict
-            The object as a dictionary of key-value pairs that correspond to the object's fields.
-
-        Returns
-        -------
-        DictSerializable
-            The deserialized object.
-
-        """
-        clean = dict(d)
-        name = clean.pop("name", None)
-        labels = clean.pop("labels", None)
-        obj = super().from_dict(clean)
-        if name is not None:
-            obj._name = name
-        if labels is not None:
-            obj._labels = validate_list(labels, str)
-        return obj

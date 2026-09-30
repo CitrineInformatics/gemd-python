@@ -167,3 +167,60 @@ def test_dependencies():
     assert ps not in mr.all_dependencies()
     assert pr in mr.all_dependencies()
     assert ms in mr.all_dependencies()
+
+
+def test_own_template():
+    """A run's own template wins over its spec's template."""
+    spec_template = MaterialTemplate("spec template", uids={"id": str(uuid4())})
+    run_template = MaterialTemplate("run template", uids={"id": str(uuid4())})
+    spec = MaterialSpec("A spec", uids={"id": str(uuid4())}, template=spec_template)
+
+    # Template only
+    run = MaterialRun("A run", template=run_template)
+    assert run.template == run_template
+    assert run_template in run.all_dependencies()
+
+    # Spec only
+    run = MaterialRun("A run", spec=spec)
+    assert run.template == spec_template
+    assert spec_template not in run.all_dependencies()
+
+    # Both, agreeing
+    run = MaterialRun("A run", spec=spec, template=spec_template)
+    assert run.template == spec_template
+    assert spec_template in run.all_dependencies()
+
+    # Both, disagreeing: the run's own template wins, and clearing it restores the fallback
+    run = MaterialRun("A run", spec=spec, template=run_template)
+    assert run.template == run_template
+    run.template = None
+    assert run.template == spec_template
+    run.template = LinkByUID.from_entity(run_template)
+    assert run.template == LinkByUID.from_entity(run_template)
+
+    # Neither
+    assert MaterialRun("A run").template is None
+
+    with pytest.raises(TypeError):
+        MaterialRun("A run", template=spec)
+    with pytest.raises(TypeError):
+        run.template = ProcessSpec("Not a template")
+
+
+def test_template_round_trip():
+    """A run's own template survives serialization."""
+    template = MaterialTemplate("run template", uids={"id": str(uuid4())})
+    run = MaterialRun("A run", uids={"id": str(uuid4())}, template=template)
+
+    assert run.as_dict()["template"] == template
+    assert MaterialRun.from_dict(run.as_dict()).template == template
+
+    copied = gemd_json.loads(gemd_json.dumps(run))
+    assert copied.template == template
+    assert copied == run
+
+    # A run without a template of its own serializes the one it reaches through its spec
+    spec = MaterialSpec("A spec", uids={"id": str(uuid4())}, template=template)
+    run = MaterialRun("A run", uids={"id": str(uuid4())}, spec=spec)
+    assert run.as_dict()["template"] == template
+    assert gemd_json.loads(gemd_json.dumps(run)) == run

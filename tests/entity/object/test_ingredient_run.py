@@ -37,7 +37,9 @@ def test_invalid_assignment():
     with pytest.raises(TypeError):
         IngredientRun(spec=5)
     with pytest.raises(TypeError):
-        IngredientRun(name="Flour")  # IngredientRuns don't have their own name
+        IngredientRun(name=5)
+    with pytest.raises(TypeError):
+        IngredientRun(labels=[5])
 
 
 def test_name_persistence():
@@ -71,25 +73,77 @@ def test_name_persistence():
     assert run.name == spec.name
     assert run.labels == spec.labels
 
-    # Test that serialization doesn't get confused after a deser and set
+    # The stashed values are now the run's own, so a later spec does not replace them
     spec_too = IngredientSpec(name="Jorge", labels=[], process=ps_link, material=ms_link)
     run.spec = spec_too
     assert run == je.copy(run)
-    assert run.name == spec_too.name
-    assert run.labels == spec_too.labels
+    assert run.name == spec.name
+    assert run.labels == spec.labels
 
 
-def test_implicit_fields():
-    """These test that users can't directly set names and labels."""
-    name = "name"
-    labels = ["label", "also"]
-    with pytest.raises(TypeError):
-        IngredientRun(name=name)
-    with pytest.raises(TypeError):
-        IngredientRun(labels=labels)
+def test_own_name_and_labels():
+    """The run's own name and labels take precedence over the spec's."""
+    from gemd.entity.link_by_uid import LinkByUID
+    from gemd.entity.object import IngredientSpec
 
+    spec = IngredientSpec(name="Spec name", labels=["spec label"])
+
+    # No values of its own and no spec
     run = IngredientRun()
+    assert run.name is None
+    assert run.labels == []
+
+    # No values of its own: the spec's values show through
+    run = IngredientRun(spec=spec)
+    assert run.name == spec.name
+    assert run.labels == spec.labels
+
+    # Own values win, whether set in the constructor or later
+    run = IngredientRun(name="Run name", labels=["run label"], spec=spec)
+    assert run.name == "Run name"
+    assert run.labels == ["run label"]
+
+    run = IngredientRun(spec=spec)
+    run.name = "Set later"
+    run.labels = ["later label"]
+    assert run.name == "Set later"
+    assert run.labels == ["later label"]
+
+    # Own values stay when the spec goes away
+    run.spec = LinkByUID(scope="local", id="spec")
+    assert run.name == "Set later"
+    assert run.labels == ["later label"]
+
+    # Clearing the own values restores the fallback
+    run.spec = spec
+    run.name = None
+    run.labels = []
+    assert run.name == spec.name
+    assert run.labels == spec.labels
+
+
+def test_name_and_labels_round_trip():
+    """Own name and labels survive dict and json round trips."""
+    from gemd.entity.object import IngredientSpec
+    from gemd.json import dumps, loads
+
+    spec = IngredientSpec(name="Spec name", labels=["spec label"])
+    run = IngredientRun(name="Run name", labels=["run label"], spec=spec)
+
+    as_dict = run.as_dict()
+    assert as_dict["name"] == "Run name"
+    assert as_dict["labels"] == ["run label"]
+    assert "template" not in as_dict
+
+    rebuilt = IngredientRun.from_dict(as_dict)
+    assert rebuilt.name == "Run name"
+    assert rebuilt.labels == ["run label"]
+
+    copied = loads(dumps(run))
+    assert copied.name == "Run name"
+    assert copied.labels == ["run label"]
+    assert copied.spec.name == spec.name
+
+    # A run with no template link of its own
     with pytest.raises(AttributeError):
-        run.name = name
-    with pytest.raises(AttributeError):
-        run.labels = labels
+        run.template = None

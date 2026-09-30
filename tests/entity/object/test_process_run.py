@@ -80,3 +80,44 @@ def test_equality():
 
     run4 = next(x for x in flatten(run3, "test-scope") if isinstance(x, ProcessRun))
     assert run4 == run3, "Flattening removes measurement references, but that's okay"
+
+
+def test_own_template():
+    """A run's own template wins over its spec's template."""
+    spec_template = ProcessTemplate("spec template", uids={"id": str(uuid4())})
+    run_template = ProcessTemplate("run template", uids={"id": str(uuid4())})
+    spec = ProcessSpec("A spec", uids={"id": str(uuid4())}, template=spec_template)
+
+    assert ProcessRun("A run", template=run_template).template == run_template
+    assert ProcessRun("A run", spec=spec).template == spec_template
+    assert ProcessRun("A run", spec=spec, template=spec_template).template == spec_template
+    assert ProcessRun("A run", spec=spec, template=run_template).template == run_template
+    assert ProcessRun("A run").template is None
+
+    with pytest.raises(TypeError):
+        ProcessRun("A run", template=spec)
+
+    run = ProcessRun("A run", uids={"id": str(uuid4())}, template=run_template)
+    assert loads(dumps(run)).template == run_template
+
+
+def test_own_template_bounds_check():
+    """A run with a template and no spec checks its attributes against the template."""
+    from gemd.entity.bounds import IntegerBounds
+    from gemd.entity.bounds_validation import WarningLevel, validation_level
+    from gemd.entity.template import ConditionTemplate
+    from gemd.entity.value import NominalInteger
+
+    cond_template = ConditionTemplate("cond", bounds=IntegerBounds(0, 10))
+    template = ProcessTemplate("run template", conditions=[(cond_template, IntegerBounds(0, 5))])
+    too_big = Condition("cond", template=cond_template, value=NominalInteger(7))
+
+    with validation_level(WarningLevel.IGNORE):
+        ProcessRun("A run", template=template, conditions=[too_big])
+    with validation_level(WarningLevel.FATAL):
+        ProcessRun("A run", conditions=[too_big])  # No template, so nothing to check
+        with pytest.raises(ValueError):
+            ProcessRun("A run", template=template, conditions=[too_big])
+        run = ProcessRun("A run", template=template)
+        with pytest.raises(ValueError):
+            run.conditions.append(too_big)

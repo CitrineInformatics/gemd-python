@@ -115,3 +115,32 @@ def test_inplace_v_not():
     assert subbed != process_dict  # This is true because the hashes change, even if objects equal
     substitute_links(process_dict, inplace=True)
     assert subbed == process_dict
+
+
+def test_setter_by_attribute():
+    """Setters are found for plain attributes, read-only properties and full properties."""
+    from gemd.util.impl import _setter_by_attribute
+
+    class Thing:
+        def __init__(self):
+            self.plain = 1
+            self._read_only = 2
+            self._full = 3
+
+        @property
+        def read_only(self):
+            return self._read_only
+
+        @property
+        def full(self):
+            return self._full
+
+        @full.setter
+        def full(self, value):
+            self._full = value
+
+    thing = Thing()
+    _setter_by_attribute(Thing, "plain")(thing, 10)
+    _setter_by_attribute(Thing, "read_only")(thing, 20)
+    _setter_by_attribute(Thing, "full")(thing, 30)
+    assert (thing.plain, thing.read_only, thing.full) == (10, 20, 30)

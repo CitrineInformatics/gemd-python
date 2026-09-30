@@ -13,6 +13,11 @@ For example, a :class:`~gemd.entity.object.material_run.MaterialRun` links to it
 Uni-directional links are typically used when the multiplicity of a relationship can be large.
 For example, a material may be referenced in thousands of ingredients.
 
+Runs may also link directly to a template.
+A :class:`~gemd.entity.object.material_run.MaterialRun`, :class:`~gemd.entity.object.process_run.ProcessRun` or :class:`~gemd.entity.object.measurement_run.MeasurementRun` carries its own ``template`` field, serialized alongside ``spec``.
+When that field is empty, the run's ``template`` property falls back to the template of its spec.
+An :class:`~gemd.entity.object.ingredient_run.IngredientRun` carries its own ``name`` and ``labels`` fields in the same way, falling back to the values on its spec.
+
 In GEMD, bi-directional links are readable but only a single direction is writable.
 For example, a :class:`~gemd.entity.object.measurement_run.MeasurementRun` can set the :class:`~gemd.entity.object.material_run.MaterialRun` material that it was performed on,
 but a :class:`~gemd.entity.object.material_run.MaterialRun` cannot set the :class:`~gemd.entity.object.measurement_run.MeasurementRun`s it contains.

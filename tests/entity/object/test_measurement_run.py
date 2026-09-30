@@ -202,3 +202,38 @@ def test_dependencies():
     assert prop in meas.all_dependencies()
     assert cond in meas.all_dependencies()
     assert param in meas.all_dependencies()
+
+
+def test_own_template():
+    """A run's own template wins over its spec's template."""
+    spec_template = MeasurementTemplate("spec template", uids={"id": str(uuid4())})
+    run_template = MeasurementTemplate("run template", uids={"id": str(uuid4())})
+    spec = MeasurementSpec("A spec", uids={"id": str(uuid4())}, template=spec_template)
+
+    assert MeasurementRun("A run", template=run_template).template == run_template
+    assert MeasurementRun("A run", spec=spec).template == spec_template
+    assert MeasurementRun("A run", spec=spec, template=spec_template).template == spec_template
+    assert MeasurementRun("A run", spec=spec, template=run_template).template == run_template
+    assert MeasurementRun("A run").template is None
+
+    with pytest.raises(TypeError):
+        MeasurementRun("A run", template=spec)
+
+    run = MeasurementRun("A run", uids={"id": str(uuid4())}, template=run_template)
+    assert loads(dumps(run)).template == run_template
+
+
+def test_own_template_bounds_check():
+    """A run with a template and no spec checks its properties against the template."""
+    prop_template = PropertyTemplate("prop", bounds=IntegerBounds(0, 10))
+    template = MeasurementTemplate(
+        "run template", properties=[(prop_template, IntegerBounds(0, 5))]
+    )
+    too_big = Property("prop", template=prop_template, value=NominalInteger(7))
+
+    with validation_level(WarningLevel.IGNORE):
+        MeasurementRun("A run", template=template, properties=[too_big])
+    with validation_level(WarningLevel.FATAL):
+        MeasurementRun("A run", properties=[too_big])  # No template, so nothing to check
+        with pytest.raises(ValueError):
+            MeasurementRun("A run", template=template, properties=[too_big])

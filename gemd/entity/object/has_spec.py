@@ -43,12 +43,31 @@ class HasSpec(HasDependencies):
 
     @property
     def template(self) -> Optional[Union[BaseTemplate, LinkByUID]]:
-        """Get the template associated with the spec."""
+        """The template that bounds this object.
+
+        Objects that also mix in :class:`~gemd.entity.object.has_template.HasTemplate` return
+        their own template when it is set.  Otherwise, this is the template of the spec, if the
+        spec is an object that has one.
+        """
+        if isinstance(self, HasTemplate):
+            own = HasTemplate.template.fget(self)
+            if own is not None:
+                return own
         if isinstance(self.spec, HasTemplate):
             return self.spec.template
         else:
             return None
 
+    @template.setter
+    def template(self, template: Optional[Union[BaseTemplate, LinkByUID]]):
+        """Set the object's own template, if it can carry one."""
+        if not isinstance(self, HasTemplate):
+            raise AttributeError(f"{type(self).__name__} does not carry its own template.")
+        HasTemplate.template.fset(self, template)
+
     def _local_dependencies(self) -> Set[Union[BaseEntity, LinkByUID]]:
         """Return a set of all immediate dependencies (no recursion)."""
-        return {self.spec} if self.spec is not None else set()
+        result = {self.spec} if self.spec is not None else set()
+        if isinstance(self, HasTemplate):
+            result |= HasTemplate._local_dependencies(self)
+        return result

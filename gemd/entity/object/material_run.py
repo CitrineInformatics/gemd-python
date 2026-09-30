@@ -5,16 +5,20 @@ from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.object.base_object import BaseObject
 from gemd.entity.object.has_process import HasProcess
 from gemd.entity.object.has_spec import HasSpec
+from gemd.entity.object.has_template import HasTemplate
 from gemd.entity.object.material_spec import MaterialSpec
 from gemd.entity.object.process_run import ProcessRun
 from gemd.entity.setters import validate_list
+from gemd.entity.template.material_template import MaterialTemplate
 from gemd.enumeration import SampleType
 
 __all__ = ["MaterialRun"]
 MeasurementRunType = TypeVar("MeasurementRunType", bound="MeasurementRun")  # noqa: F821
 
 
-class MaterialRun(BaseObject, HasSpec, HasProcess, typ="material_run", skip={"_measurements"}):
+class MaterialRun(
+    BaseObject, HasSpec, HasTemplate, HasProcess, typ="material_run", skip={"_measurements"}
+):
     """A material run.
 
     This includes a link to the originating process and soft links to measurements.
@@ -40,6 +44,9 @@ class MaterialRun(BaseObject, HasSpec, HasProcess, typ="material_run", skip={"_m
         "unknown." Default is "unknown."
     spec: :class:`~gemd.entity.object.material_spec.MaterialSpec`
         The material specification of which this is an instance.
+    template: ~gemd.entity.template.material_template.MaterialTemplate, optional
+        A template bounding the valid values for this run's attributes.
+        When unset, the template of the spec applies.
     file_links: List[~gemd.entity.file_link.FileLink], optional
         Links to associated files, with resource paths into the files API.
 
@@ -50,6 +57,7 @@ class MaterialRun(BaseObject, HasSpec, HasProcess, typ="material_run", skip={"_m
         name: str,
         *,
         spec: Union[MaterialSpec, LinkByUID] = None,
+        template: Optional[Union[MaterialTemplate, LinkByUID]] = None,
         process: Union[ProcessRun, LinkByUID] = None,
         sample_type: Union[SampleType, str] = "unknown",
         uids: Mapping[str, str] = None,
@@ -63,6 +71,7 @@ class MaterialRun(BaseObject, HasSpec, HasProcess, typ="material_run", skip={"_m
             self, name=name, uids=uids, tags=tags, notes=notes, file_links=file_links
         )
         HasSpec.__init__(self, spec=spec)
+        HasTemplate.__init__(self, template)
         self._process = None
         self._measurements = validate_list(None, [MeasurementRun, LinkByUID])
         self._sample_type = None
@@ -112,6 +121,11 @@ class MaterialRun(BaseObject, HasSpec, HasProcess, typ="material_run", skip={"_m
     def _spec_type() -> Type:
         """Required method to satisfy HasTemplates mix-in."""
         return MaterialSpec
+
+    @staticmethod
+    def _template_type() -> Type:
+        """Communicate expected template type to parent class."""
+        return MaterialTemplate
 
     def _dict_for_compare(self) -> Mapping[str, Any]:
         """Support for recursive equals."""

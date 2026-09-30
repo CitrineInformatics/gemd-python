@@ -42,4 +42,5 @@ class HasTemplate(HasDependencies):
 
     def _local_dependencies(self) -> Set[Union[BaseEntity, LinkByUID]]:
         """Return a set of all immediate dependencies (no recursion)."""
-        return {self.template} if self.template is not None else set()
+        template = getattr(self, "_template", None)  # Only the template this object stores
+        return {template} if template is not None else set()
