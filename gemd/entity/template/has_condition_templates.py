@@ -12,6 +12,10 @@ from gemd.entity.template.condition_template import ConditionTemplate
 __all__ = ["HasConditionTemplates"]
 BaseEntityType = TypeVar("BaseEntityType", bound="BaseEntity")  # noqa: F821
 ConditionType = TypeVar("ConditionType", bound="Condition")  # noqa: F821
+_ConditionTemplateType = Union[ConditionTemplate, LinkByUID]
+_ConditionPairType = Tuple[_ConditionTemplateType, Optional[BaseBounds]]
+_ConditionListPairType = List[Optional[Union[_ConditionTemplateType, BaseBounds]]]
+_ConditionInputType = Union[_ConditionTemplateType, _ConditionPairType, _ConditionListPairType]
 
 
 class HasConditionTemplates(HasDependencies):
@@ -27,18 +31,13 @@ class HasConditionTemplates(HasDependencies):
 
     def __init__(
         self,
-        conditions: Iterable[
-            Union[
-                Union[ConditionTemplate, LinkByUID],
-                Tuple[Union[ConditionTemplate, LinkByUID], Optional[BaseBounds]],
-            ]
-        ],
+        conditions: Iterable[_ConditionInputType],
     ):
         self._conditions = None
         self.conditions = conditions
 
     @property
-    def conditions(self) -> List[Union[ConditionTemplate, LinkByUID]]:
+    def conditions(self) -> List[_ConditionPairType]:
         """Get the list of condition template/bounds tuples.
 
         Returns
@@ -52,12 +51,7 @@ class HasConditionTemplates(HasDependencies):
     @conditions.setter
     def conditions(
         self,
-        conditions: Iterable[
-            Union[
-                Union[ConditionTemplate, LinkByUID],
-                Tuple[Union[ConditionTemplate, LinkByUID], Optional[BaseBounds]],
-            ]
-        ],
+        conditions: Iterable[_ConditionInputType],
     ):
         """Set the list of condition templates.
 

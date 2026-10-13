@@ -1,6 +1,6 @@
 """Base template."""
 
-from typing import Iterable, Mapping, Union
+from typing import Iterable, List, Mapping, Optional, Tuple, Union
 
 from gemd.entity.base_entity import BaseEntity
 from gemd.entity.bounds.base_bounds import BaseBounds
@@ -8,6 +8,10 @@ from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.template.attribute_template import AttributeTemplate
 
 __all__ = ["BaseTemplate"]
+_AttributeTemplateType = Union[AttributeTemplate, LinkByUID]
+_AttributePairType = Tuple[_AttributeTemplateType, Optional[BaseBounds]]
+_AttributeListPairType = List[Optional[Union[_AttributeTemplateType, BaseBounds]]]
+_AttributeInputType = Union[_AttributeTemplateType, _AttributePairType, _AttributeListPairType]
 
 
 class BaseTemplate(BaseEntity):
@@ -43,12 +47,8 @@ class BaseTemplate(BaseEntity):
         self.description = description
 
     @staticmethod
-    def _homogenize_ranges(
-        template_or_tuple: Union[
-            AttributeTemplate, LinkByUID, Iterable[Union[AttributeTemplate, BaseBounds]]
-        ],
-    ):
-        """Take either a template or pair and turn it into a (template, bounds) pair.
+    def _homogenize_ranges(template_or_tuple: _AttributeInputType) -> _AttributePairType:
+        """Take either a template or pair and turn it into a (template, bounds) tuple.
 
         If no bounds are provided, use the attribute template's default bounds.
 
@@ -60,14 +60,14 @@ class BaseTemplate(BaseEntity):
 
         Returns
         -------
-        List[AttributeTemplate or LinkByUID, BaseBounds]
+        Tuple[AttributeTemplate or LinkByUID, BaseBounds or None]
             The attribute template and bounds that should be applied to the attribute
             when used in the context of **this** object.
 
         """
         # if given a template only, use None to represent passthrough bounds
         if isinstance(template_or_tuple, (AttributeTemplate, LinkByUID)):
-            return [template_or_tuple, None]
+            return (template_or_tuple, None)
         # if given a (template, bounds) pair,
         # check that the bounds is consistent with that of the template
         elif isinstance(template_or_tuple, (tuple, list)):
@@ -78,5 +78,5 @@ class BaseTemplate(BaseEntity):
                 if isinstance(first, AttributeTemplate) and isinstance(second, BaseBounds):
                     if not first.bounds.contains(second):
                         raise ValueError("Range and template are inconsistent")
-                return [first, second]
+                return (first, second)
         raise TypeError("Expected a template or (template, bounds) tuple")  # pragma: no cover

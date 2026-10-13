@@ -58,7 +58,7 @@ def test_mixins():
     for x in (obj.properties, obj.conditions, obj.parameters):
         assert isinstance(x, ValidList)
         for y in x:
-            assert isinstance(y, list)
+            assert isinstance(y, tuple)
             assert len(y) == 2
             assert isinstance(y[0], AttributeTemplate)
             if y[1] is not None:
@@ -125,9 +125,9 @@ def test_mixins():
         "Unmatched property and bad value didn't validate."
     )
 
-    second.conditions[0][1] = None
-    second.parameters[0][1] = None
-    second.properties[0][1] = None
+    second.conditions[0] = (second.conditions[0][0], None)
+    second.parameters[0] = (second.parameters[0][0], None)
+    second.properties[0] = (second.properties[0][0], None)
     assert second.validate_condition(Condition("Name", value=good_val)), (
         "Condition and good value with passthrough didn't validate."
     )
