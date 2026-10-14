@@ -1,11 +1,13 @@
 """Tests of the process spec object."""
-import pytest
+
 from copy import deepcopy
 
-from gemd.json import dumps, loads
-from gemd.entity.attribute import PropertyAndConditions, Property
-from gemd.entity.object import ProcessSpec, MaterialSpec, IngredientSpec
+import pytest
+
+from gemd.entity.attribute import Property, PropertyAndConditions
+from gemd.entity.object import IngredientSpec, MaterialSpec, ProcessSpec
 from gemd.entity.value import DiscreteCategorical
+from gemd.json import dumps, loads
 from gemd.util import flatten
 
 
@@ -16,12 +18,12 @@ def test_material_spec():
 
     # Create MaterialSpec without a ProcessSpec
     prop = Property(
-        name="The material is a solid",
-        value=DiscreteCategorical(probabilities="solid")
+        name="The material is a solid", value=DiscreteCategorical(probabilities="solid")
     )
     mat_spec = MaterialSpec(name="a material spec", properties=PropertyAndConditions(prop))
-    assert mat_spec.process is None, \
+    assert mat_spec.process is None, (
         "MaterialSpec should be initialized with no ProcessSpec, by default"
+    )
 
     # Assign a ProcessSpec to mat_spec, first ensuring that the type is enforced
     with pytest.raises(TypeError):
@@ -29,28 +31,32 @@ def test_material_spec():
     mat_spec.process = proc_spec
 
     # Assert circular links
-    assert dumps(proc_spec.output_material.process) == dumps(proc_spec), \
+    assert dumps(proc_spec.output_material.process) == dumps(proc_spec), (
         "ProcessSpec should link to MaterialSpec that links back to itself"
+    )
 
-    assert dumps(mat_spec.process.output_material) == dumps(mat_spec), \
+    assert dumps(mat_spec.process.output_material) == dumps(mat_spec), (
         "MaterialSpec should link to ProcessSpec that links back to itself"
+    )
 
     # Make copies of both specs
     mat_spec_copy = loads(dumps(mat_spec))
     proc_spec_copy = loads(dumps(proc_spec))
 
-    assert proc_spec_copy.output_material == mat_spec, \
+    assert proc_spec_copy.output_material == mat_spec, (
         "Serialization should preserve link from ProcessSpec to MaterialSpec"
+    )
 
-    assert mat_spec_copy.process == proc_spec, \
+    assert mat_spec_copy.process == proc_spec, (
         "Serialization should preserve link from MaterialSpec to ProcessSpec"
+    )
 
 
 def test_ingredient_spec():
     """Tests that a process can house an ingredient, and that pairing survives serialization."""
     # Create a ProcessSpec
     proc_spec = ProcessSpec(name="a process spec", tags=["tag1", "tag2"])
-    IngredientSpec(name='Input', material=MaterialSpec(name='Raw'), process=proc_spec)
+    IngredientSpec(name="Input", material=MaterialSpec(name="Raw"), process=proc_spec)
 
     # Make copies of both specs
     proc_spec_copy = loads(dumps(proc_spec))
@@ -77,10 +83,10 @@ def test_equality():
 
     spec4 = deepcopy(spec3)
     assert spec4 == spec3, "Copy somehow failed"
-    spec4.ingredients[0].tags.append('A tag')
+    spec4.ingredients[0].tags.append("A tag")
     assert spec4 != spec3
 
-    spec5 = next(x for x in flatten(spec4, 'test-scope') if isinstance(x, ProcessSpec))
+    spec5 = next(x for x in flatten(spec4, "test-scope") if isinstance(x, ProcessSpec))
     assert spec5 == spec4, "Flattening removes measurement references, but that's okay"
 
 

@@ -1,6 +1,6 @@
 import pytest
 
-from gemd.entity.object import ProcessRun, MaterialRun
+from gemd.entity.object import MaterialRun, ProcessRun
 from gemd.entity.value.nominal_integer import NominalInteger
 from gemd.util import writable_sort_order
 

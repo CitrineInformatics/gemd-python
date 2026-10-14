@@ -1,11 +1,13 @@
 """Tests of the enumeration class."""
-import pytest
+
 import warnings
+
+import pytest
 
 from gemd.entity.attribute.property import Property
 from gemd.enumeration import Origin
 from gemd.enumeration.base_enumeration import BaseEnumeration, migrated_enum
-from gemd.json import loads, dumps
+from gemd.json import dumps, loads
 
 
 def test_json_serde():
@@ -21,12 +23,14 @@ def test_json_serde():
 def test_restrictions():
     """Test that restrictions apply to enumerations--all values must be unique strings."""
     with pytest.raises(ValueError):
+
         class BadClass1(BaseEnumeration):
             RED = "red"
             BLUE = "blue"
             MAROON = "red"
 
     with pytest.raises(ValueError):
+
         class BadClass2(BaseEnumeration):
             FIRST = "one"
             SECOND = 2
@@ -53,13 +57,14 @@ def test_string_enum():
     for key in TestEnum.TWO.synonyms:
         assert key != TestEnum.TWO, f"Synonym {key} was equal?"
         assert TestEnum.from_str(key) == TestEnum.TWO, f"from_str didn't resolve {key}"
-        assert (
-                TestEnum.from_str(key.upper()) == TestEnum.TWO
-        ), f"from_str didn't resolve {key.upper()}"
+        assert TestEnum.from_str(key.upper()) == TestEnum.TWO, (
+            f"from_str didn't resolve {key.upper()}"
+        )
 
 
 def test_missing():
     """Test that enumeration is resolved via multiple paths."""
+
     class TestEnum(BaseEnumeration):
         ONE = "One", "1"
         TWO = "Two", "2"
@@ -78,6 +83,7 @@ def test_missing():
 
 def test_migrated():
     """Verify that migration functions as expected."""
+
     @migrated_enum(old_value="UNO", new_value="ONE", deprecated_in="1.9.9", removed_in="2.0.0")
     class TestEnum(BaseEnumeration):
         ONE = "One", "1"

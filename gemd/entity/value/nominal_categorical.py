@@ -1,14 +1,14 @@
 """A value that nominally is equal to a single category."""
+
+from gemd.entity.bounds import CategoricalBounds
 from gemd.entity.setters import validate_str
 from gemd.entity.value.categorical_value import CategoricalValue
-from gemd.entity.bounds import CategoricalBounds
 
 __all__ = ["NominalCategorical"]
 
 
 class NominalCategorical(CategoricalValue, typ="nominal_categorical"):
-    """
-    A nominal category that the value is believed to have. It may not be exact.
+    """A nominal category that the value is believed to have. It may not be exact.
 
     Parameters
     ----------
@@ -34,8 +34,7 @@ class NominalCategorical(CategoricalValue, typ="nominal_categorical"):
             self._category = validate_str(category)
 
     def _to_bounds(self) -> CategoricalBounds:
-        """
-        Return the smallest bounds object that is consistent with the Value.
+        """Return the smallest bounds object that is consistent with the Value.
 
         Returns
         -------

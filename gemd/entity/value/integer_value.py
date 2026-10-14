@@ -1,8 +1,9 @@
 """Base class for integer values."""
-from gemd.entity.value.base_value import BaseValue
-from gemd.entity.bounds import IntegerBounds
 
 from abc import abstractmethod
+
+from gemd.entity.bounds import IntegerBounds
+from gemd.entity.value.base_value import BaseValue
 
 __all__ = ["IntegerValue"]
 
@@ -12,8 +13,7 @@ class IntegerValue(BaseValue):
 
     @abstractmethod
     def _to_bounds(self) -> IntegerBounds:
-        """
-        Return the smallest bounds object that is consistent with the Value.
+        """Return the smallest bounds object that is consistent with the Value.
 
         Returns
         -------

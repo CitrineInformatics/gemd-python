@@ -1,44 +1,48 @@
 """Tests of the measurement run object."""
-import pytest
+
 from uuid import uuid4
 
-from gemd.json import dumps, loads
-from gemd.entity.bounds import IntegerBounds
-from gemd.entity.object import MeasurementRun, MaterialRun
-from gemd.entity.object.measurement_spec import MeasurementSpec
+import pytest
+
 from gemd.entity.attribute import Condition, Parameter, Property
-from gemd.entity.source.performed_source import PerformedSource
-from gemd.entity.template import MeasurementTemplate, PropertyTemplate, ParameterTemplate, \
-    ConditionTemplate
-from gemd.entity.value import NominalReal, NominalInteger
+from gemd.entity.bounds import IntegerBounds, RealBounds
+from gemd.entity.bounds_validation import WarningLevel, validation_level
 from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
-from gemd.entity.bounds import RealBounds
-from gemd.entity.bounds_validation import validation_level, WarningLevel
+from gemd.entity.object import MaterialRun, MeasurementRun
+from gemd.entity.object.measurement_spec import MeasurementSpec
+from gemd.entity.source.performed_source import PerformedSource
+from gemd.entity.template import (
+    ConditionTemplate,
+    MeasurementTemplate,
+    ParameterTemplate,
+    PropertyTemplate,
+)
+from gemd.entity.value import NominalInteger, NominalReal
+from gemd.json import dumps, loads
 from gemd.util.impl import substitute_links
 
 
 def test_measurement_spec():
     """Test the measurement spec/run connection survives ser/de."""
-    condition = Condition(name="Temp condition", value=NominalReal(nominal=298, units='kelvin'))
+    condition = Condition(name="Temp condition", value=NominalReal(nominal=298, units="kelvin"))
     parameter = Parameter(name="Important parameter")
     spec = MeasurementSpec(
-        name="Precise way to do a measurement",
-        parameters=parameter,
-        conditions=condition
+        name="Precise way to do a measurement", parameters=parameter, conditions=condition
     )
 
     # Create a measurement run from this measurement spec
     measurement = MeasurementRun("The Measurement", conditions=condition, spec=spec)
 
     copy = loads(dumps(measurement))
-    assert dumps(copy.spec) == dumps(measurement.spec), \
+    assert dumps(copy.spec) == dumps(measurement.spec), (
         "Measurement spec should be preserved if measurement run is serialized"
+    )
 
 
 def test_material_soft_link():
     """Test that a measurement run can link to a material run, and that it survives serde."""
-    dye = MaterialRun("rhodamine", file_links=FileLink(filename='a.csv', url='/a/path'))
+    dye = MaterialRun("rhodamine", file_links=FileLink(filename="a.csv", url="/a/path"))
     assert dye.measurements == [], "default value of .measurements should be an empty list"
 
     # The .measurements member should not be settable
@@ -47,8 +51,8 @@ def test_material_soft_link():
 
     absorbance = MeasurementRun(
         name="Absorbance",
-        uids={'id': str(uuid4())},
-        properties=[Property(name='Abs at 500 nm', value=NominalReal(0.1, ''))]
+        uids={"id": str(uuid4())},
+        properties=[Property(name="Abs at 500 nm", value=NominalReal(0.1, ""))],
     )
     assert absorbance.material is None, "Measurements should have None as the material by default"
     absorbance.material = dye
@@ -57,31 +61,34 @@ def test_material_soft_link():
 
     fluorescence = MeasurementRun(
         name="Fluorescence",
-        uids={'id': str(uuid4())},
-        properties=[Property(name='PL counts at 550 nm', value=NominalReal(30000, ''))],
-        material=dye
+        uids={"id": str(uuid4())},
+        properties=[Property(name="PL counts at 550 nm", value=NominalReal(30000, ""))],
+        material=dye,
     )
 
     assert fluorescence.material == dye, "Material not set correctly for measurement"
-    assert dye.measurements == [absorbance, fluorescence], \
+    assert dye.measurements == [absorbance, fluorescence], (
         "Soft-link from material to measurements not created"
+    )
 
-    assert loads(dumps(absorbance)) == absorbance, \
+    assert loads(dumps(absorbance)) == absorbance, (
         "Measurement should remain unchanged when serialized"
-    assert loads(dumps(fluorescence)) == fluorescence, \
+    )
+    assert loads(dumps(fluorescence)) == fluorescence, (
         "Measurement should remain unchanged when serialized"
+    )
 
-    assert 'measurements' in repr(dye)
-    assert 'material' in repr(fluorescence)
-    assert 'material' in repr(absorbance)
+    assert "measurements" in repr(dye)
+    assert "material" in repr(fluorescence)
+    assert "material" in repr(absorbance)
 
     subbed = substitute_links(dye)
-    assert 'measurements' in repr(subbed)
+    assert "measurements" in repr(subbed)
 
 
 def test_material_id_link():
     """Check that a measurement can be linked to a material that is a LinkByUID."""
-    mat = LinkByUID('id', str(uuid4()))
+    mat = LinkByUID("id", str(uuid4()))
     meas = MeasurementRun("name", material=mat)
     assert meas.material == mat
     assert loads(dumps(meas)) == meas
@@ -120,7 +127,7 @@ def test_measurement_reassignment():
 def test_invalid_assignment():
     """Invalid assignments to `material` or `spec` throw a TypeError."""
     with pytest.raises(TypeError):
-        MeasurementRun("name", spec=Condition("value of pi", value=NominalReal(3.14159, '')))
+        MeasurementRun("name", spec=Condition("value of pi", value=NominalReal(3.14159, "")))
     with pytest.raises(TypeError):
         MeasurementRun("name", material=FileLink("filename", "url"))
     with pytest.raises(TypeError):
@@ -160,9 +167,9 @@ def test_template_validations(caplog):
 
 def test_template_access():
     """A measurement run's template should be equal to its spec's template."""
-    template = MeasurementTemplate("measurement template", uids={'id': str(uuid4())})
-    spec = MeasurementSpec("A spec", uids={'id': str(uuid4())}, template=template)
-    meas = MeasurementRun("A run", uids={'id': str(uuid4())}, spec=spec)
+    template = MeasurementTemplate("measurement template", uids={"id": str(uuid4())})
+    spec = MeasurementSpec("A spec", uids={"id": str(uuid4())}, template=template)
+    meas = MeasurementRun("A run", uids={"id": str(uuid4())}, spec=spec)
     assert meas.template == template
 
     meas.spec = LinkByUID.from_entity(spec)
@@ -175,23 +182,19 @@ def test_dependencies():
     cond = ConditionTemplate(name="name", bounds=IntegerBounds(0, 1))
     param = ParameterTemplate(name="name", bounds=IntegerBounds(0, 1))
 
-    template = MeasurementTemplate("measurement template",
-                                   parameters=[param],
-                                   conditions=[cond],
-                                   properties=[prop])
+    template = MeasurementTemplate(
+        "measurement template", parameters=[param], conditions=[cond], properties=[prop]
+    )
     spec = MeasurementSpec("A spec", template=template)
     mat = MaterialRun(name="mr")
-    meas = MeasurementRun("A run", spec=spec, material=mat,
-                          properties=[
-                              Property(prop.name, template=prop, value=NominalInteger(1))
-                          ],
-                          conditions=[
-                              Condition(cond.name, template=cond, value=NominalInteger(1))
-                          ],
-                          parameters=[
-                              Parameter(param.name, template=param, value=NominalInteger(1))
-                          ]
-                          )
+    meas = MeasurementRun(
+        "A run",
+        spec=spec,
+        material=mat,
+        properties=[Property(prop.name, template=prop, value=NominalInteger(1))],
+        conditions=[Condition(cond.name, template=cond, value=NominalInteger(1))],
+        parameters=[Parameter(param.name, template=param, value=NominalInteger(1))],
+    )
 
     assert template not in meas.all_dependencies()
     assert spec in meas.all_dependencies()

@@ -1,12 +1,13 @@
 """Tests of the material spec object."""
+
 import pytest
 
-from gemd.entity.attribute import PropertyAndConditions, Property, Condition
+from gemd.entity.attribute import Condition, Property, PropertyAndConditions
 from gemd.entity.bounds import IntegerBounds
-from gemd.entity.object import ProcessSpec, MaterialSpec
-from gemd.entity.template import MaterialTemplate, PropertyTemplate, ConditionTemplate
+from gemd.entity.bounds_validation import WarningLevel, validation_level
+from gemd.entity.object import MaterialSpec, ProcessSpec
+from gemd.entity.template import ConditionTemplate, MaterialTemplate, PropertyTemplate
 from gemd.entity.value import NominalInteger
-from gemd.entity.bounds_validation import validation_level, WarningLevel
 
 
 def test_process_reassignment():
@@ -42,15 +43,15 @@ def test_mat_spec_properties(caplog):
     mat_spec = MaterialSpec("Material Spec", template=mat_tmpl)
     good_prop = PropertyAndConditions(
         property=Property("Name", value=NominalInteger(1), template=prop_tmpl),
-        conditions=[Condition("Name", value=NominalInteger(1), template=cond_tmpl)]
+        conditions=[Condition("Name", value=NominalInteger(1), template=cond_tmpl)],
     )
     bad_prop = PropertyAndConditions(
         property=Property("Name", value=NominalInteger(2), template=prop_tmpl),
-        conditions=[Condition("Name", value=NominalInteger(1), template=cond_tmpl)]
+        conditions=[Condition("Name", value=NominalInteger(1), template=cond_tmpl)],
     )
     bad_cond = PropertyAndConditions(  # This will pass since we don't have a condition constraint
         property=Property("Name", value=NominalInteger(1), template=prop_tmpl),
-        conditions=[Condition("Name", value=NominalInteger(2), template=cond_tmpl)]
+        conditions=[Condition("Name", value=NominalInteger(2), template=cond_tmpl)],
     )
     with validation_level(WarningLevel.IGNORE):
         mat_spec.properties.append(good_prop)
@@ -79,13 +80,16 @@ def test_dependencies():
     cond = ConditionTemplate(name="name", bounds=IntegerBounds(0, 1))
 
     template = MaterialTemplate("measurement template")
-    spec = MaterialSpec("A spec", template=template,
-                        properties=[PropertyAndConditions(
-                            property=Property("name", template=prop, value=NominalInteger(1)),
-                            conditions=[
-                                Condition("name", template=cond, value=NominalInteger(1))
-                            ]
-                        )])
+    spec = MaterialSpec(
+        "A spec",
+        template=template,
+        properties=[
+            PropertyAndConditions(
+                property=Property("name", template=prop, value=NominalInteger(1)),
+                conditions=[Condition("name", template=cond, value=NominalInteger(1))],
+            )
+        ],
+    )
 
     assert template in spec.all_dependencies()
     assert cond in spec.all_dependencies()

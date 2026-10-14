@@ -1,17 +1,15 @@
 import functools
+from typing import Iterable, List, Mapping, Optional, Union
 
 from gemd.entity.base_entity import BaseEntity
 from gemd.entity.file_link import FileLink
 from gemd.entity.setters import validate_list, validate_str
 
-from typing import Optional, Union, Iterable, List, Mapping
-
 __all__ = ["BaseObject"]
 
 
 class BaseObject(BaseEntity):
-    """
-    Base class for objects.
+    """Base class for objects.
 
     This includes {Material, Process, Measurement, Ingredient} {Run, Spec}
 
@@ -34,13 +32,15 @@ class BaseObject(BaseEntity):
 
     """
 
-    def __init__(self,
-                 name: str,
-                 *,
-                 uids: Mapping[str, str] = None,
-                 tags: Iterable[str] = None,
-                 notes: str = None,
-                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None):
+    def __init__(
+        self,
+        name: str,
+        *,
+        uids: Mapping[str, str] = None,
+        tags: Iterable[str] = None,
+        notes: str = None,
+        file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
+    ):
         BaseEntity.__init__(self, uids, tags)
         self.notes = notes
         self._name = None
@@ -53,8 +53,7 @@ class BaseObject(BaseEntity):
     @classmethod
     @functools.lru_cache(maxsize=1024)
     def _attribute_has_setter(cls, name: str) -> bool:
-        """
-        Internal method to identify if an attribute has a setter method.
+        """Internal method to identify if an attribute has a setter method.
 
         Necessary because IngredientRun clobbers the name setter.
         """

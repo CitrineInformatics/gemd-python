@@ -1,13 +1,13 @@
 """A normally distributed real value."""
-from gemd.entity.value.continuous_value import ContinuousValue
+
 from gemd.entity.bounds import RealBounds
+from gemd.entity.value.continuous_value import ContinuousValue
 
 __all__ = ["NormalReal"]
 
 
 class NormalReal(ContinuousValue, typ="normal_real"):
-    """
-    Normal distribution over real numbers, parameterized by a mean and standard deviation.
+    """Normal distribution over real numbers, parameterized by a mean and standard deviation.
 
     Parameters
     ----------
@@ -27,8 +27,7 @@ class NormalReal(ContinuousValue, typ="normal_real"):
         self.std = std
 
     def _to_bounds(self) -> RealBounds:
-        """
-        Return the smallest bounds object that is consistent with the Value.
+        """Return the smallest bounds object that is consistent with the Value.
 
         Returns
         -------
@@ -37,6 +36,4 @@ class NormalReal(ContinuousValue, typ="normal_real"):
             :class:`~gemd.entity.bounds.real_bounds.RealBounds`.
 
         """
-        return RealBounds(lower_bound=self.mean,
-                          upper_bound=self.mean,
-                          default_units=self.units)
+        return RealBounds(lower_bound=self.mean, upper_bound=self.mean, default_units=self.units)

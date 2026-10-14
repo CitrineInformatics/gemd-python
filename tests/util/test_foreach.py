@@ -1,6 +1,6 @@
 from gemd.entity.attribute.property import Property
 from gemd.entity.bounds.real_bounds import RealBounds
-from gemd.entity.object import ProcessRun, MaterialRun, IngredientRun, MeasurementRun
+from gemd.entity.object import IngredientRun, MaterialRun, MeasurementRun, ProcessRun
 from gemd.entity.template.property_template import PropertyTemplate
 from gemd.entity.value.nominal_real import NominalReal
 from gemd.util.impl import recursive_foreach
@@ -21,12 +21,14 @@ def test_recursive_foreach():
     types = []
     recursive_foreach(output, lambda x: types.append(x.typ))
 
-    expected = ["ingredient_run",
-                "material_run", "material_run",
-                "process_run",
-                "measurement_run",
-                "property_template"
-                ]
+    expected = [
+        "ingredient_run",
+        "material_run",
+        "material_run",
+        "process_run",
+        "measurement_run",
+        "property_template",
+    ]
     assert sorted(types) == sorted(expected)
 
 

@@ -1,4 +1,5 @@
 """Test that units behave correctly."""
+
 import pytest
 
 from gemd.entity.value.nominal_real import NominalReal

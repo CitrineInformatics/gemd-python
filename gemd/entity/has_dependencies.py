@@ -1,6 +1,7 @@
 """For entities that have dependencies."""
+
 from abc import ABC, abstractmethod
-from typing import TypeVar, Union, Set
+from typing import Set, TypeVar, Union
 
 __all__ = ["HasDependencies"]
 BaseEntityType = TypeVar("BaseEntityType", bound="BaseEntity")  # noqa: F821

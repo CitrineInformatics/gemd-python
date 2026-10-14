@@ -1,16 +1,16 @@
 """Base class for all continuous values."""
-from gemd.entity.value.base_value import BaseValue
-from gemd.units import parse_units
-from gemd.entity.bounds import RealBounds
 
 from abc import abstractmethod
+
+from gemd.entity.bounds import RealBounds
+from gemd.entity.value.base_value import BaseValue
+from gemd.units import parse_units
 
 __all__ = ["ContinuousValue"]
 
 
 class ContinuousValue(BaseValue):
-    """
-    A base class for values that correspond to a distribution over the real numbers.
+    """A base class for values that correspond to a distribution over the real numbers.
 
     Parameters
     ----------
@@ -37,14 +37,15 @@ class ContinuousValue(BaseValue):
     @units.setter
     def units(self, units: str):
         if units is None:
-            raise ValueError("Continuous values must have units. "
-                             "Use an empty string for a dimensionless quantity.")
+            raise ValueError(
+                "Continuous values must have units. "
+                "Use an empty string for a dimensionless quantity."
+            )
         self._units = parse_units(units)
 
     @abstractmethod
     def _to_bounds(self) -> RealBounds:
-        """
-        Return the smallest bounds object that is consistent with the Value.
+        """Return the smallest bounds object that is consistent with the Value.
 
         Returns
         -------

@@ -1,4 +1,5 @@
 """For entities that have parameters."""
+
 from gemd.entity.source.performed_source import PerformedSource
 
 __all__ = ["HasSource"]

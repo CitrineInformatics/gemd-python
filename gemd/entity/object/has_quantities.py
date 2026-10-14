@@ -1,11 +1,12 @@
 """For entities that hve quantities."""
+
 from sys import float_info
 
 from gemd.entity.bounds.real_bounds import RealBounds
-from gemd.entity.value.continuous_value import ContinuousValue
-from gemd.entity.value.base_value import BaseValue
-from gemd.entity.bounds_validation import get_validation_level, WarningLevel
+from gemd.entity.bounds_validation import WarningLevel, get_validation_level
 from gemd.entity.dict_serializable import logger
+from gemd.entity.value.base_value import BaseValue
+from gemd.entity.value.continuous_value import ContinuousValue
 
 __all__ = ["HasQuantities"]
 
@@ -13,11 +14,14 @@ __all__ = ["HasQuantities"]
 class HasQuantities(object):
     """Mixin-trait that includes the mass, volume, number fraction, and absolute quantity."""
 
-    def __init__(self, *,
-                 mass_fraction: ContinuousValue = None,
-                 volume_fraction: ContinuousValue = None,
-                 number_fraction: ContinuousValue = None,
-                 absolute_quantity: ContinuousValue = None):
+    def __init__(
+        self,
+        *,
+        mass_fraction: ContinuousValue = None,
+        volume_fraction: ContinuousValue = None,
+        number_fraction: ContinuousValue = None,
+        absolute_quantity: ContinuousValue = None,
+    ):
 
         self._mass_fraction = None
         self.mass_fraction = mass_fraction
@@ -33,7 +37,7 @@ class HasQuantities(object):
 
     @staticmethod
     def _check(value: BaseValue):
-        fraction_bounds = RealBounds(lower_bound=0.0, upper_bound=1.0, default_units='')
+        fraction_bounds = RealBounds(lower_bound=0.0, upper_bound=1.0, default_units="")
         level = get_validation_level()
         accept = level == WarningLevel.IGNORE or fraction_bounds.contains(value)
         if not accept:
@@ -101,14 +105,10 @@ class HasQuantities(object):
             raise TypeError("absolute_quantity was not given as a continuous value")
         else:
             max_bounds = RealBounds(
-                lower_bound=0.0,
-                upper_bound=float_info.max,
-                default_units=absolute_quantity.units
+                lower_bound=0.0, upper_bound=float_info.max, default_units=absolute_quantity.units
             )
             dimensionless = RealBounds(
-                lower_bound=0.0,
-                upper_bound=float_info.max,
-                default_units=''
+                lower_bound=0.0, upper_bound=float_info.max, default_units=""
             )
             level = get_validation_level()
             if level != WarningLevel.IGNORE:

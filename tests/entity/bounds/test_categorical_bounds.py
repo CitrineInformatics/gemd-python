@@ -1,11 +1,12 @@
 """Test of CategoricalBounds."""
+
 import pytest
 
-from gemd.json import dumps, loads
 from gemd.entity.bounds.categorical_bounds import CategoricalBounds
 from gemd.entity.bounds.real_bounds import RealBounds
 from gemd.entity.util import array_like
 from gemd.entity.value.nominal_categorical import NominalCategorical
+from gemd.json import dumps, loads
 
 
 def test_categories():
@@ -29,7 +30,7 @@ def test_contains():
     bounds = CategoricalBounds(categories={"spam", "eggs"})
     assert bounds.contains(CategoricalBounds(categories={"spam"}))
     assert not bounds.contains(CategoricalBounds(categories={"spam", "foo"}))
-    assert not bounds.contains(RealBounds(0.0, 2.0, ''))
+    assert not bounds.contains(RealBounds(0.0, 2.0, ""))
     assert not bounds.contains(None)
     with pytest.raises(TypeError):
         bounds.contains({"spam", "eggs"})
@@ -66,12 +67,14 @@ def test_numpy():
 
     if len(array_like()) > 2:  # Test numpy
         import numpy as np
+
         np_bounds = CategoricalBounds(np.array(["spam", "eggs"], dtype=object))
         np_copy = loads(dumps(np_bounds))
         assert np_copy == np_bounds
 
     if len(array_like()) > 3:  # Test pandas
         import pandas as pd
+
         pd_bounds = CategoricalBounds(pd.Series(["spam", "eggs"]))
         pd_copy = loads(dumps(pd_bounds))
         assert pd_copy == pd_bounds

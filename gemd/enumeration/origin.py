@@ -1,4 +1,5 @@
 """All possible origins of an attribute."""
+
 from gemd.enumeration.base_enumeration import BaseEnumeration
 
 __all__ = ["Origin"]

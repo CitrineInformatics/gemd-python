@@ -1,8 +1,9 @@
 """Composition of a material."""
-from gemd.entity.value.base_value import BaseValue
-from gemd.entity.bounds import CompositionBounds
 
 from abc import abstractmethod
+
+from gemd.entity.bounds import CompositionBounds
+from gemd.entity.value.base_value import BaseValue
 
 __all__ = ["CompositionValue"]
 
@@ -12,8 +13,7 @@ class CompositionValue(BaseValue):
 
     @abstractmethod
     def _to_bounds(self) -> CompositionBounds:
-        """
-        Return the smallest bounds object that is consistent with the Value.
+        """Return the smallest bounds object that is consistent with the Value.
 
         Returns
         -------

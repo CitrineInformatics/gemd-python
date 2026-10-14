@@ -1,4 +1,5 @@
 """A material template."""
+
 from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.template.has_property_templates import HasPropertyTemplates
 
@@ -6,8 +7,7 @@ __all__ = ["MaterialTemplate"]
 
 
 class MaterialTemplate(BaseTemplate, HasPropertyTemplates, typ="material_template"):
-    """
-    A material template.
+    """A material template.
 
     Material templates are collections of property templates that constrain the values of
     a material's property attributes, and provide a common structure for describing similar
@@ -36,10 +36,6 @@ class MaterialTemplate(BaseTemplate, HasPropertyTemplates, typ="material_templat
 
     """
 
-    def __init__(self, name, *, description=None,
-                 properties=None,
-                 uids=None, tags=None):
-        BaseTemplate.__init__(self, name=name, description=description,
-                              uids=uids, tags=tags
-                              )
+    def __init__(self, name, *, description=None, properties=None, uids=None, tags=None):
+        BaseTemplate.__init__(self, name=name, description=description, uids=uids, tags=tags)
         HasPropertyTemplates.__init__(self, properties)

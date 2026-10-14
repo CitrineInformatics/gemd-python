@@ -1,11 +1,12 @@
 """For entities that have templates."""
+
+from abc import abstractmethod
+from typing import Optional, Set, Type, Union
+
 from gemd.entity.base_entity import BaseEntity
 from gemd.entity.has_dependencies import HasDependencies
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.template.base_template import BaseTemplate
-
-from abc import abstractmethod
-from typing import Optional, Union, Set, Type
 
 __all__ = ["HasTemplate"]
 
@@ -35,8 +36,9 @@ class HasTemplate(HasDependencies):
         elif isinstance(template, (self._template_type(), LinkByUID)):
             self._template = template
         else:
-            raise TypeError(f"Template must be a {self._template_type()} or LinkByUID, "
-                            f"not {type(template)}")
+            raise TypeError(
+                f"Template must be a {self._template_type()} or LinkByUID, not {type(template)}"
+            )
 
     def _local_dependencies(self) -> Set[Union[BaseEntity, LinkByUID]]:
         """Return a set of all immediate dependencies (no recursion)."""

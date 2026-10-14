@@ -1,30 +1,39 @@
 """General tests of entities."""
-from abc import ABC
+
 import inspect
-import pytest
+from abc import ABC
 from typing import Generic, TypeVar
 
-from gemd import ProcessSpec, IngredientSpec, MaterialSpec, IngredientRun, \
-    LinkByUID, ConditionTemplate, MolecularStructureBounds
-from gemd.entity.dict_serializable import DictSerializable
+import pytest
+
+from gemd import (
+    ConditionTemplate,
+    IngredientRun,
+    IngredientSpec,
+    LinkByUID,
+    MaterialSpec,
+    MolecularStructureBounds,
+    ProcessSpec,
+)
 from gemd.entity.base_entity import BaseEntity
+from gemd.entity.dict_serializable import DictSerializable
 
 
 def test_id_case_sensitivity():
     """Test that uids are case-insensitive."""
     with pytest.raises(ValueError):
-        IngredientRun(uids={'my_id': 'sample1', 'My_ID': 'sample2'})
+        IngredientRun(uids={"my_id": "sample1", "My_ID": "sample2"})
 
-    ingredient = IngredientRun(uids={'my_id': 'sample1'})
-    assert ingredient.uids['my_id'] == 'sample1'
-    assert ingredient.uids['MY_id'] == 'sample1'
+    ingredient = IngredientRun(uids={"my_id": "sample1"})
+    assert ingredient.uids["my_id"] == "sample1"
+    assert ingredient.uids["MY_id"] == "sample1"
 
 
 def test_id_iterables():
     """Test that the uids setter is very forgiving."""
-    assert IngredientRun(uids={'my_id': 'sample1'}).uids['my_id'] == 'sample1'
-    assert IngredientRun(uids=['my_id', 'sample1']).uids['my_id'] == 'sample1'
-    assert IngredientRun(uids=('my_id', 'sample1')).uids['my_id'] == 'sample1'
+    assert IngredientRun(uids={"my_id": "sample1"}).uids["my_id"] == "sample1"
+    assert IngredientRun(uids=["my_id", "sample1"]).uids["my_id"] == "sample1"
+    assert IngredientRun(uids=("my_id", "sample1")).uids["my_id"] == "sample1"
 
 
 def test_to_link():
@@ -39,8 +48,9 @@ def test_to_link():
     with pytest.raises(ValueError):
         obj.to_link("Third"), "to_link with a scope that an object lacks is fatal"
 
-    assert obj.to_link(scope="Third", allow_fallback=True).scope in obj.uids, \
+    assert obj.to_link(scope="Third", allow_fallback=True).scope in obj.uids, (
         "... unless allow_fallback is set"
+    )
 
 
 def test_equality():
@@ -123,9 +133,9 @@ def test_meta_behaviors_limited():
 
 
 def test_mro():
-    """This test mimics a citrine-python class inheritance structure."""
-    SerializableType = TypeVar('SerializableType', bound='Serializable')
-    ResourceType = TypeVar('ResourceType', bound='Resource')
+    """Mimic a citrine-python class inheritance structure."""
+    SerializableType = TypeVar("SerializableType", bound="Serializable")
+    ResourceType = TypeVar("ResourceType", bound="Resource")
 
     class Serializable(Generic[SerializableType]):
         pass
@@ -133,13 +143,11 @@ def test_mro():
     class Resource(Serializable[ResourceType]):
         pass
 
-    class DataConcepts(DictSerializable, Serializable['DataConcepts'], ABC):
+    class DataConcepts(DictSerializable, Serializable["DataConcepts"], ABC):
         pass
 
     class TestConditionTemplate(
-        DataConcepts,
-        Resource['TestConditionTemplate'],
-        ConditionTemplate
+        DataConcepts, Resource["TestConditionTemplate"], ConditionTemplate
     ):
         pass
 
@@ -148,8 +156,8 @@ def test_mro():
 
 def test_derived_collision():
     """Test that an exception is thrown when multiple classes claim the same typ."""
-    # One parent
-    class Parent(DictSerializable, typ="mine"):
+
+    class Parent(DictSerializable, typ="mine"):  # One parent
         pass
 
     # First kid is fine
@@ -160,5 +168,6 @@ def test_derived_collision():
     assert DictSerializable.class_mapping["mine"] is ElderChild
 
     with pytest.raises(ValueError, match="mine"):
+
         class SecondChild(Parent, typ="mine"):
             pass

@@ -1,11 +1,12 @@
 """For entities that have specs."""
+
+from abc import abstractmethod
+from typing import Set, Union
+
 from gemd.entity.base_entity import BaseEntity
 from gemd.entity.has_dependencies import HasDependencies
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.object.base_object import BaseObject
-
-from abc import abstractmethod
-from typing import Union, Set
 
 __all__ = ["HasProcess"]
 

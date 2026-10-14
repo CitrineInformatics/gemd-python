@@ -1,10 +1,10 @@
 """Test an example table."""
+
 import pandas as pd
 
-from gemd.json import load, dump
-from gemd.entity.object import MaterialRun
 from gemd.demo.table_example import ingest_table
-
+from gemd.entity.object import MaterialRun
+from gemd.json import dump, load
 
 data = [
     {"vapor pressure": 2.0, "temperature": 300},

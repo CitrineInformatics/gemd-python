@@ -1,4 +1,5 @@
 """Test IntegerBounds."""
+
 import pytest
 
 from gemd.entity.bounds.integer_bounds import IntegerBounds
@@ -49,7 +50,7 @@ def test_incompatible_types():
     """Make sure that incompatible types aren't contained or validated."""
     int_bounds = IntegerBounds(0, 1)
 
-    assert not int_bounds.contains(RealBounds(0.0, 1.0, ''))
+    assert not int_bounds.contains(RealBounds(0.0, 1.0, ""))
 
 
 def test_contains():

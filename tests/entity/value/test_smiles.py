@@ -1,16 +1,17 @@
 """Test parsing and serde of empirical chemical formulae."""
+
 import pytest
 
-from gemd.json import dumps, loads
-from gemd.entity.value.smiles_value import Smiles
 from gemd.entity.bounds import MolecularStructureBounds
+from gemd.entity.value.smiles_value import Smiles
+from gemd.json import dumps, loads
 
 
 def test_json():
     """Check that we can json ser/de round-robin."""
     smiles = Smiles("c1(C=O)cc(OC)c(O)cc1")
     copy = loads(dumps(smiles))
-    assert(copy == smiles)
+    assert copy == smiles
 
 
 def test_smiles_setter():
@@ -23,8 +24,7 @@ def test_smiles_setter():
 
 
 def test_invalid_smiles():
-    """
-    Check that an invalid SMILES throws a TypeError.
+    """Check that an invalid SMILES throws a TypeError.
 
     Note that real checking requires an external package.
     """

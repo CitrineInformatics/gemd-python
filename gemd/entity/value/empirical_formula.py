@@ -1,8 +1,9 @@
 """An empirical chemical formula."""
+
 import re
 
-from gemd.entity.value.composition_value import CompositionValue
 from gemd.entity.bounds import CompositionBounds
+from gemd.entity.value.composition_value import CompositionValue
 
 __all__ = ["EmpiricalFormula"]
 
@@ -23,8 +24,7 @@ _all_elements = re.split(r"\s+", _periodic_table.strip())
 
 
 class EmpiricalFormula(CompositionValue, typ="empirical_formula"):
-    """
-    An empirical chemical formula where only the relative stoichiometries matter.
+    """An empirical chemical formula where only the relative stoichiometries matter.
 
     Parameters
     ----------
@@ -46,7 +46,8 @@ class EmpiricalFormula(CompositionValue, typ="empirical_formula"):
     @staticmethod
     def _elements(value: str):
         import re
-        return set(re.findall('[A-Z][a-z]*', value))
+
+        return set(re.findall("[A-Z][a-z]*", value))
 
     @formula.setter
     def formula(self, value: str):
@@ -55,15 +56,13 @@ class EmpiricalFormula(CompositionValue, typ="empirical_formula"):
         elif isinstance(value, str):
             if not EmpiricalFormula._elements(value).issubset(_all_elements):
                 unknown = sorted(EmpiricalFormula._elements(value).difference(_all_elements))
-                raise ValueError('Formula {} contains unknown elements: {}'
-                                 .format(value, ' '.join(unknown)))
+                raise ValueError(f"Formula {value} contains unknown elements: {' '.join(unknown)}")
             self._formula = value
         else:
-            raise TypeError("Formula must be given as a string; got {}".format(type(value)))
+            raise TypeError(f"Formula must be given as a string; got {type(value)}")
 
     def _to_bounds(self) -> CompositionBounds:
-        """
-        Return the smallest bounds object that is consistent with the Value.
+        """Return the smallest bounds object that is consistent with the Value.
 
         Returns
         -------

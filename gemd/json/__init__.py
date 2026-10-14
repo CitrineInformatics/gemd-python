@@ -19,17 +19,13 @@ JSON support provided here to those tools.
 from .gemd_encoder import GEMDEncoder  # noqa: F401
 from .gemd_json import GEMDJson
 
-__all__ = [
-    "GEMDEncoder", "GEMDJson",
-    "loads", "dumps", "load", "dump"
-]
+__all__ = ["GEMDEncoder", "GEMDJson", "loads", "dumps", "load", "dump"]
 
 __default = GEMDJson()
 
 
 def loads(json_str, **kwargs):
-    """
-    Deserialize a json-formatted string into a gemd object.
+    """Deserialize a json-formatted string into a gemd object.
 
     Parameters
     ----------
@@ -49,8 +45,7 @@ def loads(json_str, **kwargs):
 
 
 def dumps(obj, **kwargs):
-    """
-    Serialize a gemd object, or container of them, into a json-formatting string.
+    """Serialize a gemd object, or container of them, into a json-formatting string.
 
     Parameters
     ----------
@@ -69,8 +64,7 @@ def dumps(obj, **kwargs):
 
 
 def load(fp, **kwargs):
-    """
-    Load serialized string representation of an object from a file.
+    """Load serialized string representation of an object from a file.
 
     Parameters
     ----------
@@ -89,8 +83,7 @@ def load(fp, **kwargs):
 
 
 def dump(obj, fp, **kwargs):
-    """
-    Dump an object to a file, as a serialized string.
+    """Dump an object to a file, as a serialized string.
 
     Parameters
     ----------

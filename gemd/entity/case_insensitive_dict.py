@@ -1,4 +1,4 @@
-from typing import Tuple, Sequence, Any, Mapping, Optional
+from typing import Any, Mapping, Optional, Sequence, Tuple
 
 __all__ = ["CaseInsensitiveDict"]
 
@@ -6,8 +6,7 @@ _RaiseKeyError = object()  # singleton for no-default behavior
 
 
 class CaseInsensitiveDict(dict):
-    """
-    A dictionary in which the keys are case-insensitive.
+    """A dictionary in which the keys are case-insensitive.
 
     It is initialized the same way as a typical dict, but the values can be accessed without
     regard to key case. The value associated with key "Key" can also be accessed with "key"
@@ -34,8 +33,7 @@ class CaseInsensitiveDict(dict):
         return super().__getitem__(self.lowercase_dict[key.lower()])
 
     def get(self, key: str, default: Any = None) -> Any:
-        """
-        Get the value for a given case-insensitive key.
+        """Get the value for a given case-insensitive key.
 
         Parameters
         ----------
@@ -75,8 +73,7 @@ class CaseInsensitiveDict(dict):
         self.lowercase_dict.clear()
 
     def pop(self, key: str, default=_RaiseKeyError) -> Any:
-        """
-        Remove and return the value for a given key from the dictionary.
+        """Remove and return the value for a given key from the dictionary.
 
         If key is in the dictionary, remove it and return its value, else return default.
         If default is not given and key is not in the dictionary, a KeyError is raised.
@@ -107,8 +104,7 @@ class CaseInsensitiveDict(dict):
         return val
 
     def popitem(self) -> Tuple:
-        """
-        Remove and return a (key, value) pair from the dictionary.
+        """Remove and return a (key, value) pair from the dictionary.
 
         popitem() is useful to destructively iterate over a dictionary, as often used
         in set algorithms.  If the dictionary is empty, calling popitem() raises a
@@ -127,9 +123,8 @@ class CaseInsensitiveDict(dict):
         del self.lowercase_dict[result[0].lower()]
         return result
 
-    def copy(self) -> 'CaseInsensitiveDict':
-        """
-        Return a shallow copy of the dictionary.
+    def copy(self) -> "CaseInsensitiveDict":
+        """Return a shallow copy of the dictionary.
 
         Returns
         -------
@@ -140,8 +135,7 @@ class CaseInsensitiveDict(dict):
         return CaseInsensitiveDict(super().copy())
 
     def update(self, mapping: Optional[Mapping[str, Any]] = None, **kwargs) -> None:
-        """
-        Update the dictionary with the key/value pairs from other, overwriting existing keys.
+        """Update the dictionary with the key/value pairs from other, overwriting existing keys.
 
         update() accepts either another dictionary object or an iterable of
         key/value pairs (as tuples or other iterables of length two). If keyword
@@ -167,8 +161,8 @@ class CaseInsensitiveDict(dict):
                 prev = self.lowercase_dict[key.lower()]
                 if prev != key:
                     raise ValueError(
-                        "Key '{}' already exists in dict with different case: "
-                        "'{}'".format(key, prev))
+                        f"Key '{key}' already exists in dict with different case: '{prev}'"
+                    )
         if no_mapping:
             super().update(**kwargs)
         else:
@@ -177,8 +171,7 @@ class CaseInsensitiveDict(dict):
             self._register_key(key)
 
     def _register_key(self, key: str) -> None:
-        """
-        Register a key to the dictionary.
+        """Register a key to the dictionary.
 
         Check to make sure it doesn't already exist in a different case.
 
@@ -190,6 +183,5 @@ class CaseInsensitiveDict(dict):
         """
         prev = self.lowercase_dict.get(key.lower())
         if prev is not None and prev != key:
-            raise ValueError(
-                "Key '{}' already exists in dict with different case: '{}'".format(key, prev))
+            raise ValueError(f"Key '{key}' already exists in dict with different case: '{prev}'")
         self.lowercase_dict[key.lower()] = key

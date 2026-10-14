@@ -1,4 +1,5 @@
 """Attribute templates."""
+
 from gemd.entity.base_entity import BaseEntity
 from gemd.entity.bounds.base_bounds import BaseBounds
 
@@ -6,8 +7,7 @@ __all__ = ["AttributeTemplate"]
 
 
 class AttributeTemplate(BaseEntity):
-    """
-    An attribute template, which can be a property, parameter, or condition template.
+    """An attribute template, which can be a property, parameter, or condition template.
 
     Parameters
     ----------

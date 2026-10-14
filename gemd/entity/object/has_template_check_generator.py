@@ -1,16 +1,17 @@
 """For entities that have specs."""
-from gemd.entity.template.base_template import BaseTemplate
-from gemd.entity.link_by_uid import LinkByUID
-from gemd.entity.bounds_validation import get_validation_level, WarningLevel
-from gemd.entity.dict_serializable import logger
 
 from abc import ABC, abstractmethod
-from inspect import getmodule, getmembers, isclass, signature
-from typing import Union, Callable, TypeVar
+from inspect import getmembers, getmodule, isclass, signature
+from typing import Callable, TypeVar, Union
+
+from gemd.entity.bounds_validation import WarningLevel, get_validation_level
+from gemd.entity.dict_serializable import logger
+from gemd.entity.link_by_uid import LinkByUID
+from gemd.entity.template.base_template import BaseTemplate
 
 __all__ = ["HasTemplateCheckGenerator"]
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class HasTemplateCheckGenerator(ABC):
@@ -21,11 +22,10 @@ class HasTemplateCheckGenerator(ABC):
     def template(self) -> Union[BaseTemplate, LinkByUID]:
         """Get the object template associated with this object."""
 
-    def _generate_template_check(self,
-                                 validate: Callable[["HasTemplateCheckGenerator", T], bool]
-                                 ) -> Callable[[T], None]:
-        """
-        Generate a closure for the object and the validation routine.
+    def _generate_template_check(
+        self, validate: Callable[["HasTemplateCheckGenerator", T], bool]
+    ) -> Callable[[T], None]:
+        """Generate a closure for the object and the validation routine.
 
         This method generates a function that takes a single attribute as input and checks it
         against the relevant templates and restricted bounds of the object template associated
@@ -77,9 +77,8 @@ class HasTemplateCheckGenerator(ABC):
         def template_check(x: attr):
             """Given an attribute, check it against this object's template."""
             level = get_validation_level()
-            reject = level != WarningLevel.IGNORE \
-                and isinstance(self.template, cls) \
-                and not validate(self.template, x)
+            checkable = level != WarningLevel.IGNORE and isinstance(self.template, cls)
+            reject = checkable and not validate(self.template, x)
 
             if reject:
                 message = f"Value {x.value} is inconsistent with template {self.template.name}"

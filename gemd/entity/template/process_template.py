@@ -1,4 +1,5 @@
 """A process template."""
+
 from gemd.entity.setters import validate_list
 from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.template.has_condition_templates import HasConditionTemplates
@@ -7,11 +8,10 @@ from gemd.entity.template.has_parameter_templates import HasParameterTemplates
 __all__ = ["ProcessTemplate"]
 
 
-class ProcessTemplate(BaseTemplate,
-                      HasConditionTemplates, HasParameterTemplates,
-                      typ="process_template"):
-    """
-    A process template.
+class ProcessTemplate(
+    BaseTemplate, HasConditionTemplates, HasParameterTemplates, typ="process_template"
+):
+    """A process template.
 
     Process templates are collections of condition and parameter templates that constrain the
     values of a measurement's condition and parameter attributes, and provide a common structure
@@ -50,12 +50,19 @@ class ProcessTemplate(BaseTemplate,
 
     """
 
-    def __init__(self, name, *, description=None,
-                 conditions=None, parameters=None,
-                 allowed_names=None, allowed_labels=None,
-                 uids=None, tags=None):
-        BaseTemplate.__init__(self, name=name, description=description,
-                              uids=uids, tags=tags)
+    def __init__(
+        self,
+        name,
+        *,
+        description=None,
+        conditions=None,
+        parameters=None,
+        allowed_names=None,
+        allowed_labels=None,
+        uids=None,
+        tags=None,
+    ):
+        BaseTemplate.__init__(self, name=name, description=description, uids=uids, tags=tags)
         HasConditionTemplates.__init__(self, conditions)
         HasParameterTemplates.__init__(self, parameters)
 

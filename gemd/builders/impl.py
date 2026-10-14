@@ -1,35 +1,66 @@
 # Tools to help build GEMD objects
-from gemd.entity.object import ProcessSpec, ProcessRun, MaterialSpec, IngredientSpec, \
-    MaterialRun, IngredientRun, MeasurementSpec, MeasurementRun
+from typing import List, Union
+
+from gemd.entity.attribute import Condition, Parameter, Property, PropertyAndConditions
+from gemd.entity.attribute.base_attribute import BaseAttribute
+from gemd.entity.bounds import (
+    CategoricalBounds,
+    CompositionBounds,
+    IntegerBounds,
+    MolecularStructureBounds,
+    RealBounds,
+)
+from gemd.entity.bounds.base_bounds import BaseBounds
+from gemd.entity.object import (
+    IngredientRun,
+    IngredientSpec,
+    MaterialRun,
+    MaterialSpec,
+    MeasurementRun,
+    MeasurementSpec,
+    ProcessRun,
+    ProcessSpec,
+)
 from gemd.entity.object.has_conditions import HasConditions
 from gemd.entity.object.has_parameters import HasParameters
 from gemd.entity.object.has_properties import HasProperties
-from gemd.entity.attribute import Property, PropertyAndConditions, Condition, Parameter
-from gemd.entity.attribute.base_attribute import BaseAttribute
-from gemd.entity.template import PropertyTemplate, ParameterTemplate, ConditionTemplate, \
-    MaterialTemplate, MeasurementTemplate, ProcessTemplate
-from gemd.entity.bounds import RealBounds, IntegerBounds, CategoricalBounds, \
-    CompositionBounds, MolecularStructureBounds
-from gemd.entity.bounds.base_bounds import BaseBounds
-from gemd.entity.value import NominalReal, NominalInteger, NominalCategorical, \
-    EmpiricalFormula, InChI, Smiles
-from gemd.entity.value.continuous_value import ContinuousValue
+from gemd.entity.template import (
+    ConditionTemplate,
+    MaterialTemplate,
+    MeasurementTemplate,
+    ParameterTemplate,
+    ProcessTemplate,
+    PropertyTemplate,
+)
+from gemd.entity.value import (
+    EmpiricalFormula,
+    InChI,
+    NominalCategorical,
+    NominalInteger,
+    NominalReal,
+    Smiles,
+)
 from gemd.entity.value.base_value import BaseValue
-
-from typing import Union, List
+from gemd.entity.value.continuous_value import ContinuousValue
 
 __all__ = [
-    "make_node", "add_edge", "add_measurement", "add_attribute", "make_attribute", "make_value"
+    "make_node",
+    "add_edge",
+    "add_measurement",
+    "add_attribute",
+    "make_attribute",
+    "make_value",
 ]
 
 
-def make_node(name: str,
-              *,
-              process_name: str = None,
-              process_template: ProcessTemplate = None,
-              material_template: MaterialTemplate = None) -> MaterialRun:
-    """
-    Generate a material-process spec-run quadruple.
+def make_node(
+    name: str,
+    *,
+    process_name: str = None,
+    process_template: ProcessTemplate = None,
+    material_template: MaterialTemplate = None,
+) -> MaterialRun:
+    """Generate a material-process spec-run quadruple.
 
     Parameters
     ----------
@@ -46,7 +77,7 @@ def make_node(name: str,
         :class:`~gemd.entity.template.material_template.MaterialTemplate` for the quadruple.
 
     Returns
-    --------
+    -------
     ~gemd.entity.object.material_run.MaterialRun
         A :class:`~gemd.entity.object.material_run.MaterialRun` with linked processes,
         specs and templates
@@ -58,42 +89,28 @@ def make_node(name: str,
         else:
             process_name = process_template.name
 
-    my_process_spec = ProcessSpec(
-        name=process_name,
-        template=process_template
-    )
+    my_process_spec = ProcessSpec(name=process_name, template=process_template)
 
-    my_process_run = ProcessRun(
-        name=process_name,
-        spec=my_process_spec
-    )
+    my_process_run = ProcessRun(name=process_name, spec=my_process_spec)
 
-    my_mat_spec = MaterialSpec(
-        name=name,
-        process=my_process_spec,
-        template=material_template
-    )
+    my_mat_spec = MaterialSpec(name=name, process=my_process_spec, template=material_template)
 
-    my_mat_run = MaterialRun(
-        name=name,
-        process=my_process_run,
-        spec=my_mat_spec
-    )
+    my_mat_run = MaterialRun(name=name, process=my_process_run, spec=my_mat_spec)
     return my_mat_run
 
 
-def add_edge(input_material: MaterialRun,
-             output_material: MaterialRun,
-             *,
-             name: str = None,
-             mass_fraction: Union[float, ContinuousValue] = None,
-             number_fraction: Union[float, ContinuousValue] = None,
-             volume_fraction: Union[float, ContinuousValue] = None,
-             absolute_quantity: Union[int, float, ContinuousValue] = None,
-             absolute_units: str = None,
-             ) -> IngredientRun:
-    """
-    Connect two material-process spec-run quadruples with ingredients.
+def add_edge(
+    input_material: MaterialRun,
+    output_material: MaterialRun,
+    *,
+    name: str = None,
+    mass_fraction: Union[float, ContinuousValue] = None,
+    number_fraction: Union[float, ContinuousValue] = None,
+    volume_fraction: Union[float, ContinuousValue] = None,
+    absolute_quantity: Union[int, float, ContinuousValue] = None,
+    absolute_units: str = None,
+) -> IngredientRun:
+    """Connect two material-process spec-run quadruples with ingredients.
 
     Parameters
     ----------
@@ -132,45 +149,43 @@ def add_edge(input_material: MaterialRun,
         The absolute units.  Required if absolute_quantity is provided as a float
 
     Returns
-    --------
+    -------
     ~gemd.entity.object.ingredient_run.IngredientRun
         A :class:`~gemd.entity.object.ingredient_run.IngredientRun`
         with linked processes, specs and materials
 
     """
     output_spec = output_material.spec
-    if not isinstance(output_spec, MaterialSpec) \
-            or output_spec.process is None \
-            or output_material.process is None:
-        raise ValueError("Output Material must be a MaterialRun with connected "
-                         "Specs and Processes.")
+    spec_linked = isinstance(output_spec, MaterialSpec) and output_spec.process is not None
+    if not spec_linked or output_material.process is None:
+        raise ValueError(
+            "Output Material must be a MaterialRun with connected Specs and Processes."
+        )
     if input_material.spec is None:
         raise ValueError("Input Material must be a MaterialRun with connected Spec.")
 
     if name is None:
         name = input_material.name
-    my_ingredient_spec = IngredientSpec(name=name,
-                                        process=output_spec.process,
-                                        material=input_material.spec
-                                        )
-    my_ingredient_run = IngredientRun(spec=my_ingredient_spec,
-                                      process=output_material.process,
-                                      material=input_material
-                                      )
+    my_ingredient_spec = IngredientSpec(
+        name=name, process=output_spec.process, material=input_material.spec
+    )
+    my_ingredient_run = IngredientRun(
+        spec=my_ingredient_spec, process=output_material.process, material=input_material
+    )
 
     if mass_fraction is not None:
         if isinstance(mass_fraction, float):
-            mass_fraction = NominalReal(nominal=mass_fraction, units='')
+            mass_fraction = NominalReal(nominal=mass_fraction, units="")
         my_ingredient_run.mass_fraction = mass_fraction
 
     if number_fraction is not None:
         if isinstance(number_fraction, float):
-            number_fraction = NominalReal(nominal=number_fraction, units='')
+            number_fraction = NominalReal(nominal=number_fraction, units="")
         my_ingredient_run.number_fraction = number_fraction
 
     if volume_fraction is not None:
         if isinstance(volume_fraction, float):
-            volume_fraction = NominalReal(nominal=volume_fraction, units='')
+            volume_fraction = NominalReal(nominal=volume_fraction, units="")
         my_ingredient_run.volume_fraction = volume_fraction
 
     if absolute_quantity is not None:
@@ -182,20 +197,21 @@ def add_edge(input_material: MaterialRun,
         my_ingredient_run.absolute_quantity = absolute_quantity
 
     if absolute_units is not None:
-        raise ValueError("Absolute Units are only used if "
-                         "Absolute Quantity is given as is a float.")
+        raise ValueError(
+            "Absolute Units are only used if Absolute Quantity is given as is a float."
+        )
 
     return my_ingredient_run
 
 
-def add_measurement(material: MaterialRun,
-                    *,
-                    name: str = None,
-                    template: MeasurementTemplate = None,
-                    attributes: List[BaseAttribute] = None,
-                    ) -> MeasurementRun:
-    """
-    Add a measurement run-spec set to a :class:`~gemd.entity.object.material_run.MaterialRun`.
+def add_measurement(
+    material: MaterialRun,
+    *,
+    name: str = None,
+    template: MeasurementTemplate = None,
+    attributes: List[BaseAttribute] = None,
+) -> MeasurementRun:
+    """Add a measurement run-spec set to a :class:`~gemd.entity.object.material_run.MaterialRun`.
 
     Parameters
     ----------
@@ -218,7 +234,7 @@ def add_measurement(material: MaterialRun,
         and/or :class:`Properties <gemd.entity.attribute.property.Property>`.
 
     Returns
-    --------
+    -------
     ~gemd.entity.object.measurement_run.MeasurementRun
         A :class:`~gemd.entity.object.measurement_run.MeasurementRun`
         with linked material, spec and template
@@ -247,12 +263,12 @@ def add_measurement(material: MaterialRun,
     return my_measurement_run
 
 
-def add_attribute(target: Union[HasProperties, HasConditions, HasParameters],
-                  template: Union[PropertyTemplate, ConditionTemplate, ParameterTemplate],
-                  value: Union[BaseValue, str, float, int]
-                  ) -> Union[Property, Condition, Parameter]:
-    """
-    Generate an attribute, and then add it attribute to a GEMD object.
+def add_attribute(
+    target: Union[HasProperties, HasConditions, HasParameters],
+    template: Union[PropertyTemplate, ConditionTemplate, ParameterTemplate],
+    value: Union[BaseValue, str, float, int],
+) -> Union[Property, Condition, Parameter]:
+    """Generate an attribute, and then add it attribute to a GEMD object.
 
     Parameters
     ----------
@@ -265,7 +281,7 @@ def add_attribute(target: Union[HasProperties, HasConditions, HasParameters],
         attempt to generate an appropriate :class:`BaseValue` subclass given a str, float or int.
 
     Returns
-    --------
+    -------
     BaseAttribute
         The generated attribute
 
@@ -278,8 +294,9 @@ def add_attribute(target: Union[HasProperties, HasConditions, HasParameters],
             target.properties.append(PropertyAndConditions(property=attribute))
         elif attr_class is Condition:
             if len(target.properties) == 0:
-                raise ValueError("Cannot add a condition to a MaterialSpec "
-                                 "before it has at least one property.")
+                raise ValueError(
+                    "Cannot add a condition to a MaterialSpec before it has at least one property."
+                )
             target.properties[-1].conditions.append(attribute)
         else:
             raise ValueError(f"Attribute {attr_class} is incompatible with target {type(target)}.")
@@ -296,11 +313,11 @@ def add_attribute(target: Union[HasProperties, HasConditions, HasParameters],
     return attribute
 
 
-def make_attribute(template: Union[PropertyTemplate, ConditionTemplate, ParameterTemplate],
-                   value: Union[BaseValue, str, float, int]
-                   ) -> Union[Property, Condition, Parameter]:
-    """
-    Generate an Attribute and the contained Value.
+def make_attribute(
+    template: Union[PropertyTemplate, ConditionTemplate, ParameterTemplate],
+    value: Union[BaseValue, str, float, int],
+) -> Union[Property, Condition, Parameter]:
+    """Generate an Attribute and the contained Value.
 
     Parameters
     ----------
@@ -311,7 +328,7 @@ def make_attribute(template: Union[PropertyTemplate, ConditionTemplate, Paramete
         attempt to generate an appropriate Value given a str, float or int.
 
     Returns
-    --------
+    -------
     BaseAttribute
         The generated attribute
 
@@ -333,10 +350,8 @@ def make_attribute(template: Union[PropertyTemplate, ConditionTemplate, Paramete
     return attribute
 
 
-def make_value(value: Union[str, float, int],
-               bounds: BaseBounds) -> BaseValue:
-    """
-    Generate a Value object based upon a number or string and a particular bounds.
+def make_value(value: Union[str, float, int], bounds: BaseBounds) -> BaseValue:
+    """Generate a Value object based upon a number or string and a particular bounds.
 
     Parameters
     ----------
@@ -346,7 +361,7 @@ def make_value(value: Union[str, float, int],
         The bounds type to determine which value type we want to coerce the value into
 
     Returns
-    --------
+    -------
     BaseValue
         The generated value
 

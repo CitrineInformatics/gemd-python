@@ -1,6 +1,6 @@
-from gemd.util import cached_isinstance
+from typing import Iterable, List
 
-from typing import List, Iterable
+from gemd.util import cached_isinstance
 
 
 def test_cached_isinstance():

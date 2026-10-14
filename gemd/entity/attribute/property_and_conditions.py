@@ -1,19 +1,18 @@
+from typing import Iterable, List, Optional, Union
+
 from gemd.entity.attribute.condition import Condition
 from gemd.entity.attribute.property import Property
-from gemd.entity.template.property_template import PropertyTemplate
-from gemd.entity.value.base_value import BaseValue
 from gemd.entity.dict_serializable import DictSerializable
 from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.setters import validate_list
-
-from typing import Optional, Union, Iterable, List
+from gemd.entity.template.property_template import PropertyTemplate
+from gemd.entity.value.base_value import BaseValue
 
 __all__ = ["PropertyAndConditions"]
 
 
 class PropertyAndConditions(DictSerializable, typ="property_and_conditions"):
-    """
-    A property and the conditions under which that property was determined.
+    """A property and the conditions under which that property was determined.
 
     This attribute is only relevant for material specs.
 
@@ -26,9 +25,9 @@ class PropertyAndConditions(DictSerializable, typ="property_and_conditions"):
 
     """
 
-    def __init__(self,
-                 property: Property = None,
-                 conditions: Union[Iterable[Condition], Condition] = None):
+    def __init__(
+        self, property: Property = None, conditions: Union[Iterable[Condition], Condition] = None
+    ):
         self._property = None
         self.property = property
         self._conditions = None

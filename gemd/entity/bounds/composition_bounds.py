@@ -1,8 +1,9 @@
 """Bounds a composition to have a specified set of components."""
+
+from typing import Iterable, Set, TypeVar, Union
+
 from gemd.entity.bounds.base_bounds import BaseBounds
 from gemd.entity.util import array_like
-
-from typing import TypeVar, Union, Set, Iterable
 
 __all__ = ["CompositionBounds"]
 CompositionBoundsType = TypeVar("CompositionBoundsType", bound="CompositionBounds")
@@ -11,8 +12,7 @@ CompositionValueType = TypeVar("CompositionValueType", bound="CompositionValue")
 
 
 class CompositionBounds(BaseBounds, typ="composition_bounds"):
-    """
-    Composition bounds, parameterized by a set of string-valued category labels.
+    """Composition bounds, parameterized by a set of string-valued category labels.
 
     Parameters
     ----------
@@ -40,14 +40,13 @@ class CompositionBounds(BaseBounds, typ="composition_bounds"):
         elif isinstance(value, set):
             self._components = value
         else:
-            raise ValueError("Components must be a list, tuple, or set: {}".format(value))
+            raise ValueError(f"Components must be a list, tuple, or set: {value}")
 
         if not all(isinstance(x, str) for x in self.components):
             raise ValueError("All the components must be strings")
 
     def contains(self, bounds: Union[BaseBounds, BaseValueType]) -> bool:
-        """
-        Check if another bounds or value object is contained by this bounds.
+        """Check if another bounds or value object is contained by this bounds.
 
         The other object must also be a Composition and its components must be a subset of
         this bounds's set of allowed components.
@@ -76,11 +75,10 @@ class CompositionBounds(BaseBounds, typ="composition_bounds"):
 
         return bounds.components.issubset(self.components)
 
-    def union(self,
-              *others: Union[CompositionBoundsType, CompositionValueType]
-              ) -> CompositionBoundsType:
-        """
-        Return the union of this bounds and other bounds.
+    def union(
+        self, *others: Union[CompositionBoundsType, CompositionValueType]
+    ) -> CompositionBoundsType:
+        """Return the union of this bounds and other bounds.
 
         The others list must also be Composition Bounds or Values.
 
@@ -100,11 +98,14 @@ class CompositionBounds(BaseBounds, typ="composition_bounds"):
         from gemd.entity.value.composition_value import CompositionValue
 
         if any(not isinstance(x, (CompositionBounds, CompositionValue)) for x in others):
-            misses = {type(x).__name__
-                      for x in others
-                      if not isinstance(x, (CompositionBounds, CompositionValue))}
-            raise TypeError(f"union requires consistent typing; "
-                            f"expected composition, found {misses}")
+            misses = {
+                type(x).__name__
+                for x in others
+                if not isinstance(x, (CompositionBounds, CompositionValue))
+            }
+            raise TypeError(
+                f"union requires consistent typing; expected composition, found {misses}"
+            )
         result = self.components.copy()
         for bounds in others:
             if isinstance(bounds, CompositionValue):
@@ -113,8 +114,7 @@ class CompositionBounds(BaseBounds, typ="composition_bounds"):
         return CompositionBounds(result)
 
     def update(self, *others: Union[CompositionBoundsType, CompositionValueType]):
-        """
-        Update this bounds to include other bounds.
+        """Update this bounds to include other bounds.
 
         The others list must also be Composition Bounds or Values.
 
@@ -129,8 +129,7 @@ class CompositionBounds(BaseBounds, typ="composition_bounds"):
         self.components = self.union(*others).components
 
     def as_dict(self):
-        """
-        Convert bounds to a dictionary.
+        """Convert bounds to a dictionary.
 
         Returns
         -------

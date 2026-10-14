@@ -1,4 +1,5 @@
 """Value objects"""
+
 # flake8: noqa
 from .nominal_real import NominalReal
 from .normal_real import NormalReal
@@ -12,9 +13,16 @@ from .nominal_composition import NominalComposition
 from .inchi_value import InChI
 from .smiles_value import Smiles
 
-__all__ = ["NominalReal", "NormalReal", "UniformReal",
-           "NominalInteger", "UniformInteger",
-           "NominalCategorical", "DiscreteCategorical",
-           "NominalComposition", "EmpiricalFormula",
-           "InChI", "Smiles"
-           ]
+__all__ = [
+    "NominalReal",
+    "NormalReal",
+    "UniformReal",
+    "NominalInteger",
+    "UniformInteger",
+    "NominalCategorical",
+    "DiscreteCategorical",
+    "NominalComposition",
+    "EmpiricalFormula",
+    "InChI",
+    "Smiles",
+]

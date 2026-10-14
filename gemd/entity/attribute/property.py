@@ -1,14 +1,13 @@
+from typing import Type
+
 from gemd.entity.attribute.base_attribute import BaseAttribute
 from gemd.entity.template import PropertyTemplate
-
-from typing import Type
 
 __all__ = ["Property"]
 
 
 class Property(BaseAttribute, typ="property"):
-    """
-    Property of a material, measured in a MeasurementRun or specified in a MaterialSpec.
+    """Property of a material, measured in a MeasurementRun or specified in a MaterialSpec.
 
     Properties are characteristics of a material that could be measured, e.g. chemical composition,
     density, yield strength.

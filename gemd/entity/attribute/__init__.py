@@ -1,4 +1,5 @@
 """Attribute objects."""
+
 # flake8: noqa
 from .condition import Condition
 from .parameter import Parameter

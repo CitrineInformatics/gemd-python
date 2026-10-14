@@ -1,8 +1,14 @@
 """Test Strehlow & Cook demo."""
-from gemd.demo.strehlow_and_cook import make_strehlow_table, make_strehlow_objects, \
-    minimal_subset, import_table
-import gemd.json as gemd_json
+
 import json as json_builtin
+
+import gemd.json as gemd_json
+from gemd.demo.strehlow_and_cook import (
+    import_table,
+    make_strehlow_objects,
+    make_strehlow_table,
+    minimal_subset,
+)
 
 
 def test_sac():
@@ -21,7 +27,7 @@ def test_sac():
             assert (comp1.name == comp2.name) == (comp1.spec.uids == comp2.spec.uids)
 
     # Look at each different combination of Value types in a S&C record
-    smaller = minimal_subset(sac_tbl['content'])
+    smaller = minimal_subset(sac_tbl["content"])
     # Make sure that the diversity of value types isn't lost, e.g. something is being None'd
     assert len(smaller) == 162
 

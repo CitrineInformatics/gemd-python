@@ -1,16 +1,16 @@
 """Discrete distribution across several categories."""
-from typing import Optional, Union, Mapping
 
+from typing import Mapping, Optional, Union
+
+from gemd.entity.bounds import CategoricalBounds
 from gemd.entity.setters import validate_str
 from gemd.entity.value.categorical_value import CategoricalValue
-from gemd.entity.bounds import CategoricalBounds
 
 __all__ = ["DiscreteCategorical"]
 
 
 class DiscreteCategorical(CategoricalValue, typ="discrete_categorical"):
-    """
-    Distribution over a discrete set of categories.
+    """Distribution over a discrete set of categories.
 
     Parameters
     ----------
@@ -49,8 +49,7 @@ class DiscreteCategorical(CategoricalValue, typ="discrete_categorical"):
             raise TypeError("probabilities must be dict or single value")
 
     def _to_bounds(self) -> CategoricalBounds:
-        """
-        Return the smallest bounds object that is consistent with the Value.
+        """Return the smallest bounds object that is consistent with the Value.
 
         Returns
         -------

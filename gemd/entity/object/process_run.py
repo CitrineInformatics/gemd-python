@@ -1,28 +1,33 @@
-from gemd.entity.object.process_spec import ProcessSpec
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Type, TypeVar, Union
+
+from gemd.entity.attribute.condition import Condition
+from gemd.entity.attribute.parameter import Parameter
+from gemd.entity.file_link import FileLink
+from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.object.base_object import BaseObject
-from gemd.entity.object.has_spec import HasSpec
 from gemd.entity.object.has_conditions import HasConditions
 from gemd.entity.object.has_parameters import HasParameters
 from gemd.entity.object.has_source import HasSource
-from gemd.entity.attribute.condition import Condition
-from gemd.entity.attribute.parameter import Parameter
-from gemd.entity.source.performed_source import PerformedSource
-from gemd.entity.file_link import FileLink
-from gemd.entity.link_by_uid import LinkByUID
+from gemd.entity.object.has_spec import HasSpec
+from gemd.entity.object.process_spec import ProcessSpec
 from gemd.entity.setters import validate_list
-
-from typing import TypeVar, Optional, Union, Iterable, List, Mapping, Dict, Type, Any
+from gemd.entity.source.performed_source import PerformedSource
 
 __all__ = ["ProcessRun"]
 MaterialRunType = TypeVar("MaterialRunType", bound="MaterialRun")  # noqa: F821
 IngredientRunType = TypeVar("IngredientRunType", bound="IngredientRun")  # noqa: F821
 
 
-class ProcessRun(BaseObject,
-                 HasSpec, HasConditions, HasParameters, HasSource,
-                 typ="process_run", skip={"_output_material", "_ingredients"}):
-    """
-    A process run.
+class ProcessRun(
+    BaseObject,
+    HasSpec,
+    HasConditions,
+    HasParameters,
+    HasSource,
+    typ="process_run",
+    skip={"_output_material", "_ingredients"},
+):
+    """A process run.
 
     Processes transform zero or more input materials into exactly one output material.
     This includes links to conditions and parameters under which the process was performed,
@@ -55,21 +60,24 @@ class ProcessRun(BaseObject,
 
     """
 
-    def __init__(self,
-                 name: str,
-                 *,
-                 spec: Union[ProcessSpec, LinkByUID] = None,
-                 conditions: Union[Condition, Iterable[Condition]] = None,
-                 parameters: Union[Parameter, Iterable[Parameter]] = None,
-                 uids: Mapping[str, str] = None,
-                 tags: Iterable[str] = None,
-                 notes: str = None,
-                 file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
-                 source: PerformedSource = None):
+    def __init__(
+        self,
+        name: str,
+        *,
+        spec: Union[ProcessSpec, LinkByUID] = None,
+        conditions: Union[Condition, Iterable[Condition]] = None,
+        parameters: Union[Parameter, Iterable[Parameter]] = None,
+        uids: Mapping[str, str] = None,
+        tags: Iterable[str] = None,
+        notes: str = None,
+        file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
+        source: PerformedSource = None,
+    ):
         from gemd.entity.object.ingredient_run import IngredientRun
 
-        BaseObject.__init__(self, name=name, uids=uids, tags=tags, notes=notes,
-                            file_links=file_links)
+        BaseObject.__init__(
+            self, name=name, uids=uids, tags=tags, notes=notes, file_links=file_links
+        )
         HasSpec.__init__(self, spec=spec)
         HasConditions.__init__(self, conditions)
         HasParameters.__init__(self, parameters)
@@ -106,5 +114,5 @@ class ProcessRun(BaseObject,
     def _dict_for_compare(self) -> Dict[str, Any]:
         """Support for recursive equals."""
         base = super()._dict_for_compare()
-        base['ingredients'] = self.ingredients
+        base["ingredients"] = self.ingredients
         return base

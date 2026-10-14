@@ -1,16 +1,17 @@
 """Test parsing and serde of an InChI molecular structure."""
+
 import pytest
 
-from gemd.json import dumps, loads
-from gemd.entity.value.inchi_value import InChI
 from gemd.entity.bounds import MolecularStructureBounds
+from gemd.entity.value.inchi_value import InChI
+from gemd.json import dumps, loads
 
 
 def test_json():
     """Check that we can json ser/de round-robin."""
     inchi = InChI("InChI=1/C8H8O3/c1-11-8-4-6(5-9)2-3-7(8)10/h2-5,10H,1H3")
     copy = loads(dumps(inchi))
-    assert(copy == inchi)
+    assert copy == inchi
 
 
 def test_inchi_setter():
@@ -28,8 +29,7 @@ def test_inchi_setter():
 
 
 def test_invalid_inchi():
-    """
-    Check that an invalid InChI throws a TypeError.
+    """Check that an invalid InChI throws a TypeError.
 
     Note that real checking requires an external package.
     """

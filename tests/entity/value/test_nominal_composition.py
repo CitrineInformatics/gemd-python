@@ -1,8 +1,9 @@
 """Tests of the NominalComposition class."""
+
 import pytest
 
-from gemd.entity.value.nominal_composition import NominalComposition
 from gemd.entity.bounds import CompositionBounds
+from gemd.entity.value.nominal_composition import NominalComposition
 
 
 def test_quantities_are_dict():
