@@ -4,7 +4,6 @@ import functools
 import uuid
 from typing import (
     Any,
-    ByteString,
     Callable,
     Iterable,
     List,
@@ -67,10 +66,6 @@ def cached_isinstance(obj: object, class_or_tuple: Union[Type, Tuple[Type]]) -> 
     """
     obj_type = type(obj)
     return _cached_issubclass(obj_type, class_or_tuple)
-
-
-# Older unreleased versions of citrine-python referenced the private method directly
-_cached_isinstance = cached_isinstance
 
 
 @functools.lru_cache(maxsize=1024)
@@ -181,7 +176,7 @@ def _substitute_inplace(
             return None
         elif obj.__hash__ is not None:
             return obj
-        elif cached_isinstance(obj, Iterable) and not cached_isinstance(obj, ByteString):
+        elif cached_isinstance(obj, Iterable) and not cached_isinstance(obj, (bytes, bytearray)):
             return id(obj)
         else:
             return None  # pragma: no cover  Fallback for caution's sake
@@ -448,7 +443,9 @@ def recursive_foreach(
         elif cached_isinstance(this, DictSerializable):
             for k, x in this.__dict__.items():
                 queue.append(x)
-        elif cached_isinstance(this, Iterable) and not cached_isinstance(this, (str, ByteString)):
+        elif cached_isinstance(this, Iterable) and not cached_isinstance(
+            this, (str, bytes, bytearray)
+        ):
             for x in this:
                 queue.append(x)
 
@@ -511,7 +508,9 @@ def recursive_flatmap(
                 queue.append(x)
         elif cached_isinstance(this, Reversible):
             queue.extend(reversed(this))  # Preserve order of the list/tuple
-        elif cached_isinstance(this, Iterable) and not cached_isinstance(this, (str, ByteString)):
+        elif cached_isinstance(this, Iterable) and not cached_isinstance(
+            this, (str, bytes, bytearray)
+        ):
             queue.extend(this)  # No control over order
 
     return res

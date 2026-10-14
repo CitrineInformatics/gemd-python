@@ -6,18 +6,10 @@ import re
 from importlib.resources import files
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Any, Generator, List, Tuple, Union
-
-from deprecation import deprecated
-
-try:
-    from typing import TypeAlias  # Python 3.10+
-except ImportError:  # pragma nocover
-    from typing_extensions import TypeAlias  # Python 3.9
-
 from tokenize import ERRORTOKEN, NAME, NUMBER, OP, TokenInfo
+from typing import Any, Generator, List, Tuple, TypeAlias, Union
 
-from pint import UnitRegistry, register_unit_format
+from pint import UnitRegistry
 from pint.errors import DefinitionSyntaxError, UndefinedUnitError
 
 # alias the error that is thrown when units are incompatible
@@ -294,35 +286,6 @@ def convert_units(value: float, starting_unit: str, final_unit: str) -> float:
                 dim2=_REGISTRY.get_dimensionality(resolved_final_unit),
             )
         return resolved_value.to(resolved_final_unit).magnitude
-
-
-@register_unit_format("clean")
-@deprecated(deprecated_in="2.1.0", removed_in="3.0.0", details="Scaling factor clean-up ")
-def _format_clean(unit, registry, **options):
-    """DEPRECATED Formatter that turns scaling-factor-units into numbers again.
-
-    Responsibility for this piece of clean-up has been shifted to a custom class.
-
-    """
-    try:  # Informal route changed in 0.22
-        from pint.formatting import _FORMATTERS
-
-        formatter = _FORMATTERS["D"]  # pragma: no cover
-    except ImportError:  # pragma: no cover
-        from pint import Unit
-
-        formatter_obj = registry.formatter._formatters["D"]
-
-        def _surrogate_formatter(unit, registry, **options):
-            try:
-                parsed = Unit(unit)
-                return formatter_obj.format_unit(parsed)
-            except ValueError:
-                return formatter_obj.format_quantity(unit)
-
-        formatter = _surrogate_formatter
-
-    return formatter(unit, registry, **options)
 
 
 @functools.lru_cache(maxsize=1024)
