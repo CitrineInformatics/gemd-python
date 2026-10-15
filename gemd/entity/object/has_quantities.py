@@ -11,7 +11,7 @@ from gemd.entity.value.continuous_value import ContinuousValue
 __all__ = ["HasQuantities"]
 
 
-class HasQuantities(object):
+class HasQuantities:
     """Mixin-trait that includes the mass, volume, number fraction, and absolute quantity."""
 
     def __init__(

@@ -1,4 +1,4 @@
-from typing import Iterable, List, Mapping, Optional, Set, Type, Union
+from collections.abc import Iterable, Mapping
 
 from gemd.entity.attribute.property_and_conditions import PropertyAndConditions
 from gemd.entity.file_link import FileLink
@@ -51,13 +51,13 @@ class MaterialSpec(BaseObject, HasTemplate, HasProcess, HasProperties, typ="mate
         self,
         name: str,
         *,
-        template: Optional[Union[MaterialTemplate, LinkByUID]] = None,
-        process: Union[ProcessSpec, LinkByUID] = None,
-        properties: Union[Iterable[PropertyAndConditions], PropertyAndConditions] = None,
+        template: MaterialTemplate | LinkByUID | None = None,
+        process: ProcessSpec | LinkByUID = None,
+        properties: Iterable[PropertyAndConditions] | PropertyAndConditions = None,
         uids: Mapping[str, str] = None,
         tags: Iterable[str] = None,
         notes: str = None,
-        file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
+        file_links: Iterable[FileLink] | FileLink | None = None,
     ):
         BaseObject.__init__(
             self, name=name, uids=uids, tags=tags, notes=notes, file_links=file_links
@@ -69,25 +69,23 @@ class MaterialSpec(BaseObject, HasTemplate, HasProcess, HasProperties, typ="mate
         self.process = process
 
     @property
-    def properties(self) -> List[PropertyAndConditions]:
+    def properties(self) -> list[PropertyAndConditions]:
         """Get the list of property-and-conditions."""
         return self._properties
 
     @properties.setter
-    def properties(
-        self, properties: Union[Iterable[PropertyAndConditions], PropertyAndConditions]
-    ):
+    def properties(self, properties: Iterable[PropertyAndConditions] | PropertyAndConditions):
         """Set the list of property-and-conditions."""
         checker = self._generate_template_check(HasPropertyTemplates.validate_property)
         self._properties = validate_list(properties, PropertyAndConditions, trigger=checker)
 
     @property
-    def process(self) -> Union[ProcessSpec, LinkByUID]:
+    def process(self) -> ProcessSpec | LinkByUID:
         """Get the originating process spec."""
         return self._process
 
     @process.setter
-    def process(self, process: Union[ProcessSpec, LinkByUID]):
+    def process(self, process: ProcessSpec | LinkByUID):
         """Link to the ProcessSpec that creates this MaterialSpec.
 
         If the input, process, is not an instance of ProcessSpec, raise an error.
@@ -113,11 +111,11 @@ class MaterialSpec(BaseObject, HasTemplate, HasProcess, HasProperties, typ="mate
             )
 
     @staticmethod
-    def _template_type() -> Type:
+    def _template_type() -> type:
         """Communicate expected template type to parent class."""
         return MaterialTemplate
 
-    def _local_dependencies(self) -> Set[Union[BaseEntity, LinkByUID]]:
+    def _local_dependencies(self) -> set[BaseEntity | LinkByUID]:
         """Return a set of all immediate dependencies (no recursion)."""
         result = set()
         for attr in self.properties:

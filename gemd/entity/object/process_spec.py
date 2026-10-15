@@ -1,4 +1,5 @@
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Type, TypeVar, Union
+from collections.abc import Iterable, Mapping
+from typing import Any, TypeVar
 
 from gemd.entity.attribute.condition import Condition
 from gemd.entity.attribute.parameter import Parameter
@@ -59,13 +60,13 @@ class ProcessSpec(
         self,
         name: str,
         *,
-        template: Optional[Union[ProcessTemplate, LinkByUID]] = None,
-        conditions: Union[Condition, Iterable[Condition]] = None,
-        parameters: Union[Parameter, Iterable[Parameter]] = None,
+        template: ProcessTemplate | LinkByUID | None = None,
+        conditions: Condition | Iterable[Condition] = None,
+        parameters: Parameter | Iterable[Parameter] = None,
         uids: Mapping[str, str] = None,
         tags: Iterable[str] = None,
         notes: str = None,
-        file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
+        file_links: Iterable[FileLink] | FileLink | None = None,
     ):
         from gemd.entity.link_by_uid import LinkByUID
         from gemd.entity.object.ingredient_spec import IngredientSpec
@@ -84,12 +85,12 @@ class ProcessSpec(
         self._ingredients = validate_list(None, [IngredientSpec, LinkByUID])
 
     @staticmethod
-    def _template_type() -> Type:
+    def _template_type() -> type:
         """Communicate expected template type to parent class."""
         return ProcessTemplate
 
     @property
-    def ingredients(self) -> List[IngredientSpecType]:
+    def ingredients(self) -> list[IngredientSpecType]:
         """Ingredient specs that act as inputs to this process spec.
 
         The link is established by creating each ingredient spec and setting its
@@ -99,7 +100,7 @@ class ProcessSpec(
         return self._ingredients
 
     @property
-    def output_material(self) -> Optional[MaterialSpecType]:
+    def output_material(self) -> MaterialSpecType | None:
         """The material spec that this process spec produces.
 
         The link is established by creating the material spec and settings its
@@ -108,7 +109,7 @@ class ProcessSpec(
         """
         return self._output_material
 
-    def _dict_for_compare(self) -> Dict[str, Any]:
+    def _dict_for_compare(self) -> dict[str, Any]:
         """Support for recursive equals."""
         base = super()._dict_for_compare()
         base["ingredients"] = self.ingredients

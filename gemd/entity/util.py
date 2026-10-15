@@ -1,6 +1,6 @@
 """Utility methods."""
 
-from typing import Any, Dict, List
+from typing import Any
 
 from gemd.util import recursive_foreach
 
@@ -95,7 +95,7 @@ def array_like():
     return _array_like
 
 
-def complete_material_history(mat) -> List[Dict[str, Any]]:
+def complete_material_history(mat) -> list[dict[str, Any]]:
     """Get a list of every single object in the material history, all as dictionaries.
 
     This is useful for testing, if we want the context list that can be used to rehydrate
