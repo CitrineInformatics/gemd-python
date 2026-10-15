@@ -11,6 +11,7 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import gemd
+import inspect
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../../gemd'))
@@ -89,3 +90,15 @@ html_theme_options = {
     'sticky_navigation': False,
     'logo_only': True
 }
+
+
+def _skip_builtin_members(app, what, name, obj, skip, options):
+    """Skip members implemented in C, such as int.to_bytes inherited by IntEnum classes."""
+    implemented_in_c = (
+        inspect.isbuiltin(obj) or inspect.ismethoddescriptor(obj) or inspect.isgetsetdescriptor(obj)
+    )
+    return True if implemented_in_c else None
+
+
+def setup(app):
+    app.connect("autodoc-skip-member", _skip_builtin_members)
