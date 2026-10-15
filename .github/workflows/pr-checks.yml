@@ -11,6 +11,7 @@ on:
 
 jobs:
   pr-checks:
-    uses: CitrineInformatics/common-gh-actions/.github/workflows/repo-checks.yml@v1
+    uses: CitrineInformatics/common-gh-actions/.github/workflows/repo-checks.yml@v3
     with:
       src: gemd
+      check_version_bump: ${{ github.base_ref == 'main' }}

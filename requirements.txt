@@ -1,2 +1,0 @@
-pint==0.24.4
-deprecation==2.1.0
