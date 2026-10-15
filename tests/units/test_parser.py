@@ -199,14 +199,14 @@ def _change_units(filename):
         change_definitions_file()
 
 
-def test_file_change(tmpdir):
+def test_file_change(tmp_path):
     """Test that swapping units files works."""
     assert convert_units(1, "m", "cm") == 100
     with pytest.raises(UndefinedUnitError):
         assert convert_units(1, "usd", "USD") == 1
 
-    test_file = tmpdir / "test_units.txt"
-    test_file.write_binary(files("tests.units").joinpath("test_units.txt").read_bytes())
+    test_file = tmp_path / "test_units.txt"
+    test_file.write_bytes(files("tests.units").joinpath("test_units.txt").read_bytes())
     with _change_units(filename=test_file):
         with pytest.raises(UndefinedUnitError):
             assert convert_units(1, "m", "cm") == 100
