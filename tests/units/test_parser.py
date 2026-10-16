@@ -12,6 +12,7 @@ from gemd.units import (
     change_definitions_file,
     convert_units,
     get_base_units,
+    get_compatible_units,
     parse_units,
 )
 
@@ -188,6 +189,20 @@ def test_get_base_units():
     assert get_base_units("degC") == get_base_units(_REGISTRY("degC"))
     assert get_base_units("km") == (_REGISTRY("meter"), 1000, 0)
     assert get_base_units("g / 25 mm") == (_REGISTRY("kg / m"), 0.04, 0)
+
+
+def test_get_compatible_units():
+    """Test that compatible units make sense."""
+    from gemd.units.impl import _REGISTRY
+
+    assert "kelvin" in get_compatible_units("degC")
+    assert "degree_Celsius" in get_compatible_units("degC")
+    assert "gram" in get_compatible_units("kg")
+    assert "meter" not in get_compatible_units("kg")
+    assert "meter" in get_compatible_units("km")
+    assert "meter" in get_compatible_units(_REGISTRY("km"))
+    assert "meter" in get_compatible_units("[length]")
+    assert "gram" not in get_compatible_units("km")
 
 
 @contextmanager
