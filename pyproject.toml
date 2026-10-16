@@ -44,7 +44,7 @@ exclude = ["docs", "tests"]
 [dependency-groups]
 dev = [
     "ruff==0.16.6",
-    "numpy>=2.0.2,<3; python_version<'3.14'",
+    "numpy>=2.1.0,<3; python_version<'3.14'",  # first release with 3.13 wheels
     "numpy>=2.3.2,<3; python_version>='3.14'",  # first release with 3.14 wheels
     "pandas>=2.3.0,<4; python_version<'3.14'",
     "pandas>=2.3.3,<4; python_version>='3.14'",  # first release with 3.14 wheels
