@@ -1,4 +1,4 @@
-from typing import Iterable, List
+from collections.abc import Iterable
 
 from gemd.util import cached_isinstance
 
@@ -9,7 +9,7 @@ def test_cached_isinstance():
         ("one", str),
         (1, int),
         ("one", (str, int)),
-        ([1, 2, 3], List),
+        ([1, 2, 3], list),
         ("one", Iterable),
     ]
     for obj, cls in passing_pairs:
@@ -21,7 +21,7 @@ def test_cached_isinstance():
         ("one", int),
         (1, str),
         ("one", (float, int)),
-        ("one", List),
+        ("one", list),
         (1, Iterable),
     ]
     for obj, cls in failing_pairs:

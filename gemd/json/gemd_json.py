@@ -1,5 +1,5 @@
 import json
-from typing import Any, Dict, Type
+from typing import Any
 
 from gemd.entity.base_entity import BaseEntity
 from gemd.entity.dict_serializable import DictSerializable
@@ -10,7 +10,7 @@ from gemd.util import flatten, set_uuids, substitute_links
 __all__ = ["GEMDJson"]
 
 
-class GEMDJson(object):
+class GEMDJson:
     """Class that provides json load/dump functionality that is compatible with gemd objects.
 
     The serialization and deserialization strategy implemented by this class is described in
@@ -205,9 +205,9 @@ class GEMDJson(object):
 
     @staticmethod
     def _load_and_index(
-        d: Dict[str, Any],
-        object_index: Dict[str, DictSerializable],
-        clazz_index: Dict[str, Type],
+        d: dict[str, Any],
+        object_index: dict[str, DictSerializable],
+        clazz_index: dict[str, type],
         substitute: bool = False,
     ) -> DictSerializable:
         """Load the class based on the type string and index it, if a BaseEntity.

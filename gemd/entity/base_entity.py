@@ -1,6 +1,7 @@
 """Base class for all entities."""
 
-from typing import Dict, FrozenSet, Iterable, List, MutableMapping, Optional, Set, TypeVar, Union
+from collections.abc import Iterable, MutableMapping
+from typing import TypeVar
 
 from gemd.entity.case_insensitive_dict import CaseInsensitiveDict
 from gemd.entity.dict_serializable import DictSerializable
@@ -28,7 +29,7 @@ class BaseEntity(DictSerializable):
         self.uids = uids
 
     @property
-    def tags(self) -> List[str]:
+    def tags(self) -> list[str]:
         """A collection of structured labels.
 
         `Tags <https://citrineinformatics.github.io/gemd-documentation/specification/tags/>`_
@@ -43,7 +44,7 @@ class BaseEntity(DictSerializable):
         self._tags = validate_list(tags, str)
 
     @property
-    def uids(self) -> Dict[str, str]:
+    def uids(self) -> dict[str, str]:
         """A collection of unique IDs.
 
         Requirements for and the value of unique IDs are discussed
@@ -76,9 +77,7 @@ class BaseEntity(DictSerializable):
         """
         self.uids[scope] = uid
 
-    def to_link(
-        self, scope: Optional[str] = None, *, allow_fallback: bool = False
-    ) -> LinkByUIDType:
+    def to_link(self, scope: str | None = None, *, allow_fallback: bool = False) -> LinkByUIDType:
         """Generate a ~gemd.entity.link_by_uid.LinkByUID for this object.
 
         Parameters
@@ -107,7 +106,7 @@ class BaseEntity(DictSerializable):
 
         return LinkByUID(scope=scope, id=uid)
 
-    def all_dependencies(self) -> Set[Union[BaseEntityType, LinkByUIDType]]:
+    def all_dependencies(self) -> set[BaseEntityType | LinkByUIDType]:
         """Return a set of all immediate dependencies (no recursion)."""
         result = set()
         queue = [type(self)]
@@ -121,8 +120,8 @@ class BaseEntity(DictSerializable):
 
     @staticmethod
     def _cached_equals(
-        this: "BaseEntity", that: "BaseEntity", *, cache: Dict[FrozenSet, Optional[bool]] = None
-    ) -> Optional[bool]:
+        this: "BaseEntity", that: "BaseEntity", *, cache: dict[frozenset, bool | None] = None
+    ) -> bool | None:
         """Compute and stash whether two Base Entities are equal in a recursive sense.
 
         The cache uses ternary logic to communicate state.  True or False indicate a completed

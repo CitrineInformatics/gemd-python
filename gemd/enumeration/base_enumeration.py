@@ -1,7 +1,8 @@
 """Base class for all enumerations."""
 
+from collections.abc import Callable
 from enum import Enum
-from typing import Callable, Optional, Type
+from typing import Optional
 from warnings import warn
 
 from deprecation import deprecated
@@ -81,7 +82,7 @@ class BaseEnumeration(str, Enum):
 
 def migrated_enum(
     *, old_value: str, new_value: str, deprecated_in: str, removed_in: str
-) -> Callable[[Type], Type]:
+) -> Callable[[type], type]:
     """Decorator for registering an enumerated value as migrated to a new symbol.
 
     Parameters
@@ -98,9 +99,7 @@ def migrated_enum(
 
     """
 
-    def decorator(cls) -> Type:
-        print("Sear")
-
+    def decorator(cls) -> type:
         class MixinMeta(type(cls)):
             """New derived metaclass for holding the deprecated symbol."""
 

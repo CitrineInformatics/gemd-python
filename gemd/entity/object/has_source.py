@@ -5,7 +5,7 @@ from gemd.entity.source.performed_source import PerformedSource
 __all__ = ["HasSource"]
 
 
-class HasSource(object):
+class HasSource:
     """Mixin-trait for entities that include sources (data provenance)."""
 
     def __init__(self, source: PerformedSource):

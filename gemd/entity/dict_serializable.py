@@ -1,8 +1,9 @@
 import functools
 import inspect
 from abc import ABC, ABCMeta
+from collections.abc import Iterable, Mapping
 from logging import getLogger
-from typing import Any, Dict, Iterable, List, Mapping, Set, TypeVar, Union
+from typing import Any, TypeVar
 
 __all__ = ["DictSerializable"]
 
@@ -16,7 +17,7 @@ DictSerializableType = TypeVar("DictSerializableType", bound="DictSerializable")
 class DictSerializableMeta(ABCMeta):
     """Metaclass for tracking DictSerializable type string to class mappings."""
 
-    _class: Dict[str, type] = {}
+    _class: dict[str, type] = {}
 
     def __new__(
         mcs,
@@ -24,12 +25,12 @@ class DictSerializableMeta(ABCMeta):
         bases,
         *args,  # noqa: D102
         typ: str = None,
-        skip: Set[str] = frozenset(),
+        skip: set[str] = frozenset(),
         **kwargs,
     ):
         return super().__new__(mcs, name, bases, *args, **kwargs)
 
-    def __init__(cls, name, bases, *args, typ: str = None, skip: Set[str] = frozenset(), **kwargs):
+    def __init__(cls, name, bases, *args, typ: str = None, skip: set[str] = frozenset(), **kwargs):
         super().__init__(name, bases, *args, **kwargs)
         if typ is not None:
             if typ in cls._class and not issubclass(cls, cls._class.get(typ)):
@@ -44,7 +45,7 @@ class DictSerializableMeta(ABCMeta):
         cls.skip = {x for b in bases for x in getattr(b, "skip", {})} | skip
 
     @property
-    def class_mapping(cls) -> Dict[str, type]:
+    def class_mapping(cls) -> dict[str, type]:
         """Return class typ string -> class map for DictSerializable and its descendants.
 
         Note that is actually returns a copy of the internal dict to avoid accidental breakage.
@@ -90,13 +91,13 @@ class DictSerializable(ABC, metaclass=DictSerializableMeta):
 
     @classmethod
     @functools.lru_cache(maxsize=1024)
-    def _init_sig(cls) -> List[str]:
+    def _init_sig(cls) -> list[str]:
         """Internal method for generating the argument names for the class init method."""
         expected_arg_names = inspect.getfullargspec(cls.__init__).args
         expected_arg_names += inspect.getfullargspec(cls.__init__).kwonlyargs
         return expected_arg_names
 
-    def as_dict(self) -> Dict[str, Any]:
+    def as_dict(self) -> dict[str, Any]:
         """Convert the object to a dictionary.
 
         Returns
@@ -110,7 +111,7 @@ class DictSerializable(ABC, metaclass=DictSerializableMeta):
         attributes["type"] = self.typ
         return attributes
 
-    def dump(self) -> Dict[str, Any]:
+    def dump(self) -> dict[str, Any]:
         """Convert the object to a JSON dictionary, so that every entry is serialized.
 
         Uses the json encoder client, so objects with uids are converted to LinkByUID dictionaries.
@@ -160,9 +161,7 @@ class DictSerializable(ABC, metaclass=DictSerializableMeta):
             object_dict[key] = self._name_repr(skipped_field)
         return str(object_dict)
 
-    def _name_repr(
-        self, entity: Union[Iterable[DictSerializableType], DictSerializableType]
-    ) -> str:
+    def _name_repr(self, entity: Iterable[DictSerializableType] | DictSerializableType) -> str:
         """A representation of an object or a list of objects that uses the name and type.
 
         This is used to represent soft-linked objects without inundating the user with
@@ -188,7 +187,7 @@ class DictSerializable(ABC, metaclass=DictSerializableMeta):
             name = getattr(entity, "name", "<unknown name>")
             return f"<{type(entity).__name__} '{name}'>"
 
-    def _dict_for_compare(self) -> Dict[str, Any]:
+    def _dict_for_compare(self) -> dict[str, Any]:
         """Which fields & values are relevant to an equality test."""
         return self.as_dict()
 

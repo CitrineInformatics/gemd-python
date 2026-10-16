@@ -1,6 +1,7 @@
 """For entities that have a condition template."""
 
-from typing import Iterable, List, Optional, Set, Tuple, TypeVar, Union
+from collections.abc import Iterable
+from typing import TypeVar
 
 from gemd.entity.bounds.base_bounds import BaseBounds
 from gemd.entity.has_dependencies import HasDependencies
@@ -12,10 +13,10 @@ from gemd.entity.template.condition_template import ConditionTemplate
 __all__ = ["HasConditionTemplates"]
 BaseEntityType = TypeVar("BaseEntityType", bound="BaseEntity")  # noqa: F821
 ConditionType = TypeVar("ConditionType", bound="Condition")  # noqa: F821
-_ConditionTemplateType = Union[ConditionTemplate, LinkByUID]
-_ConditionPairType = Tuple[_ConditionTemplateType, Optional[BaseBounds]]
-_ConditionListPairType = List[Optional[Union[_ConditionTemplateType, BaseBounds]]]
-_ConditionInputType = Union[_ConditionTemplateType, _ConditionPairType, _ConditionListPairType]
+_ConditionTemplateType = ConditionTemplate | LinkByUID
+_ConditionPairType = tuple[_ConditionTemplateType, BaseBounds | None]
+_ConditionListPairType = list[_ConditionTemplateType | BaseBounds | None]
+_ConditionInputType = _ConditionTemplateType | _ConditionPairType | _ConditionListPairType
 
 
 class HasConditionTemplates(HasDependencies):
@@ -37,7 +38,7 @@ class HasConditionTemplates(HasDependencies):
         self.conditions = conditions
 
     @property
-    def conditions(self) -> List[_ConditionPairType]:
+    def conditions(self) -> list[_ConditionPairType]:
         """Get the list of condition template/bounds tuples.
 
         Returns
@@ -94,6 +95,6 @@ class HasConditionTemplates(HasDependencies):
         else:
             return True  # Nothing to check against
 
-    def _local_dependencies(self) -> Set[Union[BaseEntityType, LinkByUID]]:
+    def _local_dependencies(self) -> set[BaseEntityType | LinkByUID]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {attr[0] for attr in self.conditions}

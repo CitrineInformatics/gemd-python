@@ -1,7 +1,7 @@
 """For entities that have parameters."""
 
 from abc import ABC
-from typing import Iterable, List, Set, Union
+from collections.abc import Iterable
 
 from gemd.entity.attribute.parameter import Parameter
 from gemd.entity.base_entity import BaseEntity
@@ -17,21 +17,21 @@ __all__ = ["HasParameters"]
 class HasParameters(HasTemplateCheckGenerator, HasDependencies, ABC):
     """Mixin-trait for entities that include parameters."""
 
-    def __init__(self, parameters: Union[Parameter, Iterable[Parameter]]):
+    def __init__(self, parameters: Parameter | Iterable[Parameter]):
         self._parameters = None
         self.parameters = parameters
 
     @property
-    def parameters(self) -> List[Parameter]:
+    def parameters(self) -> list[Parameter]:
         """A list of parameters associated with this entity."""
         return self._parameters
 
     @parameters.setter
-    def parameters(self, parameters: Union[Parameter, Iterable[Parameter]]):
+    def parameters(self, parameters: Parameter | Iterable[Parameter]):
         """Set the list of parameters."""
         checker = self._generate_template_check(HasParameterTemplates.validate_parameter)
         self._parameters = validate_list(parameters, Parameter, trigger=checker)
 
-    def _local_dependencies(self) -> Set[Union[BaseEntity, LinkByUID]]:
+    def _local_dependencies(self) -> set[BaseEntity | LinkByUID]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {param.template for param in self.parameters if param.template is not None}

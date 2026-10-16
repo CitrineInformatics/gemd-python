@@ -1,5 +1,3 @@
-from typing import Type
-
 from gemd.entity.attribute.base_attribute import BaseAttribute
 from gemd.entity.template import ParameterTemplate
 
@@ -33,5 +31,5 @@ class Parameter(BaseAttribute, typ="parameter"):
     """
 
     @staticmethod
-    def _template_type() -> Type:
+    def _template_type() -> type:
         return ParameterTemplate
