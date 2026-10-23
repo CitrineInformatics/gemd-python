@@ -15,3 +15,4 @@ jobs:
     with:
       src: gemd
       check_version_bump: ${{ github.base_ref == 'main' }}
+      check_docs: true
