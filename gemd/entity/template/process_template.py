@@ -32,7 +32,9 @@ class ProcessTemplate(
         are hierarchical strings that store information about an entity. They can be used
         for filtering and discoverability.
     allowed_names: List[str], optional
-        The set of names that a process' ingredients are allowed to use in their name field.
+        A list of ingredient names, kept for compatibility with existing code and stored JSON.
+        The Citrine Platform ignores a supplied list and fills this field on read with the
+        distinct names found in the ingredient specs that use the template.
     allowed_labels: List[str], optional
         The set of labels that a process' ingredients are allowed to use in their labels field.
     conditions: List[~gemd.entity.template.condition_template.ConditionTemplate] or \
