@@ -36,7 +36,7 @@ class ProcessTemplate(
         The Citrine Platform ignores this list when you save a template. When you fetch a
         template, this list has the distinct ingredient names from process specs that use
         the template. Names come from datasets you can read. GEMD Python keeps this field
-        so code and JSON that use it keep working.
+        to give users time to migrate code and JSON away from it.
     allowed_labels: List[str], optional
         The set of labels that a process' ingredients are allowed to use in their labels field.
     conditions: List[~gemd.entity.template.condition_template.ConditionTemplate] or \
