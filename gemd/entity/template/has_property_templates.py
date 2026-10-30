@@ -1,6 +1,7 @@
 """For entities that have a property template."""
 
-from typing import Iterable, List, Optional, Set, Tuple, TypeVar, Union
+from collections.abc import Iterable
+from typing import TypeVar
 
 from gemd.entity.bounds.base_bounds import BaseBounds
 from gemd.entity.has_dependencies import HasDependencies
@@ -16,10 +17,10 @@ PropertyAndConditionsType = TypeVar(
     "PropertyAndConditionsType",
     bound="PropertyAndConditions",  # noqa: F821
 )
-_PropertyTemplateType = Union[PropertyTemplate, LinkByUID]
-_PropertyPairType = Tuple[_PropertyTemplateType, Optional[BaseBounds]]
-_PropertyListPairType = List[Optional[Union[_PropertyTemplateType, BaseBounds]]]
-_PropertyInputType = Union[_PropertyTemplateType, _PropertyPairType, _PropertyListPairType]
+_PropertyTemplateType = PropertyTemplate | LinkByUID
+_PropertyPairType = tuple[_PropertyTemplateType, BaseBounds | None]
+_PropertyListPairType = list[_PropertyTemplateType | BaseBounds | None]
+_PropertyInputType = _PropertyTemplateType | _PropertyPairType | _PropertyListPairType
 
 
 class HasPropertyTemplates(HasDependencies):
@@ -41,7 +42,7 @@ class HasPropertyTemplates(HasDependencies):
         self.properties = properties
 
     @property
-    def properties(self) -> List[_PropertyPairType]:
+    def properties(self) -> list[_PropertyPairType]:
         """Get the list of property template/bounds tuples.
 
         Returns
@@ -75,7 +76,7 @@ class HasPropertyTemplates(HasDependencies):
             trigger=BaseTemplate._homogenize_ranges,
         )
 
-    def validate_property(self, prop: Union[PropertyType, PropertyAndConditionsType]) -> bool:
+    def validate_property(self, prop: PropertyType | PropertyAndConditionsType) -> bool:
         """Check if the property is consistent w/ this template."""
         from gemd.entity.attribute import PropertyAndConditions
 
@@ -94,6 +95,6 @@ class HasPropertyTemplates(HasDependencies):
         else:
             return True  # Nothing to check against
 
-    def _local_dependencies(self) -> Set[Union[BaseEntityType, LinkByUID]]:
+    def _local_dependencies(self) -> set[BaseEntityType | LinkByUID]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {attr[0] for attr in self.properties}

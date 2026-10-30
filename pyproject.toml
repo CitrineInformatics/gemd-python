@@ -4,9 +4,8 @@ dynamic = ["version"]
 dependencies = [
     "pint>=0.24.4,<0.25",
     "deprecation>=2.1.0,<3",
-    "typing_extensions>=4.8,<5; python_version<'3.10'",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 authors = [
     {name = "Citrine Informatics"}
 ]
@@ -15,7 +14,6 @@ readme = "README.md"
 license-files = ["LICENSE"]
 classifiers = [
           "Programming Language :: Python :: 3",
-          "Programming Language :: Python :: 3.9",
           "Programming Language :: Python :: 3.10",
           "Programming Language :: Python :: 3.11",
           "Programming Language :: Python :: 3.12",
@@ -46,16 +44,12 @@ exclude = ["docs", "tests"]
 [dependency-groups]
 dev = [
     "ruff==0.16.6",
-    "flake8==7.0.0",
-    "flake8-docstrings==1.7.0",
-    "numpy>=1.24.4; python_version<'3.10'",
-    "pandas>=2.0.3; python_version<'3.10'",
-    "numpy>=2.0.2,<3; python_version>='3.10'",
-    "pandas>=2.3.0,<4; python_version>='3.10'",
-    "pytest==8.4.2; python_version<'3.10'",
-    "pytest==9.0.3; python_version>='3.10'",
+    "numpy>=2.1.0,<3; python_version<'3.14'",  # first release with 3.13 wheels
+    "numpy>=2.3.2,<3; python_version>='3.14'",  # first release with 3.14 wheels
+    "pandas>=2.3.0,<4; python_version<'3.14'",
+    "pandas>=2.3.3,<4; python_version>='3.14'",  # first release with 3.14 wheels
+    "pytest==9.0.3",
     "pytest-cov==7.0.0",
-    "derp==0.1.1",
     "tomli>=2.2.1",
 ]
 docs = [
@@ -77,17 +71,16 @@ omit = [
 
 [tool.ruff]
 line-length = 99
-target-version = "py39"
+target-version = "py310"
 
 [tool.ruff.lint]
-# Mirror the flake8 configuration in tox.ini so both linters agree.
 preview = true
 explicit-preview-rules = true
 select = [
     "E",     # pycodestyle errors
     "W",     # pycodestyle warnings
     "F",     # pyflakes
-    "D",     # pydocstyle (flake8-docstrings)
+    "D",     # pydocstyle
     "I",     # isort
     "E231",  # missing whitespace after ',' (preview-only in ruff)
     "E275",  # missing whitespace after keyword (preview-only in ruff)

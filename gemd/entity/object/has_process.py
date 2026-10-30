@@ -1,7 +1,6 @@
 """For entities that have specs."""
 
 from abc import abstractmethod
-from typing import Set, Union
 
 from gemd.entity.base_entity import BaseEntity
 from gemd.entity.has_dependencies import HasDependencies
@@ -16,14 +15,14 @@ class HasProcess(HasDependencies):
 
     @property
     @abstractmethod
-    def process(self) -> Union[BaseObject, LinkByUID]:
+    def process(self) -> BaseObject | LinkByUID:
         """Get the process."""
 
     @process.setter
     @abstractmethod
-    def process(self, process: Union[BaseObject, LinkByUID]):
+    def process(self, process: BaseObject | LinkByUID):
         """Set the process."""
 
-    def _local_dependencies(self) -> Set[Union[BaseEntity, LinkByUID]]:
+    def _local_dependencies(self) -> set[BaseEntity | LinkByUID]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {self.process} if self.process is not None else set()

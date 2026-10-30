@@ -12,4 +12,4 @@ permissions:
 
 jobs:
   deploy-docs:
-    uses: CitrineInformatics/common-gh-actions/.github/workflows/deploy-docs.yml@v1
+    uses: CitrineInformatics/common-gh-actions/.github/workflows/deploy-docs.yml@v3

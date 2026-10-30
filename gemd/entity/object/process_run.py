@@ -1,4 +1,5 @@
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Type, TypeVar, Union
+from collections.abc import Iterable, Mapping
+from typing import Any, TypeVar
 
 from gemd.entity.attribute.condition import Condition
 from gemd.entity.attribute.parameter import Parameter
@@ -64,13 +65,13 @@ class ProcessRun(
         self,
         name: str,
         *,
-        spec: Union[ProcessSpec, LinkByUID] = None,
-        conditions: Union[Condition, Iterable[Condition]] = None,
-        parameters: Union[Parameter, Iterable[Parameter]] = None,
+        spec: ProcessSpec | LinkByUID = None,
+        conditions: Condition | Iterable[Condition] = None,
+        parameters: Parameter | Iterable[Parameter] = None,
         uids: Mapping[str, str] = None,
         tags: Iterable[str] = None,
         notes: str = None,
-        file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
+        file_links: Iterable[FileLink] | FileLink | None = None,
         source: PerformedSource = None,
     ):
         from gemd.entity.object.ingredient_run import IngredientRun
@@ -87,7 +88,7 @@ class ProcessRun(
         self._output_material = None
 
     @property
-    def output_material(self) -> Optional[MaterialRunType]:
+    def output_material(self) -> MaterialRunType | None:
         """The material run that this process run produces.
 
         The link is established by creating the material run and settings its
@@ -97,7 +98,7 @@ class ProcessRun(
         return self._output_material
 
     @property
-    def ingredients(self) -> List[IngredientRunType]:
+    def ingredients(self) -> list[IngredientRunType]:
         """Ingredient runs that act as inputs to this process run.
 
         The link is established by creating each ingredient run and setting its
@@ -107,11 +108,11 @@ class ProcessRun(
         return self._ingredients
 
     @staticmethod
-    def _spec_type() -> Type:
+    def _spec_type() -> type:
         """Required method to satisfy HasTemplates mix-in."""
         return ProcessSpec
 
-    def _dict_for_compare(self) -> Dict[str, Any]:
+    def _dict_for_compare(self) -> dict[str, Any]:
         """Support for recursive equals."""
         base = super()._dict_for_compare()
         base["ingredients"] = self.ingredients

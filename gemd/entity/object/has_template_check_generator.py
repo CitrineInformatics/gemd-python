@@ -1,8 +1,9 @@
 """For entities that have specs."""
 
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from inspect import getmembers, getmodule, isclass, signature
-from typing import Callable, TypeVar, Union
+from typing import TypeVar
 
 from gemd.entity.bounds_validation import WarningLevel, get_validation_level
 from gemd.entity.dict_serializable import logger
@@ -19,7 +20,7 @@ class HasTemplateCheckGenerator(ABC):
 
     @property
     @abstractmethod
-    def template(self) -> Union[BaseTemplate, LinkByUID]:
+    def template(self) -> BaseTemplate | LinkByUID:
         """Get the object template associated with this object."""
 
     def _generate_template_check(

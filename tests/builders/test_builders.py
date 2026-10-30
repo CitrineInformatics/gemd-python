@@ -1,5 +1,3 @@
-from typing import Union
-
 import pytest
 
 from gemd.builders import add_attribute, add_edge, add_measurement, make_attribute, make_node
@@ -35,11 +33,11 @@ class UnsupportedBounds(BaseBounds, typ="unsupported_bounds"):
         """Only here to satisfy abstract method."""
         pass
 
-    def union(self, *others: Union["BaseBounds", "BaseValue"]) -> "BaseBounds":  # pragma: no cover
+    def union(self, *others: BaseBounds | BaseValue) -> BaseBounds:  # pragma: no cover
         """Only here to satisfy abstract method."""
         pass
 
-    def update(self, *others: Union["BaseBounds", "BaseValue"]):  # pragma: no cover
+    def update(self, *others: BaseBounds | BaseValue):  # pragma: no cover
         """Only here to satisfy abstract method."""
         pass
 

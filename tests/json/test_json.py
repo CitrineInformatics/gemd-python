@@ -2,6 +2,7 @@
 
 import json as json_builtin
 from copy import deepcopy
+from io import StringIO
 from uuid import uuid4
 
 import pytest
@@ -75,6 +76,16 @@ def test_deserialize():
     assert copy_meas.conditions[0].value == measurement.conditions[0].value
     assert copy_meas.parameters[0].value == measurement.parameters[0].value
     assert copy_meas.uids["auto"] == measurement.uids["auto"]
+
+
+def test_file_round_trip():
+    """Dumping to a file object and loading it back should leave the object unchanged."""
+    condition = Condition(name="A condition", value=NominalReal(7, ""))
+    measurement = MeasurementRun("name", tags="A tag", conditions=condition)
+    buffer = StringIO()
+    gemd_json.dump(measurement, buffer, indent=2)
+    buffer.seek(0)
+    assert gemd_json.load(buffer) == measurement
 
 
 def test_uuid_serde():
