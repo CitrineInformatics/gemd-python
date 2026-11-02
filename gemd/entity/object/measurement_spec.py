@@ -1,4 +1,4 @@
-from typing import Iterable, Mapping, Optional, Type, Union
+from collections.abc import Iterable, Mapping
 
 from gemd.entity.attribute.condition import Condition
 from gemd.entity.attribute.parameter import Parameter
@@ -51,13 +51,13 @@ class MeasurementSpec(
         self,
         name: str,
         *,
-        template: Optional[Union[MeasurementTemplate, LinkByUID]] = None,
-        conditions: Union[Condition, Iterable[Condition]] = None,
-        parameters: Union[Parameter, Iterable[Parameter]] = None,
+        template: MeasurementTemplate | LinkByUID | None = None,
+        conditions: Condition | Iterable[Condition] = None,
+        parameters: Parameter | Iterable[Parameter] = None,
         uids: Mapping[str, str] = None,
         tags: Iterable[str] = None,
         notes: str = None,
-        file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
+        file_links: Iterable[FileLink] | FileLink | None = None,
     ):
         BaseObject.__init__(
             self, name=name, uids=uids, tags=tags, notes=notes, file_links=file_links
@@ -67,6 +67,6 @@ class MeasurementSpec(
         HasConditions.__init__(self, conditions=conditions)
 
     @staticmethod
-    def _template_type() -> Type:
+    def _template_type() -> type:
         """Communicate expected template type to parent class."""
         return MeasurementTemplate

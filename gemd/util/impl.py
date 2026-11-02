@@ -2,19 +2,9 @@
 
 import functools
 import uuid
+from collections.abc import Callable, Iterable, Mapping, MutableSequence, Reversible
 from typing import (
     Any,
-    ByteString,
-    Callable,
-    Iterable,
-    List,
-    Mapping,
-    MutableSequence,
-    Optional,
-    Reversible,
-    Tuple,
-    Type,
-    Union,
 )
 
 from gemd.entity.base_entity import BaseEntity
@@ -49,7 +39,7 @@ def set_uuids(obj, scope):
     return
 
 
-def cached_isinstance(obj: object, class_or_tuple: Union[Type, Tuple[Type]]) -> bool:
+def cached_isinstance(obj: object, class_or_tuple: type | tuple[type]) -> bool:
     """Emulate isinstance builtin to take advantage of functools caching.
 
     Parameters
@@ -69,12 +59,8 @@ def cached_isinstance(obj: object, class_or_tuple: Union[Type, Tuple[Type]]) -> 
     return _cached_issubclass(obj_type, class_or_tuple)
 
 
-# Older unreleased versions of citrine-python referenced the private method directly
-_cached_isinstance = cached_isinstance
-
-
 @functools.lru_cache(maxsize=1024)
-def _cached_issubclass(cls: Type, class_or_tuple: Union[Type, Tuple[Type]]) -> bool:
+def _cached_issubclass(cls: type, class_or_tuple: type | tuple[type]) -> bool:
     """Emulate issubclass builtin to take advantage of functools caching.
 
     Parameters
@@ -130,7 +116,7 @@ def _substitute(
 
     if cached_isinstance(replacement, MutableSequence):
         new = [_substitute(x, sub, applies, visited) for x in replacement]
-    elif cached_isinstance(replacement, Tuple):
+    elif cached_isinstance(replacement, tuple):
         new = tuple(_substitute(x, sub, applies, visited) for x in replacement)
     elif cached_isinstance(replacement, Mapping):
         new = {
@@ -181,7 +167,7 @@ def _substitute_inplace(
             return None
         elif obj.__hash__ is not None:
             return obj
-        elif cached_isinstance(obj, Iterable) and not cached_isinstance(obj, ByteString):
+        elif cached_isinstance(obj, Iterable) and not cached_isinstance(obj, (bytes, bytearray)):
             return id(obj)
         else:
             return None  # pragma: no cover  Fallback for caution's sake
@@ -200,7 +186,7 @@ def _substitute_inplace(
     if cached_isinstance(thing, MutableSequence):  # Change list in place
         for i, x in enumerate(thing):
             thing[i] = _substitute_inplace(x, sub, applies, visited)
-    elif cached_isinstance(thing, Tuple):  # Tuples are immutable; regenerate
+    elif cached_isinstance(thing, tuple):  # Tuples are immutable; regenerate
         thing = tuple(_substitute_inplace(x, sub, applies, visited) for x in thing)
         visited[orig_key] = thing  # We mutated it
     elif cached_isinstance(thing, Mapping):  # Change dict in place, both keys & values
@@ -262,7 +248,7 @@ def _setter_by_attribute(clazz: type, attribute: str) -> Callable:
     return setter
 
 
-def make_index(obj: Union[Iterable, BaseEntity, DictSerializable]):
+def make_index(obj: Iterable | BaseEntity | DictSerializable):
     """Generates an index that can be used for the substitute_objects method.
 
     This method builds a dictionary of GEMD objects found by recursively crawling the passed
@@ -287,7 +273,7 @@ def make_index(obj: Union[Iterable, BaseEntity, DictSerializable]):
 
 
 def substitute_links(
-    obj: Any, scope: Optional[str] = None, *, allow_fallback: bool = True, inplace: bool = False
+    obj: Any, scope: str | None = None, *, allow_fallback: bool = True, inplace: bool = False
 ):
     """Recursively replace pointers to BaseEntity with LinkByUID objects.
 
@@ -346,7 +332,7 @@ def substitute_objects(obj, index, *, inplace: bool = False):
     )
 
 
-def flatten(obj, scope=None) -> List[BaseEntity]:
+def flatten(obj, scope=None) -> list[BaseEntity]:
     """Flatten a BaseEntity (or array of them) into objects connected by LinkByUID.
 
     This is a composite operation the amounts to:
@@ -403,7 +389,7 @@ def flatten(obj, scope=None) -> List[BaseEntity]:
 
 
 def recursive_foreach(
-    obj: Union[Iterable, DictSerializable],
+    obj: Iterable | DictSerializable,
     func: Callable[[BaseEntity], None],
     *,
     apply_first=False,
@@ -448,7 +434,9 @@ def recursive_foreach(
         elif cached_isinstance(this, DictSerializable):
             for k, x in this.__dict__.items():
                 queue.append(x)
-        elif cached_isinstance(this, Iterable) and not cached_isinstance(this, (str, ByteString)):
+        elif cached_isinstance(this, Iterable) and not cached_isinstance(
+            this, (str, bytes, bytearray)
+        ):
             for x in this:
                 queue.append(x)
 
@@ -459,11 +447,11 @@ def recursive_foreach(
 
 
 def recursive_flatmap(
-    obj: Union[Iterable, DictSerializable],
+    obj: Iterable | DictSerializable,
     func: Callable[[BaseEntity], Iterable],
     *,
     unidirectional=True,
-) -> List:
+) -> list:
     """Recursively apply and accumulate a list-valued function to BaseEntity members.
 
     Only :class:`BaseEntity` objects will have the function applied, but the recursion will walk
@@ -511,13 +499,15 @@ def recursive_flatmap(
                 queue.append(x)
         elif cached_isinstance(this, Reversible):
             queue.extend(reversed(this))  # Preserve order of the list/tuple
-        elif cached_isinstance(this, Iterable) and not cached_isinstance(this, (str, ByteString)):
+        elif cached_isinstance(this, Iterable) and not cached_isinstance(
+            this, (str, bytes, bytearray)
+        ):
             queue.extend(this)  # No control over order
 
     return res
 
 
-def writable_sort_order(key: Union[BaseEntity, str]) -> int:
+def writable_sort_order(key: BaseEntity | str) -> int:
     """Sort order for flattening such that the objects can be read back and re-nested."""
     from gemd.entity.object import (
         IngredientRun,

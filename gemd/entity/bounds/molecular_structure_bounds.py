@@ -3,7 +3,7 @@
 In the future, this may include substructural restrictions.
 """
 
-from typing import TypeVar, Union
+from typing import TypeVar
 
 from gemd.entity.bounds.base_bounds import BaseBounds
 
@@ -16,7 +16,7 @@ MolecularValueType = TypeVar("MolecularValueType", bound="MolecularValue")  # no
 class MolecularStructureBounds(BaseBounds, typ="molecular_structure_bounds"):
     """Molecular bounds, with no component or substructural restrictions (yet)."""
 
-    def contains(self, bounds: Union[BaseBounds, BaseValueType]) -> bool:
+    def contains(self, bounds: BaseBounds | BaseValueType) -> bool:
         """Check if another bounds or value object is contained by this bounds.
 
         The other object must also be or type Molecular.  There are no other
@@ -46,9 +46,7 @@ class MolecularStructureBounds(BaseBounds, typ="molecular_structure_bounds"):
 
         return True
 
-    def union(
-        self, *others: Union[MolecularBoundsType, MolecularValueType]
-    ) -> MolecularBoundsType:
+    def union(self, *others: MolecularBoundsType | MolecularValueType) -> MolecularBoundsType:
         """Return the union of this bounds and other bounds.
 
         The others list must also be Molecular Structure Bounds or Values.
@@ -79,7 +77,7 @@ class MolecularStructureBounds(BaseBounds, typ="molecular_structure_bounds"):
             )
         return MolecularStructureBounds()
 
-    def update(self, *others: Union[MolecularBoundsType, MolecularValueType]):
+    def update(self, *others: MolecularBoundsType | MolecularValueType):
         """Update this bounds to include other bounds.
 
         The others list must also be Molecular Structure Bounds or Values.

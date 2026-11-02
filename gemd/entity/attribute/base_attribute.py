@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Iterable, List, Optional, Type, Union
+from collections.abc import Iterable
 
 from gemd.entity.bounds_validation import WarningLevel, get_validation_level
 from gemd.entity.dict_serializable import DictSerializable, logger
@@ -37,11 +37,11 @@ class BaseAttribute(DictSerializable):
         self,
         name: str,
         *,
-        template: Union[AttributeTemplate, LinkByUID, None] = None,
-        origin: Union[Origin, str] = Origin.UNKNOWN,
+        template: AttributeTemplate | LinkByUID | None = None,
+        origin: Origin | str = Origin.UNKNOWN,
         value: BaseValue = None,
         notes: str = None,
-        file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
+        file_links: Iterable[FileLink] | FileLink | None = None,
     ):
         self.name = name
         self.notes = notes
@@ -85,12 +85,12 @@ class BaseAttribute(DictSerializable):
             raise TypeError(f"value must be a BaseValue: {value}")
 
     @property
-    def template(self) -> Optional[Union[AttributeTemplate, LinkByUID]]:
+    def template(self) -> AttributeTemplate | LinkByUID | None:
         """Get the template."""
         return self._template
 
     @template.setter
-    def template(self, template: Optional[Union[AttributeTemplate, LinkByUID]]):
+    def template(self, template: AttributeTemplate | LinkByUID | None):
         """Set the template."""
         if template is None:
             self._template = None
@@ -103,7 +103,7 @@ class BaseAttribute(DictSerializable):
 
     @staticmethod
     @abstractmethod
-    def _template_type() -> Type:
+    def _template_type() -> type:
         """Get the expected type of template for this object (property of child)."""
 
     @property
@@ -112,18 +112,18 @@ class BaseAttribute(DictSerializable):
         return self._origin
 
     @origin.setter
-    def origin(self, origin: Union[Origin, str]):
+    def origin(self, origin: Origin | str):
         """Set the origin."""
         if origin is None:
             raise ValueError("origin must be specified (but may be `unknown`)")
         self._origin = Origin.from_str(origin, exception=True)
 
     @property
-    def file_links(self) -> List[FileLink]:
+    def file_links(self) -> list[FileLink]:
         """Get the file links."""
         return self._file_links
 
     @file_links.setter
-    def file_links(self, file_links: Optional[Union[Iterable[FileLink], FileLink]]):
+    def file_links(self, file_links: Iterable[FileLink] | FileLink | None):
         """Set the file links."""
         self._file_links = validate_list(file_links, FileLink)

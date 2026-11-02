@@ -1,7 +1,7 @@
 """Test measurement demo."""
 
 from gemd.demo.measurement_example import make_demo_measurements
-from gemd.json import dumps, load
+from gemd.json import dumps, loads
 
 
 def test_measurement_example(tmp_path):
@@ -9,11 +9,9 @@ def test_measurement_example(tmp_path):
     num_measurements = 4
     results = make_demo_measurements(num_measurements, extra_tags={"demo"})
 
-    with open(tmp_path / "flex_measurements.json", "w") as f:
-        f.write(dumps(results, indent=2))
-
-    with open(tmp_path / "flex_measurements.json", "r") as f:
-        copy = load(f)
+    filename = tmp_path / "flex_measurements.json"
+    filename.write_text(dumps(results, indent=2))
+    copy = loads(filename.read_text())
 
     assert len(copy) == len(results)
     assert all("demo" in x.tags for x in copy)

@@ -1,5 +1,5 @@
 import functools
-from typing import Iterable, List, Mapping, Optional, Union
+from collections.abc import Iterable, Mapping
 
 from gemd.entity.base_entity import BaseEntity
 from gemd.entity.file_link import FileLink
@@ -39,7 +39,7 @@ class BaseObject(BaseEntity):
         uids: Mapping[str, str] = None,
         tags: Iterable[str] = None,
         notes: str = None,
-        file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
+        file_links: Iterable[FileLink] | FileLink | None = None,
     ):
         BaseEntity.__init__(self, uids, tags)
         self.notes = notes
@@ -71,10 +71,10 @@ class BaseObject(BaseEntity):
         self._name = validate_str(name)
 
     @property
-    def file_links(self) -> List[FileLink]:
+    def file_links(self) -> list[FileLink]:
         """Links to associated files, with resource paths into the files API."""
         return self._file_links
 
     @file_links.setter
-    def file_links(self, file_links: Union[Iterable[FileLink], FileLink]):
+    def file_links(self, file_links: Iterable[FileLink] | FileLink):
         self._file_links = validate_list(file_links, FileLink)

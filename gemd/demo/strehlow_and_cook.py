@@ -1,6 +1,6 @@
 """Demo representing Strehlow & Cook bandgap data with data concepts."""
 
-from typing import Iterable
+from collections.abc import Iterable
 
 from gemd.entity.attribute.condition import Condition
 from gemd.entity.attribute.property import Property

@@ -3,21 +3,14 @@
 import functools
 import os
 import re
+from collections.abc import Generator
 from importlib.resources import files
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Any, Generator, List, Tuple, Union
-
-from deprecation import deprecated
-
-try:
-    from typing import TypeAlias  # Python 3.10+
-except ImportError:  # pragma nocover
-    from typing_extensions import TypeAlias  # Python 3.9
-
 from tokenize import ERRORTOKEN, NAME, NUMBER, OP, TokenInfo
+from typing import Any, TypeAlias
 
-from pint import UnitRegistry, register_unit_format
+from pint import UnitRegistry
 from pint.errors import DefinitionSyntaxError, UndefinedUnitError
 
 # alias the error that is thrown when units are incompatible
@@ -40,7 +33,7 @@ __all__ = [
 ]
 
 
-def _deploy_default_files() -> Tuple[Path, Path]:
+def _deploy_default_files() -> tuple[Path, Path]:
     """Copy the units & constants file into a temporary directory."""
     resources = files("gemd.units")
     target_dir = Path(_TEMP_DIRECTORY.name)
@@ -66,7 +59,7 @@ def _scientific_notation_preprocessor(input_string: str) -> str:
     return re.sub(number, _as_scientific, input_string)
 
 
-def _scaling_find_blocks(token_stream: Generator[TokenInfo, Any, None]) -> List[List[TokenInfo]]:
+def _scaling_find_blocks(token_stream: Generator[TokenInfo, Any, None]) -> list[list[TokenInfo]]:
     """Supporting routine for _scaling_preprocessor; tokenizer stream -> blocks.
 
     Takes a stream of tokens, and breaks it into a lists of tokens that represent
@@ -128,8 +121,8 @@ def _scaling_find_blocks(token_stream: Generator[TokenInfo, Any, None]) -> List[
 
 
 def _scaling_identify_factors(
-    input_string: str, blocks: List[List[TokenInfo]]
-) -> List[Tuple[str, str, str]]:
+    input_string: str, blocks: list[list[TokenInfo]]
+) -> list[tuple[str, str, str]]:
     """Supporting routine for _scaling_preprocessor; blocks -> scaling terms.
 
     Takes the input_string and the blocks output by _scaling_find_blocks and
@@ -171,7 +164,7 @@ def _scaling_identify_factors(
     return todo
 
 
-def _scaling_store_and_mangle(input_string: str, todo: List[Tuple[str, str, str]]) -> str:
+def _scaling_store_and_mangle(input_string: str, todo: list[tuple[str, str, str]]) -> str:
     """Supporting routine for _scaling_preprocessor; scaling terms -> updated input_string.
 
     Takes the terms to be updated, and actually updates the input_string as well as
@@ -296,39 +289,10 @@ def convert_units(value: float, starting_unit: str, final_unit: str) -> float:
         return resolved_value.to(resolved_final_unit).magnitude
 
 
-@register_unit_format("clean")
-@deprecated(deprecated_in="2.1.0", removed_in="3.0.0", details="Scaling factor clean-up ")
-def _format_clean(unit, registry, **options):
-    """DEPRECATED Formatter that turns scaling-factor-units into numbers again.
-
-    Responsibility for this piece of clean-up has been shifted to a custom class.
-
-    """
-    try:  # Informal route changed in 0.22
-        from pint.formatting import _FORMATTERS
-
-        formatter = _FORMATTERS["D"]  # pragma: no cover
-    except ImportError:  # pragma: no cover
-        from pint import Unit
-
-        formatter_obj = registry.formatter._formatters["D"]
-
-        def _surrogate_formatter(unit, registry, **options):
-            try:
-                parsed = Unit(unit)
-                return formatter_obj.format_unit(parsed)
-            except ValueError:
-                return formatter_obj.format_quantity(unit)
-
-        formatter = _surrogate_formatter
-
-    return formatter(unit, registry, **options)
-
-
 @functools.lru_cache(maxsize=1024)
 def parse_units(
-    units: Union[str, UnitRegistry.Unit, None], *, return_unit: bool = False
-) -> Union[str, UnitRegistry.Unit, None]:
+    units: str | UnitRegistry.Unit | None, *, return_unit: bool = False
+) -> str | UnitRegistry.Unit | None:
     """Parse a string or Unit into a standard string representation of the unit.
 
     Parameters
@@ -363,7 +327,7 @@ def parse_units(
 
 
 @functools.lru_cache(maxsize=1024)
-def get_base_units(units: Union[str, UnitRegistry.Unit]) -> Tuple[UnitRegistry.Unit, float, float]:
+def get_base_units(units: str | UnitRegistry.Unit) -> tuple[UnitRegistry.Unit, float, float]:
     """Get the base units and conversion factors for the given unit.
 
     Parameters
@@ -385,7 +349,7 @@ def get_base_units(units: Union[str, UnitRegistry.Unit]) -> Tuple[UnitRegistry.U
     return base_unit, float(ratio), offset
 
 
-def get_compatible_units(units: Union[str, UnitRegistry.Unit]) -> List[str]:
+def get_compatible_units(units: str | UnitRegistry.Unit) -> list[str]:
     """Get all compatible units that match the dimensionality of the provided units.
 
     Parameters

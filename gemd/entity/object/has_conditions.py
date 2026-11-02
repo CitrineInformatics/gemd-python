@@ -1,7 +1,7 @@
 """For entities that have conditions."""
 
 from abc import ABC
-from typing import Iterable, List, Set, Union
+from collections.abc import Iterable
 
 from gemd.entity.attribute.condition import Condition
 from gemd.entity.base_entity import BaseEntity
@@ -17,21 +17,21 @@ __all__ = ["HasConditions"]
 class HasConditions(HasTemplateCheckGenerator, HasDependencies, ABC):
     """Mixin-trait for entities that include conditions."""
 
-    def __init__(self, conditions: Union[Condition, Iterable[Condition]]):
+    def __init__(self, conditions: Condition | Iterable[Condition]):
         self._conditions = None
         self.conditions = conditions
 
     @property
-    def conditions(self) -> List[Condition]:
+    def conditions(self) -> list[Condition]:
         """A list of conditions associated with this entity."""
         return self._conditions
 
     @conditions.setter
-    def conditions(self, conditions: Union[Condition, Iterable[Condition]]):
+    def conditions(self, conditions: Condition | Iterable[Condition]):
         """Set the list of conditions."""
         checker = self._generate_template_check(HasConditionTemplates.validate_condition)
         self._conditions = validate_list(conditions, Condition, trigger=checker)
 
-    def _local_dependencies(self) -> Set[Union[BaseEntity, LinkByUID]]:
+    def _local_dependencies(self) -> set[BaseEntity | LinkByUID]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {cond.template for cond in self.conditions if cond.template is not None}

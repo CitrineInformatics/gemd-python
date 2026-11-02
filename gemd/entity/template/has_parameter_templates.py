@@ -1,6 +1,7 @@
 """For entities that have a parameter template."""
 
-from typing import Iterable, List, Optional, Set, Tuple, TypeVar, Union
+from collections.abc import Iterable
+from typing import TypeVar
 
 from gemd.entity.bounds.base_bounds import BaseBounds
 from gemd.entity.has_dependencies import HasDependencies
@@ -12,10 +13,10 @@ from gemd.entity.template.parameter_template import ParameterTemplate
 __all__ = ["HasParameterTemplates"]
 ParameterType = TypeVar("ParameterType", bound="Parameter")  # noqa: F821
 BaseEntityType = TypeVar("BaseEntityType", bound="BaseEntity")  # noqa: F821
-_ParameterTemplateType = Union[ParameterTemplate, LinkByUID]
-_ParameterPairType = Tuple[_ParameterTemplateType, Optional[BaseBounds]]
-_ParameterListPairType = List[Optional[Union[_ParameterTemplateType, BaseBounds]]]
-_ParameterInputType = Union[_ParameterTemplateType, _ParameterPairType, _ParameterListPairType]
+_ParameterTemplateType = ParameterTemplate | LinkByUID
+_ParameterPairType = tuple[_ParameterTemplateType, BaseBounds | None]
+_ParameterListPairType = list[_ParameterTemplateType | BaseBounds | None]
+_ParameterInputType = _ParameterTemplateType | _ParameterPairType | _ParameterListPairType
 
 
 class HasParameterTemplates(HasDependencies):
@@ -37,7 +38,7 @@ class HasParameterTemplates(HasDependencies):
         self.parameters = parameters
 
     @property
-    def parameters(self) -> List[_ParameterPairType]:
+    def parameters(self) -> list[_ParameterPairType]:
         """Get the list of parameter template/bounds tuples.
 
         Returns
@@ -94,6 +95,6 @@ class HasParameterTemplates(HasDependencies):
         else:
             return True  # Nothing to check against
 
-    def _local_dependencies(self) -> Set[Union[BaseEntityType, LinkByUID]]:
+    def _local_dependencies(self) -> set[BaseEntityType | LinkByUID]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {attr[0] for attr in self.parameters}

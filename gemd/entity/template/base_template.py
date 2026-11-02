@@ -1,6 +1,6 @@
 """Base template."""
 
-from typing import Iterable, List, Mapping, Optional, Tuple, Union
+from collections.abc import Iterable, Mapping
 
 from gemd.entity.base_entity import BaseEntity
 from gemd.entity.bounds.base_bounds import BaseBounds
@@ -8,10 +8,10 @@ from gemd.entity.link_by_uid import LinkByUID
 from gemd.entity.template.attribute_template import AttributeTemplate
 
 __all__ = ["BaseTemplate"]
-_AttributeTemplateType = Union[AttributeTemplate, LinkByUID]
-_AttributePairType = Tuple[_AttributeTemplateType, Optional[BaseBounds]]
-_AttributeListPairType = List[Optional[Union[_AttributeTemplateType, BaseBounds]]]
-_AttributeInputType = Union[_AttributeTemplateType, _AttributePairType, _AttributeListPairType]
+_AttributeTemplateType = AttributeTemplate | LinkByUID
+_AttributePairType = tuple[_AttributeTemplateType, BaseBounds | None]
+_AttributeListPairType = list[_AttributeTemplateType | BaseBounds | None]
+_AttributeInputType = _AttributeTemplateType | _AttributePairType | _AttributeListPairType
 
 
 class BaseTemplate(BaseEntity):

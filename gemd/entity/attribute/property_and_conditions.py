@@ -1,4 +1,4 @@
-from typing import Iterable, List, Optional, Union
+from collections.abc import Iterable
 
 from gemd.entity.attribute.condition import Condition
 from gemd.entity.attribute.property import Property
@@ -26,7 +26,7 @@ class PropertyAndConditions(DictSerializable, typ="property_and_conditions"):
     """
 
     def __init__(
-        self, property: Property = None, conditions: Union[Iterable[Condition], Condition] = None
+        self, property: Property = None, conditions: Iterable[Condition] | Condition = None
     ):
         self._property = None
         self.property = property
@@ -34,7 +34,7 @@ class PropertyAndConditions(DictSerializable, typ="property_and_conditions"):
         self.conditions = conditions
 
     @property
-    def conditions(self) -> List[Condition]:
+    def conditions(self) -> list[Condition]:
         """Get conditions."""
         return self._conditions
 
@@ -49,7 +49,7 @@ class PropertyAndConditions(DictSerializable, typ="property_and_conditions"):
         return self.property.name
 
     @property
-    def template(self) -> Optional[Union[PropertyTemplate, LinkByUID]]:
+    def template(self) -> PropertyTemplate | LinkByUID | None:
         """Get template of attribute (use template of property)."""
         return self.property.template
 

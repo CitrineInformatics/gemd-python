@@ -1,5 +1,4 @@
 # Tools to help build GEMD objects
-from typing import List, Union
 
 from gemd.entity.attribute import Condition, Parameter, Property, PropertyAndConditions
 from gemd.entity.attribute.base_attribute import BaseAttribute
@@ -104,10 +103,10 @@ def add_edge(
     output_material: MaterialRun,
     *,
     name: str = None,
-    mass_fraction: Union[float, ContinuousValue] = None,
-    number_fraction: Union[float, ContinuousValue] = None,
-    volume_fraction: Union[float, ContinuousValue] = None,
-    absolute_quantity: Union[int, float, ContinuousValue] = None,
+    mass_fraction: float | ContinuousValue = None,
+    number_fraction: float | ContinuousValue = None,
+    volume_fraction: float | ContinuousValue = None,
+    absolute_quantity: int | float | ContinuousValue = None,
     absolute_units: str = None,
 ) -> IngredientRun:
     """Connect two material-process spec-run quadruples with ingredients.
@@ -209,7 +208,7 @@ def add_measurement(
     *,
     name: str = None,
     template: MeasurementTemplate = None,
-    attributes: List[BaseAttribute] = None,
+    attributes: list[BaseAttribute] = None,
 ) -> MeasurementRun:
     """Add a measurement run-spec set to a :class:`~gemd.entity.object.material_run.MaterialRun`.
 
@@ -264,10 +263,10 @@ def add_measurement(
 
 
 def add_attribute(
-    target: Union[HasProperties, HasConditions, HasParameters],
-    template: Union[PropertyTemplate, ConditionTemplate, ParameterTemplate],
-    value: Union[BaseValue, str, float, int],
-) -> Union[Property, Condition, Parameter]:
+    target: HasProperties | HasConditions | HasParameters,
+    template: PropertyTemplate | ConditionTemplate | ParameterTemplate,
+    value: BaseValue | str | float | int,
+) -> Property | Condition | Parameter:
     """Generate an attribute, and then add it attribute to a GEMD object.
 
     Parameters
@@ -314,9 +313,9 @@ def add_attribute(
 
 
 def make_attribute(
-    template: Union[PropertyTemplate, ConditionTemplate, ParameterTemplate],
-    value: Union[BaseValue, str, float, int],
-) -> Union[Property, Condition, Parameter]:
+    template: PropertyTemplate | ConditionTemplate | ParameterTemplate,
+    value: BaseValue | str | float | int,
+) -> Property | Condition | Parameter:
     """Generate an Attribute and the contained Value.
 
     Parameters
@@ -350,7 +349,7 @@ def make_attribute(
     return attribute
 
 
-def make_value(value: Union[str, float, int], bounds: BaseBounds) -> BaseValue:
+def make_value(value: str | float | int, bounds: BaseBounds) -> BaseValue:
     """Generate a Value object based upon a number or string and a particular bounds.
 
     Parameters

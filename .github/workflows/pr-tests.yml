@@ -12,8 +12,6 @@ on:
 
 jobs:
   pr-tests:
-    uses: CitrineInformatics/common-gh-actions/.github/workflows/run-tests.yml@v1.1
+    uses: CitrineInformatics/common-gh-actions/.github/workflows/matrix-tests.yml@v3
     with:
       src: gemd
-      skip_38: true
-      include_313: true

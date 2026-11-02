@@ -1,4 +1,4 @@
-from typing import Iterable, List, Mapping, Optional, Type, Union
+from collections.abc import Iterable, Mapping
 
 from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
@@ -59,8 +59,8 @@ class IngredientSpec(
         self,
         name: str,
         *,
-        material: Union[MaterialSpec, LinkByUID] = None,
-        process: Union[ProcessSpec, LinkByUID] = None,
+        material: MaterialSpec | LinkByUID = None,
+        process: ProcessSpec | LinkByUID = None,
         labels: Iterable[str] = None,
         mass_fraction: ContinuousValue = None,
         volume_fraction: ContinuousValue = None,
@@ -69,7 +69,7 @@ class IngredientSpec(
         uids: Mapping[str, str] = None,
         tags: Iterable[str] = None,
         notes: str = None,
-        file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
+        file_links: Iterable[FileLink] | FileLink | None = None,
     ):
 
         BaseObject.__init__(
@@ -92,7 +92,7 @@ class IngredientSpec(
         self.process = process
 
     @property
-    def labels(self) -> List[str]:
+    def labels(self) -> list[str]:
         """Get labels."""
         return self._labels
 
@@ -101,12 +101,12 @@ class IngredientSpec(
         self._labels = validate_list(labels, str)
 
     @property
-    def material(self) -> Union[MaterialSpec, LinkByUID]:
+    def material(self) -> MaterialSpec | LinkByUID:
         """Get the material spec."""
         return self._material
 
     @material.setter
-    def material(self, material: Union[MaterialSpec, LinkByUID]):
+    def material(self, material: MaterialSpec | LinkByUID):
         """Set the material spec."""
         if material is None:
             self._material = None
@@ -116,12 +116,12 @@ class IngredientSpec(
             raise TypeError("IngredientSpec.material must be a MaterialSpec or LinkByUID")
 
     @property
-    def process(self) -> Union[ProcessSpec, LinkByUID]:
+    def process(self) -> ProcessSpec | LinkByUID:
         """Get the process."""
         return self._process
 
     @process.setter
-    def process(self, process: Union[ProcessSpec, LinkByUID]):
+    def process(self, process: ProcessSpec | LinkByUID):
         """Set the process."""
         if isinstance(self._process, ProcessSpec):
             # This could throw an exception if it's not in the list, but then something else broke
@@ -147,6 +147,6 @@ class IngredientSpec(
         raise AttributeError("Ingredients do not support a template.")
 
     @staticmethod
-    def _template_type() -> Type:
+    def _template_type() -> type:
         """Required method to satisfy HasTemplates mix-in."""
         return type(None)

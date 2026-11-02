@@ -1,4 +1,5 @@
-from typing import Any, Iterable, List, Mapping, Optional, Type, Union
+from collections.abc import Iterable, Mapping
+from typing import Any
 
 from gemd.entity.dict_serializable import DictSerializable
 from gemd.entity.file_link import FileLink
@@ -58,17 +59,17 @@ class IngredientRun(
     def __init__(
         self,
         *,
-        material: Union[MaterialRun, LinkByUID] = None,
-        process: Union[ProcessRun, LinkByUID] = None,
+        material: MaterialRun | LinkByUID = None,
+        process: ProcessRun | LinkByUID = None,
         mass_fraction: ContinuousValue = None,
         volume_fraction: ContinuousValue = None,
         number_fraction: ContinuousValue = None,
         absolute_quantity: ContinuousValue = None,
-        spec: Union[IngredientSpec, LinkByUID] = None,
+        spec: IngredientSpec | LinkByUID = None,
         uids: Mapping[str, str] = None,
         tags: Iterable[str] = None,
         notes: str = None,
-        file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
+        file_links: Iterable[FileLink] | FileLink | None = None,
     ):
         BaseObject.__init__(
             self, name=None, uids=uids, tags=tags, notes=notes, file_links=file_links
@@ -100,7 +101,7 @@ class IngredientRun(
             return super().name
 
     @property
-    def labels(self) -> List[str]:
+    def labels(self) -> list[str]:
         """Get labels."""
         from gemd.entity.object.ingredient_spec import IngredientSpec
 
@@ -110,12 +111,12 @@ class IngredientRun(
             return self._labels
 
     @property
-    def material(self) -> Union[MaterialRun, LinkByUID]:
+    def material(self) -> MaterialRun | LinkByUID:
         """Get the material."""
         return self._material
 
     @material.setter
-    def material(self, material: Union[MaterialRun, LinkByUID]):
+    def material(self, material: MaterialRun | LinkByUID):
         if material is None:
             self._material = None
         elif isinstance(material, (MaterialRun, LinkByUID)):
@@ -126,12 +127,12 @@ class IngredientRun(
             )
 
     @property
-    def process(self) -> Union[ProcessRun, LinkByUID]:
+    def process(self) -> ProcessRun | LinkByUID:
         """Get the material."""
         return self._process
 
     @process.setter
-    def process(self, process: Union[ProcessRun, LinkByUID]):
+    def process(self, process: ProcessRun | LinkByUID):
         if isinstance(self._process, ProcessRun):
             # This could throw an exception if it's not in the list, but then something else broke
             self._process.ingredients.remove(self)
@@ -144,17 +145,17 @@ class IngredientRun(
             raise TypeError(f"IngredientRun.process must be a ProcessRun or LinkByUID: {process}")
 
     @staticmethod
-    def _spec_type() -> Type:
+    def _spec_type() -> type:
         """Required method to satisfy HasTemplates mix-in."""
         return IngredientSpec
 
     @property
-    def spec(self) -> Union[IngredientSpec, LinkByUID]:
+    def spec(self) -> IngredientSpec | LinkByUID:
         """Get the spec."""
         return super().spec
 
     @spec.setter
-    def spec(self, spec: Union[IngredientSpec, LinkByUID]):
+    def spec(self, spec: IngredientSpec | LinkByUID):
         """Set the spec."""
         if isinstance(self.spec, IngredientSpec):  # Store values if you had them
             self._name = self.spec.name

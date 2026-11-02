@@ -1,11 +1,15 @@
-from typing import Any, Mapping, Optional, Sequence, Tuple
+from collections.abc import Mapping, Sequence
+from typing import Any, TypeVar, overload
 
 __all__ = ["CaseInsensitiveDict"]
 
-_RaiseKeyError = object()  # singleton for no-default behavior
+_VT = TypeVar("_VT")
+_T = TypeVar("_T")
+
+_RaiseKeyError: Any = object()  # singleton for no-default behavior
 
 
-class CaseInsensitiveDict(dict):
+class CaseInsensitiveDict(dict[str, _VT]):
     """A dictionary in which the keys are case-insensitive.
 
     It is initialized the same way as a typical dict, but the values can be accessed without
@@ -29,10 +33,19 @@ class CaseInsensitiveDict(dict):
         for key in self:
             self._register_key(key)
 
-    def __getitem__(self, key: str) -> Any:
+    def __getitem__(self, key: str) -> _VT:
         return super().__getitem__(self.lowercase_dict[key.lower()])
 
-    def get(self, key: str, default: Any = None) -> Any:
+    @overload
+    def get(self, key: str, default: None = None, /) -> _VT | None: ...
+
+    @overload
+    def get(self, key: str, default: _VT, /) -> _VT: ...
+
+    @overload
+    def get(self, key: str, default: _T, /) -> _VT | _T: ...
+
+    def get(self, key: str, default: Any = None, /) -> Any:
         """Get the value for a given case-insensitive key.
 
         Parameters
@@ -55,7 +68,7 @@ class CaseInsensitiveDict(dict):
         else:
             return default
 
-    def __setitem__(self, key: str, value: Any) -> None:
+    def __setitem__(self, key: str, value: _VT) -> None:
         self._register_key(key)
         super().__setitem__(key, value)
 
@@ -72,7 +85,16 @@ class CaseInsensitiveDict(dict):
         super().clear()
         self.lowercase_dict.clear()
 
-    def pop(self, key: str, default=_RaiseKeyError) -> Any:
+    @overload
+    def pop(self, key: str, /) -> _VT: ...
+
+    @overload
+    def pop(self, key: str, default: _VT, /) -> _VT: ...
+
+    @overload
+    def pop(self, key: str, default: _T, /) -> _VT | _T: ...
+
+    def pop(self, key: str, default: Any = _RaiseKeyError, /) -> Any:
         """Remove and return the value for a given key from the dictionary.
 
         If key is in the dictionary, remove it and return its value, else return default.
@@ -103,7 +125,7 @@ class CaseInsensitiveDict(dict):
             del self.lowercase_dict[key.lower()]
         return val
 
-    def popitem(self) -> Tuple:
+    def popitem(self) -> tuple[str, _VT]:
         """Remove and return a (key, value) pair from the dictionary.
 
         popitem() is useful to destructively iterate over a dictionary, as often used
@@ -115,7 +137,7 @@ class CaseInsensitiveDict(dict):
 
         Returns
         -------
-        Tuple(str, Any)
+        tuple[str, Any]
             The key-value pair
 
         """
@@ -123,7 +145,7 @@ class CaseInsensitiveDict(dict):
         del self.lowercase_dict[result[0].lower()]
         return result
 
-    def copy(self) -> "CaseInsensitiveDict":
+    def copy(self) -> "CaseInsensitiveDict[_VT]":
         """Return a shallow copy of the dictionary.
 
         Returns
@@ -134,7 +156,7 @@ class CaseInsensitiveDict(dict):
         """
         return CaseInsensitiveDict(super().copy())
 
-    def update(self, mapping: Optional[Mapping[str, Any]] = None, **kwargs) -> None:
+    def update(self, mapping: Mapping[str, Any] | None = None, **kwargs) -> None:
         """Update the dictionary with the key/value pairs from other, overwriting existing keys.
 
         update() accepts either another dictionary object or an iterable of

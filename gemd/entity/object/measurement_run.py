@@ -1,4 +1,4 @@
-from typing import Iterable, Mapping, Optional, Type, Union
+from collections.abc import Iterable, Mapping
 
 from gemd.entity.attribute.condition import Condition
 from gemd.entity.attribute.parameter import Parameter
@@ -71,15 +71,15 @@ class MeasurementRun(
         self,
         name: str,
         *,
-        spec: Union[MeasurementSpec, LinkByUID] = None,
-        material: Union[MaterialRun, LinkByUID] = None,
-        properties: Union[Property, Iterable[Property]] = None,
-        conditions: Union[Condition, Iterable[Condition]] = None,
-        parameters: Union[Parameter, Iterable[Parameter]] = None,
+        spec: MeasurementSpec | LinkByUID = None,
+        material: MaterialRun | LinkByUID = None,
+        properties: Property | Iterable[Property] = None,
+        conditions: Condition | Iterable[Condition] = None,
+        parameters: Parameter | Iterable[Parameter] = None,
         uids: Mapping[str, str] = None,
         tags: Iterable[str] = None,
         notes: str = None,
-        file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
+        file_links: Iterable[FileLink] | FileLink | None = None,
         source: PerformedSource = None,
     ):
         BaseObject.__init__(
@@ -95,12 +95,12 @@ class MeasurementRun(
         self.material = material
 
     @property
-    def material(self) -> Union[MaterialRun, LinkByUID]:
+    def material(self) -> MaterialRun | LinkByUID:
         """Get the material."""
         return self._material
 
     @material.setter
-    def material(self, value: Union[MaterialRun, LinkByUID]):
+    def material(self, value: MaterialRun | LinkByUID):
         if isinstance(self._material, MaterialRun):
             # This could throw an exception if it's not in the list, but then something else broke
             self._material.measurements.remove(self)
@@ -113,6 +113,6 @@ class MeasurementRun(
             raise TypeError(f"material must be a MaterialRun or LinkByUID: {value}")
 
     @staticmethod
-    def _spec_type() -> Type:
+    def _spec_type() -> type:
         """Required method to satisfy HasTemplates mix-in."""
         return MeasurementSpec

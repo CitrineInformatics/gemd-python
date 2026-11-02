@@ -4,7 +4,7 @@ import pandas as pd
 
 from gemd.demo.table_example import ingest_table
 from gemd.entity.object import MaterialRun
-from gemd.json import dump, load
+from gemd.json import dumps, loads
 
 data = [
     {"vapor pressure": 2.0, "temperature": 300},
@@ -23,11 +23,9 @@ def test_table(tmp_path):
     filename = tmp_path / "table_example.json"
 
     # write to a file (for human inspection)
-    with open(filename, "w") as f:
-        dump(result, f, indent=2)
+    filename.write_text(dumps(result, indent=2))
 
     # read it back
-    with open(filename, "r") as f:
-        copy = load(f)
+    copy = loads(filename.read_text())
 
     assert isinstance(copy, MaterialRun)

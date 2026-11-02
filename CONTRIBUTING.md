@@ -4,10 +4,9 @@
 
 Documentation is built using [Sphinx](https://www.sphinx-doc.org/en/master/) with the
 [autodoc](https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#module-sphinx.ext.autodoc)
-extension.  In order to build the documentation, you can install the necessary packages and then use make:
+extension. Build the documentation with [uv](https://docs.astral.sh/uv/):
 ```shell
-pip install -r doc_requirements.txt
-make make -C docs/ html
+uv run --group docs make -C docs/ html
 ```
 
 All documentation source files and configuration are in the `docs/source` directory.
@@ -17,32 +16,25 @@ Additional reference material, such as tutorials, should be referenced in `index
 ## Testing
 
 Changes are gated on:
- * Passing unit tests with minimum supported library versions
+ * Passing unit tests with the lowest supported versions of direct dependencies
  * 100% test coverage
- * PEP8 style compliance, with some exceptions in the [tox file](tox.ini)
- * Incrementing the package version number in [setup.py](setup.py)
+ * Passing `ruff check` and `ruff format --check`, configured in [pyproject.toml](pyproject.toml)
+ * Removing code whose deprecation has reached its `removed_in` version
+ * A [uv.lock](uv.lock) that matches [pyproject.toml](pyproject.toml)
+ * Incrementing the package version number in [gemd/\_\_version\_\_.py](gemd/__version__.py), for PRs into `main`
 
-Additionally, PRs are checked against (but not blocked by):
-* Passing unit tests with latest nominally supported versions of all dependencies
-* Documentation builds without warnings
+CI also runs the unit tests against the latest versions of all dependencies. Failures there do not block a PR.
 
-In order to run tests locally, you'll need to install additional packages:
+Run the same checks locally with uv:
 ```shell
-pip install -r test_requirements.txt
+uv run ruff check gemd tests
+uv run ruff format --check gemd tests
+uv run pytest --cov=gemd --cov-report term-missing:skip-covered --cov-fail-under=100 tests/
 ```
 
-A test runner is available in `scripts/run_tests.sh`, which gives a convenient one-line invocation for testing.
-
-As it can be easy to forget to verify these prior to pushing,
-it's possible to use [git hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks)
-to enforce compliance during normal workflows.
-Consider editing `.git/hooks/pre-commit` or `.git/hooks/pre-push`
-(or adding them and marking them as executable: `chmod +x <file>`). 
-For example, you could set your local `.git/hooks/pre-commit` to be
-```shell
-scripts/run_tests.sh --quiet --exitfirst
-```
-to make sure you're not on the `main` branch, you've incremented the package version, you pass the linter and you have complete, passing tests.
+To run these checks before every commit, add them to a
+[git hook](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) such as `.git/hooks/pre-commit`,
+and mark the hook executable with `chmod +x`.
 
 ## Coding Style
 This project follows [PEP8](https://www.python.org/dev/peps/pep-0008/), with the following exception:
@@ -79,10 +71,10 @@ To create a release:
    * You can use `git diff` as well, if you prefer
  * In another tab, navigate to the [GitHub release creation page](https://github.com/CitrineInformatics/gemd-python/releases/new)
  * Set the `Target` to the commit you want to deploy, typically `main`
- * Set the `Tag version` to `v{x.y.z}` where `x.y.z` is the version in [setup.py](setup.py), e.g. `v1.2.3`
+ * Set the `Tag version` to `v{x.y.z}` where `x.y.z` is the version in [gemd/\_\_version\_\_.py](gemd/__version__.py), e.g. `v1.2.3`
  * Set the `Release title` to "GEMD v{x.y.z} is released!"
  * Populate the release notes with a 1 or 2 sentence summary and `What's New`, `Improvements`, `Fixes`, and `Deprecated` sections, as appropriate
 
-Travis will trigger the deploy due to the addition of the tag.
+Publishing the release triggers GitHub Actions to deploy the package to PyPI and the documentation to GitHub Pages.
 Only commits on the **main** or backports branches can be released, but it need not be the most recent commit on the branch.
 The tests contained within this repository are sufficient to verify a release. 

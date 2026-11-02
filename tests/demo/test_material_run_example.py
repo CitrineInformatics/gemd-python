@@ -1,9 +1,7 @@
 """Test the ingestion of a material run."""
 
-import tempfile
-
 from gemd.demo.material_run_example import ingest_material_run
-from gemd.json import dump, load
+from gemd.json import dumps, loads
 
 # Example data (that could have been loaded from a json file)
 example = {
@@ -49,30 +47,10 @@ def test_example(tmp_path):
     assert len(result.measurements) == len(example["experiments"])
 
     # write to a file (for human inspection)
-    with open(filename, "w") as f:
-        dump(result, f, indent=2)
+    filename.write_text(dumps(result, indent=2))
 
     # read it back
-    with open(filename, "r") as f:
-        copy = load(f)
+    copy = loads(filename.read_text())
 
     # very cursory check that we get out what we'd expect
     assert next(iter(copy.uids.values())) == example["sample_id"]
-
-
-def test_example_with_temp():
-    """Test the ingest of a material run via temp file and cleaning up."""
-    # run the parsing to make sure no exceptions are thrown
-    result = ingest_material_run(example)
-
-    # write/read with a temp file that is auto-deleted
-    with tempfile.TemporaryFile("w+") as fp:
-        # write to temp file
-        dump(result, fp, indent=2)
-
-        # read it back
-        fp.seek(0)
-        copy = load(fp)
-
-        # very cursory check that we get out what we'd expect
-        assert next(iter(copy.uids.values())) == example["sample_id"]

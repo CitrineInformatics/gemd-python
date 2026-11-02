@@ -1,7 +1,6 @@
 """For entities that have specs."""
 
 from abc import abstractmethod
-from typing import Optional, Set, Type, Union
 
 from gemd.entity.base_entity import BaseEntity
 from gemd.entity.has_dependencies import HasDependencies
@@ -15,17 +14,17 @@ __all__ = ["HasSpec"]
 class HasSpec(HasDependencies):
     """Mix-in trait for objects that can be assigned specs."""
 
-    def __init__(self, spec: Union[HasTemplate, LinkByUID] = None):
+    def __init__(self, spec: HasTemplate | LinkByUID = None):
         self._spec = None
         self.spec = spec
 
     @property
-    def spec(self) -> Union[HasTemplate, LinkByUID]:
+    def spec(self) -> HasTemplate | LinkByUID:
         """A spec, which expresses the anticipated or aspirational behavior of this object."""
         return self._spec
 
     @spec.setter
-    def spec(self, spec: Union[HasTemplate, LinkByUID]):
+    def spec(self, spec: HasTemplate | LinkByUID):
         """Set the spec."""
         if spec is None:
             self._spec = None
@@ -38,17 +37,17 @@ class HasSpec(HasDependencies):
 
     @staticmethod
     @abstractmethod
-    def _spec_type() -> Type:
+    def _spec_type() -> type:
         """Child must report implementation details."""
 
     @property
-    def template(self) -> Optional[Union[BaseTemplate, LinkByUID]]:
+    def template(self) -> BaseTemplate | LinkByUID | None:
         """Get the template associated with the spec."""
         if isinstance(self.spec, HasTemplate):
             return self.spec.template
         else:
             return None
 
-    def _local_dependencies(self) -> Set[Union[BaseEntity, LinkByUID]]:
+    def _local_dependencies(self) -> set[BaseEntity | LinkByUID]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {self.spec} if self.spec is not None else set()

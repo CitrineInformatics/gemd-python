@@ -3,7 +3,6 @@ from contextlib import contextmanager
 from importlib.resources import files
 
 import pytest
-from deprecation import DeprecatedWarning
 from pint import UnitRegistry
 
 from gemd.units import (
@@ -195,6 +194,7 @@ def test_get_base_units():
 def test_get_compatible_units():
     """Test that compatible units make sense."""
     from gemd.units.impl import _REGISTRY
+
     assert "kelvin" in get_compatible_units("degC")
     assert "degree_Celsius" in get_compatible_units("degC")
     assert "gram" in get_compatible_units("kg")
@@ -214,14 +214,14 @@ def _change_units(filename):
         change_definitions_file()
 
 
-def test_file_change(tmpdir):
+def test_file_change(tmp_path):
     """Test that swapping units files works."""
     assert convert_units(1, "m", "cm") == 100
     with pytest.raises(UndefinedUnitError):
         assert convert_units(1, "usd", "USD") == 1
 
-    test_file = tmpdir / "test_units.txt"
-    test_file.write_binary(files("tests.units").joinpath("test_units.txt").read_bytes())
+    test_file = tmp_path / "test_units.txt"
+    test_file.write_bytes(files("tests.units").joinpath("test_units.txt").read_bytes())
     with _change_units(filename=test_file):
         with pytest.raises(UndefinedUnitError):
             assert convert_units(1, "m", "cm") == 100
@@ -256,21 +256,3 @@ def test__scientific_notation_preprocessor():
     assert "1e" not in parse_units("F* kg * 10 cm")
     assert "-3.07e2" in parse_units("F* -3.07 * 10 ** 2")
     assert "11e2" in parse_units("F* 11*10^2")
-
-
-def test_deprecation():
-    """Make sure deprecated things warn correctly."""
-    megapascals = parse_units("MPa", return_unit=True)
-    with pytest.warns(DeprecatedWarning):
-        stringified = f"{megapascals:clean}"
-    assert megapascals == parse_units(stringified, return_unit=False)
-
-    from pint import Quantity
-
-    with pytest.warns(DeprecatedWarning):
-        assert f"{Quantity('5 MPa'):clean}" == f"5 {stringified}"
-
-    from pint import Unit
-
-    with pytest.warns(DeprecatedWarning):
-        assert f"{Unit('MPa'):clean}" == stringified

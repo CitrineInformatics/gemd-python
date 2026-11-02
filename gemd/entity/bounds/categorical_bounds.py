@@ -1,4 +1,5 @@
-from typing import Any, Dict, Iterable, Optional, Set, TypeVar, Union
+from collections.abc import Iterable
+from typing import Any, TypeVar
 
 from gemd.entity.bounds.base_bounds import BaseBounds
 from gemd.entity.util import array_like
@@ -19,17 +20,17 @@ class CategoricalBounds(BaseBounds, typ="categorical_bounds"):
 
     """
 
-    def __init__(self, categories: Optional[Iterable[str]] = None):
+    def __init__(self, categories: Iterable[str] | None = None):
         self._categories = None
         self.categories = categories
 
     @property
-    def categories(self) -> Set[str]:
+    def categories(self) -> set[str]:
         """The collection of allowed categories."""
         return self._categories
 
     @categories.setter
-    def categories(self, categories: Optional[Iterable[str]]):
+    def categories(self, categories: Iterable[str] | None):
         if categories is None:
             self._categories = set()
         elif isinstance(categories, array_like()):
@@ -42,7 +43,7 @@ class CategoricalBounds(BaseBounds, typ="categorical_bounds"):
         if not all(isinstance(x, str) for x in self.categories):
             raise ValueError("All the categories must be strings")
 
-    def contains(self, bounds: Union[BaseBounds, BaseValueType]) -> bool:
+    def contains(self, bounds: BaseBounds | BaseValueType) -> bool:
         """Check if another bounds object or value object is contained by this bounds.
 
         The other object must also be Categorical and its allowed categories must be a
@@ -74,7 +75,7 @@ class CategoricalBounds(BaseBounds, typ="categorical_bounds"):
         return bounds.categories.issubset(self.categories)
 
     def union(
-        self, *others: Union[CategoricalBoundsType, CategoricalValueType]
+        self, *others: CategoricalBoundsType | CategoricalValueType
     ) -> CategoricalBoundsType:
         """Return the union of this bounds and other bounds.
 
@@ -111,7 +112,7 @@ class CategoricalBounds(BaseBounds, typ="categorical_bounds"):
             result.update(bounds.categories)
         return CategoricalBounds(result)
 
-    def update(self, *others: Union[CategoricalBoundsType, CategoricalValueType]):
+    def update(self, *others: CategoricalBoundsType | CategoricalValueType):
         """Update this bounds to include other bounds.
 
         The others list must also be Categorical Bounds or Values.
@@ -126,7 +127,7 @@ class CategoricalBounds(BaseBounds, typ="categorical_bounds"):
         """
         self.categories = self.union(*others).categories
 
-    def as_dict(self) -> Dict[str, Any]:
+    def as_dict(self) -> dict[str, Any]:
         """Convert bounds to a dictionary.
 
         Returns

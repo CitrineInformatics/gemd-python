@@ -1,6 +1,6 @@
 """Discrete distribution across several categories."""
 
-from typing import Mapping, Optional, Union
+from collections.abc import Mapping
 
 from gemd.entity.bounds import CategoricalBounds
 from gemd.entity.setters import validate_str
@@ -25,7 +25,7 @@ class DiscreteCategorical(CategoricalValue, typ="discrete_categorical"):
 
     """
 
-    def __init__(self, probabilities: Union[str, Mapping[str, float]] = None):
+    def __init__(self, probabilities: str | Mapping[str, float] = None):
         self._probabilities = None
         self.probabilities = probabilities
 
@@ -35,7 +35,7 @@ class DiscreteCategorical(CategoricalValue, typ="discrete_categorical"):
         return self._probabilities
 
     @probabilities.setter
-    def probabilities(self, probabilities: Optional[Union[str, Mapping[str, float]]]):
+    def probabilities(self, probabilities: str | Mapping[str, float] | None):
         """Set the map from categories to probabilities."""
         if probabilities is None:
             self._probabilities = None

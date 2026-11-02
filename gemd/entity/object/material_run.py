@@ -1,4 +1,5 @@
-from typing import Any, Iterable, List, Mapping, Optional, Type, TypeVar, Union
+from collections.abc import Iterable, Mapping
+from typing import Any, TypeVar
 
 from gemd.entity.file_link import FileLink
 from gemd.entity.link_by_uid import LinkByUID
@@ -49,13 +50,13 @@ class MaterialRun(BaseObject, HasSpec, HasProcess, typ="material_run", skip={"_m
         self,
         name: str,
         *,
-        spec: Union[MaterialSpec, LinkByUID] = None,
-        process: Union[ProcessRun, LinkByUID] = None,
-        sample_type: Union[SampleType, str] = "unknown",
+        spec: MaterialSpec | LinkByUID = None,
+        process: ProcessRun | LinkByUID = None,
+        sample_type: SampleType | str = "unknown",
         uids: Mapping[str, str] = None,
         tags: Iterable[str] = None,
         notes: str = None,
-        file_links: Optional[Union[Iterable[FileLink], FileLink]] = None,
+        file_links: Iterable[FileLink] | FileLink | None = None,
     ):
         from gemd.entity.object.measurement_run import MeasurementRun
 
@@ -71,12 +72,12 @@ class MaterialRun(BaseObject, HasSpec, HasProcess, typ="material_run", skip={"_m
         self.sample_type = sample_type
 
     @property
-    def process(self) -> Union[ProcessRun, LinkByUID]:
+    def process(self) -> ProcessRun | LinkByUID:
         """Get the originating process run."""
         return self._process
 
     @process.setter
-    def process(self, process: Union[ProcessRun, LinkByUID]):
+    def process(self, process: ProcessRun | LinkByUID):
         if self.process is not None and isinstance(self.process, ProcessRun):
             self.process._output_material = None
         if process is None:
@@ -90,7 +91,7 @@ class MaterialRun(BaseObject, HasSpec, HasProcess, typ="material_run", skip={"_m
             raise TypeError(f"process must be a ProcessRun or LinkByUID: {process}")
 
     @property
-    def measurements(self) -> List[MeasurementRunType]:
+    def measurements(self) -> list[MeasurementRunType]:
         """Measurements performed on this material.
 
         The link is established by creating the measurement run and settings its
@@ -105,11 +106,11 @@ class MaterialRun(BaseObject, HasSpec, HasProcess, typ="material_run", skip={"_m
         return self._sample_type
 
     @sample_type.setter
-    def sample_type(self, sample_type: Union[SampleType, str]):
+    def sample_type(self, sample_type: SampleType | str):
         self._sample_type = SampleType.from_str(sample_type, exception=True)
 
     @staticmethod
-    def _spec_type() -> Type:
+    def _spec_type() -> type:
         """Required method to satisfy HasTemplates mix-in."""
         return MaterialSpec
 

@@ -1,7 +1,7 @@
 """Bound a real number to be between two values."""
 
 from math import isfinite
-from typing import TypeVar, Union
+from typing import TypeVar
 
 import gemd.units as units
 from gemd.entity.bounds.base_bounds import BaseBounds
@@ -85,7 +85,7 @@ class RealBounds(BaseBounds, typ="real_bounds"):
             )
         self._default_units = units.parse_units(default_units, return_unit=False)
 
-    def contains(self, bounds: Union[BaseBounds, BaseValueType]) -> bool:
+    def contains(self, bounds: BaseBounds | BaseValueType) -> bool:
         """Check if another bounds or value object is a subset of this range.
 
         The other object must also be Real and its lower and upper bound must *both*
@@ -121,7 +121,7 @@ class RealBounds(BaseBounds, typ="real_bounds"):
 
         return bounds.lower_bound >= lower and bounds.upper_bound <= upper
 
-    def union(self, *others: Union[RealBoundsType, ContinuousValueType]) -> RealBoundsType:
+    def union(self, *others: RealBoundsType | ContinuousValueType) -> RealBoundsType:
         """Return the union of this bounds and other bounds.
 
         The others list must also be Real Bounds or Values.
@@ -163,7 +163,7 @@ class RealBounds(BaseBounds, typ="real_bounds"):
                 upper = bnd_hi
         return RealBounds(lower_bound=lower, upper_bound=upper, default_units=unit_)
 
-    def update(self, *others: Union[RealBoundsType, ContinuousValueType]):
+    def update(self, *others: RealBoundsType | ContinuousValueType):
         """Update this bounds to include other bounds.
 
         The others list must also be Real Bounds or Values.

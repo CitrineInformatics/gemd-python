@@ -1,7 +1,6 @@
 """For entities that have templates."""
 
 from abc import abstractmethod
-from typing import Optional, Set, Type, Union
 
 from gemd.entity.base_entity import BaseEntity
 from gemd.entity.has_dependencies import HasDependencies
@@ -14,22 +13,22 @@ __all__ = ["HasTemplate"]
 class HasTemplate(HasDependencies):
     """Mix-in trait for objects that can be assigned templates."""
 
-    def __init__(self, template: Optional[Union[BaseTemplate, LinkByUID]] = None):
+    def __init__(self, template: BaseTemplate | LinkByUID | None = None):
         self._template = None
         self.template = template
 
     @staticmethod
     @abstractmethod
-    def _template_type() -> Type:
+    def _template_type() -> type:
         """Child must report implementation details."""
 
     @property
-    def template(self) -> Optional[Union[BaseTemplate, LinkByUID]]:
+    def template(self) -> BaseTemplate | LinkByUID | None:
         """A template that defines the allowed values."""
         return self._template
 
     @template.setter
-    def template(self, template: Optional[Union[BaseTemplate, LinkByUID]]):
+    def template(self, template: BaseTemplate | LinkByUID | None):
         """Set the template."""
         if template is None:
             self._template = None
@@ -40,6 +39,6 @@ class HasTemplate(HasDependencies):
                 f"Template must be a {self._template_type()} or LinkByUID, not {type(template)}"
             )
 
-    def _local_dependencies(self) -> Set[Union[BaseEntity, LinkByUID]]:
+    def _local_dependencies(self) -> set[BaseEntity | LinkByUID]:
         """Return a set of all immediate dependencies (no recursion)."""
         return {self.template} if self.template is not None else set()
