@@ -1,7 +1,5 @@
 """A process template."""
 
-from warnings import warn
-
 from gemd.entity.setters import validate_list
 from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.template.has_condition_templates import HasConditionTemplates
@@ -33,11 +31,6 @@ class ProcessTemplate(
         `Tags <https://citrineinformatics.github.io/gemd-documentation/specification/tags/>`_
         are hierarchical strings that store information about an entity. They can be used
         for filtering and discoverability.
-    allowed_names: List[str], optional
-        Deprecated as of 3.1.0, and will be removed in 4.0.0.
-        This field does not limit ingredient names. The Citrine Platform ignores this list.
-        It discovers ingredient names from the ingredient specs that use the process.
-        Setting a non-empty list emits a DeprecationWarning.
     allowed_labels: List[str], optional
         The set of labels that a process' ingredients are allowed to use in their labels field.
     conditions: List[~gemd.entity.template.condition_template.ConditionTemplate] or \
@@ -62,7 +55,6 @@ class ProcessTemplate(
         description=None,
         conditions=None,
         parameters=None,
-        allowed_names=None,
         allowed_labels=None,
         uids=None,
         tags=None,
@@ -71,33 +63,8 @@ class ProcessTemplate(
         HasConditionTemplates.__init__(self, conditions)
         HasParameterTemplates.__init__(self, parameters)
 
-        self._allowed_names = None
-        self.allowed_names = allowed_names
-
         self._allowed_labels = None
         self.allowed_labels = allowed_labels
-
-    @property
-    def allowed_names(self):
-        """Get the allowed names.
-
-        Deprecated as of 3.1.0, and will be removed in 4.0.0.
-        """
-        return self._allowed_names
-
-    @allowed_names.setter
-    def allowed_names(self, allowed_names):
-        if allowed_names is None:
-            self._allowed_names = validate_list([], str)
-        else:
-            self._allowed_names = validate_list(allowed_names, str)
-            if len(self._allowed_names) > 0:
-                warn(
-                    "allowed_names is deprecated as of 3.1.0 and will be removed in 4.0.0. "
-                    "The Citrine Platform ignores it.",
-                    DeprecationWarning,
-                    stacklevel=2,
-                )
 
     @property
     def allowed_labels(self):

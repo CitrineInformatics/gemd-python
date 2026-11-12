@@ -1,7 +1,5 @@
 """Tests of the ProcessTemplate object."""
 
-import warnings
-
 import pytest
 
 from gemd.entity.bounds import IntegerBounds
@@ -19,47 +17,6 @@ def test_bounds_mismatch():
     cond_template = ConditionTemplate("a condition", bounds=attribute_bounds)
     with pytest.raises(ValueError):
         ProcessTemplate("a process template", conditions=[[cond_template, object_bounds]])
-
-
-def test_allowed_names():
-    """Test that allowed_names can be assigned, and that doing so warns of its deprecation."""
-    allowed_names = ["THF", "Carbon Disulfide", "Dimethyl Ether"]
-    with pytest.warns(DeprecationWarning, match="allowed_names"):
-        proc_template = ProcessTemplate(name="test template", allowed_names=allowed_names)
-    for name in allowed_names:
-        assert name in proc_template.allowed_names
-
-    with pytest.warns(DeprecationWarning, match="allowed_names"):
-        proc_template.allowed_names = ["Water"]
-    assert proc_template.allowed_names == ["Water"]
-
-
-@pytest.mark.parametrize("allowed_names", [None, []])
-def test_allowed_names_empty_does_not_warn(allowed_names):
-    """Test that omitting allowed_names, or passing an empty list, emits no warning."""
-    with warnings.catch_warnings():
-        warnings.simplefilter("error", DeprecationWarning)
-        proc_template = ProcessTemplate(name="test template", allowed_names=allowed_names)
-        assert proc_template.allowed_names == []
-        assert ProcessTemplate(name="no names").allowed_names == []
-
-
-def test_allowed_names_json_round_trip():
-    """Test that JSON with and without allowed_names still loads and round-trips."""
-    with warnings.catch_warnings():
-        warnings.simplefilter("error", DeprecationWarning)
-        without_names = ProcessTemplate.build({"type": "process_template", "name": "bare"})
-        assert without_names.allowed_names == []
-        assert loads(dumps(without_names)).allowed_names == []
-
-    with pytest.warns(DeprecationWarning, match="allowed_names"):
-        with_names = ProcessTemplate.build(
-            {"type": "process_template", "name": "named", "allowed_names": ["batter"]}
-        )
-    assert with_names.allowed_names == ["batter"]
-    with pytest.warns(DeprecationWarning, match="allowed_names"):
-        copied = loads(dumps(with_names))
-    assert copied.allowed_names == ["batter"]
 
 
 def test_allowed_labels():
