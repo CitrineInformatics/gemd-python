@@ -1,5 +1,7 @@
 """A process template."""
 
+from warnings import warn
+
 from gemd.entity.setters import validate_list
 from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.template.has_condition_templates import HasConditionTemplates
@@ -32,11 +34,10 @@ class ProcessTemplate(
         are hierarchical strings that store information about an entity. They can be used
         for filtering and discoverability.
     allowed_names: List[str], optional
-        Deprecated. This field does not limit ingredient names.
-        The Citrine Platform ignores this list when you save a template. When you fetch a
-        template, this list has the distinct ingredient names from process specs that use
-        the template. Names come from datasets you can read. GEMD Python keeps this field
-        to give users time to migrate code and JSON away from it.
+        Deprecated as of 3.1.0, and will be removed in 4.0.0.
+        This field does not limit ingredient names. The Citrine Platform ignores this list.
+        It discovers ingredient names from the ingredient specs that use the process.
+        Setting a non-empty list emits a DeprecationWarning.
     allowed_labels: List[str], optional
         The set of labels that a process' ingredients are allowed to use in their labels field.
     conditions: List[~gemd.entity.template.condition_template.ConditionTemplate] or \
@@ -78,7 +79,10 @@ class ProcessTemplate(
 
     @property
     def allowed_names(self):
-        """Get the allowed names."""
+        """Get the allowed names.
+
+        Deprecated as of 3.1.0, and will be removed in 4.0.0.
+        """
         return self._allowed_names
 
     @allowed_names.setter
@@ -87,6 +91,13 @@ class ProcessTemplate(
             self._allowed_names = validate_list([], str)
         else:
             self._allowed_names = validate_list(allowed_names, str)
+            if len(self._allowed_names) > 0:
+                warn(
+                    "allowed_names is deprecated as of 3.1.0 and will be removed in 4.0.0. "
+                    "The Citrine Platform ignores it.",
+                    DeprecationWarning,
+                    stacklevel=2,
+                )
 
     @property
     def allowed_labels(self):
