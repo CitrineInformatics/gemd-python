@@ -31,12 +31,6 @@ class ProcessTemplate(
         `Tags <https://citrineinformatics.github.io/gemd-documentation/specification/tags/>`_
         are hierarchical strings that store information about an entity. They can be used
         for filtering and discoverability.
-    allowed_names: List[str], optional
-        Deprecated. This field does not limit ingredient names.
-        The Citrine Platform ignores this list when you save a template. When you fetch a
-        template, this list has the distinct ingredient names from process specs that use
-        the template. Names come from datasets you can read. GEMD Python keeps this field
-        to give users time to migrate code and JSON away from it.
     allowed_labels: List[str], optional
         The set of labels that a process' ingredients are allowed to use in their labels field.
     conditions: List[~gemd.entity.template.condition_template.ConditionTemplate] or \
@@ -61,7 +55,6 @@ class ProcessTemplate(
         description=None,
         conditions=None,
         parameters=None,
-        allowed_names=None,
         allowed_labels=None,
         uids=None,
         tags=None,
@@ -70,23 +63,8 @@ class ProcessTemplate(
         HasConditionTemplates.__init__(self, conditions)
         HasParameterTemplates.__init__(self, parameters)
 
-        self._allowed_names = None
-        self.allowed_names = allowed_names
-
         self._allowed_labels = None
         self.allowed_labels = allowed_labels
-
-    @property
-    def allowed_names(self):
-        """Get the allowed names."""
-        return self._allowed_names
-
-    @allowed_names.setter
-    def allowed_names(self, allowed_names):
-        if allowed_names is None:
-            self._allowed_names = validate_list([], str)
-        else:
-            self._allowed_names = validate_list(allowed_names, str)
 
     @property
     def allowed_labels(self):
