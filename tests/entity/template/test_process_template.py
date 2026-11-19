@@ -20,12 +20,12 @@ def test_bounds_mismatch():
 
 
 def test_allowed_names_removed():
-    """Test that each use of allowed_names warns of its removal."""
-    with pytest.warns(DeprecationWarning, match="allowed_names has been removed"):
+    """Test that each use of allowed_names warns of its deprecation."""
+    with pytest.deprecated_call(match="allowed_names is deprecated"):
         proc_template = ProcessTemplate(name="test template", allowed_names=[])
-    with pytest.warns(DeprecationWarning, match="allowed_names has been removed"):
+    with pytest.deprecated_call(match="allowed_names is deprecated"):
         proc_template.allowed_names = ["Water"]
-    with pytest.warns(DeprecationWarning, match="allowed_names has been removed"):
+    with pytest.deprecated_call(match="allowed_names is deprecated"):
         assert proc_template.allowed_names == []
 
 

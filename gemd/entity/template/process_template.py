@@ -2,6 +2,8 @@
 
 from warnings import warn
 
+from deprecation import DeprecatedWarning, deprecated
+
 from gemd.entity.setters import validate_list
 from gemd.entity.template.base_template import BaseTemplate
 from gemd.entity.template.has_condition_templates import HasConditionTemplates
@@ -9,10 +11,7 @@ from gemd.entity.template.has_parameter_templates import HasParameterTemplates
 
 __all__ = ["ProcessTemplate"]
 
-_ALLOWED_NAMES_REMOVED = (
-    "ProcessTemplate.allowed_names has been removed. GEMD Python discards the value, "
-    "and the Citrine Platform ignores it."
-)
+_ALLOWED_NAMES_DETAILS = "GEMD Python discards the value, and the Citrine Platform ignores it."
 
 
 class ProcessTemplate(
@@ -39,7 +38,8 @@ class ProcessTemplate(
         are hierarchical strings that store information about an entity. They can be used
         for filtering and discoverability.
     allowed_names: List[str], optional
-        Removed as of 3.1.0. GEMD Python discards the value and leaves it out of the JSON.
+        Deprecated as of 3.1.0, and will be removed in 4.0.0.
+        GEMD Python discards the value and leaves it out of the JSON.
         Passing any list, even an empty one, emits a DeprecationWarning.
     allowed_labels: List[str], optional
         The set of labels that a process' ingredients are allowed to use in their labels field.
@@ -75,20 +75,24 @@ class ProcessTemplate(
         HasParameterTemplates.__init__(self, parameters)
 
         if allowed_names is not None:
-            warn(_ALLOWED_NAMES_REMOVED, DeprecationWarning, stacklevel=2)
+            warn(
+                DeprecatedWarning("allowed_names", "3.1.0", "4.0.0", _ALLOWED_NAMES_DETAILS),
+                stacklevel=2,
+            )
 
         self._allowed_labels = None
         self.allowed_labels = allowed_labels
 
     @property
+    @deprecated(deprecated_in="3.1.0", removed_in="4.0.0", details=_ALLOWED_NAMES_DETAILS)
     def allowed_names(self):
-        """Get an empty list, and warn that allowed_names has been removed."""
-        warn(_ALLOWED_NAMES_REMOVED, DeprecationWarning, stacklevel=2)
+        """Get an empty list."""
         return []
 
     @allowed_names.setter
+    @deprecated(deprecated_in="3.1.0", removed_in="4.0.0", details=_ALLOWED_NAMES_DETAILS)
     def allowed_names(self, allowed_names):
-        warn(_ALLOWED_NAMES_REMOVED, DeprecationWarning, stacklevel=2)
+        pass
 
     @property
     def allowed_labels(self):
