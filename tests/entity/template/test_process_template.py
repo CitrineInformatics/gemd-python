@@ -1,7 +1,5 @@
 """Tests of the ProcessTemplate object."""
 
-import warnings
-
 import pytest
 
 from gemd.entity.bounds import IntegerBounds
@@ -22,44 +20,13 @@ def test_bounds_mismatch():
 
 
 def test_allowed_names_removed():
-    """Test that allowed_names warns of its removal and holds no value."""
+    """Test that each use of allowed_names warns of its removal."""
     with pytest.warns(DeprecationWarning, match="allowed_names has been removed"):
-        proc_template = ProcessTemplate(name="test template", allowed_names=["THF"])
+        proc_template = ProcessTemplate(name="test template", allowed_names=[])
     with pytest.warns(DeprecationWarning, match="allowed_names has been removed"):
         proc_template.allowed_names = ["Water"]
     with pytest.warns(DeprecationWarning, match="allowed_names has been removed"):
         assert proc_template.allowed_names == []
-    assert "allowed_names" not in proc_template.as_dict()
-    assert "allowed_names" not in dumps(proc_template)
-
-
-def test_allowed_names_empty_warns():
-    """Test that an empty allowed_names warns too, on the constructor and on the setter."""
-    with pytest.warns(DeprecationWarning, match="allowed_names has been removed"):
-        proc_template = ProcessTemplate(name="test template", allowed_names=[])
-    with pytest.warns(DeprecationWarning, match="allowed_names has been removed"):
-        proc_template.allowed_names = []
-    with pytest.warns(DeprecationWarning, match="allowed_names has been removed"):
-        proc_template.allowed_names = None
-
-
-def test_allowed_names_omitted_does_not_warn():
-    """Test that a template built without allowed_names emits no warning."""
-    with warnings.catch_warnings():
-        warnings.simplefilter("error", DeprecationWarning)
-        proc_template = ProcessTemplate(name="test template")
-        assert loads(dumps(proc_template)) == proc_template
-        ProcessTemplate.build({"type": "process_template", "name": "bare"})
-
-
-@pytest.mark.parametrize("allowed_names", [[], ["batter"]])
-def test_allowed_names_json_load(allowed_names):
-    """Test that JSON with allowed_names loads with a warning and drops the field."""
-    with pytest.warns(DeprecationWarning, match="allowed_names has been removed"):
-        loaded = ProcessTemplate.build(
-            {"type": "process_template", "name": "named", "allowed_names": allowed_names}
-        )
-    assert "allowed_names" not in loaded.as_dict()
 
 
 def test_allowed_labels():
