@@ -49,6 +49,103 @@ Additionally:
 
 For additional (non-binding) inspiration, check out the [Google Python Style Guide](https://github.com/google/styleguide/blob/gh-pages/pyguide.md).
 
+## Removing a capability from the public API
+
+Replace a removed capability with a shim, so that existing code that uses it keeps importing.
+Each use of the shim emits a `DeprecationWarning`, so callers can find the use and delete it.
+Adding a shim takes a minor version bump, because existing code keeps importing.
+Deleting the shim breaks that code and takes a major version bump.
+
+Choose the shim by what the old code can do after the removal:
+* When the class works without a field's value, keep the field as a shim that stores nothing.
+* When the code behind a module or exported name is gone, keep the name importable and make each use of a removed class raise an error.
+
+### Removing a field from a class
+
+Keep the constructor argument and the property, and store nothing:
+* The constructor warns when a caller passes the argument, even an empty list. It does not warn when the caller omits the argument.
+* The getter warns and returns an empty value.
+* The setter warns and discards the value, even `None`.
+* The docstring keeps the argument and states that the class discards its value.
+
+Warn on empty values too, because any value shows that the name remains in the caller's code.
+`as_dict()` serializes instance attributes. The shim does not set one, so the field stays out of `as_dict()` and the JSON.
+`from_dict()` passes the field to the constructor, so old JSON that includes the field loads and warns.
+
+```python
+_ALLOWED_NAMES_REMOVED = (
+    "ProcessTemplate.allowed_names has been removed. GEMD Python discards the value."
+)
+
+def __init__(self, name, *, allowed_names=None, ...):
+    ...
+    if allowed_names is not None:
+        warn(_ALLOWED_NAMES_REMOVED, DeprecationWarning, stacklevel=2)
+
+@property
+def allowed_names(self):
+    """Get an empty list, and warn that allowed_names has been removed."""
+    warn(_ALLOWED_NAMES_REMOVED, DeprecationWarning, stacklevel=2)
+    return []
+
+@allowed_names.setter
+def allowed_names(self, allowed_names):
+    warn(_ALLOWED_NAMES_REMOVED, DeprecationWarning, stacklevel=2)
+```
+
+Add tests for these behaviors:
+* The constructor, getter, setter, and JSON loading each warn.
+* The constructor does not warn when the argument is omitted.
+* `as_dict()` and the JSON leave out the field.
+
+### Removing a module or exported name
+
+Keep every name that a release exported at its old import path:
+* Define the stand-in classes in one private module. Constructing a stand-in raises an error whose message names the removed feature. Reading a missing attribute from the class, such as an old method, raises the same error.
+* Give each module that exported a name a `__getattr__` function. It warns and returns the stand-in.
+* The warning message gives the deprecation version, the removal version, and the removed feature.
+* For an unknown name, `__getattr__` raises `AttributeError` and does not warn.
+
+Python calls a module's `__getattr__` only for names that the module does not bind.
+Import the private module as a module, rather than importing its names, so that each removed name reaches `__getattr__`.
+Therefore, `import gemd` does not warn, and importing a removed name does.
+`stacklevel=2` attributes the warning to the importing line, so Python's default filters show it in a script.
+
+```python
+"""The old feature has been removed."""
+
+from warnings import warn
+
+from gemd import _removed_features
+
+_REMOVED_NAMES = {"OldFeature", "OldFeatureResult"}
+
+
+def __getattr__(name):
+    if name not in _REMOVED_NAMES:
+        raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+    warn(
+        f"{__name__}.{name} is deprecated as of 3.1.0 and will be removed in 4.0.0. "
+        "The old feature has been removed.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    return getattr(_removed_features, name)
+```
+
+Add tests for these behaviors:
+* Importing each removed name from each old path emits the warning.
+* Each use of a stand-in raises the error.
+* Importing the package does not warn.
+
+### Scheduling the deletion
+
+The `removed_in` gate under [Testing](#testing) checks `@deprecated` decorators from the `deprecation` library.
+It fails a PR once the package version reaches a decorator's `removed_in` version.
+It reports a direct `warn(..., DeprecationWarning)` call as a non-blocking notice.
+When a shim calls `warn()` directly and names a removal version, add a test that fails once `__version__` reaches it.
+Write the test's failure message as a list of the code to delete.
+
 ## Branching strategy
 
 This project currently follows a [feature branch workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow):
