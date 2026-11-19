@@ -63,9 +63,11 @@ Choose the shim by what the old code can do after the removal:
 ### Removing a field from a class
 
 Keep the constructor argument and the property, and store nothing:
+* Mark the getter and the setter with `@deprecated` from the `deprecation` library, so that each call warns.
+* The getter returns an empty value.
+* The setter discards the value, even `None`.
 * The constructor warns when a caller passes the argument, even an empty list. It does not warn when the caller omits the argument.
-* The getter warns and returns an empty value.
-* The setter warns and discards the value, even `None`.
+* The constructor emits the library's `DeprecatedWarning` with `stacklevel=2`, so that Python attributes the warning to the caller's line.
 * The docstring keeps the argument and states that the class discards its value.
 
 Warn on empty values too, because any value shows that the name remains in the caller's code.
@@ -73,24 +75,26 @@ Warn on empty values too, because any value shows that the name remains in the c
 `from_dict()` passes the field to the constructor, so old JSON that includes the field loads and warns.
 
 ```python
-_ALLOWED_NAMES_REMOVED = (
-    "ProcessTemplate.allowed_names has been removed. GEMD Python discards the value."
-)
+_ALLOWED_NAMES_DETAILS = "GEMD Python discards the value."
 
 def __init__(self, name, *, allowed_names=None, ...):
     ...
     if allowed_names is not None:
-        warn(_ALLOWED_NAMES_REMOVED, DeprecationWarning, stacklevel=2)
+        warn(
+            DeprecatedWarning("allowed_names", "3.1.0", "4.0.0", _ALLOWED_NAMES_DETAILS),
+            stacklevel=2,
+        )
 
 @property
+@deprecated(deprecated_in="3.1.0", removed_in="4.0.0", details=_ALLOWED_NAMES_DETAILS)
 def allowed_names(self):
-    """Get an empty list, and warn that allowed_names has been removed."""
-    warn(_ALLOWED_NAMES_REMOVED, DeprecationWarning, stacklevel=2)
+    """Get an empty list."""
     return []
 
 @allowed_names.setter
+@deprecated(deprecated_in="3.1.0", removed_in="4.0.0", details=_ALLOWED_NAMES_DETAILS)
 def allowed_names(self, allowed_names):
-    warn(_ALLOWED_NAMES_REMOVED, DeprecationWarning, stacklevel=2)
+    pass
 ```
 
 Add tests for these behaviors:
@@ -142,8 +146,11 @@ Add tests for these behaviors:
 
 The `removed_in` gate under [Testing](#testing) checks `@deprecated` decorators from the `deprecation` library.
 It fails a PR once the package version reaches a decorator's `removed_in` version.
-It reports a direct `warn(..., DeprecationWarning)` call as a non-blocking notice.
-When a shim calls `warn()` directly and names a removal version, add a test that fails once `__version__` reaches it.
+Mark a shim with `@deprecated` wherever a function or method can carry the decorator, so that the gate requires the deletion.
+Write `deprecated_in` and `removed_in` as string literals on each decorator, because the gate reads them from the source.
+The gate fails a PR when a decorator lacks either keyword.
+The gate reports a direct `warn(..., DeprecationWarning)` call as a non-blocking notice.
+When a shim calls `warn()` directly, as the module `__getattr__` above does, add a test that fails once `__version__` reaches the removal version.
 Write the test's failure message as a list of the code to delete.
 
 ## Branching strategy
