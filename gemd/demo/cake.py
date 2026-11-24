@@ -195,12 +195,10 @@ def make_cake_templates():
     tmpl["Procuring"] = ProcessTemplate(
         name="Procuring",
         description="Buyin' stuff",
-        allowed_names=[],  # Takes no ingredients by definition
     )
     tmpl["Baking"] = ProcessTemplate(
         name="Baking",
         description="Using heat to promote chemical reactions in a material",
-        allowed_names=["batter"],
         allowed_labels=["precursor"],
         conditions=[(tmpl["Oven temperature"], RealBounds(0, 700, "degF"))],
         parameters=[(tmpl["Oven temperature setting"], RealBounds(100, 550, "degF"))],
