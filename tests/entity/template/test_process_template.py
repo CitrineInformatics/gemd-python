@@ -19,16 +19,14 @@ def test_bounds_mismatch():
         ProcessTemplate("a process template", conditions=[[cond_template, object_bounds]])
 
 
-def test_allowed_names():
-    """Test that allowed_names can be assigned.
-
-    Presently allowed_names is not used for any validation, but this test can be expanded
-    if it is used in the future.
-    """
-    allowed_names = ["THF", "Carbon Disulfide", "Dimethyl Ether"]
-    proc_template = ProcessTemplate(name="test template", allowed_names=allowed_names)
-    for name in allowed_names:
-        assert name in proc_template.allowed_names
+def test_allowed_names_removed():
+    """Test that each use of allowed_names warns of its deprecation."""
+    with pytest.deprecated_call(match="allowed_names is deprecated"):
+        proc_template = ProcessTemplate(name="test template", allowed_names=[])
+    with pytest.deprecated_call(match="allowed_names is deprecated"):
+        proc_template.allowed_names = ["Water"]
+    with pytest.deprecated_call(match="allowed_names is deprecated"):
+        assert proc_template.allowed_names == []
 
 
 def test_allowed_labels():
