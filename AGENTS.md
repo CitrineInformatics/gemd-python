@@ -50,12 +50,13 @@ CI also runs the tests on Python 3.10 through 3.14 on Linux, macOS, and Windows.
 - Write Numpy-style docstrings. Sphinx autogenerates `docs/source/reference/`, which git ignores.
 - Make arguments keyword-only. Every positional argument must be required.
 - Run `uv lock` after you change dependencies in `pyproject.toml`, and commit `uv.lock`.
+- Before you remove a field, module, or exported name from the public API, follow "Removing a capability from the public API" in `CONTRIBUTING.md`.
 - Python 3.10 is the floor, set by `requires-python` and the ruff `target-version`.
 - List new data files under `[tool.setuptools.package-data]` in `pyproject.toml`, so the wheel includes them.
 
 ## Further reading
 
-- `CONTRIBUTING.md`: checks, style, branching, and the release process
+- `CONTRIBUTING.md`: checks, style, removing a capability, branching, and the release process
 - `gemd/demo/README.md`: the example builders
 - GEMD data model docs: https://citrineinformatics.github.io/gemd-docs/
 - Package docs: https://citrineinformatics.github.io/gemd-python/
